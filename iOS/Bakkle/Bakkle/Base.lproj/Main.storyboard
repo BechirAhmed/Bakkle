@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="ufC-wZ-h7g">
+            <objects>
+                <viewController id="vXZ-lx-hvc" customClass="ViewController" customModule="Bakkle" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="jyV-Pf-zRb"/>
+                        <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ARj-JV-7MY">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bakkleLogo.png" translatesAutoresizingMaskIntoConstraints="NO" id="Fb3-vA-h2e">
+                                        <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SIGN UP WITH" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vxf-aK-VXy">
+                                        <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="vxf-aK-VXy" secondAttribute="trailing" constant="141" id="00K-Zf-teL"/>
+                                    <constraint firstAttribute="trailing" secondItem="Fb3-vA-h2e" secondAttribute="trailing" constant="64" id="6VR-SK-LPe"/>
+                                    <constraint firstItem="Fb3-vA-h2e" firstAttribute="top" secondItem="ARj-JV-7MY" secondAttribute="top" constant="64" id="MSZ-5F-d6j"/>
+                                    <constraint firstItem="Fb3-vA-h2e" firstAttribute="leading" secondItem="ARj-JV-7MY" secondAttribute="leading" constant="65" id="P2v-7v-1H8"/>
+                                    <constraint firstItem="vxf-aK-VXy" firstAttribute="top" secondItem="Fb3-vA-h2e" secondAttribute="bottom" constant="191" id="bLi-If-mqx"/>
+                                    <constraint firstItem="vxf-aK-VXy" firstAttribute="leading" secondItem="ARj-JV-7MY" secondAttribute="leading" constant="142" id="cdc-zo-k3l"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="subviews">
+                                        <exclude reference="Fb3-vA-h2e"/>
+                                        <exclude reference="vxf-aK-VXy"/>
+                                    </mask>
+                                    <mask key="constraints">
+                                        <exclude reference="6VR-SK-LPe"/>
+                                        <exclude reference="MSZ-5F-d6j"/>
+                                        <exclude reference="P2v-7v-1H8"/>
+                                        <exclude reference="00K-Zf-teL"/>
+                                        <exclude reference="bLi-If-mqx"/>
+                                        <exclude reference="cdc-zo-k3l"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=regular-widthClass=compact">
+                                    <mask key="subviews">
+                                        <include reference="Fb3-vA-h2e"/>
+                                        <include reference="vxf-aK-VXy"/>
+                                    </mask>
+                                    <mask key="constraints">
+                                        <include reference="6VR-SK-LPe"/>
+                                        <include reference="MSZ-5F-d6j"/>
+                                        <include reference="P2v-7v-1H8"/>
+                                        <include reference="00K-Zf-teL"/>
+                                        <include reference="bLi-If-mqx"/>
+                                        <include reference="cdc-zo-k3l"/>
+                                    </mask>
+                                </variation>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="ARj-JV-7MY" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="topMargin" id="Q5K-fa-dXt"/>
+                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="ARj-JV-7MY" secondAttribute="bottom" id="Uvz-Nl-Ilp"/>
+                            <constraint firstItem="ARj-JV-7MY" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="-16" id="eoV-2y-ArV"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="ARj-JV-7MY" secondAttribute="trailing" constant="-16" id="n1l-LN-Ewq"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="ARj-JV-7MY"/>
+                            </mask>
+                            <mask key="constraints">
+                                <exclude reference="Q5K-fa-dXt"/>
+                                <exclude reference="eoV-2y-ArV"/>
+                                <exclude reference="n1l-LN-Ewq"/>
+                                <exclude reference="Uvz-Nl-Ilp"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=regular-widthClass=compact">
+                            <mask key="subviews">
+                                <include reference="ARj-JV-7MY"/>
+                            </mask>
+                            <mask key="constraints">
+                                <include reference="Q5K-fa-dXt"/>
+                                <include reference="eoV-2y-ArV"/>
+                                <include reference="n1l-LN-Ewq"/>
+                                <include reference="Uvz-Nl-Ilp"/>
+                            </mask>
+                        </variation>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="681" y="423"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="bakkleLogo.png" width="318" height="139"/>
+    </resources>
+</document>
