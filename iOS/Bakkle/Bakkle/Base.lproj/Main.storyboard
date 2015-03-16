@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1510" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
+        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -17,17 +18,26 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="SplashScreen-bkg.png" translatesAutoresizingMaskIntoConstraints="NO" id="qfH-YC-Z4o">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                            </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ARj-JV-7MY">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bakkleLogo.png" translatesAutoresizingMaskIntoConstraints="NO" id="Fb3-vA-h2e">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo-white-design-png.png" translatesAutoresizingMaskIntoConstraints="NO" id="Fb3-vA-h2e">
                                         <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="65" y="64" width="271" height="139"/>
+                                        </variation>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SIGN UP WITH" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vxf-aK-VXy">
                                         <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="142" y="394" width="117" height="21"/>
+                                        </variation>
                                     </label>
                                 </subviews>
                                 <constraints>
@@ -44,12 +54,12 @@
                                         <exclude reference="vxf-aK-VXy"/>
                                     </mask>
                                     <mask key="constraints">
-                                        <exclude reference="6VR-SK-LPe"/>
-                                        <exclude reference="MSZ-5F-d6j"/>
-                                        <exclude reference="P2v-7v-1H8"/>
                                         <exclude reference="00K-Zf-teL"/>
                                         <exclude reference="bLi-If-mqx"/>
                                         <exclude reference="cdc-zo-k3l"/>
+                                        <exclude reference="6VR-SK-LPe"/>
+                                        <exclude reference="MSZ-5F-d6j"/>
+                                        <exclude reference="P2v-7v-1H8"/>
                                     </mask>
                                 </variation>
                                 <variation key="heightClass=regular-widthClass=compact">
@@ -58,21 +68,25 @@
                                         <include reference="vxf-aK-VXy"/>
                                     </mask>
                                     <mask key="constraints">
-                                        <include reference="6VR-SK-LPe"/>
-                                        <include reference="MSZ-5F-d6j"/>
-                                        <include reference="P2v-7v-1H8"/>
                                         <include reference="00K-Zf-teL"/>
                                         <include reference="bLi-If-mqx"/>
                                         <include reference="cdc-zo-k3l"/>
+                                        <include reference="6VR-SK-LPe"/>
+                                        <include reference="MSZ-5F-d6j"/>
+                                        <include reference="P2v-7v-1H8"/>
                                     </mask>
                                 </variation>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstAttribute="trailingMargin" secondItem="qfH-YC-Z4o" secondAttribute="trailing" id="6l5-yV-OrZ"/>
+                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="qfH-YC-Z4o" secondAttribute="bottom" id="MmF-6n-eju"/>
                             <constraint firstItem="ARj-JV-7MY" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="topMargin" id="Q5K-fa-dXt"/>
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="ARj-JV-7MY" secondAttribute="bottom" id="Uvz-Nl-Ilp"/>
+                            <constraint firstItem="qfH-YC-Z4o" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="d8U-sq-9Vx"/>
                             <constraint firstItem="ARj-JV-7MY" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="-16" id="eoV-2y-ArV"/>
+                            <constraint firstItem="qfH-YC-Z4o" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="topMargin" id="ilU-fb-cM0"/>
                             <constraint firstAttribute="trailingMargin" secondItem="ARj-JV-7MY" secondAttribute="trailing" constant="-16" id="n1l-LN-Ewq"/>
                         </constraints>
                         <variation key="default">
@@ -105,6 +119,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="bakkleLogo.png" width="318" height="139"/>
+        <image name="SplashScreen-bkg.png" width="1242" height="2208"/>
+        <image name="logo-white-design-png.png" width="1000" height="404"/>
     </resources>
 </document>

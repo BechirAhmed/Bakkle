@@ -14,6 +14,9 @@
 		5EBDD69B1AB211E600C7FBE7 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5EBDD6991AB211E600C7FBE7 /* LaunchScreen.xib */; };
 		5EBDD6A71AB211E600C7FBE7 /* BakkleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EBDD6A61AB211E600C7FBE7 /* BakkleTests.swift */; };
 		5EBDD6B11AB2139700C7FBE7 /* bakkleLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 5EBDD6B01AB2139700C7FBE7 /* bakkleLogo.png */; };
+		A03508F31AB3C34900CA6455 /* SplashScreen-bkg.png in Resources */ = {isa = PBXBuildFile; fileRef = A03508F21AB3C34900CA6455 /* SplashScreen-bkg.png */; };
+		A03508F71AB3C5FB00CA6455 /* logo-green-design-png-white.png in Resources */ = {isa = PBXBuildFile; fileRef = A03508F61AB3C5FB00CA6455 /* logo-green-design-png-white.png */; };
+		A03508F91AB3C6AE00CA6455 /* logo-white-design-png.png in Resources */ = {isa = PBXBuildFile; fileRef = A03508F81AB3C6AE00CA6455 /* logo-white-design-png.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,6 +41,9 @@
 		5EBDD6A51AB211E600C7FBE7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5EBDD6A61AB211E600C7FBE7 /* BakkleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BakkleTests.swift; sourceTree = "<group>"; };
 		5EBDD6B01AB2139700C7FBE7 /* bakkleLogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bakkleLogo.png; sourceTree = "<group>"; };
+		A03508F21AB3C34900CA6455 /* SplashScreen-bkg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "SplashScreen-bkg.png"; path = "../../../graphics/SplashScreen-bkg.png"; sourceTree = "<group>"; };
+		A03508F61AB3C5FB00CA6455 /* logo-green-design-png-white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-green-design-png-white.png"; sourceTree = "<group>"; };
+		A03508F81AB3C6AE00CA6455 /* logo-white-design-png.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-white-design-png.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,6 +98,9 @@
 		5EBDD68E1AB211E600C7FBE7 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				A03508F81AB3C6AE00CA6455 /* logo-white-design-png.png */,
+				A03508F61AB3C5FB00CA6455 /* logo-green-design-png-white.png */,
+				A03508F21AB3C34900CA6455 /* SplashScreen-bkg.png */,
 				5EBDD6B01AB2139700C7FBE7 /* bakkleLogo.png */,
 				5EBDD68F1AB211E600C7FBE7 /* Info.plist */,
 			);
@@ -164,6 +173,7 @@
 				TargetAttributes = {
 					5EBDD68A1AB211E600C7FBE7 = {
 						CreatedOnToolsVersion = 6.1.1;
+						DevelopmentTeam = 73BH7B3T66;
 					};
 					5EBDD69F1AB211E600C7FBE7 = {
 						CreatedOnToolsVersion = 6.1.1;
@@ -195,10 +205,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A03508F91AB3C6AE00CA6455 /* logo-white-design-png.png in Resources */,
+				A03508F71AB3C5FB00CA6455 /* logo-green-design-png-white.png in Resources */,
 				5EBDD6B11AB2139700C7FBE7 /* bakkleLogo.png in Resources */,
 				5EBDD6961AB211E600C7FBE7 /* Main.storyboard in Resources */,
 				5EBDD69B1AB211E600C7FBE7 /* LaunchScreen.xib in Resources */,
 				5EBDD6981AB211E600C7FBE7 /* Images.xcassets in Resources */,
+				A03508F31AB3C34900CA6455 /* SplashScreen-bkg.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -340,6 +353,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = Bakkle/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -350,6 +365,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = Bakkle/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -409,6 +426,7 @@
 				5EBDD6AC1AB211E600C7FBE7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		5EBDD6AD1AB211E600C7FBE7 /* Build configuration list for PBXNativeTarget "BakkleTests" */ = {
 			isa = XCConfigurationList;
@@ -417,6 +435,7 @@
 				5EBDD6AF1AB211E600C7FBE7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
