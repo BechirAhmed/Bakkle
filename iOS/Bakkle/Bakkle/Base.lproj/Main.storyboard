@@ -61,7 +61,7 @@
                                             </mask>
                                         </variation>
                                         <variation key="heightClass=regular-widthClass=compact" ambiguous="YES">
-                                            <rect key="frame" x="100" y="526" width="200" height="50"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="0.0" height="0.0"/>
                                             <mask key="constraints">
                                                 <exclude reference="Uul-6G-4w4"/>
                                                 <exclude reference="k6g-g8-qqH"/>
@@ -102,12 +102,12 @@
                                         <exclude reference="M2Y-Q2-c87"/>
                                     </mask>
                                     <mask key="constraints">
-                                        <exclude reference="6VR-SK-LPe"/>
-                                        <exclude reference="MSZ-5F-d6j"/>
-                                        <exclude reference="P2v-7v-1H8"/>
                                         <exclude reference="OyQ-Xl-5JY"/>
                                         <exclude reference="lHA-W9-iB7"/>
                                         <exclude reference="xo7-x7-smG"/>
+                                        <exclude reference="6VR-SK-LPe"/>
+                                        <exclude reference="MSZ-5F-d6j"/>
+                                        <exclude reference="P2v-7v-1H8"/>
                                         <exclude reference="51n-dO-jRD"/>
                                         <exclude reference="BJ0-WN-uRM"/>
                                         <exclude reference="CH5-qG-mXn"/>
@@ -135,12 +135,12 @@
                                         <include reference="M2Y-Q2-c87"/>
                                     </mask>
                                     <mask key="constraints">
-                                        <include reference="6VR-SK-LPe"/>
-                                        <include reference="MSZ-5F-d6j"/>
-                                        <include reference="P2v-7v-1H8"/>
                                         <exclude reference="OyQ-Xl-5JY"/>
                                         <include reference="lHA-W9-iB7"/>
                                         <include reference="xo7-x7-smG"/>
+                                        <include reference="6VR-SK-LPe"/>
+                                        <include reference="MSZ-5F-d6j"/>
+                                        <include reference="P2v-7v-1H8"/>
                                         <exclude reference="51n-dO-jRD"/>
                                         <exclude reference="BJ0-WN-uRM"/>
                                         <exclude reference="CH5-qG-mXn"/>
@@ -199,11 +199,29 @@
                     </view>
                     <connections>
                         <outlet property="fbLoginView" destination="M2Y-Q2-c87" id="MfE-ah-HZo"/>
+                        <segue destination="dzt-bR-uoN" kind="show" identifier="PushToFeedSegue" id="dNL-Mh-HbT"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="681" y="423"/>
+        </scene>
+        <!--Feed Screen-->
+        <scene sceneID="ZC6-XV-s1s">
+            <objects>
+                <viewController id="dzt-bR-uoN" customClass="FeedScreen" customModule="Bakkle" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Z1Y-F5-NBK"/>
+                        <viewControllerLayoutGuide type="bottom" id="a0G-kd-82u"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Wzf-MH-BHC">
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="0.95111918057977196" green="1" blue="0.47444979483763061" alpha="1" colorSpace="calibratedRGB"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="R4S-Vw-NC2" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1479" y="418.5"/>
         </scene>
     </scenes>
     <resources>

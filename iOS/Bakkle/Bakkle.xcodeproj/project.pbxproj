@@ -15,6 +15,18 @@
 		5EBDD6A71AB211E600C7FBE7 /* BakkleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EBDD6A61AB211E600C7FBE7 /* BakkleTests.swift */; };
 		5EBDD6B11AB2139700C7FBE7 /* bakkleLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 5EBDD6B01AB2139700C7FBE7 /* bakkleLogo.png */; };
 		5EE2C9891AB9B6270031D8CD /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5EE2C9881AB9B6270031D8CD /* FacebookSDK.framework */; };
+		5EE2C98B1AB9D1730031D8CD /* FeedScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C98A1AB9D1730031D8CD /* FeedScreen.swift */; };
+		5EE2C98D1AB9E3B40031D8CD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5EE2C98C1AB9E3B40031D8CD /* Foundation.framework */; };
+		5EE2C9B21AB9F0FB0031D8CD /* UIView+MDCSwipeToChoose.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C99D1AB9F0FA0031D8CD /* UIView+MDCSwipeToChoose.m */; };
+		5EE2C9B31AB9F0FB0031D8CD /* MDCSwipeToChooseView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C99F1AB9F0FA0031D8CD /* MDCSwipeToChooseView.m */; };
+		5EE2C9B41AB9F0FB0031D8CD /* MDCSwipeOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C9A11AB9F0FA0031D8CD /* MDCSwipeOptions.m */; };
+		5EE2C9B51AB9F0FB0031D8CD /* MDCSwipeToChooseViewOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C9A31AB9F0FA0031D8CD /* MDCSwipeToChooseViewOptions.m */; };
+		5EE2C9B61AB9F0FB0031D8CD /* MDCSwipeResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C9A61AB9F0FA0031D8CD /* MDCSwipeResult.m */; };
+		5EE2C9B71AB9F0FB0031D8CD /* MDCPanState.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C9A81AB9F0FA0031D8CD /* MDCPanState.m */; };
+		5EE2C9B81AB9F0FB0031D8CD /* MDCGeometry.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C9AA1AB9F0FB0031D8CD /* MDCGeometry.m */; };
+		5EE2C9B91AB9F0FB0031D8CD /* UIColor+MDCRGB8Bit.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C9AC1AB9F0FB0031D8CD /* UIColor+MDCRGB8Bit.m */; };
+		5EE2C9BA1AB9F0FB0031D8CD /* UIView+MDCBorderedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C9AE1AB9F0FB0031D8CD /* UIView+MDCBorderedLabel.m */; };
+		5EE2C9BB1AB9F0FB0031D8CD /* MDCViewState.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C9B01AB9F0FB0031D8CD /* MDCViewState.m */; };
 		A03508F31AB3C34900CA6455 /* SplashScreen-bkg.png in Resources */ = {isa = PBXBuildFile; fileRef = A03508F21AB3C34900CA6455 /* SplashScreen-bkg.png */; };
 		A03508F71AB3C5FB00CA6455 /* logo-green-design-png-white.png in Resources */ = {isa = PBXBuildFile; fileRef = A03508F61AB3C5FB00CA6455 /* logo-green-design-png-white.png */; };
 		A03508F91AB3C6AE00CA6455 /* logo-white-design-png.png in Resources */ = {isa = PBXBuildFile; fileRef = A03508F81AB3C6AE00CA6455 /* logo-white-design-png.png */; };
@@ -44,6 +56,32 @@
 		5EBDD6A61AB211E600C7FBE7 /* BakkleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BakkleTests.swift; sourceTree = "<group>"; };
 		5EBDD6B01AB2139700C7FBE7 /* bakkleLogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bakkleLogo.png; sourceTree = "<group>"; };
 		5EE2C9881AB9B6270031D8CD /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
+		5EE2C98A1AB9D1730031D8CD /* FeedScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FeedScreen.swift; path = ../FeedScreen.swift; sourceTree = "<group>"; };
+		5EE2C98C1AB9E3B40031D8CD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		5EE2C99A1AB9F0FA0031D8CD /* MDCSwipeToChoose.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDCSwipeToChoose.h; sourceTree = "<group>"; };
+		5EE2C99B1AB9F0FA0031D8CD /* MDCSwipeToChooseDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDCSwipeToChooseDelegate.h; sourceTree = "<group>"; };
+		5EE2C99C1AB9F0FA0031D8CD /* UIView+MDCSwipeToChoose.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+MDCSwipeToChoose.h"; sourceTree = "<group>"; };
+		5EE2C99D1AB9F0FA0031D8CD /* UIView+MDCSwipeToChoose.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+MDCSwipeToChoose.m"; sourceTree = "<group>"; };
+		5EE2C99E1AB9F0FA0031D8CD /* MDCSwipeToChooseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDCSwipeToChooseView.h; sourceTree = "<group>"; };
+		5EE2C99F1AB9F0FA0031D8CD /* MDCSwipeToChooseView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDCSwipeToChooseView.m; sourceTree = "<group>"; };
+		5EE2C9A01AB9F0FA0031D8CD /* MDCSwipeOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDCSwipeOptions.h; sourceTree = "<group>"; };
+		5EE2C9A11AB9F0FA0031D8CD /* MDCSwipeOptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDCSwipeOptions.m; sourceTree = "<group>"; };
+		5EE2C9A21AB9F0FA0031D8CD /* MDCSwipeToChooseViewOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDCSwipeToChooseViewOptions.h; sourceTree = "<group>"; };
+		5EE2C9A31AB9F0FA0031D8CD /* MDCSwipeToChooseViewOptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDCSwipeToChooseViewOptions.m; sourceTree = "<group>"; };
+		5EE2C9A41AB9F0FA0031D8CD /* MDCSwipeDirection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDCSwipeDirection.h; sourceTree = "<group>"; };
+		5EE2C9A51AB9F0FA0031D8CD /* MDCSwipeResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDCSwipeResult.h; sourceTree = "<group>"; };
+		5EE2C9A61AB9F0FA0031D8CD /* MDCSwipeResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDCSwipeResult.m; sourceTree = "<group>"; };
+		5EE2C9A71AB9F0FA0031D8CD /* MDCPanState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDCPanState.h; sourceTree = "<group>"; };
+		5EE2C9A81AB9F0FA0031D8CD /* MDCPanState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDCPanState.m; sourceTree = "<group>"; };
+		5EE2C9A91AB9F0FB0031D8CD /* MDCGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDCGeometry.h; sourceTree = "<group>"; };
+		5EE2C9AA1AB9F0FB0031D8CD /* MDCGeometry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDCGeometry.m; sourceTree = "<group>"; };
+		5EE2C9AB1AB9F0FB0031D8CD /* UIColor+MDCRGB8Bit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+MDCRGB8Bit.h"; sourceTree = "<group>"; };
+		5EE2C9AC1AB9F0FB0031D8CD /* UIColor+MDCRGB8Bit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+MDCRGB8Bit.m"; sourceTree = "<group>"; };
+		5EE2C9AD1AB9F0FB0031D8CD /* UIView+MDCBorderedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+MDCBorderedLabel.h"; sourceTree = "<group>"; };
+		5EE2C9AE1AB9F0FB0031D8CD /* UIView+MDCBorderedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+MDCBorderedLabel.m"; sourceTree = "<group>"; };
+		5EE2C9AF1AB9F0FB0031D8CD /* MDCViewState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDCViewState.h; sourceTree = "<group>"; };
+		5EE2C9B01AB9F0FB0031D8CD /* MDCViewState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDCViewState.m; sourceTree = "<group>"; };
+		5EE2C9B11AB9F0FB0031D8CD /* MDCSwipeToChoose-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MDCSwipeToChoose-Prefix.pch"; path = "../MDCSwipeToChoose-Prefix.pch"; sourceTree = "<group>"; };
 		A03508F21AB3C34900CA6455 /* SplashScreen-bkg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "SplashScreen-bkg.png"; path = "../../../graphics/SplashScreen-bkg.png"; sourceTree = "<group>"; };
 		A03508F61AB3C5FB00CA6455 /* logo-green-design-png-white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-green-design-png-white.png"; sourceTree = "<group>"; };
 		A03508F81AB3C6AE00CA6455 /* logo-white-design-png.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-white-design-png.png"; sourceTree = "<group>"; };
@@ -54,6 +92,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5EE2C98D1AB9E3B40031D8CD /* Foundation.framework in Frameworks */,
 				5EE2C9891AB9B6270031D8CD /* FacebookSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -71,7 +110,8 @@
 		5EBDD6821AB211E600C7FBE7 = {
 			isa = PBXGroup;
 			children = (
-				5EE2C9881AB9B6270031D8CD /* FacebookSDK.framework */,
+				5EE2C9BC1AB9F1080031D8CD /* MDCSwipe Library */,
+				5EE2C98E1AB9E3BB0031D8CD /* Frameworks */,
 				5EBDD68D1AB211E600C7FBE7 /* Bakkle */,
 				5EBDD6A31AB211E600C7FBE7 /* BakkleTests */,
 				5EBDD68C1AB211E600C7FBE7 /* Products */,
@@ -90,6 +130,7 @@
 		5EBDD68D1AB211E600C7FBE7 /* Bakkle */ = {
 			isa = PBXGroup;
 			children = (
+				5EE2C98A1AB9D1730031D8CD /* FeedScreen.swift */,
 				5E5CB0A81AB7547800F32BE6 /* Bridging-Header.h */,
 				5EBDD6901AB211E600C7FBE7 /* AppDelegate.swift */,
 				5EBDD6921AB211E600C7FBE7 /* ViewController.swift */,
@@ -104,6 +145,7 @@
 		5EBDD68E1AB211E600C7FBE7 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				5EE2C9B11AB9F0FB0031D8CD /* MDCSwipeToChoose-Prefix.pch */,
 				A03508F81AB3C6AE00CA6455 /* logo-white-design-png.png */,
 				A03508F61AB3C5FB00CA6455 /* logo-green-design-png-white.png */,
 				A03508F21AB3C34900CA6455 /* SplashScreen-bkg.png */,
@@ -128,6 +170,45 @@
 				5EBDD6A51AB211E600C7FBE7 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		5EE2C98E1AB9E3BB0031D8CD /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5EE2C98C1AB9E3B40031D8CD /* Foundation.framework */,
+				5EE2C9881AB9B6270031D8CD /* FacebookSDK.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		5EE2C9BC1AB9F1080031D8CD /* MDCSwipe Library */ = {
+			isa = PBXGroup;
+			children = (
+				5EE2C99A1AB9F0FA0031D8CD /* MDCSwipeToChoose.h */,
+				5EE2C99B1AB9F0FA0031D8CD /* MDCSwipeToChooseDelegate.h */,
+				5EE2C99C1AB9F0FA0031D8CD /* UIView+MDCSwipeToChoose.h */,
+				5EE2C99D1AB9F0FA0031D8CD /* UIView+MDCSwipeToChoose.m */,
+				5EE2C99E1AB9F0FA0031D8CD /* MDCSwipeToChooseView.h */,
+				5EE2C99F1AB9F0FA0031D8CD /* MDCSwipeToChooseView.m */,
+				5EE2C9A01AB9F0FA0031D8CD /* MDCSwipeOptions.h */,
+				5EE2C9A11AB9F0FA0031D8CD /* MDCSwipeOptions.m */,
+				5EE2C9A21AB9F0FA0031D8CD /* MDCSwipeToChooseViewOptions.h */,
+				5EE2C9A31AB9F0FA0031D8CD /* MDCSwipeToChooseViewOptions.m */,
+				5EE2C9A41AB9F0FA0031D8CD /* MDCSwipeDirection.h */,
+				5EE2C9A51AB9F0FA0031D8CD /* MDCSwipeResult.h */,
+				5EE2C9A61AB9F0FA0031D8CD /* MDCSwipeResult.m */,
+				5EE2C9A71AB9F0FA0031D8CD /* MDCPanState.h */,
+				5EE2C9A81AB9F0FA0031D8CD /* MDCPanState.m */,
+				5EE2C9A91AB9F0FB0031D8CD /* MDCGeometry.h */,
+				5EE2C9AA1AB9F0FB0031D8CD /* MDCGeometry.m */,
+				5EE2C9AB1AB9F0FB0031D8CD /* UIColor+MDCRGB8Bit.h */,
+				5EE2C9AC1AB9F0FB0031D8CD /* UIColor+MDCRGB8Bit.m */,
+				5EE2C9AD1AB9F0FB0031D8CD /* UIView+MDCBorderedLabel.h */,
+				5EE2C9AE1AB9F0FB0031D8CD /* UIView+MDCBorderedLabel.m */,
+				5EE2C9AF1AB9F0FB0031D8CD /* MDCViewState.h */,
+				5EE2C9B01AB9F0FB0031D8CD /* MDCViewState.m */,
+			);
+			name = "MDCSwipe Library";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -235,8 +316,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5EE2C9B71AB9F0FB0031D8CD /* MDCPanState.m in Sources */,
 				5EBDD6931AB211E600C7FBE7 /* ViewController.swift in Sources */,
+				5EE2C98B1AB9D1730031D8CD /* FeedScreen.swift in Sources */,
+				5EE2C9B91AB9F0FB0031D8CD /* UIColor+MDCRGB8Bit.m in Sources */,
+				5EE2C9B31AB9F0FB0031D8CD /* MDCSwipeToChooseView.m in Sources */,
+				5EE2C9BA1AB9F0FB0031D8CD /* UIView+MDCBorderedLabel.m in Sources */,
+				5EE2C9B81AB9F0FB0031D8CD /* MDCGeometry.m in Sources */,
+				5EE2C9BB1AB9F0FB0031D8CD /* MDCViewState.m in Sources */,
+				5EE2C9B41AB9F0FB0031D8CD /* MDCSwipeOptions.m in Sources */,
+				5EE2C9B61AB9F0FB0031D8CD /* MDCSwipeResult.m in Sources */,
 				5EBDD6911AB211E600C7FBE7 /* AppDelegate.swift in Sources */,
+				5EE2C9B21AB9F0FB0031D8CD /* UIView+MDCSwipeToChoose.m in Sources */,
+				5EE2C9B51AB9F0FB0031D8CD /* MDCSwipeToChooseViewOptions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

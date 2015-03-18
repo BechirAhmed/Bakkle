@@ -10,6 +10,7 @@ import UIKit
 
 class ViewController: UIViewController, FBLoginViewDelegate {
 
+    let mainScreenSegueIdentifier = "PushToFeedSegue"
     
     @IBOutlet weak var fbLoginView: FBLoginView!
     
@@ -28,13 +29,14 @@ class ViewController: UIViewController, FBLoginViewDelegate {
         fbLoginView.sizeToFit()
         
         self.fbLoginView.delegate = self
-        self.fbLoginView.readPermissions = ["public_profile", "email", "user_friends"]
+        self.fbLoginView.readPermissions = ["public_profile", "email", "user_friends", "publish_actions"]
 
         
     }
     
     func loginViewShowingLoggedInUser(loginView : FBLoginView!) {
         println("User Logged In")
+        
     }
     
     func loginViewFetchedUserInfo(loginView : FBLoginView!, user: FBGraphUser) {
@@ -43,6 +45,11 @@ class ViewController: UIViewController, FBLoginViewDelegate {
         println("User Name: \(user.name)")
         var userEmail = user.objectForKey("email") as String
         println("User Email: \(userEmail)")
+        
+        let mainScreenViewController : FeedScreen = FeedScreen()
+        self.performSegueWithIdentifier(mainScreenSegueIdentifier, sender: self)
+      //  self.navigationController?.pushViewController(mainScreenViewController, animated: true)
+     //   self.presentViewController(mainScreenViewController, animated: true, completion: nil)
     }
     
     func loginViewShowingLoggedOutUser(loginView : FBLoginView!) {
