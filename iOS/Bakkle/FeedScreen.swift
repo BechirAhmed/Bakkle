@@ -20,11 +20,13 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
         options.likedText = "Want"
         options.likedColor = UIColor.greenColor()
         options.nopeText = "Meh"
-//        options.onPan = {
-  //          if state.thresholdRatio == 1.f && state.direction == MDCSwipeDirection.Left){
-    //            println("let go to delete the picture.")
-      //      }
-       // }
+        options.holdText = "Hold"
+        options.holdColor = UIColor.blueColor()
+        options.onPan = {(state) in
+            if state.thresholdRatio == 1 && state.direction == MDCSwipeDirection.Left {
+                println("let go to delete the picture.")
+            }
+        }
         
         let view : MDCSwipeToChooseView = MDCSwipeToChooseView(frame: self.view.bounds, options: options)
         

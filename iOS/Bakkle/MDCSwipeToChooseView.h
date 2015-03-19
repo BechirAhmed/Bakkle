@@ -42,6 +42,17 @@
  */
 @property (nonatomic, strong) UIView *likedView;
 
+/*
+ * The "hold" view, which fades in as the swipe is made to the top.
+ */
+@property (nonatomic, strong) UIView *holdView;
+
+
+/*
+ * The "report" view, which fades in as the swipe is made to the bottom.
+ */
+@property (nonatomic, strong) UIView *reportView;
+
 /*!
  * The "nope" view, which fades in as the `MDCSwipeToChooseView` is panned to the left.
  */

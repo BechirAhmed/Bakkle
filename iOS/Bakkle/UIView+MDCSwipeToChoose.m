@@ -115,6 +115,8 @@ const void * const MDCViewStateKey = &MDCViewStateKey;
     MDCSwipeDirection direction = [self mdc_directionOfExceededThreshold];
     switch (direction) {
         case MDCSwipeDirectionRight:
+        case MDCSwipeDirectionUp:
+        case MDCSwipeDirectionDown:
         case MDCSwipeDirectionLeft: {
             CGPoint translation = MDCCGPointSubtract(self.center,
                                                      self.mdc_viewState.originalCenter);
@@ -171,6 +173,7 @@ const void * const MDCViewStateKey = &MDCViewStateKey;
 
 - (void)mdc_executeOnPanBlockForTranslation:(CGPoint)translation {
     if (self.mdc_options.onPan) {
+        
         CGFloat thresholdRatio = MIN(1.f, fabsf(translation.x)/self.mdc_options.threshold);
 
         MDCSwipeDirection direction = MDCSwipeDirectionNone;
@@ -178,6 +181,10 @@ const void * const MDCViewStateKey = &MDCViewStateKey;
             direction = MDCSwipeDirectionRight;
         } else if (translation.x < 0.f) {
             direction = MDCSwipeDirectionLeft;
+        } else if (translation.y > 0.f) {
+            direction = MDCSwipeDirectionUp;
+        } else if (translation.y < 0.f){
+            direction = MDCSwipeDirectionDown;
         }
 
         MDCPanState *state = [MDCPanState new];
@@ -192,8 +199,13 @@ const void * const MDCViewStateKey = &MDCViewStateKey;
 
 - (void)mdc_rotateForTranslation:(CGPoint)translation
                rotationDirection:(MDCRotationDirection)rotationDirection {
-    CGFloat rotation = MDCDegreesToRadians(translation.x/100 * self.mdc_options.rotationFactor);
-    self.layer.transform = CATransform3DMakeRotation(rotationDirection * rotation, 0.0, 0.0, 1.0);
+    if (rotationDirection == MDCSwipeDirectionLeft || rotationDirection == MDCSwipeDirectionRight){
+        CGFloat rotation = MDCDegreesToRadians(translation.x/100 * self.mdc_options.rotationFactor);
+        self.layer.transform = CATransform3DMakeRotation(rotationDirection * rotation, 0.0, 0.0, 1.0);
+    } else if (rotationDirection == MDCSwipeDirectionDown || rotationDirection == MDCSwipeDirectionUp) {
+        CGFloat rotation = MDCDegreesToRadians(translation.y/100 * self.mdc_options.rotationFactor);
+        self.layer.transform = CATransform3DMakeRotation(rotationDirection * rotation, 0.0, 0.0, 1.0);
+    }
 }
 
 #pragma mark Threshold
@@ -208,6 +220,10 @@ const void * const MDCViewStateKey = &MDCViewStateKey;
             return CGPointMake(-offset, 0);
         case MDCSwipeDirectionRight:
             return CGPointMake(offset, 0);
+        case MDCSwipeDirectionDown:
+            return CGPointMake(0, offset);
+        case MDCSwipeDirectionUp:
+            return CGPointMake(0, -offset);
         default:
             [NSException raise:NSInternalInconsistencyException
                         format:@"Invallid direction argument."];
@@ -220,7 +236,12 @@ const void * const MDCViewStateKey = &MDCViewStateKey;
         return MDCSwipeDirectionRight;
     } else if (self.center.x < self.mdc_viewState.originalCenter.x - self.mdc_options.threshold) {
         return MDCSwipeDirectionLeft;
-    } else {
+    } else if (self.center.y > self.mdc_viewState.originalCenter.y + self.mdc_options.threshold){
+        return MDCSwipeDirectionDown;
+    } else if (self.center.y < self.mdc_viewState.originalCenter.y - self.mdc_options.threshold){
+        return MDCSwipeDirectionUp;
+    }
+    else {
         return MDCSwipeDirectionNone;
     }
 }
