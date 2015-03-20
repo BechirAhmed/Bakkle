@@ -3,4 +3,7 @@
 #apt-get update
 #apt-get dist-upgrade
 
-apt-get install git python-setuptools
+sudo apt-get install git python-setuptools
+
+
+
