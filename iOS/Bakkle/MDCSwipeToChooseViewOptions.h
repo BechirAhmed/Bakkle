@@ -72,6 +72,17 @@
  */
 @property (nonatomic, assign) CGFloat nopeRotationAngle;
 
+
+@property (nonatomic, copy) NSString *holdText;
+@property (nonatomic, strong) UIColor * holdColor;
+@property (nonatomic, assign) CGFloat holdRotationAngle;
+
+
+
+@property (nonatomic, copy) NSString *reportText;
+@property (nonatomic, strong) UIColor * reportColor;
+@property (nonatomic, assign) CGFloat reportRotationAngle;
+
 /*!
  * The distance, in pixels, that a view must be panned in order to constitue a selection.
  * For example, if the `threshold` is `100.f`, panning the view `101.f` pixels to the right

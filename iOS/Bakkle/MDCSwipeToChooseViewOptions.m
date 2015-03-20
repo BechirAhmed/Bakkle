@@ -37,8 +37,16 @@
         _nopeText = [NSLocalizedString(@"nope", nil) uppercaseString];
         _nopeColor = [UIColor colorWith8BitRed:247.f green:91.f blue:37.f alpha:1.f];
         _nopeRotationAngle = 15.f;
+        
+        _holdText = [NSLocalizedString(@"hold", nil) uppercaseString];
+        _holdColor = [UIColor blueColor];
+        _holdRotationAngle = 15.f;
+        
+        _reportText = [NSLocalizedString(@"report", nil) uppercaseString];
+        _holdColor = [UIColor grayColor];
+        _holdRotationAngle = -15.f;
 
-        _threshold = 100.f;
+        _threshold = 50.f;
     }
     return self;
 }
