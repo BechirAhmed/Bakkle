@@ -39,7 +39,7 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
     }
     
     func view(view: UIView!, shouldBeChosenWithDirection direction: MDCSwipeDirection) -> Bool {
-        if direction == MDCSwipeDirection.Left {
+        if direction == MDCSwipeDirection.Left || direction == MDCSwipeDirection.Right || direction == MDCSwipeDirection.Up || direction == MDCSwipeDirection.Down {
             return true
         } else {
             UIView.animateWithDuration(0.16, animations: { () -> Void in
@@ -57,6 +57,12 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
         }
         else if direction == MDCSwipeDirection.Right {
             println("I want")
+        }
+        else if direction == MDCSwipeDirection.Up {
+            println("HOLD!")
+        }
+        else if direction == MDCSwipeDirection.Down {
+            println("Report")
         }
     }
     
