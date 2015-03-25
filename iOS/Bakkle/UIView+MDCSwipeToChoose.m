@@ -85,6 +85,10 @@ const void * const MDCViewStateKey = &MDCViewStateKey;
     return objc_getAssociatedObject(self, MDCSwipeOptionsKey);
 }
 
+//- (MDCSwipeDirection *) getDirection {
+//    return st
+//}
+
 - (void)setMdc_viewState:(MDCViewState *)state {
     objc_setAssociatedObject(self, MDCViewStateKey, state, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
@@ -174,16 +178,22 @@ const void * const MDCViewStateKey = &MDCViewStateKey;
 - (void)mdc_executeOnPanBlockForTranslation:(CGPoint)translation {
     if (self.mdc_options.onPan) {
         
-        CGFloat thresholdRatio = MIN(1.f, fabsf(translation.x)/self.mdc_options.threshold);
+        CGFloat thresholdRatio;// = MIN(1.f, fabsf(translation.x)/self.mdc_options.threshold);
 
         MDCSwipeDirection direction = MDCSwipeDirectionNone;
+        
+        
         if (translation.x > 0.f) {
+            thresholdRatio = MIN(1.f, fabsf(translation.x)/self.mdc_options.threshold);
             direction = MDCSwipeDirectionRight;
         } else if (translation.x < 0.f) {
+            thresholdRatio = MIN(1.f, fabsf(translation.x)/self.mdc_options.threshold);
             direction = MDCSwipeDirectionLeft;
         } else if (translation.y > 0.f) {
+            thresholdRatio = MIN(1.f, fabsf(translation.y)/self.mdc_options.threshold);
             direction = MDCSwipeDirectionUp;
         } else if (translation.y < 0.f){
+            thresholdRatio = MIN(1.f, fabsf(translation.y)/self.mdc_options.threshold);
             direction = MDCSwipeDirectionDown;
         }
 

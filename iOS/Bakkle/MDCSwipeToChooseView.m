@@ -50,8 +50,8 @@ static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
         [self constructLikedView];
         [self constructNopeImageView];
         [self setupSwipeToChoose];
-      //  [self constructHoldView];
-       // [self constructReportView];
+        [self constructHoldView];
+        [self constructReportView];
     }
     return self;
 }
@@ -75,14 +75,27 @@ static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
     [self addSubview:_imageView];
 }
 
+- (void)constructReportView {
+    CGRect frame = CGRectMake(MDCSwipeToChooseViewHorizontalPadding,
+                              MDCSwipeToChooseViewTopPadding,
+                              CGRectGetMidX(_imageView.bounds),
+                              MDCSwipeToChooseViewLabelWidth);
+    self.reportView = [[UIView alloc] initWithFrame:frame];
+    [self.reportView constructBorderedLabelWithText:self.options.reportText
+                                             color:self.options.reportColor
+                                             angle:self.options.reportRotationAngle];
+    self.reportView.alpha = 0.f;
+    [self.imageView addSubview:self.reportView];
+}
+
 - (void)constructHoldView {
     CGFloat width = CGRectGetMidX(_imageView.bounds);
-   // CGFloat xOrigin = (CGRectGetMaxX(_imageView.bounds) - width - MDCSwipeToChooseViewHorizontalPadding)/2;
-    CGRect frame = CGRectMake(/*xOrigin*/MDCSwipeToChooseViewHorizontalPadding, CGRectGetMaxY(_imageView.bounds) - MDCSwipeToChooseViewTopPadding/*MDCSwipeToChooseViewTopPadding*/, width, MDCSwipeToChooseViewLabelWidth);
+  //  CGFloat xOrigin = (CGRectGetMaxX(_imageView.bounds) - width - MDCSwipeToChooseViewHorizontalPadding)/2;
+    CGRect frame = CGRectMake(/*xOrigin*/MDCSwipeToChooseViewHorizontalPadding, (CGRectGetMaxY(_imageView.bounds) - MDCSwipeToChooseViewTopPadding)/*MDCSwipeToChooseViewTopPadding*/, width, MDCSwipeToChooseViewLabelWidth);
     self.holdView = [[UIImageView alloc] initWithFrame:frame];
     [self.holdView constructBorderedLabelWithText:self.options.holdText color:self.options.holdColor angle:self.options.holdRotationAngle];
     
-    self.imageView.alpha =  0.f;
+    self.holdView.alpha =  0.f;
     [self.imageView addSubview:self.holdView];
 }
 

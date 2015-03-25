@@ -12,10 +12,22 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
 
     var state : MDCPanState!
     
+    let menuSegue = "presentNav"
+    
+    var transitionOperator = TransitionOperator()
+    
+    
+    @IBOutlet weak var navBar: UINavigationBar!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        var shortImg = UIImageView(image: UIImage(named: "bakkleLogo.png")) //UIImage(named: "bakkleLogo.png")
+        self.navBar.backgroundColor = UIColor.redColor()
+        self.navBar.topItem?.title = "Logo goes here!"
         
-        var options : MDCSwipeToChooseViewOptions = MDCSwipeToChooseViewOptions()
+       // self.navigationItem.leftBarButtonItem = UINavigationItem.to
+        
+        var options = MDCSwipeToChooseViewOptions()
         options.delegate = self
         options.likedText = "Want"
         options.likedColor = UIColor.greenColor()
@@ -33,6 +45,10 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
         view.imageView.image = UIImage(named: "photo")
         self.view.addSubview(view)
     }
+    
+//    @IBAction func presentMenuBar(sender: AnyObject) {
+//        performSegueWithIdentifier(menuSegue, sender: self)
+//    }
     
     func viewDidCancelSwipe(view: UIView!) {
         println("You canceled the swipe")
@@ -66,6 +82,13 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
         }
     }
     
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == menuSegue {
+            let toViewController = segue.destinationViewController as Menu
+            self.modalPresentationStyle = UIModalPresentationStyle.Custom
+            toViewController.transitioningDelegate = self.transitionOperator
+        }
+    }
     
     
     
