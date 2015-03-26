@@ -20,6 +20,8 @@ class Menu: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
         
         self.navigationItem.title = "ACCOUNT"
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: nil)
+        
     }
     
     override func viewWillAppear(animated: Bool) {

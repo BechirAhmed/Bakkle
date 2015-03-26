@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5E0242911AC47FFB0094BB05 /* Screen Shot 2015-03-26 at 1.56.29 PM 1.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E0242901AC47FFB0094BB05 /* Screen Shot 2015-03-26 at 1.56.29 PM 1.png */; };
+		5E0242931AC481E80094BB05 /* menubtn.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E0242921AC481E80094BB05 /* menubtn.png */; };
 		5E8C44CD1AC3217000BC4A2C /* TransitionOperator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E8C44CC1AC3217000BC4A2C /* TransitionOperator.swift */; };
 		5E8C44D11AC3286200BC4A2C /* Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E8C44D01AC3286200BC4A2C /* Menu.swift */; };
 		5EBDD6911AB211E600C7FBE7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EBDD6901AB211E600C7FBE7 /* AppDelegate.swift */; };
@@ -45,6 +47,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5E0242901AC47FFB0094BB05 /* Screen Shot 2015-03-26 at 1.56.29 PM 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Screen Shot 2015-03-26 at 1.56.29 PM 1.png"; sourceTree = "<group>"; };
+		5E0242921AC481E80094BB05 /* menubtn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menubtn.png; sourceTree = "<group>"; };
 		5E5CB0A81AB7547800F32BE6 /* Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
 		5E8C44CC1AC3217000BC4A2C /* TransitionOperator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransitionOperator.swift; sourceTree = "<group>"; };
 		5E8C44D01AC3286200BC4A2C /* Menu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Menu.swift; sourceTree = "<group>"; };
@@ -114,7 +118,9 @@
 		5EBDD6821AB211E600C7FBE7 = {
 			isa = PBXGroup;
 			children = (
+				5E0242901AC47FFB0094BB05 /* Screen Shot 2015-03-26 at 1.56.29 PM 1.png */,
 				5E8C44D01AC3286200BC4A2C /* Menu.swift */,
+				5E0242921AC481E80094BB05 /* menubtn.png */,
 				5E8C44CC1AC3217000BC4A2C /* TransitionOperator.swift */,
 				5EE2C9BC1AB9F1080031D8CD /* MDCSwipe Library */,
 				5EE2C98E1AB9E3BB0031D8CD /* Frameworks */,
@@ -304,6 +310,8 @@
 				5EBDD6961AB211E600C7FBE7 /* Main.storyboard in Resources */,
 				5EBDD69B1AB211E600C7FBE7 /* LaunchScreen.xib in Resources */,
 				5EBDD6981AB211E600C7FBE7 /* Images.xcassets in Resources */,
+				5E0242931AC481E80094BB05 /* menubtn.png in Resources */,
+				5E0242911AC47FFB0094BB05 /* Screen Shot 2015-03-26 at 1.56.29 PM 1.png in Resources */,
 				A03508F31AB3C34900CA6455 /* SplashScreen-bkg.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

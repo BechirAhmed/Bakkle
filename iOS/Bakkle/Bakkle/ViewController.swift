@@ -13,8 +13,7 @@ class ViewController: UIViewController, FBLoginViewDelegate {
     let mainScreenSegueIdentifier = "PushToFeedSegue"
     
     @IBOutlet weak var fbLoginView: FBLoginView!
-    
-    
+      
     
     override func viewDidLoad() {
         super.viewDidLoad()

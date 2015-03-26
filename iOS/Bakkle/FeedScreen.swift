@@ -17,6 +17,14 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
     var transitionOperator = TransitionOperator()
     
     
+    
+    @IBOutlet weak var drawer: UIView!
+    
+
+    @IBAction func menuButtonPressed(sender: AnyObject) {
+        drawer.frame.origin = CGPoint(x: 0, y: 0)
+    }
+    
     @IBOutlet weak var navBar: UINavigationBar!
     
     override func viewDidLoad() {

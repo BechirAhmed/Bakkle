@@ -70,7 +70,7 @@ static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
 }
 
 - (void)constructImageView {
-    _imageView = [[UIImageView alloc] initWithFrame:self.bounds];
+    _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(16, 121, 368, 484)];
     _imageView.clipsToBounds = YES;
     [self addSubview:_imageView];
 }
