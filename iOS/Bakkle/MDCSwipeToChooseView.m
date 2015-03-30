@@ -50,8 +50,8 @@ static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
         [self constructLikedView];
         [self constructNopeImageView];
         [self setupSwipeToChoose];
-      //  [self constructHoldView];
-       // [self constructReportView];
+        [self constructHoldView];
+        [self constructReportView];
     }
     return self;
 }
@@ -70,19 +70,32 @@ static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
 }
 
 - (void)constructImageView {
-    _imageView = [[UIImageView alloc] initWithFrame:self.bounds];
+    _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(16, 121, 368, 484)];
     _imageView.clipsToBounds = YES;
     [self addSubview:_imageView];
 }
 
+- (void)constructReportView {
+    CGRect frame = CGRectMake(MDCSwipeToChooseViewHorizontalPadding,
+                              MDCSwipeToChooseViewTopPadding,
+                              CGRectGetMidX(_imageView.bounds),
+                              MDCSwipeToChooseViewLabelWidth);
+    self.reportView = [[UIView alloc] initWithFrame:frame];
+    [self.reportView constructBorderedLabelWithText:self.options.reportText
+                                             color:self.options.reportColor
+                                             angle:self.options.reportRotationAngle];
+    self.reportView.alpha = 0.f;
+    [self.imageView addSubview:self.reportView];
+}
+
 - (void)constructHoldView {
-    CGFloat width = CGRectGetMidX(self.imageView.bounds);
-   // CGFloat xOrigin = (CGRectGetMaxX(_imageView.bounds) - width - MDCSwipeToChooseViewHorizontalPadding)/2;
-    CGRect frame = CGRectMake(/*xOrigin*/MDCSwipeToChooseViewHorizontalPadding, /*CGRectGetMaxY(_imageView.bounds) - MDCSwipeToChooseViewTopPadding*/MDCSwipeToChooseViewTopPadding, width, MDCSwipeToChooseViewLabelWidth);
+    CGFloat width = CGRectGetMidX(_imageView.bounds);
+  //  CGFloat xOrigin = (CGRectGetMaxX(_imageView.bounds) - width - MDCSwipeToChooseViewHorizontalPadding)/2;
+    CGRect frame = CGRectMake(/*xOrigin*/MDCSwipeToChooseViewHorizontalPadding, (CGRectGetMaxY(_imageView.bounds) - MDCSwipeToChooseViewTopPadding)/*MDCSwipeToChooseViewTopPadding*/, width, MDCSwipeToChooseViewLabelWidth);
     self.holdView = [[UIImageView alloc] initWithFrame:frame];
     [self.holdView constructBorderedLabelWithText:self.options.holdText color:self.options.holdColor angle:self.options.holdRotationAngle];
     
-    self.imageView.alpha =  0.f;
+    self.holdView.alpha =  0.f;
     [self.imageView addSubview:self.holdView];
 }
 
@@ -120,17 +133,25 @@ static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
 
     __block UIView *likedImageView = self.likedView;
     __block UIView *nopeImageView = self.nopeView;
+    __block UIView *holdImageView = self.holdView;
     __weak MDCSwipeToChooseView *weakself = self;
     options.onPan = ^(MDCPanState *state) {
         if (state.direction == MDCSwipeDirectionNone) {
             likedImageView.alpha = 0.f;
             nopeImageView.alpha = 0.f;
+            holdImageView.alpha = 0.f;
         } else if (state.direction == MDCSwipeDirectionLeft) {
             likedImageView.alpha = 0.f;
+            holdImageView.alpha = 0.f;
             nopeImageView.alpha = state.thresholdRatio;
         } else if (state.direction == MDCSwipeDirectionRight) {
             likedImageView.alpha = state.thresholdRatio;
             nopeImageView.alpha = 0.f;
+            holdImageView.alpha = 0.f;
+        } else if (state.direction == MDCSwipeDirectionUp) {
+            holdImageView.alpha = state.thresholdRatio;
+            nopeImageView.alpha = 0.f;
+            likedImageView.alpha = 0.f;            
         }
 
         if (weakself.options.onPan) {
