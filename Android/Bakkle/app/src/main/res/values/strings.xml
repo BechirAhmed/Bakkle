@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Bakkle</string>
+    <string name="action_settings">Settings</string>
+    <string name="sign_up_with">SIGN UP WITH</string>
+    <string name="facebook_login">FACEBOOK</string>
+    <string name="email_login">EMAIL</string>
+    <string name="sign_in">SIGN IN</string>
+    <string name="have_account">ALREADY HAVE AN ACCOUNT?</string>
+    <string name="email_hint">EMAIL</string>
+    <string name="password_hint">PASSWORD</string>
+    <string name="or"> OR </string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_sign_in">@string/sign_in</string>
+    <string name="title_activity_login">@string/app_name</string>
+    <string name="title_activity_home">FEED</string>
+    <string name="title_activity_sellers_garage">SELLER\'S GARAGE</string>
+    <string name="title_activity_buyers_trunk">BUYER\'S TRUNK</string>
+    <string name="title_activity_holding_pattern">HOLDING PATTERN</string>
+    <string name="title_activity_feed_filter">FEED_FILTER</string>
+    <string name="title_activity_settings">SETTINGS</string>
+
+    <string name="logout">LOGOUT</string>
+    <string name="drawer_title">ACCOUNT</string>
+    <string name="drawer_open"></string>
+    <string name="drawer_close"></string>
+</resources>
