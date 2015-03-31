@@ -18,7 +18,6 @@
 		5EBDD69B1AB211E600C7FBE7 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5EBDD6991AB211E600C7FBE7 /* LaunchScreen.xib */; };
 		5EBDD6A71AB211E600C7FBE7 /* BakkleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EBDD6A61AB211E600C7FBE7 /* BakkleTests.swift */; };
 		5EBDD6B11AB2139700C7FBE7 /* bakkleLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 5EBDD6B01AB2139700C7FBE7 /* bakkleLogo.png */; };
-		5EE2C9891AB9B6270031D8CD /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5EE2C9881AB9B6270031D8CD /* FacebookSDK.framework */; };
 		5EE2C98B1AB9D1730031D8CD /* FeedScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C98A1AB9D1730031D8CD /* FeedScreen.swift */; };
 		5EE2C98D1AB9E3B40031D8CD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5EE2C98C1AB9E3B40031D8CD /* Foundation.framework */; };
 		5EE2C9B21AB9F0FB0031D8CD /* UIView+MDCSwipeToChoose.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C99D1AB9F0FA0031D8CD /* UIView+MDCSwipeToChoose.m */; };
@@ -34,6 +33,7 @@
 		A03508F31AB3C34900CA6455 /* SplashScreen-bkg.png in Resources */ = {isa = PBXBuildFile; fileRef = A03508F21AB3C34900CA6455 /* SplashScreen-bkg.png */; };
 		A03508F71AB3C5FB00CA6455 /* logo-green-design-png-white.png in Resources */ = {isa = PBXBuildFile; fileRef = A03508F61AB3C5FB00CA6455 /* logo-green-design-png-white.png */; };
 		A03508F91AB3C6AE00CA6455 /* logo-white-design-png.png in Resources */ = {isa = PBXBuildFile; fileRef = A03508F81AB3C6AE00CA6455 /* logo-white-design-png.png */; };
+		A04AAE401ACA2E6600BA7CBD /* FacebookSDK in Frameworks */ = {isa = PBXBuildFile; fileRef = A04AAE3F1ACA2E6600BA7CBD /* FacebookSDK */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -93,6 +93,7 @@
 		A03508F21AB3C34900CA6455 /* SplashScreen-bkg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "SplashScreen-bkg.png"; path = "../../../graphics/SplashScreen-bkg.png"; sourceTree = "<group>"; };
 		A03508F61AB3C5FB00CA6455 /* logo-green-design-png-white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-green-design-png-white.png"; sourceTree = "<group>"; };
 		A03508F81AB3C6AE00CA6455 /* logo-white-design-png.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-white-design-png.png"; sourceTree = "<group>"; };
+		A04AAE3F1ACA2E6600BA7CBD /* FacebookSDK */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = FacebookSDK; path = FacebookSDK.framework/Versions/A/FacebookSDK; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,8 +101,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A04AAE401ACA2E6600BA7CBD /* FacebookSDK in Frameworks */,
 				5EE2C98D1AB9E3B40031D8CD /* Foundation.framework in Frameworks */,
-				5EE2C9891AB9B6270031D8CD /* FacebookSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -187,6 +188,7 @@
 		5EE2C98E1AB9E3BB0031D8CD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A04AAE3F1ACA2E6600BA7CBD /* FacebookSDK */,
 				5EE2C98C1AB9E3B40031D8CD /* Foundation.framework */,
 				5EE2C9881AB9B6270031D8CD /* FacebookSDK.framework */,
 			);
@@ -477,6 +479,10 @@
 				);
 				INFOPLIST_FILE = Bakkle/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/FacebookSDK.framework/Versions/A",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Bakkle/Bridging-Header.h";
@@ -497,6 +503,10 @@
 				);
 				INFOPLIST_FILE = Bakkle/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/FacebookSDK.framework/Versions/A",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Bakkle/Bridging-Header.h";
