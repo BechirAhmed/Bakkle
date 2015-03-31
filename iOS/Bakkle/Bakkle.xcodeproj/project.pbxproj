@@ -13,9 +13,7 @@
 		5E8C44D11AC3286200BC4A2C /* Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E8C44D01AC3286200BC4A2C /* Menu.swift */; };
 		5EBDD6911AB211E600C7FBE7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EBDD6901AB211E600C7FBE7 /* AppDelegate.swift */; };
 		5EBDD6931AB211E600C7FBE7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EBDD6921AB211E600C7FBE7 /* ViewController.swift */; };
-		5EBDD6961AB211E600C7FBE7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5EBDD6941AB211E600C7FBE7 /* Main.storyboard */; };
 		5EBDD6981AB211E600C7FBE7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5EBDD6971AB211E600C7FBE7 /* Images.xcassets */; };
-		5EBDD69B1AB211E600C7FBE7 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5EBDD6991AB211E600C7FBE7 /* LaunchScreen.xib */; };
 		5EBDD6A71AB211E600C7FBE7 /* BakkleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EBDD6A61AB211E600C7FBE7 /* BakkleTests.swift */; };
 		5EBDD6B11AB2139700C7FBE7 /* bakkleLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 5EBDD6B01AB2139700C7FBE7 /* bakkleLogo.png */; };
 		5EE2C98B1AB9D1730031D8CD /* FeedScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C98A1AB9D1730031D8CD /* FeedScreen.swift */; };
@@ -34,6 +32,8 @@
 		A03508F71AB3C5FB00CA6455 /* logo-green-design-png-white.png in Resources */ = {isa = PBXBuildFile; fileRef = A03508F61AB3C5FB00CA6455 /* logo-green-design-png-white.png */; };
 		A03508F91AB3C6AE00CA6455 /* logo-white-design-png.png in Resources */ = {isa = PBXBuildFile; fileRef = A03508F81AB3C6AE00CA6455 /* logo-white-design-png.png */; };
 		A04AAE401ACA2E6600BA7CBD /* FacebookSDK in Frameworks */ = {isa = PBXBuildFile; fileRef = A04AAE3F1ACA2E6600BA7CBD /* FacebookSDK */; };
+		A0A709CE1ACAC9D700E772B9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5EBDD6941AB211E600C7FBE7 /* Main.storyboard */; };
+		A0A709CF1ACAC9DB00E772B9 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5EBDD6991AB211E600C7FBE7 /* LaunchScreen.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -274,6 +274,7 @@
 				TargetAttributes = {
 					5EBDD68A1AB211E600C7FBE7 = {
 						CreatedOnToolsVersion = 6.1.1;
+						DevelopmentTeam = GKAKES7JLX;
 					};
 					5EBDD69F1AB211E600C7FBE7 = {
 						CreatedOnToolsVersion = 6.1.1;
@@ -307,10 +308,10 @@
 			files = (
 				A03508F91AB3C6AE00CA6455 /* logo-white-design-png.png in Resources */,
 				A03508F71AB3C5FB00CA6455 /* logo-green-design-png-white.png in Resources */,
+				A0A709CE1ACAC9D700E772B9 /* Main.storyboard in Resources */,
 				5EBDD6B11AB2139700C7FBE7 /* bakkleLogo.png in Resources */,
-				5EBDD6961AB211E600C7FBE7 /* Main.storyboard in Resources */,
-				5EBDD69B1AB211E600C7FBE7 /* LaunchScreen.xib in Resources */,
 				5EBDD6981AB211E600C7FBE7 /* Images.xcassets in Resources */,
+				A0A709CF1ACAC9DB00E772B9 /* LaunchScreen.xib in Resources */,
 				5E0242931AC481E80094BB05 /* menubtn.png in Resources */,
 				5E0242911AC47FFB0094BB05 /* Screen Shot 2015-03-26 at 1.56.29 PM 1.png in Resources */,
 				A03508F31AB3C34900CA6455 /* SplashScreen-bkg.png in Resources */,
