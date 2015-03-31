@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html class="ui-mobile">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+    <title>Bakkle</title>
+    <link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+
+
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+
+
+    <link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css">
+    <link rel="stylesheet" href="css/bakkle-mobile.css">
+
+    <script src="js/jquery.js"></script>
+    <script src="js/jquery.mobile-1.4.5.min.js"></script>
+  </head>
+  <body>
+
+
+
+
+      <form>
+
+        <!-- FEED -->
+        <div data-role="page" id="feed">
+
+          <!-- >MENU -->
+          <div data-role="panel" id="menu" class="bakkle-menu">
+            <h1>ACCOUNT</h1>
+            <ul data-role="listview"><!-- data-inset="true"-->
+              <li><a href="#feed" class="ui-nodisc-icon ui-btn ui-shadow ui-corner-all ui-icon-NIL ui-btn-icon-left"><img src="icons/icon-house.png" alt="FEED" class="ui-li-icon">FEED</a></li>
+              <li><a href="#sellers-garage" class="ui-nodisc-icon ui-btn ui-shadow ui-corner-all ui-icon-NIL ui-btn-icon-left"><img src="icons/icon-pencil.png" alt="SELLER'S GARAGE" class="ui-li-icon">SELLER'S GARAGE</a></li>
+              <li><a href="#buyers-trunk" class="ui-nodisc-icon ui-btn ui-shadow ui-corner-all ui-icon-NIL ui-btn-icon-left"><img src="icons/icon-cart.png" alt="BUYER'S TRUNK" class="ui-li-icon">BUYER'S TRUNK</A></LI>
+              <li><a href="#holding-pattern" class="ui-nodisc-icon ui-btn ui-shadow ui-corner-all ui-icon-NIL ui-btn-icon-left"><img src="icons/icon-down.png" alt="HOLDING PATTERN" class="ui-li-icon">HOLDING PATTERN</a></li>
+              <li><a href="#feed-filter" class="ui-nodisc-icon ui-btn ui-shadow ui-corner-all ui-icon-NIL ui-btn-icon-left"><img src="icons/icon-filter.png" alt="FEED FILTER" class="ui-li-icon">FEED FILTER</a></li>
+              <li><a href="#settings" class="ui-nodisc-icon ui-btn ui-shadow ui-corner-all ui-icon-NIL ui-btn-icon-left"><img src="icons/icon-gear.png" alt="SETTINGS" class="ui-li-icon">SETTINGS</a></li>
+              <li><a href="#debug" class="ui-nodisc-icon ui-btn ui-shadow ui-corner-all ui-icon-NIL ui-btn-icon-left"><img src="icons/icon-gear.png" alt="DEBUG" class="ui-li-icon ui-corner-none">DEBUG (dev only)</a></li>
+            </ul>
+          </div>
+
+          <!-- >HEADER -->
+          <div data-role="header" style="overflow:hidden;">
+            <h1>FEED</h1>
+            <a href="#menu" data-icon="bakklebars" class="ui-btn-left ui-btn ui-icon-bars ui-btn-icon-notext ui-corner-all">&nbsp;</a>
+            <a href="#" data-icon="bakklebars" class="ui-btn-right ui-btn ui-icon-plus ui-btn-icon-notext ui-corner-all">&nbsp;</a>
+          </div>
+
+          <!-- >CONTENT -->
+          <div role="main" class="ui-content">
+          </div>
+
+          <!-- >FOOTER -->
+          <div data-role="footer">
+          </div>
+        </div>
+
+
+        <!-- SELLER'S GARAGE -->
+        <div data-role="page" id="sellers-garage">
+
+          <!-- >MENU -->
+          <div data-role="panel" id="menu" class="bakkle-menu">
+            <h1>ACCOUNT</h1>
+            <ul data-role="listview"><!-- data-inset="true"-->
+              <li><a href="#feed" class="ui-nodisc-icon ui-btn ui-shadow ui-corner-all ui-icon-NIL ui-btn-icon-left"><img src="icons/icon-house.png" alt="FEED" class="ui-li-icon">FEED</a></li>
+            </ul>
+          </div>
+
+          <!-- >HEADER -->
+          <div data-role="header" style="overflow:hidden;">
+            <h1>SELLER'S GARAGE</h1>
+            <a href="#menu" data-icon="bakklebars" class="ui-btn-left ui-btn ui-icon-bars ui-btn-icon-notext ui-corner-all">&nbsp;</a>
+            <a href="#" data-icon="bakklebars" class="ui-btn-right ui-btn ui-icon-plus ui-btn-icon-notext ui-corner-all">&nbsp;</a>
+          </div>
+
+          <!-- >CONTENT -->
+          <div role="main" class="ui-content">
+          </div>
+
+          <!-- >FOOTER -->
+          <div data-role="footer">
+          </div>
+        </div>
+
+
+        <!-- BUYER'S TRUNK -->
+        <div data-role="page" id="buyers-trunk">
+
+          <!-- >MENU -->
+          <div data-role="panel" id="menu" class="bakkle-menu">
+            <h1>ACCOUNT</h1>
+            <ul data-role="listview"><!-- data-inset="true"-->
+              <li><a href="#feed" class="ui-nodisc-icon ui-btn ui-shadow ui-corner-all ui-icon-NIL ui-btn-icon-left"><img src="icons/icon-house.png" alt="FEED" class="ui-li-icon">FEED</a></li>
+            </ul>
+          </div>
+
+          <!-- >HEADER -->
+          <div data-role="header" style="overflow:hidden;">
+            <h1>BUYER'S TRUNK</h1>
+            <a href="#menu" data-icon="bakklebars" class="ui-btn-left ui-btn ui-icon-bars ui-btn-icon-notext ui-corner-all">&nbsp;</a>
+            <a href="#" data-icon="bakklebars" class="ui-btn-right ui-btn ui-icon-plus ui-btn-icon-notext ui-corner-all">&nbsp;</a>
+          </div>
+
+          <!-- >CONTENT -->
+          <div role="main" class="ui-content">
+          </div>
+
+          <!-- >FOOTER -->
+          <div data-role="footer">
+          </div>
+        </div>
+
+
+        <!-- HOLDING PATTERN -->
+        <div data-role="page" id="holding-pattern">
+
+          <!-- MENU -->
+          <div data-role="panel" id="menu" class="bakkle-menu">
+            <h1>ACCOUNT</h1>
+            <ul data-role="listview"><!-- data-inset="true"-->
+              <li><a href="#feed" class="ui-nodisc-icon ui-btn ui-shadow ui-corner-all ui-icon-NIL ui-btn-icon-left"><img src="icons/icon-house.png" alt="FEED" class="ui-li-icon">FEED</a></li>
+            </ul>
+          </div>
+
+          <!-- >HEADER -->
+          <div data-role="header" style="overflow:hidden;">
+            <h1>HOLDING PATTERN</h1>
+            <a href="#menu" data-icon="bakklebars" class="ui-btn-left ui-btn ui-icon-bars ui-btn-icon-notext ui-corner-all">&nbsp;</a>
+            <a href="#" data-icon="bakklebars" class="ui-btn-right ui-btn ui-icon-plus ui-btn-icon-notext ui-corner-all">&nbsp;</a>
+          </div>
+
+          <!-- >CONTENT -->
+          <div role="main" class="ui-content">
+            <ul data-role="listview" data-split-icon="gear" data-split-theme="a" data-inset="true">
+              <li><a href="#">
+                  <img src="../_assets/img/album-bb.jpg">
+                  <h2>2</h2>
+                  <p>3:43</p></a>
+                <a href="#purchase" data-rel="popup" data-position-to="window" data-transition="pop">Delete?</a>
+              </li>
+              <li><a href="#">
+                  <img src="../_assets/img/album-hc.jpg">
+                  <h2>Warning</h2>
+                  <p>Hot Chip</p></a>
+                <a href="#purchase" data-rel="popup" data-position-to="window" data-transition="pop">Purchase album</a>
+              </li>
+              <li><a href="#">
+                  <img src="../_assets/img/album-p.jpg">
+                  <h2>Wolfgang Amadeus Phoenix</h2>
+                  <p>Phoenix</p></a>
+                <a href="#purchase" data-rel="popup" data-position-to="window" data-transition="pop">Purchase album</a>
+                </li>
+            </ul>
+
+            <div data-role="popup" id="purchase" data-theme="a" data-overlay-theme="b" class="ui-content" style="max-width:340px; padding-bottom:2em;">
+              <h3>Delete</h3>
+              <p>This will remove the item from the holding pattern.</p>
+              <a href="index.html" data-rel="back" class="ui-shadow ui-btn ui-corner-all ui-btn-b ui-icon-check ui-btn-icon-left ui-btn-inline ui-mini">Delete</a>
+              <a href="index.html" data-rel="back" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-mini">Cancel</a>
+            </div>
+            or
+            No items in holding pattern
+          </div>
+
+          <!-- >FOOTER -->
+          <div data-role="footer">
+          </div>
+        </div>
+
+
+        <!-- ITEM DETAIL -->
+        <div data-role="page" id="item-detail">
+
+          <!-- >MENU -->
+          <div data-role="panel" id="menu" class="bakkle-menu">
+            <h1>ACCOUNT</h1>
+            <ul data-role="listview"><!-- data-inset="true"-->
+              <li><a href="#feed" class="ui-nodisc-icon ui-btn ui-shadow ui-corner-all ui-icon-NIL ui-btn-icon-left"><img src="icons/icon-house.png" alt="FEED" class="ui-li-icon">FEED</a></li>
+            </ul>
+          </div>
+
+          <!-- >HEADER -->
+          <div data-role="header" style="overflow:hidden;">
+            <h1>[ITEM]</h1>
+            <a href="#" data-icon="bakklebars" class="ui-btn-left ui-btn ui-icon-carat-l ui-btn-icon-notext ui-corner-all">BACK</a>
+          </div>
+
+          <div role="main" class="ui-content">
+            <div class="inset-value-panel">
+              <div class="setting">
+                <label for="slider-s">TAGS:</label>
+                STUFF
+              </div>
+              <div class="setting">
+                <label for="slider-s">METHOD OF DELIVERY:</label>
+                xxx
+              </div>
+              <div class="setting">
+                <label for="slider-s">PRICE:</label>
+                xxxx
+              </div>
+            </div>
+          </div>
+
+          <a href="#" class="ui-btn ui-icon-check ui-btn-icon-left">WANT</a>
+
+          <div data-role="footer">
+            <a href="#settings" class="ui-btn ui-shadow ui-corner-all">Show settings</a>
+          </div>
+        </div>
+
+
+
+        <!-- FEED FILTER -->
+        <div data-role="page" id="feed-filter">
+          <div data-role="header" style="overflow:hidden;">
+            <h1>FEED FILTER</h1>
+            <a href="#" data-icon="bakklebars" class="ui-btn-left ui-btn ui-icon-bars ui-btn-icon-notext ui-corner-all">&nbsp;</a>
+          </div>
+
+          <div role="main" class="ui-content inset-value-panel">
+            <div class="setting">
+              <label for="slider-s">DISTANCE:</label>
+              <input type="range" name="slider-s" id="slider-s" value="10" min="0" max="100" data-highlight="true">
+            </div>
+            <div class="setting">
+              <label for="slider-s">PRICE:</label>
+              <input type="range" name="slider-price" id="slider-price" value="10" min="0" max="100" data-highlight="true">
+            </div>
+            <div class="setting">
+              <label for="slider-s">NUMBER OF ITEMS:</label>
+              <input type="range" name="slider-items" id="slider-items" value="0" min="0" max="100" data-highlight="true">
+            </div>
+          </div>
+
+          <div data-role="footer">
+            <a href="#settings" class="ui-btn ui-shadow ui-corner-all">Show settings</a>
+          </div>
+        </div>
+
+
+
+
+
+        <!-- SETTINGS -->
+        <div data-role="page" id="settings">
+
+          <div data-role="header" style="overflow:hidden;">
+            <h1>SETTINGS</h1>
+            <a href="#" data-icon="bakklebars" class="ui-btn-left ui-btn ui-icon-bars ui-btn-icon-notext ui-corner-all">&nbsp;</a>
+          </div>
+
+          <div class="content inset-value-panel">
+            <div class="setting">
+              <label for="slider-s">DISTANCE:</label>
+              <input type="range" name="slider-s" id="slider-s" value="10" min="0" max="100" data-highlight="true">
+            </div>
+            <div class="setting">
+              <label for="slider-s">PRICE:</label>
+              <input type="range" name="slider-price" id="slider-price" value="10" min="0" max="100" data-highlight="true">
+            </div>
+            <div class="setting">
+              <label for="slider-s">NUMBER OF ITEMS:</label>
+              <input type="range" name="slider-items" id="slider-items" value="0" min="0" max="100" data-highlight="true">
+            </div>
+          </div>
+
+          <div data-role="footer">
+          </div>
+
+        </div>
+      </form>
+
+  </body>
+</html>

@@ -1,0 +1,25 @@
+{ "feed-items":
+  [
+      {
+          "uuid": 2,
+          "post-date": "2015-03-20 08:30 EST",
+          "title": "Mulching lawn mower",
+          "price": 52.34,
+          "tags": ["espresso", "suprema", "contada"],
+          "method": "pickup",
+          "images": ["/s/afds3.png", "/s/fsa.png"],
+          "location": { "latitute": 36.000, "longitude": -18.000 }
+      },
+      {
+          "uuid": 3,
+          "post-date": "2015-03-20 08:35 EST",
+          "title": "",
+          "price": 52.34,
+          "tags": ["espresso", "suprema", "contada"],
+          "method": "pickup",
+          "images": ["/s/afds3.png", "/s/fsa.png"],
+          "location": { "latitute": 36.000, "longitude": -18.000 }
+      }
+  ]
+}
+
