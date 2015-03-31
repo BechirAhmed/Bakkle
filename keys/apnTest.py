@@ -5,7 +5,7 @@ from apns import APNs, Frame, Payload
 
 # Parms
 use_sandbox=True
-token_hex = 'b5bb9d8014a0f9b1d61e21e796d78dccdf1352f23cd32812f4850b87'
+token_hex = 'e69ffa8cb3299d2c3428641d4213be48ce37d373554ab18ce905dd2eab7c7655'
 message = 'Test Payload'
 soundname = 'default'
 badge = 1
