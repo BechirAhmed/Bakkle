@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="drawer_items">
+        <item>@string/title_activity_home</item>
+        <item>@string/title_activity_sellers_garage</item>
+        <item>@string/title_activity_buyers_trunk</item>
+        <item>@string/title_activity_holding_pattern</item>
+        <item>@string/title_activity_feed_filter</item>
+        <item>@string/title_activity_settings</item>
+        <item>@string/logout</item>
+    </string-array>
+    <string-array name="drawer_icons">
+        <item>@drawable/ic_home</item>
+        <item>@drawable/ic_sellers</item>
+        <item>@drawable/ic_shopping_cart</item>
+        <item>@drawable/ic_down</item>
+        <item>@drawable/ic_filter</item>
+        <item>@drawable/ic_action_settings</item>
+        <item></item>
+    </string-array>
+</resources>
