@@ -13,7 +13,7 @@ badge = 1
 # Config
 cert_file = 'apn-push-prod-2015-03-30.p12.pem'
 key_file  = 'apn-push-prod-2015-03-30.p12.pem'
-if sandbox:
+if use_sandbox:
    cert_file = 'apn-push-dev-2015-03-30.p12.pem'
    key_file  = 'apn-push-dev-2015-03-30.p12.pem'
 
@@ -25,9 +25,9 @@ payload = Payload(alert=message, sound=soundname, badge=badge)
 apns.gateway_server.send_notification(token_hex, payload)
 
 # Send multiple notifications in a single transmission
-frame = Frame()
-identifier = 1
-expiry = time.time()+3600
-priority = 10
-frame.add_item(token_hex, payload, identifier, expiry, priority)
-apns.gateway_server.send_notification_multiple(frame)
+#frame = Frame()
+#identifier = 1
+#expiry = time.time()+3600
+#priority = 10
+#frame.add_item(token_hex, payload, identifier, expiry, priority)
+#apns.gateway_server.send_notification_multiple(frame)

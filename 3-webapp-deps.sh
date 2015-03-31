@@ -2,4 +2,4 @@
 
 sudo apt-get install python-django python-pip python2.7-dev
 sudo pip install uwsgi
-
+sudo pip install apns
