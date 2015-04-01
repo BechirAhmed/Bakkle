@@ -6,7 +6,7 @@ class PushRegistrations(models.Model):
 	subscribe_date = models.DateTimeField('date subscribed')
 	enabled = models.IntegerField(default=1)
 	def __str__(self):
-		return "User: %s".format(user_id)
+		return "User: {id}".format(id=self.user_id)
 
 	def isActive(self):
 		return self.enabled==1

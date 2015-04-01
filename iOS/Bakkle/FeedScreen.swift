@@ -29,7 +29,7 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        var shortImg = UIImageView(image: UIImage(named: "bakkleLogo.png")) //UIImage(named: "bakkleLogo.png")
+        var shortImg = UIImageView(image: UIImage(named: "bakkleLogo.png"))
         self.navBar.backgroundColor = UIColor.redColor()
         self.navBar.topItem?.title = "Logo goes here!"
         
