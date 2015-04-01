@@ -45,10 +45,11 @@ class ViewController: UIViewController, FBLoginViewDelegate {
         var userEmail = user.objectForKey("email") as String
         println("User Email: \(userEmail)")
         
-        let mainScreenViewController : FeedScreen = FeedScreen()
+        let mainWebView : MainWebView = MainWebView()
         self.performSegueWithIdentifier(mainScreenSegueIdentifier, sender: self)
-      //  self.navigationController?.pushViewController(mainScreenViewController, animated: true)
-     //   self.presentViewController(mainScreenViewController, animated: true, completion: nil)
+        
+//        let mainScreenViewController : FeedScreen = FeedScreen()
+//        self.performSegueWithIdentifier(mainScreenSegueIdentifier, sender: self)
     }
     
     func loginViewShowingLoggedOutUser(loginView : FBLoginView!) {
@@ -64,8 +65,5 @@ class ViewController: UIViewController, FBLoginViewDelegate {
         // Dispose of any resources that can be recreated.
     }
     
-    
-
-
 }
 

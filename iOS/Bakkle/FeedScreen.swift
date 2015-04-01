@@ -16,6 +16,7 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
     
     var transitionOperator = TransitionOperator()
     
+    @IBOutlet weak var menuBtn: UIBarButtonItem!
     
     
     @IBOutlet weak var drawer: UIView!
@@ -29,8 +30,8 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        var shortImg = UIImageView(image: UIImage(named: "bakkleLogo.png"))
-        self.navBar.backgroundColor = UIColor.redColor()
+        var shortImg = UIImage(named: "menubtn.png")
+        menuBtn.setBackButtonBackgroundImage(shortImg, forState: UIControlState.Normal, barMetrics: UIBarMetrics.Default)
         self.navBar.topItem?.title = "Logo goes here!"
         
        // self.navigationItem.leftBarButtonItem = UINavigationItem.to

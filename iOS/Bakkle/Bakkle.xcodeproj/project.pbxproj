@@ -28,6 +28,7 @@
 		5EE2C9B91AB9F0FB0031D8CD /* UIColor+MDCRGB8Bit.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C9AC1AB9F0FB0031D8CD /* UIColor+MDCRGB8Bit.m */; };
 		5EE2C9BA1AB9F0FB0031D8CD /* UIView+MDCBorderedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C9AE1AB9F0FB0031D8CD /* UIView+MDCBorderedLabel.m */; };
 		5EE2C9BB1AB9F0FB0031D8CD /* MDCViewState.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C9B01AB9F0FB0031D8CD /* MDCViewState.m */; };
+		5EF3F3DF1ACC3D6900D93B72 /* MainWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF3F3DE1ACC3D6900D93B72 /* MainWebView.swift */; };
 		A03508F31AB3C34900CA6455 /* SplashScreen-bkg.png in Resources */ = {isa = PBXBuildFile; fileRef = A03508F21AB3C34900CA6455 /* SplashScreen-bkg.png */; };
 		A03508F71AB3C5FB00CA6455 /* logo-green-design-png-white.png in Resources */ = {isa = PBXBuildFile; fileRef = A03508F61AB3C5FB00CA6455 /* logo-green-design-png-white.png */; };
 		A03508F91AB3C6AE00CA6455 /* logo-white-design-png.png in Resources */ = {isa = PBXBuildFile; fileRef = A03508F81AB3C6AE00CA6455 /* logo-white-design-png.png */; };
@@ -48,7 +49,7 @@
 
 /* Begin PBXFileReference section */
 		5E0242901AC47FFB0094BB05 /* Screen Shot 2015-03-26 at 1.56.29 PM 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Screen Shot 2015-03-26 at 1.56.29 PM 1.png"; sourceTree = "<group>"; };
-		5E0242921AC481E80094BB05 /* menubtn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menubtn.png; sourceTree = "<group>"; };
+		5E0242921AC481E80094BB05 /* menubtn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = menubtn.png; path = ../menubtn.png; sourceTree = "<group>"; };
 		5E5CB0A81AB7547800F32BE6 /* Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
 		5E8C44CC1AC3217000BC4A2C /* TransitionOperator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransitionOperator.swift; sourceTree = "<group>"; };
 		5E8C44D01AC3286200BC4A2C /* Menu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Menu.swift; sourceTree = "<group>"; };
@@ -90,6 +91,7 @@
 		5EE2C9AF1AB9F0FB0031D8CD /* MDCViewState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDCViewState.h; sourceTree = "<group>"; };
 		5EE2C9B01AB9F0FB0031D8CD /* MDCViewState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDCViewState.m; sourceTree = "<group>"; };
 		5EE2C9B11AB9F0FB0031D8CD /* MDCSwipeToChoose-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MDCSwipeToChoose-Prefix.pch"; path = "../MDCSwipeToChoose-Prefix.pch"; sourceTree = "<group>"; };
+		5EF3F3DE1ACC3D6900D93B72 /* MainWebView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainWebView.swift; sourceTree = "<group>"; };
 		A03508F21AB3C34900CA6455 /* SplashScreen-bkg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "SplashScreen-bkg.png"; path = "../../../graphics/SplashScreen-bkg.png"; sourceTree = "<group>"; };
 		A03508F61AB3C5FB00CA6455 /* logo-green-design-png-white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-green-design-png-white.png"; sourceTree = "<group>"; };
 		A03508F81AB3C6AE00CA6455 /* logo-white-design-png.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-white-design-png.png"; sourceTree = "<group>"; };
@@ -121,7 +123,6 @@
 			children = (
 				5E0242901AC47FFB0094BB05 /* Screen Shot 2015-03-26 at 1.56.29 PM 1.png */,
 				5E8C44D01AC3286200BC4A2C /* Menu.swift */,
-				5E0242921AC481E80094BB05 /* menubtn.png */,
 				5E8C44CC1AC3217000BC4A2C /* TransitionOperator.swift */,
 				5EE2C9BC1AB9F1080031D8CD /* MDCSwipe Library */,
 				5EE2C98E1AB9E3BB0031D8CD /* Frameworks */,
@@ -147,6 +148,7 @@
 				5E5CB0A81AB7547800F32BE6 /* Bridging-Header.h */,
 				5EBDD6901AB211E600C7FBE7 /* AppDelegate.swift */,
 				5EBDD6921AB211E600C7FBE7 /* ViewController.swift */,
+				5EF3F3DE1ACC3D6900D93B72 /* MainWebView.swift */,
 				5EBDD6941AB211E600C7FBE7 /* Main.storyboard */,
 				5EBDD6971AB211E600C7FBE7 /* Images.xcassets */,
 				5EBDD6991AB211E600C7FBE7 /* LaunchScreen.xib */,
@@ -158,6 +160,7 @@
 		5EBDD68E1AB211E600C7FBE7 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				5E0242921AC481E80094BB05 /* menubtn.png */,
 				5EE2C9B11AB9F0FB0031D8CD /* MDCSwipeToChoose-Prefix.pch */,
 				A03508F81AB3C6AE00CA6455 /* logo-white-design-png.png */,
 				A03508F61AB3C5FB00CA6455 /* logo-green-design-png-white.png */,
@@ -274,7 +277,7 @@
 				TargetAttributes = {
 					5EBDD68A1AB211E600C7FBE7 = {
 						CreatedOnToolsVersion = 6.1.1;
-						DevelopmentTeam = GKAKES7JLX;
+						DevelopmentTeam = 73BH7B3T66;
 					};
 					5EBDD69F1AB211E600C7FBE7 = {
 						CreatedOnToolsVersion = 6.1.1;
@@ -342,6 +345,7 @@
 				5EE2C9B81AB9F0FB0031D8CD /* MDCGeometry.m in Sources */,
 				5EE2C9BB1AB9F0FB0031D8CD /* MDCViewState.m in Sources */,
 				5E8C44D11AC3286200BC4A2C /* Menu.swift in Sources */,
+				5EF3F3DF1ACC3D6900D93B72 /* MainWebView.swift in Sources */,
 				5EE2C9B41AB9F0FB0031D8CD /* MDCSwipeOptions.m in Sources */,
 				5EE2C9B61AB9F0FB0031D8CD /* MDCSwipeResult.m in Sources */,
 				5EBDD6911AB211E600C7FBE7 /* AppDelegate.swift in Sources */,
@@ -483,7 +487,7 @@
 					"$(PROJECT_DIR)/FacebookSDK.framework/Versions/A",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "1e868472-d829-420d-9d57-0f6ef5d07cb8";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Bakkle/Bridging-Header.h";
 			};
 			name = Debug;
@@ -506,7 +510,7 @@
 					"$(PROJECT_DIR)/FacebookSDK.framework/Versions/A",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "1e868472-d829-420d-9d57-0f6ef5d07cb8";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Bakkle/Bridging-Header.h";
 			};
 			name = Release;

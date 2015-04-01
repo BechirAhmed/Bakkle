@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1514" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -199,7 +199,7 @@
                     </view>
                     <connections>
                         <outlet property="fbLoginView" destination="M2Y-Q2-c87" id="MfE-ah-HZo"/>
-                        <segue destination="dzt-bR-uoN" kind="show" identifier="PushToFeedSegue" id="dNL-Mh-HbT"/>
+                        <segue destination="TYc-cn-Gh4" kind="show" identifier="PushToFeedSegue" id="MoJ-4J-wF0"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
@@ -317,8 +317,7 @@
                                     <navigationItem title="Title" id="Om5-ts-wJ8">
                                         <barButtonItem key="leftBarButtonItem" image="menubtn.png" id="kTM-u3-gNJ">
                                             <connections>
-                                                <action selector="presentMenuBar:" destination="dzt-bR-uoN" id="pYk-GK-yP5"/>
-                                                <segue destination="jMu-xU-vOG" kind="custom" identifier="presentNav" id="KJX-IZ-Vdl"/>
+                                                <action selector="menuButtonPressed:" destination="dzt-bR-uoN" id="duw-WD-RLz"/>
                                             </connections>
                                         </barButtonItem>
                                     </navigationItem>
@@ -334,37 +333,23 @@
                                     </mask>
                                 </variation>
                             </navigationBar>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ob6-gE-mWc">
-                                <rect key="frame" x="-23" y="-15" width="46" height="30"/>
-                                <state key="normal" image="menubtn.png">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="menuButtonPressed:" destination="dzt-bR-uoN" eventType="touchUpInside" id="ZVE-TF-Ziw"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.95111918057977196" green="1" blue="0.47444979483763061" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstAttribute="trailingMargin" secondItem="9wf-Qg-XdG" secondAttribute="trailing" constant="-16" id="6KA-IC-Yfi"/>
                             <constraint firstItem="9wf-Qg-XdG" firstAttribute="leading" secondItem="Wzf-MH-BHC" secondAttribute="leadingMargin" constant="-16" id="QL3-cA-uBP"/>
-                            <constraint firstItem="Ob6-gE-mWc" firstAttribute="top" secondItem="9wf-Qg-XdG" secondAttribute="bottom" constant="10" id="UIi-Qa-9ow"/>
                             <constraint firstItem="9wf-Qg-XdG" firstAttribute="top" secondItem="Wzf-MH-BHC" secondAttribute="topMargin" id="ZLO-2C-10S"/>
                             <constraint firstAttribute="trailing" secondItem="TvW-JJ-Vqb" secondAttribute="trailing" constant="400" id="btB-zo-zos"/>
                             <constraint firstItem="TvW-JJ-Vqb" firstAttribute="top" secondItem="Wzf-MH-BHC" secondAttribute="topMargin" constant="121" id="ekg-oj-a0a"/>
                             <constraint firstItem="TvW-JJ-Vqb" firstAttribute="leading" secondItem="Wzf-MH-BHC" secondAttribute="leadingMargin" constant="-350" id="jze-nB-A0h"/>
                             <constraint firstAttribute="bottom" secondItem="TvW-JJ-Vqb" secondAttribute="bottom" constant="101" id="qfe-Sb-1Tb"/>
-                            <constraint firstItem="Ob6-gE-mWc" firstAttribute="leading" secondItem="Wzf-MH-BHC" secondAttribute="leadingMargin" constant="-6" id="zVY-Cx-8cr"/>
                         </constraints>
                         <variation key="default">
                             <mask key="subviews">
                                 <exclude reference="TvW-JJ-Vqb"/>
                                 <exclude reference="9wf-Qg-XdG"/>
-                                <exclude reference="Ob6-gE-mWc"/>
                             </mask>
                             <mask key="constraints">
-                                <exclude reference="UIi-Qa-9ow"/>
-                                <exclude reference="zVY-Cx-8cr"/>
                                 <exclude reference="6KA-IC-Yfi"/>
                                 <exclude reference="QL3-cA-uBP"/>
                                 <exclude reference="ZLO-2C-10S"/>
@@ -378,11 +363,8 @@
                             <mask key="subviews">
                                 <include reference="TvW-JJ-Vqb"/>
                                 <include reference="9wf-Qg-XdG"/>
-                                <include reference="Ob6-gE-mWc"/>
                             </mask>
                             <mask key="constraints">
-                                <include reference="UIi-Qa-9ow"/>
-                                <include reference="zVY-Cx-8cr"/>
                                 <include reference="6KA-IC-Yfi"/>
                                 <include reference="QL3-cA-uBP"/>
                                 <include reference="ZLO-2C-10S"/>
@@ -395,12 +377,85 @@
                     </view>
                     <connections>
                         <outlet property="drawer" destination="TvW-JJ-Vqb" id="L0b-bd-0hM"/>
+                        <outlet property="menuBtn" destination="kTM-u3-gNJ" id="HEv-a1-HvB"/>
                         <outlet property="navBar" destination="9wf-Qg-XdG" id="98l-BG-JWi"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="R4S-Vw-NC2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1479" y="418.5"/>
+        </scene>
+        <!--Main Web View-->
+        <scene sceneID="uLw-DU-Qfq">
+            <objects>
+                <viewController id="TYc-cn-Gh4" customClass="MainWebView" customModule="Bakkle" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="qTo-Yv-6aN"/>
+                        <viewControllerLayoutGuide type="bottom" id="koK-em-7Fn"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="w96-cF-XQi">
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IIe-aD-Tlj">
+                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                <connections>
+                                    <outlet property="delegate" destination="TYc-cn-Gh4" id="FZb-SM-gJq"/>
+                                </connections>
+                            </webView>
+                        </subviews>
+                        <color key="backgroundColor" red="0.9511191806" green="1" blue="0.47444979479999999" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="trailingMargin" secondItem="IIe-aD-Tlj" secondAttribute="trailing" constant="-16" id="0Eu-FS-iij"/>
+                            <constraint firstItem="koK-em-7Fn" firstAttribute="top" secondItem="IIe-aD-Tlj" secondAttribute="bottom" id="DFZ-pa-pbM">
+                                <variation key="heightClass=regular-widthClass=compact" constant="0.0"/>
+                            </constraint>
+                            <constraint firstItem="IIe-aD-Tlj" firstAttribute="leading" secondItem="w96-cF-XQi" secondAttribute="leadingMargin" constant="-16" id="Eap-c9-aW8"/>
+                            <constraint firstItem="IIe-aD-Tlj" firstAttribute="top" secondItem="w96-cF-XQi" secondAttribute="topMargin" id="K8X-oS-HNB">
+                                <variation key="heightClass=regular-widthClass=compact" constant="0.0"/>
+                            </constraint>
+                            <constraint firstAttribute="trailingMargin" secondItem="IIe-aD-Tlj" secondAttribute="trailing" constant="-16" id="jcP-ma-OQv"/>
+                            <constraint firstItem="IIe-aD-Tlj" firstAttribute="top" secondItem="w96-cF-XQi" secondAttribute="topMargin" id="lWI-hG-gkg"/>
+                            <constraint firstItem="koK-em-7Fn" firstAttribute="top" secondItem="IIe-aD-Tlj" secondAttribute="bottom" id="rGM-mD-p5z"/>
+                            <constraint firstItem="IIe-aD-Tlj" firstAttribute="leading" secondItem="w96-cF-XQi" secondAttribute="leadingMargin" constant="-16" id="xbe-W3-9tl"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="IIe-aD-Tlj"/>
+                            </mask>
+                            <mask key="constraints">
+                                <exclude reference="0Eu-FS-iij"/>
+                                <exclude reference="Eap-c9-aW8"/>
+                                <exclude reference="K8X-oS-HNB"/>
+                                <exclude reference="jcP-ma-OQv"/>
+                                <exclude reference="lWI-hG-gkg"/>
+                                <exclude reference="xbe-W3-9tl"/>
+                                <exclude reference="DFZ-pa-pbM"/>
+                                <exclude reference="rGM-mD-p5z"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=regular-widthClass=compact">
+                            <mask key="subviews">
+                                <include reference="IIe-aD-Tlj"/>
+                            </mask>
+                            <mask key="constraints">
+                                <exclude reference="0Eu-FS-iij"/>
+                                <include reference="Eap-c9-aW8"/>
+                                <include reference="K8X-oS-HNB"/>
+                                <include reference="jcP-ma-OQv"/>
+                                <exclude reference="lWI-hG-gkg"/>
+                                <exclude reference="xbe-W3-9tl"/>
+                                <include reference="DFZ-pa-pbM"/>
+                                <exclude reference="rGM-mD-p5z"/>
+                            </mask>
+                        </variation>
+                    </view>
+                    <connections>
+                        <outlet property="webView" destination="IIe-aD-Tlj" id="ypN-gQ-ieu"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="FZ8-vp-dmh" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="681" y="1116"/>
         </scene>
         <!--ACCOUNT-->
         <scene sceneID="ocT-4h-EmC">
