@@ -9,29 +9,37 @@
 import UIKit
 import WebKit
 
-class MainWebView: UIViewController {
+class MainWebView: UIViewController,UIWebViewDelegate {
+    
+    let mainURL = "https://app.bakkle.com/static/comp.html"
 
     @IBOutlet weak var webView: UIWebView!
-    
-    @IBOutlet weak var myWebView : WKWebView!
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        
         loadAddress()
-        println("WebView is loading? \(self.webView.loading)")
     }
 
     func loadAddress(){
-        let targetURL = NSURL(string: "http//google.com")
+        let targetURL = NSURL(string: mainURL)
         let request = NSURLRequest(URL: targetURL!)
         webView.loadRequest(request)
-        webView.sizeToFit()
+        //webView.sizeToFit()
     }
     
-    override func viewDidAppear(animated: Bool) {
-        loadAddress()
+    func webViewDidFinishLoad(webView: UIWebView) {
+        println(true)
+    }
+    
+    func webViewDidStartLoad(webView: UIWebView) {
+        println("web view started loading!!!!!!!")
+    }
+    
+    func webView(webView: UIWebView, didFailLoadWithError error: NSError) {
+        println("loading failed!!!! Ugghhh!! \(error)")
     }
 
 }

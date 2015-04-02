@@ -394,6 +394,7 @@
                         <viewControllerLayoutGuide type="bottom" id="koK-em-7Fn"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="w96-cF-XQi">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IIe-aD-Tlj">
@@ -423,14 +424,14 @@
                                 <exclude reference="IIe-aD-Tlj"/>
                             </mask>
                             <mask key="constraints">
+                                <exclude reference="DFZ-pa-pbM"/>
+                                <exclude reference="rGM-mD-p5z"/>
                                 <exclude reference="0Eu-FS-iij"/>
                                 <exclude reference="Eap-c9-aW8"/>
                                 <exclude reference="K8X-oS-HNB"/>
                                 <exclude reference="jcP-ma-OQv"/>
                                 <exclude reference="lWI-hG-gkg"/>
                                 <exclude reference="xbe-W3-9tl"/>
-                                <exclude reference="DFZ-pa-pbM"/>
-                                <exclude reference="rGM-mD-p5z"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
@@ -438,14 +439,14 @@
                                 <include reference="IIe-aD-Tlj"/>
                             </mask>
                             <mask key="constraints">
+                                <include reference="DFZ-pa-pbM"/>
+                                <exclude reference="rGM-mD-p5z"/>
                                 <exclude reference="0Eu-FS-iij"/>
                                 <include reference="Eap-c9-aW8"/>
                                 <include reference="K8X-oS-HNB"/>
                                 <include reference="jcP-ma-OQv"/>
                                 <exclude reference="lWI-hG-gkg"/>
                                 <exclude reference="xbe-W3-9tl"/>
-                                <include reference="DFZ-pa-pbM"/>
-                                <exclude reference="rGM-mD-p5z"/>
                             </mask>
                         </variation>
                     </view>
