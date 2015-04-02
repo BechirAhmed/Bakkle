@@ -134,6 +134,7 @@ static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
     __block UIView *likedImageView = self.likedView;
     __block UIView *nopeImageView = self.nopeView;
     __block UIView *holdImageView = self.holdView;
+    __block UIView *reportImageView = self.reportView;
     __weak MDCSwipeToChooseView *weakself = self;
     options.onPan = ^(MDCPanState *state) {
         if (state.direction == MDCSwipeDirectionNone) {
@@ -152,6 +153,11 @@ static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
             holdImageView.alpha = state.thresholdRatio;
             nopeImageView.alpha = 0.f;
             likedImageView.alpha = 0.f;            
+        } else if (state.direction == MDCSwipeDirectionDown) {
+            reportImageView.alpha = state.thresholdRatio;
+            holdImageView.alpha = 0.f;
+            nopeImageView.alpha = 0.f;
+            likedImageView.alpha = 0.f;
         }
 
         if (weakself.options.onPan) {
