@@ -69,14 +69,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         println("Registered for notifications")
         println(deviceToken);
         
-        // Sent notification token to server
-//        var url:NSURL? = NSURL(string: "https://app.bakkle.com/notifications/register\(deviceToken)")
-//        println(url)
-//        let task = NSURLSession.sharedSession().dataTaskWithURL(url!) {(data, response, error) in
-//            println(NSString(data: data, encoding: NSUTF8StringEncoding))
-//        }
-        let url:NSURL? = NSURL(string: "http://10.0.0.118:8000/notifications/register")
-//        let url:NSURL? = NSURL(string: "https://app.bakkle.com/notifications/register")
+        let url:NSURL? = NSURL(string: "https://app.bakkle.com/notifications/register")
         let request = NSMutableURLRequest(URL: url!)
         request.HTTPMethod = "POST"
         let postString = "device_token=\(deviceToken)"

@@ -48,11 +48,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		5E0242901AC47FFB0094BB05 /* Screen Shot 2015-03-26 at 1.56.29 PM 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Screen Shot 2015-03-26 at 1.56.29 PM 1.png"; sourceTree = "<group>"; };
+		5E0242901AC47FFB0094BB05 /* Screen Shot 2015-03-26 at 1.56.29 PM 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Screen Shot 2015-03-26 at 1.56.29 PM 1.png"; path = "../Screen Shot 2015-03-26 at 1.56.29 PM 1.png"; sourceTree = "<group>"; };
 		5E0242921AC481E80094BB05 /* menubtn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = menubtn.png; path = ../menubtn.png; sourceTree = "<group>"; };
 		5E5CB0A81AB7547800F32BE6 /* Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
-		5E8C44CC1AC3217000BC4A2C /* TransitionOperator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransitionOperator.swift; sourceTree = "<group>"; };
-		5E8C44D01AC3286200BC4A2C /* Menu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Menu.swift; sourceTree = "<group>"; };
+		5E8C44CC1AC3217000BC4A2C /* TransitionOperator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TransitionOperator.swift; path = ../TransitionOperator.swift; sourceTree = "<group>"; };
+		5E8C44D01AC3286200BC4A2C /* Menu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Menu.swift; path = ../Menu.swift; sourceTree = "<group>"; };
 		5EBDD68B1AB211E600C7FBE7 /* Bakkle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bakkle.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5EBDD68F1AB211E600C7FBE7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5EBDD6901AB211E600C7FBE7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -121,9 +121,6 @@
 		5EBDD6821AB211E600C7FBE7 = {
 			isa = PBXGroup;
 			children = (
-				5E0242901AC47FFB0094BB05 /* Screen Shot 2015-03-26 at 1.56.29 PM 1.png */,
-				5E8C44D01AC3286200BC4A2C /* Menu.swift */,
-				5E8C44CC1AC3217000BC4A2C /* TransitionOperator.swift */,
 				5EE2C9BC1AB9F1080031D8CD /* MDCSwipe Library */,
 				5EE2C98E1AB9E3BB0031D8CD /* Frameworks */,
 				5EBDD68D1AB211E600C7FBE7 /* Bakkle */,
@@ -144,6 +141,8 @@
 		5EBDD68D1AB211E600C7FBE7 /* Bakkle */ = {
 			isa = PBXGroup;
 			children = (
+				5E8C44CC1AC3217000BC4A2C /* TransitionOperator.swift */,
+				5E8C44D01AC3286200BC4A2C /* Menu.swift */,
 				5EE2C98A1AB9D1730031D8CD /* FeedScreen.swift */,
 				5E5CB0A81AB7547800F32BE6 /* Bridging-Header.h */,
 				5EBDD6901AB211E600C7FBE7 /* AppDelegate.swift */,
@@ -160,6 +159,7 @@
 		5EBDD68E1AB211E600C7FBE7 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				5E0242901AC47FFB0094BB05 /* Screen Shot 2015-03-26 at 1.56.29 PM 1.png */,
 				5E0242921AC481E80094BB05 /* menubtn.png */,
 				5EE2C9B11AB9F0FB0031D8CD /* MDCSwipeToChoose-Prefix.pch */,
 				A03508F81AB3C6AE00CA6455 /* logo-white-design-png.png */,
@@ -277,7 +277,7 @@
 				TargetAttributes = {
 					5EBDD68A1AB211E600C7FBE7 = {
 						CreatedOnToolsVersion = 6.1.1;
-						DevelopmentTeam = 73BH7B3T66;
+						DevelopmentTeam = GKAKES7JLX;
 					};
 					5EBDD69F1AB211E600C7FBE7 = {
 						CreatedOnToolsVersion = 6.1.1;

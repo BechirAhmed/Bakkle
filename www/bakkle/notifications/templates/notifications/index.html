@@ -1,3 +1,8 @@
+{% extends "base.html" %}
+
+{% block title %}Bakkle notifications{% endblock %}
+
+{% block content%}
 
 {% if notification_list %}
 <ul>
@@ -8,3 +13,5 @@
 {% else %}
 <p> no notifications present </p>
 {% endif %}
+
+{% endblock %}
