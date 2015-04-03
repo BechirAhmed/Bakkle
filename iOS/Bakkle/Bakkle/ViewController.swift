@@ -13,7 +13,7 @@ class ViewController: UIViewController, FBLoginViewDelegate {
     let mainScreenSegueIdentifier = "PushToFeedSegue"
     
     @IBOutlet weak var fbLoginView: FBLoginView!
-      
+    @IBOutlet weak var fbLoginViewBtn: UIImageView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,10 +22,14 @@ class ViewController: UIViewController, FBLoginViewDelegate {
        // fbLoginView.center = self.view.center
     //    self.view.addSubview(fbLoginView)
         
-        fbLoginView.frame = CGRectOffset(fbLoginView.frame, 65, 526)
+
+        fbLoginView.frame = fbLoginViewBtn.frame;
+        //fbLoginView.frame = CGRectOffset(fbLoginView.frame, 65, 526)
         
         self.view.addSubview(fbLoginView)
-        fbLoginView.sizeToFit()
+        //fbLoginView.sizeToFit()
+        
+        fbLoginView.frame.origin = CGPointMake(200, 400)
         
         self.fbLoginView.delegate = self
         self.fbLoginView.readPermissions = ["public_profile", "email", "user_friends", "publish_actions"]

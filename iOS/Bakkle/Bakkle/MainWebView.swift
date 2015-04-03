@@ -11,10 +11,14 @@ import WebKit
 
 class MainWebView: UIViewController,UIWebViewDelegate {
     
-    let mainURL = "https://app.bakkle.com/static/comp.html"
+    let mainURL = "https://app.bakkle.com/p1/comp.html"
 
     @IBOutlet weak var webView: UIWebView!
     
+    @IBAction func logout(sender: AnyObject) {
+        FBSession.activeSession().closeAndClearTokenInformation()
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
