@@ -19,20 +19,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FBLoginView.self
         FBProfilePictureView.self
         
-        // Register for push notifications
-        if application.respondsToSelector("registerUserNotificationSettings:") {
-            
-            let types:UIUserNotificationType = (.Alert | .Badge | .Sound)
-            let settings:UIUserNotificationSettings = UIUserNotificationSettings(forTypes: types, categories: nil)
-            
-            application.registerUserNotificationSettings(settings)
-            application.registerForRemoteNotifications()
-            
-        } else {
-            // Register for Push Notifications before iOS 8
-            application.registerForRemoteNotificationTypes(.Alert | .Badge | .Sound)
-        }
-        
         return true
     }
     
@@ -58,6 +44,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidBecomeActive(application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         FBAppEvents.activateApp();
+        
+        // Register for push notifications
+        if application.respondsToSelector("registerUserNotificationSettings:") {
+            
+            let types:UIUserNotificationType = (.Alert | .Badge | .Sound)
+            let settings:UIUserNotificationSettings = UIUserNotificationSettings(forTypes: types, categories: nil)
+            
+            application.registerUserNotificationSettings(settings)
+            application.registerForRemoteNotifications()
+            
+        } else {
+            // Register for Push Notifications before iOS 8
+            application.registerForRemoteNotificationTypes(.Alert | .Badge | .Sound)
+        }
+
     }
 
     func applicationWillTerminate(application: UIApplication) {
@@ -69,7 +70,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         println("Registered for notifications")
         println(deviceToken);
         
-        let url:NSURL? = NSURL(string: "https://app.bakkle.com/notifications/register")
+        let url:NSURL? = NSURL(string: "https://app.bakkle.com/notifications/register/")
         let request = NSMutableURLRequest(URL: url!)
         request.HTTPMethod = "POST"
         let postString = "device_token=\(deviceToken)"
