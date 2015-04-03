@@ -33,6 +33,9 @@
 		A03508F71AB3C5FB00CA6455 /* logo-green-design-png-white.png in Resources */ = {isa = PBXBuildFile; fileRef = A03508F61AB3C5FB00CA6455 /* logo-green-design-png-white.png */; };
 		A03508F91AB3C6AE00CA6455 /* logo-white-design-png.png in Resources */ = {isa = PBXBuildFile; fileRef = A03508F81AB3C6AE00CA6455 /* logo-white-design-png.png */; };
 		A04AAE401ACA2E6600BA7CBD /* FacebookSDK in Frameworks */ = {isa = PBXBuildFile; fileRef = A04AAE3F1ACA2E6600BA7CBD /* FacebookSDK */; };
+		A0A2FFF31ACE213F00A42CD8 /* logo-white-design-png-100.png in Resources */ = {isa = PBXBuildFile; fileRef = A0A2FFF21ACE213F00A42CD8 /* logo-white-design-png-100.png */; };
+		A0A2FFF51ACE232F00A42CD8 /* LoginScreen-bkg.png in Resources */ = {isa = PBXBuildFile; fileRef = A0A2FFF41ACE232F00A42CD8 /* LoginScreen-bkg.png */; };
+		A0A2FFF71ACE276200A42CD8 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0A2FFF61ACE276200A42CD8 /* FBSDKCoreKit.framework */; };
 		A0A709CE1ACAC9D700E772B9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5EBDD6941AB211E600C7FBE7 /* Main.storyboard */; };
 		A0A709CF1ACAC9DB00E772B9 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5EBDD6991AB211E600C7FBE7 /* LaunchScreen.xib */; };
 /* End PBXBuildFile section */
@@ -96,6 +99,9 @@
 		A03508F61AB3C5FB00CA6455 /* logo-green-design-png-white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-green-design-png-white.png"; sourceTree = "<group>"; };
 		A03508F81AB3C6AE00CA6455 /* logo-white-design-png.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-white-design-png.png"; sourceTree = "<group>"; };
 		A04AAE3F1ACA2E6600BA7CBD /* FacebookSDK */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = FacebookSDK; path = FacebookSDK.framework/Versions/A/FacebookSDK; sourceTree = "<group>"; };
+		A0A2FFF21ACE213F00A42CD8 /* logo-white-design-png-100.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-white-design-png-100.png"; sourceTree = "<group>"; };
+		A0A2FFF41ACE232F00A42CD8 /* LoginScreen-bkg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "LoginScreen-bkg.png"; path = "../../../graphics/LoginScreen-bkg.png"; sourceTree = "<group>"; };
+		A0A2FFF61ACE276200A42CD8 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,6 +110,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A04AAE401ACA2E6600BA7CBD /* FacebookSDK in Frameworks */,
+				A0A2FFF71ACE276200A42CD8 /* FBSDKCoreKit.framework in Frameworks */,
 				5EE2C98D1AB9E3B40031D8CD /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -159,6 +166,8 @@
 		5EBDD68E1AB211E600C7FBE7 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				A0A2FFF41ACE232F00A42CD8 /* LoginScreen-bkg.png */,
+				A0A2FFF21ACE213F00A42CD8 /* logo-white-design-png-100.png */,
 				5E0242901AC47FFB0094BB05 /* Screen Shot 2015-03-26 at 1.56.29 PM 1.png */,
 				5E0242921AC481E80094BB05 /* menubtn.png */,
 				5EE2C9B11AB9F0FB0031D8CD /* MDCSwipeToChoose-Prefix.pch */,
@@ -191,6 +200,7 @@
 		5EE2C98E1AB9E3BB0031D8CD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A0A2FFF61ACE276200A42CD8 /* FBSDKCoreKit.framework */,
 				A04AAE3F1ACA2E6600BA7CBD /* FacebookSDK */,
 				5EE2C98C1AB9E3B40031D8CD /* Foundation.framework */,
 				5EE2C9881AB9B6270031D8CD /* FacebookSDK.framework */,
@@ -310,7 +320,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				A03508F91AB3C6AE00CA6455 /* logo-white-design-png.png in Resources */,
+				A0A2FFF51ACE232F00A42CD8 /* LoginScreen-bkg.png in Resources */,
 				A03508F71AB3C5FB00CA6455 /* logo-green-design-png-white.png in Resources */,
+				A0A2FFF31ACE213F00A42CD8 /* logo-white-design-png-100.png in Resources */,
 				A0A709CE1ACAC9D700E772B9 /* Main.storyboard in Resources */,
 				5EBDD6B11AB2139700C7FBE7 /* bakkleLogo.png in Resources */,
 				5EBDD6981AB211E600C7FBE7 /* Images.xcassets in Resources */,
