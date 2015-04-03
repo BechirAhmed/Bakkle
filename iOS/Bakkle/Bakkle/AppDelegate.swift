@@ -83,10 +83,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 return
             }
             
-            println("response = \(response)")
+           // println("response = \(response)")
             
             let responseString = NSString(data: data, encoding: NSUTF8StringEncoding)
-            println("responseString = \(responseString)")
+            //println("responseString = \(responseString)")
         }
         task.resume()
     }
