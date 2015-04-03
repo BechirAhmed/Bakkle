@@ -23,16 +23,16 @@
 		<dict>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>fb1625520267670984</string>
+				<string>fb1592001697724990</string>
 			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>FacebookAppID</key>
-	<string>1625520267670984</string>
+	<string>1592001697724990</string>
 	<key>FacebookDisplayName</key>
-	<string>Test app</string>
+	<string>Bakkle</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
