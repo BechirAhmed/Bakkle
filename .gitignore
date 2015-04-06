@@ -3,3 +3,4 @@ iOS/Bakkle/Bakkle.xcodeproj/project.xcworkspace/xcuserdata/pethessa.xcuserdatad/
 iOS/Bakkle/Bakkle.xcodeproj/xcuserdata/pethessa.xcuserdatad/xcschemes/Bakkle.xcscheme
 iOS/Bakkle/Bakkle.xcodeproj/xcuserdata/pethessa.xcuserdatad/xcschemes/xcschememanagement.plist
 *.pyc
+*.tmp
