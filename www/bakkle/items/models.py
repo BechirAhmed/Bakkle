@@ -1,4 +1,5 @@
 from django.db import models
+from bakkle.account.models import Account
 
 class Items(models.Model):
     PICK_UP = 'Pick-up'
