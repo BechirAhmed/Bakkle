@@ -84,9 +84,10 @@ def device_detail(request, device_id):
 
 # Register a new device
 def device_register(ip, uuid, userID):
+    account = get_object_or_404(Account, pk=userID)
     device = Device.objects.get_or_create(
         uuid = uuid,
-        account_id= userID,
+        account_id= account,
         defaults={'notificationsEnabled': False, })[0]
     device.lastSeenDate = datetime.datetime.now()
     device.ipAddress = ip
