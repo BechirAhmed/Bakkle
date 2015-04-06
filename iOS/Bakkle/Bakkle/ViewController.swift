@@ -81,6 +81,13 @@ class ViewController: UIViewController, FBLoginViewDelegate {
             println("User Email: \(userEmail)")
         }
         
+        
+        // Sucessfully logged in via FB
+        let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate!
+        appDelegate.registerForPushNotifications(UIApplication.sharedApplication(), userid: user.objectID)
+        
+        
+        
         // SWITCH BETWEEN NATIVE OR WEB CODE
         if(switchWebNative) {
             let mainWebView : MainWebView = MainWebView()

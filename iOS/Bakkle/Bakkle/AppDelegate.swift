@@ -12,7 +12,7 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    var userid: String!
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
@@ -41,9 +41,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
     }
 
-    func applicationDidBecomeActive(application: UIApplication) {
-        // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-        FBAppEvents.activateApp();
+    func registerForPushNotifications(application: UIApplication, userid: String ) {
+        self.userid = userid
         
         // Register for push notifications
         if application.respondsToSelector("registerUserNotificationSettings:") {
@@ -58,7 +57,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // Register for Push Notifications before iOS 8
             application.registerForRemoteNotificationTypes(.Alert | .Badge | .Sound)
         }
-
+    }
+    
+    func applicationDidBecomeActive(application: UIApplication) {
+        // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        FBAppEvents.activateApp();
     }
 
     func applicationWillTerminate(application: UIApplication) {
@@ -73,7 +76,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let url:NSURL? = NSURL(string: "https://app.bakkle.com/account/device/register")
         let request = NSMutableURLRequest(URL: url!)
         request.HTTPMethod = "POST"
-        let postString = "device_token=\(deviceToken)"
+        let postString = "device_token=\(deviceToken)&userid=\(self.userid)"
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
             data, response, error in
