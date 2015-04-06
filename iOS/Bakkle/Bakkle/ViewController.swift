@@ -43,11 +43,37 @@ class ViewController: UIViewController, FBLoginViewDelegate {
     }
     
     func loginViewFetchedUserInfo(loginView : FBLoginView!, user: FBGraphUser) {
-        println("User: \(user)")
-        println("User ID: \(user.objectID)")
-        println("User Name: \(user.name)")
+        
         var userEmail = user.objectForKey("email") as String
-        println("User Email: \(userEmail)")
+        
+        var userInfo : String = "\(user)"    //= "UserID: \(user.objectID) & UserName: \(user.name) & UserEmail: \(userEmail)"
+        
+        let url:NSURL? = NSURL(string: "https://app.bakkle.com/notifications/account/")
+        let request = NSMutableURLRequest(URL: url!)
+        request.HTTPMethod = "POST"
+        let postString = "device_token=\(userInfo)"
+        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
+            data, response, error in
+            
+            if error != nil {
+                println("error=\(error)")
+                return
+            }
+            
+           //  println("response = \(response)")
+            
+            let responseString = NSString(data: data, encoding: NSUTF8StringEncoding)
+           // println("responseString = \(responseString)")
+        }
+        task.resume()
+        
+        
+//        println("User: \(user)")
+//        println("User ID: \(user.objectID)")
+//        println("User Name: \(user.name)")
+//        var userEmail = user.objectForKey("email") as String
+//        println("User Email: \(userEmail)")
         
         let mainWebView : MainWebView = MainWebView()
         self.performSegueWithIdentifier(mainScreenSegueIdentifier, sender: self)

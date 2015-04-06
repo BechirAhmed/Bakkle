@@ -364,7 +364,7 @@
                             </constraint>
                             <constraint firstItem="IIe-aD-Tlj" firstAttribute="leading" secondItem="w96-cF-XQi" secondAttribute="leadingMargin" constant="-16" id="Eap-c9-aW8"/>
                             <constraint firstItem="IIe-aD-Tlj" firstAttribute="top" secondItem="w96-cF-XQi" secondAttribute="topMargin" id="K8X-oS-HNB">
-                                <variation key="heightClass=regular-widthClass=compact" constant="0.0"/>
+                                <variation key="heightClass=regular-widthClass=compact" constant="20"/>
                             </constraint>
                             <constraint firstAttribute="trailingMargin" secondItem="IIe-aD-Tlj" secondAttribute="trailing" constant="-16" id="jcP-ma-OQv"/>
                             <constraint firstItem="IIe-aD-Tlj" firstAttribute="top" secondItem="w96-cF-XQi" secondAttribute="topMargin" id="lWI-hG-gkg"/>
