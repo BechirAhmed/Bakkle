@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Bakkle device detail{% endblock %}
+
+{% block content %}
+
+{% if device %}
+  Details for device: {{ device.id }}
+  <br>ID: {{ device.id }}
+  <br>APNS: {{ device.apnsToken }} 
+  <br>DateAdded: {{ device.dateAdded }} 
+  <br>LastSeen: {{ device.lastSeenDate }} (<a href="{% url 'account:device_notify' device.id %}">Notify</a>)
+{% else %}
+  <p> No device with that id </p>
+{% endif %}
+
+{% endblock %}

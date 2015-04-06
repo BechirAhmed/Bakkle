@@ -1,4 +1,5 @@
 from django.db import models
+#from bakkle.account.models import Account
 
 class Items(models.Model):
     PICK_UP = 'Pick-up'
@@ -12,7 +13,7 @@ class Items(models.Model):
     description = models.CharField(max_length=4000)
     #use django-location-field?
     location = models.CharField(max_length=11)
-    seller = models.ForeignKey(Account)
+    #seller = models.ForeignKey(Account)
     price = models.IntegerField()
     post_date = models.DateTimeField('date posted')
     expire_date = models.DateTimeField('expire date')

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Bakkle account detail{% endblock %}
+
+{% block content %}
+
+{% if account %}
+  Details for account: {{ account.id }}
+  <br/>displayname={{ account.displayName }}
+  <br/>facebookid={{ account.facebookId }}
+
+  {% if devices %}
+     {% for device in devices %}
+       <ul>
+       <!-- { url 'account:device_detail' device.id } -->
+         <li><a href="{% url 'account:device_detail' device.id %}">{{ device.id }}</a> (<a href="{% url 'account:device_notify' device.id %}">Notify</a>)</li>
+       </ul>
+     {% endfor %}
+  {% else %}
+   <p> This account has no registered devices </p>
+  {% endif %}
+{% else %}
+  <p> No account with that id </p>
+{% endif %}
+
+{% endblock %}
