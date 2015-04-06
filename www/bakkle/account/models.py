@@ -30,6 +30,9 @@ class Account(models.Model):
     itemsSold = models.IntegerField(default = 0)
     buyerRating = models.DecimalField(max_digits = 2, decimal_places=1, null = True)
     itemsBought = models.IntegerField(default = 0)
+    maxDistance = models.IntegerField(default = 10)
+    maxPrice = models.DecimalField(max_digits=7, decimal_places=2, default=100.00)
+    displayNumItems = models.IntegerField(default = 100)
     def __str__(self):
         return "ID={} email={} displayname={}".format(self.id, self.email, self.displayName)
 
@@ -40,10 +43,10 @@ class Device(models.Model):
     apnsToken = models.CharField(max_length=64)
     ipAddress = models.CharField(max_length=15)
     uuid = models.CharField(max_length=36)
-    notificationsEnabled = models.BooleanField()
+    notificationsEnabled = models.BooleanField(default = True)
 
     class Meta:
-        unique_together = ("account_id", "uuid")
+        unique_together = (("account_id", "uuid"))
 
     def send_notification(self, message, sound="default", badge=0):
         print(cert_file)

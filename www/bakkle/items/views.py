@@ -33,20 +33,42 @@ def reset(request):
     #TODO: Change to POST or DELETE
     Items.objects.all().delete()
     i = Items(
-        post_date=timezone.now(),
-        expire_date=timezone.now()+datetime.timedelta(days=item_expire_time),
-        title="Used lawn mower",
-        description="Runs great has 26 inch cut",
-        price=50.25,
-        method=Items.PICK_UP )
+        imageUrls = "https://app.bakkle.com/images/b8347df.jpg",
+        title = "Orange Push Mower",
+        description = "Year old orange push mower. Some wear and sun fadding. Was kept outside and not stored in shed.",
+        location = "39.417672,-87.330438",
+        seller = get_object_or_404(Account, pk=1),
+        price = 50.25,
+        tags = "lawnmower, orange, somewear",
+        method = Items.PICK_UP,
+        status = Items.ACTIVE,
+        postDate = datetime.datetime.now,
+        timesReported = 0 )
     i.save()
     i = Items(
-        post_date=timezone.now(),
-        expire_date=timezone.now()+datetime.timedelta(days=item_expire_time),
-        title="Wedding ring",
-        description="Runs great has 26 inch cut",
-        price=50.25,
-        method=Items.PICK_UP )
+        imageUrls = "https://app.bakkle.com/images/b8348df.jpg",
+        title = "Rabbit Push Mower",
+        description = "Homemade lawn mower. Includes rabbit and water container.",
+        location = "39.417672,-87.330438",
+        seller = get_object_or_404(Account, pk=1),
+        price = 10.99,
+        tags = "lawnmower, homemade, rabbit",
+        method = Items.PICK_UP,
+        status = Items.ACTIVE,
+        postDate = datetime.datetime.now,
+        timesReported = 0 )
+    i = Items(
+        imageUrls = "https://app.bakkle.com/images/b8349df.jpg,https://app.bakkle.com/images/b8350df.jpg",
+        title = "iPhone 6 Cracked",
+        description = "iPhone 6. Has a cracked screen. Besides screen phone is in good condition.",
+        location = "39.417672,-87.330438",
+        seller = get_object_or_404(Account, pk=1),
+        price = 65.99,
+        tags = "iPhone6, cracked, damaged",
+        method = Items.DELIVERY,
+        status = Items.ACTIVE,
+        postDate = datetime.datetime.now,
+        timesReported = 0 )
     i.save()
     print("Adding {}".format(i.title))
     return HttpResponse("resetting {}".format(i.title)) #change success value
