@@ -11,11 +11,11 @@ soundname = 'default'
 badge = 1
 
 # Config
-cert_file = 'notifications/apn-push-prod-2015-03-30.p12.pem'
-key_file  = 'notifications/apn-push-prod-2015-03-30.p12.pem'
+cert_file = 'account/apn-push-prod-2015-03-30.p12.pem'
+key_file  = 'account/apn-push-prod-2015-03-30.p12.pem'
 if use_sandbox:
-    cert_file = 'notifications/apn-push-dev-2015-03-30.p12.pem'
-    key_file  = 'notifications/apn-push-dev-2015-03-30.p12.pem'
+    cert_file = 'account/apn-push-dev-2015-03-30.p12.pem'
+    key_file  = 'account/apn-push-dev-2015-03-30.p12.pem'
 
 
 # Create your models here.
