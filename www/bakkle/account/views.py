@@ -1,6 +1,7 @@
 from django.shortcuts import render
 
 import datetime
+import json
 
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.core.urlresolvers import reverse
@@ -12,6 +13,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import Account, Device
 
 # Show a list of all accounts in the system.
+@csrf_exempt
 def index(request):
     account_list = Account.objects.all()
     context = {
@@ -22,23 +24,24 @@ def index(request):
 @csrf_exempt
 def facebook(request):
     if request.method == "POST" or request.method == "PUT":
+
         #TODO: these two items are hardcoded
-        token_expire_time = 7 # days
+        token_expire_time = 7  # days
 
         facebook_id = request.POST.get('UserID', "")
         displayName = request.POST.get('Name',"")
         email = request.POST.get('email', "")
         uuid = request.POST.get('deviceUUID', "")
-        if facebook_id == None || uuid == None || email == None:
+        if facebook_id == None or uuid == None or email == None:
             return "" # TODO: Need better response
 
-        if displayName == None
-        	firstName = request.POST.get('FirstName', "")
-        	lastName = request.POST.get('LastName', "")
-        	if firstName == None || lastName == None
-        		return "" # TODO: Add Better Response
-        	else 
-        		displayName = firstName + " " + lastName
+        if displayName == None:
+            firstName = request.POST.get('FirstName', "")
+            lastName = request.POST.get('LastName', "")
+            if firstName == None or lastName == None:
+                return "" # TODO: Add Better Response
+            else:
+                displayName = firstName + " " + lasftName
 
         account = Account.objects.get_or_create(
             facebookId=facebook_id,
@@ -50,12 +53,14 @@ def facebook(request):
         account.save()
         request.session['id'] = account.id
 
-        device_register(uuid, account.id)
-        return HttpResponseRedirect(reverse('account:detail', args=(account.id,)))
+        device_register(get_client_ip(request), uuid, account)
+        response_data = {'status':1, 'userid':account.id}
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
     else:
-        raise Http404("Wrong method")
+        raise Http404("Wrong method, use POST")
 
 # Show detail on an account
+@csrf_exempt
 def detail(request, account_id):
     account = get_object_or_404(Account, pk=account_id)
     devices = Device.objects.filter(account_id=account_id)
@@ -63,11 +68,13 @@ def detail(request, account_id):
         'account': account,
         'devices': devices,
     }
+    print(context)
     return render(request, 'account/detail.html', context)
 
 ## DEVICE STUFF
 
 # Show detail on a device
+@csrf_exempt
 def device_detail(request, device_id):
     device = get_object_or_404(Device, pk=device_id)
     context = {
@@ -76,13 +83,13 @@ def device_detail(request, device_id):
     return render(request, 'account/device_detail.html', context)
 
 # Register a new device
-def device_register(uuid, userID):
+def device_register(ip, uuid, userID):
     device = Device.objects.get_or_create(
         uuid = uuid,
         account_id= userID,
-        defaults={'notificationsEnabled': false, })[0]
+        defaults={'notificationsEnabled': False, })[0]
     device.lastSeenDate = datetime.datetime.now()
-    device.ipAddress = get_client_ip(request)
+    device.ipAddress = ip
     device.save()
 
 # Register a new device for notifications
@@ -93,23 +100,24 @@ def device_register_push(request):
         device_token = request.POST.get('device_token', "")
         userID = request.POST.get('userid', "")
         uuid = request.POST.get('deviceUUID', "")
-        if device_token == None || userID == None || uuid == None:
+        if device_token == None or userID == None or uuid == None:
             return "" # Need better response
 
-        print("Registering {} to {}".format(device_token, request.session['user_id']))
+        print("Registering {} to {}".format(device_token, userID))
         device = Device.objects.get_or_create(
             uuid = uuid,
             account_id= userID,
-            defaults={'notificationsEnabled': true, })[0]
+            defaults={'notificationsEnabled': True, })[0]
         device.lastSeenDate = datetime.datetime.now()
         device.ipAddress = get_client_ip(request)
         device.apnsToken = device_token
         device.save()
-        return HttpResponseRedirect(reverse('account:device_detail', args=(device.id)))
+        return HttpResponseRedirect(reverse('account:device_detail', args=(device.id,)))
     else:
         raise Http404("Wrong method")
 
 # Dispatch a notification to device
+@csrf_exempt
 def device_notify(request, device_id):
     n = get_object_or_404(Device, pk=device_id)
     n.send_notification("bob", "default", 42)

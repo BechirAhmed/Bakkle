@@ -6,7 +6,10 @@
 
 {% if device %}
   Details for device: {{ device.id }}
-  <a href="{% url 'account:device_notify' device.id %}">{{ device.id }}: {{ device.apnsToken }} {{ device.dateAdded }} {{ device.lastSeenDate }}</a>
+  <br>ID: {{ device.id }}
+  <br>APNS: {{ device.apnsToken }} 
+  <br>DateAdded: {{ device.dateAdded }} 
+  <br>LastSeen: {{ device.lastSeenDate }} (<a href="{% url 'account:device_notify' device.id %}">Notify</a>)
 {% else %}
   <p> No device with that id </p>
 {% endif %}

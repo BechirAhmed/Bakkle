@@ -6,12 +6,13 @@
 
 {% if account %}
   Details for account: {{ account.id }}
-  displayname={{ account.displayName }}
-  facebookid={{ account.facebookId }}
+  <br/>displayname={{ account.displayName }}
+  <br/>facebookid={{ account.facebookId }}
 
   {% if devices %}
      {% for device in devices %}
        <ul>
+       <!-- { url 'account:device_detail' device.id } -->
          <li><a href="{% url 'account:device_detail' device.id %}">{{ device.id }}</a> (<a href="{% url 'account:device_notify' device.id %}">Notify</a>)</li>
        </ul>
      {% endfor %}
