@@ -29,6 +29,7 @@
 		5EE2C9BA1AB9F0FB0031D8CD /* UIView+MDCBorderedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C9AE1AB9F0FB0031D8CD /* UIView+MDCBorderedLabel.m */; };
 		5EE2C9BB1AB9F0FB0031D8CD /* MDCViewState.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C9B01AB9F0FB0031D8CD /* MDCViewState.m */; };
 		5EF3F3DF1ACC3D6900D93B72 /* MainWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF3F3DE1ACC3D6900D93B72 /* MainWebView.swift */; };
+		A003EB101ACF3B2C00EE51A1 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A003EB0F1ACF3B2C00EE51A1 /* SWRevealViewController.m */; };
 		A03508F31AB3C34900CA6455 /* SplashScreen-bkg.png in Resources */ = {isa = PBXBuildFile; fileRef = A03508F21AB3C34900CA6455 /* SplashScreen-bkg.png */; };
 		A03508F71AB3C5FB00CA6455 /* logo-green-design-png-white.png in Resources */ = {isa = PBXBuildFile; fileRef = A03508F61AB3C5FB00CA6455 /* logo-green-design-png-white.png */; };
 		A03508F91AB3C6AE00CA6455 /* logo-white-design-png.png in Resources */ = {isa = PBXBuildFile; fileRef = A03508F81AB3C6AE00CA6455 /* logo-white-design-png.png */; };
@@ -99,6 +100,8 @@
 		5EE2C9B01AB9F0FB0031D8CD /* MDCViewState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDCViewState.m; sourceTree = "<group>"; };
 		5EE2C9B11AB9F0FB0031D8CD /* MDCSwipeToChoose-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MDCSwipeToChoose-Prefix.pch"; path = "../MDCSwipeToChoose-Prefix.pch"; sourceTree = "<group>"; };
 		5EF3F3DE1ACC3D6900D93B72 /* MainWebView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainWebView.swift; sourceTree = "<group>"; };
+		A003EB0E1ACF3B2C00EE51A1 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
+		A003EB0F1ACF3B2C00EE51A1 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
 		A03508F21AB3C34900CA6455 /* SplashScreen-bkg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "SplashScreen-bkg.png"; path = "../../../graphics/SplashScreen-bkg.png"; sourceTree = "<group>"; };
 		A03508F61AB3C5FB00CA6455 /* logo-green-design-png-white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-green-design-png-white.png"; sourceTree = "<group>"; };
 		A03508F81AB3C6AE00CA6455 /* logo-white-design-png.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-white-design-png.png"; sourceTree = "<group>"; };
@@ -136,6 +139,7 @@
 		5EBDD6821AB211E600C7FBE7 = {
 			isa = PBXGroup;
 			children = (
+				A003EB111ACF3BBC00EE51A1 /* SWRevealViewController */,
 				5EE2C9BC1AB9F1080031D8CD /* MDCSwipe Library */,
 				5EE2C98E1AB9E3BB0031D8CD /* Frameworks */,
 				5EBDD68D1AB211E600C7FBE7 /* Bakkle */,
@@ -248,6 +252,15 @@
 				5EE2C9B01AB9F0FB0031D8CD /* MDCViewState.m */,
 			);
 			name = "MDCSwipe Library";
+			sourceTree = "<group>";
+		};
+		A003EB111ACF3BBC00EE51A1 /* SWRevealViewController */ = {
+			isa = PBXGroup;
+			children = (
+				A003EB0E1ACF3B2C00EE51A1 /* SWRevealViewController.h */,
+				A003EB0F1ACF3B2C00EE51A1 /* SWRevealViewController.m */,
+			);
+			name = SWRevealViewController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -374,6 +387,7 @@
 				5EE2C9BB1AB9F0FB0031D8CD /* MDCViewState.m in Sources */,
 				5E8C44D11AC3286200BC4A2C /* Menu.swift in Sources */,
 				5EF3F3DF1ACC3D6900D93B72 /* MainWebView.swift in Sources */,
+				A003EB101ACF3B2C00EE51A1 /* SWRevealViewController.m in Sources */,
 				5EE2C9B41AB9F0FB0031D8CD /* MDCSwipeOptions.m in Sources */,
 				5EE2C9B61AB9F0FB0031D8CD /* MDCSwipeResult.m in Sources */,
 				5EBDD6911AB211E600C7FBE7 /* AppDelegate.swift in Sources */,
