@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1514" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
@@ -141,7 +141,7 @@
                     <connections>
                         <outlet property="fbLoginView" destination="M2Y-Q2-c87" id="MfE-ah-HZo"/>
                         <outlet property="fbLoginViewBtn" destination="LeQ-jZ-CDJ" id="uhy-1I-97g"/>
-                        <segue destination="TYc-cn-Gh4" kind="show" identifier="PushToFeedSegue" id="MoJ-4J-wF0"/>
+                        <segue destination="aNC-04-Ly5" kind="show" identifier="PushToFeedSegue" id="BwO-lw-aJH"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
@@ -403,13 +403,31 @@
                             </mask>
                         </variation>
                     </view>
+                    <navigationItem key="navigationItem" id="doP-zD-9Kp"/>
                     <connections>
                         <outlet property="webView" destination="IIe-aD-Tlj" id="ypN-gQ-ieu"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FZ8-vp-dmh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="681" y="1116"/>
+            <point key="canvasLocation" x="709" y="1214"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="2IF-mK-ott">
+            <objects>
+                <navigationController id="aNC-04-Ly5" sceneMemberID="viewController">
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="548-e8-0qJ">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="TYc-cn-Gh4" kind="relationship" relationship="rootViewController" id="Ucb-Po-L1L"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="LfU-VI-Xi5" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-86" y="1145"/>
         </scene>
         <!--ACCOUNT-->
         <scene sceneID="ocT-4h-EmC">

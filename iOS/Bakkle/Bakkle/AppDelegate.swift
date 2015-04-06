@@ -70,7 +70,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         println("Registered for notifications")
         println(deviceToken);
         
-        let url:NSURL? = NSURL(string: "https://app.bakkle.com/notifications/register/")
+        let url:NSURL? = NSURL(string: "https://app.bakkle.com/account/device/register")
         let request = NSMutableURLRequest(URL: url!)
         request.HTTPMethod = "POST"
         let postString = "device_token=\(deviceToken)"

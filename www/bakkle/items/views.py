@@ -40,5 +40,13 @@ def reset(request):
         price=50.25,
         method=Items.PICK_UP )
     i.save()
+    i = Items(
+        post_date=timezone.now(),
+        expire_date=timezone.now()+datetime.timedelta(days=item_expire_time),
+        title="Wedding ring",
+        description="Runs great has 26 inch cut",
+        price=50.25,
+        method=Items.PICK_UP )
+    i.save()
     print("Adding {}".format(i.title))
     return HttpResponse("resetting {}".format(i.title)) #change success value
