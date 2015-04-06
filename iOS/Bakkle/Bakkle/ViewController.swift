@@ -12,22 +12,21 @@ class ViewController: UIViewController, FBLoginViewDelegate {
 
     let mainScreenSegueIdentifier = "PushToFeedSegue"
     
+    let deviceUUID = UIDevice.currentDevice().identifierForVendor.UUIDString
+    
+    var account_id: String!
+ 
+
     @IBOutlet weak var fbLoginView: FBLoginView!
     @IBOutlet weak var fbLoginViewBtn: UIImageView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        
-       // fbLoginView.center = self.view.center
-    //    self.view.addSubview(fbLoginView)
         
 
         fbLoginView.frame = fbLoginViewBtn.frame;
-        //fbLoginView.frame = CGRectOffset(fbLoginView.frame, 65, 526)
         
         self.view.addSubview(fbLoginView)
-        //fbLoginView.sizeToFit()
         
         fbLoginView.frame.origin = CGPointMake(200, 400)
         
@@ -42,20 +41,21 @@ class ViewController: UIViewController, FBLoginViewDelegate {
         
     }
     
+    
+    
     func loginViewFetchedUserInfo(loginView : FBLoginView!, user: FBGraphUser) {
         
         var userEmail = user.objectForKey("email") as String
         var userGender = user.objectForKey("gender") as String
         var userUsername = user.objectForKey("username") as String!
         
-        let debug = false
         let switchWebNative = true
         
         var postString = ""
         
-        postString += "email=\(userEmail)&Name=\(user.name)&UserName=\(userUsername)&Gender=\(userGender)&UserID=\(user.objectID)&locale=\(user.location)&FirstName=\(user.first_name)&LastName=\(user.last_name)"
+        postString += "email=\(userEmail)&Name=\(user.name)&UserName=\(userUsername)&Gender=\(userGender)&UserID=\(user.objectID)&locale=\(user.location)&FirstName=\(user.first_name)&LastName=\(user.last_name)&deviceUUID=\(deviceUUID)"
         
-        let url:NSURL? = NSURL(string: "https://app.bakkle.com/account/facebook")
+        let url:NSURL? = NSURL(string: "https://app.bakkle.com/account/facebook/")
         let request = NSMutableURLRequest(URL: url!)
         request.HTTPMethod = "POST"
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
@@ -68,24 +68,25 @@ class ViewController: UIViewController, FBLoginViewDelegate {
             }
             
             let responseString = NSString(data: data, encoding: NSUTF8StringEncoding)
+            var error: NSError? = error
+            
+            var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &error) as NSDictionary
+            
+            if responseDict.valueForKey("status")?.integerValue == 1 {
+                
+            self.account_id = response.valueForKey("userid") as String
 
+            }
             println("Post STRING IS: \(postString)")
+            println("RESPONSE STRING IS: \(responseString)")
+            println("ACCOUNT ID IS: \(self.account_id)")
         }
         task.resume()
-        
-        if(debug) {
-            println("User: \(user)")
-            println("User ID: \(user.objectID)")
-            println("User Name: \(user.name)")
-            var userEmail = user.objectForKey("email") as String
-            println("User Email: \(userEmail)")
-        }
         
         
         // Sucessfully logged in via FB
         let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate!
-        appDelegate.registerForPushNotifications(UIApplication.sharedApplication(), userid: user.objectID)
-        
+        appDelegate.registerForPushNotifications(UIApplication.sharedApplication(), userid: user.objectID, deviceuuid: self.deviceUUID, account_id: self.account_id)
         
         
         // SWITCH BETWEEN NATIVE OR WEB CODE
@@ -104,11 +105,6 @@ class ViewController: UIViewController, FBLoginViewDelegate {
     
     func loginView(loginView : FBLoginView!, handleError:NSError) {
         println("Error: \(handleError.localizedDescription)")
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
 }
