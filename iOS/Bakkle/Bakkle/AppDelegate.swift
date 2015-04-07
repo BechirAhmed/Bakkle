@@ -14,7 +14,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var userid: String!
     
-    var account_id: String!
+    var account_id: Int!
     
     var deviceUUID : String = UIDevice.currentDevice().identifierForVendor.UUIDString
 
@@ -45,10 +45,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
     }
 
-    func registerForPushNotifications(application: UIApplication, userid: String, deviceuuid: String, account_id: String) {
+    func registerForPushNotifications(application: UIApplication, userid: String, deviceuuid: String, accountid: Int) {
         self.userid = userid
         self.deviceUUID = deviceuuid
-        self.account_id = account_id
+        self.account_id = accountid
         
         // Register for push notifications
         if application.respondsToSelector("registerUserNotificationSettings:") {
@@ -82,7 +82,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let url:NSURL? = NSURL(string: "https://app.bakkle.com/account/device/register_push/")
         let request = NSMutableURLRequest(URL: url!)
         request.HTTPMethod = "POST"
-        let postString = "device_token=\(deviceToken)&userid=\(self.account_id)&deviceUUID=\(deviceUUID)"
+//        println("USERID IS: \(self.userid)")
+//        println("UUID IS: \(self.deviceUUID)")
+        let postString = "device_token=\(deviceToken)&userid=\(self.account_id)&deviceUUID=\(self.deviceUUID)"
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
             data, response, error in
