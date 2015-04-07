@@ -10,5 +10,6 @@ urlpatterns = patterns('',
 
     url(r'^account/',       include('account.urls',         namespace="account")),
     url(r'^items/',         include('items.urls',           namespace="items")),
+    url(r'^system/',        include('system.urls',          namespace="system")),
     url(r'^admin/',         include(admin.site.urls)),
 )
