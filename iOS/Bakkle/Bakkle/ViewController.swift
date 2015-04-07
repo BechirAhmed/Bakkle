@@ -27,7 +27,7 @@ class ViewController: UIViewController, FBLoginViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-
+ 
         fbLoginView.frame = fbLoginViewBtn.frame;
         
         self.view.addSubview(fbLoginView)
