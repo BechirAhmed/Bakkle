@@ -14,7 +14,11 @@ class ViewController: UIViewController, FBLoginViewDelegate {
     
     let deviceUUID = UIDevice.currentDevice().identifierForVendor.UUIDString
     
-    var account_id: String!
+    var account_id: Int!
+    
+    let url:NSURL? = NSURL(string: "https://app.bakkle.com/account/facebook/")
+    
+    let switchWebNative = true
  
 
     @IBOutlet weak var fbLoginView: FBLoginView!
@@ -23,7 +27,7 @@ class ViewController: UIViewController, FBLoginViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-
+ 
         fbLoginView.frame = fbLoginViewBtn.frame;
         
         self.view.addSubview(fbLoginView)
@@ -49,45 +53,48 @@ class ViewController: UIViewController, FBLoginViewDelegate {
         var userGender = user.objectForKey("gender") as String
         var userUsername = user.objectForKey("username") as String!
         
-        let switchWebNative = true
-        
         var postString = ""
         
-        postString += "email=\(userEmail)&Name=\(user.name)&UserName=\(userUsername)&Gender=\(userGender)&UserID=\(user.objectID)&locale=\(user.location)&FirstName=\(user.first_name)&LastName=\(user.last_name)&deviceUUID=\(deviceUUID)"
+        postString += "email=\(userEmail)&Name=\(user.name)&UserName=\(userUsername)&Gender=\(userGender)&UserID=\(user.objectID)&locale=\(user.location)&FirstName=\(user.first_name)&LastName=\(user.last_name)&deviceUUID=\(self.deviceUUID)"
         
-        let url:NSURL? = NSURL(string: "https://app.bakkle.com/account/facebook/")
         let request = NSMutableURLRequest(URL: url!)
+        
         request.HTTPMethod = "POST"
+        
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+        
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
             data, response, error in
             
+          println("GETS TO REQUESTTTTTTTT")
             if error != nil {
                 println("error=\(error)")
                 return
             }
             
-            let responseString = NSString(data: data, encoding: NSUTF8StringEncoding)
+            let responseString: String = NSString(data: data, encoding: NSUTF8StringEncoding)!
             var error: NSError? = error
             
-            var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &error) as NSDictionary
+            var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &error) as NSDictionary!
+            println("DICTIONARY IS: \(responseDict)")
             
             if responseDict.valueForKey("status")?.integerValue == 1 {
                 
-            self.account_id = response.valueForKey("userid") as String
+            self.account_id = responseDict.valueForKey("userid") as Int!
 
             }
+            
+            // Uses the Bakkle account ID and registers for push notifications.
+            let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate!
+            appDelegate.registerForPushNotifications(UIApplication.sharedApplication(), userid: user.objectID, deviceuuid: self.deviceUUID, accountid: self.account_id)
+
             println("Post STRING IS: \(postString)")
             println("RESPONSE STRING IS: \(responseString)")
             println("ACCOUNT ID IS: \(self.account_id)")
         }
         task.resume()
         
-        
         // Sucessfully logged in via FB
-        let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate!
-        appDelegate.registerForPushNotifications(UIApplication.sharedApplication(), userid: user.objectID, deviceuuid: self.deviceUUID, account_id: self.account_id)
-        
         
         // SWITCH BETWEEN NATIVE OR WEB CODE
         if(switchWebNative) {
@@ -97,6 +104,7 @@ class ViewController: UIViewController, FBLoginViewDelegate {
             let mainScreenViewController : FeedScreen = FeedScreen()
             self.performSegueWithIdentifier(mainScreenSegueIdentifier, sender: self)
         }
+        
     }
     
     func loginViewShowingLoggedOutUser(loginView : FBLoginView!) {
