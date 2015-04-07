@@ -141,12 +141,12 @@
                     <connections>
                         <outlet property="fbLoginView" destination="M2Y-Q2-c87" id="MfE-ah-HZo"/>
                         <outlet property="fbLoginViewBtn" destination="LeQ-jZ-CDJ" id="uhy-1I-97g"/>
-                        <segue destination="aNC-04-Ly5" kind="show" identifier="PushToFeedSegue" id="BwO-lw-aJH"/>
+                        <segue destination="dzt-bR-uoN" kind="show" identifier="PushToFeedSegue" id="pVC-pg-pDf"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="679.5" y="421.5"/>
+            <point key="canvasLocation" x="723" y="505.5"/>
         </scene>
         <!--Feed Screen-->
         <scene sceneID="ZC6-XV-s1s">
@@ -157,7 +157,7 @@
                         <viewControllerLayoutGuide type="bottom" id="a0G-kd-82u"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Wzf-MH-BHC">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TvW-JJ-Vqb" userLabel="Drawer">
@@ -262,6 +262,7 @@
                                                 <action selector="menuButtonPressed:" destination="dzt-bR-uoN" id="duw-WD-RLz"/>
                                             </connections>
                                         </barButtonItem>
+                                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="daZ-Yi-i7m"/>
                                     </navigationItem>
                                 </items>
                                 <variation key="default">
@@ -275,14 +276,34 @@
                                     </mask>
                                 </variation>
                             </navigationBar>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3fx-Mv-gkv">
+                                <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                <state key="normal" title="Button">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <variation key="heightClass=regular-widthClass=compact" ambiguous="YES" misplaced="YES">
+                                    <rect key="frame" x="59" y="505" width="46" height="30"/>
+                                </variation>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tgH-WZ-0K1">
+                                <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                <state key="normal" title="Button">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <variation key="heightClass=regular-widthClass=compact" ambiguous="YES" misplaced="YES">
+                                    <rect key="frame" x="233" y="511" width="46" height="30"/>
+                                </variation>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.95111918057977196" green="1" blue="0.47444979483763061" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstAttribute="trailingMargin" secondItem="9wf-Qg-XdG" secondAttribute="trailing" constant="-16" id="6KA-IC-Yfi"/>
+                            <constraint firstItem="3fx-Mv-gkv" firstAttribute="leading" secondItem="Wzf-MH-BHC" secondAttribute="leadingMargin" constant="43" id="Fag-qs-MZ1"/>
                             <constraint firstItem="9wf-Qg-XdG" firstAttribute="leading" secondItem="Wzf-MH-BHC" secondAttribute="leadingMargin" constant="-16" id="QL3-cA-uBP"/>
                             <constraint firstItem="9wf-Qg-XdG" firstAttribute="top" secondItem="Wzf-MH-BHC" secondAttribute="topMargin" id="ZLO-2C-10S"/>
                             <constraint firstAttribute="trailing" secondItem="TvW-JJ-Vqb" secondAttribute="trailing" constant="400" id="btB-zo-zos"/>
                             <constraint firstItem="TvW-JJ-Vqb" firstAttribute="top" secondItem="Wzf-MH-BHC" secondAttribute="topMargin" constant="121" id="ekg-oj-a0a"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="tgH-WZ-0K1" secondAttribute="trailing" constant="25" id="gMc-L8-yaO"/>
                             <constraint firstItem="TvW-JJ-Vqb" firstAttribute="leading" secondItem="Wzf-MH-BHC" secondAttribute="leadingMargin" constant="-350" id="jze-nB-A0h"/>
                             <constraint firstAttribute="bottom" secondItem="TvW-JJ-Vqb" secondAttribute="bottom" constant="101" id="qfe-Sb-1Tb"/>
                         </constraints>
@@ -290,6 +311,8 @@
                             <mask key="subviews">
                                 <exclude reference="TvW-JJ-Vqb"/>
                                 <exclude reference="9wf-Qg-XdG"/>
+                                <exclude reference="3fx-Mv-gkv"/>
+                                <exclude reference="tgH-WZ-0K1"/>
                             </mask>
                             <mask key="constraints">
                                 <exclude reference="6KA-IC-Yfi"/>
@@ -299,12 +322,16 @@
                                 <exclude reference="ekg-oj-a0a"/>
                                 <exclude reference="jze-nB-A0h"/>
                                 <exclude reference="qfe-Sb-1Tb"/>
+                                <exclude reference="Fag-qs-MZ1"/>
+                                <exclude reference="gMc-L8-yaO"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
                             <mask key="subviews">
                                 <include reference="TvW-JJ-Vqb"/>
                                 <include reference="9wf-Qg-XdG"/>
+                                <include reference="3fx-Mv-gkv"/>
+                                <include reference="tgH-WZ-0K1"/>
                             </mask>
                             <mask key="constraints">
                                 <include reference="6KA-IC-Yfi"/>
@@ -314,9 +341,12 @@
                                 <include reference="ekg-oj-a0a"/>
                                 <include reference="jze-nB-A0h"/>
                                 <include reference="qfe-Sb-1Tb"/>
+                                <include reference="Fag-qs-MZ1"/>
+                                <include reference="gMc-L8-yaO"/>
                             </mask>
                         </variation>
                     </view>
+                    <navigationItem key="navigationItem" id="cQy-VJ-jfm"/>
                     <connections>
                         <outlet property="drawer" destination="TvW-JJ-Vqb" id="L0b-bd-0hM"/>
                         <outlet property="menuBtn" destination="kTM-u3-gNJ" id="HEv-a1-HvB"/>
@@ -325,7 +355,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="R4S-Vw-NC2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1479" y="418.5"/>
+            <point key="canvasLocation" x="723" y="1100.25"/>
         </scene>
         <!--Main Web View-->
         <scene sceneID="uLw-DU-Qfq">
@@ -336,7 +366,7 @@
                         <viewControllerLayoutGuide type="bottom" id="koK-em-7Fn"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="w96-cF-XQi">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IIe-aD-Tlj">
@@ -346,7 +376,7 @@
                                 </connections>
                             </webView>
                             <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JT2-Qk-171">
-                                <rect key="frame" x="46" y="524" width="230" height="40"/>
+                                <rect key="frame" x="46" y="556" width="230" height="40"/>
                                 <state key="normal" image="btn-logout40.png">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -410,7 +440,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FZ8-vp-dmh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="709" y="1214"/>
+            <point key="canvasLocation" x="1339.5" y="1437.75"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="2IF-mK-ott">
@@ -422,7 +452,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="TYc-cn-Gh4" kind="relationship" relationship="rootViewController" id="Ucb-Po-L1L"/>
+                        <segue destination="dzt-bR-uoN" kind="relationship" relationship="rootViewController" id="qNE-kT-jWH"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LfU-VI-Xi5" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -487,4 +517,7 @@
         <image name="logo-white-design-png-100.png" width="248" height="100"/>
         <image name="menubtn.png" width="54" height="39"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="pVC-pg-pDf"/>
+    </inferredMetricsTieBreakers>
 </document>

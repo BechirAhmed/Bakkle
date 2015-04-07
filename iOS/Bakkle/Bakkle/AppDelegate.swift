@@ -84,7 +84,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         request.HTTPMethod = "POST"
         println("USERID IS: \(self.userid)")
         println("UUID IS: \(self.deviceUUID)")
-        let postString = "device_token=\(deviceToken)&userid=\(self.account_id)&deviceUUID=\(self.deviceUUID)"
+        let postString = "device_token=\(deviceToken)&account_id=\(self.account_id)&device_uuid=\(self.deviceUUID)"
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
             data, response, error in

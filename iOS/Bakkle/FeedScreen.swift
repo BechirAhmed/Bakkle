@@ -14,7 +14,13 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
     
     let menuSegue = "presentNav"
     
+    var account_id : Int!
+    
+    var feedItems : [NSObject]!
+    
     var transitionOperator = TransitionOperator()
+    
+    let feedURL = NSURL(string: "https://app.bakkle.com/items/feed/")
     
     @IBOutlet weak var menuBtn: UIBarButtonItem!
     
@@ -51,13 +57,39 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
         
         let view : MDCSwipeToChooseView = MDCSwipeToChooseView(frame: self.view.bounds, options: options)
         
-        view.imageView.image = UIImage(named: "photo")
+        view.imageView.image = UIImage(named: "tiger.jpg")
         self.view.addSubview(view)
     }
     
-//    @IBAction func presentMenuBar(sender: AnyObject) {
-//        performSegueWithIdentifier(menuSegue, sender: self)
-//    }
+    func populateFeed(){
+        var postString = "account_id=\(account_id)"
+        
+        let request = NSMutableURLRequest(URL: feedURL!)
+        
+        request.HTTPMethod = "POST"
+        
+       request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+        
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: { (data, response, error) -> Void in
+            if error != nil {
+                println("error= \(error)")
+                return
+            }
+            
+            let responseString: String = NSString(data: data, encoding: NSUTF8StringEncoding)!
+            var error: NSError? = error
+            
+            var responseDict: NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error) as NSDictionary!
+            
+            println("RESPONSE DICT IS: \(responseDict)")
+            
+            if responseDict.valueForKey("status")?.integerValue == 1 {
+                self.feedItems = responseDict.valueForKey("feed") as [NSObject]!
+                
+                
+            }
+        })
+    }
     
     func viewDidCancelSwipe(view: UIView!) {
         println("You canceled the swipe")
@@ -75,6 +107,7 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
             return false
         }
     }
+    
     
     func view(view: UIView!, wasChosenWithDirection direction: MDCSwipeDirection) {
         if direction == MDCSwipeDirection.Left {

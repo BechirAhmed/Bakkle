@@ -42,7 +42,7 @@ static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
 #pragma mark - Object Lifecycle
 
 - (instancetype)initWithFrame:(CGRect)frame options:(MDCSwipeToChooseViewOptions *)options {
-    self = [super initWithFrame:frame];
+    self = [super initWithFrame:CGRectMake(25, 125, 275, 300)];
     if (self) {
         _options = options ? options : [MDCSwipeToChooseViewOptions new];
         [self setupView];
