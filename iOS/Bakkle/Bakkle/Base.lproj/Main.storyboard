@@ -255,6 +255,7 @@
                                         <variation key="heightClass=regular-widthClass=compact" constant="64"/>
                                     </constraint>
                                 </constraints>
+                                <color key="barTintColor" red="0.35294117650000001" green="0.84313725490000002" blue="0.4941176471" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <items>
                                     <navigationItem title="Title" id="Om5-ts-wJ8">
                                         <barButtonItem key="leftBarButtonItem" image="menubtn.png" id="kTM-u3-gNJ">
@@ -294,11 +295,24 @@
                                     <rect key="frame" x="233" y="511" width="46" height="30"/>
                                 </variation>
                             </button>
+                            <searchBar contentMode="redraw" placeholder="Search" translatesAutoresizingMaskIntoConstraints="NO" id="QD8-Cu-75h">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                <color key="backgroundColor" red="0.35294117647058826" green="0.84313725490196079" blue="0.49411764705882355" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="barTintColor" red="0.35294117650000001" green="0.84313725490000002" blue="0.4941176471" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                <scopeButtonTitles>
+                                    <string>Title</string>
+                                    <string>Title</string>
+                                </scopeButtonTitles>
+                            </searchBar>
                         </subviews>
-                        <color key="backgroundColor" red="0.95111918057977196" green="1" blue="0.47444979483763061" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="QD8-Cu-75h" firstAttribute="leading" secondItem="Wzf-MH-BHC" secondAttribute="leadingMargin" constant="-16" id="1LC-B4-mHB"/>
+                            <constraint firstItem="QD8-Cu-75h" firstAttribute="top" secondItem="9wf-Qg-XdG" secondAttribute="bottom" id="1nQ-av-txc"/>
                             <constraint firstAttribute="trailingMargin" secondItem="9wf-Qg-XdG" secondAttribute="trailing" constant="-16" id="6KA-IC-Yfi"/>
                             <constraint firstItem="3fx-Mv-gkv" firstAttribute="leading" secondItem="Wzf-MH-BHC" secondAttribute="leadingMargin" constant="43" id="Fag-qs-MZ1"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="QD8-Cu-75h" secondAttribute="trailing" constant="-16" id="GPg-K5-V7Y"/>
                             <constraint firstItem="9wf-Qg-XdG" firstAttribute="leading" secondItem="Wzf-MH-BHC" secondAttribute="leadingMargin" constant="-16" id="QL3-cA-uBP"/>
                             <constraint firstItem="9wf-Qg-XdG" firstAttribute="top" secondItem="Wzf-MH-BHC" secondAttribute="topMargin" id="ZLO-2C-10S"/>
                             <constraint firstAttribute="trailing" secondItem="TvW-JJ-Vqb" secondAttribute="trailing" constant="400" id="btB-zo-zos"/>
@@ -313,11 +327,15 @@
                                 <exclude reference="9wf-Qg-XdG"/>
                                 <exclude reference="3fx-Mv-gkv"/>
                                 <exclude reference="tgH-WZ-0K1"/>
+                                <exclude reference="QD8-Cu-75h"/>
                             </mask>
                             <mask key="constraints">
                                 <exclude reference="6KA-IC-Yfi"/>
                                 <exclude reference="QL3-cA-uBP"/>
                                 <exclude reference="ZLO-2C-10S"/>
+                                <exclude reference="1LC-B4-mHB"/>
+                                <exclude reference="1nQ-av-txc"/>
+                                <exclude reference="GPg-K5-V7Y"/>
                                 <exclude reference="btB-zo-zos"/>
                                 <exclude reference="ekg-oj-a0a"/>
                                 <exclude reference="jze-nB-A0h"/>
@@ -332,11 +350,15 @@
                                 <include reference="9wf-Qg-XdG"/>
                                 <include reference="3fx-Mv-gkv"/>
                                 <include reference="tgH-WZ-0K1"/>
+                                <include reference="QD8-Cu-75h"/>
                             </mask>
                             <mask key="constraints">
                                 <include reference="6KA-IC-Yfi"/>
                                 <include reference="QL3-cA-uBP"/>
                                 <include reference="ZLO-2C-10S"/>
+                                <include reference="1LC-B4-mHB"/>
+                                <include reference="1nQ-av-txc"/>
+                                <include reference="GPg-K5-V7Y"/>
                                 <include reference="btB-zo-zos"/>
                                 <include reference="ekg-oj-a0a"/>
                                 <include reference="jze-nB-A0h"/>
