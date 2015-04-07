@@ -22,6 +22,9 @@ sudo touch /bakkle/www/bakkle/version.py
 sudo chmod 777 /bakkle/www/bakkle/version.py
 sudo echo bakkle_server_version = \"`git rev-parse HEAD` --  `git describe --long`\" >> /bakkle/www/bakkle/version.py
 
+cd /bakkle/www/bakkle
+sudo python manage.py makemigrations
+sudo python manage.py migrate
 
 # system service script
 sudo install -m 755      etc/init.d/bakkle /etc/init.d/bakkle
