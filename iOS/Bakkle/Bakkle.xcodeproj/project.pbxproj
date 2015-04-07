@@ -10,6 +10,9 @@
 		5E0242911AC47FFB0094BB05 /* Screen Shot 2015-03-26 at 1.56.29 PM 1.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E0242901AC47FFB0094BB05 /* Screen Shot 2015-03-26 at 1.56.29 PM 1.png */; };
 		5E0242931AC481E80094BB05 /* menubtn.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E0242921AC481E80094BB05 /* menubtn.png */; };
 		5E1DCC9F1AD44C72002D41FD /* tiger.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5E1DCC9E1AD44C71002D41FD /* tiger.jpg */; };
+		5E1DCCA21AD47C53002D41FD /* btn-check.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E1DCCA01AD47C53002D41FD /* btn-check.png */; };
+		5E1DCCA31AD47C53002D41FD /* btn-x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E1DCCA11AD47C53002D41FD /* btn-x.png */; };
+		5E1DCCA51AD486D2002D41FD /* AddItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E1DCCA41AD486D2002D41FD /* AddItem.swift */; };
 		5E8C44CD1AC3217000BC4A2C /* TransitionOperator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E8C44CC1AC3217000BC4A2C /* TransitionOperator.swift */; };
 		5E8C44D11AC3286200BC4A2C /* Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E8C44D01AC3286200BC4A2C /* Menu.swift */; };
 		5EBDD6911AB211E600C7FBE7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EBDD6901AB211E600C7FBE7 /* AppDelegate.swift */; };
@@ -60,6 +63,9 @@
 		5E0242901AC47FFB0094BB05 /* Screen Shot 2015-03-26 at 1.56.29 PM 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Screen Shot 2015-03-26 at 1.56.29 PM 1.png"; path = "../Screen Shot 2015-03-26 at 1.56.29 PM 1.png"; sourceTree = "<group>"; };
 		5E0242921AC481E80094BB05 /* menubtn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = menubtn.png; path = ../menubtn.png; sourceTree = "<group>"; };
 		5E1DCC9E1AD44C71002D41FD /* tiger.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = tiger.jpg; sourceTree = "<group>"; };
+		5E1DCCA01AD47C53002D41FD /* btn-check.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-check.png"; sourceTree = "<group>"; };
+		5E1DCCA11AD47C53002D41FD /* btn-x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-x.png"; sourceTree = "<group>"; };
+		5E1DCCA41AD486D2002D41FD /* AddItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddItem.swift; sourceTree = "<group>"; };
 		5E5CB0A81AB7547800F32BE6 /* Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
 		5E8C44CC1AC3217000BC4A2C /* TransitionOperator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TransitionOperator.swift; path = ../TransitionOperator.swift; sourceTree = "<group>"; };
 		5E8C44D01AC3286200BC4A2C /* Menu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Menu.swift; path = ../Menu.swift; sourceTree = "<group>"; };
@@ -169,6 +175,7 @@
 				5EBDD6901AB211E600C7FBE7 /* AppDelegate.swift */,
 				5EBDD6921AB211E600C7FBE7 /* ViewController.swift */,
 				5EF3F3DE1ACC3D6900D93B72 /* MainWebView.swift */,
+				5E1DCCA41AD486D2002D41FD /* AddItem.swift */,
 				5EBDD6941AB211E600C7FBE7 /* Main.storyboard */,
 				5EBDD6971AB211E600C7FBE7 /* Images.xcassets */,
 				5EBDD6991AB211E600C7FBE7 /* LaunchScreen.xib */,
@@ -180,6 +187,8 @@
 		5EBDD68E1AB211E600C7FBE7 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				5E1DCCA01AD47C53002D41FD /* btn-check.png */,
+				5E1DCCA11AD47C53002D41FD /* btn-x.png */,
 				5E1DCC9E1AD44C71002D41FD /* tiger.jpg */,
 				A0A200041ACE30C200A42CD8 /* btn-logout40.png */,
 				A0A2FFFE1ACE2F7500A42CD8 /* btn-email40.png */,
@@ -352,11 +361,13 @@
 				A03508F71AB3C5FB00CA6455 /* logo-green-design-png-white.png in Resources */,
 				5E1DCC9F1AD44C72002D41FD /* tiger.jpg in Resources */,
 				A0A200011ACE2F7500A42CD8 /* btn-email40.png in Resources */,
+				5E1DCCA21AD47C53002D41FD /* btn-check.png in Resources */,
 				A0A2FFF31ACE213F00A42CD8 /* logo-white-design-png-100.png in Resources */,
 				A0A709CE1ACAC9D700E772B9 /* Main.storyboard in Resources */,
 				5EBDD6B11AB2139700C7FBE7 /* bakkleLogo.png in Resources */,
 				5EBDD6981AB211E600C7FBE7 /* Images.xcassets in Resources */,
 				A0A200021ACE2F7500A42CD8 /* btn-facebook40.png in Resources */,
+				5E1DCCA31AD47C53002D41FD /* btn-x.png in Resources */,
 				A0A709CF1ACAC9DB00E772B9 /* LaunchScreen.xib in Resources */,
 				A0A200051ACE30C200A42CD8 /* btn-logout40.png in Resources */,
 				5E0242931AC481E80094BB05 /* menubtn.png in Resources */,
@@ -394,6 +405,7 @@
 				A003EB101ACF3B2C00EE51A1 /* SWRevealViewController.m in Sources */,
 				5EE2C9B41AB9F0FB0031D8CD /* MDCSwipeOptions.m in Sources */,
 				5EE2C9B61AB9F0FB0031D8CD /* MDCSwipeResult.m in Sources */,
+				5E1DCCA51AD486D2002D41FD /* AddItem.swift in Sources */,
 				5EBDD6911AB211E600C7FBE7 /* AppDelegate.swift in Sources */,
 				5EE2C9B21AB9F0FB0031D8CD /* UIView+MDCSwipeToChoose.m in Sources */,
 				5EE2C9B51AB9F0FB0031D8CD /* MDCSwipeToChooseViewOptions.m in Sources */,

@@ -24,6 +24,7 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
     
     @IBOutlet weak var menuBtn: UIBarButtonItem!
     
+    @IBOutlet weak var addItemBtn: UIBarButtonItem!
     
     @IBOutlet weak var drawer: UIView!
     
