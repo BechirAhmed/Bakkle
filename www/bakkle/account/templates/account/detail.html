@@ -6,18 +6,31 @@
 
 {% if account %}
   Details for account: {{ account.id }}
-  <br/>displayname={{ account.displayName }}
-  <br/>facebookid={{ account.facebookId }}
+  <br/>Display Name = {{ account.display_name }}
+  <br/>Facebook ID = {{ account.facebook_id }}
+  <br/>Email = {{ account.email }}
+  <br/>
 
+  <br/>Devices:
   {% if devices %}
-     {% for device in devices %}
-       <ul>
-       <!-- { url 'account:device_detail' device.id } -->
-         <li><a href="{% url 'account:device_detail' device.id %}">{{ device.id }}</a> (<a href="{% url 'account:device_notify' device.id %}">Notify</a>)</li>
-       </ul>
-     {% endfor %}
+    <ul>
+      {% for device in devices %}
+         <li><a href="{% url 'account:device_detail' device.id %}">{{ device.id }}</a>: {{ device.uuid }} (<a href="{% url 'account:device_notify' device.id %}">Notify</a>)</li>
+      {% endfor %}
+    </ul> 
   {% else %}
    <p> This account has no registered devices </p>
+  {% endif %}
+
+  <br/>Items Viewed:
+  {% if items %}
+    <ul>
+      {% for buyer_item in items %}
+        <li><a href="{% url 'items:detail' buyer_item.item.id %}">{{ buyer_item.item.id }}:</a> {{ buyer_item.item.title }} <br /> Item Status For Buyer: {{ buyer_item.status }} </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+   <p> This account has not viewed any items </p>
   {% endif %}
 {% else %}
   <p> No account with that id </p>

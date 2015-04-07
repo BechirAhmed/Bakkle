@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Bakkle Items{% endblock %}
+
+{% block content %}
+
+{% if item_list %}
+  <ul>
+    {% for item in item_list %}
+      <li><a href="{% url 'items:detail' item.id %}">{{ item.id }}:</a> {{ item.title }}</li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p> no items present </p>
+{% endif %}
+
+{% endblock %}
