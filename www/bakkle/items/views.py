@@ -101,6 +101,7 @@ def report(request):
         item_id = request.POST.get('item_id')
         item = get_object_or_404(Items, pk=item_id)
         item.times_reported = item.times_reported + 1
+        item.save()
         return add_Item_To_Buyer_Items(request, BuyerItem.REPORT)
     else:
         raise Http404("Wrong method, use POST")
