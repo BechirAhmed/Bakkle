@@ -10,6 +10,8 @@ urlpatterns = [
     url(r'^want/$', views.want, name='want'),
     url(r'^hold/$', views.hold, name='hold'),
     url(r'^report/$', views.report, name='report'),
+    url(r'^add_item/$', views.report, name='report'),
+    url(r'^edit_item/$', views.report, name='report'),
     url(r'^(?P<item_id>[0-9]+)/$', views.detail, name='detail'),
 ]
 

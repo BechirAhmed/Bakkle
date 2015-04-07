@@ -33,6 +33,33 @@ def detail(request, item_id):
     return render(request, 'items/detail.html', context) 
 
 @csrf_exempt
+def add_item(request):
+    if request.method == "POST" or request.method == "PUT":
+        image_urls = request.POST.get('device_token', "")
+        title = request.POST.get('title')
+        description = request.POST.get('description', "")
+        location = request.POST.get('location')
+        seller_id = request.POST.get('account_id')
+        price = request.POST.get('price')
+        tags = request.POST.get('tags',"")
+        method = request.POST.get('method')
+        # TODO: Pick up here on MONDAY
+
+        response_data = { 'status':1 }
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+    else:
+        raise Http404("Wrong method, use POST")
+
+@csrf_exempt
+def edit_item(request):
+    if request.method == "POST" or request.method == "PUT":
+
+        response_data = { 'status':1 }
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+    else:
+        raise Http404("Wrong method, use POST")
+
+@csrf_exempt
 def feed(request):
     if request.method == "POST" or request.method == "PUT":
         #TODO: need to confirm order to display, chrono?, closest? "magic"?
@@ -49,7 +76,7 @@ def feed(request):
 @csrf_exempt
 def meh(request):
     if request.method == "POST" or request.method == "PUT":
-        return addItemToBuyerItems(request, BuyerItem.MEH)
+        return add_Item_To_Buyer_Items(request, BuyerItem.MEH)
     else:
         raise Http404("Wrong method, use POST")
 
@@ -57,25 +84,28 @@ def meh(request):
 @csrf_exempt
 def want(request):
     if request.method == "POST" or request.method == "PUT":
-        return addItemToBuyerItems(request, BuyerItem.WANT)
+        return add_Item_To_Buyer_Items(request, BuyerItem.WANT)
     else:
         raise Http404("Wrong method, use POST")
 
 @csrf_exempt
 def hold(request):
     if request.method == "POST" or request.method == "PUT":
-        return addItemToBuyerItems(request, BuyerItem.HOLD)
+        return add_Item_To_Buyer_Items(request, BuyerItem.HOLD)
     else:
         raise Http404("Wrong method, use POST")
 
 @csrf_exempt
 def report(request):
     if request.method == "POST" or request.method == "PUT":
-        return addItemToBuyerItems(request, BuyerItem.REPORT)
+        item_id = request.POST.get('item_id')
+        item = get_object_or_404(Items, pk=item_id)
+        item.times_reported = item.times_reported + 1
+        return add_Item_To_Buyer_Items(request, BuyerItem.REPORT)
     else:
         raise Http404("Wrong method, use POST")
 
-def addItemToBuyerItems(request, status):
+def add_Item_To_Buyer_Items(request, status):
     buyer_id = request.POST.get('account_id')
     item_id = request.POST.get('item_id')
 
