@@ -18,8 +18,8 @@
 
   {% if urls %}
     <ul>
-    {% for url in urls %}
-      <li><img src=url /></li>
+    {% for imageUrl in urls %}
+      <li><img src= {{ imageUrl }} /></li>
     {% endfor %}
   {% endif %}
 
