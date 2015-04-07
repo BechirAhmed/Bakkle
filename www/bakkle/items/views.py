@@ -11,7 +11,7 @@ from django.shortcuts import get_object_or_404
 from django.core import serializers
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import Items
+from .models import Items, BuyerItem
 from account.models import Account
 
 @csrf_exempt
@@ -25,7 +25,7 @@ def index(request):
 @csrf_exempt
 def detail(request, item_id):
     item = get_object_or_404(Items, pk=item_id)
-    urls = item.imageUrls.split(',');
+    urls = item.image_urls.split(',');
     context = {
         'item': item,
         'urls': urls,
@@ -36,13 +36,13 @@ def detail(request, item_id):
 def feed(request):
     #TODO: need to confirm order to display, chrono?, closest? "magic"?
     #TODO: Get items for <USERID>
-    # response_data = { 'now': timezone.now().__str__(),
-    #                   'item-list': Items.objects.order_by('-post_date')[:10] }
-    # print(len(response_data['item-list']))
-    # if len(response_data['item-list'])<1:
-    #     return ""
-    # return HttpResponse(json.dumps(response_data), content_type="application/json")
-    return ""
+    # TODO: Add distance filtering here
+    buyer_id = request.POST.get('account_id')
+    items_viewed = BuyerItem.objects.filter(buyer = buyer_id)
+    item_list = Items.objects.exclude(buyeritem = items_viewed)
+    
+    response_data = {'status': 1, 'feed': serializers.serialize('json', item_list)}
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 @csrf_exempt
 def reset(request):
@@ -50,8 +50,9 @@ def reset(request):
     item_expire_time=7 #days
     #TODO: Change to POST or DELETE
     Items.objects.all().delete()
+    BuyerItem.objects.all().delete()
     i = Items(
-        imageUrls = "https://app.bakkle.com/static/images/b8347df.jpg",
+        image_urls = "https://app.bakkle.com/static/images/b8347df.jpg",
         title = "Orange Push Mower",
         description = "Year old orange push mower. Some wear and sun fadding. Was kept outside and not stored in shed.",
         location = "39.417672,-87.330438",
@@ -60,11 +61,11 @@ def reset(request):
         tags = "lawnmower, orange, somewear",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        postDate = datetime.datetime.now,
-        timesReported = 0 )
+        post_date = datetime.datetime.now,
+        times_reported = 0 )
     i.save()
     i = Items(
-        imageUrls = "https://app.bakkle.com/static/images/b8348df.jpg",
+        image_urls = "https://app.bakkle.com/static/images/b8348df.jpg",
         title = "Rabbit Push Mower",
         description = "Homemade lawn mower. Includes rabbit and water container.",
         location = "39.417672,-87.330438",
@@ -73,11 +74,11 @@ def reset(request):
         tags = "lawnmower, homemade, rabbit",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        postDate = datetime.datetime.now,
-        timesReported = 0 )
+        post_date = datetime.datetime.now,
+        times_reported = 0 )
     i.save()
     i = Items(
-        imageUrls = "https://app.bakkle.com/static/images/b8349df.jpg,https://app.bakkle.com/static/images/b8350df.jpg",
+        image_urls = "https://app.bakkle.com/static/images/b8349df.jpg,https://app.bakkle.com/static/images/b8350df.jpg",
         title = "iPhone 6 Cracked",
         description = "iPhone 6. Has a cracked screen. Besides screen phone is in good condition.",
         location = "39.417672,-87.330438",
@@ -86,9 +87,16 @@ def reset(request):
         tags = "iPhone6, cracked, damaged",
         method = Items.DELIVERY,
         status = Items.ACTIVE,
-        postDate = datetime.datetime.now,
-        timesReported = 0 )
+        post_date = datetime.datetime.now,
+        times_reported = 0 )
     i.save()
+    # b = BuyerItem(
+    #     buyer = i.seller,
+    #     item = i,
+    #     confirmed_price = i.price,
+    #     status = BuyerItem.WANT )
+    # b.save()
+
     print("Adding {}".format(i.title))
     return HttpResponse("resetting {}".format(i.title)) #change success value
 

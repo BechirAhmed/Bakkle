@@ -4,3 +4,4 @@ iOS/Bakkle/Bakkle.xcodeproj/xcuserdata/pethessa.xcuserdatad/xcschemes/Bakkle.xcs
 iOS/Bakkle/Bakkle.xcodeproj/xcuserdata/pethessa.xcuserdatad/xcschemes/xcschememanagement.plist
 *.pyc
 *.tmp
+www/bakkle/db.sqlite3

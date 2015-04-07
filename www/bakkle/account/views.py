@@ -29,32 +29,32 @@ def facebook(request):
         token_expire_time = 7  # days
 
         facebook_id = request.POST.get('UserID', "")
-        displayName = request.POST.get('Name',"")
+        display_name = request.POST.get('Name',"")
         email = request.POST.get('email', "")
-        uuid = request.POST.get('deviceUUID', "")
-        if (facebook_id == None or facebook == "") or (uuid == None or uuid == "") or (email == None or email == ""):
+        uuid = request.POST.get('device_uuid', "")
+        if (facebook_id == None or facebook_id == "") or (uuid == None or uuid == "") or (email == None or email == ""):
             return "" # TODO: Need better response
 
-        if displayName == None or displayName == "":
-            firstName = request.POST.get('FirstName', "")
-            lastName = request.POST.get('LastName', "")
-            if (firstName == None or firstName == "") or (lastName == None or lastName == ""):
+        if display_name == None or display_name == "":
+            first_name = request.POST.get('FirstName', "")
+            last_name = request.POST.get('LastName', "")
+            if (first_name == None or first_name == "") or (last_name == None or last_name == ""):
                 return "" # TODO: Add Better Response
             else:
-                displayName = firstName + " " + lasftName
+                display_name = first_name + " " + last_name
 
         account = Account.objects.get_or_create(
-            facebookId=facebook_id,
-            defaults= {'displayName': displayName,
+            facebook_id=facebook_id,
+            defaults= {'display_name': display_name,
                        'email': email,
                    })[0]
-        account.displayName = displayName
+        account.display_name = display_name
         account.email = email
         account.save()
         request.session['id'] = account.id
 
         device_register(get_client_ip(request), uuid, account)
-        response_data = {'status':1, 'userid':account.id}
+        response_data = {'status':1, 'account_id':account.id}
         return HttpResponse(json.dumps(response_data), content_type="application/json")
     else:
         raise Http404("Wrong method, use POST")
@@ -83,13 +83,13 @@ def device_detail(request, device_id):
     return render(request, 'account/device_detail.html', context)
 
 # Register a new device
-def device_register(ip, uuid, userID):
+def device_register(ip, uuid, user):
     device = Device.objects.get_or_create(
         uuid = uuid,
-        account_id= userID,
-        defaults={'notificationsEnabled': True, })[0]
-    device.lastSeenDate = datetime.datetime.now()
-    device.ipAddress = ip
+        account_id= user,
+        defaults={'notifications_enabled': True, })[0]
+    device.last_seen_date = datetime.datetime.now()
+    device.ip_address = ip
     device.save()
 
 # Register a new device for notifications
@@ -98,20 +98,20 @@ def device_register_push(request):
     if request.method == "POST" or request.method == "PUT":
 
         device_token = request.POST.get('device_token', "")
-        userID = request.POST.get('userid', "")
-        uuid = request.POST.get('deviceUUID', "")
-        if (device_token == None or device_token == "") or (userID == None or userID == "") or (uuid == None or uuid == ""):
+        account_id = request.POST.get('account_id', "")
+        uuid = request.POST.get('device_uuid', "")
+        if (device_token == None or device_token == "") or (account_id == None or account_id == "") or (uuid == None or uuid == ""):
             return "" # Need better response
 
-        print("Registering {} to {}".format(device_token, userID))
-        account = get_object_or_404(Account, pk=userID)
+        print("Registering {} to {}".format(device_token, account_id))
+        account = get_object_or_404(Account, pk=account_id)
         device = Device.objects.get_or_create(
             uuid = uuid,
             account_id= account,
-            defaults={'notificationsEnabled': True, })[0]
-        device.lastSeenDate = datetime.datetime.now()
-        device.ipAddress = get_client_ip(request)
-        device.apnsToken = device_token
+            defaults={'notifications_enabled': True, })[0]
+        device.last_seen_date = datetime.datetime.now()
+        device.ip_address = get_client_ip(request)
+        device.apns_token = device_token
         device.save()
         return HttpResponseRedirect(reverse('account:device_detail', args=(device.id,)))
     else:
