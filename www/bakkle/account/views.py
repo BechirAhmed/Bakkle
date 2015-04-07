@@ -11,6 +11,7 @@ from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import Account, Device
+from items.models import Items, BuyerItem
 
 # Show a list of all accounts in the system.
 @csrf_exempt
@@ -51,7 +52,6 @@ def facebook(request):
         account.display_name = display_name
         account.email = email
         account.save()
-        request.session['id'] = account.id
 
         device_register(get_client_ip(request), uuid, account)
         response_data = {'status':1, 'account_id':account.id}
@@ -64,9 +64,11 @@ def facebook(request):
 def detail(request, account_id):
     account = get_object_or_404(Account, pk=account_id)
     devices = Device.objects.filter(account_id=account_id)
+    buyer_items = BuyerItem.objects.filter(buyer=account_id)
     context = {
         'account': account,
         'devices': devices,
+        'items': buyer_items,
     }
     print(context)
     return render(request, 'account/detail.html', context)

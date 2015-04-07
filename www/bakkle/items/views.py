@@ -34,14 +34,64 @@ def detail(request, item_id):
 
 @csrf_exempt
 def feed(request):
-    #TODO: need to confirm order to display, chrono?, closest? "magic"?
-    #TODO: Get items for <USERID>
-    # TODO: Add distance filtering here
+    if request.method == "POST" or request.method == "PUT":
+        #TODO: need to confirm order to display, chrono?, closest? "magic"?
+        #TODO: Get items for <USERID>
+        # TODO: Add distance filtering here
+        buyer_id = request.POST.get('account_id')
+        items_viewed = BuyerItem.objects.filter(buyer = buyer_id)
+        item_list = Items.objects.exclude(buyeritem = items_viewed).exclude(seller = buyer_id)
+        response_data = "{'status': 1, 'feed': " + serializers.serialize('json', item_list) + "}"
+        return HttpResponse(response_data, content_type="application/json")
+    else:
+        raise Http404("Wrong method, use POST")
+
+@csrf_exempt
+def meh(request):
+    if request.method == "POST" or request.method == "PUT":
+        return addItemToBuyerItems(request, BuyerItem.MEH)
+    else:
+        raise Http404("Wrong method, use POST")
+
+
+@csrf_exempt
+def want(request):
+    if request.method == "POST" or request.method == "PUT":
+        return addItemToBuyerItems(request, BuyerItem.WANT)
+    else:
+        raise Http404("Wrong method, use POST")
+
+@csrf_exempt
+def hold(request):
+    if request.method == "POST" or request.method == "PUT":
+        return addItemToBuyerItems(request, BuyerItem.HOLD)
+    else:
+        raise Http404("Wrong method, use POST")
+
+@csrf_exempt
+def report(request):
+    if request.method == "POST" or request.method == "PUT":
+        return addItemToBuyerItems(request, BuyerItem.REPORT)
+    else:
+        raise Http404("Wrong method, use POST")
+
+def addItemToBuyerItems(request, status):
     buyer_id = request.POST.get('account_id')
-    items_viewed = BuyerItem.objects.filter(buyer = buyer_id)
-    item_list = Items.objects.exclude(buyeritem = items_viewed)
-    
-    response_data = {'status': 1, 'feed': serializers.serialize('json', item_list)}
+    item_id = request.POST.get('item_id')
+
+    if buyer_id == None or item_id == None:
+        return "" # TODO: Need better response
+
+    item = get_object_or_404(Items, pk=item_id)
+
+    buyer_item = BuyerItem.objects.get_or_create(
+        buyer = get_object_or_404(Account, pk=buyer_id),
+        item = item,
+        defaults = { 'status': status, 'confirmed_price': item.price })[0]
+    buyer_item.status = status
+    buyer_item.confirmed_price = item.price
+    buyer_item.save()
+    response_data = { 'status':1 }
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 @csrf_exempt
