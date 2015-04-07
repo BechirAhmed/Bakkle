@@ -109,7 +109,7 @@ def device_register_push(request):
         account = get_object_or_404(Account, pk=account_id)
         device = Device.objects.get_or_create(
             uuid = uuid,
-            account_id= account,
+            account_id = account,
             defaults={'notifications_enabled': True, })[0]
         device.last_seen_date = datetime.datetime.now()
         device.ip_address = get_client_ip(request)

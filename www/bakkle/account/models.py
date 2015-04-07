@@ -47,7 +47,7 @@ class Device(models.Model):
     notifications_enabled = models.BooleanField(default = True)
 
     class Meta:
-        unique_together = (("account_id", "uuid"))
+        unique_together = ("account_id", "uuid")
 
     def send_notification(self, message, sound="default", badge=0):
         print(cert_file)
