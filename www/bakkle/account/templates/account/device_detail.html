@@ -7,6 +7,7 @@
 {% if device %}
   Details for device: {{ device.id }}
   <br>ID: {{ device.id }}
+  <br>UUID:= {{ device.uuid }}
   <br>APNS: {{ device.apnsToken }} 
   <br>DateAdded: {{ device.dateAdded }} 
   <br>LastSeen: {{ device.lastSeenDate }} (<a href="{% url 'account:device_notify' device.id %}">Notify</a>)

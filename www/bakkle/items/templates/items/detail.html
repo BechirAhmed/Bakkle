@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Bakkle item detail{% endblock %}
+
+{% block content %}
+
+{% if item %}
+  Details for item: {{ item.id }}
+  <br/>Title: {{ item.title }}
+  <br/>Description: {{ item.description }}
+  <br/>Seller: {{ item.seller }}
+  <br/>Price: {{ item.price }}
+  <br/>Tags: {{ item.tags }}
+  <br/>Method of Deliver: {{ item.method }}
+  <br/>Status: {{ item.status }}
+  <br/>PostDate: {{ item.postDate }}
+
+  {% if urls %}
+    <ul>
+    {% for url in urls %}
+      <li><img src=url /></li>
+    {% endfor %}
+  {% endif %}
+
+{% else %}
+  <p> No item with that id </p>
+{% endif %}
+
+{% endblock %}
