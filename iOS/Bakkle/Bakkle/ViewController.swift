@@ -51,7 +51,7 @@ class ViewController: UIViewController, FBLoginViewDelegate {
         
         var userEmail = user.objectForKey("email") as String
         var userGender = user.objectForKey("gender") as String
-        var userUsername = user.objectForKey("username") as String
+        var userUsername = user.objectForKey("username") as String!
         
         var postString = ""
         
@@ -83,6 +83,8 @@ class ViewController: UIViewController, FBLoginViewDelegate {
             self.account_id = responseDict.valueForKey("userid") as Int!
 
             }
+            
+            // Uses the Bakkle account ID and registers for push notifications.
             let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate!
             appDelegate.registerForPushNotifications(UIApplication.sharedApplication(), userid: user.objectID, deviceuuid: self.deviceUUID, accountid: self.account_id)
 

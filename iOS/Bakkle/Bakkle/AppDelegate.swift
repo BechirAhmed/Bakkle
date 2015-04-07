@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
-        FBLoginView.self 
+        FBLoginView.self
         FBProfilePictureView.self
         
         return true
@@ -82,8 +82,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let url:NSURL? = NSURL(string: "https://app.bakkle.com/account/device/register_push/")
         let request = NSMutableURLRequest(URL: url!)
         request.HTTPMethod = "POST"
-//        println("USERID IS: \(self.userid)")
-//        println("UUID IS: \(self.deviceUUID)")
+        println("USERID IS: \(self.userid)")
+        println("UUID IS: \(self.deviceUUID)")
         let postString = "device_token=\(deviceToken)&userid=\(self.account_id)&deviceUUID=\(self.deviceUUID)"
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
@@ -94,7 +94,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 return
             }
             
-           // println("response = \(response)")
             
             let responseString = NSString(data: data, encoding: NSUTF8StringEncoding)
             println("responseString = \(responseString)")
