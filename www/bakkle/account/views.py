@@ -32,13 +32,13 @@ def facebook(request):
         displayName = request.POST.get('Name',"")
         email = request.POST.get('email', "")
         uuid = request.POST.get('deviceUUID', "")
-        if facebook_id == None or uuid == None or email == None:
+        if (facebook_id == None or facebook == "") or (uuid == None or uuid == "") or (email == None or email == ""):
             return "" # TODO: Need better response
 
-        if displayName == None:
+        if displayName == None or displayName == "":
             firstName = request.POST.get('FirstName', "")
             lastName = request.POST.get('LastName', "")
-            if firstName == None or lastName == None:
+            if (firstName == None of firstName == "") or (lastName == None or lastName == ""):
                 return "" # TODO: Add Better Response
             else:
                 displayName = firstName + " " + lasftName
@@ -87,7 +87,7 @@ def device_register(ip, uuid, userID):
     device = Device.objects.get_or_create(
         uuid = uuid,
         account_id= userID,
-        defaults={'notificationsEnabled': False, })[0]
+        defaults={'notificationsEnabled': True, })[0]
     device.lastSeenDate = datetime.datetime.now()
     device.ipAddress = ip
     device.save()
@@ -100,7 +100,7 @@ def device_register_push(request):
         device_token = request.POST.get('device_token', "")
         userID = request.POST.get('userid', "")
         uuid = request.POST.get('deviceUUID', "")
-        if device_token == None or userID == None or uuid == None:
+        if (device_token == None or device_token == "") or (userID == None or userID == "") or (uuid == None or uuid == ""):
             return "" # Need better response
 
         print("Registering {} to {}".format(device_token, userID))

@@ -13,6 +13,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var userid: String!
+    
+    var account_id: String!
+    
+    var deviceUUID : String = UIDevice.currentDevice().identifierForVendor.UUIDString
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
@@ -41,8 +45,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
     }
 
-    func registerForPushNotifications(application: UIApplication, userid: String ) {
+    func registerForPushNotifications(application: UIApplication, userid: String, deviceuuid: String, account_id: String) {
         self.userid = userid
+        self.deviceUUID = deviceuuid
+        self.account_id = account_id
         
         // Register for push notifications
         if application.respondsToSelector("registerUserNotificationSettings:") {
@@ -73,10 +79,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         println("Registered for notifications")
         println(deviceToken);
         
-        let url:NSURL? = NSURL(string: "https://app.bakkle.com/account/device/register")
+        let url:NSURL? = NSURL(string: "https://app.bakkle.com/account/device/register_push/")
         let request = NSMutableURLRequest(URL: url!)
         request.HTTPMethod = "POST"
-        let postString = "device_token=\(deviceToken)&userid=\(self.userid)"
+        let postString = "device_token=\(deviceToken)&userid=\(self.account_id)&deviceUUID=\(deviceUUID)"
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
             data, response, error in
@@ -89,11 +95,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
            // println("response = \(response)")
             
             let responseString = NSString(data: data, encoding: NSUTF8StringEncoding)
-            //println("responseString = \(responseString)")
+            println("responseString = \(responseString)")
         }
         task.resume()
     }
     func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
+        
         println("Failed to register for notifications")
         //TODO: Handle push registration fail
     }
