@@ -38,7 +38,7 @@ def facebook(request):
         if displayName == None or displayName == "":
             firstName = request.POST.get('FirstName', "")
             lastName = request.POST.get('LastName', "")
-            if (firstName == None of firstName == "") or (lastName == None or lastName == ""):
+            if (firstName == None or firstName == "") or (lastName == None or lastName == ""):
                 return "" # TODO: Add Better Response
             else:
                 displayName = firstName + " " + lasftName

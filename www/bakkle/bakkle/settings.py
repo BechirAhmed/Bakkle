@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'items',
     'account',
+    'system',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -131,4 +132,4 @@ LOGGING = {
 
 import logging
 log = logging.getLogger(__name__)
-log.debug("Hey there it works!!")
+log.debug("System started")
