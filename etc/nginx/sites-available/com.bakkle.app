@@ -81,9 +81,13 @@ server {
                 proxy_set_header X-Real-proto https;
         }
 
- #       location /static {
-#                try_files $uri $uri/ =404;
-  #      }
+        location /p1 {
+                try_files $uri $uri/ =404;
+        }
+
+        location /img {
+                try_files $uri $uri/ =404;
+        }
 
 	error_page 502	/static/502.html;
 }
