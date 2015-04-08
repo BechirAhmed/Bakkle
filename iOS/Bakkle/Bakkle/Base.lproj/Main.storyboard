@@ -916,12 +916,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" misplaced="YES" image="mock-menu.png" translatesAutoresizingMaskIntoConstraints="NO" id="c84-vx-YNw">
-                                <rect key="frame" x="0.0" y="0.0" width="319.5" height="417"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="c84-vx-YNw" secondAttribute="height" multiplier="36:47" id="3lF-SL-8Hu"/>
-                                </constraints>
-                            </imageView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BuN-8D-dcY" userLabel="Reset Demo">
                                 <rect key="frame" x="70" y="380" width="169" height="28"/>
                                 <state key="normal">
@@ -931,22 +925,28 @@
                                     <action selector="btnReset:" destination="dqb-7R-YaF" eventType="touchUpInside" id="zVH-v0-cI7"/>
                                 </connections>
                             </button>
+                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" image="mock-menu.png" translatesAutoresizingMaskIntoConstraints="NO" id="c84-vx-YNw">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="451"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="c84-vx-YNw" secondAttribute="height" multiplier="320:451" id="KQr-HF-PJA"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="0.19834094622697562" green="0.19834094622697562" blue="0.19834094622697562" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="c84-vx-YNw" firstAttribute="top" secondItem="189-Lq-u4k" secondAttribute="topMargin" id="Eg1-qg-sk1"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="c84-vx-YNw" secondAttribute="trailing" id="Fje-J3-IS5"/>
-                            <constraint firstItem="c84-vx-YNw" firstAttribute="leading" secondItem="189-Lq-u4k" secondAttribute="leadingMargin" id="HF2-cH-2TK"/>
-                            <constraint firstItem="c84-vx-YNw" firstAttribute="leading" secondItem="189-Lq-u4k" secondAttribute="leadingMargin" id="aL3-9u-IpV"/>
-                            <constraint firstItem="c84-vx-YNw" firstAttribute="trailing" secondItem="189-Lq-u4k" secondAttribute="trailingMargin" id="dAB-Lf-J07"/>
-                            <constraint firstItem="c84-vx-YNw" firstAttribute="top" secondItem="189-Lq-u4k" secondAttribute="topMargin" id="oeu-8Y-Yjt"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="c84-vx-YNw" secondAttribute="trailing" constant="-16" id="N92-2T-JxZ"/>
+                            <constraint firstItem="c84-vx-YNw" firstAttribute="leading" secondItem="189-Lq-u4k" secondAttribute="leadingMargin" constant="-16" id="TEW-cm-zVj"/>
+                            <constraint firstItem="c84-vx-YNw" firstAttribute="top" secondItem="189-Lq-u4k" secondAttribute="topMargin" id="TuI-3y-PbZ"/>
+                            <constraint firstItem="c84-vx-YNw" firstAttribute="leading" secondItem="189-Lq-u4k" secondAttribute="leadingMargin" constant="-16" id="bfp-As-JV6"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="c84-vx-YNw" secondAttribute="trailing" constant="-16" id="obG-Vx-zWy"/>
+                            <constraint firstItem="c84-vx-YNw" firstAttribute="top" secondItem="189-Lq-u4k" secondAttribute="topMargin" id="p6F-Gt-GVX"/>
                         </constraints>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ARP-d6-P3g" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="346" y="434"/>
+            <point key="canvasLocation" x="337" y="434"/>
         </scene>
     </scenes>
     <resources>

@@ -31,7 +31,15 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
 
     @IBAction func menuButtonPressed(sender: AnyObject) {
         drawer.frame.origin = CGPoint(x: 0, y: 0)
+        //self.revealViewController().revealToggleAnimated(true)
     }
+    @IBAction func btnX(sender: AnyObject) {
+        self.mark("meh", item_id: 1)
+    }
+    @IBAction func btnCheck(sender: AnyObject) {
+        self.mark("want", item_id: 1)
+    }
+    
     
     @IBOutlet weak var navBar: UINavigationBar!
     
@@ -59,23 +67,15 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
         let view : MDCSwipeToChooseView = MDCSwipeToChooseView(frame: self.view.bounds, options: options)
         
         view.imageView.image = UIImage(named: "item-lawnmower.png")
+        view.imageView.contentMode = UIViewContentMode.ScaleAspectFill
         self.view.addSubview(view)
-        
-        customSetup()
-    }
-    
-    /* For the menu view (SWRevealViewController) */
-    func customSetup() {
+
+        /* Menu reveal */
         if self.revealViewController() != nil {
             menuBtn.target = self.revealViewController()
             menuBtn.action = "revealToggle:"
-            
-            menuBtn.target = self.revealViewController()
-            menuBtn.action = "revealToggle:"
-
             self.revealViewController().rearViewRevealWidth = 250
         }
-
     }
     
     func populateFeed(){
@@ -129,18 +129,16 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
     func view(view: UIView!, wasChosenWithDirection direction: MDCSwipeDirection) {
         if direction == MDCSwipeDirection.Left {
             self.revealViewController().revealToggleAnimated(true)
-//            self.markMeh(0) //TODO: Needs item_id
-            println("Meh!!!")
+            self.mark("meh", item_id: 1)    //TODO: Needs item_id
         }
         else if direction == MDCSwipeDirection.Right {
-            self.markWant(1) //TODO: Needs item_id
-            println("I want")
+            self.mark("want", item_id: 1)   //TODO: Needs item_id
         }
         else if direction == MDCSwipeDirection.Up {
-            println("HOLD!")
+            self.mark("hold", item_id: 1)   //TODO: Needs item_id
         }
         else if direction == MDCSwipeDirection.Down {
-            println("Report")
+            self.mark("report", item_id: 1) //TODO: Needs item_id
         }
     }
     
@@ -183,10 +181,11 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
         task.resume()
     }
 
-    /* Mark item as WANT on server */
-    func markWant(item_id: Int){
+    /* Mark item as 'status' on server */
+    func mark(status: String, item_id: Int){
         
-        let url:NSURL? = NSURL(string: baseUrlString.stringByAppendingString("items/want/"))
+        println("Marking item: \(item_id) as \(status) on server for account: \(account_id)")
+        let url:NSURL? = NSURL(string: baseUrlString.stringByAppendingString("items/\(status)/"))
         let request = NSMutableURLRequest(URL: url!)
         var postString : String = "account_id=\(self.account_id)&item_id=\(item_id)"
         request.HTTPMethod = "POST"
