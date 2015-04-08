@@ -18,6 +18,8 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
     
     var feedItems : [NSObject]!
     
+    let options = MDCSwipeToChooseViewOptions()
+    
     var transitionOperator = TransitionOperator()
     
     let feedURL = NSURL(string: "https://app.bakkle.com/items/feed/")
@@ -27,6 +29,8 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
     @IBOutlet weak var addItemBtn: UIButton!
     
     @IBOutlet weak var drawer: UIView!
+    
+    var hardCoded = false
     
 
     @IBAction func menuButtonPressed(sender: AnyObject) {
@@ -46,8 +50,6 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
         super.viewDidLoad()
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         
-        
-        var options = MDCSwipeToChooseViewOptions()
         options.delegate = self
         options.likedText = "Want"
         options.likedColor = UIColor.greenColor()
@@ -62,10 +64,14 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
         
         let view : MDCSwipeToChooseView = MDCSwipeToChooseView(frame: self.view.bounds, options: options)
         
-        view.imageView.image = UIImage(named: "item-lawnmower.png")
-        view.imageView.contentMode = UIViewContentMode.ScaleAspectFill
-        self.view.addSubview(view)
-
+        if hardCoded {
+            view.imageView.image = UIImage(named: "item-lawnmower.png")
+            view.imageView.contentMode = UIViewContentMode.ScaleAspectFill
+            self.view.addSubview(view)
+        } else {
+            populateFeed(view)
+        }
+            
         /* Menu reveal */
         if self.revealViewController() != nil {
             menuBtn.targetForAction("revealToggle:", withSender: self)
@@ -78,8 +84,14 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
         presentViewController(addItem, animated: true, completion: nil)
     }
     
-    func populateFeed(){
-        var postString = "account_id=\(account_id)"
+    func populateFeed(feedView: MDCSwipeToChooseView){
+        if hardCoded {
+            feedView.imageView.image = UIImage(named: "item-lawnmower.png")
+            feedView.imageView.contentMode = UIViewContentMode.ScaleAspectFill
+            view.addSubview(feedView)
+        }
+            
+        var postString = "account_id=\(2)"
         
         let request = NSMutableURLRequest(URL: feedURL!)
         
@@ -92,20 +104,36 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
                 println("error= \(error)")
                 return
             }
+            let tempStr = "{\"status\": 1, \"feed\": [{\"fields\": {\"status\": \"Active\", \"times_reported\": 0, \"description\": \"Year old orange push mower. Some wear and sun fadding. Was kept outside and not stored in shed.\", \"title\": \"Orange Push Mower\", \"price\": \"50.25\", \"tags\": \"lawnmower, orange, somewear\", \"image_urls\": \"https://app.bakkle.com/img/b8347df.jpg\", \"seller\": 1, \"post_date\": \"2015-04-08T13:50:02.850Z\", \"location\": \"39.417672,-87.330438\", \"method\": \"Pick-up\"}, \"model\": \"items.items\", \"pk\": 10}]}"
+
+            let tempData = tempStr.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
             
-            let responseString: String = NSString(data: data, encoding: NSUTF8StringEncoding)!
-            var error: NSError? = error
+            let responseString: String = NSString(data: tempData!, encoding: NSUTF8StringEncoding)!
+           // println("RESPONSE STRING IN FEED IS: \(responseString)")
+            var parseError: NSError?
             
-            var responseDict: NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error) as NSDictionary!
+            var responseDict: NSDictionary = NSJSONSerialization.JSONObjectWithData(tempData!, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as NSDictionary!
+            
             
             println("RESPONSE DICT IS: \(responseDict)")
             
             if responseDict.valueForKey("status")?.integerValue == 1 {
                 self.feedItems = responseDict.valueForKey("feed") as [NSObject]!
-                
+                var topItem = self.feedItems[0]
+                println("top item is: \(topItem)")
+                var itemDetails: NSDictionary = topItem.valueForKey("fields") as NSDictionary!
+                let imgURLs: String = itemDetails.valueForKey("image_urls") as String
+                println("urls are: \(imgURLs)")
+                let imgURL = NSURL(string: imgURLs)
+                if let imgData = NSData(contentsOfURL: imgURL!) {
+                    feedView.imageView.image = UIImage(data: imgData)
+                    feedView.imageView.contentMode = UIViewContentMode.ScaleAspectFill
+                    self.view.addSubview(feedView)
+                }
                 
             }
         })
+        task.resume()
     }
     
     func viewDidCancelSwipe(view: UIView!) {
