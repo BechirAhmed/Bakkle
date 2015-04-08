@@ -16,9 +16,11 @@ class ViewController: UIViewController, FBLoginViewDelegate {
     
     var account_id: Int!
     
+    var debug = false
+    
     let url:NSURL? = NSURL(string: "https://app.bakkle.com/account/facebook/")
     
-    let switchWebNative = true
+    let isNative = true
  
 
     @IBOutlet weak var fbLoginView: FBLoginView!
@@ -41,8 +43,7 @@ class ViewController: UIViewController, FBLoginViewDelegate {
     }
     
     func loginViewShowingLoggedInUser(loginView : FBLoginView!) {
-        println("User Logged In")
-        
+        println("User Logged in")
     }
     
     
@@ -55,7 +56,7 @@ class ViewController: UIViewController, FBLoginViewDelegate {
         
         var postString = ""
         
-        postString += "email=\(userEmail)&Name=\(user.name)&UserName=\(userUsername)&Gender=\(userGender)&UserID=\(user.objectID)&locale=\(user.location)&FirstName=\(user.first_name)&LastName=\(user.last_name)&deviceUUID=\(self.deviceUUID)"
+        postString += "email=\(userEmail)&Name=\(user.name)&UserName=\(userUsername)&Gender=\(userGender)&UserID=\(user.objectID)&locale=\(user.location)&FirstName=\(user.first_name)&LastName=\(user.last_name)&device_uuid=\(self.deviceUUID)"
         
         let request = NSMutableURLRequest(URL: url!)
         
@@ -66,7 +67,6 @@ class ViewController: UIViewController, FBLoginViewDelegate {
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
             data, response, error in
             
-          println("GETS TO REQUESTTTTTTTT")
             if error != nil {
                 println("error=\(error)")
                 return
@@ -76,11 +76,10 @@ class ViewController: UIViewController, FBLoginViewDelegate {
             var error: NSError? = error
             
             var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &error) as NSDictionary!
-            println("DICTIONARY IS: \(responseDict)")
             
             if responseDict.valueForKey("status")?.integerValue == 1 {
                 
-            self.account_id = responseDict.valueForKey("userid") as Int!
+            self.account_id = responseDict.valueForKey("account_id") as Int!
 
             }
             
@@ -88,23 +87,26 @@ class ViewController: UIViewController, FBLoginViewDelegate {
             let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate!
             appDelegate.registerForPushNotifications(UIApplication.sharedApplication(), userid: user.objectID, deviceuuid: self.deviceUUID, accountid: self.account_id)
 
-            println("Post STRING IS: \(postString)")
-            println("RESPONSE STRING IS: \(responseString)")
-            println("ACCOUNT ID IS: \(self.account_id)")
+            if self.debug {
+                println("Post STRING IS: \(postString)")
+                println("RESPONSE STRING IS: \(responseString)")
+                println("ACCOUNT ID IS: \(self.account_id)")
+            }
         }
         task.resume()
         
         // Sucessfully logged in via FB
         
         // SWITCH BETWEEN NATIVE OR WEB CODE
-        if(switchWebNative) {
+        if(isNative) {
+            let feedVC : FeedScreen = FeedScreen()
+            feedVC.account_id = self.account_id
+            self.performSegueWithIdentifier(mainScreenSegueIdentifier, sender: self)
+           
+        } else {
             let mainWebView : MainWebView = MainWebView()
             self.performSegueWithIdentifier(mainScreenSegueIdentifier, sender: self)
-        } else {
-            let mainScreenViewController : FeedScreen = FeedScreen()
-            self.performSegueWithIdentifier(mainScreenSegueIdentifier, sender: self)
         }
-        
     }
     
     func loginViewShowingLoggedOutUser(loginView : FBLoginView!) {
