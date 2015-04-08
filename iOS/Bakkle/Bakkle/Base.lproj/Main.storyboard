@@ -322,7 +322,7 @@
                                             <segue destination="6AS-g2-sDb" kind="presentation" id="Q9f-g0-v35"/>
                                         </connections>
                                     </button>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" image="logo-white-design-png-100.png" translatesAutoresizingMaskIntoConstraints="NO" id="SVO-SE-GJf">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" image="logo-white-design-png-transp-100.png" translatesAutoresizingMaskIntoConstraints="NO" id="SVO-SE-GJf">
                                         <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="36" id="Edb-Lq-ywF"/>
@@ -1050,6 +1050,7 @@
         <image name="btn-sign-in40.png" width="230" height="40"/>
         <image name="btn-x.png" width="546" height="207"/>
         <image name="logo-white-design-png-100.png" width="248" height="100"/>
+        <image name="logo-white-design-png-transp-100.png" width="248" height="100"/>
         <image name="menubtn.png" width="54" height="39"/>
         <image name="mock-menu.png" width="987" height="1251"/>
         <image name="tiger.jpg" width="1920" height="1080"/>

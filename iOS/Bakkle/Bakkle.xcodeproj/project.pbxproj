@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5E023F861AD592B80002AFBC /* addItem.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E023F851AD592B80002AFBC /* addItem.png */; };
+		5E023F881AD59F200002AFBC /* logo-white-design-png-transp-100.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E023F871AD59F200002AFBC /* logo-white-design-png-transp-100.png */; };
 		5E0242911AC47FFB0094BB05 /* Screen Shot 2015-03-26 at 1.56.29 PM 1.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E0242901AC47FFB0094BB05 /* Screen Shot 2015-03-26 at 1.56.29 PM 1.png */; };
 		5E0242931AC481E80094BB05 /* menubtn.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E0242921AC481E80094BB05 /* menubtn.png */; };
 		5E1DCC9F1AD44C72002D41FD /* tiger.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5E1DCC9E1AD44C71002D41FD /* tiger.jpg */; };
@@ -65,6 +66,7 @@
 
 /* Begin PBXFileReference section */
 		5E023F851AD592B80002AFBC /* addItem.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = addItem.png; sourceTree = "<group>"; };
+		5E023F871AD59F200002AFBC /* logo-white-design-png-transp-100.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-white-design-png-transp-100.png"; sourceTree = "<group>"; };
 		5E0242901AC47FFB0094BB05 /* Screen Shot 2015-03-26 at 1.56.29 PM 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Screen Shot 2015-03-26 at 1.56.29 PM 1.png"; path = "../Screen Shot 2015-03-26 at 1.56.29 PM 1.png"; sourceTree = "<group>"; };
 		5E0242921AC481E80094BB05 /* menubtn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = menubtn.png; path = ../menubtn.png; sourceTree = "<group>"; };
 		5E1DCC9E1AD44C71002D41FD /* tiger.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = tiger.jpg; sourceTree = "<group>"; };
@@ -196,6 +198,7 @@
 		5EBDD68E1AB211E600C7FBE7 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				5E023F871AD59F200002AFBC /* logo-white-design-png-transp-100.png */,
 				5E023F851AD592B80002AFBC /* addItem.png */,
 				A003EB191AD4DB8800EE51A1 /* item-lawnmower.png */,
 				A003EB151AD4D71C00EE51A1 /* mock-menu.png */,
@@ -374,6 +377,7 @@
 				5E1DCC9F1AD44C72002D41FD /* tiger.jpg in Resources */,
 				A0A200011ACE2F7500A42CD8 /* btn-email40.png in Resources */,
 				5E1DCCA21AD47C53002D41FD /* btn-check.png in Resources */,
+				5E023F881AD59F200002AFBC /* logo-white-design-png-transp-100.png in Resources */,
 				A0A2FFF31ACE213F00A42CD8 /* logo-white-design-png-100.png in Resources */,
 				A0A709CE1ACAC9D700E772B9 /* Main.storyboard in Resources */,
 				5EBDD6B11AB2139700C7FBE7 /* bakkleLogo.png in Resources */,
