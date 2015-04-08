@@ -129,7 +129,7 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
     func view(view: UIView!, wasChosenWithDirection direction: MDCSwipeDirection) {
         if direction == MDCSwipeDirection.Left {
             self.revealViewController().revealToggleAnimated(true)
-            self.mark("meh", item_id: 1)    //TODO: Needs item_id
+          //  self.mark("meh", item_id: 1)    //TODO: Needs item_id
         }
         else if direction == MDCSwipeDirection.Right {
             self.mark("want", item_id: 1)   //TODO: Needs item_id
