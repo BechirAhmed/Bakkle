@@ -3,7 +3,7 @@
 //  Bakkle
 //
 //  Created by Ishank Tandon on 3/18/15.
-//  Copyright (c) 2015 Ishank Tandon. All rights reserved.
+//  Copyright (c) 2015 Bakkle Inc. All rights reserved.
 //
 
 import UIKit
@@ -30,7 +30,6 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
     
 
     @IBAction func menuButtonPressed(sender: AnyObject) {
-        //drawer.frame.origin = CGPoint(x: 0, y: 0)
         self.revealViewController().revealToggleAnimated(true)
     }
     @IBAction func btnX(sender: AnyObject) {
@@ -69,8 +68,7 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
 
         /* Menu reveal */
         if self.revealViewController() != nil {
-            menuBtn.targetForAction("revealToggle:", withSender: self)// = self.revealViewController()
-//            menuBtn.action = "revealToggle:"
+            menuBtn.targetForAction("revealToggle:", withSender: self)
             self.revealViewController().rearViewRevealWidth = 250
         }
     }
