@@ -30,8 +30,8 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
     
 
     @IBAction func menuButtonPressed(sender: AnyObject) {
-        drawer.frame.origin = CGPoint(x: 0, y: 0)
-        //self.revealViewController().revealToggleAnimated(true)
+        //drawer.frame.origin = CGPoint(x: 0, y: 0)
+        self.revealViewController().revealToggleAnimated(true)
     }
     @IBAction func btnX(sender: AnyObject) {
         self.mark("meh", item_id: 1)
@@ -47,7 +47,7 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
         super.viewDidLoad()
         var shortImg = UIImage(named: "menubtn.png")
         menuBtn.setBackButtonBackgroundImage(shortImg, forState: UIControlState.Normal, barMetrics: UIBarMetrics.Default)
-        self.navBar.topItem?.title = "Bakkle Logo"
+      //  self.navBar.topItem?.title = "Bakkle Logo"
         
        // self.navigationItem.leftBarButtonItem = UINavigationItem.to
         
@@ -129,16 +129,16 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
     func view(view: UIView!, wasChosenWithDirection direction: MDCSwipeDirection) {
         if direction == MDCSwipeDirection.Left {
             self.revealViewController().revealToggleAnimated(true)
-            self.mark("meh", item_id: 1)    //TODO: Needs item_id
+           // self.mark("meh", item_id: 1)    //TODO: Needs item_id
         }
         else if direction == MDCSwipeDirection.Right {
-            self.mark("want", item_id: 1)   //TODO: Needs item_id
+           // self.mark("want", item_id: 1)   //TODO: Needs item_id
         }
         else if direction == MDCSwipeDirection.Up {
-            self.mark("hold", item_id: 1)   //TODO: Needs item_id
+           // self.mark("hold", item_id: 1)   //TODO: Needs item_id
         }
         else if direction == MDCSwipeDirection.Down {
-            self.mark("report", item_id: 1) //TODO: Needs item_id
+           // self.mark("report", item_id: 1) //TODO: Needs item_id
         }
     }
     
