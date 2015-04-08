@@ -22,9 +22,9 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
     
     let feedURL = NSURL(string: "https://app.bakkle.com/items/feed/")
     
-    @IBOutlet weak var menuBtn: UIBarButtonItem!
+    @IBOutlet weak var menuBtn: UIButton!
     
-    @IBOutlet weak var addItemBtn: UIBarButtonItem!
+    @IBOutlet weak var addItemBtn: UIButton!
     
     @IBOutlet weak var drawer: UIView!
     
@@ -45,11 +45,8 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        var shortImg = UIImage(named: "menubtn.png")
-        menuBtn.setBackButtonBackgroundImage(shortImg, forState: UIControlState.Normal, barMetrics: UIBarMetrics.Default)
-      //  self.navBar.topItem?.title = "Bakkle Logo"
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
         
-       // self.navigationItem.leftBarButtonItem = UINavigationItem.to
         
         var options = MDCSwipeToChooseViewOptions()
         options.delegate = self
@@ -72,10 +69,15 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
 
         /* Menu reveal */
         if self.revealViewController() != nil {
-            menuBtn.target = self.revealViewController()
-            menuBtn.action = "revealToggle:"
+            menuBtn.targetForAction("revealToggle:", withSender: self)// = self.revealViewController()
+//            menuBtn.action = "revealToggle:"
             self.revealViewController().rearViewRevealWidth = 250
         }
+    }
+    
+    func showAddItem(){
+        var addItem: UIViewController = AddItem()
+        presentViewController(addItem, animated: true, completion: nil)
     }
     
     func populateFeed(){

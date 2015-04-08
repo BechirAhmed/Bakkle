@@ -58,6 +58,8 @@
  */
 @property (nonatomic, strong) UIView *nopeView;
 
+@property (nonatomic, strong) UILabel *itemTitle;
+
 /*!
  * The designated initializer takes a `frame` and a set of options to customize
  * the behavior of the view.
