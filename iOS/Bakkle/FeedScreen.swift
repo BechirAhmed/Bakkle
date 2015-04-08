@@ -39,7 +39,7 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
         super.viewDidLoad()
         var shortImg = UIImage(named: "menubtn.png")
         menuBtn.setBackButtonBackgroundImage(shortImg, forState: UIControlState.Normal, barMetrics: UIBarMetrics.Default)
-        self.navBar.topItem?.title = "Logo goes here!"
+        self.navBar.topItem?.title = "Bakkle Logo"
         
        // self.navigationItem.leftBarButtonItem = UINavigationItem.to
         
@@ -58,8 +58,24 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
         
         let view : MDCSwipeToChooseView = MDCSwipeToChooseView(frame: self.view.bounds, options: options)
         
-        view.imageView.image = UIImage(named: "tiger.jpg")
+        view.imageView.image = UIImage(named: "item-lawnmower.png")
         self.view.addSubview(view)
+        
+        customSetup()
+    }
+    
+    /* For the menu view (SWRevealViewController) */
+    func customSetup() {
+        if self.revealViewController() != nil {
+            menuBtn.target = self.revealViewController()
+            menuBtn.action = "revealToggle:"
+            
+            menuBtn.target = self.revealViewController()
+            menuBtn.action = "revealToggle:"
+
+            self.revealViewController().rearViewRevealWidth = 250
+        }
+
     }
     
     func populateFeed(){
@@ -69,7 +85,7 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
         
         request.HTTPMethod = "POST"
         
-       request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
         
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: { (data, response, error) -> Void in
             if error != nil {
@@ -112,9 +128,12 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
     
     func view(view: UIView!, wasChosenWithDirection direction: MDCSwipeDirection) {
         if direction == MDCSwipeDirection.Left {
+            self.revealViewController().revealToggleAnimated(true)
+//            self.markMeh(0) //TODO: Needs item_id
             println("Meh!!!")
         }
         else if direction == MDCSwipeDirection.Right {
+            self.markWant(1) //TODO: Needs item_id
             println("I want")
         }
         else if direction == MDCSwipeDirection.Up {
@@ -133,7 +152,65 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
         }
     }
     
+    let baseUrlString : String = "https://app.bakkle.com/"
     
+    /* Mark item as MEH on server */
+    func markMeh(item_id: Int){
+        
+        let url:NSURL? = NSURL(string: baseUrlString.stringByAppendingString("items/meh/"))
+        let request = NSMutableURLRequest(URL: url!)
+        var postString : String = "account_id=\(self.account_id)&item_id=\(item_id)"
+        request.HTTPMethod = "POST"
+        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+        
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
+            data, response, error in
+            
+            if error != nil {
+                println("error=\(error)")
+                return
+            }
+            
+            let responseString: String = NSString(data: data, encoding: NSUTF8StringEncoding)!
+            var error: NSError? = error
+            
+            var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &error) as NSDictionary!
+            
+            if responseDict.valueForKey("status")?.integerValue == 1 {
+                // Success
+            }
+        }
+        task.resume()
+    }
+
+    /* Mark item as WANT on server */
+    func markWant(item_id: Int){
+        
+        let url:NSURL? = NSURL(string: baseUrlString.stringByAppendingString("items/want/"))
+        let request = NSMutableURLRequest(URL: url!)
+        var postString : String = "account_id=\(self.account_id)&item_id=\(item_id)"
+        request.HTTPMethod = "POST"
+        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+        
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
+            data, response, error in
+            
+            if error != nil {
+                println("error=\(error)")
+                return
+            }
+            
+            let responseString: String = NSString(data: data, encoding: NSUTF8StringEncoding)!
+            var error: NSError? = error
+            
+            var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &error) as NSDictionary!
+            
+            if responseDict.valueForKey("status")?.integerValue == 1 {
+                // Success
+            }
+        }
+        task.resume()
+    }
     
     
 }

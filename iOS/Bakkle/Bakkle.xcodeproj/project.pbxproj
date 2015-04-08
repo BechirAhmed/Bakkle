@@ -33,7 +33,10 @@
 		5EE2C9BA1AB9F0FB0031D8CD /* UIView+MDCBorderedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C9AE1AB9F0FB0031D8CD /* UIView+MDCBorderedLabel.m */; };
 		5EE2C9BB1AB9F0FB0031D8CD /* MDCViewState.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C9B01AB9F0FB0031D8CD /* MDCViewState.m */; };
 		5EF3F3DF1ACC3D6900D93B72 /* MainWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF3F3DE1ACC3D6900D93B72 /* MainWebView.swift */; };
-		A003EB101ACF3B2C00EE51A1 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A003EB0F1ACF3B2C00EE51A1 /* SWRevealViewController.m */; };
+		A003EB141AD4CCA600EE51A1 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A003EB131AD4CCA600EE51A1 /* SWRevealViewController.m */; };
+		A003EB161AD4D71C00EE51A1 /* mock-menu.png in Resources */ = {isa = PBXBuildFile; fileRef = A003EB151AD4D71C00EE51A1 /* mock-menu.png */; };
+		A003EB181AD4D8CA00EE51A1 /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A003EB171AD4D8CA00EE51A1 /* MenuView.swift */; };
+		A003EB1A1AD4DB8800EE51A1 /* item-lawnmower.png in Resources */ = {isa = PBXBuildFile; fileRef = A003EB191AD4DB8800EE51A1 /* item-lawnmower.png */; };
 		A03508F31AB3C34900CA6455 /* SplashScreen-bkg.png in Resources */ = {isa = PBXBuildFile; fileRef = A03508F21AB3C34900CA6455 /* SplashScreen-bkg.png */; };
 		A03508F71AB3C5FB00CA6455 /* logo-green-design-png-white.png in Resources */ = {isa = PBXBuildFile; fileRef = A03508F61AB3C5FB00CA6455 /* logo-green-design-png-white.png */; };
 		A03508F91AB3C6AE00CA6455 /* logo-white-design-png.png in Resources */ = {isa = PBXBuildFile; fileRef = A03508F81AB3C6AE00CA6455 /* logo-white-design-png.png */; };
@@ -108,8 +111,11 @@
 		5EE2C9B01AB9F0FB0031D8CD /* MDCViewState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDCViewState.m; sourceTree = "<group>"; };
 		5EE2C9B11AB9F0FB0031D8CD /* MDCSwipeToChoose-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MDCSwipeToChoose-Prefix.pch"; path = "../MDCSwipeToChoose-Prefix.pch"; sourceTree = "<group>"; };
 		5EF3F3DE1ACC3D6900D93B72 /* MainWebView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainWebView.swift; sourceTree = "<group>"; };
-		A003EB0E1ACF3B2C00EE51A1 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
-		A003EB0F1ACF3B2C00EE51A1 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
+		A003EB121AD4CCA600EE51A1 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
+		A003EB131AD4CCA600EE51A1 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
+		A003EB151AD4D71C00EE51A1 /* mock-menu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mock-menu.png"; sourceTree = "<group>"; };
+		A003EB171AD4D8CA00EE51A1 /* MenuView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
+		A003EB191AD4DB8800EE51A1 /* item-lawnmower.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "item-lawnmower.png"; sourceTree = "<group>"; };
 		A03508F21AB3C34900CA6455 /* SplashScreen-bkg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "SplashScreen-bkg.png"; path = "../../../graphics/SplashScreen-bkg.png"; sourceTree = "<group>"; };
 		A03508F61AB3C5FB00CA6455 /* logo-green-design-png-white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-green-design-png-white.png"; sourceTree = "<group>"; };
 		A03508F81AB3C6AE00CA6455 /* logo-white-design-png.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-white-design-png.png"; sourceTree = "<group>"; };
@@ -170,6 +176,7 @@
 			children = (
 				5E8C44CC1AC3217000BC4A2C /* TransitionOperator.swift */,
 				5E8C44D01AC3286200BC4A2C /* Menu.swift */,
+				A003EB171AD4D8CA00EE51A1 /* MenuView.swift */,
 				5EE2C98A1AB9D1730031D8CD /* FeedScreen.swift */,
 				5E5CB0A81AB7547800F32BE6 /* Bridging-Header.h */,
 				5EBDD6901AB211E600C7FBE7 /* AppDelegate.swift */,
@@ -187,6 +194,8 @@
 		5EBDD68E1AB211E600C7FBE7 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				A003EB191AD4DB8800EE51A1 /* item-lawnmower.png */,
+				A003EB151AD4D71C00EE51A1 /* mock-menu.png */,
 				5E1DCCA01AD47C53002D41FD /* btn-check.png */,
 				5E1DCCA11AD47C53002D41FD /* btn-x.png */,
 				5E1DCC9E1AD44C71002D41FD /* tiger.jpg */,
@@ -269,8 +278,8 @@
 		A003EB111ACF3BBC00EE51A1 /* SWRevealViewController */ = {
 			isa = PBXGroup;
 			children = (
-				A003EB0E1ACF3B2C00EE51A1 /* SWRevealViewController.h */,
-				A003EB0F1ACF3B2C00EE51A1 /* SWRevealViewController.m */,
+				A003EB121AD4CCA600EE51A1 /* SWRevealViewController.h */,
+				A003EB131AD4CCA600EE51A1 /* SWRevealViewController.m */,
 			);
 			name = SWRevealViewController;
 			sourceTree = "<group>";
@@ -369,11 +378,13 @@
 				A0A200021ACE2F7500A42CD8 /* btn-facebook40.png in Resources */,
 				5E1DCCA31AD47C53002D41FD /* btn-x.png in Resources */,
 				A0A709CF1ACAC9DB00E772B9 /* LaunchScreen.xib in Resources */,
+				A003EB1A1AD4DB8800EE51A1 /* item-lawnmower.png in Resources */,
 				A0A200051ACE30C200A42CD8 /* btn-logout40.png in Resources */,
 				5E0242931AC481E80094BB05 /* menubtn.png in Resources */,
 				5E0242911AC47FFB0094BB05 /* Screen Shot 2015-03-26 at 1.56.29 PM 1.png in Resources */,
 				A0A200031ACE2F7500A42CD8 /* btn-sign-in40.png in Resources */,
 				A03508F31AB3C34900CA6455 /* SplashScreen-bkg.png in Resources */,
+				A003EB161AD4D71C00EE51A1 /* mock-menu.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -394,15 +405,16 @@
 				5EE2C9B71AB9F0FB0031D8CD /* MDCPanState.m in Sources */,
 				5EBDD6931AB211E600C7FBE7 /* ViewController.swift in Sources */,
 				5EE2C98B1AB9D1730031D8CD /* FeedScreen.swift in Sources */,
+				A003EB181AD4D8CA00EE51A1 /* MenuView.swift in Sources */,
 				5EE2C9B91AB9F0FB0031D8CD /* UIColor+MDCRGB8Bit.m in Sources */,
 				5EE2C9B31AB9F0FB0031D8CD /* MDCSwipeToChooseView.m in Sources */,
+				A003EB141AD4CCA600EE51A1 /* SWRevealViewController.m in Sources */,
 				5EE2C9BA1AB9F0FB0031D8CD /* UIView+MDCBorderedLabel.m in Sources */,
 				5E8C44CD1AC3217000BC4A2C /* TransitionOperator.swift in Sources */,
 				5EE2C9B81AB9F0FB0031D8CD /* MDCGeometry.m in Sources */,
 				5EE2C9BB1AB9F0FB0031D8CD /* MDCViewState.m in Sources */,
 				5E8C44D11AC3286200BC4A2C /* Menu.swift in Sources */,
 				5EF3F3DF1ACC3D6900D93B72 /* MainWebView.swift in Sources */,
-				A003EB101ACF3B2C00EE51A1 /* SWRevealViewController.m in Sources */,
 				5EE2C9B41AB9F0FB0031D8CD /* MDCSwipeOptions.m in Sources */,
 				5EE2C9B61AB9F0FB0031D8CD /* MDCSwipeResult.m in Sources */,
 				5E1DCCA51AD486D2002D41FD /* AddItem.swift in Sources */,

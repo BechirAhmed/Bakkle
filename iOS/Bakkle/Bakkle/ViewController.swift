@@ -79,7 +79,7 @@ class ViewController: UIViewController, FBLoginViewDelegate {
             
             if responseDict.valueForKey("status")?.integerValue == 1 {
                 
-            self.account_id = responseDict.valueForKey("account_id") as Int!
+                self.account_id = responseDict.valueForKey("account_id") as Int!
 
             }
             
