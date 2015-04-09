@@ -68,7 +68,7 @@ def feed(request):
         buyer_id = request.POST.get('account_id')
         items_viewed = BuyerItem.objects.filter(buyer = buyer_id)
         item_list = Items.objects.exclude(buyeritem = items_viewed).exclude(seller = buyer_id)
-        response_data = "{'status': 1, 'feed': " + serializers.serialize('json', item_list) + "}"
+        response_data = "{\"status\": 1, \"feed\": " + serializers.serialize('json', item_list) + "}"
         return HttpResponse(response_data, content_type="application/json")
     else:
         raise Http404("Wrong method, use POST")
