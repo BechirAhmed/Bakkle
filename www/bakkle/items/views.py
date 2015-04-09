@@ -133,7 +133,7 @@ def reset(request):
     Items.objects.all().delete()
     BuyerItem.objects.all().delete()
     i = Items(
-        image_urls = "https://app.bakkle.com/img/b8347df.jpg",
+        image_urls = "https://app.bakkle.com/img/b83bdbd.png",
         title = "Orange Push Mower",
         description = "Year old orange push mower. Some wear and sun fadding. Was kept outside and not stored in shed.",
         location = "39.417672,-87.330438",
