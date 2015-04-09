@@ -37,6 +37,8 @@
  */
 @property (nonatomic, strong) UIImageView *imageView;
 
+@property (nonatomic, strong) UIImageView *bottomImg;
+
 /*!
  * The "liked" view, which fades in as the `MDCSwipeToChooseView` is panned to the right.
  */
@@ -57,6 +59,8 @@
  * The "nope" view, which fades in as the `MDCSwipeToChooseView` is panned to the left.
  */
 @property (nonatomic, strong) UIView *nopeView;
+
+@property (nonatomic, strong) UILabel *itemTitle;
 
 /*!
  * The designated initializer takes a `frame` and a set of options to customize

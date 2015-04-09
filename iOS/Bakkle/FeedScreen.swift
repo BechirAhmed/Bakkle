@@ -3,7 +3,7 @@
 //  Bakkle
 //
 //  Created by Ishank Tandon on 3/18/15.
-//  Copyright (c) 2015 Ishank Tandon. All rights reserved.
+//  Copyright (c) 2015 Bakkle Inc. All rights reserved.
 //
 
 import UIKit
@@ -14,36 +14,40 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
     
     let menuSegue = "presentNav"
     
-    var account_id : Int!
+    let options = MDCSwipeToChooseViewOptions()
     
-    var feedItems : [NSObject]!
+    @IBOutlet weak var menuBtn: UIButton!
     
-    var transitionOperator = TransitionOperator()
-    
-    let feedURL = NSURL(string: "https://app.bakkle.com/items/feed/")
-    
-    @IBOutlet weak var menuBtn: UIBarButtonItem!
-    
-    @IBOutlet weak var addItemBtn: UIBarButtonItem!
+    @IBOutlet weak var addItemBtn: UIButton!
     
     @IBOutlet weak var drawer: UIView!
     
-
+    @IBOutlet weak var progressIndicator: UIActivityIndicatorView!
+    
+    var hardCoded = false
+    
+    var item_id = 42 //TODO: unhardcode this
+    
     @IBAction func menuButtonPressed(sender: AnyObject) {
-        drawer.frame.origin = CGPoint(x: 0, y: 0)
+        self.revealViewController().revealToggleAnimated(true)
     }
+    @IBAction func btnX(sender: AnyObject) {
+        Bakkle.sharedInstance.markItem("meh", item_id: self.item_id, success: {}, fail: {})
+
+    }
+    @IBAction func btnCheck(sender: AnyObject) {
+        Bakkle.sharedInstance.markItem("want", item_id: self.item_id, success: {}, fail: {})
+    }
+    
     
     @IBOutlet weak var navBar: UINavigationBar!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        var shortImg = UIImage(named: "menubtn.png")
-        menuBtn.setBackButtonBackgroundImage(shortImg, forState: UIControlState.Normal, barMetrics: UIBarMetrics.Default)
-        self.navBar.topItem?.title = "Logo goes here!"
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
         
-       // self.navigationItem.leftBarButtonItem = UINavigationItem.to
+        progressIndicator.startAnimating()
         
-        var options = MDCSwipeToChooseViewOptions()
         options.delegate = self
         options.likedText = "Want"
         options.likedColor = UIColor.greenColor()
@@ -56,40 +60,62 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
             }
         }
         
-        let view : MDCSwipeToChooseView = MDCSwipeToChooseView(frame: self.view.bounds, options: options)
-        
-        view.imageView.image = UIImage(named: "tiger.jpg")
-        self.view.addSubview(view)
+        /* Menu reveal */
+        if self.revealViewController() != nil {
+            menuBtn.targetForAction("revealToggle:", withSender: self)
+            self.revealViewController().rearViewRevealWidth = 250
+        }
     }
     
-    func populateFeed(){
-        var postString = "account_id=\(account_id)"
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+    
+        let view : MDCSwipeToChooseView = MDCSwipeToChooseView(frame: self.view.bounds, options: options)
         
-        let request = NSMutableURLRequest(URL: feedURL!)
-        
-        request.HTTPMethod = "POST"
-        
-       request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
-        
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: { (data, response, error) -> Void in
-            if error != nil {
-                println("error= \(error)")
-                return
-            }
-            
-            let responseString: String = NSString(data: data, encoding: NSUTF8StringEncoding)!
-            var error: NSError? = error
-            
-            var responseDict: NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error) as NSDictionary!
-            
-            println("RESPONSE DICT IS: \(responseDict)")
-            
-            if responseDict.valueForKey("status")?.integerValue == 1 {
-                self.feedItems = responseDict.valueForKey("feed") as [NSObject]!
+        if hardCoded {
+            view.imageView.image = UIImage(named: "item-lawnmower.png")
+            view.imageView.contentMode = UIViewContentMode.ScaleAspectFill
+            self.view.addSubview(view)
+        } else {
+            Bakkle.sharedInstance.populateFeed({
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.updateView(view)
+                }
+            })
+        }
+    }
+    
+    func showAddItem(){
+        var addItem: UIViewController = AddItem()
+        presentViewController(addItem, animated: true, completion: nil)
+    }
+    
+    func updateView(feedView: MDCSwipeToChooseView) {
+        if hardCoded {
+            feedView.imageView.image = UIImage(named: "item-lawnmower.png")
+            feedView.imageView.contentMode = UIViewContentMode.ScaleAspectFill
+            view.addSubview(feedView)
+        } else {
+            if Bakkle.sharedInstance.feedItems.count > 0 {
+                var topItem = Bakkle.sharedInstance.feedItems[0]
+                var bottomItem = Bakkle.sharedInstance.feedItems[1]
+                println("top item is: \(topItem)")
                 
+                var itemDetails: NSDictionary = topItem.valueForKey("fields") as NSDictionary!
+                var bottomItemDetail: NSDictionary = bottomItem.valueForKey("fields") as NSDictionary!
                 
+                let imgURLs: String = itemDetails.valueForKey("image_urls") as String
+                let bottomURL: String = bottomItemDetail.valueForKey("image_urls") as String
+                
+                println("urls are: \(imgURLs)")
+                let imgURL = NSURL(string: imgURLs)
+                if let imgData = NSData(contentsOfURL: imgURL!) {
+                    feedView.imageView.image = UIImage(data: imgData)
+                    feedView.imageView.contentMode = UIViewContentMode.ScaleAspectFill
+                    self.view.addSubview(feedView)
+                }
             }
-        })
+        }
     }
     
     func viewDidCancelSwipe(view: UIView!) {
@@ -109,19 +135,18 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
         }
     }
     
-    
     func view(view: UIView!, wasChosenWithDirection direction: MDCSwipeDirection) {
         if direction == MDCSwipeDirection.Left {
-            println("Meh!!!")
+            Bakkle.sharedInstance.markItem("meh", item_id: self.item_id, success: {}, fail: {})
         }
         else if direction == MDCSwipeDirection.Right {
-            println("I want")
+            Bakkle.sharedInstance.markItem("want", item_id: self.item_id, success: {}, fail: {})
         }
         else if direction == MDCSwipeDirection.Up {
-            println("HOLD!")
+            Bakkle.sharedInstance.markItem("hold", item_id: self.item_id, success: {}, fail: {})
         }
         else if direction == MDCSwipeDirection.Down {
-            println("Report")
+            Bakkle.sharedInstance.markItem("report", item_id: self.item_id, success: {}, fail: {})
         }
     }
     
@@ -129,11 +154,8 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
         if segue.identifier == menuSegue {
             let toViewController = segue.destinationViewController as Menu
             self.modalPresentationStyle = UIModalPresentationStyle.Custom
-            toViewController.transitioningDelegate = self.transitionOperator
+           // toViewController.transitioningDelegate = self.transitionOperator
         }
     }
-    
-    
-    
     
 }
