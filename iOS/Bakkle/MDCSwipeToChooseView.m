@@ -51,10 +51,15 @@ static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
     CGRect screenBounds = [[UIScreen mainScreen] applicationFrame];
     CGFloat itemWidth = screenBounds.size.height-250;
     CGFloat itemHeight = screenBounds.size.width+10;
+    
+    UIImageView *bottomImg = [[UIImageView alloc] initWithFrame:CGRectMake(12, 125, itemWidth -15, itemHeight)];
+    [bottomImg setBackgroundColor: [UIColor colorWithRed:255 green:0 blue:0 alpha:1]];
+    
     self = [super initWithFrame:CGRectMake(12, 125, itemWidth, itemHeight)];
     if (self) {
         _options = options ? options : [MDCSwipeToChooseViewOptions new];
         [self setupView];
+       // [super addSubview: bottomImg];
         [self constructImageView];
         [self constructLikedView];
         [self constructNopeImageView];
@@ -81,7 +86,7 @@ static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
 - (void)constructImageView {
     _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height)];
     [_imageView setContentMode:UIViewContentModeScaleAspectFill];
-//    _imageView.clipsToBounds = YES;
+    _imageView.clipsToBounds = YES;
     [self addSubview:_imageView];
 }
 

@@ -14,19 +14,15 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
     
     let menuSegue = "presentNav"
     
-    var feedItems : [NSObject]!
-    
     let options = MDCSwipeToChooseViewOptions()
-    
-    var transitionOperator = TransitionOperator()
-    
-    let feedURL = NSURL(string: "https://app.bakkle.com/items/feed/")
     
     @IBOutlet weak var menuBtn: UIButton!
     
     @IBOutlet weak var addItemBtn: UIButton!
     
     @IBOutlet weak var drawer: UIView!
+    
+    @IBOutlet weak var progressIndicator: UIActivityIndicatorView!
     
     var hardCoded = false
     
@@ -50,6 +46,8 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
         super.viewDidLoad()
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         
+        progressIndicator.startAnimating()
+        
         options.delegate = self
         options.likedText = "Want"
         options.likedColor = UIColor.greenColor()
@@ -62,6 +60,16 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
             }
         }
         
+        /* Menu reveal */
+        if self.revealViewController() != nil {
+            menuBtn.targetForAction("revealToggle:", withSender: self)
+            self.revealViewController().rearViewRevealWidth = 250
+        }
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+    
         let view : MDCSwipeToChooseView = MDCSwipeToChooseView(frame: self.view.bounds, options: options)
         
         if hardCoded {
@@ -69,13 +77,11 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
             view.imageView.contentMode = UIViewContentMode.ScaleAspectFill
             self.view.addSubview(view)
         } else {
-            populateFeed(view)
-        }
-            
-        /* Menu reveal */
-        if self.revealViewController() != nil {
-            menuBtn.targetForAction("revealToggle:", withSender: self)
-            self.revealViewController().rearViewRevealWidth = 250
+            Bakkle.sharedInstance.populateFeed({
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.updateView(view)
+                }
+            })
         }
     }
     
@@ -84,45 +90,23 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
         presentViewController(addItem, animated: true, completion: nil)
     }
     
-    func populateFeed(feedView: MDCSwipeToChooseView){
+    func updateView(feedView: MDCSwipeToChooseView) {
         if hardCoded {
             feedView.imageView.image = UIImage(named: "item-lawnmower.png")
             feedView.imageView.contentMode = UIViewContentMode.ScaleAspectFill
             view.addSubview(feedView)
-        }
-            
-        var postString = "account_id=\(2)"
-        
-        let request = NSMutableURLRequest(URL: feedURL!)
-        
-        request.HTTPMethod = "POST"
-        
-        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
-        
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: { (data, response, error) -> Void in
-            if error != nil {
-                println("error= \(error)")
-                return
-            }
-            let tempStr = "{\"status\": 1, \"feed\": [{\"fields\": {\"status\": \"Active\", \"times_reported\": 0, \"description\": \"Year old orange push mower. Some wear and sun fadding. Was kept outside and not stored in shed.\", \"title\": \"Orange Push Mower\", \"price\": \"50.25\", \"tags\": \"lawnmower, orange, somewear\", \"image_urls\": \"https://app.bakkle.com/img/b8347df.jpg\", \"seller\": 1, \"post_date\": \"2015-04-08T13:50:02.850Z\", \"location\": \"39.417672,-87.330438\", \"method\": \"Pick-up\"}, \"model\": \"items.items\", \"pk\": 10}]}"
-
-            let tempData = tempStr.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
-            
-            let responseString: String = NSString(data: tempData!, encoding: NSUTF8StringEncoding)!
-           // println("RESPONSE STRING IN FEED IS: \(responseString)")
-            var parseError: NSError?
-            
-            var responseDict: NSDictionary = NSJSONSerialization.JSONObjectWithData(tempData!, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as NSDictionary!
-            
-            
-            println("RESPONSE DICT IS: \(responseDict)")
-            
-            if responseDict.valueForKey("status")?.integerValue == 1 {
-                self.feedItems = responseDict.valueForKey("feed") as [NSObject]!
-                var topItem = self.feedItems[0]
+        } else {
+            if Bakkle.sharedInstance.feedItems.count > 0 {
+                var topItem = Bakkle.sharedInstance.feedItems[0]
+                var bottomItem = Bakkle.sharedInstance.feedItems[1]
                 println("top item is: \(topItem)")
+                
                 var itemDetails: NSDictionary = topItem.valueForKey("fields") as NSDictionary!
+                var bottomItemDetail: NSDictionary = bottomItem.valueForKey("fields") as NSDictionary!
+                
                 let imgURLs: String = itemDetails.valueForKey("image_urls") as String
+                let bottomURL: String = bottomItemDetail.valueForKey("image_urls") as String
+                
                 println("urls are: \(imgURLs)")
                 let imgURL = NSURL(string: imgURLs)
                 if let imgData = NSData(contentsOfURL: imgURL!) {
@@ -130,10 +114,8 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
                     feedView.imageView.contentMode = UIViewContentMode.ScaleAspectFill
                     self.view.addSubview(feedView)
                 }
-                
             }
-        })
-        task.resume()
+        }
     }
     
     func viewDidCancelSwipe(view: UIView!) {
@@ -172,7 +154,7 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
         if segue.identifier == menuSegue {
             let toViewController = segue.destinationViewController as Menu
             self.modalPresentationStyle = UIModalPresentationStyle.Custom
-            toViewController.transitioningDelegate = self.transitionOperator
+           // toViewController.transitioningDelegate = self.transitionOperator
         }
     }
     

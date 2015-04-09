@@ -17,10 +17,13 @@ class Bakkle {
     let url_register_push: String = "account/device/register_push/"
     let url_reset: String         = "items/reset/"
     let url_mark: String          = "items/" //+status
+    let url_feed: String          = "items/feed/"
     
     var debug: Int = 2 // 0=off
     var account_id: Int! = 0
     var deviceUUID : String = UIDevice.currentDevice().identifierForVendor.UUIDString
+    var feedItems: [NSObject]!
+    var responseDict: NSDictionary!
     
     class var sharedInstance: Bakkle {
         struct Static {
@@ -154,20 +157,58 @@ class Bakkle {
                 println("Response: \(responseString)")
                 
                 //TODO: Check error handling here.
-                var err: NSError?
-                var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &err) as NSDictionary!
-                
+//                var err: NSError?
+//                var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &err) as NSDictionary!
+//                
                 //TODO: THIS IS WRONG
-                if responseDict.valueForKey("status")?.integerValue == 1 {
+                //if responseDict.valueForKey("status")?.integerValue == 1 {
                     success()
-                }
+              //  }
 
             }
             fail()
         }
         task.resume()
     }
-
+    
+    /* Populates the feed with items from the server */
+    func populateFeed(success: ()->()) {
+        let url: NSURL? = NSURL(string: url_base + url_feed)
+        let request = NSMutableURLRequest(URL: url!)
+        
+        request.HTTPMethod = "POST"
+        let postString = "account_id=\(Bakkle.sharedInstance.account_id)"
+        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+        
+        info("[Bakkle] populateFeed")
+        info("URL: \(url) METHOD: \(request.HTTPMethod) BODY: \(postString)")
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
+            data, response, error in
+            
+            if error != nil {
+                self.err("error= \(error)")
+                return
+            }
+            let tempStr = "{\"status\": 1, \"feed\": [{\"fields\": {\"status\": \"Active\", \"times_reported\": 0, \"description\": \"Year old orange push mower. Some wear and sun fadding. Was kept outside and not stored in shed.\", \"title\": \"Orange Push Mower\", \"price\": \"50.25\", \"tags\": \"lawnmower, orange, somewear\", \"image_urls\": \"https://app.bakkle.com/img/b8347df.jpg\", \"seller\": 1, \"post_date\": \"2015-04-08T13:50:02.850Z\", \"location\": \"39.417672,-87.330438\", \"method\": \"Pick-up\"}, \"model\": \"items.items\", \"pk\": 10},{\"fields\":{\"status\":\"Active\",\"times_reported\":0,\"description\":\"Homemade lawn mower. Includes rabbit and water container.\",\"title\":\"Rabbit Push Mower\",\"price\":\"10.99\",\"tags\":\"lawnmower, homemade, rabbit\",\"image_urls\":\"https://app.bakkle.com/img/b8348df.jpg\",\"seller\":1,\"post_date\":\"2015-04-09T03:41:40.465Z\",\"location\":\"39.417672,-87.330438\",\"method\":\"Pick-up\"},\"model\":\"items.items\",\"pk\":47},{\"fields\":{\"status\":\"Active\",\"times_reported\":0,\"description\":\"iPhone 6. Has a cracked screen. Besides screen phone is in good condition.\",\"title\":\"iPhone 6 Cracked\",\"price\":\"65.99\",\"tags\":\"iPhone6, cracked, damaged\",\"image_urls\":\"https://app.bakkle.com/img/b8349df.jpg\",\"seller\":1,\"post_date\":\"2015-04-09T03:41:40.473Z\",\"location\":\"39.417672,-87.330438\",\"method\":\"Delivery\"},\"model\":\"items.items\",\"pk\":48}]}"
+            
+            let tempData = tempStr.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+            
+            let responseString: String = NSString(data: tempData!, encoding: NSUTF8StringEncoding)!
+            self.resp("Response: \(responseString)")
+            var parseError: NSError?
+            
+            self.responseDict = NSJSONSerialization.JSONObjectWithData(tempData!, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as NSDictionary!
+             self.resp("RESPONSE DICT IS: \(self.responseDict)")
+            
+             if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
+                self.feedItems = self.responseDict.valueForKey("feed") as Array!
+                success()
+            }
+            
+        }
+        task.resume()
+    }
+    
     /* reset feed items on server for DEMO */
     func resetDemo() {
         let url:NSURL? = NSURL(string: url_base + url_reset)

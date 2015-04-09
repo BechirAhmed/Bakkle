@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1514" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
@@ -273,6 +273,9 @@
                                         <include reference="ghp-JF-dYa"/>
                                     </mask>
                                 </variation>
+                                <connections>
+                                    <action selector="btnCheck:" destination="dzt-bR-uoN" eventType="touchUpInside" id="Owv-mU-Ma5"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3fx-Mv-gkv">
                                 <rect key="frame" x="-23" y="-15" width="46" height="30"/>
@@ -295,6 +298,9 @@
                                         <include reference="sgO-va-xvH"/>
                                     </mask>
                                 </variation>
+                                <connections>
+                                    <action selector="btnX:" destination="dzt-bR-uoN" eventType="touchUpInside" id="waW-Nq-nZZ"/>
+                                </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cvc-cz-rgJ">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
@@ -432,9 +438,13 @@
                                     </mask>
                                 </variation>
                             </view>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="t37-H0-tA2">
+                                <rect key="frame" x="-10" y="-10" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstAttribute="centerY" secondItem="t37-H0-tA2" secondAttribute="centerY" id="4pg-ZZ-0df"/>
                             <constraint firstItem="3fx-Mv-gkv" firstAttribute="width" secondItem="tgH-WZ-0K1" secondAttribute="width" id="7xe-DZ-nV2"/>
                             <constraint firstItem="tgH-WZ-0K1" firstAttribute="leading" secondItem="3fx-Mv-gkv" secondAttribute="trailing" constant="10" id="9RZ-fc-D4e"/>
                             <constraint firstItem="3fx-Mv-gkv" firstAttribute="leading" secondItem="Wzf-MH-BHC" secondAttribute="leadingMargin" constant="43" id="Fag-qs-MZ1"/>
@@ -447,6 +457,7 @@
                             <constraint firstAttribute="trailing" secondItem="TvW-JJ-Vqb" secondAttribute="trailing" constant="400" id="btB-zo-zos"/>
                             <constraint firstItem="TvW-JJ-Vqb" firstAttribute="top" secondItem="Wzf-MH-BHC" secondAttribute="topMargin" constant="121" id="ekg-oj-a0a"/>
                             <constraint firstAttribute="trailingMargin" secondItem="tgH-WZ-0K1" secondAttribute="trailing" constant="25" id="gMc-L8-yaO"/>
+                            <constraint firstAttribute="centerX" secondItem="t37-H0-tA2" secondAttribute="centerX" id="jZo-pn-ESK"/>
                             <constraint firstItem="tgH-WZ-0K1" firstAttribute="leading" secondItem="3fx-Mv-gkv" secondAttribute="trailing" constant="10" id="jaq-t4-MxA"/>
                             <constraint firstItem="cvc-cz-rgJ" firstAttribute="leading" secondItem="Wzf-MH-BHC" secondAttribute="leadingMargin" constant="-16" id="jpj-c9-CpX"/>
                             <constraint firstItem="TvW-JJ-Vqb" firstAttribute="leading" secondItem="Wzf-MH-BHC" secondAttribute="leadingMargin" constant="-350" id="jze-nB-A0h"/>
@@ -459,10 +470,13 @@
                                 <exclude reference="tgH-WZ-0K1"/>
                                 <exclude reference="3fx-Mv-gkv"/>
                                 <exclude reference="cvc-cz-rgJ"/>
+                                <exclude reference="t37-H0-tA2"/>
                             </mask>
                             <mask key="constraints">
                                 <exclude reference="Tyv-00-w6W"/>
                                 <exclude reference="sQP-Ms-Xlw"/>
+                                <exclude reference="4pg-ZZ-0df"/>
+                                <exclude reference="jZo-pn-ESK"/>
                                 <exclude reference="7xe-DZ-nV2"/>
                                 <exclude reference="Fag-qs-MZ1"/>
                                 <exclude reference="M7w-mR-AKf"/>
@@ -486,10 +500,13 @@
                                 <include reference="tgH-WZ-0K1"/>
                                 <include reference="3fx-Mv-gkv"/>
                                 <include reference="cvc-cz-rgJ"/>
+                                <include reference="t37-H0-tA2"/>
                             </mask>
                             <mask key="constraints">
                                 <include reference="Tyv-00-w6W"/>
                                 <include reference="sQP-Ms-Xlw"/>
+                                <include reference="4pg-ZZ-0df"/>
+                                <include reference="jZo-pn-ESK"/>
                                 <exclude reference="7xe-DZ-nV2"/>
                                 <exclude reference="Fag-qs-MZ1"/>
                                 <include reference="M7w-mR-AKf"/>
@@ -514,6 +531,7 @@
                         <outlet property="addItemBtn" destination="tls-6h-cM3" id="stY-yj-Hge"/>
                         <outlet property="drawer" destination="TvW-JJ-Vqb" id="L0b-bd-0hM"/>
                         <outlet property="menuBtn" destination="RLk-Hy-bab" id="Uch-yE-2QO"/>
+                        <outlet property="progressIndicator" destination="t37-H0-tA2" id="Fyg-ZW-tJR"/>
                         <outlet property="searchDisplayController" destination="hSv-s7-nTK" id="bfk-b0-bf7"/>
                     </connections>
                 </viewController>
