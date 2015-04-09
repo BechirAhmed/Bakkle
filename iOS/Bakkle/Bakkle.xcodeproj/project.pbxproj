@@ -43,6 +43,7 @@
 		A03508F71AB3C5FB00CA6455 /* logo-green-design-png-white.png in Resources */ = {isa = PBXBuildFile; fileRef = A03508F61AB3C5FB00CA6455 /* logo-green-design-png-white.png */; };
 		A03508F91AB3C6AE00CA6455 /* logo-white-design-png.png in Resources */ = {isa = PBXBuildFile; fileRef = A03508F81AB3C6AE00CA6455 /* logo-white-design-png.png */; };
 		A04AAE401ACA2E6600BA7CBD /* FacebookSDK in Frameworks */ = {isa = PBXBuildFile; fileRef = A04AAE3F1ACA2E6600BA7CBD /* FacebookSDK */; };
+		A06AA9EE1AD609530075D7F7 /* Bakkle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A06AA9ED1AD609530075D7F7 /* Bakkle.swift */; };
 		A0A200011ACE2F7500A42CD8 /* btn-email40.png in Resources */ = {isa = PBXBuildFile; fileRef = A0A2FFFE1ACE2F7500A42CD8 /* btn-email40.png */; };
 		A0A200021ACE2F7500A42CD8 /* btn-facebook40.png in Resources */ = {isa = PBXBuildFile; fileRef = A0A2FFFF1ACE2F7500A42CD8 /* btn-facebook40.png */; };
 		A0A200031ACE2F7500A42CD8 /* btn-sign-in40.png in Resources */ = {isa = PBXBuildFile; fileRef = A0A200001ACE2F7500A42CD8 /* btn-sign-in40.png */; };
@@ -124,6 +125,7 @@
 		A03508F61AB3C5FB00CA6455 /* logo-green-design-png-white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-green-design-png-white.png"; sourceTree = "<group>"; };
 		A03508F81AB3C6AE00CA6455 /* logo-white-design-png.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-white-design-png.png"; sourceTree = "<group>"; };
 		A04AAE3F1ACA2E6600BA7CBD /* FacebookSDK */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = FacebookSDK; path = FacebookSDK.framework/Versions/A/FacebookSDK; sourceTree = "<group>"; };
+		A06AA9ED1AD609530075D7F7 /* Bakkle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bakkle.swift; sourceTree = "<group>"; };
 		A0A200001ACE2F7500A42CD8 /* btn-sign-in40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-sign-in40.png"; sourceTree = "<group>"; };
 		A0A200041ACE30C200A42CD8 /* btn-logout40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-logout40.png"; sourceTree = "<group>"; };
 		A0A2FFF21ACE213F00A42CD8 /* logo-white-design-png-100.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-white-design-png-100.png"; sourceTree = "<group>"; };
@@ -178,6 +180,7 @@
 		5EBDD68D1AB211E600C7FBE7 /* Bakkle */ = {
 			isa = PBXGroup;
 			children = (
+				A06AA9ED1AD609530075D7F7 /* Bakkle.swift */,
 				5E8C44CC1AC3217000BC4A2C /* TransitionOperator.swift */,
 				5E8C44D01AC3286200BC4A2C /* Menu.swift */,
 				A003EB171AD4D8CA00EE51A1 /* MenuView.swift */,
@@ -423,6 +426,7 @@
 				5EE2C9BB1AB9F0FB0031D8CD /* MDCViewState.m in Sources */,
 				5E8C44D11AC3286200BC4A2C /* Menu.swift in Sources */,
 				5EF3F3DF1ACC3D6900D93B72 /* MainWebView.swift in Sources */,
+				A06AA9EE1AD609530075D7F7 /* Bakkle.swift in Sources */,
 				5EE2C9B41AB9F0FB0031D8CD /* MDCSwipeOptions.m in Sources */,
 				5EE2C9B61AB9F0FB0031D8CD /* MDCSwipeResult.m in Sources */,
 				5E1DCCA51AD486D2002D41FD /* AddItem.swift in Sources */,

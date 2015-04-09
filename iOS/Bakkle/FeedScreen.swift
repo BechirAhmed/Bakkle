@@ -14,8 +14,6 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
     
     let menuSegue = "presentNav"
     
-    var account_id : Int!
-    
     var feedItems : [NSObject]!
     
     let options = MDCSwipeToChooseViewOptions()
@@ -32,15 +30,17 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
     
     var hardCoded = false
     
-
+    var item_id = 42 //TODO: unhardcode this
+    
     @IBAction func menuButtonPressed(sender: AnyObject) {
         self.revealViewController().revealToggleAnimated(true)
     }
     @IBAction func btnX(sender: AnyObject) {
-        self.mark("meh", item_id: 1)
+        Bakkle.sharedInstance.markItem("meh", item_id: self.item_id, success: {}, fail: {})
+
     }
     @IBAction func btnCheck(sender: AnyObject) {
-        self.mark("want", item_id: 1)
+        Bakkle.sharedInstance.markItem("want", item_id: self.item_id, success: {}, fail: {})
     }
     
     
@@ -153,20 +153,18 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
         }
     }
     
-    
     func view(view: UIView!, wasChosenWithDirection direction: MDCSwipeDirection) {
         if direction == MDCSwipeDirection.Left {
-            self.revealViewController().revealToggleAnimated(true)
-           // self.mark("meh", item_id: 1)    //TODO: Needs item_id
+            Bakkle.sharedInstance.markItem("meh", item_id: self.item_id, success: {}, fail: {})
         }
         else if direction == MDCSwipeDirection.Right {
-           // self.mark("want", item_id: 1)   //TODO: Needs item_id
+            Bakkle.sharedInstance.markItem("want", item_id: self.item_id, success: {}, fail: {})
         }
         else if direction == MDCSwipeDirection.Up {
-           // self.mark("hold", item_id: 1)   //TODO: Needs item_id
+            Bakkle.sharedInstance.markItem("hold", item_id: self.item_id, success: {}, fail: {})
         }
         else if direction == MDCSwipeDirection.Down {
-           // self.mark("report", item_id: 1) //TODO: Needs item_id
+            Bakkle.sharedInstance.markItem("report", item_id: self.item_id, success: {}, fail: {})
         }
     }
     
@@ -177,67 +175,5 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
             toViewController.transitioningDelegate = self.transitionOperator
         }
     }
-    
-    let baseUrlString : String = "https://app.bakkle.com/"
-    
-    /* Mark item as MEH on server */
-    func markMeh(item_id: Int){
-        
-        let url:NSURL? = NSURL(string: baseUrlString.stringByAppendingString("items/meh/"))
-        let request = NSMutableURLRequest(URL: url!)
-        var postString : String = "account_id=\(self.account_id)&item_id=\(item_id)"
-        request.HTTPMethod = "POST"
-        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
-        
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
-            data, response, error in
-            
-            if error != nil {
-                println("error=\(error)")
-                return
-            }
-            
-            let responseString: String = NSString(data: data, encoding: NSUTF8StringEncoding)!
-            var error: NSError? = error
-            
-            var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &error) as NSDictionary!
-            
-            if responseDict.valueForKey("status")?.integerValue == 1 {
-                // Success
-            }
-        }
-        task.resume()
-    }
-
-    /* Mark item as 'status' on server */
-    func mark(status: String, item_id: Int){
-        
-        println("Marking item: \(item_id) as \(status) on server for account: \(account_id)")
-        let url:NSURL? = NSURL(string: baseUrlString.stringByAppendingString("items/\(status)/"))
-        let request = NSMutableURLRequest(URL: url!)
-        var postString : String = "account_id=\(self.account_id)&item_id=\(item_id)"
-        request.HTTPMethod = "POST"
-        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
-        
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
-            data, response, error in
-            
-            if error != nil {
-                println("error=\(error)")
-                return
-            }
-            
-            let responseString: String = NSString(data: data, encoding: NSUTF8StringEncoding)!
-            var error: NSError? = error
-            
-            var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &error) as NSDictionary!
-            
-            if responseDict.valueForKey("status")?.integerValue == 1 {
-                // Success
-            }
-        }
-        task.resume()
-    }
-    
     
 }

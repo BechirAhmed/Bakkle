@@ -12,14 +12,11 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    var userid: String!
-    
-    var account_id: Int!
-    
-    var deviceUUID : String = UIDevice.currentDevice().identifierForVendor.UUIDString
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        
+        /* Init Facebook module */
         FBLoginView.self
         FBProfilePictureView.self
         
@@ -45,10 +42,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
     }
 
-    func registerForPushNotifications(application: UIApplication, userid: String, deviceuuid: String, accountid: Int) {
-        self.userid = userid
-        self.deviceUUID = deviceuuid
-        self.account_id = accountid
+    func registerForPushNotifications(application: UIApplication) {
         
         // Register for push notifications
         if application.respondsToSelector("registerUserNotificationSettings:") {
@@ -67,43 +61,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func applicationDidBecomeActive(application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        
         FBAppEvents.activateApp();
+        Bakkle.sharedInstance.refresh()
     }
 
     func applicationWillTerminate(application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
     
-    // Notifications
+    // Push Notifications
     func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
-        println("Registered for notifications")
-        println(deviceToken);
         
-        let url:NSURL? = NSURL(string: "https://app.bakkle.com/account/device/register_push/")
-        let request = NSMutableURLRequest(URL: url!)
-        request.HTTPMethod = "POST"
-        println("USERID IS: \(self.userid)")
-        println("UUID IS: \(self.deviceUUID)")
-        let postString = "device_token=\(deviceToken)&account_id=\(self.account_id)&device_uuid=\(self.deviceUUID)"
-        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
-            data, response, error in
-            
-            if error != nil {
-                println("error=\(error)")
-                return
-            }
-            
-            
-            let responseString = NSString(data: data, encoding: NSUTF8StringEncoding)
-            println("responseString = \(responseString)")
-        }
-        task.resume()
+        println("Registered for notifications")
+        Bakkle.sharedInstance.register_push(deviceToken)
     }
     func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
         
         println("Failed to register for notifications")
-        //TODO: Handle push registration fail
+        /* DO nothing on failure */
     }
 
 
