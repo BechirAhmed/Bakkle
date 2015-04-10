@@ -17,6 +17,7 @@
 		5E1DCCA51AD486D2002D41FD /* AddItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E1DCCA41AD486D2002D41FD /* AddItem.swift */; };
 		5E1FEE6D1AD8431B00C08131 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E1FEE6C1AD8431B00C08131 /* CoreGraphics.framework */; };
 		5E1FEE6F1AD8432100C08131 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E1FEE6E1AD8432100C08131 /* UIKit.framework */; };
+		5E1FEE7C1AD8641900C08131 /* MDCSwipeToChooseView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E1FEE7B1AD8641900C08131 /* MDCSwipeToChooseView.m */; };
 		5E6760881AD8138600EC899F /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E6760871AD8138600EC899F /* Photos.framework */; };
 		5EBDD6911AB211E600C7FBE7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EBDD6901AB211E600C7FBE7 /* AppDelegate.swift */; };
 		5EBDD6931AB211E600C7FBE7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EBDD6921AB211E600C7FBE7 /* ViewController.swift */; };
@@ -26,7 +27,6 @@
 		5EE2C98B1AB9D1730031D8CD /* FeedScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C98A1AB9D1730031D8CD /* FeedScreen.swift */; };
 		5EE2C98D1AB9E3B40031D8CD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5EE2C98C1AB9E3B40031D8CD /* Foundation.framework */; };
 		5EE2C9B21AB9F0FB0031D8CD /* UIView+MDCSwipeToChoose.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C99D1AB9F0FA0031D8CD /* UIView+MDCSwipeToChoose.m */; };
-		5EE2C9B31AB9F0FB0031D8CD /* MDCSwipeToChooseView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C99F1AB9F0FA0031D8CD /* MDCSwipeToChooseView.m */; };
 		5EE2C9B41AB9F0FB0031D8CD /* MDCSwipeOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C9A11AB9F0FA0031D8CD /* MDCSwipeOptions.m */; };
 		5EE2C9B51AB9F0FB0031D8CD /* MDCSwipeToChooseViewOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C9A31AB9F0FA0031D8CD /* MDCSwipeToChooseViewOptions.m */; };
 		5EE2C9B61AB9F0FB0031D8CD /* MDCSwipeResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C9A61AB9F0FA0031D8CD /* MDCSwipeResult.m */; };
@@ -88,6 +88,7 @@
 		5E1DCCA41AD486D2002D41FD /* AddItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddItem.swift; sourceTree = "<group>"; };
 		5E1FEE6C1AD8431B00C08131 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		5E1FEE6E1AD8432100C08131 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		5E1FEE7B1AD8641900C08131 /* MDCSwipeToChooseView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDCSwipeToChooseView.m; sourceTree = "<group>"; };
 		5E5CB0A81AB7547800F32BE6 /* Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
 		5E6760871AD8138600EC899F /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
 		5EBDD68B1AB211E600C7FBE7 /* Bakkle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bakkle.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -109,7 +110,6 @@
 		5EE2C99C1AB9F0FA0031D8CD /* UIView+MDCSwipeToChoose.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+MDCSwipeToChoose.h"; sourceTree = "<group>"; };
 		5EE2C99D1AB9F0FA0031D8CD /* UIView+MDCSwipeToChoose.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+MDCSwipeToChoose.m"; sourceTree = "<group>"; };
 		5EE2C99E1AB9F0FA0031D8CD /* MDCSwipeToChooseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDCSwipeToChooseView.h; sourceTree = "<group>"; };
-		5EE2C99F1AB9F0FA0031D8CD /* MDCSwipeToChooseView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDCSwipeToChooseView.m; sourceTree = "<group>"; };
 		5EE2C9A01AB9F0FA0031D8CD /* MDCSwipeOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDCSwipeOptions.h; sourceTree = "<group>"; };
 		5EE2C9A11AB9F0FA0031D8CD /* MDCSwipeOptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDCSwipeOptions.m; sourceTree = "<group>"; };
 		5EE2C9A21AB9F0FA0031D8CD /* MDCSwipeToChooseViewOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDCSwipeToChooseViewOptions.h; sourceTree = "<group>"; };
@@ -287,7 +287,7 @@
 				5EE2C99C1AB9F0FA0031D8CD /* UIView+MDCSwipeToChoose.h */,
 				5EE2C99D1AB9F0FA0031D8CD /* UIView+MDCSwipeToChoose.m */,
 				5EE2C99E1AB9F0FA0031D8CD /* MDCSwipeToChooseView.h */,
-				5EE2C99F1AB9F0FA0031D8CD /* MDCSwipeToChooseView.m */,
+				5E1FEE7B1AD8641900C08131 /* MDCSwipeToChooseView.m */,
 				5EE2C9A01AB9F0FA0031D8CD /* MDCSwipeOptions.h */,
 				5EE2C9A11AB9F0FA0031D8CD /* MDCSwipeOptions.m */,
 				5EE2C9A21AB9F0FA0031D8CD /* MDCSwipeToChooseViewOptions.h */,
@@ -490,7 +490,6 @@
 				A0D96F8A1AD773DB0046DA13 /* FeedFilter.swift in Sources */,
 				5EE2C9B91AB9F0FB0031D8CD /* UIColor+MDCRGB8Bit.m in Sources */,
 				A0D96F881AD772DA0046DA13 /* HoldingPattern.swift in Sources */,
-				5EE2C9B31AB9F0FB0031D8CD /* MDCSwipeToChooseView.m in Sources */,
 				A003EB141AD4CCA600EE51A1 /* SWRevealViewController.m in Sources */,
 				A0D96F841AD76F1F0046DA13 /* SettingsView.swift in Sources */,
 				5EE2C9BA1AB9F0FB0031D8CD /* UIView+MDCBorderedLabel.m in Sources */,
@@ -503,6 +502,7 @@
 				5EE2C9B61AB9F0FB0031D8CD /* MDCSwipeResult.m in Sources */,
 				5E1DCCA51AD486D2002D41FD /* AddItem.swift in Sources */,
 				5EBDD6911AB211E600C7FBE7 /* AppDelegate.swift in Sources */,
+				5E1FEE7C1AD8641900C08131 /* MDCSwipeToChooseView.m in Sources */,
 				5EE2C9B21AB9F0FB0031D8CD /* UIView+MDCSwipeToChoose.m in Sources */,
 				5EE2C9B51AB9F0FB0031D8CD /* MDCSwipeToChooseViewOptions.m in Sources */,
 			);
@@ -643,7 +643,7 @@
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				SDKROOT = iphoneos8.3;
+				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "Bakkle/Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -669,7 +669,7 @@
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				SDKROOT = iphoneos8.3;
+				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "Bakkle/Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
