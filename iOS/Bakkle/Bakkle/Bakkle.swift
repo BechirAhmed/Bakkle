@@ -12,16 +12,22 @@ class Bakkle {
     
     let apiVersion: Float = 1.2
     let url_base: String          = "https://app.bakkle.com/"
+    let url_login: String         = "account/login/"
     let url_logout: String        = "account/logout/"
     let url_facebook: String      = "account/facebook/"
     let url_register_push: String = "account/device/register_push/"
     let url_reset: String         = "items/reset/"
-    let url_mark: String          = "items/" //+status
+    let url_mark: String          = "items/" //+status/
     let url_feed: String          = "items/feed/"
     
     var debug: Int = 2 // 0=off
-    var account_id: Int! = 0
     var deviceUUID : String = UIDevice.currentDevice().identifierForVendor.UUIDString
+    
+    var account_id: Int! = 0
+    var display_name: String!
+    var email: String!
+    var facebook_id: Int32!
+    
     var feedItems: [NSObject]!
     var responseDict: NSDictionary!
     
@@ -73,6 +79,45 @@ class Bakkle {
             }
         }
         task.resume()
+    }
+    
+    /* login and get account details */
+    func login(success: ()->(), fail: ()->()) {
+            let url:NSURL? = NSURL(string: url_base + url_login)
+            let request = NSMutableURLRequest(URL: url!)
+            
+            request.HTTPMethod = "POST"
+            let postString = "account_id=\(self.account_id)"
+            request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+            
+            println("[Bakkle] login")
+            println("URL: \(url) METHOD: \(request.HTTPMethod) BODY: \(postString)")
+            let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
+                data, response, error in
+                
+                if error != nil {
+                    println("error=\(error)")
+                    return
+                }
+
+                let responseString = NSString(data: data, encoding:NSUTF8StringEncoding)
+                println("Response: \(responseString)")
+                
+                /* JSON parse */
+                var error: NSError? = error
+                var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &error) as! NSDictionary!
+                
+                if responseDict.valueForKey("status")?.integerValue == 1 {
+                    self.account_id = responseDict.valueForKey("account_id") as! Int!
+                    self.display_name = responseDict.valueForKey("display_name") as! String!
+                    self.email = responseDict.valueForKey("email") as! String!
+                    self.facebook_id = responseDict.valueForKey("facebook_id")!.intValue
+                    success()
+                } else {
+                    fail()
+                }
+            }
+            task.resume()
     }
     
     /* logout */
@@ -247,4 +292,8 @@ class Bakkle {
             println("[RESP] \(functionName): \(logMessage)")
         }
     }
+    
+    
+    // HELPERS
+    
 }

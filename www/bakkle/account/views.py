@@ -24,8 +24,9 @@ def index(request):
 
 @csrf_exempt
 def login(request):
-    # TODO
-    response_data = {'status':1, 'account_id':account.id}
+    account_id = request.POST.get('account_id', "")
+    a = get_object_or_404(Account, pk=account_id)
+    response_data = {'status':1, 'account_id':a.id, 'facebook_id': a.facebook_id, 'display_name': a.display_name, 'email': a.email }
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 @csrf_exempt

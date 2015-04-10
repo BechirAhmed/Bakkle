@@ -15,6 +15,13 @@ class SettingsView: UIViewController {
         
     }
     
+    override func viewWillAppear(animated: Bool) {
+        
+        var facebookProfileUrl = "http://graph.facebook.com/\(Bakkle.sharedInstance.facebook_id)/picture?type=large"
+            
+            
+    }
+    
     /* MENUBAR ITEMS */
     @IBAction func btnMenu(sender: AnyObject) {
         self.revealViewController().revealToggleAnimated(true)
