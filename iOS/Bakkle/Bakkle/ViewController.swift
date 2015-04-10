@@ -10,10 +10,7 @@ import UIKit
 
 class ViewController: UIViewController, FBLoginViewDelegate {
 
-    let mainScreenSegueIdentifier = "PushToFeedSegue"
-    
-    let isNative = true
- 
+    let mainScreenSegueIdentifier = "PushToFeedSegue" 
 
     @IBOutlet weak var fbLoginView: FBLoginView!
     @IBOutlet weak var fbLoginViewBtn: UIImageView!
@@ -58,16 +55,8 @@ class ViewController: UIViewController, FBLoginViewDelegate {
             let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate!
             appDelegate.registerForPushNotifications(UIApplication.sharedApplication())
         
-            
-            // SWITCH BETWEEN NATIVE OR WEB CODE
-            if(self.isNative) {
-                let feedVC : FeedScreen = FeedScreen()
-                self.performSegueWithIdentifier(self.mainScreenSegueIdentifier, sender: self)
-               
-            } else {
-                let mainWebView : MainWebView = MainWebView()
-                self.performSegueWithIdentifier(self.mainScreenSegueIdentifier, sender: self)
-            }
+            let feedVC : FeedScreen = FeedScreen()
+            self.performSegueWithIdentifier(self.mainScreenSegueIdentifier, sender: self)
         })
         
         //TODO: Display error on fail?

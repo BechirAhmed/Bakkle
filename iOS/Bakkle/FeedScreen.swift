@@ -150,12 +150,4 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
         }
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == menuSegue {
-            let toViewController = segue.destinationViewController as! Menu
-            self.modalPresentationStyle = UIModalPresentationStyle.Custom
-           // toViewController.transitioningDelegate = self.transitionOperator
-        }
-    }
-    
 }

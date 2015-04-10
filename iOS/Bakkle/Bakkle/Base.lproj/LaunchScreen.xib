@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1514" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7531" systemVersion="14D131" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7520"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -10,7 +10,7 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFill" fixedFrame="YES" image="SplashScreen-bkg.png" translatesAutoresizingMaskIntoConstraints="NO" id="Zf1-le-pxa">
+                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFill" image="SplashScreen-bkg.png" translatesAutoresizingMaskIntoConstraints="NO" id="Zf1-le-pxa">
                     <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                 </imageView>
                 <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" image="logo-white-design-png-100.png" translatesAutoresizingMaskIntoConstraints="NO" id="E5Z-Ws-e3i">
@@ -22,7 +22,11 @@
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
+                <constraint firstItem="Zf1-le-pxa" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="0F1-gy-4zM"/>
+                <constraint firstAttribute="trailing" secondItem="Zf1-le-pxa" secondAttribute="trailing" id="8s0-t5-jBt"/>
                 <constraint firstItem="E5Z-Ws-e3i" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="102" id="BkB-rt-x41"/>
+                <constraint firstItem="Zf1-le-pxa" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="MPb-8B-Z27"/>
+                <constraint firstAttribute="bottom" secondItem="Zf1-le-pxa" secondAttribute="bottom" id="PzU-5H-twV"/>
                 <constraint firstAttribute="centerX" secondItem="E5Z-Ws-e3i" secondAttribute="centerX" constant="5.5" id="Toz-qz-2jM"/>
                 <constraint firstAttribute="centerX" secondItem="E5Z-Ws-e3i" secondAttribute="centerX" id="jb2-KM-6Hg"/>
             </constraints>
