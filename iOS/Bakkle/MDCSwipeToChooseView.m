@@ -50,9 +50,9 @@ static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
 - (instancetype)initWithFrame:(CGRect)frame options:(MDCSwipeToChooseViewOptions *)options {
     CGRect screenBounds = [[UIScreen mainScreen] applicationFrame];
     CGFloat itemWidth = screenBounds.size.width -20;
-    CGFloat itemHeight = screenBounds.size.height -250;
+    CGFloat itemHeight = screenBounds.size.height -220;
     
-    UIImageView *bottomImg = [[UIImageView alloc] initWithFrame:CGRectMake(12, 125, itemWidth -15, itemHeight)];
+    UIImageView *bottomImg = [[UIImageView alloc] initWithFrame:CGRectMake(12, 125, itemWidth, itemHeight)];
     [bottomImg setBackgroundColor: [UIColor colorWithRed:255 green:0 blue:0 alpha:1]];
     
     self = [super initWithFrame:CGRectMake(12, 125, itemWidth, itemHeight)];
