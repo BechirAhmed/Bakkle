@@ -40,11 +40,11 @@
         
         _holdText = [NSLocalizedString(@"HOLD", nil) uppercaseString];
         _holdColor = [UIColor blueColor];
-        _holdRotationAngle = 15.f;
+        _holdRotationAngle = -15.f;
         
         _reportText = [NSLocalizedString(@"REPORT", nil) uppercaseString];
-        _holdColor = [UIColor grayColor];
-        _holdRotationAngle = -15.f;
+        _reportColor = [UIColor blackColor];
+        _reportRotationAngle = -15.f;
 
         _threshold = 150.f;
     }

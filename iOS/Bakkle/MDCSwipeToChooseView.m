@@ -87,8 +87,8 @@ static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
 }
 
 - (void)constructHoldView {
-    CGRect frame = CGRectMake(MDCSwipeToChooseViewHorizontalPadding,
-                              MDCSwipeToChooseViewTopPadding,
+    CGRect frame = CGRectMake(CGRectGetMidX(_imageView.bounds)/2,
+                              CGRectGetMaxY(_imageView.bounds)/2 + MDCSwipeToChooseViewTopPadding*2,
                               CGRectGetMidX(_imageView.bounds),
                               MDCSwipeToChooseViewLabelWidth);
     self.holdView = [[UIView alloc] initWithFrame:frame];
@@ -100,9 +100,7 @@ static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
 }
 
 - (void)constructReportView {
-    CGFloat width = CGRectGetMidX(_imageView.bounds);
-  //  CGFloat xOrigin = (CGRectGetMaxX(_imageView.bounds) - width - MDCSwipeToChooseViewHorizontalPadding)/2;
-    CGRect frame = CGRectMake(/*xOrigin*/MDCSwipeToChooseViewHorizontalPadding, (CGRectGetMaxY(_imageView.bounds) -50 - MDCSwipeToChooseViewTopPadding)/*MDCSwipeToChooseViewTopPadding*/, width, MDCSwipeToChooseViewLabelWidth);
+    CGRect frame = CGRectMake(CGRectGetMidX(_imageView.bounds)/2, MDCSwipeToChooseViewTopPadding, CGRectGetMidX(_imageView.bounds), MDCSwipeToChooseViewLabelWidth);
     self.reportView = [[UIImageView alloc] initWithFrame:frame];
     [self.reportView constructBorderedLabelWithText:self.options.reportText color:self.options.reportColor angle:self.options.reportRotationAngle];
     
@@ -164,16 +162,15 @@ static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
             holdImageView.alpha = 0.f;
             reportImageView.alpha = 0.f;
         } else if (state.direction == MDCSwipeDirectionUp) {
-            holdImageView.alpha = state.thresholdRatio;
+            reportImageView.alpha = state.thresholdRatio;
             nopeImageView.alpha = 0.f;
             likedImageView.alpha = 0.f;
-            reportImageView.alpha = 0.f;
-        } else if (state.direction == MDCSwipeDirectionDown) {
-            reportImageView.alpha = state.thresholdRatio;
             holdImageView.alpha = 0.f;
+        } else if (state.direction == MDCSwipeDirectionDown) {
+            holdImageView.alpha = state.thresholdRatio;
+            reportImageView.alpha = 0.f;
             nopeImageView.alpha = 0.f;
             likedImageView.alpha = 0.f;
-            reportImageView.alpha = state.thresholdRatio;
         }
 
         if (weakself.options.onPan) {

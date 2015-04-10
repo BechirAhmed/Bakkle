@@ -12,14 +12,10 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
 
     var state : MDCPanState!
     
-//    var currentItem: Item!
-//    var frontItem: ChooseItemView!
-//    var backItem: ChooseItemView!
-//    var allItems: [NSObject]!
-    
     let menuSegue = "presentNav"
     
     let options = MDCSwipeToChooseViewOptions()
+    var swipeView : MDCSwipeToChooseView!
     
     @IBOutlet weak var menuBtn: UIButton!
     
@@ -37,20 +33,17 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
         self.revealViewController().revealToggleAnimated(true)
     }
     @IBAction func btnX(sender: AnyObject) {
+        self.swipeView.mdc_swipe(MDCSwipeDirection.Left)
         Bakkle.sharedInstance.markItem("meh", item_id: self.item_id, success: {}, fail: {})
 
     }
     @IBAction func btnCheck(sender: AnyObject) {
+        self.swipeView.mdc_swipe(MDCSwipeDirection.Right)
         Bakkle.sharedInstance.markItem("want", item_id: self.item_id, success: {}, fail: {})
     }
     
     
     @IBOutlet weak var navBar: UINavigationBar!
-    
-//    func defaultItems() -> [Item] {
-//        return [Item(name: "item1", image: UIImage(named: "tiger.jpg")), Item(name: "item2", image: UIImage(named: "bakkleLogo.png")), Item(name: "item3", image: UIImage(named: "tiger.jpg"))]
-//        
-//    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,6 +56,7 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
         options.likedColor = UIColor.greenColor()
         options.nopeText = "Meh"
         options.holdText = "Hold"
+        options.reportText = "spam"
         options.holdColor = UIColor.blueColor()
         options.onPan = {(state) in
             if state.thresholdRatio == 1 && state.direction == MDCSwipeDirection.Left {
@@ -80,62 +74,19 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
     
-        let view : MDCSwipeToChooseView = MDCSwipeToChooseView(frame: self.view.bounds, options: options)
-        
-//        self.allItems = self.defaultItems()
-//        
-//        self.frontItem = self.popItemViewWithFrame(self.frontItemViewFrame())
-//        self.view.addSubview(self.frontItem)
-//        
-//        self.backItem = self.popItemViewWithFrame(self.backItemViewFrame())
-//        self.view.insertSubview(self.backItem, belowSubview: self.frontItem)
-        
-
-        
+        swipeView = MDCSwipeToChooseView(frame: self.view.bounds, options: options)
         
         if hardCoded {
-            view.imageView.image = UIImage(named: "item-lawnmower.png")
-            view.imageView.contentMode = UIViewContentMode.ScaleAspectFill
+            swipeView.imageView.image = UIImage(named: "item-lawnmower.png")
+            swipeView.imageView.contentMode = UIViewContentMode.ScaleAspectFill
             self.view.addSubview(view)
         } else {
             Bakkle.sharedInstance.populateFeed({
                 dispatch_async(dispatch_get_main_queue()) {
-                    self.updateView(view)
+                    self.updateView(self.swipeView)
                 }
             })
         }
-    }
-    
-//    func popItemViewWithFrame(frame: CGRect) -> ChooseItemView {
-//       // if self.allItems.count != 0 {
-//            options.delegate = self
-//            options.threshold = CGFloat(160)
-//            options.onPan = {(state) in
-//                let frame = self.backItemViewFrame()
-//                self.backItem.frame = CGRectMake(frame.origin.x, frame.origin.y - (state.thresholdRatio * 10.0), CGRectGetWidth(frame), CGRectGetHeight(frame))
-//            }
-//            
-//            var itemView: ChooseItemView = ChooseItemView(frame: frame, options: options)
-//            
-//            self.allItems.removeAtIndex(0)
-//            return itemView
-//        
-////        }
-////        else {
-////            retur
-////        }
-//    }
-    
-    func backItemViewFrame() -> CGRect {
-        var frontFrame: CGRect = self.frontItemViewFrame()
-        return CGRectMake(frontFrame.origin.x, frontFrame.origin.y, CGRectGetWidth(frontFrame), CGRectGetHeight(frontFrame))
-    }
-    
-    func frontItemViewFrame() -> CGRect {
-        var horizontalPadding: CGFloat = 20.0
-        var topPadding: CGFloat = 60.0
-        var bottomPadding: CGFloat = 200.0
-        return CGRectMake(horizontalPadding, topPadding, CGRectGetWidth(self.view.frame) - horizontalPadding * 2, CGRectGetHeight(self.view.frame) - bottomPadding)
     }
     
     func showAddItem(){
