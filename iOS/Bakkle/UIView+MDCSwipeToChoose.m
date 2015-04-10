@@ -184,16 +184,16 @@ const void * const MDCViewStateKey = &MDCViewStateKey;
         
         
         if (translation.x > 10.f) {
-            thresholdRatio = MIN(1.f, fabsf(translation.x)/self.mdc_options.threshold);
+            thresholdRatio = MIN(1.f, fabs(translation.x)/self.mdc_options.threshold);
             direction = MDCSwipeDirectionRight;
         } else if (translation.x < -10.f) {
-            thresholdRatio = MIN(1.f, fabsf(translation.x)/self.mdc_options.threshold);
+            thresholdRatio = MIN(1.f, fabs(translation.x)/self.mdc_options.threshold);
             direction = MDCSwipeDirectionLeft;
         } else if (translation.y > -10.f) {
-            thresholdRatio = MIN(1.f, fabsf(translation.y)/self.mdc_options.threshold);
+            thresholdRatio = MIN(1.f, fabs(translation.y)/self.mdc_options.threshold);
             direction = MDCSwipeDirectionUp;
         } else if (translation.y < 10.f){
-            thresholdRatio = MIN(1.f, fabsf(translation.y)/self.mdc_options.threshold);
+            thresholdRatio = MIN(1.f, fabs(translation.y)/self.mdc_options.threshold);
             direction = MDCSwipeDirectionDown;
         }
 

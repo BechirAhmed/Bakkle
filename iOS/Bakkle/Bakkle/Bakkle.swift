@@ -60,23 +60,17 @@ class Bakkle {
                 return
             }
             
-            if let responseString: String = NSString(data: data, encoding: NSUTF8StringEncoding)
-            {
-                println("Response: \(responseString)")
+            println("Response: \(data)")
 
-                /* JSON parse */
-                var error: NSError? = error
-                var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &error) as NSDictionary!
+            /* JSON parse */
+            var error: NSError? = error
+            var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &error) as! NSDictionary!
+            
+            if responseDict.valueForKey("status")?.integerValue == 1 {
+                self.account_id = responseDict.valueForKey("account_id") as! Int!
                 
-                if responseDict.valueForKey("status")?.integerValue == 1 {
-                    self.account_id = responseDict.valueForKey("account_id") as Int!
-                    
-                    success()
-                }
-            } else {
-//                return nil
+                success()
             }
-
         }
         task.resume()
     }
@@ -193,15 +187,15 @@ class Bakkle {
             
             let tempData = tempStr.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
             
-            let responseString: String = NSString(data: tempData!, encoding: NSUTF8StringEncoding)!
+            let responseString: String = NSString(data: tempData!, encoding: NSUTF8StringEncoding)! as String
             self.resp("Response: \(responseString)")
             var parseError: NSError?
             
-            self.responseDict = NSJSONSerialization.JSONObjectWithData(tempData!, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as NSDictionary!
+            self.responseDict = NSJSONSerialization.JSONObjectWithData(tempData!, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! NSDictionary!
              self.resp("RESPONSE DICT IS: \(self.responseDict)")
             
              if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
-                self.feedItems = self.responseDict.valueForKey("feed") as Array!
+                self.feedItems = self.responseDict.valueForKey("feed") as! Array!
                 success()
             }
             
@@ -210,7 +204,7 @@ class Bakkle {
     }
     
     /* reset feed items on server for DEMO */
-    func resetDemo() {
+    func resetDemo(success: ()->()) {
         let url:NSURL? = NSURL(string: url_base + url_reset)
         let request = NSMutableURLRequest(URL: url!)
         
@@ -232,6 +226,7 @@ class Bakkle {
                 self.resp("Response: \(responseString)")
                 
                 // TODO: Refresh UI
+                success()
             }
         }
         task.resume()

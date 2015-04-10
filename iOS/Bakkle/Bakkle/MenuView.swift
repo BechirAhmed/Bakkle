@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MenuView: UIViewController {
+class MenuView: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,27 +23,27 @@ class MenuView: UIViewController {
 
     /* MENU ITEMS */
     @IBAction func btnSellersGarage(sender: AnyObject) {
-        Bakkle.sharedInstance.resetDemo()
+//        Bakkle.sharedInstance.resetDemo()
     }
     
     @IBAction func btnBuyersTrunk(sender: AnyObject) {
-        Bakkle.sharedInstance.resetDemo()
+  //      Bakkle.sharedInstance.resetDemo()
     }
     
     @IBAction func btnHoldingPattern(sender: AnyObject) {
-        Bakkle.sharedInstance.resetDemo()
+  //      Bakkle.sharedInstance.resetDemo()
     }
     
     @IBAction func btnFeedFilter(sender: AnyObject) {
-        Bakkle.sharedInstance.resetDemo()
+   //     Bakkle.sharedInstance.resetDemo()
     }
     
     @IBAction func btnSettings(sender: AnyObject) {
-        Bakkle.sharedInstance.resetDemo()
+  //      Bakkle.sharedInstance.resetDemo()
     }
 
     @IBAction func btnReset(sender: AnyObject) {
-        Bakkle.sharedInstance.resetDemo()
+   //     Bakkle.sharedInstance.resetDemo()
     }
 
     @IBAction func btnLogout(sender: AnyObject) {

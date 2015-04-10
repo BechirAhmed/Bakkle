@@ -23,6 +23,18 @@ def index(request):
     return render(request, 'account/index.html', context)
 
 @csrf_exempt
+def login(request):
+    # TODO
+    response_data = {'status':1, 'account_id':account.id}
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+@csrf_exempt
+def logout(request):
+    # TODO
+    response_data = {'status':1, 'account_id':account.id}
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+@csrf_exempt
 def facebook(request):
     if request.method == "POST" or request.method == "PUT":
 

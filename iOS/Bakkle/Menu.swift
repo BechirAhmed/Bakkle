@@ -50,7 +50,7 @@ class Menu: UITableViewController {
 
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("cellTest", forIndexPath: indexPath) as UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("cellTest", forIndexPath: indexPath) as! UITableViewCell
 
         // Configure the cell...
 

@@ -101,11 +101,11 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
                 var bottomItem = Bakkle.sharedInstance.feedItems[1]
                 println("top item is: \(topItem)")
                 
-                var itemDetails: NSDictionary = topItem.valueForKey("fields") as NSDictionary!
-                var bottomItemDetail: NSDictionary = bottomItem.valueForKey("fields") as NSDictionary!
+                var itemDetails: NSDictionary = topItem.valueForKey("fields") as! NSDictionary!
+                var bottomItemDetail: NSDictionary = bottomItem.valueForKey("fields") as! NSDictionary!
                 
-                let imgURLs: String = itemDetails.valueForKey("image_urls") as String
-                let bottomURL: String = bottomItemDetail.valueForKey("image_urls") as String
+                let imgURLs: String = itemDetails.valueForKey("image_urls") as! String
+                let bottomURL: String = bottomItemDetail.valueForKey("image_urls") as! String
                 
                 println("urls are: \(imgURLs)")
                 let imgURL = NSURL(string: imgURLs)
@@ -152,7 +152,7 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == menuSegue {
-            let toViewController = segue.destinationViewController as Menu
+            let toViewController = segue.destinationViewController as! Menu
             self.modalPresentationStyle = UIModalPresentationStyle.Custom
            // toViewController.transitioningDelegate = self.transitionOperator
         }

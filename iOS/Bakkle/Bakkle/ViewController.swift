@@ -39,8 +39,8 @@ class ViewController: UIViewController, FBLoginViewDelegate {
     
     func loginViewFetchedUserInfo(loginView : FBLoginView!, user: FBGraphUser) {
         
-        var email = user.objectForKey("email") as String!
-        var gender = user.objectForKey("gender") as String!
+        var email = user.objectForKey("email") as! String!
+        var gender = user.objectForKey("gender") as! String!
         var username = "" //user.objectForKey("username") as String!
         var name = user.name
         var userid = user.objectID
@@ -50,12 +50,12 @@ class ViewController: UIViewController, FBLoginViewDelegate {
         
         Bakkle.sharedInstance.facebook(email, gender: gender, username: username,
             name: name, userid: userid, locale: locale,
-            first_name: first_name, last_name: last_name,
+            first_name: first_name, last_name: last_name, success:
             {
             // Sucessfully logged in via FB
                 
             // Register for push notifications.
-            let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate!
+            let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate!
             appDelegate.registerForPushNotifications(UIApplication.sharedApplication())
         
             
