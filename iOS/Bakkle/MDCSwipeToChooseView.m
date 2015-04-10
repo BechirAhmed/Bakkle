@@ -52,20 +52,16 @@ static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
     CGFloat itemWidth = screenBounds.size.width -20;
     CGFloat itemHeight = screenBounds.size.height -220;
     
-    UIImageView *bottomImg = [[UIImageView alloc] initWithFrame:CGRectMake(12, 125, itemWidth, itemHeight)];
-    [bottomImg setBackgroundColor: [UIColor colorWithRed:255 green:0 blue:0 alpha:1]];
-    
     self = [super initWithFrame:CGRectMake(12, 125, itemWidth, itemHeight)];
     if (self) {
         _options = options ? options : [MDCSwipeToChooseViewOptions new];
         [self setupView];
-       // [super addSubview: bottomImg];
         [self constructImageView];
         [self constructLikedView];
         [self constructNopeImageView];
-        [self setupSwipeToChoose];
         [self constructHoldView];
         [self constructReportView];
+        [self setupSwipeToChoose];
     }
     return self;
 }
@@ -90,28 +86,28 @@ static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
     [self addSubview:_imageView];
 }
 
-- (void)constructReportView {
+- (void)constructHoldView {
     CGRect frame = CGRectMake(MDCSwipeToChooseViewHorizontalPadding,
                               MDCSwipeToChooseViewTopPadding,
                               CGRectGetMidX(_imageView.bounds),
                               MDCSwipeToChooseViewLabelWidth);
-    self.reportView = [[UIView alloc] initWithFrame:frame];
-    [self.reportView constructBorderedLabelWithText:self.options.reportText
-                                             color:self.options.reportColor
-                                             angle:self.options.reportRotationAngle];
-    self.reportView.alpha = 0.f;
-    [self.imageView addSubview:self.reportView];
+    self.holdView = [[UIView alloc] initWithFrame:frame];
+    [self.holdView constructBorderedLabelWithText:self.options.holdText
+                                             color:self.options.holdColor
+                                             angle:self.options.holdRotationAngle];
+    self.holdView.alpha = 0.f;
+    [self.imageView addSubview:self.holdView];
 }
 
-- (void)constructHoldView {
+- (void)constructReportView {
     CGFloat width = CGRectGetMidX(_imageView.bounds);
   //  CGFloat xOrigin = (CGRectGetMaxX(_imageView.bounds) - width - MDCSwipeToChooseViewHorizontalPadding)/2;
-    CGRect frame = CGRectMake(/*xOrigin*/MDCSwipeToChooseViewHorizontalPadding, (CGRectGetMaxY(_imageView.bounds) - MDCSwipeToChooseViewTopPadding)/*MDCSwipeToChooseViewTopPadding*/, width, MDCSwipeToChooseViewLabelWidth);
-    self.holdView = [[UIImageView alloc] initWithFrame:frame];
-    [self.holdView constructBorderedLabelWithText:self.options.holdText color:self.options.holdColor angle:self.options.holdRotationAngle];
+    CGRect frame = CGRectMake(/*xOrigin*/MDCSwipeToChooseViewHorizontalPadding, (CGRectGetMaxY(_imageView.bounds) -50 - MDCSwipeToChooseViewTopPadding)/*MDCSwipeToChooseViewTopPadding*/, width, MDCSwipeToChooseViewLabelWidth);
+    self.reportView = [[UIImageView alloc] initWithFrame:frame];
+    [self.reportView constructBorderedLabelWithText:self.options.reportText color:self.options.reportColor angle:self.options.reportRotationAngle];
     
-    self.holdView.alpha =  0.f;
-    [self.imageView addSubview:self.holdView];
+    self.reportView.alpha =  0.f;
+    [self.imageView addSubview:self.reportView];
 }
 
 - (void)constructLikedView {
@@ -156,23 +152,28 @@ static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
             likedImageView.alpha = 0.f;
             nopeImageView.alpha = 0.f;
             holdImageView.alpha = 0.f;
+            reportImageView.alpha = 0.f;
         } else if (state.direction == MDCSwipeDirectionLeft) {
             likedImageView.alpha = 0.f;
+            reportImageView.alpha = 0.f;
             holdImageView.alpha = 0.f;
             nopeImageView.alpha = state.thresholdRatio;
         } else if (state.direction == MDCSwipeDirectionRight) {
             likedImageView.alpha = state.thresholdRatio;
             nopeImageView.alpha = 0.f;
             holdImageView.alpha = 0.f;
+            reportImageView.alpha = 0.f;
         } else if (state.direction == MDCSwipeDirectionUp) {
             holdImageView.alpha = state.thresholdRatio;
             nopeImageView.alpha = 0.f;
-            likedImageView.alpha = 0.f;            
+            likedImageView.alpha = 0.f;
+            reportImageView.alpha = 0.f;
         } else if (state.direction == MDCSwipeDirectionDown) {
             reportImageView.alpha = state.thresholdRatio;
             holdImageView.alpha = 0.f;
             nopeImageView.alpha = 0.f;
             likedImageView.alpha = 0.f;
+            reportImageView.alpha = state.thresholdRatio;
         }
 
         if (weakself.options.onPan) {

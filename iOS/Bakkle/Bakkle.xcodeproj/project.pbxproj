@@ -15,6 +15,8 @@
 		5E1DCCA21AD47C53002D41FD /* btn-check.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E1DCCA01AD47C53002D41FD /* btn-check.png */; };
 		5E1DCCA31AD47C53002D41FD /* btn-x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E1DCCA11AD47C53002D41FD /* btn-x.png */; };
 		5E1DCCA51AD486D2002D41FD /* AddItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E1DCCA41AD486D2002D41FD /* AddItem.swift */; };
+		5E1FEE6D1AD8431B00C08131 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E1FEE6C1AD8431B00C08131 /* CoreGraphics.framework */; };
+		5E1FEE6F1AD8432100C08131 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E1FEE6E1AD8432100C08131 /* UIKit.framework */; };
 		5E6760881AD8138600EC899F /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E6760871AD8138600EC899F /* Photos.framework */; };
 		5EBDD6911AB211E600C7FBE7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EBDD6901AB211E600C7FBE7 /* AppDelegate.swift */; };
 		5EBDD6931AB211E600C7FBE7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EBDD6921AB211E600C7FBE7 /* ViewController.swift */; };
@@ -84,6 +86,8 @@
 		5E1DCCA01AD47C53002D41FD /* btn-check.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-check.png"; sourceTree = "<group>"; };
 		5E1DCCA11AD47C53002D41FD /* btn-x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-x.png"; sourceTree = "<group>"; };
 		5E1DCCA41AD486D2002D41FD /* AddItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddItem.swift; sourceTree = "<group>"; };
+		5E1FEE6C1AD8431B00C08131 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		5E1FEE6E1AD8432100C08131 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		5E5CB0A81AB7547800F32BE6 /* Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
 		5E6760871AD8138600EC899F /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
 		5EBDD68B1AB211E600C7FBE7 /* Bakkle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bakkle.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -160,6 +164,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5E1FEE6F1AD8432100C08131 /* UIKit.framework in Frameworks */,
+				5E1FEE6D1AD8431B00C08131 /* CoreGraphics.framework in Frameworks */,
 				5E6760881AD8138600EC899F /* Photos.framework in Frameworks */,
 				A04AAE401ACA2E6600BA7CBD /* FacebookSDK in Frameworks */,
 				A0A2FFF71ACE276200A42CD8 /* FBSDKCoreKit.framework in Frameworks */,
@@ -262,6 +268,8 @@
 		5EE2C98E1AB9E3BB0031D8CD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5E1FEE6E1AD8432100C08131 /* UIKit.framework */,
+				5E1FEE6C1AD8431B00C08131 /* CoreGraphics.framework */,
 				5E6760871AD8138600EC899F /* Photos.framework */,
 				A0A2FFF61ACE276200A42CD8 /* FBSDKCoreKit.framework */,
 				A04AAE3F1ACA2E6600BA7CBD /* FacebookSDK */,
@@ -635,7 +643,9 @@
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SDKROOT = iphoneos8.3;
 				SWIFT_OBJC_BRIDGING_HEADER = "Bakkle/Bridging-Header.h";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -659,7 +669,9 @@
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SDKROOT = iphoneos8.3;
 				SWIFT_OBJC_BRIDGING_HEADER = "Bakkle/Bridging-Header.h";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
