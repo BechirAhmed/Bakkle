@@ -12,6 +12,11 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
 
     var state : MDCPanState!
     
+//    var currentItem: Item!
+//    var frontItem: ChooseItemView!
+//    var backItem: ChooseItemView!
+//    var allItems: [NSObject]!
+    
     let menuSegue = "presentNav"
     
     let options = MDCSwipeToChooseViewOptions()
@@ -41,6 +46,11 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
     
     
     @IBOutlet weak var navBar: UINavigationBar!
+    
+//    func defaultItems() -> [Item] {
+//        return [Item(name: "item1", image: UIImage(named: "tiger.jpg")), Item(name: "item2", image: UIImage(named: "bakkleLogo.png")), Item(name: "item3", image: UIImage(named: "tiger.jpg"))]
+//        
+//    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -72,6 +82,17 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
     
         let view : MDCSwipeToChooseView = MDCSwipeToChooseView(frame: self.view.bounds, options: options)
         
+//        self.allItems = self.defaultItems()
+//        
+//        self.frontItem = self.popItemViewWithFrame(self.frontItemViewFrame())
+//        self.view.addSubview(self.frontItem)
+//        
+//        self.backItem = self.popItemViewWithFrame(self.backItemViewFrame())
+//        self.view.insertSubview(self.backItem, belowSubview: self.frontItem)
+        
+
+        
+        
         if hardCoded {
             view.imageView.image = UIImage(named: "item-lawnmower.png")
             view.imageView.contentMode = UIViewContentMode.ScaleAspectFill
@@ -83,6 +104,38 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
                 }
             })
         }
+    }
+    
+//    func popItemViewWithFrame(frame: CGRect) -> ChooseItemView {
+//       // if self.allItems.count != 0 {
+//            options.delegate = self
+//            options.threshold = CGFloat(160)
+//            options.onPan = {(state) in
+//                let frame = self.backItemViewFrame()
+//                self.backItem.frame = CGRectMake(frame.origin.x, frame.origin.y - (state.thresholdRatio * 10.0), CGRectGetWidth(frame), CGRectGetHeight(frame))
+//            }
+//            
+//            var itemView: ChooseItemView = ChooseItemView(frame: frame, options: options)
+//            
+//            self.allItems.removeAtIndex(0)
+//            return itemView
+//        
+////        }
+////        else {
+////            retur
+////        }
+//    }
+    
+    func backItemViewFrame() -> CGRect {
+        var frontFrame: CGRect = self.frontItemViewFrame()
+        return CGRectMake(frontFrame.origin.x, frontFrame.origin.y, CGRectGetWidth(frontFrame), CGRectGetHeight(frontFrame))
+    }
+    
+    func frontItemViewFrame() -> CGRect {
+        var horizontalPadding: CGFloat = 20.0
+        var topPadding: CGFloat = 60.0
+        var bottomPadding: CGFloat = 200.0
+        return CGRectMake(horizontalPadding, topPadding, CGRectGetWidth(self.view.frame) - horizontalPadding * 2, CGRectGetHeight(self.view.frame) - bottomPadding)
     }
     
     func showAddItem(){
