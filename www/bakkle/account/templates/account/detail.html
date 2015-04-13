@@ -32,6 +32,17 @@
   {% else %}
    <p> This account has not viewed any items </p>
   {% endif %}
+  <br/>Items Selling:
+  {% if selling %}
+    <ul>
+      {% for seller_item in selling %}
+        <li><a href="{% url 'items:detail' seller_item.id %}">{{ seller_item.id }}:</a> {{ seller_item.title }} </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+   <p> This account is not selling any items </p>
+  {% endif %}
+
 {% else %}
   <p> No account with that id </p>
 {% endif %}
