@@ -17,6 +17,8 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
     let options = MDCSwipeToChooseViewOptions()
     var swipeView : MDCSwipeToChooseView!
     
+    @IBOutlet weak var backImgView: UIImageView!
+    
     @IBOutlet weak var menuBtn: UIButton!
     
     @IBOutlet weak var addItemBtn: UIButton!
@@ -87,19 +89,14 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
     
     func resetSwipeView() {
         /* First time page is loaded, swipe view will not exist and we need to create it. */
-        if self.swipeView == nil {
             self.swipeView = MDCSwipeToChooseView(frame: self.view.bounds, options: options)
-        } else {
-            /* View already exists */
             
             /* If view is off the page we need to reset the view */
             if (state != nil && state.direction != MDCSwipeDirection.None) {
                 self.swipeView = MDCSwipeToChooseView(frame: self.view.bounds, options: options)
             } else {
-                /* View is already on the page AND is still visible. Do nothing */
+               //  View is already on the page AND is still visible. Do nothing
             }
-        }
-        
     }
     
     override func viewWillAppear(animated: Bool) {
