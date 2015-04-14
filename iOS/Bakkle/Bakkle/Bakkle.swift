@@ -11,7 +11,8 @@ import Foundation
 class Bakkle {
     
     let apiVersion: Float = 1.2
-    let url_base: String          = "https://app.bakkle.com/"
+//    let url_base: String          = "https://app.bakkle.com/"
+    let url_base: String          = "http://137.112.63.186:8000/"
     let url_login: String         = "account/login/"
     let url_logout: String        = "account/logout/"
     let url_facebook: String      = "account/facebook/"
