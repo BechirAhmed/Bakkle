@@ -50,7 +50,7 @@ static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
 - (instancetype)initWithFrame:(CGRect)frame options:(MDCSwipeToChooseViewOptions *)options {
     CGRect screenBounds = [[UIScreen mainScreen] applicationFrame];
     CGFloat itemWidth = screenBounds.size.width -20;
-    CGFloat itemHeight = screenBounds.size.height -220;
+    CGFloat itemHeight = screenBounds.size.height -215;
     
     self = [super initWithFrame:CGRectMake(12, 125, itemWidth, itemHeight)];
     if (self) {

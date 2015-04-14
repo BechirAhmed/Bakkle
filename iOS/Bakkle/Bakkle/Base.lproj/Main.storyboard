@@ -455,7 +455,7 @@
                                     <action selector="btnX:" destination="dzt-bR-uoN" eventType="touchUpInside" id="waW-Nq-nZZ"/>
                                 </connections>
                             </button>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="tiger.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="eGm-YM-qRQ">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bakkleLogo.png" translatesAutoresizingMaskIntoConstraints="NO" id="eGm-YM-qRQ">
                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                             </imageView>
                         </subviews>
@@ -563,6 +563,7 @@
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
                         <outlet property="addItemBtn" destination="tls-6h-cM3" id="stY-yj-Hge"/>
+                        <outlet property="backImgView" destination="eGm-YM-qRQ" id="Kaw-sE-65R"/>
                         <outlet property="drawer" destination="TvW-JJ-Vqb" id="L0b-bd-0hM"/>
                         <outlet property="menuBtn" destination="RLk-Hy-bab" id="Uch-yE-2QO"/>
                         <outlet property="progressIndicator" destination="t37-H0-tA2" id="Fyg-ZW-tJR"/>
@@ -1127,7 +1128,7 @@
                                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
                                                     <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                                                        <rect key="frame" x="8" y="0.0" width="367" height="55"/>
+                                                        <rect key="frame" x="9" y="0.0" width="367" height="55"/>
                                                     </variation>
                                                     <connections>
                                                         <action selector="btnLogout:" destination="7HF-wZ-OKA" eventType="touchUpInside" id="oEs-Wk-SfH"/>
@@ -1268,7 +1269,7 @@
                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
                                     <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                                        <rect key="frame" x="82" y="12" width="236" height="21"/>
+                                        <rect key="frame" x="83" y="12" width="236" height="21"/>
                                     </variation>
                                 </label>
                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vmo-0r-UxV">
@@ -1378,7 +1379,7 @@
                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
                                     <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                                        <rect key="frame" x="82" y="12" width="236" height="26"/>
+                                        <rect key="frame" x="83" y="12" width="236" height="26"/>
                                     </variation>
                                 </label>
                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CT3-HP-MeM">
@@ -1509,6 +1510,7 @@
         <image name="LoginScreen-bkg.png" width="1242" height="2208"/>
         <image name="Screen Shot 2015-03-26 at 1.56.29 PM 1.png" width="334" height="708"/>
         <image name="addItem.png" width="44" height="35"/>
+        <image name="bakkleLogo.png" width="318" height="139"/>
         <image name="btn-check.png" width="545" height="207"/>
         <image name="btn-email40.png" width="230" height="40"/>
         <image name="btn-facebook40.png" width="230" height="40"/>
