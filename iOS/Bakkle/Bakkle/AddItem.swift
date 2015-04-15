@@ -15,12 +15,26 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     var assetCollection: PHAssetCollection!
     var photosAsset: PHFetchResult!
 
-    @IBAction func cancelAdd(sender: AnyObject) {
-        self.dismissViewControllerAnimated(true, completion: nil)
-    }
     override func viewDidLoad() {
         super.viewDidLoad()
         
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        add.enabled = false
+    }
+
+    @IBAction func cancelAdd(sender: AnyObject) {
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    @IBOutlet weak var add: UIButton!
+    
+    @IBAction func btnAdd(sender: AnyObject) {
+        let alertController = UIAlertController(title: "Bakkle", message:
+            "This feature not active yet.", preferredStyle: UIAlertControllerStyle.Alert)
+        alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default,handler: nil))
+        self.presentViewController(alertController, animated: true, completion: nil)
     }
 
     @IBAction func cameraBtn(sender: AnyObject) {

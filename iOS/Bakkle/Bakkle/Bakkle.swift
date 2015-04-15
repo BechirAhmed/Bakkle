@@ -11,9 +11,9 @@ import Foundation
 class Bakkle {
     
     let apiVersion: Float = 1.2
-//    let url_base: String          = "https://app.bakkle.com/"
-    let url_base: String          = "http://137.112.63.186:8000/"
-    let url_login: String         = "account/login/"
+    let url_base: String          = "https://app.bakkle.com/"
+//    let url_base: String          = "http://137.112.63.186:8000/"
+    let url_login: String         = "account/login_facebook/"
     let url_logout: String        = "account/logout/"
     let url_facebook: String      = "account/facebook/"
     let url_register_push: String = "account/device/register_push/"
@@ -21,13 +21,14 @@ class Bakkle {
     let url_mark: String          = "items/" //+status/
     let url_feed: String          = "items/feed/"
     
-    var debug: Int = 2 // 0=off
+    var debug: Int = 1 // 0=off
     var deviceUUID : String = UIDevice.currentDevice().identifierForVendor.UUIDString
     
     var account_id: Int! = 0
     var display_name: String!
     var email: String!
-    var facebook_id: Int32!
+    var facebook_id: Int!
+    var facebook_id_str: String!
     
     var feedItems: [NSObject]!
     var responseDict: NSDictionary!
@@ -53,6 +54,10 @@ class Bakkle {
         let url:NSURL? = NSURL(string: url_base + url_facebook)
         let request = NSMutableURLRequest(URL: url!)
         
+        println("userid: \(userid)")
+        self.facebook_id_str = userid
+        self.facebook_id = userid.toInt()
+            
         request.HTTPMethod = "POST"
             let postString = "email=\(email)&Name=\(name)&UserName=\(username)&Gender=\(gender)&UserID=\(userid)&locale=\(locale)&FirstName=\(first_name)&LastName=\(last_name)&device_uuid=\(self.deviceUUID)"
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
@@ -88,10 +93,10 @@ class Bakkle {
             let request = NSMutableURLRequest(URL: url!)
             
             request.HTTPMethod = "POST"
-            let postString = "account_id=\(self.account_id)"
+            let postString = "account_id=\(self.account_id)&device_uuid=\(self.deviceUUID)&user_id=\(self.facebook_id)"
             request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
             
-            println("[Bakkle] login")
+            println("[Bakkle] login (facebook)")
             println("URL: \(url) METHOD: \(request.HTTPMethod) BODY: \(postString)")
             let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
                 data, response, error in
@@ -112,7 +117,7 @@ class Bakkle {
                     self.account_id = responseDict.valueForKey("account_id") as! Int!
                     self.display_name = responseDict.valueForKey("display_name") as! String!
                     self.email = responseDict.valueForKey("email") as! String!
-                    self.facebook_id = responseDict.valueForKey("facebook_id")!.intValue
+                    //self.facebook_id = (responseDict.valueForKey("facebook_id") as! String).toInt()
                     success()
                 } else {
                     fail()
@@ -168,7 +173,7 @@ class Bakkle {
             }
             
             let responseString = NSString(data: data, encoding: NSUTF8StringEncoding)
-            println("Response: \(responseString)")
+            self.resp("Response: \(responseString)")
         }
         task.resume()
     }
@@ -184,6 +189,8 @@ class Bakkle {
         
         println("[Bakkle] markItem")
         println("URL: \(url) METHOD: \(request.HTTPMethod) BODY: \(postString)")
+        dispatch_async(dispatch_get_global_queue(
+            Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
             data, response, error in
             
@@ -194,7 +201,7 @@ class Bakkle {
 //            }
             
             if let responseString = NSString(data: data, encoding: NSUTF8StringEncoding) {
-                println("Response: \(responseString)")
+                self.resp("Response: \(responseString)")
                 
                 //TODO: Check error handling here.
 //                var err: NSError?
@@ -209,6 +216,7 @@ class Bakkle {
             fail()
         }
         task.resume()
+        }
     }
     
     /* Populates the feed with items from the server */

@@ -38,6 +38,10 @@
 		A003EB141AD4CCA600EE51A1 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A003EB131AD4CCA600EE51A1 /* SWRevealViewController.m */; };
 		A003EB161AD4D71C00EE51A1 /* mock-menu.png in Resources */ = {isa = PBXBuildFile; fileRef = A003EB151AD4D71C00EE51A1 /* mock-menu.png */; };
 		A003EB1A1AD4DB8800EE51A1 /* item-lawnmower.png in Resources */ = {isa = PBXBuildFile; fileRef = A003EB191AD4DB8800EE51A1 /* item-lawnmower.png */; };
+		A018DF881ADE07E700AF5550 /* btn-add.png in Resources */ = {isa = PBXBuildFile; fileRef = A018DF861ADE07E700AF5550 /* btn-add.png */; };
+		A018DF891ADE07E700AF5550 /* btn-cancel.png in Resources */ = {isa = PBXBuildFile; fileRef = A018DF871ADE07E700AF5550 /* btn-cancel.png */; };
+		A018DF8B1ADE08DB00AF5550 /* btn-add-disabled.png in Resources */ = {isa = PBXBuildFile; fileRef = A018DF8A1ADE08DB00AF5550 /* btn-add-disabled.png */; };
+		A018DF8D1ADE09A500AF5550 /* mock-additem.png in Resources */ = {isa = PBXBuildFile; fileRef = A018DF8C1ADE09A500AF5550 /* mock-additem.png */; };
 		A03508F31AB3C34900CA6455 /* SplashScreen-bkg.png in Resources */ = {isa = PBXBuildFile; fileRef = A03508F21AB3C34900CA6455 /* SplashScreen-bkg.png */; };
 		A03508F71AB3C5FB00CA6455 /* logo-green-design-png-white.png in Resources */ = {isa = PBXBuildFile; fileRef = A03508F61AB3C5FB00CA6455 /* logo-green-design-png-white.png */; };
 		A03508F91AB3C6AE00CA6455 /* logo-white-design-png.png in Resources */ = {isa = PBXBuildFile; fileRef = A03508F81AB3C6AE00CA6455 /* logo-white-design-png.png */; };
@@ -132,6 +136,10 @@
 		A003EB131AD4CCA600EE51A1 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
 		A003EB151AD4D71C00EE51A1 /* mock-menu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mock-menu.png"; sourceTree = "<group>"; };
 		A003EB191AD4DB8800EE51A1 /* item-lawnmower.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "item-lawnmower.png"; sourceTree = "<group>"; };
+		A018DF861ADE07E700AF5550 /* btn-add.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-add.png"; sourceTree = "<group>"; };
+		A018DF871ADE07E700AF5550 /* btn-cancel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-cancel.png"; sourceTree = "<group>"; };
+		A018DF8A1ADE08DB00AF5550 /* btn-add-disabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-add-disabled.png"; sourceTree = "<group>"; };
+		A018DF8C1ADE09A500AF5550 /* mock-additem.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mock-additem.png"; sourceTree = "<group>"; };
 		A03508F21AB3C34900CA6455 /* SplashScreen-bkg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "SplashScreen-bkg.png"; path = "../../../graphics/SplashScreen-bkg.png"; sourceTree = "<group>"; };
 		A03508F61AB3C5FB00CA6455 /* logo-green-design-png-white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-green-design-png-white.png"; sourceTree = "<group>"; };
 		A03508F81AB3C6AE00CA6455 /* logo-white-design-png.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-white-design-png.png"; sourceTree = "<group>"; };
@@ -334,6 +342,7 @@
 		A0D96F8B1AD774980046DA13 /* mocks */ = {
 			isa = PBXGroup;
 			children = (
+				A018DF8C1ADE09A500AF5550 /* mock-additem.png */,
 				A0D96F8F1AD7751E0046DA13 /* mock-settings.png */,
 				A003EB151AD4D71C00EE51A1 /* mock-menu.png */,
 				5E0242901AC47FFB0094BB05 /* Screen Shot 2015-03-26 at 1.56.29 PM 1.png */,
@@ -344,6 +353,9 @@
 		A0D96F8C1AD774A30046DA13 /* buttons */ = {
 			isa = PBXGroup;
 			children = (
+				A018DF8A1ADE08DB00AF5550 /* btn-add-disabled.png */,
+				A018DF861ADE07E700AF5550 /* btn-add.png */,
+				A018DF871ADE07E700AF5550 /* btn-cancel.png */,
 				5E023F851AD592B80002AFBC /* addItem.png */,
 				5E1DCCA01AD47C53002D41FD /* btn-check.png */,
 				5E1DCCA11AD47C53002D41FD /* btn-x.png */,
@@ -443,10 +455,13 @@
 				5E1DCC9F1AD44C72002D41FD /* tiger.jpg in Resources */,
 				A0A200011ACE2F7500A42CD8 /* btn-email40.png in Resources */,
 				5E1DCCA21AD47C53002D41FD /* btn-check.png in Resources */,
+				A018DF8B1ADE08DB00AF5550 /* btn-add-disabled.png in Resources */,
+				A018DF891ADE07E700AF5550 /* btn-cancel.png in Resources */,
 				5E023F881AD59F200002AFBC /* logo-white-design-png-transp-100.png in Resources */,
 				A0A2FFF31ACE213F00A42CD8 /* logo-white-design-png-100.png in Resources */,
 				A0A709CE1ACAC9D700E772B9 /* Main.storyboard in Resources */,
 				5EBDD6B11AB2139700C7FBE7 /* bakkleLogo.png in Resources */,
+				A018DF881ADE07E700AF5550 /* btn-add.png in Resources */,
 				5E023F861AD592B80002AFBC /* addItem.png in Resources */,
 				5EBDD6981AB211E600C7FBE7 /* Images.xcassets in Resources */,
 				A0D96F7C1AD765990046DA13 /* icon-cart.png in Resources */,
@@ -455,6 +470,7 @@
 				5E1DCCA31AD47C53002D41FD /* btn-x.png in Resources */,
 				A0A709CF1ACAC9DB00E772B9 /* LaunchScreen.xib in Resources */,
 				A003EB1A1AD4DB8800EE51A1 /* item-lawnmower.png in Resources */,
+				A018DF8D1ADE09A500AF5550 /* mock-additem.png in Resources */,
 				A0D96F901AD7751E0046DA13 /* mock-settings.png in Resources */,
 				A0A200051ACE30C200A42CD8 /* btn-logout40.png in Resources */,
 				5E0242931AC481E80094BB05 /* menubtn.png in Resources */,
