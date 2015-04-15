@@ -146,6 +146,59 @@ def reset(request):
         times_reported = 0 )
     i.save()
     i = Items(
+        image_urls = "https://app.bakkle.com/img/00e0e_5WQCcunAcn_600x450.jpg",
+        title = "Flat screen LED TV",
+        description = "Flat screen LED LCD TV. Brand new in box, 4 HDMI ports and Netflix built in.",
+        location = "39.417672,-87.330438",
+        seller = get_object_or_404(Account, pk=1),
+        price = 107.00,
+        tags = "tv, led, netflix",
+        method = Items.PICK_UP,
+        status = Items.ACTIVE,
+        post_date = datetime.datetime.now,
+        times_reported = 0 )
+    i.save()
+    i = Items(
+        image_urls = "https://app.bakkle.com/img/00n0n_eerJtWHsBKc_600x450.jpg",
+        title = "15\" MacBook pro",
+        description = "MacBook Pro 15\"Mid 2014 i7. 2.2 GHz, 16 GB RAM, 256 GB SSD. Very little use, needed a lighter model so switched to MacBook air. Includes original box, power cord, etc.",
+        location = "39.417672,-87.330438",
+        seller = get_object_or_404(Account, pk=1),
+        price = 999.00,
+        tags = "mac, apple, macbook, macbook pro",
+        method = Items.PICK_UP,
+        status = Items.ACTIVE,
+        post_date = datetime.datetime.now,
+        times_reported = 0 )
+    i.save()
+    i = Items(
+        image_urls = "https://app.bakkle.com/img/00n0n_gonFpgUcRAe_600x450.jpg",
+        title = "Paint ball gun",
+        description = "Gun only, no CO2 tank. Needs new HPR piston",
+        location = "39.417672,-87.330438",
+        seller = get_object_or_404(Account, pk=1),
+        price = 40.99,
+        tags = "paintball, gun, bump paintball",
+        method = Items.PICK_UP,
+        status = Items.ACTIVE,
+        post_date = datetime.datetime.now,
+        times_reported = 0 )
+    i.save()
+    i = Items(
+        image_urls = "https://app.bakkle.com/img/00O0O_kOqfijcw7FL_600x450.jpg",
+        title = "Business law text book",
+        description = "Business law text and cases, clarkson, miller, jentz, 11th edition. No marks or highlighting.",
+        location = "39.417672,-87.330438",
+        seller = get_object_or_404(Account, pk=1),
+        price = 40.99,
+        tags = "textbook, business law",
+        method = Items.PICK_UP,
+        status = Items.ACTIVE,
+        post_date = datetime.datetime.now,
+        times_reported = 0 )
+    i.save()
+    
+    i = Items(
         image_urls = "https://app.bakkle.com/img/b8348df.jpg",
         title = "Rabbit Push Mower",
         description = "Homemade lawn mower. Includes rabbit and water container.",
