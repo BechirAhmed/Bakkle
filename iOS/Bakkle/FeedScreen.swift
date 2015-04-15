@@ -27,6 +27,8 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
     
     @IBOutlet weak var progressIndicator: UIActivityIndicatorView!
     
+    @IBOutlet weak var seachBar: UISearchBar!
+    
     var hardCoded = false
     
     var item_id = 42 //TODO: unhardcode this
@@ -74,6 +76,13 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
         }
         
         loaded = false
+        
+        var tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
+        self.view.addGestureRecognizer(tap)
+    }
+    
+    func dismissKeyboard() {
+        self.seachBar.resignFirstResponder()
     }
     
     /* Used at end of swipe, this is used to load the next item in the view */

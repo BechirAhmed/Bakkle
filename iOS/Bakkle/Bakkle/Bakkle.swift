@@ -20,8 +20,9 @@ class Bakkle {
     let url_reset: String         = "items/reset/"
     let url_mark: String          = "items/" //+status/
     let url_feed: String          = "items/feed/"
+    let url_add_item: String      = "items/add_item/"
     
-    var debug: Int = 1 // 0=off
+    var debug: Int = 2 // 0=off
     var deviceUUID : String = UIDevice.currentDevice().identifierForVendor.UUIDString
     
     var account_id: Int! = 0
@@ -237,10 +238,7 @@ class Bakkle {
                 self.err("error= \(error)")
                 return
             }
-            let tempStr = "{\"status\": 1, \"feed\": [{\"fields\": {\"status\": \"Active\", \"times_reported\": 0, \"description\": \"Year old orange push mower. Some wear and sun fadding. Was kept outside and not stored in shed.\", \"title\": \"Orange Push Mower\", \"price\": \"50.25\", \"tags\": \"lawnmower, orange, somewear\", \"image_urls\": \"https://app.bakkle.com/img/b83bdbd.png\", \"seller\": 1, \"post_date\": \"2015-04-08T13:50:02.850Z\", \"location\": \"39.417672,-87.330438\", \"method\": \"Pick-up\"}, \"model\": \"items.items\", \"pk\": 10},{\"fields\":{\"status\":\"Active\",\"times_reported\":0,\"description\":\"Homemade lawn mower. Includes rabbit and water container.\",\"title\":\"Rabbit Push Mower\",\"price\":\"10.99\",\"tags\":\"lawnmower, homemade, rabbit\",\"image_urls\":\"https://app.bakkle.com/img/b8348df.jpg\",\"seller\":1,\"post_date\":\"2015-04-09T03:41:40.465Z\",\"location\":\"39.417672,-87.330438\",\"method\":\"Pick-up\"},\"model\":\"items.items\",\"pk\":47},{\"fields\":{\"status\":\"Active\",\"times_reported\":0,\"description\":\"iPhone 6. Has a cracked screen. Besides screen phone is in good condition.\",\"title\":\"iPhone 6 Cracked\",\"price\":\"65.99\",\"tags\":\"iPhone6, cracked, damaged\",\"image_urls\":\"https://app.bakkle.com/img/b8349df.jpg\",\"seller\":1,\"post_date\":\"2015-04-09T03:41:40.473Z\",\"location\":\"39.417672,-87.330438\",\"method\":\"Delivery\"},\"model\":\"items.items\",\"pk\":48}]}"
-            
-            let tempData = tempStr.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
-            
+
             let responseString: String = NSString(data: data, encoding: NSUTF8StringEncoding)! as String
             self.resp("Response: \(responseString)")
             var parseError: NSError?
@@ -255,6 +253,36 @@ class Bakkle {
             
         }
         task.resume()
+    }
+    
+    func addItem(title: String, description: String, location: String, price: String, tags: String, method: String) {
+        let url: NSURL? = NSURL(string: url_base + url_add_item)
+        let request = NSMutableURLRequest(URL: url!)
+        let location = "39.417672,-87.330438"
+        
+        request.HTTPMethod = "POST"
+        let postString = "device_token=\(self.deviceUUID)&title=\(title)&description=\(description)&location=\(location)&account_id=\(Bakkle.sharedInstance.account_id)&price=\(price)&tags=\(tags)&method=\(method)"
+        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+        
+        info("[Bakkle] addItem")
+        info("URL: \(url) METHOD: \(request.HTTPMethod) BODY: \(postString)")
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
+            data, response, error in
+            
+            if error != nil {
+                self.err("error= \(error)")
+                return
+            }
+            
+            let responseString: String = NSString(data: data, encoding: NSUTF8StringEncoding)! as String
+            println("Response: \(responseString)")
+            var parseError: NSError?
+            
+            self.responseDict = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! NSDictionary!
+            self.resp("RESPONSE DICT IS: \(self.responseDict)")            
+        }
+        task.resume()
+
     }
     
     /* reset feed items on server for DEMO */
