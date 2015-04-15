@@ -241,11 +241,11 @@ class Bakkle {
             
             let tempData = tempStr.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
             
-            let responseString: String = NSString(data: tempData!, encoding: NSUTF8StringEncoding)! as String
+            let responseString: String = NSString(data: data, encoding: NSUTF8StringEncoding)! as String
             self.resp("Response: \(responseString)")
             var parseError: NSError?
             
-            self.responseDict = NSJSONSerialization.JSONObjectWithData(tempData!, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! NSDictionary!
+            self.responseDict = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! NSDictionary!
              self.resp("RESPONSE DICT IS: \(self.responseDict)")
             
              if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
