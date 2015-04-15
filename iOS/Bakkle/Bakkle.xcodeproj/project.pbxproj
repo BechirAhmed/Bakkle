@@ -11,6 +11,7 @@
 		5E023F881AD59F200002AFBC /* logo-white-design-png-transp-100.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E023F871AD59F200002AFBC /* logo-white-design-png-transp-100.png */; };
 		5E0242911AC47FFB0094BB05 /* Screen Shot 2015-03-26 at 1.56.29 PM 1.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E0242901AC47FFB0094BB05 /* Screen Shot 2015-03-26 at 1.56.29 PM 1.png */; };
 		5E0242931AC481E80094BB05 /* menubtn.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E0242921AC481E80094BB05 /* menubtn.png */; };
+		5E0E0CD51ADEE86C008D9467 /* ImageLabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E0E0CD41ADEE86C008D9467 /* ImageLabelView.swift */; };
 		5E1DCC9F1AD44C72002D41FD /* tiger.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5E1DCC9E1AD44C71002D41FD /* tiger.jpg */; };
 		5E1DCCA21AD47C53002D41FD /* btn-check.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E1DCCA01AD47C53002D41FD /* btn-check.png */; };
 		5E1DCCA31AD47C53002D41FD /* btn-x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E1DCCA11AD47C53002D41FD /* btn-x.png */; };
@@ -86,6 +87,7 @@
 		5E023F871AD59F200002AFBC /* logo-white-design-png-transp-100.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-white-design-png-transp-100.png"; sourceTree = "<group>"; };
 		5E0242901AC47FFB0094BB05 /* Screen Shot 2015-03-26 at 1.56.29 PM 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Screen Shot 2015-03-26 at 1.56.29 PM 1.png"; path = "../Screen Shot 2015-03-26 at 1.56.29 PM 1.png"; sourceTree = "<group>"; };
 		5E0242921AC481E80094BB05 /* menubtn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = menubtn.png; path = ../menubtn.png; sourceTree = "<group>"; };
+		5E0E0CD41ADEE86C008D9467 /* ImageLabelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageLabelView.swift; sourceTree = "<group>"; };
 		5E1DCC9E1AD44C71002D41FD /* tiger.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = tiger.jpg; sourceTree = "<group>"; };
 		5E1DCCA01AD47C53002D41FD /* btn-check.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-check.png"; sourceTree = "<group>"; };
 		5E1DCCA11AD47C53002D41FD /* btn-x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-x.png"; sourceTree = "<group>"; };
@@ -231,6 +233,7 @@
 				5EBDD6971AB211E600C7FBE7 /* Images.xcassets */,
 				5EBDD6991AB211E600C7FBE7 /* LaunchScreen.xib */,
 				5EBDD68E1AB211E600C7FBE7 /* Supporting Files */,
+				5E0E0CD41ADEE86C008D9467 /* ImageLabelView.swift */,
 			);
 			path = Bakkle;
 			sourceTree = "<group>";
@@ -521,6 +524,7 @@
 				5E1FEE7C1AD8641900C08131 /* MDCSwipeToChooseView.m in Sources */,
 				5EE2C9B21AB9F0FB0031D8CD /* UIView+MDCSwipeToChoose.m in Sources */,
 				5EE2C9B51AB9F0FB0031D8CD /* MDCSwipeToChooseViewOptions.m in Sources */,
+				5E0E0CD51ADEE86C008D9467 /* ImageLabelView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

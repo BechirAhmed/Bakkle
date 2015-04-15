@@ -16,6 +16,7 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
     
     let options = MDCSwipeToChooseViewOptions()
     var swipeView : MDCSwipeToChooseView!
+    var infoView: UIView!
     
     @IBOutlet weak var backImgView: UIImageView!
     
@@ -60,8 +61,8 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
         options.likedText = "Want"
         options.likedColor = UIColor.greenColor()
         options.nopeText = "Meh"
-        options.holdText = "Hold"
-        options.reportText = "spam"
+        options.holdText = "Holding"
+        options.reportText = "report"
         options.holdColor = UIColor.blueColor()
         options.onPan = {(state) in
             if state.thresholdRatio == 1 && state.direction == MDCSwipeDirection.Left {
@@ -145,6 +146,16 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
     func showAddItem(){
         var addItem: UIViewController = AddItem()
         presentViewController(addItem, animated: true, completion: nil)
+    }
+    
+    func constructInfoView() {
+        var bottomHeight: CGFloat = 60.0
+        var bottomFrame: CGRect = CGRectMake(0, CGRectGetHeight(swipeView.bounds) - bottomHeight, CGRectGetWidth(swipeView.bounds), bottomHeight)
+        self.infoView = UIView(frame: bottomFrame)
+        self.infoView.backgroundColor = UIColor.whiteColor()
+        self.infoView.clipsToBounds = true
+        self.infoView.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleTopMargin
+        swipeView.addSubview(self.infoView)
     }
     
     func updateView(feedView: MDCSwipeToChooseView) {

@@ -39,7 +39,7 @@
     label.text = [text uppercaseString];
     label.textAlignment = NSTextAlignmentCenter;
     label.font = [UIFont fontWithName:@"HelveticaNeue-CondensedBlack"
-                                 size:48.f];
+                                 size:32.f];
     label.textColor = color;
     [self addSubview:label];
 
