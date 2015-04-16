@@ -167,6 +167,9 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
         } else {
             if Bakkle.sharedInstance.feedItems.count > 0 {
                 var topItem = Bakkle.sharedInstance.feedItems[0]
+                if let x = topItem.valueForKey("pk") {
+                    self.item_id = Int(x.intValue)
+                }
                 if Bakkle.sharedInstance.feedItems.count > 1 {
                     var bottomItem = Bakkle.sharedInstance.feedItems[1]
                     var bottomItemDetail: NSDictionary = bottomItem.valueForKey("fields") as! NSDictionary!
