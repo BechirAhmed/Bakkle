@@ -67,7 +67,8 @@ def feed(request):
         # TODO: Add distance filtering here
         buyer_id = request.POST.get('account_id')
         items_viewed = BuyerItem.objects.filter(buyer = buyer_id)
-        item_list = Items.objects.exclude(buyeritem = items_viewed).exclude(seller = buyer_id)
+        #PUT BACK FOR LIVE, commenting for test item_list = Items.objects.exclude(buyeritem = items_viewed).exclude(seller = buyer_id)
+        item_list = Items.objects.exclude(buyeritem = items_viewed)
         response_data = "{\"status\": 1, \"feed\": " + serializers.serialize('json', item_list) + "}"
         return HttpResponse(response_data, content_type="application/json")
     else:
@@ -110,6 +111,8 @@ def add_Item_To_Buyer_Items(request, status):
     buyer_id = request.POST.get('account_id')
     item_id = request.POST.get('item_id')
 
+    print("Marking {} as {} for account: {}".format(item_id, status, buyer_id))
+
     if buyer_id == None or item_id == None:
         return "" # TODO: Need better response
 
@@ -129,6 +132,7 @@ def add_Item_To_Buyer_Items(request, status):
 def reset(request):
     #TODO: hardcoded values
     item_expire_time=7 #days
+    account_id=2
     #TODO: Change to POST or DELETE
     Items.objects.all().delete()
     BuyerItem.objects.all().delete()
@@ -137,7 +141,7 @@ def reset(request):
         title = "Orange Push Mower",
         description = "Year old orange push mower. Some wear and sun fadding. Was kept outside and not stored in shed.",
         location = "39.417672,-87.330438",
-        seller = get_object_or_404(Account, pk=1),
+        seller = get_object_or_404(Account, pk=account_id),
         price = 50.25,
         tags = "lawnmower, orange, somewear",
         method = Items.PICK_UP,
@@ -150,7 +154,7 @@ def reset(request):
         title = "Flat screen LED TV",
         description = "Flat screen LED LCD TV. Brand new in box, 4 HDMI ports and Netflix built in.",
         location = "39.417672,-87.330438",
-        seller = get_object_or_404(Account, pk=1),
+        seller = get_object_or_404(Account, pk=account_id),
         price = 107.00,
         tags = "tv, led, netflix",
         method = Items.PICK_UP,
@@ -163,7 +167,7 @@ def reset(request):
         title = "15\" MacBook pro",
         description = "MacBook Pro 15\"Mid 2014 i7. 2.2 GHz, 16 GB RAM, 256 GB SSD. Very little use, needed a lighter model so switched to MacBook air. Includes original box, power cord, etc.",
         location = "39.417672,-87.330438",
-        seller = get_object_or_404(Account, pk=1),
+        seller = get_object_or_404(Account, pk=account_id),
         price = 999.00,
         tags = "mac, apple, macbook, macbook pro",
         method = Items.PICK_UP,
@@ -176,7 +180,7 @@ def reset(request):
         title = "Paint ball gun",
         description = "Gun only, no CO2 tank. Needs new HPR piston",
         location = "39.417672,-87.330438",
-        seller = get_object_or_404(Account, pk=1),
+        seller = get_object_or_404(Account, pk=account_id),
         price = 40.99,
         tags = "paintball, gun, bump paintball",
         method = Items.PICK_UP,
@@ -189,7 +193,7 @@ def reset(request):
         title = "Business law text book",
         description = "Business law text and cases, clarkson, miller, jentz, 11th edition. No marks or highlighting.",
         location = "39.417672,-87.330438",
-        seller = get_object_or_404(Account, pk=1),
+        seller = get_object_or_404(Account, pk=account_id),
         price = 40.99,
         tags = "textbook, business law",
         method = Items.PICK_UP,
@@ -203,7 +207,7 @@ def reset(request):
         title = "Rabbit Push Mower",
         description = "Homemade lawn mower. Includes rabbit and water container.",
         location = "39.417672,-87.330438",
-        seller = get_object_or_404(Account, pk=1),
+        seller = get_object_or_404(Account, pk=account_id),
         price = 10.99,
         tags = "lawnmower, homemade, rabbit",
         method = Items.PICK_UP,
@@ -216,7 +220,7 @@ def reset(request):
         title = "iPhone 6 Cracked",
         description = "iPhone 6. Has a cracked screen. Besides screen phone is in good condition.",
         location = "39.417672,-87.330438",
-        seller = get_object_or_404(Account, pk=1),
+        seller = get_object_or_404(Account, pk=account_id),
         price = 65.99,
         tags = "iPhone6, cracked, damaged",
         method = Items.DELIVERY,
