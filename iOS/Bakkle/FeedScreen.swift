@@ -16,6 +16,7 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
     
     let options = MDCSwipeToChooseViewOptions()
     var swipeView : MDCSwipeToChooseView!
+    var infoView: UIView!
     
     @IBOutlet weak var backImgView: UIImageView!
     
@@ -26,6 +27,8 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
     @IBOutlet weak var drawer: UIView!
     
     @IBOutlet weak var progressIndicator: UIActivityIndicatorView!
+    
+    @IBOutlet weak var seachBar: UISearchBar!
     
     var hardCoded = false
     
@@ -58,8 +61,8 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
         options.likedText = "Want"
         options.likedColor = UIColor.greenColor()
         options.nopeText = "Meh"
-        options.holdText = "Hold"
-        options.reportText = "spam"
+        options.holdText = "Holding"
+        options.reportText = "report"
         options.holdColor = UIColor.blueColor()
         options.onPan = {(state) in
             if state.thresholdRatio == 1 && state.direction == MDCSwipeDirection.Left {
@@ -74,6 +77,13 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
         }
         
         loaded = false
+        
+        var tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
+        self.view.addGestureRecognizer(tap)
+    }
+    
+    func dismissKeyboard() {
+        self.seachBar.resignFirstResponder()
     }
     
     /* Used at end of swipe, this is used to load the next item in the view */
@@ -138,6 +148,16 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
         presentViewController(addItem, animated: true, completion: nil)
     }
     
+    func constructInfoView() {
+        var bottomHeight: CGFloat = 60.0
+        var bottomFrame: CGRect = CGRectMake(0, CGRectGetHeight(swipeView.bounds) - bottomHeight, CGRectGetWidth(swipeView.bounds), bottomHeight)
+        self.infoView = UIView(frame: bottomFrame)
+        self.infoView.backgroundColor = UIColor.whiteColor()
+        self.infoView.clipsToBounds = true
+        self.infoView.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleTopMargin
+        swipeView.addSubview(self.infoView)
+    }
+    
     func updateView(feedView: MDCSwipeToChooseView) {
         println("[FeedScreen] Updating view")
         if hardCoded {
@@ -147,6 +167,9 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
         } else {
             if Bakkle.sharedInstance.feedItems.count > 0 {
                 var topItem = Bakkle.sharedInstance.feedItems[0]
+                if let x = topItem.valueForKey("pk") {
+                    self.item_id = Int(x.intValue)
+                }
                 if Bakkle.sharedInstance.feedItems.count > 1 {
                     var bottomItem = Bakkle.sharedInstance.feedItems[1]
                     var bottomItemDetail: NSDictionary = bottomItem.valueForKey("fields") as! NSDictionary!
