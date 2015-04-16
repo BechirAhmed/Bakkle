@@ -2,8 +2,9 @@ from django.shortcuts import render
 
 import datetime
 import json
+import md5
 
-from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.http import HttpResponse, HttpResponseRedirect, Http404, HttpResponseForbidden
 from django.core.urlresolvers import reverse
 from django.template import RequestContext, loader
 from django.utils import timezone
@@ -23,15 +24,20 @@ def index(request):
     }
     return render(request, 'account/index.html', context)
 
+# Login to account using Facebook
 @csrf_exempt
 @require_POST
-def login(request):
-    account_id = request.POST.get('account_id', "")
-    device_token = request.POST.get('device_token', "")
-    a = get_object_or_404(Account, pk=account_id)
-    response_data = {"status":1, "account_id":a.id, "facebook_id": a.facebook_id, "display_name": a.display_name, "email": a.email }
+def login_facebook(request):
+    facebook_id = request.POST.get('user_id', "")
+    device_uuid = request.POST.get('device_uuid', "")
+    account = get_object_or_404(Account, facebook_id=facebook_id)
+    device = device_register(get_client_ip(request), uuid, account)
+    device.auth_token = md5(datetime.now()) + "_" + account_id
+    device.save()
+    response_data = {"status":1, "account_id":account.id, "facebook_id": account.facebook_id, "display_name": account.display_name, "email": account.email }
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
+# Logout of account
 @csrf_exempt
 @require_POST
 def logout(request):
@@ -39,6 +45,7 @@ def logout(request):
     response_data = {'status':1, 'account_id':account.id}
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
+# Register with Facebook
 @csrf_exempt
 @require_POST
 def facebook(request):
@@ -109,6 +116,7 @@ def device_register(ip, uuid, user):
     device.last_seen_date = datetime.datetime.now()
     device.ip_address = ip
     device.save()
+    return device
 
 # Register a new device for notifications
 @csrf_exempt
@@ -118,7 +126,8 @@ def device_register_push(request):
     account_id = request.POST.get('account_id', "")
     uuid = request.POST.get('device_uuid', "")
     if (device_token == None or device_token == "") or (account_id == None or account_id == "") or (uuid == None or uuid == ""):
-        return "" # Need better response
+        response_data = { "status":0 }
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
 
     print("Registering {} to {}".format(device_token, account_id))
     account = get_object_or_404(Account, pk=account_id)
@@ -130,15 +139,29 @@ def device_register_push(request):
     device.ip_address = get_client_ip(request)
     device.apns_token = device_token
     device.save()
-    return HttpResponseRedirect(reverse('account:device_detail', args=(device.id,)))
+    response_data = { "status":1 }
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 # Dispatch a notification to device
 @csrf_exempt
+@require_POST
 def device_notify(request, device_id):
     n = get_object_or_404(Device, pk=device_id)
     n.send_notification("bob", "default", 42)
-    return HttpResponse("detail on notification: {}".format(n))
+    response_data = { "status":1 }
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
 
+# Dispatch a notification to all devices for that user
+@csrf_exempt
+@require_POST
+def device_notify_all(request, account_id):
+    devices = Device.objects.filter(account_id=account_id)
+    for device in devices:
+        device_notify(request, device.id)
+    response_data = { "status":1 }
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+# Get's the client IP from a request
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
     if x_forwarded_for:
@@ -148,12 +171,32 @@ def get_client_ip(request):
     return ip
 
 
-# Decorator
+# Decorator for login authentication
 def authenticate(function):
     def wrap(request, *args, **kwargs):
-        # TODO: Authenticate the user token sent in request with the one in the db
-        # if not same send error
-        # else return function(request, *args, **kwargs)
+        auth_token = request.POST.get('auth_token', "")
+        device_uuid = request.POST.get('device_uuid', "")
+
+        # check if any of the required fields are empty
+        if auth_token == None or auth_token.strip() == "" or auth_token.find('_') == -1 or device_uuid == None or device_uuid.strip() == "":
+            response_data = { "status":0 }
+            return HttpResponse(json.dumps(response_data), content_type="application/json")
+        
+        # get the account id and the device the user is logging in from
+        account_id = auth_token.split('_')[1]
+        device = get_object_or_404(Device, account_id = account_id, uuid = device_uuid)
+
+        # check if the device has a token first (first time logging in)
+        if device.auth_token == "":
+            response_data = { "status":0 }
+            return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+        # check if the tokens match
+        if device.auth_token == auth_token:
+            return function(request, *args, **kwargs)
+        else:
+            response_data = { "status":0 }
+            return HttpResponse(json.dumps(response_data), content_type="application/json")
     wrap.__doc__ = function.__doc__
     wrap.__name__=function.__name__
     return wrap

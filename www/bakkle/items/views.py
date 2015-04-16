@@ -34,7 +34,6 @@ def detail(request, item_id):
     return render(request, 'items/detail.html', context) 
 
 @csrf_exempt
-
 @require_POST
 def add_item(request):
     image_urls = request.POST.get('device_token', "").strip()
@@ -49,22 +48,19 @@ def add_item(request):
     if (title == None or title == "") or (title == None or title == ""):
         return ""
 
-    response_data = { 'status':1 }
+    response_data = { "status":0 }
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 @csrf_exempt
-
 @require_POST
 def edit_item(request):
-    response_data = { 'status':1 }
+    response_data = { "status":0 }
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 @csrf_exempt
-
 @require_POST
 def feed(request):
-    #TODO: need to confirm order to display, chrono?, closest? "magic"?
-    #TODO: Get items for <USERID>
+    # TODO: need to confirm order to display, chrono?, closest? "magic"?
     # TODO: Add distance filtering here
     buyer_id = request.POST.get('account_id')
     items_viewed = BuyerItem.objects.filter(buyer = buyer_id)

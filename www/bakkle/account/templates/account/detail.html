@@ -11,10 +11,10 @@
   <br/>Email = {{ account.email }}
   <br/>
 
-  <br/>Devices:
+  <br/>Devices: (<a href="{% url 'account:device_notify_all' account.id %}">Notify All</a>)
   {% if devices %}
     <ul>
-      {% for device in devices %}
+      {% for device in devices %} 
          <li><a href="{% url 'account:device_detail' device.id %}">{{ device.id }}</a>: {{ device.uuid }} (<a href="{% url 'account:device_notify' device.id %}">Notify</a>)</li>
       {% endfor %}
     </ul> 
