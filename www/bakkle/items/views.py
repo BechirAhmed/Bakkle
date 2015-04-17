@@ -150,6 +150,19 @@ def reset(request):
         times_reported = 0 )
     i.save()
     i = Items(
+        image_urls = "https://app.bakkle.com/img/WP_20150417_09_47_27_Pro.jpg",
+        title = "Oil change",
+        description = "will change your cars oil at your location, $ 19.95.",
+        location = "39.417672,-87.330438",
+        seller = get_object_or_404(Account, pk=account_id),
+        price = 19.95,
+        tags = "service, oil change",
+        method = Items.PICK_UP,
+        status = Items.ACTIVE,
+        post_date = datetime.datetime.now,
+        times_reported = 0 )
+    i.save()
+    i = Items(
         image_urls = "https://app.bakkle.com/img/00e0e_5WQCcunAcn_600x450.jpg",
         title = "Flat screen LED TV",
         description = "Flat screen LED LCD TV. Brand new in box, 4 HDMI ports and Netflix built in.",
