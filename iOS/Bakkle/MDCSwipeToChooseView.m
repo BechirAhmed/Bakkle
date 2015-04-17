@@ -88,7 +88,7 @@ static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
 
 - (void)constructHoldView {
     CGRect frame = CGRectMake(CGRectGetMidX(_imageView.bounds)/2,
-                              CGRectGetMaxY(_imageView.bounds)/2 + MDCSwipeToChooseViewTopPadding*2,
+                              MDCSwipeToChooseViewTopPadding,
                               CGRectGetMidX(_imageView.bounds),
                               MDCSwipeToChooseViewLabelWidth);
     self.holdView = [[UIView alloc] initWithFrame:frame];
