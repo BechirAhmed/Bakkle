@@ -14,36 +14,7 @@ from django.views.decorators.http import require_POST
 
 from .models import Account, Device
 from items.models import Items, BuyerItem
-
-# Decorator for login authentication
-def authenticate(function):
-    def wrap(request, *args, **kwargs):
-        auth_token = request.POST.get('auth_token', "")
-        device_uuid = request.POST.get('device_uuid', "")
-
-        # check if any of the required fields are empty
-        if auth_token == None or auth_token.strip() == "" or auth_token.find('_') == -1 or device_uuid == None or device_uuid.strip() == "":
-            response_data = { "status":0, "error":"Required parameters missing! Need auth_token and device_uuid." }
-            return HttpResponse(json.dumps(response_data), content_type="application/json")
-        
-        # get the account id and the device the user is logging in from
-        account_id = auth_token.split('_')[1]
-        device = get_object_or_404(Device, account_id = account_id, uuid = device_uuid)
-
-        # check if the device has a token first (first time logging in)
-        if device.auth_token == "":
-            response_data = { "status":0, "error":"No authentication token for this device! Need to log in from this device." }
-            return HttpResponse(json.dumps(response_data), content_type="application/json")
-
-        # check if the tokens match
-        if device.auth_token == auth_token:
-            return function(request, *args, **kwargs)
-        else:
-            response_data = { "status":0, "error":"Authentication token does not match the device and account." }
-            return HttpResponse(json.dumps(response_data), content_type="application/json")
-    wrap.__doc__ = function.__doc__
-    wrap.__name__=function.__name__
-    return wrap
+from common import authenticate
 
 # Show a list of all accounts in the system.
 @csrf_exempt
@@ -60,11 +31,24 @@ def index(request):
 def login_facebook(request):
     facebook_id = request.POST.get('user_id', "")
     device_uuid = request.POST.get('device_uuid', "")
+
+    # Check that all required params are sent
+    # Check that all required fields are sent
+    if (facebook_id == None or facebook_id.strip() == "") or (device_uuid == None or device_uuid.strip() == ""): 
+        response_data = {"status":0, "error":"A required parameter was not provided."}
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+    # Get the account for that facebook ID and it's associated device
     account = get_object_or_404(Account, facebook_id=facebook_id)
     device = device_register(get_client_ip(request), device_uuid, account)
+
+    # Create authentication token
     login_date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    # Set authentication token and save it
     device.auth_token = md5.new(login_date).hexdigest() + "_" + str(account.id)
     device.save()
+
     response_data = {"status":1, "auth_token": device.auth_token }
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
@@ -72,8 +56,26 @@ def login_facebook(request):
 @csrf_exempt
 @require_POST
 def logout(request):
-    # TODO
-    response_data = {'status':1, 'account_id':account.id}
+    auth_token = request.POST.get('auth_token', "")
+    device_uuid = request.POST.get('device_uuid', "")
+
+    # Check that all require params are sent and are of the right format
+    if (auth_token == None or auth_token.strip() == "" or auth_token.find('_') == -1) or (device_uuid == None or device_uuid.strip() == ""):
+        response_data = { "status":0, "error": "A required parameter was not provided." }
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+    # get the account id and the device the user is logging in from
+    account_id = auth_token.split('_')[1]
+    account = get_object_or_404(Account, pk=account_id)
+
+    # Get the device and update its fields. Also empty the auth_token
+    device = Device.objects.get(uuid = device_uuid, account_id = account)
+    device.last_seen_date = datetime.datetime.now()
+    device.ip_address = get_client_ip(request)
+    device.auth_token = ""
+    device.save()
+
+    response_data = {"status":1}
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 # Register with Facebook
@@ -83,26 +85,33 @@ def facebook(request):
     facebook_id = request.POST.get('user_id', "")
     display_name = request.POST.get('name',"")
     email = request.POST.get('email', "")
-    uuid = request.POST.get('device_uuid', "")
-    if (facebook_id == None or facebook_id == "") or (uuid == None or uuid == "") or (email == None or email == ""): 
+    device_uuid = request.POST.get('device_uuid', "")
+
+    # Check that all required fields are sent
+    if (facebook_id == None or facebook_id.strip() == "") or (device_uuid == None or device_uuid.strip() == "") or (email == None or email.strip() == ""): 
         response_data = {"status":0, "error":"A required parameter was not provided."}
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 
-    if display_name == None or display_name == "":
-        first_name = request.POST.get('FirstName', "")
-        last_name = request.POST.get('LastName', "")
-        if (first_name == None or first_name == "") or (last_name == None or last_name == ""):
+    # Check for a display name and if it is missing attempt to create one from the first and last name
+    if display_name == None or display_name.strip() == "":
+        first_name = request.POST.get('first_name', "")
+        last_name = request.POST.get('last_name', "")
+        if (first_name == None or first_name.strip() == "") or (last_name == None or last_name.strip() == ""):
             response_data = {"status":0, "error":"No name was provided."}
             return HttpResponse(json.dumps(response_data), content_type="application/json")
         else:
             display_name = first_name + " " + last_name
-
-    account = Account.objects.get_or_create(facebook_id=facebook_id,defaults= {'display_name': display_name,'email': email,})[0]
+    
+    # Update or create the account
+    account = Account.objects.get_or_create(
+        facebook_id=facebook_id,
+        defaults= {'display_name': display_name,'email': email,})[0]
     account.display_name = display_name
     account.email = email
     account.save()
 
-    device_register(get_client_ip(request), uuid, account)
+    # Register device to the client
+    device_register(get_client_ip(request), device_uuid, account)
     response_data = {"status":1}
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
@@ -149,41 +158,51 @@ def device_register(ip, uuid, user):
 @require_POST
 @authenticate
 def device_register_push(request):
-    # TODO: get account_id from token
     device_token = request.POST.get('device_token', "")
-    account_id = request.POST.get('account_id', "")
-    uuid = request.POST.get('device_uuid', "")
-    if (device_token == None or device_token == "") or (account_id == None or account_id == "") or (uuid == None or uuid == ""):
+    auth_token = request.POST.get('auth_token', "")
+    device_uuid = request.POST.get('device_uuid', "")
+
+    # Check that all require params are sent and are of the right format
+    if (device_token == None or device_token.strip() == "") or (auth_token == None or auth_token.strip() == "" or auth_token.find('_') == -1) or (device_uuid == None or device_uuid.strip() == ""):
         response_data = { "status":0, "error": "A required parameter was not provided." }
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 
-    print("Registering {} to {}".format(device_token, account_id))
+    # get the account id and the device the user is logging in from
+    account_id = auth_token.split('_')[1]
     account = get_object_or_404(Account, pk=account_id)
+
+    # Either get the device or create it if it is a new one 
     device = Device.objects.get_or_create(
-        uuid = uuid,
+        uuid = device_uuid,
         account_id = account,
         defaults={'notifications_enabled': True, })[0]
     device.last_seen_date = datetime.datetime.now()
     device.ip_address = get_client_ip(request)
     device.apns_token = device_token
     device.save()
+
     response_data = { "status":1 }
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 # Dispatch a notification to device
 @csrf_exempt
 def device_notify(request, device_id):
-    n = get_object_or_404(Device, pk=device_id)
-    n.send_notification("bob", "default", 42)
+    # TODO: Send an actual message
+    device = get_object_or_404(Device, pk=device_id)
+    device.send_notification("bob", "default", 42)
     response_data = { "status":1 }
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 # Dispatch a notification to all devices for that user
 @csrf_exempt
 def device_notify_all(request, account_id):
+    # Get all devices for the account
     devices = Device.objects.filter(account_id=account_id)
+
+    # notify each device
     for device in devices:
         device_notify(request, device.id)
+        
     response_data = { "status":1 }
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
@@ -195,6 +214,5 @@ def get_client_ip(request):
     else:
         ip = request.META.get('REMOTE_ADDR')
     return ip
-
 
     

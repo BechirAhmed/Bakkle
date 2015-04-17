@@ -14,6 +14,7 @@ from django.views.decorators.http import require_POST
 
 from .models import Items, BuyerItem
 from account.models import Account
+from common import authenticate
 
 @csrf_exempt
 def index(request):
@@ -35,6 +36,7 @@ def detail(request, item_id):
 
 @csrf_exempt
 @require_POST
+@authenticate
 def add_item(request):
     image_urls = request.POST.get('device_token', "").strip()
     title = request.POST.get('title', "").strip()
@@ -53,54 +55,93 @@ def add_item(request):
 
 @csrf_exempt
 @require_POST
+@authenticate
 def edit_item(request):
     response_data = { "status":0 }
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 @csrf_exempt
 @require_POST
+@authenticate
 def feed(request):
     # TODO: need to confirm order to display, chrono?, closest? "magic"?
     # TODO: Add distance filtering here
-    buyer_id = request.POST.get('account_id')
+    auth_token = request.POST.get('auth_token')
+
+    # Check that all require params are sent and are of the right format
+    if (auth_token == None or auth_token.strip() == "" or auth_token.find('_') == -1):
+        response_data = { "status":0, "error": "A required parameter was not provided." }
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+    # get the account id 
+    buyer_id = auth_token.split('_')[1]
+
+    # get items
     items_viewed = BuyerItem.objects.filter(buyer = buyer_id)
     item_list = Items.objects.exclude(buyeritem = items_viewed).exclude(seller = buyer_id)
-    response_data = "{\"status\": 1, \"feed\": " + serializers.serialize('json', item_list) + "}"
+
+    # get json representaion of item array
+    items_json = "["
+    for item in item_list:
+        items_json = items_json + str(item)
+    items_json = items_json + "]"
+
+    # create json string
+    response_data = "{\"status\": 1, \"feed\": " + items_json + "}"
     return HttpResponse(response_data, content_type="application/json")
 
 @csrf_exempt
 @require_POST
+@authenticate
 def meh(request):
     return add_Item_To_Buyer_Items(request, BuyerItem.MEH)
 
 @csrf_exempt
 @require_POST
+@authenticate
 def want(request):
     return add_Item_To_Buyer_Items(request, BuyerItem.WANT)
 
 @csrf_exempt
 @require_POST
+@authenticate
 def hold(request):
     return add_Item_To_Buyer_Items(request, BuyerItem.HOLD)
 
 @csrf_exempt
 @require_POST
+@authenticate
 def report(request):
     item_id = request.POST.get('item_id')
+
+    # Check that all require params are sent and are of the right format
+    if (item_id == None or item_id.strip() == ""):
+        response_data = { "status":0, "error": "A required parameter was not provided." }
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+     
+    # Get item and update the times reported
     item = get_object_or_404(Items, pk=item_id)
     item.times_reported = item.times_reported + 1
     item.save()
+
     return add_Item_To_Buyer_Items(request, BuyerItem.REPORT)
     
 def add_Item_To_Buyer_Items(request, status):
-    buyer_id = request.POST.get('account_id')
+    auth_token = request.POST.get('auth_token')
     item_id = request.POST.get('item_id')
 
-    if buyer_id == None or item_id == None:
-        return "" # TODO: Need better response
+    # Check that all require params are sent and are of the right format
+    if (auth_token == None or auth_token.strip() == "" or auth_token.find('_') == -1) or (item_id == None or item_id.strip() == ""):
+        response_data = { "status":0, "error": "A required parameter was not provided." }
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+        
+    # get the account id 
+    buyer_id = auth_token.split('_')[1]
 
+    # get the item
     item = get_object_or_404(Items, pk=item_id)
 
+    # Create or update the buyer item
     buyer_item = BuyerItem.objects.get_or_create(
         buyer = get_object_or_404(Account, pk=buyer_id),
         item = item,
@@ -108,6 +149,7 @@ def add_Item_To_Buyer_Items(request, status):
     buyer_item.status = status
     buyer_item.confirmed_price = item.price
     buyer_item.save()
+
     response_data = { 'status':1 }
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
