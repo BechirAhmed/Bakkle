@@ -50,6 +50,7 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.setNavigationBarHidden(true, animated: true)
+//        self.backImgView = UIImageView(frame: CGRectMake(swipeView.frame.origin.x, swipeView.frame.origin.y, swipeView.frame.size.width, swipeView.frame.size.height))
         
         progressIndicator.startAnimating()
         

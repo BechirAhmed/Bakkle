@@ -157,6 +157,7 @@ def add_Item_To_Buyer_Items(request, status):
 def reset(request):
     #TODO: hardcoded values
     item_expire_time=7 #days
+    account_id = 2
     #TODO: Change to POST or DELETE
     Items.objects.all().delete()
     BuyerItem.objects.all().delete()
@@ -168,6 +169,214 @@ def reset(request):
         seller = get_object_or_404(Account, pk=1),
         price = 50.25,
         tags = "lawnmower, orange, somewear",
+        method = Items.PICK_UP,
+        status = Items.ACTIVE,
+        post_date = datetime.datetime.now,
+        times_reported = 0 )
+    i.save()
+    i = Items(
+        image_urls = "https://app.bakkle.com/img/WP_20150417_09_47_27_Pro.jpg",
+        title = "Oil change",
+        description = "will change your cars oil at your location, $ 19.95.",
+        location = "39.417672,-87.330438",
+        seller = get_object_or_404(Account, pk=account_id),
+        price = 19.95,
+        tags = "service, oil change",
+        method = Items.PICK_UP,
+        status = Items.ACTIVE,
+        post_date = datetime.datetime.now,
+        times_reported = 0 )
+    i.save()
+    i = Items(
+        image_urls = "https://app.bakkle.com/img/00e0e_5WQCcunAcn_600x450.jpg",
+        title = "Flat screen LED TV",
+        description = "Flat screen LED LCD TV. Brand new in box, 4 HDMI ports and Netflix built in.",
+        location = "39.417672,-87.330438",
+        seller = get_object_or_404(Account, pk=account_id),
+        price = 107.00,
+        tags = "tv, led, netflix",
+        method = Items.PICK_UP,
+        status = Items.ACTIVE,
+        post_date = datetime.datetime.now,
+        times_reported = 0 )
+    i.save()
+    i = Items(
+        image_urls = "https://app.bakkle.com/img/00n0n_eerJtWHsBKc_600x450.jpg",
+        title = "15\" MacBook pro",
+        description = "MacBook Pro 15\"Mid 2014 i7. 2.2 GHz, 16 GB RAM, 256 GB SSD. Very little use, needed a lighter model so switched to MacBook air. Includes original box, power cord, etc.",
+        location = "39.417672,-87.330438",
+        seller = get_object_or_404(Account, pk=account_id),
+        price = 999.00,
+        tags = "mac, apple, macbook, macbook pro",
+        method = Items.PICK_UP,
+        status = Items.ACTIVE,
+        post_date = datetime.datetime.now,
+        times_reported = 0 )
+    i.save()
+    i = Items(
+        image_urls = "https://app.bakkle.com/img/00n0n_gonFpgUcRAe_600x450.jpg",
+        title = "Paint ball gun",
+        description = "Gun only, no CO2 tank. Needs new HPR piston",
+        location = "39.417672,-87.330438",
+        seller = get_object_or_404(Account, pk=account_id),
+        price = 40.99,
+        tags = "paintball, gun, bump paintball",
+        method = Items.PICK_UP,
+        status = Items.ACTIVE,
+        post_date = datetime.datetime.now,
+        times_reported = 0 )
+    i.save()
+    i = Items(
+        image_urls = "https://app.bakkle.com/img/00O0O_kOqfijcw7FL_600x450.jpg",
+        title = "Business law text book",
+        description = "Business law text and cases, clarkson, miller, jentz, 11th edition. No marks or highlighting.",
+        location = "39.417672,-87.330438",
+        seller = get_object_or_404(Account, pk=account_id),
+        price = 40.99,
+        tags = "textbook, business law",
+        method = Items.PICK_UP,
+        status = Items.ACTIVE,
+        post_date = datetime.datetime.now,
+        times_reported = 0 )
+    i.save()
+    i = Items(
+        image_urls = "https://app.bakkle.com/img/00P0P_dcFyXMBIkYE_600x450.jpg",
+        title = "Baseball mitt",
+        description = "Louisville slugger baseball mitt, mint condition.",
+        location = "39.417672,-87.330438",
+        seller = get_object_or_404(Account, pk=account_id),
+        price = 30.00,
+        tags = "baseball mitt",
+        method = Items.PICK_UP,
+        status = Items.ACTIVE,
+        post_date = datetime.datetime.now,
+        times_reported = 0 )
+    i.save()
+    i = Items(
+        image_urls = "https://app.bakkle.com/img/00s0s_49F9D9EnAJ3_600x450.jpg",
+        title = "Bicycle",
+        description = "Pure fix fixie bicycle.",
+        location = "39.417672,-87.330438",
+        seller = get_object_or_404(Account, pk=account_id),
+        price = 300,
+        tags = "bicycle",
+        method = Items.PICK_UP,
+        status = Items.ACTIVE,
+        post_date = datetime.datetime.now,
+        times_reported = 0 )
+    i.save()
+    i = Items(
+        image_urls = "https://app.bakkle.com/img/00T0T_f1xeeb2KYxA_600x450.jpg",
+        title = "Canon 50D",
+        description = "Canon 50D digital camera. Comes with f1.8 50mm lens.",
+        location = "39.417672,-87.330438",
+        seller = get_object_or_404(Account, pk=account_id),
+        price = 30.00,
+        tags = "canon, 50d, digital camera",
+        method = Items.PICK_UP,
+        status = Items.ACTIVE,
+        post_date = datetime.datetime.now,
+        times_reported = 0 )
+    i.save()
+    i = Items(
+        image_urls = "https://app.bakkle.com/img/00u0u_hj2g60Tn2D7_600x450.jpg",
+        title = "iPhone 5",
+        description = "White Apple iphone 5. Unlocked",
+        location = "39.417672,-87.330438",
+        seller = get_object_or_404(Account, pk=account_id),
+        price = 200.00,
+        tags = "apple, iphone, iphone 5",
+        method = Items.PICK_UP,
+        status = Items.ACTIVE,
+        post_date = datetime.datetime.now,
+        times_reported = 0 )
+    i.save()
+    i = Items(
+        image_urls = "https://app.bakkle.com/img/00V0V_kQXPgLCzkEl_600x450.jpg",
+        title = "weights",
+        description = "Premium adjustable hand barbell weight set.",
+        location = "39.417672,-87.330438",
+        seller = get_object_or_404(Account, pk=account_id),
+        price = 300.00,
+        tags = "weights, barbell",
+        method = Items.PICK_UP,
+        status = Items.ACTIVE,
+        post_date = datetime.datetime.now,
+        times_reported = 0 )
+    i.save()
+    i = Items(
+        image_urls = "https://app.bakkle.com/img/00W0W_hCYzWAyYAvP_600x450.jpg",
+        title = "Blender",
+        description = "Blender, used. Runs great. 5 speeds with turbo",
+        location = "39.417672,-87.330438",
+        seller = get_object_or_404(Account, pk=account_id),
+        price = 12.00,
+        tags = "blender",
+        method = Items.PICK_UP,
+        status = Items.ACTIVE,
+        post_date = datetime.datetime.now,
+        times_reported = 0 )
+    i.save()
+    i = Items(
+        image_urls = "https://app.bakkle.com/img/00404_8sCApbm5Bvc_600x450.jpg",
+        title = "Playstation 2",
+        description = "Playstation 2 with controller. Broken, needs laser cleaning. Won't read discs.",
+        location = "39.417672,-87.330438",
+        seller = get_object_or_404(Account, pk=account_id),
+        price = 45.00,
+        tags = "sony, playstation, controller",
+        method = Items.PICK_UP,
+        status = Items.ACTIVE,
+        post_date = datetime.datetime.now,
+        times_reported = 0 )
+    i.save()
+    i = Items(
+        image_urls = "https://app.bakkle.com/img/00808_k0TscttMik5_600x450.jpg",
+        title = "Baseball bat",
+        description = "Basic home security system.",
+        location = "39.417672,-87.330438",
+        seller = get_object_or_404(Account, pk=account_id),
+        price = 10.00,
+        tags = "baseball, security, bat",
+        method = Items.PICK_UP,
+        status = Items.ACTIVE,
+        post_date = datetime.datetime.now,
+        times_reported = 0 )
+    i.save()
+    i = Items(
+        image_urls = "https://app.bakkle.com/img/00909_iVAvBfYmpNm_600x450.jpg",
+        title = "Gas grille",
+        description = "Propane barbeque grill with side burner. 2 years old worth $200 from Lowes. Full propane bottle included.",
+        location = "39.417672,-87.330438",
+        seller = get_object_or_404(Account, pk=account_id),
+        price = 10.00,
+        tags = "propane, gas, grille, barbeque, bbq",
+        method = Items.PICK_UP,
+        status = Items.ACTIVE,
+        post_date = datetime.datetime.now,
+        times_reported = 0 )
+    i.save()
+    i = Items(
+        image_urls = "https://app.bakkle.com/img/01313_fXdf3fNJDJC_600x450.jpg",
+        title = "Marketing textbooks",
+        description = "MKTG marketing text (instructor edition) by Lam, hair, mcdaniel and Essentials of Entrepreneurship and Small Business Management by Normal M. Scarborough (7th global edition).",
+        location = "39.417672,-87.330438",
+        seller = get_object_or_404(Account, pk=account_id),
+        price = 175.00,
+        tags = "marketing, textbooks",
+        method = Items.PICK_UP,
+        status = Items.ACTIVE,
+        post_date = datetime.datetime.now,
+        times_reported = 0 )
+    i.save()
+    i = Items(
+        image_urls = "https://app.bakkle.com/img/01313_gsH7Yan7PYA_600x450.jpg",
+        title = "Nike shoes",
+        description = "Nike women's air max shoes size 6 1/2. Never worn outside.",
+        location = "39.417672,-87.330438",
+        seller = get_object_or_404(Account, pk=account_id),
+        price = 90.00,
+        tags = "shoes, nike, womens",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
         post_date = datetime.datetime.now,
@@ -199,12 +408,6 @@ def reset(request):
         post_date = datetime.datetime.now,
         times_reported = 0 )
     i.save()
-    # b = BuyerItem(
-    #     buyer = i.seller,
-    #     item = i,
-    #     confirmed_price = i.price,
-    #     status = BuyerItem.WANT )
-    # b.save()
 
     print("Adding {}".format(i.title))
     return HttpResponse("resetting {}".format(i.title)) #change success value
