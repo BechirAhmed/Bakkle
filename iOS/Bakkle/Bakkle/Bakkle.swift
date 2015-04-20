@@ -255,13 +255,13 @@ class Bakkle {
         task.resume()
     }
     
-    func addItem(title: String, description: String, location: String, price: String, tags: String, method: String) {
+    func addItem(title: String, description: String, location: String, price: String, tags: String, method: String, imageToSend: String) {
         let url: NSURL? = NSURL(string: url_base + url_add_item)
         let request = NSMutableURLRequest(URL: url!)
         let location = "39.417672,-87.330438"
         
         request.HTTPMethod = "POST"
-        let postString = "device_token=\(self.deviceUUID)&title=\(title)&description=\(description)&location=\(location)&account_id=\(Bakkle.sharedInstance.account_id)&price=\(price)&tags=\(tags)&method=\(method)"
+        let postString = "device_token=\(self.deviceUUID)&title=\(title)&description=\(description)&location=\(location)&account_id=\(Bakkle.sharedInstance.account_id)&price=\(price)&tags=\(tags)&method=\(method)&image=\(imageToSend)"
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
         
         info("[Bakkle] addItem")

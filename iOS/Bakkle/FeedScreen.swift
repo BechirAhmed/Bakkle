@@ -13,6 +13,7 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
     var state : MDCPanState!
     
     let menuSegue = "presentNav"
+    let itemDetailSegue = "ItemDetailSegue"
     
     let options = MDCSwipeToChooseViewOptions()
     var swipeView : MDCSwipeToChooseView!
@@ -32,6 +33,7 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
     @IBOutlet weak var seachBar: UISearchBar!
     
     var hardCoded = false
+    var itemDetailTap: UITapGestureRecognizer!
     
     var item_id = 42 //TODO: unhardcode this
     var loaded = false
@@ -79,10 +81,20 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
         
         var tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
         self.view.addGestureRecognizer(tap)
+        
+        itemDetailTap = UITapGestureRecognizer(target: self, action: "goToDetails")
     }
     
     func dismissKeyboard() {
         self.seachBar.resignFirstResponder()
+    }
+    
+    func goToDetails() {
+        let itemDet = ItemDetails()
+        println("GOES IN DETAILS VIEW CONTROLLER")
+   //     itemDet.imgDet.image = swipeView.imageView.image
+        self.presentViewController(itemDet, animated: true, completion: nil)
+        
     }
     
     /* Used at end of swipe, this is used to load the next item in the view */

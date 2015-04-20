@@ -59,7 +59,9 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     @IBOutlet weak var add: UIButton!    
     
     @IBAction func btnAdd(sender: AnyObject) {
-        Bakkle.sharedInstance.addItem(self.titleField.text, description: "", location: "", price: self.priceField.text, tags: self.tagsField.text, method: self.methodField.text)
+        var imageData = UIImageJPEGRepresentation(imageView.image, 0.5)
+        let base64String = imageData.base64EncodedStringWithOptions(NSDataBase64EncodingOptions.allZeros)
+        Bakkle.sharedInstance.addItem(self.titleField.text, description: "", location: "", price: self.priceField.text, tags: self.tagsField.text, method: self.methodField.text, imageToSend: base64String)
         
         let alertController = UIAlertController(title: "Bakkle", message:
             "Trying to send item to server.", preferredStyle: UIAlertControllerStyle.Alert)
