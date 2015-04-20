@@ -87,7 +87,7 @@
 		5E023F871AD59F200002AFBC /* logo-white-design-png-transp-100.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-white-design-png-transp-100.png"; sourceTree = "<group>"; };
 		5E0242901AC47FFB0094BB05 /* Screen Shot 2015-03-26 at 1.56.29 PM 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Screen Shot 2015-03-26 at 1.56.29 PM 1.png"; path = "../Screen Shot 2015-03-26 at 1.56.29 PM 1.png"; sourceTree = "<group>"; };
 		5E0242921AC481E80094BB05 /* menubtn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = menubtn.png; path = ../menubtn.png; sourceTree = "<group>"; };
-		5E0E0CD41ADEE86C008D9467 /* ImageLabelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageLabelView.swift; sourceTree = "<group>"; };
+		5E0E0CD41ADEE86C008D9467 /* ImageLabelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImageLabelView.swift; path = Bakkle/ImageLabelView.swift; sourceTree = "<group>"; };
 		5E1DCC9E1AD44C71002D41FD /* tiger.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = tiger.jpg; sourceTree = "<group>"; };
 		5E1DCCA01AD47C53002D41FD /* btn-check.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-check.png"; sourceTree = "<group>"; };
 		5E1DCCA11AD47C53002D41FD /* btn-x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-x.png"; sourceTree = "<group>"; };
@@ -233,7 +233,6 @@
 				5EBDD6971AB211E600C7FBE7 /* Images.xcassets */,
 				5EBDD6991AB211E600C7FBE7 /* LaunchScreen.xib */,
 				5EBDD68E1AB211E600C7FBE7 /* Supporting Files */,
-				5E0E0CD41ADEE86C008D9467 /* ImageLabelView.swift */,
 			);
 			path = Bakkle;
 			sourceTree = "<group>";
@@ -298,6 +297,7 @@
 				5EE2C99C1AB9F0FA0031D8CD /* UIView+MDCSwipeToChoose.h */,
 				5EE2C99D1AB9F0FA0031D8CD /* UIView+MDCSwipeToChoose.m */,
 				5EE2C99E1AB9F0FA0031D8CD /* MDCSwipeToChooseView.h */,
+				5E0E0CD41ADEE86C008D9467 /* ImageLabelView.swift */,
 				5E1FEE7B1AD8641900C08131 /* MDCSwipeToChooseView.m */,
 				5EE2C9A01AB9F0FA0031D8CD /* MDCSwipeOptions.h */,
 				5EE2C9A11AB9F0FA0031D8CD /* MDCSwipeOptions.m */,

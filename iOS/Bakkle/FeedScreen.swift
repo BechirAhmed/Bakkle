@@ -174,14 +174,16 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
 
                 var itemDetails: NSDictionary = topItem.valueForKey("fields") as! NSDictionary!
                 let imgURLs: String = itemDetails.valueForKey("image_urls") as! String
+                let topTitle: String = itemDetails.valueForKey("title") as! String
+                let topPrice: String = itemDetails.valueForKey("price") as! String
                 
                 //TEMP for testing, remove later.
-                if imgURLs == "https://app.bakkle.com/img/b83bdbd.png" {
-                    feedView.imageView.image = UIImage(named: "item-lawnmower.png")
-                    feedView.imageView.contentMode = UIViewContentMode.ScaleAspectFill
-                    view.addSubview(feedView)
-                    return
-                }
+//                if imgURLs == "https://app.bakkle.com/img/b83bdbd.png" {
+//                    feedView.imageView.image = UIImage(named: "item-lawnmower.png")
+//                    feedView.imageView.contentMode = UIViewContentMode.ScaleAspectFill
+//                    view.addSubview(feedView)
+//                    return
+//                }
                 
                 println("[FeedScreen] Downloading image (top) \(imgURLs)")
                 dispatch_async(dispatch_get_global_queue(
@@ -192,6 +194,7 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
                             println("[FeedScreen] displaying image (top)")
                             feedView.imageView.image = UIImage(data: imgData)
                             feedView.imageView.contentMode = UIViewContentMode.ScaleAspectFill
+                            feedView.nameLabel.text = topTitle + "  $" + topPrice
                             super.view.addSubview(feedView)
                         }
                     }
