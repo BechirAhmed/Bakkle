@@ -17,10 +17,8 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
     
     let options = MDCSwipeToChooseViewOptions()
     var swipeView : MDCSwipeToChooseView!
+    var bottomView : MDCSwipeToChooseView!
     var infoView: UIView!
-    
-    @IBOutlet weak var backImgView: UIImageView!
-    @IBOutlet weak var backImgView2: UIImageView!
     
     @IBOutlet weak var menuBtn: UIButton!
     
@@ -54,7 +52,6 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.setNavigationBarHidden(true, animated: true)
-//        self.backImgView = UIImageView(frame: CGRectMake(swipeView.frame.origin.x, swipeView.frame.origin.y, swipeView.frame.size.width, swipeView.frame.size.height))
         
         progressIndicator.startAnimating()
         
@@ -65,11 +62,6 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
         options.holdText = "Holding"
         options.reportText = "report"
         options.holdColor = UIColor.blueColor()
-        options.onPan = {(state) in
-            if state.thresholdRatio == 1 && state.direction == MDCSwipeDirection.Left {
-                println("let go to delete the picture.")
-            }
-        }
         
         /* Menu reveal */
         if self.revealViewController() != nil {
@@ -117,12 +109,12 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
         
         /* First time page is loaded, swipe view will not exist and we need to create it. */
         self.swipeView = MDCSwipeToChooseView(frame: self.view.bounds, options: options)
-        self.backImgView2 = UIImageView(frame: self.view.bounds)
-//        self.backImgView.frame = self.view.bounds
+        self.bottomView = MDCSwipeToChooseView(frame: CGRectMake(self.swipeView.frame.origin.x, self.swipeView.frame.origin.y + 10, self.swipeView.frame.width, self.swipeView.frame.height), options: nil)
         
         /* If view is off the page we need to reset the view */
         if (state != nil && state.direction != MDCSwipeDirection.None) {
             self.swipeView = MDCSwipeToChooseView(frame: self.view.bounds, options: options)
+            self.bottomView = MDCSwipeToChooseView(frame: CGRectMake(self.swipeView.frame.origin.x, self.swipeView.frame.origin.y + 10, self.swipeView.frame.width, self.swipeView.frame.height), options: nil)
         } else {
            //  View is already on the page AND is still visible. Do nothing
         }
@@ -184,7 +176,7 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
                     self.item_id = Int(x.intValue)
                 }
 
-                var itemDetails: NSDictionary = topItem.valueForKey("fields") as! NSDictionary!
+                var itemDetails: NSDictionary = topItem.valueForKey("fields") as! NSDictionary
                 let imgURLs: String = itemDetails.valueForKey("image_urls") as! String
                 let topTitle: String = itemDetails.valueForKey("title") as! String
                 let topPrice: String = itemDetails.valueForKey("price") as! String
@@ -215,8 +207,12 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
                 // Load BOTTOM item card
                 if Bakkle.sharedInstance.feedItems.count > 1 {
                     var bottomItem = Bakkle.sharedInstance.feedItems[1]
-                    var bottomItemDetail: NSDictionary = bottomItem.valueForKey("fields") as! NSDictionary!
-                    let bottomURL: String = bottomItemDetail.valueForKey("image_urls") as! String
+                    var bottomItemDetails: NSDictionary = bottomItem.valueForKey("fields") as! NSDictionary
+                    let bottomURL: String = bottomItemDetails.valueForKey("image_urls") as! String
+                    let bottomTitle: String = bottomItemDetails.valueForKey("title") as! String
+                    let bottomPrice: String = bottomItemDetails.valueForKey("price") as! String
+                    
+                    self.bottomView.userInteractionEnabled = false
                     
                     println("[FeedScreen] Downloading image (bottom) \(bottomURL)")
                     dispatch_async(dispatch_get_global_queue(
@@ -225,9 +221,10 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
                             if let imgData = NSData(contentsOfURL: imgURL!) {
                                 dispatch_async(dispatch_get_main_queue()) {
                                     println("[FeedScreen] displaying image (bottom)")
-                                    self.backImgView.image = UIImage(data: imgData)
-                                    //self.backImgView!.frame = CGRect(origin: feedView.imageView.frame.origin, size: feedView.imageView.frame.size )
-                                    self.backImgView.contentMode = UIViewContentMode.ScaleAspectFill
+                                    self.bottomView.imageView.image = UIImage(data: imgData)
+                                    self.bottomView.imageView.contentMode = UIViewContentMode.ScaleAspectFill
+                                    self.bottomView.nameLabel.text = bottomTitle + "  $" + bottomPrice
+                                    
                                 }
                             }
                     }
@@ -278,6 +275,18 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
             Bakkle.sharedInstance.markItem("report", item_id: self.item_id, success: {}, fail: {})
             loaded = false
             loadNext()
+        }
+        
+        if bottomView != nil {
+            self.swipeView = self.bottomView
+        }
+        
+        if bottomView != nil {
+            self.bottomView.alpha = 0.0
+            self.view.insertSubview(self.bottomView, belowSubview: self.swipeView)
+            UIView.animateWithDuration(0.5, delay: 0.0, options: UIViewAnimationOptions.CurveEaseInOut, animations: { () -> Void in
+                self.bottomView.alpha = 1.0
+            }, completion: nil)
         }
     }
     
