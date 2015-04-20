@@ -62,6 +62,13 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
         options.holdText = "Holding"
         options.reportText = "report"
         options.holdColor = UIColor.blueColor()
+//        options.onPan = { state -> Void in
+//            if self.bottomView != nil {
+//                self.bottomView.alpha = 0.0
+//                var frame: CGRect = self.frontCardViewFrame()
+//                self.bottomView.frame = CGRectMake(frame.origin.x, frame.origin.y - (state.thresholdRatio * 10.0), CGRectGetWidth(frame), CGRectGetHeight(frame))
+//            }
+//        }
         
         /* Menu reveal */
         if self.revealViewController() != nil {
@@ -75,6 +82,13 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
         self.view.addGestureRecognizer(tap)
         
         itemDetailTap = UITapGestureRecognizer(target: self, action: "goToDetails")
+    }
+    
+    func frontCardViewFrame() -> CGRect{
+        var horizontalPadding:CGFloat = 20.0
+        var topPadding:CGFloat = 60.0
+        var bottomPadding:CGFloat = 200.0
+        return CGRectMake(horizontalPadding,topPadding,CGRectGetWidth(self.view.frame) - (horizontalPadding * 2), CGRectGetHeight(self.view.frame) - bottomPadding)
     }
     
     func dismissKeyboard() {
