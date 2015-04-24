@@ -7,11 +7,13 @@
 //
 
 import UIKit
+import Social
 
 class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
 
     var state : MDCPanState!
-    
+
+    let ChooseItemViewImageLabelWidth:CGFloat = 42.0;
     let menuSegue = "presentNav"
     let itemDetailSegue = "ItemDetailSegue"
     
@@ -21,6 +23,8 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
     var infoView: UIView!
     
     @IBOutlet weak var menuBtn: UIButton!
+    
+    @IBOutlet weak var noNewItemsLabel: UILabel!
     
     @IBOutlet weak var addItemBtn: UIButton!
     
@@ -61,14 +65,17 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
         options.nopeText = "Meh"
         options.holdText = "Holding"
         options.reportText = "report"
-        options.holdColor = UIColor.blueColor()
-//        options.onPan = { state -> Void in
-//            if self.bottomView != nil {
-//                self.bottomView.alpha = 0.0
-//                var frame: CGRect = self.frontCardViewFrame()
-//                self.bottomView.frame = CGRectMake(frame.origin.x, frame.origin.y - (state.thresholdRatio * 10.0), CGRectGetWidth(frame), CGRectGetHeight(frame))
-//            }
-//        }
+        options.holdColor = UIColor.whiteColor()
+
+        if hardCoded {
+            options.onPan = { state -> Void in
+                if self.bottomView != nil {
+                    self.bottomView.alpha = 0.0
+                    var frame: CGRect = self.frontCardViewFrame()
+                    self.bottomView.frame = CGRectMake(frame.origin.x, frame.origin.y - (state.thresholdRatio *     10.0), CGRectGetWidth(frame), CGRectGetHeight(frame))
+                }
+            }
+        }
         
         /* Menu reveal */
         if self.revealViewController() != nil {
@@ -124,11 +131,13 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
         /* First time page is loaded, swipe view will not exist and we need to create it. */
         self.swipeView = MDCSwipeToChooseView(frame: self.view.bounds, options: options)
         self.bottomView = MDCSwipeToChooseView(frame: CGRectMake(self.swipeView.frame.origin.x, self.swipeView.frame.origin.y + 10, self.swipeView.frame.width, self.swipeView.frame.height), options: nil)
+        self.view.insertSubview(self.bottomView, belowSubview: self.swipeView)
         
         /* If view is off the page we need to reset the view */
         if (state != nil && state.direction != MDCSwipeDirection.None) {
             self.swipeView = MDCSwipeToChooseView(frame: self.view.bounds, options: options)
             self.bottomView = MDCSwipeToChooseView(frame: CGRectMake(self.swipeView.frame.origin.x, self.swipeView.frame.origin.y + 10, self.swipeView.frame.width, self.swipeView.frame.height), options: nil)
+            self.view.insertSubview(self.bottomView, belowSubview: self.swipeView)
         } else {
            //  View is already on the page AND is still visible. Do nothing
         }
@@ -195,14 +204,6 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
                 let topTitle: String = itemDetails.valueForKey("title") as! String
                 let topPrice: String = itemDetails.valueForKey("price") as! String
                 
-                //TEMP for testing, remove later.
-//                if imgURLs == "https://app.bakkle.com/img/b83bdbd.png" {
-//                    feedView.imageView.image = UIImage(named: "item-lawnmower.png")
-//                    feedView.imageView.contentMode = UIViewContentMode.ScaleAspectFill
-//                    view.addSubview(feedView)
-//                    return
-//                }
-                
                 println("[FeedScreen] Downloading image (top) \(imgURLs)")
                 dispatch_async(dispatch_get_global_queue(
                     Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
@@ -212,7 +213,7 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
                             println("[FeedScreen] displaying image (top)")
                             feedView.imageView.image = UIImage(data: imgData)
                             feedView.imageView.contentMode = UIViewContentMode.ScaleAspectFill
-                            feedView.nameLabel.text = topTitle + "  $" + topPrice
+                            feedView.nameLabel.text = topTitle + ",  $" + topPrice
                             super.view.addSubview(feedView)
                         }
                     }
@@ -237,7 +238,7 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
                                     println("[FeedScreen] displaying image (bottom)")
                                     self.bottomView.imageView.image = UIImage(data: imgData)
                                     self.bottomView.imageView.contentMode = UIViewContentMode.ScaleAspectFill
-                                    self.bottomView.nameLabel.text = bottomTitle + "  $" + bottomPrice
+                                    self.bottomView.nameLabel.text = bottomTitle + ",  $" + bottomPrice
                                     
                                 }
                             }
@@ -245,8 +246,7 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
                 }
             } else {
                 /* No items left in feed */
-                
-                //TODO: Display no items label
+                noNewItemsLabel.alpha = 1
             }
         }
         loaded = true
@@ -255,6 +255,16 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
     func viewDidCancelSwipe(view: UIView!) {
         //println("You canceled the swipe")
     }
+    
+    func buildImageLabelViewLeftOf(x:CGFloat, image:UIImage, text:NSString) -> ImageLabelView{
+        var frame:CGRect = CGRect(x:x-ChooseItemViewImageLabelWidth, y: 0,
+            width: ChooseItemViewImageLabelWidth,
+            height: CGRectGetHeight(self.infoView.bounds))
+        var view:ImageLabelView = ImageLabelView(frame:frame, image:image, text:text)
+        view.autoresizingMask = UIViewAutoresizing.FlexibleLeftMargin
+        return view
+    }
+
     
     func view(view: UIView!, shouldBeChosenWithDirection direction: MDCSwipeDirection) -> Bool {
         if direction == MDCSwipeDirection.Left || direction == MDCSwipeDirection.Right || direction == MDCSwipeDirection.Up || direction == MDCSwipeDirection.Down {
@@ -294,7 +304,7 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
         if bottomView != nil {
             self.swipeView = self.bottomView
         }
-        
+
         if bottomView != nil {
             self.bottomView.alpha = 0.0
             self.view.insertSubview(self.bottomView, belowSubview: self.swipeView)
