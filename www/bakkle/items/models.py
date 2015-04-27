@@ -1,12 +1,20 @@
+import md5
+import datetime
+
 from django.db import models
+from django.forms import ModelForm
 from account.models import Account
 
 class Items(models.Model):
     PICK_UP = 'Pick-up'
     DELIVERY = 'Delivery'
+    MEET = 'Meet'
+    SHIP = 'Ship'
     METHOD_CHOICES = (
         (PICK_UP, 'Pick-up'),
         (DELIVERY, 'Delivery'),
+        (MEET, 'Meet'),
+        (SHIP, 'Ship'),
     )
     ACTIVE = 'Active'
     PENDING = 'Pending'
@@ -75,5 +83,7 @@ class BuyerItem(models.Model):
     buyer = models.ForeignKey(Account)
     item = models.ForeignKey(Items)
     view_time = models.DateTimeField(auto_now = True)
+    view_duration = models.DecimalField(max_digits = 10, decimal_places = 2)
     status = models.CharField(max_length=11, choices = STATUS_OPTIONS, default=ACTIVE)
     confirmed_price = models.DecimalField(max_digits = 7, decimal_places = 2)
+    accepted_sale_price = models.BooleanField(default = False)

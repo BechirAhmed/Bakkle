@@ -34,6 +34,7 @@ class Account(models.Model):
     max_price = models.DecimalField(max_digits=7, decimal_places=2, default=100.00)
     display_num_items = models.IntegerField(default = 100)
     seller_location = models.CharField(max_length=11, null = True)
+    disabled = models.BooleanField(default = False)
 
     def __str__(self):
         return "ID={} email={} displayname={}".format(self.id, self.email, self.display_name)
