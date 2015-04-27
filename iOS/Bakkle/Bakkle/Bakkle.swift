@@ -11,22 +11,26 @@ import Foundation
 class Bakkle {
     
     let apiVersion: Float = 1.2
-    let url_base: String          = "https://app.bakkle.com/"
-    let url_login: String         = "account/login/"
+    var url_base: String          = "https://app.bakkle.com/"
+//    let url_base: String          = "http://137.112.63.186:8000/"
+    let url_login: String         = "account/login_facebook/"
     let url_logout: String        = "account/logout/"
     let url_facebook: String      = "account/facebook/"
     let url_register_push: String = "account/device/register_push/"
     let url_reset: String         = "items/reset/"
     let url_mark: String          = "items/" //+status/
     let url_feed: String          = "items/feed/"
+    let url_add_item: String      = "items/add_item/"
     
     var debug: Int = 2 // 0=off
+    var serverNum: Int = 0
     var deviceUUID : String = UIDevice.currentDevice().identifierForVendor.UUIDString
     
     var account_id: Int! = 0
     var display_name: String!
     var email: String!
-    var facebook_id: Int32!
+    var facebook_id: Int!
+    var facebook_id_str: String!
     
     var feedItems: [NSObject]!
     var responseDict: NSDictionary!
@@ -40,18 +44,35 @@ class Bakkle {
 
     init() {
         println("Bakkle API initialized \(apiVersion)");
+        serverNum = NSUserDefaults.standardUserDefaults().integerForKey("server")
+        setServer()
+        println("Using server: \(self.serverNum) \(self.url_base)")
+    }
+    
+    func setServer() {
+        switch( serverNum )
+        {
+        case 0: self.url_base = "https://app.bakkle.com/"
+        case 1: self.url_base = "localhost"
+        case 2: self.url_base = "https://test.bakkle.com/"
+        default: self.url_base = "https://app.bakkle.com/"
+        }
     }
 
     func refresh() {
         /* TODO: this will request a data update from the server */
     }
-
+    
     /* register and login using facebook */
     func facebook(email: String, gender: String, username: String,
         name: String, userid: String, locale: String, first_name: String, last_name: String, success: ()->()) {
         let url:NSURL? = NSURL(string: url_base + url_facebook)
         let request = NSMutableURLRequest(URL: url!)
         
+        println("userid: \(userid)")
+        self.facebook_id_str = userid
+        self.facebook_id = userid.toInt()
+            
         request.HTTPMethod = "POST"
             let postString = "email=\(email)&Name=\(name)&UserName=\(username)&Gender=\(gender)&UserID=\(userid)&locale=\(locale)&FirstName=\(first_name)&LastName=\(last_name)&device_uuid=\(self.deviceUUID)"
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
@@ -87,10 +108,10 @@ class Bakkle {
             let request = NSMutableURLRequest(URL: url!)
             
             request.HTTPMethod = "POST"
-            let postString = "account_id=\(self.account_id)"
+            let postString = "account_id=\(self.account_id)&device_uuid=\(self.deviceUUID)&user_id=\(self.facebook_id)"
             request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
             
-            println("[Bakkle] login")
+            println("[Bakkle] login (facebook)")
             println("URL: \(url) METHOD: \(request.HTTPMethod) BODY: \(postString)")
             let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
                 data, response, error in
@@ -111,7 +132,7 @@ class Bakkle {
                     self.account_id = responseDict.valueForKey("account_id") as! Int!
                     self.display_name = responseDict.valueForKey("display_name") as! String!
                     self.email = responseDict.valueForKey("email") as! String!
-                    self.facebook_id = responseDict.valueForKey("facebook_id")!.intValue
+                    //self.facebook_id = (responseDict.valueForKey("facebook_id") as! String).toInt()
                     success()
                 } else {
                     fail()
@@ -167,7 +188,7 @@ class Bakkle {
             }
             
             let responseString = NSString(data: data, encoding: NSUTF8StringEncoding)
-            println("Response: \(responseString)")
+            self.resp("Response: \(responseString)")
         }
         task.resume()
     }
@@ -183,17 +204,13 @@ class Bakkle {
         
         println("[Bakkle] markItem")
         println("URL: \(url) METHOD: \(request.HTTPMethod) BODY: \(postString)")
+        dispatch_async(dispatch_get_global_queue(
+            Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
             data, response, error in
             
-//            if error != nil {
-//                println("error=\(error)")
-//                fail()
-//                return
-//            }
-            
             if let responseString = NSString(data: data, encoding: NSUTF8StringEncoding) {
-                println("Response: \(responseString)")
+                self.resp("Response: \(responseString)")
                 
                 //TODO: Check error handling here.
 //                var err: NSError?
@@ -208,6 +225,7 @@ class Bakkle {
             fail()
         }
         task.resume()
+        }
     }
     
     /* Populates the feed with items from the server */
@@ -228,15 +246,12 @@ class Bakkle {
                 self.err("error= \(error)")
                 return
             }
-            let tempStr = "{\"status\": 1, \"feed\": [{\"fields\": {\"status\": \"Active\", \"times_reported\": 0, \"description\": \"Year old orange push mower. Some wear and sun fadding. Was kept outside and not stored in shed.\", \"title\": \"Orange Push Mower\", \"price\": \"50.25\", \"tags\": \"lawnmower, orange, somewear\", \"image_urls\": \"https://app.bakkle.com/img/b83bdbd.png\", \"seller\": 1, \"post_date\": \"2015-04-08T13:50:02.850Z\", \"location\": \"39.417672,-87.330438\", \"method\": \"Pick-up\"}, \"model\": \"items.items\", \"pk\": 10},{\"fields\":{\"status\":\"Active\",\"times_reported\":0,\"description\":\"Homemade lawn mower. Includes rabbit and water container.\",\"title\":\"Rabbit Push Mower\",\"price\":\"10.99\",\"tags\":\"lawnmower, homemade, rabbit\",\"image_urls\":\"https://app.bakkle.com/img/b8348df.jpg\",\"seller\":1,\"post_date\":\"2015-04-09T03:41:40.465Z\",\"location\":\"39.417672,-87.330438\",\"method\":\"Pick-up\"},\"model\":\"items.items\",\"pk\":47},{\"fields\":{\"status\":\"Active\",\"times_reported\":0,\"description\":\"iPhone 6. Has a cracked screen. Besides screen phone is in good condition.\",\"title\":\"iPhone 6 Cracked\",\"price\":\"65.99\",\"tags\":\"iPhone6, cracked, damaged\",\"image_urls\":\"https://app.bakkle.com/img/b8349df.jpg\",\"seller\":1,\"post_date\":\"2015-04-09T03:41:40.473Z\",\"location\":\"39.417672,-87.330438\",\"method\":\"Delivery\"},\"model\":\"items.items\",\"pk\":48}]}"
-            
-            let tempData = tempStr.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
-            
-            let responseString: String = NSString(data: tempData!, encoding: NSUTF8StringEncoding)! as String
+
+            let responseString: String = NSString(data: data, encoding: NSUTF8StringEncoding)! as String
             self.resp("Response: \(responseString)")
             var parseError: NSError?
             
-            self.responseDict = NSJSONSerialization.JSONObjectWithData(tempData!, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! NSDictionary!
+            self.responseDict = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! NSDictionary!
              self.resp("RESPONSE DICT IS: \(self.responseDict)")
             
              if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
@@ -246,6 +261,36 @@ class Bakkle {
             
         }
         task.resume()
+    }
+    
+    func addItem(title: String, description: String, location: String, price: String, tags: String, method: String, imageToSend: String) {
+        let url: NSURL? = NSURL(string: url_base + url_add_item)
+        let request = NSMutableURLRequest(URL: url!)
+        let location = "39.417672,-87.330438"
+        
+        request.HTTPMethod = "POST"
+        let postString = "device_token=\(self.deviceUUID)&title=\(title)&description=\(description)&location=\(location)&account_id=\(Bakkle.sharedInstance.account_id)&price=\(price)&tags=\(tags)&method=\(method)&image=\(imageToSend)"
+        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+        
+        info("[Bakkle] addItem")
+        info("URL: \(url) METHOD: \(request.HTTPMethod) BODY: \(postString)")
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
+            data, response, error in
+            
+            if error != nil {
+                self.err("error= \(error)")
+                return
+            }
+            
+            let responseString: String = NSString(data: data, encoding: NSUTF8StringEncoding)! as String
+            println("Response: \(responseString)")
+            var parseError: NSError?
+            
+            self.responseDict = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! NSDictionary!
+            self.resp("RESPONSE DICT IS: \(self.responseDict)")            
+        }
+        task.resume()
+
     }
     
     /* reset feed items on server for DEMO */

@@ -35,6 +35,8 @@ static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
 
 @interface MDCSwipeToChooseView ()
 @property (nonatomic, strong) MDCSwipeToChooseViewOptions *options;
+@property (nonatomic, strong) UIView *informationView;
+
 @end
 
 @implementation MDCSwipeToChooseView
@@ -61,6 +63,7 @@ static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
         [self constructNopeImageView];
         [self constructHoldView];
         [self constructReportView];
+        [self constructInformationView];
         [self setupSwipeToChoose];
     }
     return self;
@@ -77,6 +80,34 @@ static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
                                                  green:220.f
                                                   blue:220.f
                                                  alpha:1.f].CGColor;
+}
+
+- (void)constructInformationView {
+    CGFloat bottomHeight = 60.f;
+    CGRect bottomFrame = CGRectMake(0,
+                                    CGRectGetHeight(self.bounds) - bottomHeight,
+                                    CGRectGetWidth(self.bounds),
+                                    bottomHeight);
+    _informationView = [[UIView alloc] initWithFrame:bottomFrame];
+    _informationView.backgroundColor = [UIColor whiteColor];
+    _informationView.clipsToBounds = YES;
+    _informationView.autoresizingMask = UIViewAutoresizingFlexibleWidth |
+    UIViewAutoresizingFlexibleTopMargin;
+    [self addSubview:_informationView];
+    
+    [self constructNameLabel];
+}
+
+- (void)constructNameLabel {
+    CGFloat leftPadding = 12.f;
+    CGFloat topPadding = 17.f;
+    CGRect frame = CGRectMake(leftPadding,
+                              topPadding,
+                              floorf(CGRectGetWidth(_informationView.frame)),
+                              CGRectGetHeight(_informationView.frame) - topPadding);
+    _nameLabel = [[UILabel alloc] initWithFrame:frame];
+    _nameLabel.text = [NSString stringWithFormat:@"%s %s", "", ""];
+    [_informationView addSubview:_nameLabel];
 }
 
 - (void)constructImageView {

@@ -49,7 +49,6 @@
  */
 @property (nonatomic, strong) UIView *holdView;
 
-
 /*
  * The "report" view, which fades in as the swipe is made to the bottom.
  */
@@ -60,7 +59,7 @@
  */
 @property (nonatomic, strong) UIView *nopeView;
 
-@property (nonatomic, strong) UILabel *itemTitle;
+@property (nonatomic, strong) UILabel *nameLabel;
 
 /*!
  * The designated initializer takes a `frame` and a set of options to customize
