@@ -239,6 +239,7 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
                                     self.bottomView.imageView.image = UIImage(data: imgData)
                                     self.bottomView.imageView.contentMode = UIViewContentMode.ScaleAspectFill
                                     self.bottomView.nameLabel.text = bottomTitle + ",  $" + bottomPrice
+                                    self.view.insertSubview(self.bottomView, belowSubview: feedView)
                                     
                                 }
                             }
@@ -307,7 +308,6 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
 
         if bottomView != nil {
             self.bottomView.alpha = 0.0
-            self.view.insertSubview(self.bottomView, belowSubview: self.swipeView)
             UIView.animateWithDuration(0.5, delay: 0.0, options: UIViewAnimationOptions.CurveEaseInOut, animations: { () -> Void in
                 self.bottomView.alpha = 1.0
             }, completion: nil)

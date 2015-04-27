@@ -373,7 +373,7 @@ def reset(request):
         times_reported = 0 )
     i.save()
     i = Items(
-        image_urls = "https://app.bakkle.com/img/b8349df.jpg,https://app.bakkle.com/img/b8350df.jpg",
+        image_urls = "https://app.bakkle.com/img/b8349df.jpg",
         title = "iPhone 6 Cracked",
         description = "iPhone 6. Has a cracked screen. Besides screen phone is in good condition.",
         location = "39.417672,-87.330438",

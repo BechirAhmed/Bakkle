@@ -209,12 +209,6 @@ class Bakkle {
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
             data, response, error in
             
-//            if error != nil {
-//                println("error=\(error)")
-//                fail()
-//                return
-//            }
-            
             if let responseString = NSString(data: data, encoding: NSUTF8StringEncoding) {
                 self.resp("Response: \(responseString)")
                 

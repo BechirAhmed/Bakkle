@@ -7,12 +7,26 @@
 //
 
 import UIKit
+import Photos
 
-class SellersGarageView: UIViewController {
+class SellersGarageView: UIViewController, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+    
+    let photoCellIdentifier = "PhotoCell"
+    var assetCollection: PHAssetCollection!
+    var photosAsset: PHFetchResult!
+    var assetThumbnailSize: CGSize!
+    
+    @IBOutlet weak var collectionView: UICollectionView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(true)
+        let scale: CGFloat = UIScreen.mainScreen().scale
+        let cellSize = (self.collectionView.collectionViewLayout as! UICollectionViewFlowLayout).itemSize
     }
     
     /* MENUBAR ITEMS */
@@ -22,6 +36,10 @@ class SellersGarageView: UIViewController {
     
     @IBAction func btnAddItem(sender: AnyObject) {
         // Probably a seque instead
+    }
+    
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection: Int) -> Int {
+        return self.photosAsset != nil ? self.photosAsset.count : 0
     }
     
 }

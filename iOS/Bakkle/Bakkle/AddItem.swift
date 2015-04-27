@@ -12,7 +12,6 @@ import Photos
 class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
     
     let albumName = "Bakkle"
-    var photosAsset: PHFetchResult!
     
     @IBOutlet weak var titleField: UITextField!
     @IBOutlet weak var priceField: UITextField!
@@ -43,6 +42,36 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         tagsField.becomeFirstResponder()
     }
     
+    func textFieldDidBeginEditing(textField: UITextField) {
+        animateViewMoving(true, moveValue: 130)
+    }
+    
+    func textFieldDidEndEditing(textField: UITextField) {
+        animateViewMoving(false, moveValue: 130)
+    }
+    
+    func animateViewMoving(up: Bool, moveValue: CGFloat) {
+        let movementDuration = 0.5
+        let movement = up ? -moveValue : moveValue
+        UIView.beginAnimations("animateView", context: nil)
+        UIView.setAnimationBeginsFromCurrentState(true)
+        UIView.setAnimationDuration(movementDuration)
+        self.view.frame = CGRectOffset(self.view.frame, 0, movement)
+        UIView.commitAnimations()
+    }
+    
+    func keboardWillShow(notification: NSNotification) {
+        var info: NSDictionary = notification.userInfo!
+        var keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
+        var keyboardHeight: CGFloat = keyboardFrame.height
+        
+        var animationDuration: CGFloat = info[UIKeyboardAnimationDurationUserInfoKey] as! CGFloat
+        
+        UIView.animateWithDuration(0.25, delay: 0.25, options: UIViewAnimationOptions.CurveEaseIn, animations: { () -> Void in
+            self.view.frame = CGRectMake(0, self.view.frame.origin.y - keyboardHeight, self.view.bounds.width, self.view.bounds.height)
+        }, completion: nil)
+    }
+    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(true)
         add.enabled = true
@@ -68,6 +97,17 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         alertController.addAction(UIAlertAction(title: "Ok!", style: UIAlertActionStyle.Default,handler: nil))
         self.presentViewController(alertController, animated: true, completion: nil)
     }
+    
+//    func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
+//        
+//        return true
+//    }
+    
+//    func textFieldShouldEndEditing(textField: UITextField) -> Bool {
+//        
+//        self.view.endEditing(true)
+//        return true
+//    }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         if textField == titleField {
