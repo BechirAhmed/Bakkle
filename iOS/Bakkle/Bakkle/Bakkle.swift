@@ -11,7 +11,7 @@ import Foundation
 class Bakkle {
     
     let apiVersion: Float = 1.2
-    let url_base: String          = "https://app.bakkle.com/"
+    var url_base: String          = "https://app.bakkle.com/"
 //    let url_base: String          = "http://137.112.63.186:8000/"
     let url_login: String         = "account/login_facebook/"
     let url_logout: String        = "account/logout/"
@@ -23,6 +23,7 @@ class Bakkle {
     let url_add_item: String      = "items/add_item/"
     
     var debug: Int = 2 // 0=off
+    var serverNum: Int = 0
     var deviceUUID : String = UIDevice.currentDevice().identifierForVendor.UUIDString
     
     var account_id: Int! = 0
@@ -43,12 +44,25 @@ class Bakkle {
 
     init() {
         println("Bakkle API initialized \(apiVersion)");
+        serverNum = NSUserDefaults.standardUserDefaults().integerForKey("server")
+        setServer()
+        println("Using server: \(self.serverNum) \(self.url_base)")
+    }
+    
+    func setServer() {
+        switch( serverNum )
+        {
+        case 0: self.url_base = "https://app.bakkle.com/"
+        case 1: self.url_base = "localhost"
+        case 2: self.url_base = "https://test.bakkle.com/"
+        default: self.url_base = "https://app.bakkle.com/"
+        }
     }
 
     func refresh() {
         /* TODO: this will request a data update from the server */
     }
-
+    
     /* register and login using facebook */
     func facebook(email: String, gender: String, username: String,
         name: String, userid: String, locale: String, first_name: String, last_name: String, success: ()->()) {

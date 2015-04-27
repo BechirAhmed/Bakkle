@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7531" systemVersion="14D131" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7520"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -1543,7 +1543,7 @@
                                     </mask>
                                 </variation>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9J2-jl-t4F">
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9J2-jl-t4F">
                                 <rect key="frame" x="21" y="22" width="54" height="39"/>
                                 <state key="normal" image="menubtn.png">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -1552,7 +1552,7 @@
                                     <action selector="btnMenu:" destination="6Ze-gR-D6u" eventType="touchUpInside" id="axI-b6-PHc"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zTX-TZ-6Zh">
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zTX-TZ-6Zh">
                                 <rect key="frame" x="305" y="25" width="54" height="39"/>
                                 <state key="normal" image="addItem.png">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -1596,6 +1596,8 @@
                                 <exclude reference="e7V-yc-Rjq"/>
                             </mask>
                             <mask key="constraints">
+                                <exclude reference="Rk0-y4-9an"/>
+                                <exclude reference="pTA-67-I6A"/>
                                 <exclude reference="UeV-oN-Npv"/>
                                 <exclude reference="ZJH-li-Sws"/>
                                 <exclude reference="uHQ-PP-OKW"/>
@@ -1607,8 +1609,6 @@
                                 <exclude reference="lje-yx-Mfg"/>
                                 <exclude reference="nI3-6J-lU9"/>
                                 <exclude reference="unH-uM-YUg"/>
-                                <exclude reference="Rk0-y4-9an"/>
-                                <exclude reference="pTA-67-I6A"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
@@ -1616,6 +1616,8 @@
                                 <include reference="e7V-yc-Rjq"/>
                             </mask>
                             <mask key="constraints">
+                                <include reference="Rk0-y4-9an"/>
+                                <include reference="pTA-67-I6A"/>
                                 <include reference="UeV-oN-Npv"/>
                                 <exclude reference="XGq-2d-UCV"/>
                                 <include reference="ZJH-li-Sws"/>
@@ -1633,8 +1635,6 @@
                                 <include reference="lje-yx-Mfg"/>
                                 <include reference="nI3-6J-lU9"/>
                                 <include reference="unH-uM-YUg"/>
-                                <include reference="Rk0-y4-9an"/>
-                                <include reference="pTA-67-I6A"/>
                             </mask>
                         </variation>
                     </view>
