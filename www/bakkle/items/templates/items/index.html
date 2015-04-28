@@ -7,7 +7,8 @@
 {% if item_list %}
   <ul>
     {% for item in item_list %}
-      <li><a href="{% url 'items:detail' item.id %}">{{ item.id }}:</a> {{ item.title }}</li>
+      <li><a href="{% url 'items:detail' item.id %}">{{ item.id }}:</a> {{ item.title }}
+      <br />&nbsp&nbsp&nbsp&nbspStatus: {{ item.status }}</li>
     {% endfor %}
   </ul>
 {% else %}

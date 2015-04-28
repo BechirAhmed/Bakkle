@@ -22,6 +22,8 @@ from account.models import Account
 from common import authenticate
 from django.conf import settings
 
+MAX_ITEM_IMAGE = 5
+
 @csrf_exempt
 def index(request):
     # List all items (this is for web viewing of data only)
@@ -76,7 +78,7 @@ def add_item(request):
 
     # Check for the image params. The max number is 5 and is defined in settings
     image_urls = ""
-    for i in range (1, settings.MAX_ITEM_IMAGE + 1):
+    for i in range (1, MAX_ITEM_IMAGE + 1):
         # Get the image from the request (of format imageX where X is the image number)
         imageData = request.POST.get('image' + str(i), "" )
 
@@ -102,7 +104,7 @@ def add_item(request):
             # Add the new image url to the image_urls for the item
             image_urls = image_urls + filepath + ","
 
-    if (item_id == None or item_id = ""):
+    if (item_id == None or item_id == ""):
         # Create the item
         item = Items.objects.create(
             title = title,
@@ -143,23 +145,76 @@ def add_item(request):
 @require_POST
 @authenticate
 def delete_item(request):
-    update_status(request, Items.DELETED)
+    return update_status(request, Items.DELETED)
 
 @csrf_exempt
 @require_POST
 @authenticate
 def sell_item(request):
-    update_status(request, Items.SOLD)
+    return update_status(request, Items.SOLD)
+
+# This will only be called by the system if an Item has been reported X amount of times.
+# TODO: implement this in the report 
+@csrf_exempt
+def spam_item(request):
+    return update_status(request, Items.SPAM)
+
+# Helper for updating Item Statuses
+def update_status(request, status):
+    # Get the item id 
+    item_id = request.POST.get('item_id', "")
+
+    # Ensure that required fields are present otherwise send back a failed status
+    if (item_id == None or item_id == ""):
+        response_data = { "status":0, "error": "A required parameter was not provided." }
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+    # Get the item
+    item = Items.objects.get(pk=item_id)
+    item.status = status
+    item.save()
+    response_data = { "status":1 }
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 @csrf_exempt
 @require_POST
 @authenticate
-def spam_item(request):
-    update_status(request, Items.)
+def get_seller_items(request):
+    # Get the authentication code
+    auth_token = request.POST.get('auth_token')
+    seller_id = auth_token.split('_')[1]
 
-def update_status(request, status):
-    # Get the item id if present (If it is present an item will be edited not added)
-    item_id = request.POST.get('item_id', "")
+    item_list = Items.objects.filter(Q(seller=seller_id, status=Items.ACTIVE) | Q(seller=seller_id, status=Items.PENDING))
+
+     # get json representaion of item array
+    items_json = "["
+    for item in item_list:
+        items_json = items_json + str(item)
+    items_json = items_json + "]"
+
+    # create json string
+    response_data = "{\"status\": 1, \"seller_garage\": " + items_json + "}"
+    return HttpResponse(response_data, content_type="application/json")
+
+@csrf_exempt
+@require_POST
+@authenticate
+def get_seller_transactions(request):
+    # Get the authentication code
+    auth_token = request.POST.get('auth_token')
+    seller_id = auth_token.split('_')[1]
+
+    item_list = Items.objects.filter(seller=seller_id, status=Items.SOLD)
+
+     # get json representaion of item array
+    items_json = "["
+    for item in item_list:
+        items_json = items_json + str(item)
+    items_json = items_json + "]"
+
+    # create json string
+    response_data = "{\"status\": 1, \"seller_history\": " + items_json + "}"
+    return HttpResponse(response_data, content_type="application/json")
 
 @csrf_exempt
 @require_POST
@@ -256,59 +311,19 @@ def add_Item_To_Buyer_Items(request, status):
     response_data = { 'status':1 }
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
-# Image uploading
-# TODO: Finish/test image uploading
-# TODO: Remove commented out code if new method for image uploading works
-# class UploadFileForm(forms.Form):
-#     file = forms.FileField()
-
-# @csrf_exempt
-# @require_POST
-# def upload_file(request):
-#     form = UploadFileForm(request.POST, request.FILES)
-#     item_id = request.POST.get('item_id', "")
-#     if item_id == None or item_id.strip() == "":
-#         print("Doesn't have item id")
-#         response_data = { "status":0, "error": "A required parameter was not provided." }
-#         return HttpResponse(json.dumps(response_data), content_type="application/json")
-    
-#     item = get_object_or_404(Items, pk=item_id)
-
-#     if form.is_valid():
-#         filepath = handle_uploaded_file(request.FILES['file'])
-#         item.image_urls = item.image_urls + "," + filepath
-#         item.save()
-#         response_data = { 'status':1 }
-#         return HttpResponse(json.dumps(response_data), content_type="application/json")
-#     else:
-#         print("Form isn't valid")
-#         response_data = { "status":0, "error": "Image form was not valid." }
-#         return HttpResponse(json.dumps(response_data), content_type="application/json")
-
-
-# def handle_uploaded_file(file):
-#     filepath = make_filepath()
-#     print("The filepath for the image is: " + filepath)
-#     if not os.path.exists(os.path.dirname(filepath)):
-#         os.makedirs(os.path.dirname(filepath))
-#     destination_file = open(filepath, 'wb+')
-#     print("Opened destination file.")
-#     for chunk in file.chunks():
-#         destination_file.write(chunk)
-#     destination_file.close()
-#     return filepath
+# Helper Functions
 
 def make_filepath():
-    path = datetime.datetime.now().strftime('%Y\\%m\\%d\\')
+    path = "img\\" + datetime.datetime.now().strftime('%Y\\%m\\%d\\')
     filename = (md5.new(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")).hexdigest())[0:10] + ".png"
-    return os.path.join(settings.MEDIA_ROOT, path, filename)
+    return os.path.join(os.getcwd(), path, filename)
 
 # TODO: Remove eventually. Testing data.
 @csrf_exempt
 def reset(request):
     #TODO: hardcoded values
     item_expire_time=7 #days
-    account_id = 2
+    account_id = 1
     #TODO: Change to POST or DELETE
     Items.objects.all().delete()
     BuyerItem.objects.all().delete()
