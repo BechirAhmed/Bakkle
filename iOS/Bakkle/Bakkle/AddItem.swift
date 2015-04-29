@@ -48,6 +48,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     
     func textFieldDidEndEditing(textField: UITextField) {
         animateViewMoving(false, moveValue: 130)
+        validateTextFields()
     }
     
     func animateViewMoving(up: Bool, moveValue: CGFloat) {
@@ -74,15 +75,25 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(true)
-        add.enabled = true
+        add.enabled = false
     }
     
     func dismissKeyboard() {
         self.titleField.resignFirstResponder() || self.priceField.resignFirstResponder() || self.tagsField.resignFirstResponder() || self.methodField.resignFirstResponder()
+        validateTextFields()
     }
 
     @IBAction func cancelAdd(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func validateTextFields() {
+        if self.titleField.text.isEmpty || self.priceField.text.isEmpty || self.tagsField.text.isEmpty || self.methodField.text.isEmpty || imageView.image == nil {
+            add.enabled = false
+        }
+        else {
+            add.enabled = true
+        }
     }
     
     @IBOutlet weak var add: UIButton!    
@@ -94,7 +105,11 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         
         let alertController = UIAlertController(title: "Bakkle", message:
             "Trying to send item to server.", preferredStyle: UIAlertControllerStyle.Alert)
-        alertController.addAction(UIAlertAction(title: "Ok!", style: UIAlertActionStyle.Default,handler: nil))
+        
+        let dismissAction = UIAlertAction(title: "OK!", style: UIAlertActionStyle.Default) { (action) -> Void in
+            self.dismissViewControllerAnimated(true, completion: nil)
+        }
+        alertController.addAction(dismissAction)
         self.presentViewController(alertController, animated: true, completion: nil)
     }
     
