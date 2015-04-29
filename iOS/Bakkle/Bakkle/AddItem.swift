@@ -98,17 +98,6 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         self.presentViewController(alertController, animated: true, completion: nil)
     }
     
-//    func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
-//        
-//        return true
-//    }
-    
-//    func textFieldShouldEndEditing(textField: UITextField) -> Bool {
-//        
-//        self.view.endEditing(true)
-//        return true
-//    }
-    
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         if textField == titleField {
             priceField.becomeFirstResponder()
