@@ -65,7 +65,7 @@ class Items(models.Model):
         string_tags = string_tags + "]"
 
         # create items json
-        return "{\"pk\": \"" + str(self.id) + "\", \"image_urls\": " + string_urls + ", \"title\": \"" + self.title + "\", \"desctiption\": \"" + self.description + "\", \"location\": \"" + self.location + "\", \"seller\": \"" + str(self.seller.id) + "\", \"price\": \"" + str(self.price) + "\", \"tags\": " + string_tags + ", \"method\": \"" + self.method + "\", \"status\": \"" + self.status + "\", \"post_date\": \"" + self.post_date.strftime("%Y-%m-%d %H:%M:%S") + "\", \"times_reported\": \"" + str(self.times_reported) + "}"
+        return "{\"pk\": \"" + str(self.id) + "\", \"image_urls\": " + string_urls + ", \"title\": \"" + self.title + "\", \"description\": \"" + self.description + "\", \"location\": \"" + self.location + "\", \"seller\": \"" + str(self.seller.id) + "\", \"price\": \"" + str(self.price) + "\", \"tags\": " + string_tags + ", \"method\": \"" + self.method + "\", \"status\": \"" + self.status + "\", \"post_date\": \"" + self.post_date.strftime("%Y-%m-%d %H:%M:%S") + "\", \"times_reported\": \"" + str(self.times_reported) + "\"}"
 
 class BuyerItem(models.Model):
     ACTIVE = 'Active'
