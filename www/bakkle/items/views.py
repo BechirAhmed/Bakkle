@@ -239,7 +239,10 @@ def feed(request):
     # get json representaion of item array
     items_json = "["
     for item in item_list:
-        items_json = items_json + str(item) + ','
+        if item_list.index(item) == 0:
+            items_json = items_json + str(item)
+        else:
+            items_json = items_json  + ',' + str(item)
     items_json = items_json + "]"
 
     # create json string
@@ -368,8 +371,8 @@ def reset(request):
     i.save()
     i = Items(
         image_urls = "https://app.bakkle.com/img/00n0n_eerJtWHsBKc_600x450.jpg",
-        title = "15\" MacBook pro",
-        description = "MacBook Pro 15\"Mid 2014 i7. 2.2 GHz, 16 GB RAM, 256 GB SSD. Very little use, needed a lighter model so switched to MacBook air. Includes original box, power cord, etc.",
+        title = "15inch MacBook pro",
+        description = "MacBook Pro 15inch Mid 2014 i7. 2.2 GHz, 16 GB RAM, 256 GB SSD. Very little use, needed a lighter model so switched to MacBook air. Includes original box, power cord, etc.",
         location = "39.417672,-87.330438",
         seller = get_object_or_404(Account, pk=account_id),
         price = 999.00,
