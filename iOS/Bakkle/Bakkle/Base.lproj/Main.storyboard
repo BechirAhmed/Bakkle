@@ -303,6 +303,10 @@
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                         <color key="barTintColor" red="0.35294117650000001" green="0.84313725490000002" blue="0.4941176471" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="yes" spellCheckingType="yes"/>
+                                        <scopeButtonTitles>
+                                            <string>Title</string>
+                                            <string>Title</string>
+                                        </scopeButtonTitles>
                                     </searchBar>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RLk-Hy-bab">
                                         <rect key="frame" x="-23" y="-15" width="46" height="30"/>
@@ -580,7 +584,7 @@
                         <outlet property="progressIndicator" destination="t37-H0-tA2" id="Fyg-ZW-tJR"/>
                         <outlet property="seachBar" destination="uxF-IE-DWo" id="SPC-jP-vcG"/>
                         <outlet property="searchDisplayController" destination="hSv-s7-nTK" id="bfk-b0-bf7"/>
-                        <segue destination="cN1-rQ-EwG" kind="showDetail" identifier="ItemDetailSegue" id="6FO-kX-j4H"/>
+                        <segue destination="cN1-rQ-EwG" kind="presentation" identifier="ItemDetailSegue" id="sSN-KI-aZV"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="R4S-Vw-NC2" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -607,6 +611,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="LBF-eC-nfr">
+                                <rect key="frame" x="-10" y="-10" width="20" height="20"/>
+                            </activityIndicatorView>
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="L23-qV-1Dc">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                 <constraints>
@@ -616,7 +623,14 @@
                                 </constraints>
                                 <color key="barTintColor" red="0.35294117650000001" green="0.84313725490000002" blue="0.4941176471" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <items>
-                                    <navigationItem title="Title" id="gHZ-x2-y9f"/>
+                                    <navigationItem title="Title" id="gHZ-x2-y9f">
+                                        <barButtonItem key="leftBarButtonItem" title="BACK" id="aD8-rY-jnv">
+                                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <connections>
+                                                <action selector="goback:" destination="cN1-rQ-EwG" id="aOc-mM-EQI"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
                                 </items>
                                 <variation key="default">
                                     <mask key="constraints">
@@ -646,17 +660,21 @@
                                 </variation>
                             </imageView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="FWd-VD-JTT" firstAttribute="top" secondItem="L23-qV-1Dc" secondAttribute="bottom" id="E3X-BR-VH7"/>
+                            <constraint firstItem="LBF-eC-nfr" firstAttribute="top" secondItem="L23-qV-1Dc" secondAttribute="bottom" constant="95" id="7bn-DH-DFn"/>
+                            <constraint firstItem="FWd-VD-JTT" firstAttribute="top" secondItem="L23-qV-1Dc" secondAttribute="bottom" id="E3X-BR-VH7">
+                                <variation key="heightClass=regular-widthClass=compact" constant="114"/>
+                            </constraint>
                             <constraint firstItem="L23-qV-1Dc" firstAttribute="leading" secondItem="Srk-IV-RKn" secondAttribute="leadingMargin" constant="-16" id="HVE-5h-gdL"/>
                             <constraint firstItem="L23-qV-1Dc" firstAttribute="top" secondItem="Srk-IV-RKn" secondAttribute="topMargin" id="KK3-DA-nNB"/>
+                            <constraint firstAttribute="centerX" secondItem="LBF-eC-nfr" secondAttribute="centerX" id="N6l-up-ctB"/>
                             <constraint firstAttribute="trailingMargin" secondItem="L23-qV-1Dc" secondAttribute="trailing" constant="-16" id="aL9-Kk-cqD"/>
                             <constraint firstAttribute="trailingMargin" secondItem="FWd-VD-JTT" secondAttribute="trailing" constant="-16" id="fwK-hX-N71"/>
                             <constraint firstItem="FWd-VD-JTT" firstAttribute="leading" secondItem="Srk-IV-RKn" secondAttribute="leadingMargin" constant="-16" id="wTD-Sd-7jf"/>
                         </constraints>
                         <variation key="default">
                             <mask key="subviews">
+                                <exclude reference="LBF-eC-nfr"/>
                                 <exclude reference="L23-qV-1Dc"/>
                                 <exclude reference="FWd-VD-JTT"/>
                             </mask>
@@ -667,10 +685,13 @@
                                 <exclude reference="E3X-BR-VH7"/>
                                 <exclude reference="fwK-hX-N71"/>
                                 <exclude reference="wTD-Sd-7jf"/>
+                                <exclude reference="7bn-DH-DFn"/>
+                                <exclude reference="N6l-up-ctB"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
                             <mask key="subviews">
+                                <include reference="LBF-eC-nfr"/>
                                 <include reference="L23-qV-1Dc"/>
                                 <include reference="FWd-VD-JTT"/>
                             </mask>
@@ -681,16 +702,19 @@
                                 <include reference="E3X-BR-VH7"/>
                                 <include reference="fwK-hX-N71"/>
                                 <include reference="wTD-Sd-7jf"/>
+                                <include reference="7bn-DH-DFn"/>
+                                <include reference="N6l-up-ctB"/>
                             </mask>
                         </variation>
                     </view>
                     <connections>
-                        <outlet property="imgDet" destination="FWd-VD-JTT" id="u5f-Vo-17w"/>
+                        <outlet property="activityInd" destination="LBF-eC-nfr" id="ufp-W3-XB5"/>
+                        <outlet property="imgDet" destination="FWd-VD-JTT" id="VXs-4g-Axj"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4TP-4r-yld" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1530" y="2997"/>
+            <point key="canvasLocation" x="-1527" y="3084"/>
         </scene>
         <!--Add Item-->
         <scene sceneID="zQ9-Wy-bBw">

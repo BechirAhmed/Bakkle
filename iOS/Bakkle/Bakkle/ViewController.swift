@@ -32,8 +32,6 @@ class ViewController: UIViewController, FBLoginViewDelegate {
         println("User Logged in")
     }
     
-    
-    
     func loginViewFetchedUserInfo(loginView : FBLoginView!, user: FBGraphUser) {
         
         var email = user.objectForKey("email") as! String!
@@ -50,16 +48,19 @@ class ViewController: UIViewController, FBLoginViewDelegate {
             first_name: first_name, last_name: last_name, success:
             {
                 // Sucessfully logged in via FB
-                Bakkle.sharedInstance.login({
-                
-                // Register for push notifications.
-                let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate!
-                appDelegate.registerForPushNotifications(UIApplication.sharedApplication())
-            
-                let feedVC : FeedScreen = FeedScreen()
-                self.performSegueWithIdentifier(self.mainScreenSegueIdentifier, sender: self)
-                    }, fail: {})
+              //  Bakkle.sharedInstance.login({
+                    
+                    dispatch_async(dispatch_get_main_queue()) {
+
+                        // Register for push notifications.
+                        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate!
+                        appDelegate.registerForPushNotifications(UIApplication.sharedApplication())
+                    }
+                    
+             //   }, fail: {})
         })
+        let feedVC : FeedScreen = FeedScreen()
+        self.performSegueWithIdentifier(self.mainScreenSegueIdentifier, sender: self)
         
         //TODO: Display error on fail?
     }

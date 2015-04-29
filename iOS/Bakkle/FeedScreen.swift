@@ -105,8 +105,8 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
     func goToDetails() {
         let itemDet = ItemDetails()
         println("GOES IN DETAILS VIEW CONTROLLER")
-   //     itemDet.imgDet.image = swipeView.imageView.image
-        self.presentViewController(itemDet, animated: true, completion: nil)
+       // itemDet.imgDet.image = UIImage(named: "tiger.jpg")
+        self.performSegueWithIdentifier(itemDetailSegue, sender: self)
         
     }
     
@@ -130,14 +130,16 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
         
         /* First time page is loaded, swipe view will not exist and we need to create it. */
         self.swipeView = MDCSwipeToChooseView(frame: self.view.bounds, options: options)
-        self.bottomView = MDCSwipeToChooseView(frame: CGRectMake(self.swipeView.frame.origin.x, self.swipeView.frame.origin.y + 10, self.swipeView.frame.width, self.swipeView.frame.height), options: nil)
+        self.bottomView = MDCSwipeToChooseView(frame: CGRectMake(self.swipeView.frame.origin.x, self.swipeView.frame.origin.y + 10, self.swipeView.frame.width, self.swipeView.frame.height + 10), options: nil)
         self.view.insertSubview(self.bottomView, belowSubview: self.swipeView)
+        self.swipeView.addGestureRecognizer(itemDetailTap)
         
         /* If view is off the page we need to reset the view */
         if (state != nil && state.direction != MDCSwipeDirection.None) {
             self.swipeView = MDCSwipeToChooseView(frame: self.view.bounds, options: options)
             self.bottomView = MDCSwipeToChooseView(frame: CGRectMake(self.swipeView.frame.origin.x, self.swipeView.frame.origin.y + 10, self.swipeView.frame.width, self.swipeView.frame.height), options: nil)
             self.view.insertSubview(self.bottomView, belowSubview: self.swipeView)
+            self.swipeView.addGestureRecognizer(itemDetailTap)
         } else {
            //  View is already on the page AND is still visible. Do nothing
         }
@@ -188,68 +190,70 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
     
     func updateView(feedView: MDCSwipeToChooseView) {
         println("[FeedScreen] Updating view")
-        if hardCoded {
-            feedView.imageView.image = UIImage(named: "item-lawnmower.png")
-            feedView.imageView.contentMode = UIViewContentMode.ScaleAspectFill
-            view.addSubview(feedView)
-        } else {
-            if Bakkle.sharedInstance.feedItems.count > 0 {
-                var topItem = Bakkle.sharedInstance.feedItems[0]
-                if let x: AnyObject = topItem.valueForKey("pk") {
-                    self.item_id = Int(x.intValue)
-                }
-
-                var itemDetails: NSDictionary = topItem.valueForKey("fields") as! NSDictionary
-                let imgURLs: String = itemDetails.valueForKey("image_urls") as! String
-                let topTitle: String = itemDetails.valueForKey("title") as! String
-                let topPrice: String = itemDetails.valueForKey("price") as! String
-                
-                println("[FeedScreen] Downloading image (top) \(imgURLs)")
-                dispatch_async(dispatch_get_global_queue(
-                    Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
-                    let imgURL = NSURL(string: imgURLs)
-                    if let imgData = NSData(contentsOfURL: imgURL!) {
-                        dispatch_async(dispatch_get_main_queue()) {
-                            println("[FeedScreen] displaying image (top)")
-                            feedView.imageView.image = UIImage(data: imgData)
-                            feedView.imageView.contentMode = UIViewContentMode.ScaleAspectFill
-                            feedView.nameLabel.text = topTitle + ",  $" + topPrice
-                            super.view.addSubview(feedView)
+        if Bakkle.sharedInstance.feedItems.count > 0 {
+            var topItem = Bakkle.sharedInstance.feedItems[0]
+            if let x: AnyObject = topItem.valueForKey("pk") {
+                self.item_id = Int(x.intValue)
+            }
+            var itemDetails: NSDictionary = topItem.valueForKey("fields") as! NSDictionary
+            let imgURLs: String = itemDetails.valueForKey("image_urls") as! String
+            let topTitle: String = itemDetails.valueForKey("title") as! String
+            let topPrice: String = itemDetails.valueForKey("price") as! String
+            
+            println("[FeedScreen] Downloading image (top) \(imgURLs)")
+            feedView.nameLabel.text = topTitle + ",  $" + topPrice
+            dispatch_async(dispatch_get_global_queue(
+                Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
+                let imgURL = NSURL(string: imgURLs)
+                if let imgData = NSData(contentsOfURL: imgURL!) {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        println("[FeedScreen] displaying image (top)")
+                        feedView.imageView.image = UIImage(data: imgData)
+                        feedView.imageView.contentMode = UIViewContentMode.ScaleAspectFill
+                        
+                        super.view.addSubview(feedView)
+                    }
+                    }
+            
+            
+                    if Bakkle.sharedInstance.feedItems.count > 1 {
+                        var bottomItem = Bakkle.sharedInstance.feedItems[1]
+                        var bottomItemDetails: NSDictionary = bottomItem.valueForKey("fields") as! NSDictionary
+                        let bottomURL: String = bottomItemDetails.valueForKey("image_urls") as! String
+                        let bottomTitle: String = bottomItemDetails.valueForKey("title") as! String
+                        let bottomPrice: String = bottomItemDetails.valueForKey("price") as! String
+                        
+                        self.bottomView.nameLabel.text = bottomTitle + ",  $" + bottomPrice
+                        
+                        self.bottomView.userInteractionEnabled = false
+                        
+                        println("[FeedScreen] Downloading image (bottom) \(bottomURL)")
+                        
+                        let imgURL = NSURL(string: bottomURL)
+                        if let imgData = NSData(contentsOfURL: imgURL!) {
+                            dispatch_async(dispatch_get_main_queue()) {
+                                println("[FeedScreen] displaying image (bottom)")
+                                self.bottomView.imageView.image = UIImage(data: imgData)
+                                self.bottomView.imageView.contentMode = UIViewContentMode.ScaleAspectFill
+                            }
                         }
                     }
                 }
-                
-                // Load BOTTOM item card
-                if Bakkle.sharedInstance.feedItems.count > 1 {
-                    var bottomItem = Bakkle.sharedInstance.feedItems[1]
-                    var bottomItemDetails: NSDictionary = bottomItem.valueForKey("fields") as! NSDictionary
-                    let bottomURL: String = bottomItemDetails.valueForKey("image_urls") as! String
-                    let bottomTitle: String = bottomItemDetails.valueForKey("title") as! String
-                    let bottomPrice: String = bottomItemDetails.valueForKey("price") as! String
-                    
-                    self.bottomView.userInteractionEnabled = false
-                    
-                    println("[FeedScreen] Downloading image (bottom) \(bottomURL)")
-                    dispatch_async(dispatch_get_global_queue(
-                        Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
-                            let imgURL = NSURL(string: bottomURL)
-                            if let imgData = NSData(contentsOfURL: imgURL!) {
-                                dispatch_async(dispatch_get_main_queue()) {
-                                    println("[FeedScreen] displaying image (bottom)")
-                                    self.bottomView.imageView.image = UIImage(data: imgData)
-                                    self.bottomView.imageView.contentMode = UIViewContentMode.ScaleAspectFill
-                                    self.bottomView.nameLabel.text = bottomTitle + ",  $" + bottomPrice
-                                    self.view.insertSubview(self.bottomView, belowSubview: feedView)
-                                    
-                                }
-                            }
-                    }
-                }
-            } else {
-                /* No items left in feed */
-                noNewItemsLabel.alpha = 1
-            }
+            
+            // Load BOTTOM item card
+            
+//                dispatch_async(dispatch_get_global_queue(
+//                    Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
+            
+                                
+                         //   }
+               //     }
+         //   }
+        } else {
+            /* No items left in feed */
+            noNewItemsLabel.alpha = 1
         }
+       // }
         loaded = true
     }
     
@@ -308,6 +312,7 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
 
         if bottomView != nil {
             self.bottomView.alpha = 0.0
+            self.view.insertSubview(self.bottomView, belowSubview: self.swipeView)
             UIView.animateWithDuration(0.5, delay: 0.0, options: UIViewAnimationOptions.CurveEaseInOut, animations: { () -> Void in
                 self.bottomView.alpha = 1.0
             }, completion: nil)

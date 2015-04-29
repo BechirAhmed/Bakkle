@@ -38,7 +38,7 @@
         _nopeColor = [UIColor colorWith8BitRed:247.f green:91.f blue:37.f alpha:1.f];
         _nopeRotationAngle = 15.f;
         
-        _holdText = [NSLocalizedString(@"HOLD", nil) uppercaseString];
+        _holdText = [NSLocalizedString(@"HOLDING", nil) uppercaseString];
         _holdColor = [UIColor blueColor];
         _holdRotationAngle = -15.f;
         
