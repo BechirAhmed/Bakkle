@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Bakkle Site Detail{% endblock %}
+
+{% block content %}
+
+Accounts:
+<br/> &nbsp&nbsp&nbsp&nbspTotal Users: {{ register_users }}
+<br/> &nbsp&nbsp&nbsp&nbspTotal Active Users: {{ active_users }}
+
+<br/>Items:
+<br/> &nbsp&nbsp&nbsp&nbspTotal Items Listed: {{ total_items }}
+<br/> &nbsp&nbsp&nbsp&nbspTotal Items Sold: {{ total_sold }}
+<br/> &nbsp&nbsp&nbsp&nbspTotal Items Expired: {{ total_expired }}
+<br/> &nbsp&nbsp&nbsp&nbspTotal Items Deleted: {{ total_deleted }}
+<br/> &nbsp&nbsp&nbsp&nbspTotal Items Reported: {{ total_spam }}
+<br/> &nbsp&nbsp&nbsp&nbspTotal Items Pending Sale: {{ total_pending }}
+
+{% endblock %}

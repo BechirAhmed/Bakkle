@@ -2,6 +2,8 @@ from django.shortcuts import render
 
 import json
 import datetime
+import md5
+import os
 
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.core.urlresolvers import reverse
@@ -10,12 +12,21 @@ from django.utils import timezone
 from django.shortcuts import get_object_or_404
 from django.core import serializers
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+from django.db.models import Q
+from decimal import *
+from django import forms
 
 from .models import Items, BuyerItem
 from account.models import Account
+from common import authenticate
+from django.conf import settings
+
+MAX_ITEM_IMAGE = 5
 
 @csrf_exempt
 def index(request):
+    # List all items (this is for web viewing of data only)
     item_list = Items.objects.all()
     context = {
         'item_list': item_list,
@@ -24,6 +35,7 @@ def index(request):
 
 @csrf_exempt
 def detail(request, item_id):
+    # get the item with the item id (this is for web viewing of data only)
     item = get_object_or_404(Items, pk=item_id)
     urls = item.image_urls.split(',');
     context = {
@@ -33,106 +45,285 @@ def detail(request, item_id):
     return render(request, 'items/detail.html', context) 
 
 @csrf_exempt
+@require_POST
+@authenticate
 def add_item(request):
-    if request.method == "POST" or request.method == "PUT":
-        image_urls = request.POST.get('device_token', "")
-        title = request.POST.get('title')
-        description = request.POST.get('description', "")
-        location = request.POST.get('location')
-        seller_id = request.POST.get('account_id')
-        price = request.POST.get('price')
-        tags = request.POST.get('tags',"")
-        method = request.POST.get('method')
-        # TODO: Pick up here on MONDAY
+    # Get the authentication code
+    auth_token = request.POST.get('auth_token')
 
-        response_data = { 'status':1 }
+    # TODO: Handle location
+    # Get the rest of the necessary params from the request
+    title = request.POST.get('title', "")
+    description = request.POST.get('description', "")
+    location = request.POST.get('location')
+    seller_id = auth_token.split('_')[1]
+    price = request.POST.get('price')
+    tags = request.POST.get('tags',"")
+    method = request.POST.get('method')
+
+    # Get the item id if present (If it is present an item will be edited not added)
+    item_id = request.POST.get('item_id', "")
+
+    # Ensure that required fields are present otherwise send back a failed status
+    if (title == None or title == "") or (tags == None or tags == "") or (price == None or price == "") or (method == None or method == ""):
+        response_data = { "status":0, "error": "A required parameter was not provided." }
         return HttpResponse(json.dumps(response_data), content_type="application/json")
-    else:
-        raise Http404("Wrong method, use POST")
 
-@csrf_exempt
-def edit_item(request):
-    if request.method == "POST" or request.method == "PUT":
-
-        response_data = { 'status':1 }
+    # Ensure that the price can be converted to a decimal otherwise send back a failed status
+    try:
+        price = Decimal(price)
+    except ValueError:
+        response_data = { "status":0, "error": "Price was not a valid decimal." }
         return HttpResponse(json.dumps(response_data), content_type="application/json")
-    else:
-        raise Http404("Wrong method, use POST")
 
-@csrf_exempt
-def feed(request):
-    if request.method == "POST" or request.method == "PUT":
-        #TODO: need to confirm order to display, chrono?, closest? "magic"?
-        #TODO: Get items for <USERID>
-        # TODO: Add distance filtering here
-        buyer_id = request.POST.get('account_id')
-        items_viewed = BuyerItem.objects.filter(buyer = buyer_id)
-        #PUT BACK FOR LIVE, commenting for test item_list = Items.objects.exclude(buyeritem = items_viewed).exclude(seller = buyer_id)
-        item_list = Items.objects.exclude(buyeritem = items_viewed)
-        response_data = "{\"status\": 1, \"feed\": " + serializers.serialize('json', item_list) + "}"
-        return HttpResponse(response_data, content_type="application/json")
-    else:
-        raise Http404("Wrong method, use POST")
+    # Check for the image params. The max number is 5 and is defined in settings
+    image_urls = ""
+    for i in range (1, MAX_ITEM_IMAGE + 1):
+        # Get the image from the request (of format imageX where X is the image number)
+        imageData = request.POST.get('image' + str(i), "" )
 
-@csrf_exempt
-def meh(request):
-    if request.method == "POST" or request.method == "PUT":
-        return add_Item_To_Buyer_Items(request, BuyerItem.MEH)
-    else:
-        raise Http404("Wrong method, use POST")
+        # Check to see if image data is present
+        if imageData != None and imageData != "":
+            # Convert the data to an image from base64
+            image = imageData.decode('base64')
 
+            # Get the filepath which includes the filename to save the image to (see helper method)
+            filepath = make_filepath()
 
-@csrf_exempt
-def want(request):
-    if request.method == "POST" or request.method == "PUT":
-        return add_Item_To_Buyer_Items(request, BuyerItem.WANT)
-    else:
-        raise Http404("Wrong method, use POST")
+            # if the filepath does not exist, create it (this includes folder and file creation)
+            if not os.path.exists(os.path.dirname(filepath)):
+                os.makedirs(os.path.dirname(filepath))
 
-@csrf_exempt
-def hold(request):
-    if request.method == "POST" or request.method == "PUT":
-        return add_Item_To_Buyer_Items(request, BuyerItem.HOLD)
-    else:
-        raise Http404("Wrong method, use POST")
+            # Open the created file for writing
+            destination_file = open(filepath, 'wb+')
 
-@csrf_exempt
-def report(request):
-    if request.method == "POST" or request.method == "PUT":
-        item_id = request.POST.get('item_id')
-        item = get_object_or_404(Items, pk=item_id)
-        item.times_reported = item.times_reported + 1
+            # Write the image data to the file and close it
+            destination_file.write(image)
+            destination_file.close()
+
+            # Add the new image url to the image_urls for the item
+            image_urls = image_urls + filepath + ","
+
+    if (item_id == None or item_id == ""):
+        # Create the item
+        item = Items.objects.create(
+            title = title,
+            seller_id = seller_id,
+            description = description,
+            location = "",
+            price = price,
+            tags = tags,
+            method = method,
+            image_urls = image_urls,
+            status = Items.ACTIVE)
         item.save()
-        return add_Item_To_Buyer_Items(request, BuyerItem.REPORT)
     else:
-        raise Http404("Wrong method, use POST")
+        # Else get the item
+        item = get_object_or_404(Items, pk=item_id);
 
-def add_Item_To_Buyer_Items(request, status):
-    buyer_id = request.POST.get('account_id')
+        # Remove all previous images
+        old_urls = item.image_urls.split(",")
+        for url in old_urls:
+            # if image exists remove the file
+            if os.path.exists(url):
+                os.remove(url)
+
+        # Update item fields
+        item.title = title
+        item.description = description
+        item.tags = tags
+        item.price = price
+        item.method = method
+        item.image_urls = image_urls
+        item.save()
+
+    response_data = { "status":1 }
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+# TODO: Pick up on the delete, sell, and spam
+@csrf_exempt
+@require_POST
+@authenticate
+def delete_item(request):
+    return update_status(request, Items.DELETED)
+
+@csrf_exempt
+@require_POST
+@authenticate
+def sell_item(request):
+    return update_status(request, Items.SOLD)
+
+# This will only be called by the system if an Item has been reported X amount of times.
+# TODO: implement this in the report 
+@csrf_exempt
+def spam_item(request):
+    return update_status(request, Items.SPAM)
+
+# Helper for updating Item Statuses
+def update_status(request, status):
+    # Get the item id 
+    item_id = request.POST.get('item_id', "")
+
+    # Ensure that required fields are present otherwise send back a failed status
+    if (item_id == None or item_id == ""):
+        response_data = { "status":0, "error": "A required parameter was not provided." }
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+    # Get the item
+    item = Items.objects.get(pk=item_id)
+    item.status = status
+    item.save()
+    response_data = { "status":1 }
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+@csrf_exempt
+@require_POST
+@authenticate
+def get_seller_items(request):
+    # Get the authentication code
+    auth_token = request.POST.get('auth_token')
+    seller_id = auth_token.split('_')[1]
+
+    item_list = Items.objects.filter(Q(seller=seller_id, status=Items.ACTIVE) | Q(seller=seller_id, status=Items.PENDING))
+
+     # get json representaion of item array
+    items_json = "["
+    for item in item_list:
+        items_json = items_json + str(item)
+    items_json = items_json + "]"
+
+    # create json string
+    response_data = "{\"status\": 1, \"seller_garage\": " + items_json + "}"
+    return HttpResponse(response_data, content_type="application/json")
+
+@csrf_exempt
+@require_POST
+@authenticate
+def get_seller_transactions(request):
+    # Get the authentication code
+    auth_token = request.POST.get('auth_token')
+    seller_id = auth_token.split('_')[1]
+
+    item_list = Items.objects.filter(seller=seller_id, status=Items.SOLD)
+
+     # get json representaion of item array
+    items_json = "["
+    for item in item_list:
+        items_json = items_json + str(item)
+    items_json = items_json + "]"
+
+    # create json string
+    response_data = "{\"status\": 1, \"seller_history\": " + items_json + "}"
+    return HttpResponse(response_data, content_type="application/json")
+
+@csrf_exempt
+@require_POST
+@authenticate
+def feed(request):
+    # TODO: need to confirm order to display, chrono?, closest? "magic"?
+    # TODO: Add distance filtering here
+    auth_token = request.POST.get('auth_token')
+
+    # Check that all require params are sent and are of the right format
+    if (auth_token == None or auth_token.strip() == "" or auth_token.find('_') == -1):
+        response_data = { "status":0, "error": "A required parameter was not provided." }
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+    # get the account id 
+    buyer_id = auth_token.split('_')[1]
+
+    # get items
+    items_viewed = BuyerItem.objects.filter(buyer = buyer_id)
+    item_list = Items.objects.exclude(buyeritem = items_viewed)# TODO: Put back in and also test the additional filter: .exclude(seller = buyer_id).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING))
+
+    # get json representaion of item array
+    items_json = "["
+    for item in item_list:
+        items_json = items_json + str(item)
+    items_json = items_json + "]"
+
+    # create json string
+    response_data = "{\"status\": 1, \"feed\": " + items_json + "}"
+    return HttpResponse(response_data, content_type="application/json")
+
+@csrf_exempt
+@require_POST
+@authenticate
+def meh(request):
+    return add_Item_To_Buyer_Items(request, BuyerItem.MEH)
+
+@csrf_exempt
+@require_POST
+@authenticate
+def want(request):
+    return add_Item_To_Buyer_Items(request, BuyerItem.WANT)
+
+@csrf_exempt
+@require_POST
+@authenticate
+def hold(request):
+    return add_Item_To_Buyer_Items(request, BuyerItem.HOLD)
+
+@csrf_exempt
+@require_POST
+@authenticate
+def report(request):
     item_id = request.POST.get('item_id')
 
-    print("Marking {} as {} for account: {}".format(item_id, status, buyer_id))
+    # Check that all require params are sent and are of the right format
+    if (item_id == None or item_id.strip() == ""):
+        response_data = { "status":0, "error": "A required parameter was not provided." }
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+     
+    # Get item and update the times reported
+    item = get_object_or_404(Items, pk=item_id)
+    item.times_reported = item.times_reported + 1
+    item.save()
 
-    if buyer_id == None or item_id == None:
-        return "" # TODO: Need better response
+    return add_Item_To_Buyer_Items(request, BuyerItem.REPORT)
+    
+def add_Item_To_Buyer_Items(request, status):
+    auth_token = request.POST.get('auth_token', "")
+    item_id = request.POST.get('item_id', "")
+    view_duration = request.Post.get('view_duration',"")
 
+    # Check that all require params are sent and are of the right format
+    if (view_duration == None or view_duration.strip() == "") or (auth_token == None or auth_token.strip() == "" or auth_token.find('_') == -1) or (item_id == None or item_id.strip() == ""):
+        response_data = { "status":0, "error": "A required parameter was not provided." }
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+        
+    # get the account id 
+    buyer_id = auth_token.split('_')[1]
+
+    # get the item
     item = get_object_or_404(Items, pk=item_id)
 
+    # Create or update the buyer item
     buyer_item = BuyerItem.objects.get_or_create(
         buyer = get_object_or_404(Account, pk=buyer_id),
         item = item,
         defaults = { 'status': status, 'confirmed_price': item.price })[0]
     buyer_item.status = status
     buyer_item.confirmed_price = item.price
+    buyer_item.view_duration = Decimal(view_duration)
     buyer_item.save()
+
     response_data = { 'status':1 }
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
+# Helper Functions
+
+def make_filepath():
+    path = "img\\" + datetime.datetime.now().strftime('%Y\\%m\\%d\\')
+    filename = (md5.new(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")).hexdigest())[0:10] + ".png"
+    return os.path.join(os.getcwd(), path, filename)
+
+# TODO: Remove eventually. Testing data.
 @csrf_exempt
 def reset(request):
     #TODO: hardcoded values
     item_expire_time=7 #days
-    account_id=2
+    account_id = 1
     #TODO: Change to POST or DELETE
     Items.objects.all().delete()
     BuyerItem.objects.all().delete()
@@ -357,8 +548,6 @@ def reset(request):
         post_date = datetime.datetime.now,
         times_reported = 0 )
     i.save()
-
-
     i = Items(
         image_urls = "https://app.bakkle.com/img/b8348df.jpg",
         title = "Rabbit Push Mower",
@@ -385,12 +574,6 @@ def reset(request):
         post_date = datetime.datetime.now,
         times_reported = 0 )
     i.save()
-    # b = BuyerItem(
-    #     buyer = i.seller,
-    #     item = i,
-    #     confirmed_price = i.price,
-    #     status = BuyerItem.WANT )
-    # b.save()
 
     print("Adding {}".format(i.title))
     return HttpResponse("resetting {}".format(i.title)) #change success value
