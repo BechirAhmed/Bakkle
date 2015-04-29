@@ -27,6 +27,7 @@ class ItemDetails: UIViewController {
             dispatch_async(dispatch_get_main_queue()) {
                 println("[FeedScreen] displaying image (top)")
                 self.imgDet.image = UIImage(data: imgData)
+                self.imgDet.clipsToBounds = true
                 self.imgDet.contentMode = UIViewContentMode.ScaleAspectFill
             }
         }
