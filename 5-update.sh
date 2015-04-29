@@ -3,6 +3,10 @@
 # WARNING THIS IS DESTRUCTIVE
 sudo service bakkle stop
 #sudo rm -rf              /bakkle/www
+sudo mkdir /archives/
+export DTE=`date +'%Y-%m-%d_%H%M%S'`
+sudo mkdir /archives/$DTE
+sudo cp -r /bakkle /archives/$DTE
 
 sudo mkdir -m 755        /bakkle
 sudo mkdir -m 755        /bakkle/run
