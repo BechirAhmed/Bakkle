@@ -238,11 +238,11 @@ def feed(request):
 
     # get json representaion of item array
     items_json = "["
-    for item in item_list:
-        if item_list.index(item) == 0:
-            items_json = items_json + str(item)
+    for x in range(0, len(item_list)):
+        if x == 0:
+            items_json = items_json + str(item_list[x])
         else:
-            items_json = items_json  + ',' + str(item)
+            items_json = items_json  + ',' + str(item_list[x])
     items_json = items_json + "]"
 
     # create json string
