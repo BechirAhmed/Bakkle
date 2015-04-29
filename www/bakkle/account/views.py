@@ -39,7 +39,13 @@ def login_facebook(request):
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 
     # Get the account for that facebook ID and it's associated device
-    account = get_object_or_404(Account, facebook_id=facebook_id)
+    #account = get_object_or_404(Account, facebook_id=facebook_id)
+    try:
+        account = Account.objects.get(facebook_id=facebook_id)
+    except Account.DoesNotExist:
+        account = None
+        response_data = {"status":0, "error":"Account {} does not exist.".format(facebook_id)}
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
     device = device_register(get_client_ip(request), device_uuid, account)
 
     # Create authentication token

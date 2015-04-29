@@ -239,7 +239,7 @@ def feed(request):
     # get json representaion of item array
     items_json = "["
     for item in item_list:
-        items_json = items_json + str(item)
+        items_json = items_json + str(item) + ','
     items_json = items_json + "]"
 
     # create json string
