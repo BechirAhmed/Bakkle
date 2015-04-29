@@ -27,6 +27,7 @@ class SellersGarageView: UIViewController, UICollectionViewDelegate, UICollectio
         super.viewWillAppear(true)
         let scale: CGFloat = UIScreen.mainScreen().scale
         let cellSize = (self.collectionView.collectionViewLayout as! UICollectionViewFlowLayout).itemSize
+    
     }
     
     /* MENUBAR ITEMS */
@@ -39,22 +40,27 @@ class SellersGarageView: UIViewController, UICollectionViewDelegate, UICollectio
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection: Int) -> Int {
-        return Bakkle.sharedInstance.feedItems != nil ? Bakkle.sharedInstance.feedItems.count : 0
+      //  return Bakkle.sharedInstance.feedItems != nil ? Bakkle.sharedInstance.feedItems.count : 0
+        return 5
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell : CollectionThumbnail = collectionView.dequeueReusableCellWithReuseIdentifier(photoCellIdentifier, forIndexPath: indexPath) as! CollectionThumbnail
         
-        let asset: PHAsset = self.photosAsset[indexPath.item] as! PHAsset
+        populateCells(cell)
         
-        PHImageManager.defaultManager().requestImageForAsset(asset, targetSize: self.assetThumbnailSize, contentMode: PHImageContentMode.AspectFill, options: nil, resultHandler: {(result, info) in
-            cell.setThumbnailImage(result)
-        })
+//        let asset: PHAsset = self.photosAsset[indexPath.item] as! PHAsset
+        
+//        PHImageManager.defaultManager().requestImageForAsset(asset, targetSize: self.assetThumbnailSize, contentMode: PHImageContentMode.AspectFill, options: nil, resultHandler: {(result, info) in
+//            cell.setThumbnailImage(result)
+//        })
         return cell
     }
     
-    func populateCells() {
-        
+    func populateCells(cell: UICollectionViewCell) {
+        if Bakkle.sharedInstance.feedItems.count > 0 {
+            
+        }
     }
 
     

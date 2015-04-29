@@ -646,28 +646,32 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="FWd-VD-JTT">
                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                 <constraints>
+                                    <constraint firstAttribute="width" constant="320" id="H3B-ze-Vu5"/>
                                     <constraint firstAttribute="height" constant="209" id="NJX-TL-3hQ"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="209" id="j6f-UQ-88H"/>
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
+                                        <exclude reference="H3B-ze-Vu5"/>
                                         <exclude reference="NJX-TL-3hQ"/>
+                                        <exclude reference="j6f-UQ-88H"/>
                                     </mask>
                                 </variation>
                                 <variation key="heightClass=regular-widthClass=compact">
                                     <mask key="constraints">
+                                        <include reference="H3B-ze-Vu5"/>
                                         <include reference="NJX-TL-3hQ"/>
+                                        <exclude reference="j6f-UQ-88H"/>
                                     </mask>
                                 </variation>
                             </imageView>
                         </subviews>
                         <constraints>
                             <constraint firstItem="LBF-eC-nfr" firstAttribute="top" secondItem="L23-qV-1Dc" secondAttribute="bottom" constant="95" id="7bn-DH-DFn"/>
-                            <constraint firstItem="FWd-VD-JTT" firstAttribute="top" secondItem="L23-qV-1Dc" secondAttribute="bottom" id="E3X-BR-VH7">
-                                <variation key="heightClass=regular-widthClass=compact" constant="114"/>
-                            </constraint>
                             <constraint firstItem="L23-qV-1Dc" firstAttribute="leading" secondItem="Srk-IV-RKn" secondAttribute="leadingMargin" constant="-16" id="HVE-5h-gdL"/>
                             <constraint firstItem="L23-qV-1Dc" firstAttribute="top" secondItem="Srk-IV-RKn" secondAttribute="topMargin" id="KK3-DA-nNB"/>
                             <constraint firstAttribute="centerX" secondItem="LBF-eC-nfr" secondAttribute="centerX" id="N6l-up-ctB"/>
+                            <constraint firstItem="FWd-VD-JTT" firstAttribute="top" secondItem="L23-qV-1Dc" secondAttribute="bottom" id="YQI-rr-7oF"/>
                             <constraint firstAttribute="trailingMargin" secondItem="L23-qV-1Dc" secondAttribute="trailing" constant="-16" id="aL9-Kk-cqD"/>
                             <constraint firstAttribute="trailingMargin" secondItem="FWd-VD-JTT" secondAttribute="trailing" constant="-16" id="fwK-hX-N71"/>
                             <constraint firstItem="FWd-VD-JTT" firstAttribute="leading" secondItem="Srk-IV-RKn" secondAttribute="leadingMargin" constant="-16" id="wTD-Sd-7jf"/>
@@ -682,7 +686,7 @@
                                 <exclude reference="HVE-5h-gdL"/>
                                 <exclude reference="KK3-DA-nNB"/>
                                 <exclude reference="aL9-Kk-cqD"/>
-                                <exclude reference="E3X-BR-VH7"/>
+                                <exclude reference="YQI-rr-7oF"/>
                                 <exclude reference="fwK-hX-N71"/>
                                 <exclude reference="wTD-Sd-7jf"/>
                                 <exclude reference="7bn-DH-DFn"/>
@@ -699,7 +703,7 @@
                                 <include reference="HVE-5h-gdL"/>
                                 <include reference="KK3-DA-nNB"/>
                                 <include reference="aL9-Kk-cqD"/>
-                                <include reference="E3X-BR-VH7"/>
+                                <include reference="YQI-rr-7oF"/>
                                 <include reference="fwK-hX-N71"/>
                                 <include reference="wTD-Sd-7jf"/>
                                 <include reference="7bn-DH-DFn"/>
@@ -1590,7 +1594,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="XFF-YW-f5A">
-                                    <size key="itemSize" width="165" height="165"/>
+                                    <size key="itemSize" width="145" height="145"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -1600,45 +1604,30 @@
                                         <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="165" height="165"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="145" height="145"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="tiger.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="2p6-q6-6oY">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="LMY-wb-f5x">
                                                     <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                                    <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
+                                                        <rect key="frame" x="0.0" y="0.0" width="145" height="145"/>
+                                                    </variation>
                                                 </imageView>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
-                                        <constraints>
-                                            <constraint firstItem="2p6-q6-6oY" firstAttribute="leading" secondItem="f70-L9-NrC" secondAttribute="leading" id="KBm-gW-L7L"/>
-                                            <constraint firstItem="2p6-q6-6oY" firstAttribute="top" secondItem="f70-L9-NrC" secondAttribute="top" id="bZQ-wD-81l"/>
-                                            <constraint firstAttribute="bottom" secondItem="2p6-q6-6oY" secondAttribute="bottom" id="eWh-rR-sRq"/>
-                                            <constraint firstAttribute="trailing" secondItem="2p6-q6-6oY" secondAttribute="trailing" id="uxF-QX-Zkg"/>
-                                        </constraints>
                                         <variation key="default">
                                             <mask key="subviews">
-                                                <exclude reference="2p6-q6-6oY"/>
-                                            </mask>
-                                            <mask key="constraints">
-                                                <exclude reference="KBm-gW-L7L"/>
-                                                <exclude reference="bZQ-wD-81l"/>
-                                                <exclude reference="eWh-rR-sRq"/>
-                                                <exclude reference="uxF-QX-Zkg"/>
+                                                <exclude reference="LMY-wb-f5x"/>
                                             </mask>
                                         </variation>
                                         <variation key="heightClass=regular-widthClass=compact">
                                             <mask key="subviews">
-                                                <include reference="2p6-q6-6oY"/>
-                                            </mask>
-                                            <mask key="constraints">
-                                                <include reference="KBm-gW-L7L"/>
-                                                <include reference="bZQ-wD-81l"/>
-                                                <include reference="eWh-rR-sRq"/>
-                                                <include reference="uxF-QX-Zkg"/>
+                                                <include reference="LMY-wb-f5x"/>
                                             </mask>
                                         </variation>
                                         <connections>
-                                            <outlet property="imgView" destination="2p6-q6-6oY" id="hk2-lJ-YMk"/>
+                                            <outlet property="imgView" destination="LMY-wb-f5x" id="MD5-Rr-lLk"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
@@ -2256,7 +2245,6 @@
         <image name="menubtn.png" width="54" height="39"/>
         <image name="mock-additem.png" width="985" height="1582"/>
         <image name="mock-settings.png" width="970" height="1439"/>
-        <image name="tiger.jpg" width="1920" height="1080"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="lk1-fc-YGc"/>
