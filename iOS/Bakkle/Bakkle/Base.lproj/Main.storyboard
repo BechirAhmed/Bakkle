@@ -878,7 +878,7 @@
                                 </constraints>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="yes" spellCheckingType="yes" keyboardType="numberPad" returnKeyType="next" enablesReturnKeyAutomatically="YES"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="yes" spellCheckingType="yes" keyboardType="decimalPad" returnKeyType="next" enablesReturnKeyAutomatically="YES"/>
                                 <variation key="default">
                                     <mask key="constraints">
                                         <exclude reference="biY-pL-afx"/>
@@ -2243,7 +2243,7 @@
         <image name="logo-white-design-png-100.png" width="248" height="100"/>
         <image name="logo-white-design-png-transp-100.png" width="248" height="100"/>
         <image name="menubtn.png" width="54" height="39"/>
-        <image name="mock-additem.png" width="987" height="1401"/>
+        <image name="mock-additem.png" width="985" height="1582"/>
         <image name="mock-settings.png" width="970" height="1439"/>
     </resources>
     <inferredMetricsTieBreakers>

@@ -191,44 +191,46 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
     func updateView(feedView: MDCSwipeToChooseView) {
         println("[FeedScreen] Updating view")
         if Bakkle.sharedInstance.feedItems.count > 0 {
-            var topItem = Bakkle.sharedInstance.feedItems[0]
+            let topItem = Bakkle.sharedInstance.feedItems[0]
             if let x: AnyObject = topItem.valueForKey("pk") {
                 self.item_id = Int(x.intValue)
             }
-            var itemDetails: NSDictionary = topItem.valueForKey("fields") as! NSDictionary
-            let imgURLs: String = itemDetails.valueForKey("image_urls") as! String
-            let topTitle: String = itemDetails.valueForKey("title") as! String
-            let topPrice: String = itemDetails.valueForKey("price") as! String
+           // var itemDetails: NSDictionary = topItem.valueForKey("feed") as! NSDictionary
+            let imgURLs = topItem.valueForKey("image_urls") as! NSArray
+            let topTitle: String = topItem.valueForKey("title") as! String
+            let topPrice: String = topItem.valueForKey("price") as! String
             
             println("[FeedScreen] Downloading image (top) \(imgURLs)")
             feedView.nameLabel.text = topTitle + ",  $" + topPrice
             dispatch_async(dispatch_get_global_queue(
                 Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
-                let imgURL = NSURL(string: imgURLs)
-                if let imgData = NSData(contentsOfURL: imgURL!) {
-                    dispatch_async(dispatch_get_main_queue()) {
-                        println("[FeedScreen] displaying image (top)")
-                        feedView.imageView.image = UIImage(data: imgData)
-                        feedView.imageView.contentMode = UIViewContentMode.ScaleAspectFill
+                    let firstURL = imgURLs[0].valueForKey("url") as! String
+                    let imgURL = NSURL(string: firstURL)
+                    if let imgData = NSData(contentsOfURL: imgURL!) {
+                        dispatch_async(dispatch_get_main_queue()) {
+                            println("[FeedScreen] displaying image (top)")
+                            feedView.imageView.image = UIImage(data: imgData)
+                            feedView.imageView.contentMode = UIViewContentMode.ScaleAspectFill
                         
-                        super.view.addSubview(feedView)
-                    }
+                            super.view.addSubview(feedView)
+                        }
                     }
             
             
                     if Bakkle.sharedInstance.feedItems.count > 1 {
                         var bottomItem = Bakkle.sharedInstance.feedItems[1]
-                        var bottomItemDetails: NSDictionary = bottomItem.valueForKey("fields") as! NSDictionary
-                        let bottomURL: String = bottomItemDetails.valueForKey("image_urls") as! String
-                        let bottomTitle: String = bottomItemDetails.valueForKey("title") as! String
-                        let bottomPrice: String = bottomItemDetails.valueForKey("price") as! String
+                      //  var bottomItemDetails: NSDictionary = bottomItem.valueForKey("fields") as! NSDictionary
+                        let bottomURLs = bottomItem.valueForKey("image_urls") as! NSArray
+                        let bottomTitle: String = bottomItem.valueForKey("title") as! String
+                        let bottomPrice: String = bottomItem.valueForKey("price") as! String
                         
                         self.bottomView.nameLabel.text = bottomTitle + ",  $" + bottomPrice
                         
                         self.bottomView.userInteractionEnabled = false
                         
-                        println("[FeedScreen] Downloading image (bottom) \(bottomURL)")
+                        println("[FeedScreen] Downloading image (bottom) \(bottomURLs)")
                         
+                        let bottomURL = bottomURLs[0].valueForKey("url") as! String
                         let imgURL = NSURL(string: bottomURL)
                         if let imgData = NSData(contentsOfURL: imgURL!) {
                             dispatch_async(dispatch_get_main_queue()) {
