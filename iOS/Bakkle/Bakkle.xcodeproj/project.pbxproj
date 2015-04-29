@@ -20,6 +20,7 @@
 		5E1FEE6F1AD8432100C08131 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E1FEE6E1AD8432100C08131 /* UIKit.framework */; };
 		5E1FEE7C1AD8641900C08131 /* MDCSwipeToChooseView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E1FEE7B1AD8641900C08131 /* MDCSwipeToChooseView.m */; };
 		5E6760881AD8138600EC899F /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E6760871AD8138600EC899F /* Photos.framework */; };
+		5E78D7E11AF121BA0014ED8F /* CollectionThumbnail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E78D7E01AF121BA0014ED8F /* CollectionThumbnail.swift */; };
 		5E8055421AE541460035521C /* ItemDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E8055411AE541460035521C /* ItemDetails.swift */; };
 		5E8055571AEA78790035521C /* Bakkle WatchKit App.app in Resources */ = {isa = PBXBuildFile; fileRef = 5E8055561AEA78790035521C /* Bakkle WatchKit App.app */; };
 		5EBDD6911AB211E600C7FBE7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EBDD6901AB211E600C7FBE7 /* AppDelegate.swift */; };
@@ -107,6 +108,7 @@
 		5E1FEE7B1AD8641900C08131 /* MDCSwipeToChooseView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDCSwipeToChooseView.m; sourceTree = "<group>"; };
 		5E5CB0A81AB7547800F32BE6 /* Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
 		5E6760871AD8138600EC899F /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
+		5E78D7E01AF121BA0014ED8F /* CollectionThumbnail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionThumbnail.swift; sourceTree = "<group>"; };
 		5E8055411AE541460035521C /* ItemDetails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemDetails.swift; sourceTree = "<group>"; };
 		5E8055471AEA78790035521C /* Bakkle WatchKit Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Bakkle WatchKit Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E8055561AEA78790035521C /* Bakkle WatchKit App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Bakkle WatchKit App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -252,6 +254,7 @@
 				5E5CB0A81AB7547800F32BE6 /* Bridging-Header.h */,
 				5EBDD6901AB211E600C7FBE7 /* AppDelegate.swift */,
 				5EBDD6921AB211E600C7FBE7 /* ViewController.swift */,
+				5E78D7E01AF121BA0014ED8F /* CollectionThumbnail.swift */,
 				5E1DCCA41AD486D2002D41FD /* AddItem.swift */,
 				5E8055411AE541460035521C /* ItemDetails.swift */,
 				5EBDD6941AB211E600C7FBE7 /* Main.storyboard */,
@@ -607,6 +610,7 @@
 				A0D96F821AD76D8E0046DA13 /* BuyersTrunkView.swift in Sources */,
 				5EE2C9B81AB9F0FB0031D8CD /* MDCGeometry.m in Sources */,
 				5EE2C9BB1AB9F0FB0031D8CD /* MDCViewState.m in Sources */,
+				5E78D7E11AF121BA0014ED8F /* CollectionThumbnail.swift in Sources */,
 				A0D96F861AD771900046DA13 /* SellersGarage.swift in Sources */,
 				A06AA9EE1AD609530075D7F7 /* Bakkle.swift in Sources */,
 				5EE2C9B41AB9F0FB0031D8CD /* MDCSwipeOptions.m in Sources */,
