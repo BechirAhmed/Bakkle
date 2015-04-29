@@ -188,8 +188,11 @@ def get_seller_items(request):
 
      # get json representaion of item array
     items_json = "["
-    for item in item_list:
-        items_json = items_json + str(item)
+    for x in range(0, len(item_list)):
+        if x == 0:
+            items_json = items_json + str(item_list[x])
+        else:
+            items_json = items_json  + ',' + str(item_list[x])
     items_json = items_json + "]"
 
     # create json string
@@ -208,8 +211,11 @@ def get_seller_transactions(request):
 
      # get json representaion of item array
     items_json = "["
-    for item in item_list:
-        items_json = items_json + str(item)
+    for x in range(0, len(item_list)):
+        if x == 0:
+            items_json = items_json + str(item_list[x])
+        else:
+            items_json = items_json  + ',' + str(item_list[x])
     items_json = items_json + "]"
 
     # create json string
@@ -234,7 +240,7 @@ def feed(request):
 
     # get items
     items_viewed = BuyerItem.objects.filter(buyer = buyer_id)
-    item_list = Items.objects.exclude(buyeritem = items_viewed)# TODO: Put back in and also test the additional filter: .exclude(seller = buyer_id).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING))
+    item_list = Items.objects.exclude(buyeritem = items_viewed).exclude(seller = buyer_id).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING))
 
     # get json representaion of item array
     items_json = "["
@@ -286,9 +292,10 @@ def report(request):
     return add_Item_To_Buyer_Items(request, BuyerItem.REPORT)
     
 def add_Item_To_Buyer_Items(request, status):
+    # TODO: Put in check for view_duration being valid decimal
     auth_token = request.POST.get('auth_token', "")
     item_id = request.POST.get('item_id', "")
-    view_duration = request.Post.get('view_duration',"")
+    view_duration = request.POST.get('view_duration',"")
 
     # Check that all require params are sent and are of the right format
     if (view_duration == None or view_duration.strip() == "") or (auth_token == None or auth_token.strip() == "" or auth_token.find('_') == -1) or (item_id == None or item_id.strip() == ""):
@@ -305,7 +312,7 @@ def add_Item_To_Buyer_Items(request, status):
     buyer_item = BuyerItem.objects.get_or_create(
         buyer = get_object_or_404(Account, pk=buyer_id),
         item = item,
-        defaults = { 'status': status, 'confirmed_price': item.price })[0]
+        defaults = { 'status': status, 'confirmed_price': item.price, 'view_duration': 0 })[0]
     buyer_item.status = status
     buyer_item.confirmed_price = item.price
     buyer_item.view_duration = Decimal(view_duration)
@@ -313,6 +320,54 @@ def add_Item_To_Buyer_Items(request, status):
 
     response_data = { 'status':1 }
     return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+# Functions for BuyerItem
+@csrf_exempt
+@require_POST
+@authenticate
+def get_buyers_trunk(request):
+    # Get the authentication code
+    auth_token = request.POST.get('auth_token')
+    buyer_id = auth_token.split('_')[1]
+
+    item_list = BuyerItem.objects.filter(Q(buyer=buyer_id, status=BuyerItem.WANT) | Q(buyer=buyer_id, status=BuyerItem.PENDING) | Q(buyer=buyer_id, status=BuyerItem.NEGOCIATING))
+
+     # get json representaion of item array TODO: Do this serializers.serialize('json', [ obj, ])
+    items_json = "["
+    for x in range(0, len(item_list)):
+        if x == 0:
+            items_json = items_json + str(item_list[x])
+        else:
+            items_json = items_json  + ',' + str(item_list[x])
+    items_json = items_json + "]"
+
+    # create json string
+    response_data = "{\"status\": 1, \"buyers_trunk\": " + items_json + "}"
+    return HttpResponse(response_data, content_type="application/json")
+
+@csrf_exempt
+@require_POST
+@authenticate
+def get_holding_pattern(request):
+    # Get the authentication code
+    auth_token = request.POST.get('auth_token')
+    seller_id = auth_token.split('_')[1]
+
+    item_list = BuyerItem.objects.filter(buyer=buyer_id, status=BuyerItem.HOLD)
+
+     # get json representaion of item array
+    items_json = "["
+    for x in range(0, len(item_list)):
+        if x == 0:
+            items_json = items_json + str(item_list[x])
+        else:
+            items_json = items_json  + ',' + str(item_list[x])
+    items_json = items_json + "]"
+
+    # create json string
+    response_data = "{\"status\": 1, \"holding_pattern\": " + items_json + "}"
+    return HttpResponse(response_data, content_type="application/json")
+
 
 # Helper Functions
 
@@ -326,16 +381,29 @@ def make_filepath():
 def reset(request):
     #TODO: hardcoded values
     item_expire_time=7 #days
-    account_id = 1
     #TODO: Change to POST or DELETE
     Items.objects.all().delete()
     BuyerItem.objects.all().delete()
+
+    # create dummy account
+    try:
+        a = Account.objects.get(
+            facebook_id="1020420",
+            display_name="Test Seller",
+            email="testseller@bakkle.com" )
+    except Account.DoesNotExist:
+        a = Account(
+            facebook_id="1020420",
+            display_name="Test Seller",
+            email="testseller@bakkle.com" )
+        a.save()
+
     i = Items(
         image_urls = "https://app.bakkle.com/img/b83bdbd.png",
         title = "Orange Push Mower",
         description = "Year old orange push mower. Some wear and sun fadding. Was kept outside and not stored in shed.",
         location = "39.417672,-87.330438",
-        seller = get_object_or_404(Account, pk=account_id),
+        seller = a,
         price = 50.25,
         tags = "lawnmower, orange, somewear",
         method = Items.PICK_UP,
@@ -348,7 +416,7 @@ def reset(request):
         title = "Oil change",
         description = "will change your cars oil at your location, $ 19.95.",
         location = "39.417672,-87.330438",
-        seller = get_object_or_404(Account, pk=account_id),
+        seller = a,
         price = 19.95,
         tags = "service, oil change",
         method = Items.PICK_UP,
@@ -361,7 +429,7 @@ def reset(request):
         title = "Flat screen LED TV",
         description = "Flat screen LED LCD TV. Brand new in box, 4 HDMI ports and Netflix built in.",
         location = "39.417672,-87.330438",
-        seller = get_object_or_404(Account, pk=account_id),
+        seller = a,
         price = 107.00,
         tags = "tv, led, netflix",
         method = Items.PICK_UP,
@@ -374,7 +442,7 @@ def reset(request):
         title = "15inch MacBook pro",
         description = "MacBook Pro 15inch Mid 2014 i7. 2.2 GHz, 16 GB RAM, 256 GB SSD. Very little use, needed a lighter model so switched to MacBook air. Includes original box, power cord, etc.",
         location = "39.417672,-87.330438",
-        seller = get_object_or_404(Account, pk=account_id),
+        seller = a,
         price = 999.00,
         tags = "mac, apple, macbook, macbook pro",
         method = Items.PICK_UP,
@@ -387,7 +455,7 @@ def reset(request):
         title = "Paint ball gun",
         description = "Gun only, no CO2 tank. Needs new HPR piston",
         location = "39.417672,-87.330438",
-        seller = get_object_or_404(Account, pk=account_id),
+        seller = a,
         price = 40.99,
         tags = "paintball, gun, bump paintball",
         method = Items.PICK_UP,
@@ -400,7 +468,7 @@ def reset(request):
         title = "Business law text book",
         description = "Business law text and cases, clarkson, miller, jentz, 11th edition. No marks or highlighting.",
         location = "39.417672,-87.330438",
-        seller = get_object_or_404(Account, pk=account_id),
+        seller = a,
         price = 40.99,
         tags = "textbook, business law",
         method = Items.PICK_UP,
@@ -413,7 +481,7 @@ def reset(request):
         title = "Baseball mitt",
         description = "Louisville slugger baseball mitt, mint condition.",
         location = "39.417672,-87.330438",
-        seller = get_object_or_404(Account, pk=account_id),
+        seller = a,
         price = 30.00,
         tags = "baseball mitt",
         method = Items.PICK_UP,
@@ -426,7 +494,7 @@ def reset(request):
         title = "Bicycle",
         description = "Pure fix fixie bicycle.",
         location = "39.417672,-87.330438",
-        seller = get_object_or_404(Account, pk=account_id),
+        seller = a,
         price = 300,
         tags = "bicycle",
         method = Items.PICK_UP,
@@ -439,7 +507,7 @@ def reset(request):
         title = "Canon 50D",
         description = "Canon 50D digital camera. Comes with f1.8 50mm lens.",
         location = "39.417672,-87.330438",
-        seller = get_object_or_404(Account, pk=account_id),
+        seller = a,
         price = 30.00,
         tags = "canon, 50d, digital camera",
         method = Items.PICK_UP,
@@ -452,7 +520,7 @@ def reset(request):
         title = "iPhone 5",
         description = "White Apple iphone 5. Unlocked",
         location = "39.417672,-87.330438",
-        seller = get_object_or_404(Account, pk=account_id),
+        seller = a,
         price = 200.00,
         tags = "apple, iphone, iphone 5",
         method = Items.PICK_UP,
@@ -465,7 +533,7 @@ def reset(request):
         title = "weights",
         description = "Premium adjustable hand barbell weight set.",
         location = "39.417672,-87.330438",
-        seller = get_object_or_404(Account, pk=account_id),
+        seller = a,
         price = 300.00,
         tags = "weights, barbell",
         method = Items.PICK_UP,
@@ -478,7 +546,7 @@ def reset(request):
         title = "Blender",
         description = "Blender, used. Runs great. 5 speeds with turbo",
         location = "39.417672,-87.330438",
-        seller = get_object_or_404(Account, pk=account_id),
+        seller = a,
         price = 12.00,
         tags = "blender",
         method = Items.PICK_UP,
@@ -491,7 +559,7 @@ def reset(request):
         title = "Playstation 2",
         description = "Playstation 2 with controller. Broken, needs laser cleaning. Won't read discs.",
         location = "39.417672,-87.330438",
-        seller = get_object_or_404(Account, pk=account_id),
+        seller = a,
         price = 45.00,
         tags = "sony, playstation, controller",
         method = Items.PICK_UP,
@@ -504,7 +572,7 @@ def reset(request):
         title = "Baseball bat",
         description = "Basic home security system.",
         location = "39.417672,-87.330438",
-        seller = get_object_or_404(Account, pk=account_id),
+        seller = a,
         price = 10.00,
         tags = "baseball, security, bat",
         method = Items.PICK_UP,
@@ -517,7 +585,7 @@ def reset(request):
         title = "Gas grille",
         description = "Propane barbeque grill with side burner. 2 years old worth $200 from Lowes. Full propane bottle included.",
         location = "39.417672,-87.330438",
-        seller = get_object_or_404(Account, pk=account_id),
+        seller = a,
         price = 10.00,
         tags = "propane, gas, grille, barbeque, bbq",
         method = Items.PICK_UP,
@@ -530,7 +598,7 @@ def reset(request):
         title = "Marketing textbooks",
         description = "MKTG marketing text (instructor edition) by Lam, hair, mcdaniel and Essentials of Entrepreneurship and Small Business Management by Normal M. Scarborough (7th global edition).",
         location = "39.417672,-87.330438",
-        seller = get_object_or_404(Account, pk=account_id),
+        seller = a,
         price = 175.00,
         tags = "marketing, textbooks",
         method = Items.PICK_UP,
@@ -543,7 +611,7 @@ def reset(request):
         title = "Nike shoes",
         description = "Nike women's air max shoes size 6 1/2. Never worn outside.",
         location = "39.417672,-87.330438",
-        seller = get_object_or_404(Account, pk=account_id),
+        seller = a,
         price = 90.00,
         tags = "shoes, nike, womens",
         method = Items.PICK_UP,
@@ -556,7 +624,7 @@ def reset(request):
         title = "Rabbit Push Mower",
         description = "Homemade lawn mower. Includes rabbit and water container.",
         location = "39.417672,-87.330438",
-        seller = get_object_or_404(Account, pk=account_id),
+        seller = a,
         price = 10.99,
         tags = "lawnmower, homemade, rabbit",
         method = Items.PICK_UP,
@@ -569,7 +637,7 @@ def reset(request):
         title = "iPhone 6 Cracked",
         description = "iPhone 6. Has a cracked screen. Besides screen phone is in good condition.",
         location = "39.417672,-87.330438",
-        seller = get_object_or_404(Account, pk=account_id),
+        seller = a,
         price = 65.99,
         tags = "iPhone6, cracked, damaged",
         method = Items.DELIVERY,
