@@ -123,7 +123,7 @@ class Bakkle {
                 }
 
                 let responseString = NSString(data: data, encoding:NSUTF8StringEncoding)
-                println("Response: \(responseString)")
+                println("ResponseLogin: \(responseString)")
                 
                 /* JSON parse */
                 var error: NSError? = error

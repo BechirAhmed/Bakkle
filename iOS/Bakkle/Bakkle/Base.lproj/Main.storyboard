@@ -683,14 +683,14 @@
                                 <exclude reference="FWd-VD-JTT"/>
                             </mask>
                             <mask key="constraints">
+                                <exclude reference="7bn-DH-DFn"/>
+                                <exclude reference="N6l-up-ctB"/>
                                 <exclude reference="HVE-5h-gdL"/>
                                 <exclude reference="KK3-DA-nNB"/>
                                 <exclude reference="aL9-Kk-cqD"/>
                                 <exclude reference="YQI-rr-7oF"/>
                                 <exclude reference="fwK-hX-N71"/>
                                 <exclude reference="wTD-Sd-7jf"/>
-                                <exclude reference="7bn-DH-DFn"/>
-                                <exclude reference="N6l-up-ctB"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
@@ -700,14 +700,14 @@
                                 <include reference="FWd-VD-JTT"/>
                             </mask>
                             <mask key="constraints">
+                                <include reference="7bn-DH-DFn"/>
+                                <include reference="N6l-up-ctB"/>
                                 <include reference="HVE-5h-gdL"/>
                                 <include reference="KK3-DA-nNB"/>
                                 <include reference="aL9-Kk-cqD"/>
                                 <include reference="YQI-rr-7oF"/>
                                 <include reference="fwK-hX-N71"/>
                                 <include reference="wTD-Sd-7jf"/>
-                                <include reference="7bn-DH-DFn"/>
-                                <include reference="N6l-up-ctB"/>
                             </mask>
                         </variation>
                     </view>
@@ -1669,6 +1669,13 @@
                                 <exclude reference="nGS-By-p3o"/>
                             </mask>
                             <mask key="constraints">
+                                <exclude reference="9bk-aE-ca6"/>
+                                <exclude reference="Rk0-y4-9an"/>
+                                <exclude reference="pTA-67-I6A"/>
+                                <exclude reference="uWi-5q-IjO"/>
+                                <exclude reference="EYS-PM-HcW"/>
+                                <exclude reference="kVx-4i-2en"/>
+                                <exclude reference="rYf-kw-aXw"/>
                                 <exclude reference="0DM-aY-bMh"/>
                                 <exclude reference="ACv-IU-LbA"/>
                                 <exclude reference="UeV-oN-Npv"/>
@@ -1677,13 +1684,6 @@
                                 <exclude reference="wFT-bV-qSC"/>
                                 <exclude reference="8aK-Se-AZT"/>
                                 <exclude reference="vyT-zk-rhy"/>
-                                <exclude reference="EYS-PM-HcW"/>
-                                <exclude reference="kVx-4i-2en"/>
-                                <exclude reference="rYf-kw-aXw"/>
-                                <exclude reference="9bk-aE-ca6"/>
-                                <exclude reference="Rk0-y4-9an"/>
-                                <exclude reference="pTA-67-I6A"/>
-                                <exclude reference="uWi-5q-IjO"/>
                                 <exclude reference="c5b-hn-BWl"/>
                                 <exclude reference="iKc-tk-UHb"/>
                                 <exclude reference="uQD-XK-hoI"/>
@@ -1697,6 +1697,13 @@
                                 <include reference="nGS-By-p3o"/>
                             </mask>
                             <mask key="constraints">
+                                <include reference="9bk-aE-ca6"/>
+                                <exclude reference="Rk0-y4-9an"/>
+                                <include reference="pTA-67-I6A"/>
+                                <exclude reference="uWi-5q-IjO"/>
+                                <include reference="EYS-PM-HcW"/>
+                                <include reference="kVx-4i-2en"/>
+                                <include reference="rYf-kw-aXw"/>
                                 <include reference="0DM-aY-bMh"/>
                                 <include reference="ACv-IU-LbA"/>
                                 <exclude reference="UeV-oN-Npv"/>
@@ -1708,13 +1715,6 @@
                                 <include reference="wFT-bV-qSC"/>
                                 <include reference="8aK-Se-AZT"/>
                                 <include reference="vyT-zk-rhy"/>
-                                <include reference="EYS-PM-HcW"/>
-                                <include reference="kVx-4i-2en"/>
-                                <include reference="rYf-kw-aXw"/>
-                                <include reference="9bk-aE-ca6"/>
-                                <exclude reference="Rk0-y4-9an"/>
-                                <include reference="pTA-67-I6A"/>
-                                <exclude reference="uWi-5q-IjO"/>
                                 <exclude reference="c5b-hn-BWl"/>
                                 <include reference="iKc-tk-UHb"/>
                                 <exclude reference="uQD-XK-hoI"/>
@@ -2228,7 +2228,7 @@
         <image name="addItem.png" width="44" height="35"/>
         <image name="btn-add-disabled.png" width="481" height="162"/>
         <image name="btn-add.png" width="481" height="162"/>
-        <image name="btn-cancel.png" width="480" height="162"/>
+        <image name="btn-cancel.png" width="477" height="158"/>
         <image name="btn-check.png" width="545" height="207"/>
         <image name="btn-email40.png" width="230" height="40"/>
         <image name="btn-facebook40.png" width="230" height="40"/>
@@ -2243,7 +2243,7 @@
         <image name="logo-white-design-png-100.png" width="248" height="100"/>
         <image name="logo-white-design-png-transp-100.png" width="248" height="100"/>
         <image name="menubtn.png" width="54" height="39"/>
-        <image name="mock-additem.png" width="985" height="1582"/>
+        <image name="mock-additem.png" width="987" height="1401"/>
         <image name="mock-settings.png" width="970" height="1439"/>
     </resources>
     <inferredMetricsTieBreakers>
