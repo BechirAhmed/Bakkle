@@ -12,7 +12,6 @@ class Bakkle {
     
     let apiVersion: Float = 1.2
     var url_base: String          = "https://app.bakkle.com/"
-//    let url_base: String          = "http://137.112.63.186:8000/"
     let url_login: String         = "account/login_facebook/"
     let url_logout: String        = "account/logout/"
     let url_facebook: String      = "account/facebook/"
@@ -26,7 +25,8 @@ class Bakkle {
     var serverNum: Int = 0
     var deviceUUID : String = UIDevice.currentDevice().identifierForVendor.UUIDString
     
-    var account_id: Int! = 0
+//    var account_id: Int! = 0
+    var auth_token: String!
     var display_name: String!
     var email: String!
     var facebook_id: Int!
@@ -54,7 +54,7 @@ class Bakkle {
         {
         case 0: self.url_base = "https://app.bakkle.com/"
         case 1: self.url_base = "localhost"
-        case 2: self.url_base = "https://test.bakkle.com/"
+        case 2: self.url_base = "http://137.112.63.186:8000/"
         default: self.url_base = "https://app.bakkle.com/"
         }
     }
@@ -74,7 +74,7 @@ class Bakkle {
         self.facebook_id = userid.toInt()
             
         request.HTTPMethod = "POST"
-            let postString = "email=\(email)&Name=\(name)&UserName=\(username)&Gender=\(gender)&UserID=\(userid)&locale=\(locale)&FirstName=\(first_name)&LastName=\(last_name)&device_uuid=\(self.deviceUUID)"
+            let postString = "email=\(email)&name=\(name)&user_name=\(username)&gender=\(gender)&user_id=\(userid)&locale=\(locale)&first_name=\(first_name)&last_name=\(last_name)&device_uuid=\(self.deviceUUID)"
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
         
         println("[Bakkle] facebook")
@@ -87,15 +87,16 @@ class Bakkle {
                 return
             }
             
-            println("Response: \(data)")
-
+            let responseString = NSString(data: data, encoding:NSUTF8StringEncoding)
+            println("Response: \(responseString)")
+            
             /* JSON parse */
             var error: NSError? = error
             var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &error) as! NSDictionary!
             
             if responseDict.valueForKey("status")?.integerValue == 1 {
-                self.account_id = responseDict.valueForKey("account_id") as! Int!
-                
+                self.display_name = username
+                self.email = email
                 success()
             }
         }
@@ -108,7 +109,7 @@ class Bakkle {
             let request = NSMutableURLRequest(URL: url!)
             
             request.HTTPMethod = "POST"
-            let postString = "account_id=\(self.account_id)&device_uuid=\(self.deviceUUID)&user_id=\(self.facebook_id)"
+            let postString = "device_uuid=\(self.deviceUUID)&user_id=\(self.facebook_id_str)"
             request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
             
             println("[Bakkle] login (facebook)")
@@ -129,12 +130,11 @@ class Bakkle {
                 var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &error) as! NSDictionary!
                 
                 if responseDict.valueForKey("status")?.integerValue == 1 {
-                    self.account_id = responseDict.valueForKey("account_id") as! Int!
-                    self.display_name = responseDict.valueForKey("display_name") as! String!
-                    self.email = responseDict.valueForKey("email") as! String!
-                    //self.facebook_id = (responseDict.valueForKey("facebook_id") as! String).toInt()
+                    self.auth_token = responseDict.valueForKey("auth_token") as! String!
                     success()
                 } else {
+                    Bakkle.sharedInstance.logout()
+                    FBSession.activeSession().closeAndClearTokenInformation()
                     fail()
                 }
             }
@@ -143,16 +143,16 @@ class Bakkle {
     
     /* logout */
     func logout() {
-        self.account_id = 0
+        self.auth_token = ""
         
         let url:NSURL? = NSURL(string: url_base + url_logout)
         let request = NSMutableURLRequest(URL: url!)
         
         request.HTTPMethod = "POST"
-        let postString = "account_id=\(self.account_id)&device_uuid=\(self.deviceUUID)"
+        let postString = "auth_token=\(self.auth_token)&device_uuid=\(self.deviceUUID)"
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
         
-        println("Logout account_id:\(account_id) device:\(self.deviceUUID)")
+        println("Logout auth_token:\(auth_token) device:\(self.deviceUUID)")
         println("URL: \(url) METHOD: \(request.HTTPMethod) BODY: \(postString)")
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
             data, response, error in
@@ -174,7 +174,7 @@ class Bakkle {
         let request = NSMutableURLRequest(URL: url!)
 
         request.HTTPMethod = "POST"
-        let postString = "account_id=\(self.account_id)&device_uuid=\(self.deviceUUID)&device_token=\(deviceToken)"
+        let postString = "auth_token=\(self.auth_token)&device_uuid=\(self.deviceUUID)&device_token=\(deviceToken)"
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
 
         println("[Bakkle] register_push")
@@ -198,8 +198,10 @@ class Bakkle {
         let url:NSURL? = NSURL(string: url_base + url_mark + "\(status)/")
         let request = NSMutableURLRequest(URL: url!)
         
+        let view_duration = 42 //TODO: this needs to be accepted as a parm
+        
         request.HTTPMethod = "POST"
-        let postString = "account_id=\(self.account_id)&device_uuid=\(self.deviceUUID)&item_id=\(item_id)"
+        let postString = "auth_token=\(self.auth_token)&device_uuid=\(self.deviceUUID)&item_id=\(item_id)&view_duration=\(view_duration)"
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
         
         println("[Bakkle] markItem")
@@ -234,7 +236,7 @@ class Bakkle {
         let request = NSMutableURLRequest(URL: url!)
         
         request.HTTPMethod = "POST"
-        let postString = "account_id=\(Bakkle.sharedInstance.account_id)"
+        let postString = "auth_token=\(self.auth_token)&device_uuid=\(self.deviceUUID)"
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
         
         info("[Bakkle] populateFeed")
@@ -248,9 +250,9 @@ class Bakkle {
             }
 
             let responseString: String = NSString(data: data, encoding: NSUTF8StringEncoding)! as String
-            self.resp("Response: \(responseString)")
-            var parseError: NSError?
+            println("Response: \(responseString)")
             
+            var parseError: NSError?
             self.responseDict = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! NSDictionary!
              self.resp("RESPONSE DICT IS: \(self.responseDict)")
             
@@ -269,7 +271,7 @@ class Bakkle {
         let location = "39.417672,-87.330438"
         
         request.HTTPMethod = "POST"
-        let postString = "device_token=\(self.deviceUUID)&title=\(title)&description=\(description)&location=\(location)&account_id=\(Bakkle.sharedInstance.account_id)&price=\(price)&tags=\(tags)&method=\(method)&image=\(imageToSend)"
+        let postString = "device_uuid=\(self.deviceUUID)&title=\(title)&description=\(description)&location=\(location)&auth_token=\(self.auth_token)&price=\(price)&tags=\(tags)&method=\(method)&image=\(imageToSend)"
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
         
         info("[Bakkle] addItem")
@@ -299,7 +301,7 @@ class Bakkle {
         let request = NSMutableURLRequest(URL: url!)
         
         request.HTTPMethod = "POST"
-        let postString = "account_id=\(self.account_id)&device_uuid=\(self.deviceUUID)"
+        let postString = "auth_token=\(self.auth_token)&device_uuid=\(self.deviceUUID)"
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
         
         info("[Bakkle] reset")
