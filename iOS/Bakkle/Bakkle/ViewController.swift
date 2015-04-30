@@ -50,9 +50,11 @@ class ViewController: UIViewController, FBLoginViewDelegate {
                 // Sucessfully logged in via FB
                 Bakkle.sharedInstance.login({
                     
-                    let feedVC : FeedScreen = FeedScreen()
-                    self.performSegueWithIdentifier(self.mainScreenSegueIdentifier, sender: self)
-
+                    dispatch_async(dispatch_get_main_queue()) {
+                        let feedVC : FeedScreen = FeedScreen()
+                        self.performSegueWithIdentifier(self.mainScreenSegueIdentifier, sender: self)
+                    }
+                    
                     dispatch_async(dispatch_get_main_queue()) {
 
                         // Register for push notifications.

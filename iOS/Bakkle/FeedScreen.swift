@@ -162,6 +162,8 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
 
+        println("--FeedScreen WillAppear--")
+        
         if let items = Bakkle.sharedInstance.feedItems {
             if Bakkle.sharedInstance.feedItems.count>0 {
                 resetSwipeView()

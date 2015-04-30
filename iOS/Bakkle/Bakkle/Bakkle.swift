@@ -39,6 +39,10 @@ class Bakkle {
     var feedItems: [NSObject]!
     var responseDict: NSDictionary!
     
+    var filter_distance: Float = 100
+    var filter_price: Float = 50
+    var filter_number: Float = 80
+    
     class var sharedInstance: Bakkle {
         struct Static {
             static let instance: Bakkle = Bakkle()
@@ -329,6 +333,12 @@ class Bakkle {
             }
         }
         task.resume()
+    }
+ 
+    func setFilter(ffilter_distance: Float, ffilter_price: Float, ffilter_number:Float) {
+        self.filter_distance = ffilter_distance
+        self.filter_price = ffilter_price
+        self.filter_number = ffilter_number
     }
     
     func err(logMessage: String, functionName: String = __FUNCTION__, line: Int = __LINE__, file: String = __FILE__) {
