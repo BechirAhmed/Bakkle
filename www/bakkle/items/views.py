@@ -240,7 +240,8 @@ def feed(request):
 
     # get items
     items_viewed = BuyerItem.objects.filter(buyer = buyer_id)
-    item_list = Items.objects.exclude(buyeritem = items_viewed).exclude(seller = buyer_id).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING))
+    item_list = Items.objects.exclude(buyeritem = items_viewed).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING))
+    #item_list = Items.objects.exclude(buyeritem = items_viewed).exclude(seller = buyer_id).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING))
 
     # get json representaion of item array
     items_json = "["

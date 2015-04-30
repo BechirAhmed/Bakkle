@@ -20,7 +20,7 @@ def authenticate(function):
 
         # check if any of the required fields are empty
         if auth_token == None or auth_token.strip() == "" or auth_token.find('_') == -1 or device_uuid == None or device_uuid.strip() == "":
-            response_data = { "status":0, "error":"Required parameters missing! Need auth_token and device_uuid." }
+            response_data = { "status":0, "error":"Required parameters missing! Need auth_token and device_uuid. A: {} D: {}".format(auth_token, device_uuid) }
             return HttpResponse(json.dumps(response_data), content_type="application/json")
         
         # get the account id and the device the user is logging in from
