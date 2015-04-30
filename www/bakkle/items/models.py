@@ -95,3 +95,7 @@ class BuyerItem(models.Model):
     status = models.CharField(max_length=11, choices = STATUS_OPTIONS, default=ACTIVE)
     confirmed_price = models.DecimalField(max_digits = 7, decimal_places = 2)
     accepted_sale_price = models.BooleanField(default = False)
+
+    def __str__(self):
+        # create buyer item json
+        return "{\"pk\": \"" + str(self.id) + "\"item: \""
