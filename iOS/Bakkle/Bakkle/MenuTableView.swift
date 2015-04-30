@@ -24,7 +24,6 @@ class MenuTableController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    
     @IBAction func btnReset(sender: AnyObject) {
         Bakkle.sharedInstance.resetDemo({
             let alertController = UIAlertController(title: "Bakkle Server", message:
@@ -40,6 +39,11 @@ class MenuTableController: UITableViewController {
         self.revealViewController().dismissViewControllerAnimated(true, completion: { () -> Void in
             //
         })
+    }
+    
+    override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        /* This fixes the small lines on the left hand side of the cell dividers */
+        cell.backgroundColor = UIColor(red: 153/255, green: 153/255, blue: 153/255, alpha: 1.0)
     }
 }
 

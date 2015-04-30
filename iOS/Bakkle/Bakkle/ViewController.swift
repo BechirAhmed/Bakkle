@@ -48,7 +48,12 @@ class ViewController: UIViewController, FBLoginViewDelegate {
             first_name: first_name, last_name: last_name, success:
             {
                 // Sucessfully logged in via FB
-              //  Bakkle.sharedInstance.login({
+                Bakkle.sharedInstance.login({
+                    
+                    dispatch_async(dispatch_get_main_queue()) {
+                        let feedVC : FeedScreen = FeedScreen()
+                        self.performSegueWithIdentifier(self.mainScreenSegueIdentifier, sender: self)
+                    }
                     
                     dispatch_async(dispatch_get_main_queue()) {
 
@@ -57,10 +62,8 @@ class ViewController: UIViewController, FBLoginViewDelegate {
                         appDelegate.registerForPushNotifications(UIApplication.sharedApplication())
                     }
                     
-             //   }, fail: {})
+                }, fail: {})
         })
-        let feedVC : FeedScreen = FeedScreen()
-        self.performSegueWithIdentifier(self.mainScreenSegueIdentifier, sender: self)
         
         //TODO: Display error on fail?
     }
