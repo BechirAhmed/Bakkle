@@ -64,8 +64,9 @@ class Bakkle {
         {
             case 0: self.url_base = "https://app.bakkle.com/"
             case 1: self.url_base = "localhost"
-            case 2: self.url_base = "http://137.112.63.186:8000/"
-            default: self.url_base = "https://app.bakkle.com/"
+            case 2: self.url_base = "http://bakkle.rhventures.org/"
+            case 3: self.url_base = "http://137.112.63.186:8000/"
+        default: self.url_base = "https://app.bakkle.com/"
         }
     }
 
@@ -154,8 +155,6 @@ class Bakkle {
     
     /* logout */
     func logout() {
-        self.auth_token = ""
-        
         let url:NSURL? = NSURL(string: url_base + url_logout)
         let request = NSMutableURLRequest(URL: url!)
         
@@ -175,6 +174,8 @@ class Bakkle {
             
             let responseString = NSString(data: data, encoding: NSUTF8StringEncoding)
             println("Response: \(responseString)")
+            
+            self.auth_token = ""
         }
         task.resume()
     }
@@ -247,14 +248,13 @@ class Bakkle {
         let request = NSMutableURLRequest(URL: url!)
         
         request.HTTPMethod = "POST"
-        //TODO: Add filter variables here
-        let postString = "auth_token=\(self.auth_token)&device_uuid=\(self.deviceUUID)"
+        let postString = "auth_token=\(self.auth_token)&device_uuid=\(self.deviceUUID)&search=&filter_distance=\(self.filter_distance)&filter_price=\(self.filter_price)&filter_number=\(self.filter_number)"
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
         
         info("[Bakkle] populateFeed")
         info("[Bakkle]  URL: \(url)")
         info("[Bakkle]  METHOD: \(request.HTTPMethod)")
-       // info("[Bakkle]  BODY: \(postString)")
+        info("[Bakkle]  BODY: \(postString)")
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
             data, response, error in
             
@@ -264,13 +264,13 @@ class Bakkle {
             }
 
             let responseString: String = NSString(data: data, encoding: NSUTF8StringEncoding)! as String
-            self.debg("Response: \(responseString)")
+            //self.debg("Response: \(responseString)")
             
             var parseError: NSError?
             self.responseDict = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! NSDictionary!
-             self.debg("RESPONSE DICT IS: \(self.responseDict)")
+            //self.debg("RESPONSE DICT IS: \(self.responseDict)")
             
-             if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
+            if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
                 self.feedItems = self.responseDict.valueForKey("feed") as! Array!
                 success()
             }

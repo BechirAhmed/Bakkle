@@ -24,8 +24,18 @@ class FeedFilterView: UIViewController {
     @IBOutlet weak var numberLbl: UILabel!
 
     
+    @IBAction func filterRealtime(sender: AnyObject) {
+        //println("d:\(Int(distance.value)) p:\(price.value) n: \(number.value)")
+        distanceLbl.text = "\(Int(distance.value)) mi"
+        priceLbl.text = "$\(Int(price.value))"
+        numberLbl.text = "\(Int(number.value))"
+        if number.value >= 1000 {
+            numberLbl.text = "∞"
+        } else {
+        }
+    }
     @IBAction func filterChanged(sender: AnyObject) {
-        println("d:\(Int(distance.value)) p:\(price.value) n: \(number.value)")
+        println("SET d:\(Int(distance.value)) p:\(price.value) n: \(number.value)")
         distanceLbl.text = "\(Int(distance.value)) mi"
         priceLbl.text = "$\(Int(price.value))"
         numberLbl.text = "\(Int(number.value))"

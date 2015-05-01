@@ -14,6 +14,7 @@
 				<integer>0</integer>
 				<integer>1</integer>
 				<integer>2</integer>
+				<integer>3</integer>
 			</array>
 			<key>Key</key>
 			<string>server</string>
@@ -24,6 +25,7 @@
 				<string>Production Server (default)</string>
 				<string>Built-in (DEMO)</string>
 				<string>Test (Developers only)</string>
+				<string>Lindsey (Developers only)</string>
 			</array>
 		</dict>
 	</array>
