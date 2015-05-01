@@ -25,7 +25,8 @@ class ItemDetails: UIViewController {
         var topItem = Bakkle.sharedInstance.feedItems[0]
         let imgURLs = topItem.valueForKey("image_urls") as! NSArray
         
-        let firstURL = imgURLs[0].valueForKey("url") as! String
+        //TOOD: Load all images into an array and UIScrollView.
+        let firstURL = imgURLs[0] as! String
         let topTitle: String = topItem.valueForKey("title") as! String
         let topPrice: String = topItem.valueForKey("price") as! String
         let topMethod: String = topItem.valueForKey("method") as! String

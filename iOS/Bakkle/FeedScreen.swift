@@ -206,7 +206,7 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
             feedView.nameLabel.text = topTitle + ",  $" + topPrice
             dispatch_async(dispatch_get_global_queue(
                 Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
-                    let firstURL = imgURLs[0].valueForKey("url") as! String
+                    let firstURL = imgURLs[0] as! String
                     let imgURL = NSURL(string: firstURL)
                     if let imgData = NSData(contentsOfURL: imgURL!) {
                         dispatch_async(dispatch_get_main_queue()) {
@@ -230,7 +230,7 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
                         
                         println("[FeedScreen] Downloading image (bottom) \(bottomURLs)")
                         
-                        let bottomURL = bottomURLs[0].valueForKey("url") as! String
+                        let bottomURL = bottomURLs[0] as! String
                         let imgURL = NSURL(string: bottomURL)
                         if let imgData = NSData(contentsOfURL: imgURL!) {
                             dispatch_async(dispatch_get_main_queue()) {

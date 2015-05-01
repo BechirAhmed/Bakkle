@@ -247,8 +247,11 @@ class Bakkle {
         let url: NSURL? = NSURL(string: url_base + url_feed)
         let request = NSMutableURLRequest(URL: url!)
         
+        //TODO: change this location
+        let search_text = ""
+        
         request.HTTPMethod = "POST"
-        let postString = "auth_token=\(self.auth_token)&device_uuid=\(self.deviceUUID)&search=&filter_distance=\(self.filter_distance)&filter_price=\(self.filter_price)&filter_number=\(self.filter_number)"
+        let postString = "auth_token=\(self.auth_token)&device_uuid=\(self.deviceUUID)&search_text=\(search_text)&filter_distance=\(Int(self.filter_distance))&filter_price=\(Int(self.filter_price))&filter_number=\(Int(self.filter_number))"
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
         
         info("[Bakkle] populateFeed")
@@ -268,7 +271,7 @@ class Bakkle {
             
             var parseError: NSError?
             self.responseDict = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! NSDictionary!
-            //self.debg("RESPONSE DICT IS: \(self.responseDict)")
+            self.debg("RESPONSE DICT IS: \(self.responseDict)")
             
             if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
                 self.feedItems = self.responseDict.valueForKey("feed") as! Array!
@@ -342,11 +345,22 @@ class Bakkle {
         task.resume()
     }
  
+    func getFilter() {
+        var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        self.filter_distance = userDefaults.objectForKey("filter_distance") as! Float
+        self.filter_price    = userDefaults.objectForKey("filter_price")    as! Float
+        self.filter_number   = userDefaults.objectForKey("filter_number")   as! Float
+    }
     func setFilter(ffilter_distance: Float, ffilter_price: Float, ffilter_number:Float) {
         self.filter_distance = ffilter_distance
         self.filter_price = ffilter_price
         self.filter_number = ffilter_number
-        //TODO: Store filter settings locally
+        
+        var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.setFloat(self.filter_distance, forKey: "filter_distance")
+        userDefaults.setFloat(self.filter_price,    forKey: "filter_price")
+        userDefaults.setFloat(self.filter_number,   forKey: "filter_number")
+        userDefaults.synchronize()
     }
     
     func err(logMessage: String, functionName: String = __FUNCTION__, line: Int = __LINE__, file: String = __FILE__) {
