@@ -240,8 +240,24 @@ def report(request):
 
     return add_item_to_buyer_items(request, BuyerItem.REPORT)
 
+
 #--------------------------------------------#
-#            Seller Item Methods             #
+#            Buyer Item Methods              #
+#--------------------------------------------#
+@csrf_exempt
+@require_POST
+@authenticate
+def buyer_item_meh(request):
+    return add_item_to_buyer_items(request, BuyerItem.MEH)
+
+@csrf_exempt
+@require_POST
+@authenticate
+def buyer_item_want(request):
+    return add_item_to_buyer_items(request, BuyerItem.WANT)
+
+#--------------------------------------------#
+#           Seller's Item Methods            #
 #--------------------------------------------#
 @csrf_exempt
 @require_POST
@@ -283,9 +299,8 @@ def get_seller_transactions(request):
     response_data = {'status': 1, 'seller_history': item_array}
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
-
 #--------------------------------------------#
-#            Buyer Item Methods              #
+#           Buyer's Item Methods             #
 #--------------------------------------------#
 @csrf_exempt
 @require_POST
@@ -355,31 +370,48 @@ def make_filepath(seller_id):
 
 # Helper for creating buyer items
 def add_item_to_buyer_items(request, status):
-    # TODO: Put in check for view_duration being valid decimal
     auth_token = request.POST.get('auth_token', "")
     item_id = request.POST.get('item_id', "")
     view_duration = request.POST.get('view_duration',"")
+    buyer_item_id = request.POST.get('buyer_item_id', "")
 
     # Check that all require params are sent and are of the right format
     if (view_duration == None or view_duration.strip() == "") or (auth_token == None or auth_token.strip() == "" or auth_token.find('_') == -1) or (item_id == None or item_id.strip() == ""):
         response_data = { "status":0, "error": "A required parameter was not provided." }
         return HttpResponse(json.dumps(response_data), content_type="application/json")
-        
+    
+    try:
+        view_duration = Decimal(view_duration)
+    except ValueError:
+        response_data = { "status":0, "error": "Price was not a valid decimal." }
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+
     # get the account id 
     buyer_id = auth_token.split('_')[1]
 
     # get the item
     item = get_object_or_404(Items, pk=item_id)
 
-    # Create or update the buyer item
-    buyer_item = BuyerItem.objects.get_or_create(
-        buyer = get_object_or_404(Account, pk=buyer_id),
-        item = item,
-        defaults = { 'status': status, 'confirmed_price': item.price, 'view_duration': 0 })[0]
-    buyer_item.status = status
-    buyer_item.confirmed_price = item.price
-    buyer_item.view_duration = Decimal(view_duration)
-    buyer_item.save()
+    if (buyer_item_id == None or buyer_item_id == ""):
+        # Create or update the buyer item
+        buyer_item = BuyerItem.objects.create(
+            buyer = get_object_or_404(Account, pk=buyer_id),
+            item = item,
+            status = status, 
+            confirmed_price = item.price,
+            view_duration = 0)
+        buyer_item.status = status
+        buyer_item.confirmed_price = item.price
+        buyer_item.view_duration = view_duration
+        buyer_item.save()
+    else:
+        buyer_item = get_object_or_404(BuyerItem, pk=buyer_item_id)
+
+        # Update fields
+        buyer_item.status = status
+        buyer_item.confirmed_price = item.price
+        buyer_item.view_duration = view_duration
+        buyer_item.save()
 
     response_data = { 'status':1 }
     return HttpResponse(json.dumps(response_data), content_type="application/json")
