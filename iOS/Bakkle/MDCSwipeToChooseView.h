@@ -37,8 +37,6 @@
  */
 @property (nonatomic, strong) UIImageView *imageView;
 
-@property (nonatomic, strong) UIImageView *bottomImg;
-
 /*!
  * The "liked" view, which fades in as the `MDCSwipeToChooseView` is panned to the right.
  */

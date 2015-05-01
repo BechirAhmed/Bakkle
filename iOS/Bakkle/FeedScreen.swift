@@ -44,7 +44,8 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
         self.revealViewController().revealToggleAnimated(true)
     }
     @IBAction func btnX(sender: AnyObject) {
-        self.swipeView.mdc_swipe(MDCSwipeDirection.Left)
+        self.bottomView.mdc_swipe(MDCSwipeDirection.Left)
+       // self.swipeView.mdc_swipe(MDCSwipeDirection.Left)
     }
     @IBAction func btnCheck(sender: AnyObject) {
         self.swipeView.mdc_swipe(MDCSwipeDirection.Right)
@@ -105,7 +106,6 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
     func goToDetails() {
         let itemDet = ItemDetails()
         println("GOES IN DETAILS VIEW CONTROLLER")
-       // itemDet.imgDet.image = UIImage(named: "tiger.jpg")
         self.performSegueWithIdentifier(itemDetailSegue, sender: self)
         
     }
@@ -226,8 +226,6 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
                         let bottomTitle: String = bottomItem.valueForKey("title") as! String
                         let bottomPrice: String = bottomItem.valueForKey("price") as! String
                         
-                        self.bottomView.nameLabel.text = bottomTitle + ",  $" + bottomPrice
-                        
                         self.bottomView.userInteractionEnabled = false
                         
                         println("[FeedScreen] Downloading image (bottom) \(bottomURLs)")
@@ -239,20 +237,11 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
                                 println("[FeedScreen] displaying image (bottom)")
                                 self.bottomView.imageView.image = UIImage(data: imgData)
                                 self.bottomView.imageView.contentMode = UIViewContentMode.ScaleAspectFill
+                                self.bottomView.nameLabel.text = bottomTitle + ",  $" + bottomPrice
                             }
                         }
                     }
                 }
-            
-            // Load BOTTOM item card
-            
-//                dispatch_async(dispatch_get_global_queue(
-//                    Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
-            
-                                
-                         //   }
-               //     }
-         //   }
         } else {
             /* No items left in feed */
             noNewItemsLabel.alpha = 1

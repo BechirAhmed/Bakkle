@@ -19,10 +19,11 @@ class ItemDetails: UIViewController {
     
     override func viewWillAppear(animated: Bool) {
         var topItem = Bakkle.sharedInstance.feedItems[0]
-        var itemDetails: NSDictionary = topItem.valueForKey("fields") as! NSDictionary
-        let imgURLs: String = itemDetails.valueForKey("image_urls") as! String
+        let imgURLs = topItem.valueForKey("image_urls") as! NSArray
         
-        let imgURL = NSURL(string: imgURLs)
+        let firstURL = imgURLs[0].valueForKey("url") as! String
+        
+        let imgURL = NSURL(string: firstURL)
         if let imgData = NSData(contentsOfURL: imgURL!) {
             dispatch_async(dispatch_get_main_queue()) {
                 println("[FeedScreen] displaying image (top)")
@@ -35,7 +36,7 @@ class ItemDetails: UIViewController {
     }
     
     @IBAction func goback(sender: AnyObject) {
-        self.navigationController?.popToRootViewControllerAnimated(true)
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
 
     @IBOutlet weak var imgDet: UIImageView!

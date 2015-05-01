@@ -251,7 +251,7 @@ class Bakkle {
         info("[Bakkle] populateFeed")
         info("[Bakkle]  URL: \(url)")
         info("[Bakkle]  METHOD: \(request.HTTPMethod)")
-        info("[Bakkle]  BODY: \(postString)")
+       // info("[Bakkle]  BODY: \(postString)")
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
             data, response, error in
             
@@ -296,6 +296,10 @@ class Bakkle {
             }
             
             let responseString: String = NSString(data: data, encoding: NSUTF8StringEncoding)! as String
+            
+//            let responseString = "{\"status\": 1, feed\": [{\"pk\": \"121\", \"image_urls\": [{\"url\": "/bakkle/www/bakkle/img\2015\04\30\/7e8113cb22.png"}{\"url\": ""}], \"title\": \"Gd\", \"description\": "", \"location\": "", \"seller\": \"2\", \"price\": \"54.00\", \"tags\": [{\"tag\": \"Hs\"}], \"method\": \"Hs\", \"status\": \"Active\", \"post_date\": \"2015-04-30 18:43:46\", \"times_reported\": \"0\"}]}"
+            
+            
             println("Response: \(responseString)")
             var parseError: NSError?
             
