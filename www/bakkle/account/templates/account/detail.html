@@ -31,7 +31,7 @@
   {% if items %}
     <ul>
       {% for buyer_item in items %}
-        <li><a href="{% url 'items:detail' buyer_item.item.id %}">{{ buyer_item.item.id }}:</a> {{ buyer_item.item.title }} <br /> Item Status For Buyer: {{ buyer_item.status }} </li>
+        <li><a href="{% url 'items:detail' buyer_item.item.id %}">{{ buyer_item.item.id }}:</a> {{ buyer_item.item.title }} <br /> Item Status For Buyer: {{ buyer_item.status }} <br /> BuyerItem Id: {{ buyer_item.id }}</li>
       {% endfor %}
     </ul>
   {% else %}
