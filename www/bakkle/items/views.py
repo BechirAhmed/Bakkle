@@ -24,6 +24,9 @@ from django.conf import settings
 
 MAX_ITEM_IMAGE = 5
 
+#--------------------------------------------#
+#               Web page requests            #
+#--------------------------------------------#
 @csrf_exempt
 def index(request):
     # List all items (this is for web viewing of data only)
@@ -44,6 +47,9 @@ def detail(request, item_id):
     }
     return render(request, 'items/detail.html', context) 
 
+#--------------------------------------------#
+#               Item Methods                 #
+#--------------------------------------------#
 @csrf_exempt
 @require_POST
 @authenticate
@@ -88,7 +94,7 @@ def add_item(request):
             image = imageData.decode('base64')
 
             # Get the filepath which includes the filename to save the image to (see helper method)
-            filepath = make_filepath()
+            filepath = make_filepath(seller_id)
 
             # if the filepath does not exist, create it (this includes folder and file creation)
             if not os.path.exists(os.path.dirname(filepath)):
@@ -140,7 +146,6 @@ def add_item(request):
     response_data = { "status":1 }
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
-# TODO: Pick up on the delete, sell, and spam
 @csrf_exempt
 @require_POST
 @authenticate
@@ -159,76 +164,18 @@ def sell_item(request):
 def spam_item(request):
     return update_status(request, Items.SPAM)
 
-# Helper for updating Item Statuses
-def update_status(request, status):
-    # Get the item id 
-    item_id = request.POST.get('item_id', "")
-
-    # Ensure that required fields are present otherwise send back a failed status
-    if (item_id == None or item_id == ""):
-        response_data = { "status":0, "error": "A required parameter was not provided." }
-        return HttpResponse(json.dumps(response_data), content_type="application/json")
-
-    # Get the item
-    item = Items.objects.get(pk=item_id)
-    item.status = status
-    item.save()
-    response_data = { "status":1 }
-    return HttpResponse(json.dumps(response_data), content_type="application/json")
-
-@csrf_exempt
-@require_POST
-@authenticate
-def get_seller_items(request):
-    # Get the authentication code
-    auth_token = request.POST.get('auth_token')
-    seller_id = auth_token.split('_')[1]
-
-    item_list = Items.objects.filter(Q(seller=seller_id, status=Items.ACTIVE) | Q(seller=seller_id, status=Items.PENDING))
-
-     # get json representaion of item array
-    items_json = "["
-    for x in range(0, len(item_list)):
-        if x == 0:
-            items_json = items_json + str(item_list[x])
-        else:
-            items_json = items_json  + ',' + str(item_list[x])
-    items_json = items_json + "]"
-
-    # create json string
-    response_data = "{\"status\": 1, \"seller_garage\": " + items_json + "}"
-    return HttpResponse(response_data, content_type="application/json")
-
-@csrf_exempt
-@require_POST
-@authenticate
-def get_seller_transactions(request):
-    # Get the authentication code
-    auth_token = request.POST.get('auth_token')
-    seller_id = auth_token.split('_')[1]
-
-    item_list = Items.objects.filter(seller=seller_id, status=Items.SOLD)
-
-     # get json representaion of item array
-    items_json = "["
-    for x in range(0, len(item_list)):
-        if x == 0:
-            items_json = items_json + str(item_list[x])
-        else:
-            items_json = items_json  + ',' + str(item_list[x])
-    items_json = items_json + "]"
-
-    # create json string
-    response_data = "{\"status\": 1, \"seller_history\": " + items_json + "}"
-    return HttpResponse(response_data, content_type="application/json")
-
 @csrf_exempt
 @require_POST
 @authenticate
 def feed(request):
     # TODO: need to confirm order to display, chrono?, closest? "magic"?
-    # TODO: Add distance filtering here
     auth_token = request.POST.get('auth_token')
+
+    # TODO: Use these for filtering
+    search_text = request.POST.get('search_text')
+    filter_distance = request.POST.get('filter_distance')
+    filter_price = request.POST.get('filter_price')
+    filter_number = request.POST.get('filter_number')
 
     # Check that all require params are sent and are of the right format
     if (auth_token == None or auth_token.strip() == "" or auth_token.find('_') == -1):
@@ -240,39 +187,40 @@ def feed(request):
 
     # get items
     items_viewed = BuyerItem.objects.filter(buyer = buyer_id)
-    item_list = Items.objects.exclude(buyeritem = items_viewed).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING))
-    #item_list = Items.objects.exclude(buyeritem = items_viewed).exclude(seller = buyer_id).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING))
 
+    item_list = None
+    if(search_text != None and search_text != ""):
+        search_text.strip()
+        item_list = Items.objects.exclude(buyeritem = items_viewed).exclude(seller = buyer_id).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).filter(Q(tags__contains=search_text))
+    else:
+        item_list = Items.objects.exclude(buyeritem = items_viewed).exclude(seller = buyer_id).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING))
+
+    item_array = []
     # get json representaion of item array
-    items_json = "["
-    for x in range(0, len(item_list)):
-        if x == 0:
-            items_json = items_json + str(item_list[x])
-        else:
-            items_json = items_json  + ',' + str(item_list[x])
-    items_json = items_json + "]"
+    for item in item_list:
+        item_dict = get_item_dictionary(item)
+        item_array.append(item_dict)
 
-    # create json string
-    response_data = "{\"status\": 1, \"feed\": " + items_json + "}"
-    return HttpResponse(response_data, content_type="application/json")
+    response_data = { 'status': 1, 'feed': item_array }
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 @csrf_exempt
 @require_POST
 @authenticate
 def meh(request):
-    return add_Item_To_Buyer_Items(request, BuyerItem.MEH)
+    return add_item_to_buyer_items(request, BuyerItem.MEH)
 
 @csrf_exempt
 @require_POST
 @authenticate
 def want(request):
-    return add_Item_To_Buyer_Items(request, BuyerItem.WANT)
+    return add_item_to_buyer_items(request, BuyerItem.WANT)
 
 @csrf_exempt
 @require_POST
 @authenticate
 def hold(request):
-    return add_Item_To_Buyer_Items(request, BuyerItem.HOLD)
+    return add_item_to_buyer_items(request, BuyerItem.HOLD)
 
 @csrf_exempt
 @require_POST
@@ -290,9 +238,123 @@ def report(request):
     item.times_reported = item.times_reported + 1
     item.save()
 
-    return add_Item_To_Buyer_Items(request, BuyerItem.REPORT)
-    
-def add_Item_To_Buyer_Items(request, status):
+    return add_item_to_buyer_items(request, BuyerItem.REPORT)
+
+#--------------------------------------------#
+#            Seller Item Methods             #
+#--------------------------------------------#
+@csrf_exempt
+@require_POST
+@authenticate
+def get_seller_items(request):
+    # Get the authentication code
+    auth_token = request.POST.get('auth_token')
+    seller_id = auth_token.split('_')[1]
+
+    item_list = Items.objects.filter(Q(seller=seller_id, status=Items.ACTIVE) | Q(seller=seller_id, status=Items.PENDING))
+
+    item_array = []
+    # get json representaion of item array
+    for item in item_list:
+        item_dict = get_item_dictionary(item)
+        item_array.append(item_dict)
+
+    # create json string
+    response_data = {'status': 1, 'seller_garage': item_array}
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+@csrf_exempt
+@require_POST
+@authenticate
+def get_seller_transactions(request):
+    # Get the authentication code
+    auth_token = request.POST.get('auth_token')
+    seller_id = auth_token.split('_')[1]
+
+    item_list = Items.objects.filter(seller=seller_id, status=Items.SOLD)
+
+    item_array = []
+    # get json representaion of item array
+    for item in item_list:
+        item_dict = get_item_dictionary(item)
+        item_array.append(item_dict)
+
+    # create json string
+    response_data = {'status': 1, 'seller_history': item_array}
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+
+#--------------------------------------------#
+#            Buyer Item Methods              #
+#--------------------------------------------#
+@csrf_exempt
+@require_POST
+@authenticate
+def get_buyers_trunk(request):
+    # Get the authentication code
+    auth_token = request.POST.get('auth_token')
+    buyer_id = auth_token.split('_')[1]
+
+    item_list = BuyerItem.objects.filter(Q(buyer=buyer_id, status=BuyerItem.WANT) | Q(buyer=buyer_id, status=BuyerItem.PENDING) | Q(buyer=buyer_id, status=BuyerItem.NEGOCIATING))
+
+    item_array = []
+    # get json representaion of item array
+    for item in item_list:
+        item_dict = get_buyer_item_dictionary(item)
+        item_array.append(item_dict)
+
+    response_data = { 'status': 1, 'buyers_trunk': item_array }
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+@csrf_exempt
+@require_POST
+@authenticate
+def get_holding_pattern(request):
+    # Get the authentication code
+    auth_token = request.POST.get('auth_token')
+    buyer_id = auth_token.split('_')[1]
+
+    item_list = BuyerItem.objects.filter(buyer=buyer_id, status=BuyerItem.HOLD)
+
+    item_array = []
+    # get json representaion of item array
+    for item in item_list:
+        item_dict = get_buyer_item_dictionary(item)
+        item_array.append(item_dict)
+
+    response_data = { 'status': 1, 'holding_pattern': item_array}
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+@csrf_exempt
+@require_POST
+@authenticate
+def get_buyer_transactions(request):
+    # Get the authentication code
+    auth_token = request.POST.get('auth_token')
+    buyer_id = auth_token.split('_')[1]
+
+    item_list = BuyerItem.objects.filter(buyer=buyer_id, status=BuyerItem.SOLD_TO)
+
+    item_array = []
+    # get json representaion of item array
+    for item in item_list:
+        item_dict = get_buyer_item_dictionary(item)
+        item_array.append(item_dict)
+
+    response_data = { 'status': 1, 'buyer_history': item_array}
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+#--------------------------------------------#
+#             Helper Functions               #
+#--------------------------------------------#
+# Helper for filepath generation
+def make_filepath(seller_id):
+    path = "..\\img\\" + datetime.datetime.now().strftime('%Y-%m\\')
+    filename = str(seller_id) + "_" + (md5.new(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")).hexdigest())[0:10] + ".png"
+    return os.path.join(os.getcwd(), path, filename)
+
+# Helper for creating buyer items
+def add_item_to_buyer_items(request, status):
     # TODO: Put in check for view_duration being valid decimal
     auth_token = request.POST.get('auth_token', "")
     item_id = request.POST.get('item_id', "")
@@ -322,61 +384,81 @@ def add_Item_To_Buyer_Items(request, status):
     response_data = { 'status':1 }
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
-# Functions for BuyerItem
-@csrf_exempt
-@require_POST
-@authenticate
-def get_buyers_trunk(request):
-    # Get the authentication code
-    auth_token = request.POST.get('auth_token')
-    buyer_id = auth_token.split('_')[1]
+# Helper for updating Item Statuses
+def update_status(request, status):
+    # Get the item id 
+    item_id = request.POST.get('item_id', "")
 
-    item_list = BuyerItem.objects.filter(Q(buyer=buyer_id, status=BuyerItem.WANT) | Q(buyer=buyer_id, status=BuyerItem.PENDING) | Q(buyer=buyer_id, status=BuyerItem.NEGOCIATING))
+    # Ensure that required fields are present otherwise send back a failed status
+    if (item_id == None or item_id == ""):
+        response_data = { "status":0, "error": "A required parameter was not provided." }
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
 
-     # get json representaion of item array TODO: Do this serializers.serialize('json', [ obj, ])
-    items_json = "["
-    for x in range(0, len(item_list)):
-        if x == 0:
-            items_json = items_json + str(item_list[x])
-        else:
-            items_json = items_json  + ',' + str(item_list[x])
-    items_json = items_json + "]"
+    # Get the item
+    item = Items.objects.get(pk=item_id)
+    item.status = status
+    item.save()
+    response_data = { "status":1 }
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
 
-    # create json string
-    response_data = "{\"status\": 1, \"buyers_trunk\": " + items_json + "}"
-    return HttpResponse(response_data, content_type="application/json")
+# Helper for making an Item into a dictionary for JSON
+def get_item_dictionary(item):
+    images = []
+    hashtags = []
 
-@csrf_exempt
-@require_POST
-@authenticate
-def get_holding_pattern(request):
-    # Get the authentication code
-    auth_token = request.POST.get('auth_token')
-    seller_id = auth_token.split('_')[1]
+    urls = item.image_urls.split(",")
+    for url in urls:
+        if url != "" and url != " ":
+            images.append(url)
 
-    item_list = BuyerItem.objects.filter(buyer=buyer_id, status=BuyerItem.HOLD)
+    tags = item.tags.split(",")
+    for tag in tags:
+        if tag != "" and tag != " ":
+            hashtags.append(tag)
 
-     # get json representaion of item array
-    items_json = "["
-    for x in range(0, len(item_list)):
-        if x == 0:
-            items_json = items_json + str(item_list[x])
-        else:
-            items_json = items_json  + ',' + str(item_list[x])
-    items_json = items_json + "]"
+    seller_dict = get_account_dictionary(item.seller)
+    item_dict = {'pk':item.pk, 
+        'description': item.description, 
+        'seller': seller_dict,
+        'image_urls': images,
+        'tags': hashtags,
+        'title': item.title,
+        'location': item.location,
+        'price': str(item.price),
+        'method': item.method,
+        'status': item.status,
+        'post_date': item.post_date.strftime("%Y-%m-%d %H:%M:%S")}
+    return item_dict
 
-    # create json string
-    response_data = "{\"status\": 1, \"holding_pattern\": " + items_json + "}"
-    return HttpResponse(response_data, content_type="application/json")
+# Helper for getting account information for items for JSON
+# TODO: may need to add more fields
+def get_account_dictionary(account):
+    seller_dict = {'pk': account.pk, 
+        'display_name': account.display_name, 
+        'seller_rating': account.seller_rating,
+        'buyer_rating': account.buyer_rating,
+        'seller_location': account.seller_location}
+    return seller_dict
+
+# Helper for making a BuyerItem into a dictionary for JSON
+def get_buyer_item_dictionary(buyer_item):
+    buyer_dict = get_account_dictionary(buyer_item.buyer)
+    item_dict = get_item_dictionary(buyer_item.item)
+
+    buyer_item_dict = {'pk': buyer_item.pk,
+        'view_time': buyer_item.view_time.strftime("%Y-%m-%d %H:%M:%S"),
+        'view_duration': str(buyer_item.view_duration),
+        'status': buyer_item.status,
+        'confirmed_price': str(buyer_item.confirmed_price),
+        'accepted_sale_price': buyer_item.accepted_sale_price,
+        'item': item_dict,
+        'buyer': buyer_dict}
+    return buyer_item_dict
 
 
-# Helper Functions
-
-def make_filepath():
-    path = "img\\" + datetime.datetime.now().strftime('%Y\\%m\\%d\\')
-    filename = (md5.new(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")).hexdigest())[0:10] + ".png"
-    return os.path.join(os.getcwd(), path, filename)
-
+#--------------------------------------------#
+#               Testing Items                #
+#--------------------------------------------#
 # TODO: Remove eventually. Testing data.
 @csrf_exempt
 def reset(request):
@@ -440,8 +522,8 @@ def reset(request):
     i.save()
     i = Items(
         image_urls = "https://app.bakkle.com/img/00n0n_eerJtWHsBKc_600x450.jpg",
-        title = "15inch MacBook pro",
-        description = "MacBook Pro 15inch Mid 2014 i7. 2.2 GHz, 16 GB RAM, 256 GB SSD. Very little use, needed a lighter model so switched to MacBook air. Includes original box, power cord, etc.",
+        title = "15\" MacBook pro",
+        description = "MacBook Pro 15\" Mid 2014 i7. 2.2 GHz, 16 GB RAM, 256 GB SSD. Very little use, needed a lighter model so switched to MacBook air. Includes original box, power cord, etc.",
         location = "39.417672,-87.330438",
         seller = a,
         price = 999.00,
