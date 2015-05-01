@@ -307,6 +307,9 @@
                                             <string>Title</string>
                                             <string>Title</string>
                                         </scopeButtonTitles>
+                                        <connections>
+                                            <outlet property="delegate" destination="dzt-bR-uoN" id="Owh-Vq-vI7"/>
+                                        </connections>
                                     </searchBar>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RLk-Hy-bab">
                                         <rect key="frame" x="-23" y="-15" width="46" height="30"/>

@@ -43,6 +43,8 @@ class Bakkle {
     var filter_price: Float = 50
     var filter_number: Float = 80
     
+    var search_text: String = ""
+    
     class var sharedInstance: Bakkle {
         struct Static {
             static let instance: Bakkle = Bakkle()
@@ -248,10 +250,10 @@ class Bakkle {
         let request = NSMutableURLRequest(URL: url!)
         
         //TODO: change this location
-        let search_text = ""
+//        let search_text = "mower"
         
         request.HTTPMethod = "POST"
-        let postString = "auth_token=\(self.auth_token)&device_uuid=\(self.deviceUUID)&search_text=\(search_text)&filter_distance=\(Int(self.filter_distance))&filter_price=\(Int(self.filter_price))&filter_number=\(Int(self.filter_number))"
+        let postString = "auth_token=\(self.auth_token)&device_uuid=\(self.deviceUUID)&search_text=\(self.search_text)&filter_distance=\(Int(self.filter_distance))&filter_price=\(Int(self.filter_price))&filter_number=\(Int(self.filter_number))"
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
         
         info("[Bakkle] populateFeed")

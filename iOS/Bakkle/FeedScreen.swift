@@ -9,7 +9,7 @@
 import UIKit
 import Social
 
-class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
+class FeedScreen: UIViewController, UISearchBarDelegate, MDCSwipeToChooseDelegate {
 
     var state : MDCPanState!
 
@@ -53,6 +53,17 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
     
     
     @IBOutlet weak var navBar: UINavigationBar!
+    
+    /* UISearch Bar delegate stuff */
+    
+    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+        Bakkle.sharedInstance.search_text = searchText
+        checkForUpdates()
+        //TODO: need to fix queuing mechanism so multple requests are not dispatched.
+    }
+    
+    /* End search bar delegate stuff */
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
