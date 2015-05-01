@@ -10,6 +10,10 @@ import UIKit
 
 class ItemDetails: UIViewController {
 
+    @IBOutlet weak var itemTitleLabel: UILabel!
+    
+    @IBOutlet weak var itemMethodLabel: UILabel!
+    @IBOutlet weak var itemPriceLabel: UILabel!
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.whiteColor()
@@ -19,10 +23,18 @@ class ItemDetails: UIViewController {
     
     override func viewWillAppear(animated: Bool) {
         var topItem = Bakkle.sharedInstance.feedItems[0]
-        var itemDetails: NSDictionary = topItem.valueForKey("fields") as! NSDictionary
-        let imgURLs: String = itemDetails.valueForKey("image_urls") as! String
+        let imgURLs = topItem.valueForKey("image_urls") as! NSArray
         
-        let imgURL = NSURL(string: imgURLs)
+        let firstURL = imgURLs[0].valueForKey("url") as! String
+        let topTitle: String = topItem.valueForKey("title") as! String
+        let topPrice: String = topItem.valueForKey("price") as! String
+        let topMethod: String = topItem.valueForKey("method") as! String
+        
+        itemTitleLabel.text = topTitle.uppercaseString
+        itemPriceLabel.text = "$" + topPrice
+        itemMethodLabel.text = topMethod
+        
+        let imgURL = NSURL(string: firstURL)
         if let imgData = NSData(contentsOfURL: imgURL!) {
             dispatch_async(dispatch_get_main_queue()) {
                 println("[FeedScreen] displaying image (top)")
@@ -34,8 +46,14 @@ class ItemDetails: UIViewController {
 
     }
     
+    @IBAction func wantBtn(sender: AnyObject) {
+        let alertController = UIAlertController(title: "Bakkle", message:
+            "Not implemented yet.", preferredStyle: UIAlertControllerStyle.Alert)
+        alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default,handler: nil))
+        self.presentViewController(alertController, animated: true, completion: nil)
+    }
     @IBAction func goback(sender: AnyObject) {
-        self.navigationController?.popToRootViewControllerAnimated(true)
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
 
     @IBOutlet weak var imgDet: UIImageView!
