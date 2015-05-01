@@ -55,6 +55,8 @@ class Bakkle {
         serverNum = NSUserDefaults.standardUserDefaults().integerForKey("server")
         setServer()
         info("Using server: \(self.serverNum) \(self.url_base)")
+        
+        //TODO: Load local filter prefs
     }
     
     func setServer() {
@@ -245,6 +247,7 @@ class Bakkle {
         let request = NSMutableURLRequest(URL: url!)
         
         request.HTTPMethod = "POST"
+        //TODO: Add filter variables here
         let postString = "auth_token=\(self.auth_token)&device_uuid=\(self.deviceUUID)"
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
         
@@ -339,6 +342,7 @@ class Bakkle {
         self.filter_distance = ffilter_distance
         self.filter_price = ffilter_price
         self.filter_number = ffilter_number
+        //TODO: Store filter settings locally
     }
     
     func err(logMessage: String, functionName: String = __FUNCTION__, line: Int = __LINE__, file: String = __FILE__) {

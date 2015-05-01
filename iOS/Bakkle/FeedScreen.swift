@@ -80,7 +80,7 @@ class FeedScreen: UIViewController, MDCSwipeToChooseDelegate {
         /* Menu reveal */
         if self.revealViewController() != nil {
             menuBtn.targetForAction("revealToggle:", withSender: self)
-            self.revealViewController().rearViewRevealWidth = 250
+            self.revealViewController().rearViewRevealWidth = 270
         }
         
         loaded = false
