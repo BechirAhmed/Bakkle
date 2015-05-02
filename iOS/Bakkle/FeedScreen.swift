@@ -8,13 +8,15 @@
 
 import UIKit
 import Social
+import Photos
 
-class FeedScreen: UIViewController, UISearchBarDelegate, MDCSwipeToChooseDelegate {
+class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBarDelegate, UINavigationControllerDelegate, MDCSwipeToChooseDelegate {
 
     var state : MDCPanState!
 
     let ChooseItemViewImageLabelWidth:CGFloat = 42.0;
     let menuSegue = "presentNav"
+    let addItemSegue = "AddItemSegue"
     let itemDetailSegue = "ItemDetailSegue"
     
     let options = MDCSwipeToChooseViewOptions()
@@ -22,11 +24,11 @@ class FeedScreen: UIViewController, UISearchBarDelegate, MDCSwipeToChooseDelegat
     var bottomView : MDCSwipeToChooseView!
     var infoView: UIView!
     
+    var chosenImage: UIImage?
+    
     @IBOutlet weak var menuBtn: UIButton!
     
     @IBOutlet weak var noNewItemsLabel: UILabel!
-    
-    @IBOutlet weak var addItemBtn: UIButton!
     
     @IBOutlet weak var drawer: UIView!
     
@@ -54,7 +56,7 @@ class FeedScreen: UIViewController, UISearchBarDelegate, MDCSwipeToChooseDelegat
     
     @IBOutlet weak var navBar: UINavigationBar!
     
-    /* UISearch Bar delegate stuff */
+    /* UISearch Bar delegate */
     
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
         Bakkle.sharedInstance.search_text = searchText
@@ -62,7 +64,7 @@ class FeedScreen: UIViewController, UISearchBarDelegate, MDCSwipeToChooseDelegat
         //TODO: need to fix queuing mechanism so multple requests are not dispatched.
     }
     
-    /* End search bar delegate stuff */
+    /* End search bar delegate */
     
     
     override func viewDidLoad() {
@@ -184,11 +186,6 @@ class FeedScreen: UIViewController, UISearchBarDelegate, MDCSwipeToChooseDelegat
 
         // Always look for updates
         checkForUpdates()
-    }
-    
-    func showAddItem(){
-        var addItem: UIViewController = AddItem()
-        presentViewController(addItem, animated: true, completion: nil)
     }
     
     func constructInfoView() {
@@ -322,5 +319,54 @@ class FeedScreen: UIViewController, UISearchBarDelegate, MDCSwipeToChooseDelegat
             }, completion: nil)
         }
     }
+
+    /* Camera */
+    let albumName = "Bakkle"
     
+    func showAddItem(){
+        var addItem: UIViewController = AddItem()
+        presentViewController(addItem, animated: true, completion: nil)
+    }
+    
+    // Display camera as first step of add-item
+    @IBAction func cameraBtn(sender: AnyObject) {
+        let fetchOptions = PHFetchOptions()
+        fetchOptions.predicate = NSPredicate(format: "title = %@", albumName)
+        
+        if(UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera)){
+            //load the camera interface
+            var picker : UIImagePickerController = UIImagePickerController()
+            picker.sourceType = UIImagePickerControllerSourceType.Camera
+            picker.delegate = self
+            picker.allowsEditing = false
+            self.presentViewController(picker, animated: false, completion: nil)
+            
+        } else{
+            //no camera available
+            var alert = UIAlertController(title: "Sorry", message: "Bakkle requires a picture when selling items", preferredStyle: .Alert)
+            alert.addAction(UIAlertAction(title: "Okay", style: .Default, handler: {(alertAction)in
+                alert.dismissViewControllerAnimated(false, completion: nil)
+            }))
+            self.presentViewController(alert, animated: false, completion: nil)
+        }
+    }
+    
+    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+        picker.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
+        let chosen = info[UIImagePickerControllerOriginalImage] as! UIImage
+        
+        self.chosenImage = chosen
+        dismissViewControllerAnimated(false, completion: {
+            self.performSegueWithIdentifier(self.addItemSegue, sender: self)
+        })
+    }
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
+        if segue.identifier == self.addItemSegue {
+            let destinationVC = segue.destinationViewController as! AddItem
+            destinationVC.itemImage = self.chosenImage
+        }
+    }
 }

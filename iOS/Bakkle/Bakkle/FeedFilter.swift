@@ -48,10 +48,6 @@ class FeedFilterView: UIViewController {
     }
     
     override func viewWillAppear(animated: Bool) {
-        distance.value = Bakkle.sharedInstance.filter_distance
-        price.value = Bakkle.sharedInstance.filter_price
-        number.value = Bakkle.sharedInstance.filter_number
-        
         distance.maximumValue = 100
         distance.maximumTrackTintColor = UIColor.blackColor()
         distance.thumbTintColor = UIColor.blackColor()
@@ -74,6 +70,10 @@ class FeedFilterView: UIViewController {
         number.setThumbImage(UIImage(named: "dot.png"), forState: UIControlState.Highlighted)
         number.enabled = true
 
+        distance.setValue(Bakkle.sharedInstance.filter_distance, animated: true)
+        price.setValue(Bakkle.sharedInstance.filter_price, animated: true)
+        number.setValue(Bakkle.sharedInstance.filter_number, animated: true)
+        self.filterRealtime(0) // force labels to update
     }
     
     /* MENUBAR ITEMS */

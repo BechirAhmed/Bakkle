@@ -13,6 +13,8 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     
     let albumName = "Bakkle"
     
+    var itemImage: UIImage?
+    
     @IBOutlet weak var titleField: UITextField!
     @IBOutlet weak var priceField: UITextField!
     @IBOutlet weak var tagsField: UITextField!
@@ -76,6 +78,8 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(true)
         add.enabled = false
+        imageView.image = self.itemImage!
+        imageView.contentMode = UIViewContentMode.ScaleAspectFit
     }
     
     func dismissKeyboard() {
@@ -104,7 +108,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         Bakkle.sharedInstance.addItem(self.titleField.text, description: "", location: "", price: self.priceField.text, tags: self.tagsField.text, method: self.methodField.text, imageToSend: base64String)
         
         let alertController = UIAlertController(title: "Bakkle", message:
-            "Trying to send item to server.", preferredStyle: UIAlertControllerStyle.Alert)
+            "Item uploaded to Bakkle.", preferredStyle: UIAlertControllerStyle.Alert)
         
         let dismissAction = UIAlertAction(title: "OK!", style: UIAlertActionStyle.Default) { (action) -> Void in
             self.dismissViewControllerAnimated(true, completion: nil)
