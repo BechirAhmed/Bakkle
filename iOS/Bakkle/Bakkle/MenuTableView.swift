@@ -26,10 +26,12 @@ class MenuTableController: UITableViewController {
     
     @IBAction func btnReset(sender: AnyObject) {
         Bakkle.sharedInstance.resetDemo({
+            
             let alertController = UIAlertController(title: "Bakkle Server", message:
                 "Items in the feed have been reset for DEMO.", preferredStyle: UIAlertControllerStyle.Alert)
             alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default,handler: nil))
             self.presentViewController(alertController, animated: true, completion: nil)
+            
         })
     }
     

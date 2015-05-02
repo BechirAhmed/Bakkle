@@ -326,7 +326,7 @@
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <segue destination="6AS-g2-sDb" kind="presentation" id="Q9f-g0-v35"/>
+                                            <action selector="cameraBtn:" destination="dzt-bR-uoN" eventType="touchUpInside" id="hF9-ZD-SGh"/>
                                         </connections>
                                     </button>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" image="logo-white-design-png-transp-100.png" translatesAutoresizingMaskIntoConstraints="NO" id="SVO-SE-GJf">
@@ -580,7 +580,6 @@
                     <navigationItem key="navigationItem" id="cQy-VJ-jfm"/>
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
-                        <outlet property="addItemBtn" destination="tls-6h-cM3" id="stY-yj-Hge"/>
                         <outlet property="drawer" destination="TvW-JJ-Vqb" id="L0b-bd-0hM"/>
                         <outlet property="menuBtn" destination="RLk-Hy-bab" id="Uch-yE-2QO"/>
                         <outlet property="noNewItemsLabel" destination="gXy-mo-Jm8" id="ETD-2Q-A3U"/>
@@ -588,6 +587,7 @@
                         <outlet property="seachBar" destination="uxF-IE-DWo" id="SPC-jP-vcG"/>
                         <outlet property="searchDisplayController" destination="hSv-s7-nTK" id="bfk-b0-bf7"/>
                         <segue destination="cN1-rQ-EwG" kind="presentation" identifier="ItemDetailSegue" id="sSN-KI-aZV"/>
+                        <segue destination="6AS-g2-sDb" kind="presentation" identifier="AddItemSegue" id="Chj-xB-zO6"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="R4S-Vw-NC2" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1081,14 +1081,7 @@
                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </textAttributes>
                                 <items>
-                                    <navigationItem title="ADD ITEM" id="EXo-1B-IT2">
-                                        <barButtonItem key="rightBarButtonItem" systemItem="camera" id="G0U-v4-Ncb">
-                                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            <connections>
-                                                <action selector="cameraBtn:" destination="6AS-g2-sDb" id="Z8x-Sn-9Rg"/>
-                                            </connections>
-                                        </barButtonItem>
-                                    </navigationItem>
+                                    <navigationItem title="ADD ITEM" id="EXo-1B-IT2"/>
                                 </items>
                                 <variation key="default">
                                     <mask key="constraints">
@@ -1619,7 +1612,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LfU-VI-Xi5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2103" y="2590"/>
+            <point key="canvasLocation" x="-2347.5" y="2440.5"/>
         </scene>
         <!--Menu Table Controller-->
         <scene sceneID="cvc-b9-3ue">
@@ -1980,25 +1973,25 @@
                             </label>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="nGS-By-p3o">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="XFF-YW-f5A">
-                                    <size key="itemSize" width="145" height="145"/>
+                                <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.92549019610000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="5" minimumInteritemSpacing="5" id="XFF-YW-f5A">
+                                    <size key="itemSize" width="150" height="150"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                    <inset key="sectionInset" minX="5" minY="5" maxX="5" maxY="5"/>
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="PhotoCell" id="f70-L9-NrC" userLabel="Photo Cell" customClass="CollectionThumbnail" customModule="Bakkle" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="145" height="145"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="150" height="150"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="LMY-wb-f5x">
                                                     <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                                     <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                                                        <rect key="frame" x="0.0" y="0.0" width="145" height="145"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="150" height="150"/>
                                                     </variation>
                                                 </imageView>
                                             </subviews>
@@ -2025,7 +2018,7 @@
                                 </connections>
                             </collectionView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.92549019607843142" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="IMi-D0-RPH" firstAttribute="leading" secondItem="Ibv-4q-Xku" secondAttribute="leadingMargin" constant="-16" id="0DM-aY-bMh"/>
                             <constraint firstItem="9J2-jl-t4F" firstAttribute="leading" secondItem="Ibv-4q-Xku" secondAttribute="leadingMargin" constant="-16" id="8aK-Se-AZT"/>
@@ -2114,6 +2107,7 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
                         <outlet property="collectionView" destination="nGS-By-p3o" id="lBh-SV-Zfy"/>
+                        <segue destination="6AS-g2-sDb" kind="presentation" identifier="AddItemSegueFromGarage" id="Ay4-Il-I0O"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eyy-Yl-vYF" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2838,6 +2832,7 @@
         <image name="mock-settings.png" width="970" height="1439"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Rco-rv-njI"/>
+        <segue reference="lk1-fc-YGc"/>
+        <segue reference="Ay4-Il-I0O"/>
     </inferredMetricsTieBreakers>
 </document>

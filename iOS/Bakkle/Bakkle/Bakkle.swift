@@ -19,7 +19,12 @@ class Bakkle {
     let url_reset: String         = "items/reset/"
     let url_mark: String          = "items/" //+status/
     let url_feed: String          = "items/feed/"
+    let url_garage: String        = "items/get_seller_items/"
     let url_add_item: String      = "items/add_item/"
+    let url_buyers_trunk: String        = "items/get_buyers_trunk"
+    let url_get_holding_pattern: String = "items/get_holding_pattern"
+    let url_buyertransactions: String   = "items/get_buyer_transactions"
+    let url_sellertransactions: String  = "items/get_seller_transactions"
     
     /* 1 - ERROR
      * 2 - INFO
@@ -37,6 +42,9 @@ class Bakkle {
     var facebook_id_str: String!
     
     var feedItems: [NSObject]!
+    var garageItems: [NSObject]!
+    
+    //TODO: Remove
     var responseDict: NSDictionary!
     
     var filter_distance: Float = 100
@@ -57,8 +65,9 @@ class Bakkle {
         serverNum = NSUserDefaults.standardUserDefaults().integerForKey("server")
         setServer()
         info("Using server: \(self.serverNum) \(self.url_base)")
-        
-        //TODO: Load local filter prefs
+
+        self.getFilter()
+        self.restoreData()
     }
     
     func setServer() {
@@ -234,6 +243,7 @@ class Bakkle {
 //                
                 //TODO: THIS IS WRONG
                 //if responseDict.valueForKey("status")?.integerValue == 1 {
+                    self.persistData()
                     success()
               //  }
 
@@ -244,6 +254,47 @@ class Bakkle {
         }
     }
     
+    /* Populates the garage with items from the server */
+    func populateGarage(success: ()->()) {
+        let url: NSURL? = NSURL(string: url_base + url_garage)
+        let request = NSMutableURLRequest(URL: url!)
+        
+        //TODO: change this location
+        //        let search_text = "mower"
+        
+        request.HTTPMethod = "POST"
+        let postString = "auth_token=\(self.auth_token)&device_uuid=\(self.deviceUUID)"
+        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+        
+        info("[Bakkle] populateGarage")
+        info("[Bakkle]  URL: \(url)")
+        info("[Bakkle]  METHOD: \(request.HTTPMethod)")
+        info("[Bakkle]  BODY: \(postString)")
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
+            data, response, error in
+            
+            if error != nil {
+                self.err("error= \(error)")
+                return
+            }
+            
+            let responseString: String = NSString(data: data, encoding: NSUTF8StringEncoding)! as String
+            //self.debg("Response: \(responseString)")
+            
+            var parseError: NSError?
+            self.responseDict = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! NSDictionary!
+            self.debg("RESPONSE DICT IS: \(self.responseDict)")
+            
+            if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
+                self.garageItems = self.responseDict.valueForKey("feed") as! Array!
+                self.persistData()
+                success()
+            }
+            
+        }
+        task.resume()
+    }
+
     /* Populates the feed with items from the server */
     func populateFeed(success: ()->()) {
         let url: NSURL? = NSURL(string: url_base + url_feed)
@@ -277,6 +328,7 @@ class Bakkle {
             
             if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
                 self.feedItems = self.responseDict.valueForKey("feed") as! Array!
+                self.persistData()
                 success()
             }
             
@@ -349,9 +401,25 @@ class Bakkle {
  
     func getFilter() {
         var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
-        self.filter_distance = userDefaults.objectForKey("filter_distance") as! Float
-        self.filter_price    = userDefaults.objectForKey("filter_price")    as! Float
-        self.filter_number   = userDefaults.objectForKey("filter_number")   as! Float
+
+        if let x = userDefaults.objectForKey("filter_distance") as? Float {
+            self.filter_distance = x
+            println("loaded \(x)")
+        } else {
+            self.filter_distance = 50
+        }
+        if let y = userDefaults.objectForKey("filter_price")    as? Float {
+            self.filter_price = y
+            println("loaded \(y)")
+        } else {
+            self.filter_price = 50
+        }
+        if let z = userDefaults.objectForKey("filter_number")   as? Float {
+            self.filter_number = z
+            println("loaded \(z)")
+        }else{
+            self.filter_number = 100
+        }
     }
     func setFilter(ffilter_distance: Float, ffilter_price: Float, ffilter_number:Float) {
         self.filter_distance = ffilter_distance
@@ -365,14 +433,41 @@ class Bakkle {
         userDefaults.synchronize()
     }
     
+    func restoreData() {
+        var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        if let f = userDefaults.objectForKey("feedItems") as? [NSObject] {
+           self.feedItems = f
+        }
+        if let g = userDefaults.objectForKey("garageItems") as? [NSObject] {
+          //  self.garageItems = g
+        }
+    }
+    func persistData() {
+        var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        //userDefaults.setObject(self.feedItems,   forKey: "feedItems")
+      //  userDefaults.setObject(self.garageItems, forKey: "garageItems")
+        userDefaults.synchronize()
+    }
+    
     func err(logMessage: String, functionName: String = __FUNCTION__, line: Int = __LINE__, file: String = __FILE__) {
         if self.debug>=1 {
             println("[ERRR] \(file.lastPathComponent.stringByDeletingPathExtension):(\(line)): \(logMessage)")
         }
     }
     func info(logMessage: String, functionName: String = __FUNCTION__, line: Int = __LINE__, file: String = __FILE__) {
+        var prettyFunc = functionName
+//        var range = functionName.rangeOfString("(")
+//        
+//        if let r = range {
+//        //the correct solution
+//            var intIndex: Int = distance(functionName.startIndex, range!.startIndex)
+//            var startIndex2 = advance(functionName.startIndex, intIndex)
+//            var range2 = startIndex2...startIndex2
+//            
+//            prettyFunc = functionName[range2]
+//        }
         if self.debug>=2 {
-            println("[INFO] \(file.lastPathComponent.stringByDeletingPathExtension):(\(line)): \(logMessage)")
+            println("[INFO] \(file.lastPathComponent.stringByDeletingPathExtension):\(prettyFunc)(\(line)): \(logMessage)")
         }
     }
     func debg(logMessage: String, functionName: String = __FUNCTION__, line: Int = __LINE__, file: String = __FILE__) {
