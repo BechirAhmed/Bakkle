@@ -46,8 +46,7 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
         self.revealViewController().revealToggleAnimated(true)
     }
     @IBAction func btnX(sender: AnyObject) {
-        self.bottomView.mdc_swipe(MDCSwipeDirection.Left)
-       // self.swipeView.mdc_swipe(MDCSwipeDirection.Left)
+        self.swipeView.mdc_swipe(MDCSwipeDirection.Left)
     }
     @IBAction func btnCheck(sender: AnyObject) {
         self.swipeView.mdc_swipe(MDCSwipeDirection.Right)
@@ -137,16 +136,14 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
         
         /* First time page is loaded, swipe view will not exist and we need to create it. */
         self.swipeView = MDCSwipeToChooseView(frame: self.view.bounds, options: options)
-        self.bottomView = MDCSwipeToChooseView(frame: CGRectMake(self.swipeView.frame.origin.x, self.swipeView.frame.origin.y + 10, self.swipeView.frame.width, self.swipeView.frame.height + 10), options: nil)
+        self.bottomView = MDCSwipeToChooseView(frame: CGRectMake(self.swipeView.frame.origin.x , self.swipeView.frame.origin.y , self.swipeView.frame.width, self.swipeView.frame.height), options: nil)
         self.view.insertSubview(self.bottomView, belowSubview: self.swipeView)
         self.swipeView.addGestureRecognizer(itemDetailTap)
         
         /* If view is off the page we need to reset the view */
         if (state != nil && state.direction != MDCSwipeDirection.None) {
             self.swipeView = MDCSwipeToChooseView(frame: self.view.bounds, options: options)
-            self.swipeView.backgroundColor = UIColor.purpleColor()
             self.bottomView = MDCSwipeToChooseView(frame: CGRectMake(self.swipeView.frame.origin.x, self.swipeView.frame.origin.y + 10, self.swipeView.frame.width, self.swipeView.frame.height), options: nil)
-            self.bottomView.backgroundColor = UIColor.yellowColor()
             self.view.insertSubview(self.bottomView, belowSubview: self.swipeView)
             self.swipeView.addGestureRecognizer(itemDetailTap)
         } else {
@@ -349,6 +346,8 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
     
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
         picker.dismissViewControllerAnimated(true, completion: nil)
+        resetSwipeView()
+        checkForUpdates()
     }
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
