@@ -39,7 +39,7 @@
         _nopeRotationAngle = 15.f;
         
         _holdText = [NSLocalizedString(@"HOLDING", nil) uppercaseString];
-        _holdColor = [UIColor blueColor];
+        _holdColor = [UIColor whiteColor];
         _holdRotationAngle = -15.f;
         
         _reportText = [NSLocalizedString(@"REPORT", nil) uppercaseString];
