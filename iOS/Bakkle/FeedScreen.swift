@@ -74,12 +74,6 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
         progressIndicator.startAnimating()
         
         options.delegate = self
-        options.likedText = "Want"
-        options.likedColor = UIColor.greenColor()
-        options.nopeText = "Meh"
-        options.holdText = "Holding"
-        options.reportText = "report"
-        options.holdColor = UIColor.whiteColor()
 
         if hardCoded {
             options.onPan = { state -> Void in
@@ -150,7 +144,9 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
         /* If view is off the page we need to reset the view */
         if (state != nil && state.direction != MDCSwipeDirection.None) {
             self.swipeView = MDCSwipeToChooseView(frame: self.view.bounds, options: options)
+            self.swipeView.backgroundColor = UIColor.purpleColor()
             self.bottomView = MDCSwipeToChooseView(frame: CGRectMake(self.swipeView.frame.origin.x, self.swipeView.frame.origin.y + 10, self.swipeView.frame.width, self.swipeView.frame.height), options: nil)
+            self.bottomView.backgroundColor = UIColor.yellowColor()
             self.view.insertSubview(self.bottomView, belowSubview: self.swipeView)
             self.swipeView.addGestureRecognizer(itemDetailTap)
         } else {
@@ -252,14 +248,14 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
                 }
         } else {
             /* No items left in feed */
+            self.bottomView.removeFromSuperview()
             noNewItemsLabel.alpha = 1
         }
-       // }
         loaded = true
     }
     
     func viewDidCancelSwipe(view: UIView!) {
-        //println("You canceled the swipe")
+        // Do nothing. Resets the swpe view
     }
     
     func buildImageLabelViewLeftOf(x:CGFloat, image:UIImage, text:NSString) -> ImageLabelView{
@@ -307,9 +303,9 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
             loadNext()
         }
         
-        if bottomView != nil {
-            self.swipeView = self.bottomView
-        }
+//        if bottomView != nil {
+//            self.swipeView = self.bottomView
+//        }
 
         if bottomView != nil {
             self.bottomView.alpha = 0.0
