@@ -115,7 +115,7 @@ class Bakkle {
             
             /* JSON parse */
             var error: NSError? = error
-            var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &error) as! NSDictionary!
+            var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &error) as! NSDictionary
             
             if responseDict.valueForKey("status")?.integerValue == 1 {
                 self.display_name = username

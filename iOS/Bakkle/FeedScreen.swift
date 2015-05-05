@@ -246,6 +246,7 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
         } else {
             /* No items left in feed */
             self.bottomView.removeFromSuperview()
+            self.swipeView.removeFromSuperview()
             noNewItemsLabel.alpha = 1
         }
         loaded = true
@@ -345,9 +346,9 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
     }
     
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
-        picker.dismissViewControllerAnimated(true, completion: nil)
         resetSwipeView()
-        checkForUpdates()
+        picker.dismissViewControllerAnimated(true, completion: nil)
+       // checkForUpdates()
     }
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
