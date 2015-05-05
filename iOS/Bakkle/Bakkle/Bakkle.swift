@@ -286,7 +286,7 @@ class Bakkle {
             self.debg("RESPONSE DICT IS: \(self.responseDict)")
             
             if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
-                self.garageItems = self.responseDict.valueForKey("feed") as! Array!
+                self.garageItems = self.responseDict.valueForKey("seller_garage") as! Array
                 self.persistData()
                 success()
             }
@@ -327,7 +327,7 @@ class Bakkle {
             self.debg("RESPONSE DICT IS: \(self.responseDict)")
             
             if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
-                self.feedItems = self.responseDict.valueForKey("feed") as! Array!
+                self.feedItems = self.responseDict.valueForKey("feed") as! Array
                 self.persistData()
                 success()
             }
