@@ -31,4 +31,18 @@ class BuyersTrunkView: UITableViewController {
         // Probably a seque instead
     }
     
+    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 1
+    }
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return Bakkle.sharedInstance.trunkItems.count
+    }
+    
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = self.tableView.dequeueReusableCellWithIdentifier("GarageRowCell", forIndexPath: indexPath) as! UITableViewCell
+        // set cell data
+        //cell.textLabel?.text = Bakkle.sharedInstance.trunkItems
+        return cell
+    }
+    
 }
