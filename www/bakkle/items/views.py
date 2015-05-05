@@ -364,9 +364,11 @@ def get_buyer_transactions(request):
 #--------------------------------------------#
 # Helper for filepath generation
 def make_filepath(seller_id):
-    path = "..\\img\\" + datetime.datetime.now().strftime('%Y-%m\\')
     filename = str(seller_id) + "_" + (md5.new(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")).hexdigest())[0:10] + ".png"
-    return os.path.join(os.getcwd(), path, filename)
+    filepath = os.path.join(os.getcwd(), "..", "img", datetime.datetime.now().strftime('%Y-%m'), filename)
+    print("Filepath\n")
+    print(filepath)
+    return filepath
 
 # Helper for creating buyer items
 def add_item_to_buyer_items(request, status):
@@ -487,6 +489,13 @@ def get_buyer_item_dictionary(buyer_item):
         'buyer': buyer_dict}
     return buyer_item_dict
 
+# Helper to return the delivery methods for items
+@csrf_exempt
+@require_POST
+@authenticate
+def get_delivery_methods(request):
+    response_data = { 'status': 1, 'deliver_methods': Items.METHOD_CHOICES}
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 #--------------------------------------------#
 #               Testing Items                #

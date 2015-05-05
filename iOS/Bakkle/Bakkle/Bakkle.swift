@@ -21,10 +21,10 @@ class Bakkle {
     let url_feed: String          = "items/feed/"
     let url_garage: String        = "items/get_seller_items/"
     let url_add_item: String      = "items/add_item/"
-    let url_buyers_trunk: String        = "items/get_buyers_trunk"
-    let url_get_holding_pattern: String = "items/get_holding_pattern"
-    let url_buyertransactions: String   = "items/get_buyer_transactions"
-    let url_sellertransactions: String  = "items/get_seller_transactions"
+    let url_buyers_trunk: String        = "items/get_buyers_trunk/"
+    let url_get_holding_pattern: String = "items/get_holding_pattern/"
+    let url_buyertransactions: String   = "items/get_buyer_transactions/"
+    let url_sellertransactions: String  = "items/get_seller_transactions/"
     
     /* 1 - ERROR
      * 2 - INFO
@@ -43,6 +43,7 @@ class Bakkle {
     
     var feedItems: [NSObject]!
     var garageItems: [NSObject]!
+    var trunkItems: [NSObject]!
     
     //TODO: Remove
     var responseDict: NSDictionary!
@@ -65,7 +66,7 @@ class Bakkle {
         serverNum = NSUserDefaults.standardUserDefaults().integerForKey("server")
         setServer()
         info("Using server: \(self.serverNum) \(self.url_base)")
-
+        
         self.getFilter()
         self.restoreData()
     }
@@ -83,6 +84,13 @@ class Bakkle {
 
     func refresh() {
         /* TODO: this will request a data update from the server */
+    }
+    
+    func appVersion() -> (String, String) {
+        let build: String = NSBundle.mainBundle().infoDictionary?["CFBundleVersion"] as! String
+        let bundleName: String = NSBundle.mainBundle().infoDictionary?["CFBundleNameKey"] as! String
+        
+        return (build,bundleName)
     }
     
     /* register and login using facebook */
@@ -115,7 +123,7 @@ class Bakkle {
             
             /* JSON parse */
             var error: NSError? = error
-            var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &error) as! NSDictionary!
+            var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &error) as! NSDictionary
             
             if responseDict.valueForKey("status")?.integerValue == 1 {
                 self.display_name = username
@@ -286,7 +294,7 @@ class Bakkle {
             self.debg("RESPONSE DICT IS: \(self.responseDict)")
             
             if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
-                self.garageItems = self.responseDict.valueForKey("feed") as! Array!
+                self.garageItems = self.responseDict.valueForKey("seller_garage") as! Array
                 self.persistData()
                 success()
             }
@@ -295,6 +303,47 @@ class Bakkle {
         task.resume()
     }
 
+    /* Populates the trunk with items from the server */
+    func populateTrunk(success: ()->()) {
+        let url: NSURL? = NSURL(string: url_base + url_buyers_trunk)
+        let request = NSMutableURLRequest(URL: url!)
+        
+        //TODO: change this location
+        //        let search_text = "mower"
+        
+        request.HTTPMethod = "POST"
+        let postString = "auth_token=\(self.auth_token)&device_uuid=\(self.deviceUUID)"
+        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+        
+        info("[Bakkle] populateTrunk")
+        info("[Bakkle]  URL: \(url)")
+        info("[Bakkle]  METHOD: \(request.HTTPMethod)")
+        info("[Bakkle]  BODY: \(postString)")
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
+            data, response, error in
+            
+            if error != nil {
+                self.err("error= \(error)")
+                return
+            }
+            
+            let responseString: String = NSString(data: data, encoding: NSUTF8StringEncoding)! as String
+            self.info("Response: \(responseString)")
+            
+            var parseError: NSError?
+            self.responseDict = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! NSDictionary!
+            self.debg("RESPONSE DICT IS: \(self.responseDict)")
+            
+            if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
+                self.trunkItems = self.responseDict.valueForKey("buyers_trunk") as! Array
+                self.persistData()
+                success()
+            }
+            
+        }
+        task.resume()
+    }
+    
     /* Populates the feed with items from the server */
     func populateFeed(success: ()->()) {
         let url: NSURL? = NSURL(string: url_base + url_feed)
@@ -327,7 +376,7 @@ class Bakkle {
             self.debg("RESPONSE DICT IS: \(self.responseDict)")
             
             if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
-                self.feedItems = self.responseDict.valueForKey("feed") as! Array!
+                self.feedItems = self.responseDict.valueForKey("feed") as! Array
                 self.persistData()
                 success()
             }

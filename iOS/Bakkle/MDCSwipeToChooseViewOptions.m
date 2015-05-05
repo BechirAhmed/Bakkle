@@ -39,14 +39,14 @@
         _nopeRotationAngle = 15.f;
         
         _holdText = [NSLocalizedString(@"HOLDING", nil) uppercaseString];
-        _holdColor = [UIColor blueColor];
+        _holdColor = [UIColor whiteColor];
         _holdRotationAngle = -15.f;
         
         _reportText = [NSLocalizedString(@"REPORT", nil) uppercaseString];
         _reportColor = [UIColor blackColor];
         _reportRotationAngle = -15.f;
 
-        _threshold = 150.f;
+        _threshold = 100.f;
     }
     return self;
 }

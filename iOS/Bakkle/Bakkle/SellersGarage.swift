@@ -30,7 +30,10 @@ class SellersGarageView: UIViewController, UICollectionViewDelegate, UICollectio
         super.viewWillAppear(true)
         let scale: CGFloat = UIScreen.mainScreen().scale
         let cellSize = (self.collectionView.collectionViewLayout as! UICollectionViewFlowLayout).itemSize
-        Bakkle.sharedInstance.populateGarage({ self.refresh() })
+        Bakkle.sharedInstance.populateGarage({
+          //  self.refresh()
+            println("IT GETS HERE")
+        })
     }
     
     func refresh() {
@@ -40,13 +43,32 @@ class SellersGarageView: UIViewController, UICollectionViewDelegate, UICollectio
         }
     }
     
+    func updateGarage() {
+        println("[Sellers Garage] Requesting from server")
+        dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
+            Bakkle.sharedInstance.populateGarage({ () -> () in
+                println("[Sellers Garage] garage updates reveived")
+                dispatch_async(dispatch_get_main_queue()) {
+                    
+                }
+            })
+        }
+    }
+    
+    func updateView(collectionView: UICollectionView) {
+        println("[Sellers Garage] Updating View")
+        if Bakkle.sharedInstance.garageItems.count > 0 {
+            
+        }
+    }
+    
     /* MENUBAR ITEMS */
     @IBAction func btnMenu(sender: AnyObject) {
         self.revealViewController().revealToggleAnimated(true)
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection: Int) -> Int {
-        return 3
+        return 10
 //        return Bakkle.sharedInstance.garageItems != nil ? Bakkle.sharedInstance.garageItems.count : 0
     }
     
@@ -60,7 +82,8 @@ class SellersGarageView: UIViewController, UICollectionViewDelegate, UICollectio
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell : CollectionThumbnail = collectionView.dequeueReusableCellWithReuseIdentifier(photoCellIdentifier, forIndexPath: indexPath) as! CollectionThumbnail
         
-        //populateCells(cell)
+//        populateCells(cell)
+//        collectionView.reloadData()
         
         // MOCK
         cell.setThumbnailImage(UIImage(named: "mock-tile.png")!)
@@ -74,9 +97,17 @@ class SellersGarageView: UIViewController, UICollectionViewDelegate, UICollectio
         return cell
     }
     
-    func populateCells(cell: UICollectionViewCell) {
+    func populateCells(cell: CollectionThumbnail) {
         if Bakkle.sharedInstance.garageItems.count > 0 {
+            let topItem = Bakkle.sharedInstance.garageItems[0]
+            let imgURLs = topItem.valueForKey("image_urls") as! NSArray
             
+            let firstURL = imgURLs[0] as! String
+            let imgURL = NSURL(string: firstURL)
+            if let imgData = NSData(contentsOfURL: imgURL!) {
+                cell.setThumbnailImage(UIImage(data: imgData)!)
+                cell.imgView.contentMode = UIViewContentMode.ScaleAspectFill
+            }
         }
     }
 

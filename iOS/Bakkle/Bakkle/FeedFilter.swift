@@ -48,6 +48,8 @@ class FeedFilterView: UIViewController {
     }
     
     override func viewWillAppear(animated: Bool) {
+        
+        /* Custom skin for UISlideView */
         distance.maximumValue = 100
         distance.maximumTrackTintColor = UIColor.blackColor()
         distance.thumbTintColor = UIColor.blackColor()
@@ -73,6 +75,7 @@ class FeedFilterView: UIViewController {
         distance.setValue(Bakkle.sharedInstance.filter_distance, animated: true)
         price.setValue(Bakkle.sharedInstance.filter_price, animated: true)
         number.setValue(Bakkle.sharedInstance.filter_number, animated: true)
+        
         self.filterRealtime(0) // force labels to update
     }
     
