@@ -74,6 +74,11 @@ class SellersGarageView: UIViewController, UICollectionViewDelegate, UICollectio
         return cell
     }
     
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+        let dim = (collectionView.frame.width / 2) - (5*3)-0.5
+        
+        return CGSize(width: dim, height: dim)
+    }
     func populateCells(cell: UICollectionViewCell) {
         if Bakkle.sharedInstance.garageItems.count > 0 {
             

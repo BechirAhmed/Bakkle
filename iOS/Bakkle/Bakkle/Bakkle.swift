@@ -65,7 +65,7 @@ class Bakkle {
         serverNum = NSUserDefaults.standardUserDefaults().integerForKey("server")
         setServer()
         info("Using server: \(self.serverNum) \(self.url_base)")
-
+        
         self.getFilter()
         self.restoreData()
     }
@@ -83,6 +83,13 @@ class Bakkle {
 
     func refresh() {
         /* TODO: this will request a data update from the server */
+    }
+    
+    func appVersion() -> (String, String) {
+        let build: String = NSBundle.mainBundle().infoDictionary?["CFBundleVersion"] as! String
+        let bundleName: String = NSBundle.mainBundle().infoDictionary?["CFBundleNameKey"] as! String
+        
+        return (build,bundleName)
     }
     
     /* register and login using facebook */
