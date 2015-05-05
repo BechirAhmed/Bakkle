@@ -20,6 +20,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FBLoginView.self
         FBProfilePictureView.self
         
+        UIApplication.sharedApplication().statusBarStyle = .LightContent
+        
         return true
     }
     

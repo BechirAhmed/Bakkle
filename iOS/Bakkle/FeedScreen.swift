@@ -25,6 +25,7 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
     var infoView: UIView!
     
     var chosenImage: UIImage?
+    var fromCamera: Bool! = false
     
     @IBOutlet weak var menuBtn: UIButton!
     
@@ -143,7 +144,7 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
         /* If view is off the page we need to reset the view */
         if (state != nil && state.direction != MDCSwipeDirection.None) {
             self.swipeView = MDCSwipeToChooseView(frame: self.view.bounds, options: options)
-            self.bottomView = MDCSwipeToChooseView(frame: CGRectMake(self.swipeView.frame.origin.x, self.swipeView.frame.origin.y + 10, self.swipeView.frame.width, self.swipeView.frame.height), options: nil)
+            self.bottomView = MDCSwipeToChooseView(frame: CGRectMake(self.swipeView.frame.origin.x, self.swipeView.frame.origin.y, self.swipeView.frame.width, self.swipeView.frame.height), options: nil)
             self.view.insertSubview(self.bottomView, belowSubview: self.swipeView)
             self.swipeView.addGestureRecognizer(itemDetailTap)
         } else {
@@ -169,16 +170,18 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
         super.viewWillAppear(animated)
 
         println("--FeedScreen WillAppear--")
-        
-        if let items = Bakkle.sharedInstance.feedItems {
-            if Bakkle.sharedInstance.feedItems.count>0 {
-                resetSwipeView()
-                self.updateView(self.swipeView)
+        if fromCamera == false {
+            if let items = Bakkle.sharedInstance.feedItems {
+                if Bakkle.sharedInstance.feedItems.count>0 {
+                    resetSwipeView()
+                    self.updateView(self.swipeView)
+                }
             }
         }
-
+        
         // Always look for updates
         checkForUpdates()
+        fromCamera = false
     }
     
     func constructInfoView() {
@@ -246,6 +249,7 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
         } else {
             /* No items left in feed */
             self.bottomView.removeFromSuperview()
+            self.swipeView.removeFromSuperview()
             noNewItemsLabel.alpha = 1
         }
         loaded = true
@@ -333,6 +337,7 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
             picker.delegate = self
             picker.allowsEditing = false
             self.presentViewController(picker, animated: false, completion: nil)
+            fromCamera = true
             
         } else{
             //no camera available
@@ -345,9 +350,9 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
     }
     
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+        fromCamera = true
         picker.dismissViewControllerAnimated(true, completion: nil)
-        resetSwipeView()
-        checkForUpdates()
+       // checkForUpdates()
     }
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {

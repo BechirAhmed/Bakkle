@@ -46,7 +46,7 @@
         _reportColor = [UIColor blackColor];
         _reportRotationAngle = -15.f;
 
-        _threshold = 150.f;
+        _threshold = 100.f;
     }
     return self;
 }
