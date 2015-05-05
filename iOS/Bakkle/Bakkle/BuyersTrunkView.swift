@@ -15,6 +15,13 @@ class BuyersTrunkView: UITableViewController {
         
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(true)
+        Bakkle.sharedInstance.populateTrunk({
+//            updateUI()
+        });
+    }
+    
     /* MENUBAR ITEMS */
     @IBAction func btnMenu(sender: AnyObject) {
         self.revealViewController().revealToggleAnimated(true)
