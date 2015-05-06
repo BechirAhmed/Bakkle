@@ -188,7 +188,7 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
         var bottomHeight: CGFloat = 60.0
         var bottomFrame: CGRect = CGRectMake(0, CGRectGetHeight(swipeView.bounds) - bottomHeight, CGRectGetWidth(swipeView.bounds), bottomHeight)
         self.infoView = UIView(frame: bottomFrame)
-        self.infoView.backgroundColor = UIColor.whiteColor()
+        self.infoView.backgroundColor = UIColor.yellowColor()
         self.infoView.clipsToBounds = true
         self.infoView.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleTopMargin
         swipeView.addSubview(self.infoView)
@@ -208,6 +208,7 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
             
             println("[FeedScreen] Downloading image (top) \(imgURLs)")
             feedView.nameLabel.text = topTitle + ",  $" + topPrice
+            feedView.nameLabel.font = UIFont (name: "Helvetica Light", size: 17)
             dispatch_async(dispatch_get_global_queue(
                 Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
                     let firstURL = imgURLs[0] as! String
@@ -242,6 +243,7 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
                                 self.bottomView.imageView.image = UIImage(data: imgData)
                                 self.bottomView.imageView.contentMode = UIViewContentMode.ScaleAspectFill
                                 self.bottomView.nameLabel.text = bottomTitle + ",  $" + bottomPrice
+                                self.bottomView.nameLabel.font = UIFont (name: "Helvetica Light", size: 17)
                             }
                         }
                     }

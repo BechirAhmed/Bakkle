@@ -98,12 +98,19 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         else {
             add.enabled = true
         }
+//        self.titleField.text = "title"
+//        self.priceField.text = "2.08"
+//        self.tagsField.text = "tag lindsey tag"
+//        self.methodField.text = "air"
+//        add.enabled = true
     }
     
     @IBOutlet weak var add: UIButton!    
     
     @IBAction func btnAdd(sender: AnyObject) {
         var imageData = UIImageJPEGRepresentation(imageView.image, 0.5)
+       // var imageData = UIImageJPEGRepresentation(UIImage(named: "tiger.jpg"), 0.5)
+        //var imageData: NSData = "bob+".dataUsingEncoding(NSUTF8StringEncoding)!
         let base64String = imageData.base64EncodedStringWithOptions(NSDataBase64EncodingOptions.allZeros)
         Bakkle.sharedInstance.addItem(self.titleField.text, description: "", location: "", price: self.priceField.text, tags: self.tagsField.text, method: self.methodField.text, imageToSend: base64String)
         
@@ -136,8 +143,6 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     @IBAction func cameraBtn(sender: AnyObject) {
         let fetchOptions = PHFetchOptions()
         fetchOptions.predicate = NSPredicate(format: "title = %@", albumName)
-        
-        
         
         if(UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera)){
             //load the camera interface
