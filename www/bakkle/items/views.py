@@ -4,6 +4,7 @@ import json
 import datetime
 import md5
 import os
+import base64
 
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.core.urlresolvers import reverse
@@ -91,7 +92,7 @@ def add_item(request):
         # Check to see if image data is present
         if imageData != None and imageData != "":
             # Convert the data to an image from base64
-            image = imageData.decode('base64')
+            image = base64.decodestring(imageData)#.decode('base64')
 
             # Get the filepath which includes the filename to save the image to (see helper method)
             filepath = make_filepath(seller_id)
@@ -191,9 +192,9 @@ def feed(request):
     item_list = None
     if(search_text != None and search_text != ""):
         search_text.strip()
-        item_list = Items.objects.exclude(buyeritem = items_viewed).exclude(seller = buyer_id).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).filter(Q(tags__contains=search_text))
+        item_list = Items.objects.exclude(buyeritem = items_viewed).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).filter(Q(tags__contains=search_text))
     else:
-        item_list = Items.objects.exclude(buyeritem = items_viewed).exclude(seller = buyer_id).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING))
+        item_list = Items.objects.exclude(buyeritem = items_viewed).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING))
 
     item_array = []
     # get json representaion of item array
@@ -402,7 +403,18 @@ def add_item_to_buyer_items(request, status):
             status = status, 
             confirmed_price = item.price,
             view_duration = 0)
-        buyer_item.status = status
+
+        # If the item seller is the same as the buyer mark it as their item instead of the status
+        if(item.seller.id == buyer_id):
+            print("Are same")
+            buyer_item.status = BuyerItem.MY_ITEM
+        else:
+            buyer_item.status = status
+
+        print(item.seller.id)
+        print(buyer_id)
+        print(buyer_item.status)
+        print(BuyerItem.MY_ITEM)
         buyer_item.confirmed_price = item.price
         buyer_item.view_duration = view_duration
         buyer_item.save()
@@ -410,7 +422,18 @@ def add_item_to_buyer_items(request, status):
         buyer_item = get_object_or_404(BuyerItem, pk=buyer_item_id)
 
         # Update fields
-        buyer_item.status = status
+        # If the item seller is the same as the buyer mark it as their item instead of the status
+        if(str(item.seller.id) == str(buyer_id)):
+            print("Are same")
+            buyer_item.status = BuyerItem.MY_ITEM
+        else:
+            buyer_item.status = status
+
+        print(item.seller.id)
+        print(buyer_id)
+        print(item.seller.id == buyer_id)
+        print(buyer_item.status)
+        print(BuyerItem.MY_ITEM)
         buyer_item.confirmed_price = item.price
         buyer_item.view_duration = view_duration
         buyer_item.save()

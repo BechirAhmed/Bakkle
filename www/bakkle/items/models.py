@@ -53,6 +53,7 @@ class BuyerItem(models.Model):
     PENDING = 'Pending'
     SOLD = 'Sold'
     SOLD_TO = 'Sold To'
+    MY_ITEM = 'My Item'
     STATUS_OPTIONS = (
         (ACTIVE, 'Active'),
         (MEH, 'Meh'),
@@ -62,7 +63,8 @@ class BuyerItem(models.Model):
         (NEGOCIATING, 'Negociating'),
         (PENDING, 'Pending'),
         (SOLD, 'Sold'),
-        (SOLD_TO, 'Sold To')
+        (SOLD_TO, 'Sold To'),
+        (MY_ITEM, 'My Item')
     )
     buyer = models.ForeignKey(Account)
     item = models.ForeignKey(Items)
