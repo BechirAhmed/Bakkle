@@ -336,6 +336,8 @@ class Bakkle {
             
             if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
                 self.trunkItems = self.responseDict.valueForKey("buyers_trunk") as! Array
+                // cheap hack to get data for testing
+                self.trunkItems = self.feedItems
                 self.persistData()
                 success()
             }
