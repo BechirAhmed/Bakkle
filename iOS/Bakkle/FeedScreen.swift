@@ -208,7 +208,6 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
             
             println("[FeedScreen] Downloading image (top) \(imgURLs)")
             feedView.nameLabel.text = topTitle + ",  $" + topPrice
-            feedView.nameLabel.font = UIFont (name: "Helvetica Light", size: 17)
             dispatch_async(dispatch_get_global_queue(
                 Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
                     let firstURL = imgURLs[0] as! String
@@ -230,10 +229,12 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
                         let bottomURLs = bottomItem.valueForKey("image_urls") as! NSArray
                         let bottomTitle: String = bottomItem.valueForKey("title") as! String
                         let bottomPrice: String = bottomItem.valueForKey("price") as! String
+                        self.bottomView.nameLabel.text = bottomTitle + ",  $" + bottomPrice
                         
                         self.bottomView.userInteractionEnabled = false
                         
                         println("[FeedScreen] Downloading image (bottom) \(bottomURLs)")
+                        
                         
                         let bottomURL = bottomURLs[0] as! String
                         let imgURL = NSURL(string: bottomURL)
@@ -242,8 +243,6 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
                                 println("[FeedScreen] displaying image (bottom)")
                                 self.bottomView.imageView.image = UIImage(data: imgData)
                                 self.bottomView.imageView.contentMode = UIViewContentMode.ScaleAspectFill
-                                self.bottomView.nameLabel.text = bottomTitle + ",  $" + bottomPrice
-                                self.bottomView.nameLabel.font = UIFont (name: "Helvetica Light", size: 17)
                             }
                         }
                     }
@@ -252,13 +251,14 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
             /* No items left in feed */
             self.bottomView.removeFromSuperview()
             self.swipeView.removeFromSuperview()
+            self.progressIndicator.alpha = 0
             noNewItemsLabel.alpha = 1
         }
         loaded = true
     }
     
     func viewDidCancelSwipe(view: UIView!) {
-        // Do nothing. Resets the swpe view
+        // Do nothing. Resets the swipe view
     }
     
     func buildImageLabelViewLeftOf(x:CGFloat, image:UIImage, text:NSString) -> ImageLabelView{
