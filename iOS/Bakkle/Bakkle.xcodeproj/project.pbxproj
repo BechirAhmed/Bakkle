@@ -52,6 +52,8 @@
 		A05DB7541AF3F22B0076D97D /* dot@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A05DB7531AF3F22B0076D97D /* dot@2x.png */; };
 		A05DB7561AF463340076D97D /* ItemTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05DB7551AF463340076D97D /* ItemTile.swift */; };
 		A05DB7581AF4F8C60076D97D /* mock-tile.png in Resources */ = {isa = PBXBuildFile; fileRef = A05DB7571AF4F8C60076D97D /* mock-tile.png */; };
+		A05DB75E1AF9B8B00076D97D /* bkg-chat-text.png in Resources */ = {isa = PBXBuildFile; fileRef = A05DB75D1AF9B8B00076D97D /* bkg-chat-text.png */; };
+		A05DB7601AF9BAF30076D97D /* Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05DB75F1AF9BAF30076D97D /* Chat.swift */; };
 		A06AA9EE1AD609530075D7F7 /* Bakkle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A06AA9ED1AD609530075D7F7 /* Bakkle.swift */; };
 		A0A200011ACE2F7500A42CD8 /* btn-email40.png in Resources */ = {isa = PBXBuildFile; fileRef = A0A2FFFE1ACE2F7500A42CD8 /* btn-email40.png */; };
 		A0A200021ACE2F7500A42CD8 /* btn-facebook40.png in Resources */ = {isa = PBXBuildFile; fileRef = A0A2FFFF1ACE2F7500A42CD8 /* btn-facebook40.png */; };
@@ -168,6 +170,8 @@
 		A05DB7531AF3F22B0076D97D /* dot@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dot@2x.png"; sourceTree = "<group>"; };
 		A05DB7551AF463340076D97D /* ItemTile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemTile.swift; sourceTree = "<group>"; };
 		A05DB7571AF4F8C60076D97D /* mock-tile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mock-tile.png"; sourceTree = "<group>"; };
+		A05DB75D1AF9B8B00076D97D /* bkg-chat-text.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bkg-chat-text.png"; sourceTree = "<group>"; };
+		A05DB75F1AF9BAF30076D97D /* Chat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Chat.swift; sourceTree = "<group>"; };
 		A06AA9ED1AD609530075D7F7 /* Bakkle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bakkle.swift; sourceTree = "<group>"; };
 		A0A200001ACE2F7500A42CD8 /* btn-sign-in40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-sign-in40.png"; sourceTree = "<group>"; };
 		A0A200041ACE30C200A42CD8 /* btn-logout40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-logout40.png"; sourceTree = "<group>"; };
@@ -255,6 +259,7 @@
 				A05DB74C1AF0180D0076D97D /* ImageLabelView.swift */,
 				A06AA9ED1AD609530075D7F7 /* Bakkle.swift */,
 				A0D96F7F1AD767BD0046DA13 /* MenuTableView.swift */,
+				A05DB75F1AF9BAF30076D97D /* Chat.swift */,
 				5EE2C98A1AB9D1730031D8CD /* FeedScreen.swift */,
 				A0D96F851AD771900046DA13 /* SellersGarage.swift */,
 				A0D96F811AD76D8E0046DA13 /* BuyersTrunkView.swift */,
@@ -280,6 +285,7 @@
 		5EBDD68E1AB211E600C7FBE7 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				A05DB75D1AF9B8B00076D97D /* bkg-chat-text.png */,
 				DBEE0E9A1AF3C85C005E60BD /* btn-want-disabled.png */,
 				DBEE0E981AF3C855005E60BD /* btb-want.png */,
 				DBEE0E961AF3C464005E60BD /* item-detail-overlay.png */,
@@ -585,6 +591,7 @@
 				A05DB7521AF1BC090076D97D /* btn-menu.png in Resources */,
 				A0D96F7C1AD765990046DA13 /* icon-cart.png in Resources */,
 				A0D96F791AD765990046DA13 /* icon-gear.png in Resources */,
+				A05DB75E1AF9B8B00076D97D /* bkg-chat-text.png in Resources */,
 				A0A200021ACE2F7500A42CD8 /* btn-facebook40.png in Resources */,
 				5E1DCCA31AD47C53002D41FD /* btn-x.png in Resources */,
 				A0A709CF1ACAC9DB00E772B9 /* LaunchScreen.xib in Resources */,
@@ -645,6 +652,7 @@
 				5EE2C9B61AB9F0FB0031D8CD /* MDCSwipeResult.m in Sources */,
 				5E1DCCA51AD486D2002D41FD /* AddItem.swift in Sources */,
 				5EBDD6911AB211E600C7FBE7 /* AppDelegate.swift in Sources */,
+				A05DB7601AF9BAF30076D97D /* Chat.swift in Sources */,
 				5E1FEE7C1AD8641900C08131 /* MDCSwipeToChooseView.m in Sources */,
 				A05DB74D1AF0180D0076D97D /* ImageLabelView.swift in Sources */,
 				5EE2C9B21AB9F0FB0031D8CD /* UIView+MDCSwipeToChoose.m in Sources */,

@@ -44,6 +44,7 @@ class Bakkle {
     var feedItems: [NSObject]!
     var garageItems: [NSObject]!
     var trunkItems: [NSObject]!
+    var holdingItems: [NSObject]!
     
     //TODO: Remove
     var responseDict: NSDictionary!
@@ -302,6 +303,47 @@ class Bakkle {
         }
         task.resume()
     }
+    
+    /* Populates the holding pattern with items from the server */
+    func populateHolding(success: ()->()) {
+        let url: NSURL? = NSURL(string: url_base + url_get_holding_pattern)
+        let request = NSMutableURLRequest(URL: url!)
+        
+        //TODO: change this location
+        //        let search_text = "mower"
+        
+        request.HTTPMethod = "POST"
+        let postString = "auth_token=\(self.auth_token)&device_uuid=\(self.deviceUUID)"
+        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+        
+        info("[Bakkle] populateHolding")
+        info("[Bakkle]  URL: \(url)")
+        info("[Bakkle]  METHOD: \(request.HTTPMethod)")
+        info("[Bakkle]  BODY: \(postString)")
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
+            data, response, error in
+            
+            if error != nil {
+                self.err("error= \(error)")
+                return
+            }
+            
+            let responseString: String = NSString(data: data, encoding: NSUTF8StringEncoding)! as String
+            self.info("Response: \(responseString)")
+            
+            var parseError: NSError?
+            self.responseDict = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! NSDictionary!
+            self.debg("RESPONSE DICT IS: \(self.responseDict)")
+            
+            if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
+                self.holdingItems = self.responseDict.valueForKey("holding_item") as! Array
+                self.persistData()
+                success()
+            }
+            
+        }
+        task.resume()
+    }
 
     /* Populates the trunk with items from the server */
     func populateTrunk(success: ()->()) {
@@ -383,6 +425,13 @@ class Bakkle {
             
         }
         task.resume()
+    }
+    
+    func sendChat(conversation_id: Int, message: String) {
+        
+    }
+    func onNewChat(conversation_id: Int, message: String, timestamp: time_t) {
+        
     }
     
     func addItem(title: String, description: String, location: String, price: String, tags: String, method: String, imageToSend: String) {
