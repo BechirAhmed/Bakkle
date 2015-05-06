@@ -45,6 +45,7 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
     
     @IBAction func menuButtonPressed(sender: AnyObject) {
         self.revealViewController().revealToggleAnimated(true)
+        checkForUpdates()
     }
     @IBAction func btnX(sender: AnyObject) {
         self.swipeView.mdc_swipe(MDCSwipeDirection.Left)
@@ -123,23 +124,35 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
         // Remove the item that was just marked from the view
         if Bakkle.sharedInstance.feedItems.count>0 {
             Bakkle.sharedInstance.feedItems.removeAtIndex(0)
+           // self.swipeView.removeFromSuperview()
+            //self.bottomView.removeFromSuperview()
+        }
+        
+        if Bakkle.sharedInstance.feedItems.count == 0 {
+//            self.bottomView.removeFromSuperview()
+            self.swipeView.removeFromSuperview()
         }
         
         // Put the swipe view back in the correct location
         resetSwipeView()
         
         // Load images into swipe and under view
-        updateView(self.swipeView)
+        updateView()
     }
     
     func resetSwipeView() {
         println("[FeedScreen] Resetting swipe view")
         
         /* First time page is loaded, swipe view will not exist and we need to create it. */
-        self.swipeView = MDCSwipeToChooseView(frame: self.view.bounds, options: options)
-        self.bottomView = MDCSwipeToChooseView(frame: CGRectMake(self.swipeView.frame.origin.x , self.swipeView.frame.origin.y , self.swipeView.frame.width, self.swipeView.frame.height), options: nil)
-        self.view.insertSubview(self.bottomView, belowSubview: self.swipeView)
-        self.swipeView.addGestureRecognizer(itemDetailTap)
+        if Bakkle.sharedInstance.feedItems.count > 0 {
+            self.swipeView = MDCSwipeToChooseView(frame: self.view.bounds, options: options)
+            self.swipeView.addGestureRecognizer(itemDetailTap)
+            if Bakkle.sharedInstance.feedItems.count > 1 {
+                self.bottomView = MDCSwipeToChooseView(frame: CGRectMake(self.swipeView.frame.origin.x , self.swipeView.frame.origin.y , self.swipeView.frame.width, self.swipeView.frame.height), options: nil)
+                self.view.insertSubview(self.bottomView, belowSubview: self.swipeView)
+            }
+        }
+        
         
         /* If view is off the page we need to reset the view */
         if (state != nil && state.direction != MDCSwipeDirection.None) {
@@ -160,7 +173,7 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
                 println("[FeedScreen] updates received")
                 dispatch_async(dispatch_get_main_queue()) {
                     self.resetSwipeView()
-                    self.updateView(self.swipeView)
+                    self.updateView()
                 }
             })
         }
@@ -174,7 +187,7 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
             if let items = Bakkle.sharedInstance.feedItems {
                 if Bakkle.sharedInstance.feedItems.count>0 {
                     resetSwipeView()
-                    self.updateView(self.swipeView)
+                    self.updateView()
                 }
             }
         }
@@ -194,9 +207,11 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
         swipeView.addSubview(self.infoView)
     }
     
-    func updateView(feedView: MDCSwipeToChooseView) {
+    func updateView() {
         println("[FeedScreen] Updating view")
         if Bakkle.sharedInstance.feedItems.count > 0 {
+            
+            
             let topItem = Bakkle.sharedInstance.feedItems[0]
             if let x: AnyObject = topItem.valueForKey("pk") {
                 self.item_id = Int(x.intValue)
@@ -207,7 +222,7 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
             let topPrice: String = topItem.valueForKey("price") as! String
             
             println("[FeedScreen] Downloading image (top) \(imgURLs)")
-            feedView.nameLabel.text = topTitle + ",  $" + topPrice
+            self.swipeView.nameLabel.text = topTitle + ",  $" + topPrice
             dispatch_async(dispatch_get_global_queue(
                 Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
                     let firstURL = imgURLs[0] as! String
@@ -215,10 +230,10 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
                     if let imgData = NSData(contentsOfURL: imgURL!) {
                         dispatch_async(dispatch_get_main_queue()) {
                             println("[FeedScreen] displaying image (top)")
-                            feedView.imageView.image = UIImage(data: imgData)
-                            feedView.imageView.contentMode = UIViewContentMode.ScaleAspectFill
+                            self.swipeView.imageView.image = UIImage(data: imgData)
+                            self.swipeView.imageView.contentMode = UIViewContentMode.ScaleAspectFill
                         
-                            super.view.addSubview(feedView)
+                            super.view.addSubview(self.swipeView)
                         }
                     }
             
@@ -229,7 +244,6 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
                         let bottomURLs = bottomItem.valueForKey("image_urls") as! NSArray
                         let bottomTitle: String = bottomItem.valueForKey("title") as! String
                         let bottomPrice: String = bottomItem.valueForKey("price") as! String
-                        self.bottomView.nameLabel.text = bottomTitle + ",  $" + bottomPrice
                         
                         self.bottomView.userInteractionEnabled = false
                         
@@ -243,14 +257,15 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
                                 println("[FeedScreen] displaying image (bottom)")
                                 self.bottomView.imageView.image = UIImage(data: imgData)
                                 self.bottomView.imageView.contentMode = UIViewContentMode.ScaleAspectFill
+                                self.bottomView.nameLabel.text = bottomTitle + ",  $" + bottomPrice
                             }
                         }
                     }
                 }
         } else {
             /* No items left in feed */
-            self.bottomView.removeFromSuperview()
-            self.swipeView.removeFromSuperview()
+            
+            
             self.progressIndicator.alpha = 0
             noNewItemsLabel.alpha = 1
         }
@@ -309,7 +324,7 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
 //        if bottomView != nil {
 //            self.swipeView = self.bottomView
 //        }
-
+        
         if bottomView != nil {
             self.bottomView.alpha = 0.0
             self.view.insertSubview(self.bottomView, belowSubview: self.swipeView)
@@ -319,6 +334,7 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
         }
     }
 
+    
     /* Camera */
     let albumName = "Bakkle"
     
