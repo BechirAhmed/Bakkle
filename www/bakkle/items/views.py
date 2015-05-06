@@ -405,15 +405,13 @@ def add_item_to_buyer_items(request, status):
             view_duration = 0)
 
         # If the item seller is the same as the buyer mark it as their item instead of the status
-        if(item.seller.id == buyer_id):
-            print("Are same")
-            buyer_item.status = BuyerItem.MY_ITEM
-        else:
-            buyer_item.status = status
+        # TODO: Eventually put this back in to prevent errors from user trying to buy their own item
+        # if(str(item.seller.id) == str(buyer_id)):
+        #     print("Are same")
+        #     buyer_item.status = BuyerItem.MY_ITEM
+        # else:
+        #     buyer_item.status = status
 
-        print(item.seller.id)
-        print(buyer_id)
-        print(buyer_item.status)
         print(BuyerItem.MY_ITEM)
         buyer_item.confirmed_price = item.price
         buyer_item.view_duration = view_duration
@@ -423,20 +421,16 @@ def add_item_to_buyer_items(request, status):
 
         # Update fields
         # If the item seller is the same as the buyer mark it as their item instead of the status
-        if(str(item.seller.id) == str(buyer_id)):
-            print("Are same")
-            buyer_item.status = BuyerItem.MY_ITEM
-        else:
-            buyer_item.status = status
+        # TODO: Eventually put this back in to prevent errors from user trying to buy their own item
+        # if(str(item.seller.id) == str(buyer_id)):
+        #     print("Are same")
+        #     buyer_item.status = BuyerItem.MY_ITEM
+        # else:
+        #     buyer_item.status = status
 
-        print(item.seller.id)
-        print(buyer_id)
-        print(item.seller.id == buyer_id)
-        print(buyer_item.status)
-        print(BuyerItem.MY_ITEM)
-        buyer_item.confirmed_price = item.price
-        buyer_item.view_duration = view_duration
-        buyer_item.save()
+        # buyer_item.confirmed_price = item.price
+        # buyer_item.view_duration = view_duration
+        # buyer_item.save()
 
     response_data = { 'status':1 }
     return HttpResponse(json.dumps(response_data), content_type="application/json")
