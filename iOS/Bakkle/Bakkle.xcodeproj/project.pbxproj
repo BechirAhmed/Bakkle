@@ -63,6 +63,7 @@
 		A0A5F71D1AEDAE54001A7D7A /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A0A5F71C1AEDAE54001A7D7A /* Settings.bundle */; };
 		A0A709CE1ACAC9D700E772B9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5EBDD6941AB211E600C7FBE7 /* Main.storyboard */; };
 		A0A709CF1ACAC9DB00E772B9 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5EBDD6991AB211E600C7FBE7 /* LaunchScreen.xib */; };
+		A0B7F4BA1AFB053B00065407 /* blank.png in Resources */ = {isa = PBXBuildFile; fileRef = A0B7F4B91AFB053B00065407 /* blank.png */; };
 		A0D96F791AD765990046DA13 /* icon-gear.png in Resources */ = {isa = PBXBuildFile; fileRef = A0D96F731AD765990046DA13 /* icon-gear.png */; };
 		A0D96F7A1AD765990046DA13 /* icon-filter.png in Resources */ = {isa = PBXBuildFile; fileRef = A0D96F741AD765990046DA13 /* icon-filter.png */; };
 		A0D96F7B1AD765990046DA13 /* icon-down.png in Resources */ = {isa = PBXBuildFile; fileRef = A0D96F751AD765990046DA13 /* icon-down.png */; };
@@ -177,6 +178,7 @@
 		A0A2FFFE1ACE2F7500A42CD8 /* btn-email40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-email40.png"; sourceTree = "<group>"; };
 		A0A2FFFF1ACE2F7500A42CD8 /* btn-facebook40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-facebook40.png"; sourceTree = "<group>"; };
 		A0A5F71C1AEDAE54001A7D7A /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		A0B7F4B91AFB053B00065407 /* blank.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blank.png; sourceTree = "<group>"; };
 		A0D96F731AD765990046DA13 /* icon-gear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-gear.png"; sourceTree = "<group>"; };
 		A0D96F741AD765990046DA13 /* icon-filter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-filter.png"; sourceTree = "<group>"; };
 		A0D96F751AD765990046DA13 /* icon-down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-down.png"; sourceTree = "<group>"; };
@@ -280,6 +282,7 @@
 		5EBDD68E1AB211E600C7FBE7 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				A0B7F4B91AFB053B00065407 /* blank.png */,
 				DBEE0E9A1AF3C85C005E60BD /* btn-want-disabled.png */,
 				DBEE0E981AF3C855005E60BD /* btb-want.png */,
 				DBEE0E961AF3C464005E60BD /* item-detail-overlay.png */,
@@ -566,6 +569,7 @@
 				A0A5F71D1AEDAE54001A7D7A /* Settings.bundle in Resources */,
 				A03508F91AB3C6AE00CA6455 /* logo-white-design-png.png in Resources */,
 				A0A2FFF51ACE232F00A42CD8 /* LoginScreen-bkg.png in Resources */,
+				A0B7F4BA1AFB053B00065407 /* blank.png in Resources */,
 				A03508F71AB3C5FB00CA6455 /* logo-green-design-png-white.png in Resources */,
 				5E1DCC9F1AD44C72002D41FD /* tiger.jpg in Resources */,
 				DBEE0E991AF3C855005E60BD /* btb-want.png in Resources */,
