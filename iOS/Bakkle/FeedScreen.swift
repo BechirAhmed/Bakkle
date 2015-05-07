@@ -99,6 +99,7 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
         itemDetailTap = UITapGestureRecognizer(target: self, action: "goToDetails")
     }
     
+    //TODO: Ishank, this doesn't appear to be used, please remove.
     func frontCardViewFrame() -> CGRect{
         var horizontalPadding:CGFloat = 20.0
         var topPadding:CGFloat = 60.0

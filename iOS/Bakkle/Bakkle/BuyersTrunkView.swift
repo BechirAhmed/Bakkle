@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Haneke
 
 class BuyersTrunkCell : UITableViewCell {
     @IBOutlet var itemImage: UIImageView?
@@ -22,16 +23,14 @@ class BuyersTrunkCell : UITableViewCell {
             Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
                 let firstURL = imgURLs[0] as String
                 let imgURL = NSURL(string: firstURL)
-                if let imgData = NSData(contentsOfURL: imgURL!) {
-                    dispatch_async(dispatch_get_main_queue()) {
-                        let superview: UITableView = self.superview?.superview! as! UITableView
-                        if let cellToUpdate = superview.cellForRowAtIndexPath(indexPath) {
-                            println("[BuyersTrunk] displaying cell image")
-                            self.itemImage!.image = UIImage(data: imgData)
-                            self.itemImage?.contentMode = UIViewContentMode.ScaleAspectFill
-                            self.itemImage?.layer.cornerRadius = 4.0
-                            self.itemImage?.clipsToBounds = true
-                        }
+                dispatch_async(dispatch_get_main_queue()) {
+                    let superview: UITableView = self.superview?.superview! as! UITableView
+                    if let cellToUpdate = superview.cellForRowAtIndexPath(indexPath) {
+                        println("[BuyersTrunk] displaying cell image")
+                        self.itemImage!.hnk_setImageFromURL(imgURL!)
+                        self.itemImage?.contentMode = UIViewContentMode.ScaleAspectFill
+                        self.itemImage?.layer.cornerRadius = 4.0
+                        self.itemImage?.clipsToBounds = true
                     }
                 }
         }

@@ -80,6 +80,7 @@
 		DBEE0E971AF3C464005E60BD /* item-detail-overlay.png in Resources */ = {isa = PBXBuildFile; fileRef = DBEE0E961AF3C464005E60BD /* item-detail-overlay.png */; };
 		DBEE0E991AF3C855005E60BD /* btb-want.png in Resources */ = {isa = PBXBuildFile; fileRef = DBEE0E981AF3C855005E60BD /* btb-want.png */; };
 		DBEE0E9B1AF3C85C005E60BD /* btn-want-disabled.png in Resources */ = {isa = PBXBuildFile; fileRef = DBEE0E9A1AF3C85C005E60BD /* btn-want-disabled.png */; };
+		E5016D9C10A43489915BBFC7 /* Pods_Bakkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E0CABDBE20E9D5B2EED4810 /* Pods_Bakkle.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -100,6 +101,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1D710285C97E0FF7D33DEB9E /* Pods-Bakkle.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bakkle.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Bakkle/Pods-Bakkle.debug.xcconfig"; sourceTree = "<group>"; };
+		3E0CABDBE20E9D5B2EED4810 /* Pods_Bakkle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Bakkle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E023F851AD592B80002AFBC /* btn-addItem.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-addItem.png"; sourceTree = "<group>"; };
 		5E023F871AD59F200002AFBC /* logo-white-design-png-transp-100.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-white-design-png-transp-100.png"; sourceTree = "<group>"; };
 		5E1DCC9E1AD44C71002D41FD /* tiger.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = tiger.jpg; sourceTree = "<group>"; };
@@ -152,6 +155,7 @@
 		5EE2C9AF1AB9F0FB0031D8CD /* MDCViewState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDCViewState.h; sourceTree = "<group>"; };
 		5EE2C9B01AB9F0FB0031D8CD /* MDCViewState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDCViewState.m; sourceTree = "<group>"; };
 		5EE2C9B11AB9F0FB0031D8CD /* MDCSwipeToChoose-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MDCSwipeToChoose-Prefix.pch"; path = "../MDCSwipeToChoose-Prefix.pch"; sourceTree = "<group>"; };
+		698270E0C83AB2371F464BB2 /* Pods-Bakkle.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bakkle.release.xcconfig"; path = "Pods/Target Support Files/Pods-Bakkle/Pods-Bakkle.release.xcconfig"; sourceTree = "<group>"; };
 		A003EB121AD4CCA600EE51A1 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
 		A003EB131AD4CCA600EE51A1 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
 		A003EB191AD4DB8800EE51A1 /* item-lawnmower.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "item-lawnmower.png"; sourceTree = "<group>"; };
@@ -215,6 +219,7 @@
 				A04AAE401ACA2E6600BA7CBD /* FacebookSDK in Frameworks */,
 				A0A2FFF71ACE276200A42CD8 /* FBSDKCoreKit.framework in Frameworks */,
 				5EE2C98D1AB9E3B40031D8CD /* Foundation.framework in Frameworks */,
+				E5016D9C10A43489915BBFC7 /* Pods_Bakkle.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -237,6 +242,7 @@
 				5EBDD68D1AB211E600C7FBE7 /* Bakkle */,
 				5EBDD6A31AB211E600C7FBE7 /* BakkleTests */,
 				5EBDD68C1AB211E600C7FBE7 /* Products */,
+				EE168E761A42906DDE93E5F8 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -329,6 +335,7 @@
 				A04AAE3F1ACA2E6600BA7CBD /* FacebookSDK */,
 				5EE2C98C1AB9E3B40031D8CD /* Foundation.framework */,
 				5EE2C9881AB9B6270031D8CD /* FacebookSDK.framework */,
+				3E0CABDBE20E9D5B2EED4810 /* Pods_Bakkle.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -425,6 +432,15 @@
 			name = buttons;
 			sourceTree = "<group>";
 		};
+		EE168E761A42906DDE93E5F8 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				1D710285C97E0FF7D33DEB9E /* Pods-Bakkle.debug.xcconfig */,
+				698270E0C83AB2371F464BB2 /* Pods-Bakkle.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -465,9 +481,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5EBDD6AA1AB211E600C7FBE7 /* Build configuration list for PBXNativeTarget "Bakkle" */;
 			buildPhases = (
+				2B121FB3053DE85C02FA613D /* Check Pods Manifest.lock */,
 				5EBDD6871AB211E600C7FBE7 /* Sources */,
 				5EBDD6881AB211E600C7FBE7 /* Frameworks */,
 				5EBDD6891AB211E600C7FBE7 /* Resources */,
+				DAC119B602F64538F899B059 /* Embed Pods Frameworks */,
+				1BBD5791D628CB2AC4F68D73 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -614,6 +633,54 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		1BBD5791D628CB2AC4F68D73 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Bakkle/Pods-Bakkle-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		2B121FB3053DE85C02FA613D /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		DAC119B602F64538F899B059 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Bakkle/Pods-Bakkle-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		5E8055431AEA78790035521C /* Sources */ = {
@@ -854,6 +921,7 @@
 		};
 		5EBDD6AB1AB211E600C7FBE7 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1D710285C97E0FF7D33DEB9E /* Pods-Bakkle.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -864,7 +932,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = Bakkle/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -880,6 +948,7 @@
 		};
 		5EBDD6AC1AB211E600C7FBE7 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 698270E0C83AB2371F464BB2 /* Pods-Bakkle.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -890,7 +959,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = Bakkle/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
