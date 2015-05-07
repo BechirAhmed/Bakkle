@@ -46,6 +46,7 @@
 		A03508F71AB3C5FB00CA6455 /* logo-green-design-png-white.png in Resources */ = {isa = PBXBuildFile; fileRef = A03508F61AB3C5FB00CA6455 /* logo-green-design-png-white.png */; };
 		A03508F91AB3C6AE00CA6455 /* logo-white-design-png.png in Resources */ = {isa = PBXBuildFile; fileRef = A03508F81AB3C6AE00CA6455 /* logo-white-design-png.png */; };
 		A04AAE401ACA2E6600BA7CBD /* FacebookSDK in Frameworks */ = {isa = PBXBuildFile; fileRef = A04AAE3F1ACA2E6600BA7CBD /* FacebookSDK */; };
+		A058A2A11AFC28BE005E7432 /* DemoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A058A2A01AFC28BE005E7432 /* DemoView.swift */; };
 		A05DB74D1AF0180D0076D97D /* ImageLabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05DB74C1AF0180D0076D97D /* ImageLabelView.swift */; };
 		A05DB74F1AF1A4C80076D97D /* dot.png in Resources */ = {isa = PBXBuildFile; fileRef = A05DB74E1AF1A4C80076D97D /* dot.png */; };
 		A05DB7521AF1BC090076D97D /* btn-menu.png in Resources */ = {isa = PBXBuildFile; fileRef = A05DB7511AF1BC090076D97D /* btn-menu.png */; };
@@ -167,6 +168,7 @@
 		A03508F61AB3C5FB00CA6455 /* logo-green-design-png-white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-green-design-png-white.png"; sourceTree = "<group>"; };
 		A03508F81AB3C6AE00CA6455 /* logo-white-design-png.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-white-design-png.png"; sourceTree = "<group>"; };
 		A04AAE3F1ACA2E6600BA7CBD /* FacebookSDK */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = FacebookSDK; path = FacebookSDK.framework/Versions/A/FacebookSDK; sourceTree = "<group>"; };
+		A058A2A01AFC28BE005E7432 /* DemoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemoView.swift; sourceTree = "<group>"; };
 		A05DB74C1AF0180D0076D97D /* ImageLabelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageLabelView.swift; sourceTree = SOURCE_ROOT; };
 		A05DB74E1AF1A4C80076D97D /* dot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dot.png; sourceTree = "<group>"; };
 		A05DB7511AF1BC090076D97D /* btn-menu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-menu.png"; sourceTree = "<group>"; };
@@ -281,6 +283,7 @@
 				A05DB7551AF463340076D97D /* ItemTile.swift */,
 				5EBDD68E1AB211E600C7FBE7 /* Supporting Files */,
 				A0A5F71C1AEDAE54001A7D7A /* Settings.bundle */,
+				A058A2A01AFC28BE005E7432 /* DemoView.swift */,
 			);
 			path = Bakkle;
 			sourceTree = "<group>";
@@ -716,6 +719,7 @@
 				5EE2C9B61AB9F0FB0031D8CD /* MDCSwipeResult.m in Sources */,
 				5E1DCCA51AD486D2002D41FD /* AddItem.swift in Sources */,
 				5EBDD6911AB211E600C7FBE7 /* AppDelegate.swift in Sources */,
+				A058A2A11AFC28BE005E7432 /* DemoView.swift in Sources */,
 				5E1FEE7C1AD8641900C08131 /* MDCSwipeToChooseView.m in Sources */,
 				A05DB74D1AF0180D0076D97D /* ImageLabelView.swift in Sources */,
 				5EE2C9B21AB9F0FB0031D8CD /* UIView+MDCSwipeToChoose.m in Sources */,

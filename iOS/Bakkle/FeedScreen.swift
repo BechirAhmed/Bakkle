@@ -361,6 +361,9 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
             var alert = UIAlertController(title: "Sorry", message: "Bakkle requires a picture when selling items", preferredStyle: .Alert)
             alert.addAction(UIAlertAction(title: "Okay", style: .Default, handler: {(alertAction)in
                 alert.dismissViewControllerAnimated(false, completion: nil)
+                //DEBUG ONLY *******
+                self.performSegueWithIdentifier(self.addItemSegue, sender: self)
+
             }))
             self.presentViewController(alert, animated: false, completion: nil)
         }

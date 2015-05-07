@@ -338,7 +338,7 @@ class Bakkle {
             self.debg("RESPONSE DICT IS: \(self.responseDict)")
             
             if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
-                self.holdingItems = self.responseDict.valueForKey("holding_item") as! Array
+               // self.holdingItems = self.responseDict.valueForKey("holding_item") as! Array
                 self.persistData()
                 success()
             }
@@ -381,7 +381,7 @@ class Bakkle {
             if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
                 self.trunkItems = self.responseDict.valueForKey("buyers_trunk") as! Array
                 // cheap hack to get data for testing
-                self.trunkItems = self.feedItems
+                //self.trunkItems = self.feedItems
                 self.persistData()
                 NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkTrunkUpdate, object: self)
                 success()
@@ -501,6 +501,30 @@ class Bakkle {
         }
         task.resume()
     }
+
+//    /* Send image to server */
+//    func postImage(image: UIImage) {
+//
+//        let imageData: NSData = UIImageJPEGRepresentation(image, 0.5)
+//        let postLength: String = "\(imageData)"
+//
+//    NSData *imageData = UIImagePNGRepresentation(image);
+//    NSString *postLength = [NSString stringWithFormat:@"%d", [imageData length]];
+//    
+//    // Init the URLRequest
+//    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+//    [request setHTTPMethod:@"POST"];
+//    [request setURL:[NSURL URLWithString:[NSString stringWithString:@"http://yoururl.domain"]]];
+//    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+//    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+//    [request setHTTPBody:imageData];
+//    
+//    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+//    if (connection) {
+//    // response data of the request
+//    }
+//    [request release];
+//    }
  
     func getFilter() {
         var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
