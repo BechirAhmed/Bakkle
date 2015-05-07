@@ -1,5 +1,4 @@
 #!/usr/bin/python
-#
 # author: ajs
 # license: bsd
 # copyright: re2
