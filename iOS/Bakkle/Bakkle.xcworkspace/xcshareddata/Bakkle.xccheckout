@@ -5,7 +5,7 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>71E3C001-7556-4050-AAD4-8A6D701450DF</string>
+	<string>4E605956-E2DE-47D3-8D39-5D3AB1A14A70</string>
 	<key>IDESourceControlProjectName</key>
 	<string>Bakkle</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
@@ -14,11 +14,11 @@
 		<string>git.rhventures.org:omnisite-bakkle</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>iOS/Bakkle/Bakkle.xcodeproj</string>
+	<string>iOS/Bakkle/Bakkle.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>6968322BD7AC8EEFBDCC9A916F5A8BBF203A6E58</key>
-		<string>../../../..</string>
+		<string>../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>git.rhventures.org:omnisite-bakkle</string>

@@ -52,8 +52,6 @@
 		A05DB7541AF3F22B0076D97D /* dot@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A05DB7531AF3F22B0076D97D /* dot@2x.png */; };
 		A05DB7561AF463340076D97D /* ItemTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05DB7551AF463340076D97D /* ItemTile.swift */; };
 		A05DB7581AF4F8C60076D97D /* mock-tile.png in Resources */ = {isa = PBXBuildFile; fileRef = A05DB7571AF4F8C60076D97D /* mock-tile.png */; };
-		A05DB75E1AF9B8B00076D97D /* bkg-chat-text.png in Resources */ = {isa = PBXBuildFile; fileRef = A05DB75D1AF9B8B00076D97D /* bkg-chat-text.png */; };
-		A05DB7601AF9BAF30076D97D /* Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05DB75F1AF9BAF30076D97D /* Chat.swift */; };
 		A06AA9EE1AD609530075D7F7 /* Bakkle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A06AA9ED1AD609530075D7F7 /* Bakkle.swift */; };
 		A0A200011ACE2F7500A42CD8 /* btn-email40.png in Resources */ = {isa = PBXBuildFile; fileRef = A0A2FFFE1ACE2F7500A42CD8 /* btn-email40.png */; };
 		A0A200021ACE2F7500A42CD8 /* btn-facebook40.png in Resources */ = {isa = PBXBuildFile; fileRef = A0A2FFFF1ACE2F7500A42CD8 /* btn-facebook40.png */; };
@@ -65,6 +63,7 @@
 		A0A5F71D1AEDAE54001A7D7A /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A0A5F71C1AEDAE54001A7D7A /* Settings.bundle */; };
 		A0A709CE1ACAC9D700E772B9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5EBDD6941AB211E600C7FBE7 /* Main.storyboard */; };
 		A0A709CF1ACAC9DB00E772B9 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5EBDD6991AB211E600C7FBE7 /* LaunchScreen.xib */; };
+		A0B7F4BA1AFB053B00065407 /* blank.png in Resources */ = {isa = PBXBuildFile; fileRef = A0B7F4B91AFB053B00065407 /* blank.png */; };
 		A0D96F791AD765990046DA13 /* icon-gear.png in Resources */ = {isa = PBXBuildFile; fileRef = A0D96F731AD765990046DA13 /* icon-gear.png */; };
 		A0D96F7A1AD765990046DA13 /* icon-filter.png in Resources */ = {isa = PBXBuildFile; fileRef = A0D96F741AD765990046DA13 /* icon-filter.png */; };
 		A0D96F7B1AD765990046DA13 /* icon-down.png in Resources */ = {isa = PBXBuildFile; fileRef = A0D96F751AD765990046DA13 /* icon-down.png */; };
@@ -81,6 +80,7 @@
 		DBEE0E971AF3C464005E60BD /* item-detail-overlay.png in Resources */ = {isa = PBXBuildFile; fileRef = DBEE0E961AF3C464005E60BD /* item-detail-overlay.png */; };
 		DBEE0E991AF3C855005E60BD /* btb-want.png in Resources */ = {isa = PBXBuildFile; fileRef = DBEE0E981AF3C855005E60BD /* btb-want.png */; };
 		DBEE0E9B1AF3C85C005E60BD /* btn-want-disabled.png in Resources */ = {isa = PBXBuildFile; fileRef = DBEE0E9A1AF3C85C005E60BD /* btn-want-disabled.png */; };
+		E5016D9C10A43489915BBFC7 /* Pods_Bakkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E0CABDBE20E9D5B2EED4810 /* Pods_Bakkle.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -101,6 +101,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1D710285C97E0FF7D33DEB9E /* Pods-Bakkle.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bakkle.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Bakkle/Pods-Bakkle.debug.xcconfig"; sourceTree = "<group>"; };
+		3E0CABDBE20E9D5B2EED4810 /* Pods_Bakkle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Bakkle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E023F851AD592B80002AFBC /* btn-addItem.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-addItem.png"; sourceTree = "<group>"; };
 		5E023F871AD59F200002AFBC /* logo-white-design-png-transp-100.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-white-design-png-transp-100.png"; sourceTree = "<group>"; };
 		5E1DCC9E1AD44C71002D41FD /* tiger.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = tiger.jpg; sourceTree = "<group>"; };
@@ -153,6 +155,7 @@
 		5EE2C9AF1AB9F0FB0031D8CD /* MDCViewState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDCViewState.h; sourceTree = "<group>"; };
 		5EE2C9B01AB9F0FB0031D8CD /* MDCViewState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDCViewState.m; sourceTree = "<group>"; };
 		5EE2C9B11AB9F0FB0031D8CD /* MDCSwipeToChoose-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MDCSwipeToChoose-Prefix.pch"; path = "../MDCSwipeToChoose-Prefix.pch"; sourceTree = "<group>"; };
+		698270E0C83AB2371F464BB2 /* Pods-Bakkle.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bakkle.release.xcconfig"; path = "Pods/Target Support Files/Pods-Bakkle/Pods-Bakkle.release.xcconfig"; sourceTree = "<group>"; };
 		A003EB121AD4CCA600EE51A1 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
 		A003EB131AD4CCA600EE51A1 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
 		A003EB191AD4DB8800EE51A1 /* item-lawnmower.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "item-lawnmower.png"; sourceTree = "<group>"; };
@@ -170,8 +173,6 @@
 		A05DB7531AF3F22B0076D97D /* dot@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dot@2x.png"; sourceTree = "<group>"; };
 		A05DB7551AF463340076D97D /* ItemTile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemTile.swift; sourceTree = "<group>"; };
 		A05DB7571AF4F8C60076D97D /* mock-tile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mock-tile.png"; sourceTree = "<group>"; };
-		A05DB75D1AF9B8B00076D97D /* bkg-chat-text.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bkg-chat-text.png"; sourceTree = "<group>"; };
-		A05DB75F1AF9BAF30076D97D /* Chat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Chat.swift; sourceTree = "<group>"; };
 		A06AA9ED1AD609530075D7F7 /* Bakkle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bakkle.swift; sourceTree = "<group>"; };
 		A0A200001ACE2F7500A42CD8 /* btn-sign-in40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-sign-in40.png"; sourceTree = "<group>"; };
 		A0A200041ACE30C200A42CD8 /* btn-logout40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-logout40.png"; sourceTree = "<group>"; };
@@ -181,6 +182,7 @@
 		A0A2FFFE1ACE2F7500A42CD8 /* btn-email40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-email40.png"; sourceTree = "<group>"; };
 		A0A2FFFF1ACE2F7500A42CD8 /* btn-facebook40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-facebook40.png"; sourceTree = "<group>"; };
 		A0A5F71C1AEDAE54001A7D7A /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		A0B7F4B91AFB053B00065407 /* blank.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blank.png; sourceTree = "<group>"; };
 		A0D96F731AD765990046DA13 /* icon-gear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-gear.png"; sourceTree = "<group>"; };
 		A0D96F741AD765990046DA13 /* icon-filter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-filter.png"; sourceTree = "<group>"; };
 		A0D96F751AD765990046DA13 /* icon-down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-down.png"; sourceTree = "<group>"; };
@@ -217,6 +219,7 @@
 				A04AAE401ACA2E6600BA7CBD /* FacebookSDK in Frameworks */,
 				A0A2FFF71ACE276200A42CD8 /* FBSDKCoreKit.framework in Frameworks */,
 				5EE2C98D1AB9E3B40031D8CD /* Foundation.framework in Frameworks */,
+				E5016D9C10A43489915BBFC7 /* Pods_Bakkle.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -239,6 +242,7 @@
 				5EBDD68D1AB211E600C7FBE7 /* Bakkle */,
 				5EBDD6A31AB211E600C7FBE7 /* BakkleTests */,
 				5EBDD68C1AB211E600C7FBE7 /* Products */,
+				EE168E761A42906DDE93E5F8 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -259,7 +263,6 @@
 				A05DB74C1AF0180D0076D97D /* ImageLabelView.swift */,
 				A06AA9ED1AD609530075D7F7 /* Bakkle.swift */,
 				A0D96F7F1AD767BD0046DA13 /* MenuTableView.swift */,
-				A05DB75F1AF9BAF30076D97D /* Chat.swift */,
 				5EE2C98A1AB9D1730031D8CD /* FeedScreen.swift */,
 				A0D96F851AD771900046DA13 /* SellersGarage.swift */,
 				A0D96F811AD76D8E0046DA13 /* BuyersTrunkView.swift */,
@@ -285,7 +288,7 @@
 		5EBDD68E1AB211E600C7FBE7 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				A05DB75D1AF9B8B00076D97D /* bkg-chat-text.png */,
+				A0B7F4B91AFB053B00065407 /* blank.png */,
 				DBEE0E9A1AF3C85C005E60BD /* btn-want-disabled.png */,
 				DBEE0E981AF3C855005E60BD /* btb-want.png */,
 				DBEE0E961AF3C464005E60BD /* item-detail-overlay.png */,
@@ -332,6 +335,7 @@
 				A04AAE3F1ACA2E6600BA7CBD /* FacebookSDK */,
 				5EE2C98C1AB9E3B40031D8CD /* Foundation.framework */,
 				5EE2C9881AB9B6270031D8CD /* FacebookSDK.framework */,
+				3E0CABDBE20E9D5B2EED4810 /* Pods_Bakkle.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -428,6 +432,15 @@
 			name = buttons;
 			sourceTree = "<group>";
 		};
+		EE168E761A42906DDE93E5F8 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				1D710285C97E0FF7D33DEB9E /* Pods-Bakkle.debug.xcconfig */,
+				698270E0C83AB2371F464BB2 /* Pods-Bakkle.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -468,9 +481,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5EBDD6AA1AB211E600C7FBE7 /* Build configuration list for PBXNativeTarget "Bakkle" */;
 			buildPhases = (
+				2B121FB3053DE85C02FA613D /* Check Pods Manifest.lock */,
 				5EBDD6871AB211E600C7FBE7 /* Sources */,
 				5EBDD6881AB211E600C7FBE7 /* Frameworks */,
 				5EBDD6891AB211E600C7FBE7 /* Resources */,
+				DAC119B602F64538F899B059 /* Embed Pods Frameworks */,
+				1BBD5791D628CB2AC4F68D73 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -572,6 +588,7 @@
 				A0A5F71D1AEDAE54001A7D7A /* Settings.bundle in Resources */,
 				A03508F91AB3C6AE00CA6455 /* logo-white-design-png.png in Resources */,
 				A0A2FFF51ACE232F00A42CD8 /* LoginScreen-bkg.png in Resources */,
+				A0B7F4BA1AFB053B00065407 /* blank.png in Resources */,
 				A03508F71AB3C5FB00CA6455 /* logo-green-design-png-white.png in Resources */,
 				5E1DCC9F1AD44C72002D41FD /* tiger.jpg in Resources */,
 				DBEE0E991AF3C855005E60BD /* btb-want.png in Resources */,
@@ -591,7 +608,6 @@
 				A05DB7521AF1BC090076D97D /* btn-menu.png in Resources */,
 				A0D96F7C1AD765990046DA13 /* icon-cart.png in Resources */,
 				A0D96F791AD765990046DA13 /* icon-gear.png in Resources */,
-				A05DB75E1AF9B8B00076D97D /* bkg-chat-text.png in Resources */,
 				A0A200021ACE2F7500A42CD8 /* btn-facebook40.png in Resources */,
 				5E1DCCA31AD47C53002D41FD /* btn-x.png in Resources */,
 				A0A709CF1ACAC9DB00E772B9 /* LaunchScreen.xib in Resources */,
@@ -617,6 +633,54 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		1BBD5791D628CB2AC4F68D73 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Bakkle/Pods-Bakkle-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		2B121FB3053DE85C02FA613D /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		DAC119B602F64538F899B059 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Bakkle/Pods-Bakkle-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		5E8055431AEA78790035521C /* Sources */ = {
@@ -652,7 +716,6 @@
 				5EE2C9B61AB9F0FB0031D8CD /* MDCSwipeResult.m in Sources */,
 				5E1DCCA51AD486D2002D41FD /* AddItem.swift in Sources */,
 				5EBDD6911AB211E600C7FBE7 /* AppDelegate.swift in Sources */,
-				A05DB7601AF9BAF30076D97D /* Chat.swift in Sources */,
 				5E1FEE7C1AD8641900C08131 /* MDCSwipeToChooseView.m in Sources */,
 				A05DB74D1AF0180D0076D97D /* ImageLabelView.swift in Sources */,
 				5EE2C9B21AB9F0FB0031D8CD /* UIView+MDCSwipeToChoose.m in Sources */,
@@ -858,6 +921,7 @@
 		};
 		5EBDD6AB1AB211E600C7FBE7 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1D710285C97E0FF7D33DEB9E /* Pods-Bakkle.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -868,7 +932,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = Bakkle/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -884,6 +948,7 @@
 		};
 		5EBDD6AC1AB211E600C7FBE7 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 698270E0C83AB2371F464BB2 /* Pods-Bakkle.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -894,7 +959,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = Bakkle/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",

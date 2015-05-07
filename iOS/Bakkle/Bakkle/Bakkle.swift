@@ -25,6 +25,8 @@ class Bakkle {
     let url_get_holding_pattern: String = "items/get_holding_pattern/"
     let url_buyertransactions: String   = "items/get_buyer_transactions/"
     let url_sellertransactions: String  = "items/get_seller_transactions/"
+
+    static let bkTrunkUpdate = "com.bakkle.trunkUpdate"
     
     /* 1 - ERROR
      * 2 - INFO
@@ -378,7 +380,10 @@ class Bakkle {
             
             if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
                 self.trunkItems = self.responseDict.valueForKey("buyers_trunk") as! Array
+                // cheap hack to get data for testing
+                self.trunkItems = self.feedItems
                 self.persistData()
+                NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkTrunkUpdate, object: self)
                 success()
             }
             
