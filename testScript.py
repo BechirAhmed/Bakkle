@@ -8,6 +8,7 @@
 import json 
 import sys
 import urllib2
+import time
 
 jenkinsUrl = "http://rhv-bakkle-jenkins.rose-hulman.edu:8080/job/"
 jobName = "test"
@@ -27,11 +28,17 @@ except:
     sys.exit(3)
 
 if buildStatusJson.has_key("result"):      
-    if buildStatusJson["result"] != "SUCCESS": 
-        req = urllib2.Request("http://sauron.rhventures.org:8765/lamp/A1/ON")
+    if buildStatusJson["result"] == "SUCCESS": 
+        req = urllib2.Request("http://sauron.rhventures.org:8765/lamp/A2/ON")
+        urllib2.urlopen(req)
+        time.sleep(0.5)
+        req = urllib2.Request("http://sauron.rhventures.org:8765/lamp/A1/OFF")
         urllib2.urlopen(req)
     else:
-        req = urllib2.Request("http://sauron.rhventures.org:8765/lamp/A1/OFF")
+        req = urllib2.Request("http://sauron.rhventures.org:8765/lamp/A1/ON")
+        urllib2.urlopen(req)
+        time.sleep(0.5)
+        req = urllib2.Request("http://sauron.rhventures.org:8765/lamp/A2/OFF")
         urllib2.urlopen(req)
 else:
     sys.exit(5)
