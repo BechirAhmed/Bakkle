@@ -9,11 +9,12 @@ import json
 import sys
 import urllib2
 
-jenkinsUrl = "https://rhv-bakkle-jenkins.rose-hulman.edu/job/"
+jenkinsUrl = "http://rhv-bakkle-jenkins.rose-hulman.edu:8080/job/"
 jobName = "test"
 
 try:
-    jenkinsStream = urllib2.urlopen( jenkinsUrl + jobName + "/lastBuild/api/json" )
+    print jenkinsUrl + jobName + "/lastBuild/api/json"
+    jenkinsStream = urllib2.urlopen(jenkinsUrl + jobName + "/lastBuild/api/json")
 except urllib2.HTTPError, e:
     print "URL Error: " + str(e.code) 
     print "      (job name [" + jobName + "] probably wrong)"
