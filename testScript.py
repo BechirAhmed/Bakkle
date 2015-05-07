@@ -28,18 +28,18 @@ except:
     sys.exit(3)
 
 if buildStatusJson.has_key("result"):      
-    if buildStatusJson["result"] == "SUCCESS": 
-        req = urllib2.Request("http://sauron.rhventures.org:8765/lamp/A2/ON")
-        urllib2.urlopen(req)
-        time.sleep(0.5)
+    if buildStatusJson["result"] == "SUCCESS":
         req = urllib2.Request("http://sauron.rhventures.org:8765/lamp/A1/OFF")
         urllib2.urlopen(req)
-    else:
-        req = urllib2.Request("http://sauron.rhventures.org:8765/lamp/A1/ON")
+        req = urllib2.Request("http://sauron.rhventures.org:8765/lamp/A2/ON")
         urllib2.urlopen(req)
-        time.sleep(0.5)
+        #time.sleep(0.5)
+    else:
         req = urllib2.Request("http://sauron.rhventures.org:8765/lamp/A2/OFF")
         urllib2.urlopen(req)
+        req = urllib2.Request("http://sauron.rhventures.org:8765/lamp/A1/ON")
+        urllib2.urlopen(req)
+        #time.sleep(0.5)
 else:
     sys.exit(5)
 
