@@ -230,8 +230,12 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
                     let imgURL = NSURL(string: firstURL)
                     dispatch_async(dispatch_get_main_queue()) {
                         println("[FeedScreen] displaying image (top)")
-                        self.swipeView.imageView.hnk_setImageFromURL(imgURL!)
-                        self.swipeView.imageView.contentMode = UIViewContentMode.ScaleAspectFill
+                        if imgURL == nil {
+                            
+                        }else{
+                            self.swipeView.imageView.hnk_setImageFromURL(imgURL!)
+                            self.swipeView.imageView.contentMode = UIViewContentMode.ScaleAspectFill
+                        }
                         super.view.addSubview(self.swipeView)
                     }
             
@@ -248,8 +252,11 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
                         let imgURL = NSURL(string: bottomURL)
                         dispatch_async(dispatch_get_main_queue()) {
                             println("[FeedScreen] displaying image (bottom)")
-                            self.bottomView.imageView.hnk_setImageFromURL(imgURL!)
-                            self.bottomView.imageView.contentMode = UIViewContentMode.ScaleAspectFill
+                            if let x = imgURL {
+                                self.bottomView.imageView.hnk_setImageFromURL(imgURL!)
+
+                                self.bottomView.imageView.contentMode = UIViewContentMode.ScaleAspectFill
+                            }
                             self.bottomView.nameLabel.text = bottomTitle + ",  $" + bottomPrice
                         }
                     }
