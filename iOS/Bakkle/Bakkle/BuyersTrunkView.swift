@@ -43,12 +43,13 @@ class BuyersTrunkCell : UITableViewCell {
     }
 }
 
-class BuyersTrunkView: UITableViewController {
+class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
+    @IBOutlet weak var tableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
         var nib = UINib(nibName: "BuyersTrunkCell", bundle: nil)
-        tableView.registerNib(nib, forCellReuseIdentifier: "GarageRowCell")
+        self.tableView.registerNib(nib, forCellReuseIdentifier: "GarageRowCell")
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -63,10 +64,10 @@ class BuyersTrunkView: UITableViewController {
         Bakkle.sharedInstance.populateTrunk({});
     }
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let x = Bakkle.sharedInstance.trunkItems {
             println("Actually got items from the trunk!")
             println(String(Bakkle.sharedInstance.trunkItems.count) + " items in trunk")
@@ -76,7 +77,7 @@ class BuyersTrunkView: UITableViewController {
         return 0
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         println("[BuyersTrunk] Updating table view")
         let cell = self.tableView.dequeueReusableCellWithIdentifier("BuyersTrunkCell") as! BuyersTrunkCell
         cell.itemImage?.image = UIImage(named: "blank.png")
