@@ -71,7 +71,7 @@ def detail(request, item_id):
 #TODO: Reinstate auth   @authenticate
 def add_item(request):
 
-    import pdb; pdb.set_trace()
+    #import pdb; pdb.set_trace()
     # Get the authentication code
     auth_token = request.GET.get('auth_token')
 
@@ -393,7 +393,7 @@ def handle_delete_file_s3(image_path):
 # Helper to handle image uploading
 def imgupload(request, seller_id):
     image_urls = ""
-    import pdb; pdb.set_trace()
+    #import pdb; pdb.set_trace()
     #for i in request.FILES.getlist('image'):
     i = request.FILES['image']
     uhash = hex(random.getrandbits(128))[2:-1]
