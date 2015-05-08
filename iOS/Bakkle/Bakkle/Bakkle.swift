@@ -441,12 +441,19 @@ class Bakkle {
     }
     
     func addItem(title: String, description: String, location: String, price: String, tags: String, method: String, image: UIImage) {
-        let url: NSURL? = NSURL(string: url_base + url_add_item + "?auth_token=\(self.auth_token)")
+        
+        // URL encode some vars.
+        let escTitle = title.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
+        let escDescription = description.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
+        let escLocation = location.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
+        let escTags = tags.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
+        let escMethod = method.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
+
+        let postString = "device_uuid=\(self.deviceUUID)&title=\(escTitle)&description=\(escDescription)&location=\(escLocation)&auth_token=\(self.auth_token)&price=\(price)&tags=\(escTags)&method=\(escMethod)"
+        let url: NSURL? = NSURL(string: url_base + url_add_item + "?\(postString)")
         
         let request = NSMutableURLRequest(URL: url!)
         request.HTTPMethod = "POST"
-        let postString = "device_uuid=\(self.deviceUUID)&title=\(title)&description=\(description)&location=\(location)&auth_token=\(self.auth_token)&price=\(price)&tags=\(tags)&method=\(method)"
-        
 
         let imageData: NSData = UIImageJPEGRepresentation(image, 0.5)
         let postLength: String = "\(imageData.length)"
@@ -457,6 +464,12 @@ class Bakkle {
         request.addValue(contentType, forHTTPHeaderField: "Content-Type")
         
         var body:NSMutableData = NSMutableData()
+        
+        // auth_token
+        body.appendData("\r\n\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
+        body.appendData("Content-Disposition: form-data; name=\"auth_token\"; \r\n\(auth_token)".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
+
+        
         body.appendData("\r\n--\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
         
         body.appendData("Content-Disposition: form-data; name=\"image\"; \(postString)&filename=\"image.jpg\"\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
@@ -465,7 +478,7 @@ class Bakkle {
         body.appendData("\r\n--\(boundary)--\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
         request.HTTPBody = body
         
-        info("[Bakkle] imgupload")
+        info("[Bakkle] addItem")
         info("URL: \(url) METHOD: \(request.HTTPMethod) BODY: --binary blob-- LENGTH: \(imageData.length)")
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
             data, response, error in

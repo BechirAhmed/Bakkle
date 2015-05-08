@@ -90,6 +90,9 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
             /* This allows us to test adding image using simulator */
             if UIDevice.currentDevice().model == "iPhone Simulator" {
                 imageView.image = UIImage(named: "tiger.jpg")
+                titleField.text = "Tiger"
+                priceField.text = "34000.00"
+                tagsField.text = "tiger predator dictator-loot"
             } else {
                 imageView.image = UIImage(named: "blank.png")
             }
