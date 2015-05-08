@@ -281,9 +281,9 @@
 				5EBDD6971AB211E600C7FBE7 /* Images.xcassets */,
 				5EBDD6991AB211E600C7FBE7 /* LaunchScreen.xib */,
 				A05DB7551AF463340076D97D /* ItemTile.swift */,
+				A058A2A01AFC28BE005E7432 /* DemoView.swift */,
 				5EBDD68E1AB211E600C7FBE7 /* Supporting Files */,
 				A0A5F71C1AEDAE54001A7D7A /* Settings.bundle */,
-				A058A2A01AFC28BE005E7432 /* DemoView.swift */,
 			);
 			path = Bakkle;
 			sourceTree = "<group>";

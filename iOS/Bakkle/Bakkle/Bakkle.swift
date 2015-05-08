@@ -450,7 +450,7 @@ class Bakkle {
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
         
         info("[Bakkle] addItem")
-        info("URL: \(url) METHOD: \(request.HTTPMethod) BODY: \(postString)")
+        info("URL: \(url) METHOD: \(request.HTTPMethod) BODY: --binary--")
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
             data, response, error in
             

@@ -81,7 +81,12 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         if self.itemImage != nil {
             imageView.image = self.itemImage!
         } else {
-            imageView.image = UIImage(named: "tiger.jpg")
+            /* This allows us to test adding image using simulator */
+            if UIDevice.currentDevice().model == "iPhone Simulator" {
+                imageView.image = UIImage(named: "tiger.jpg")
+            } else {
+                imageView.image = UIImage(named: "blank.png")
+            }
         }
         imageView.contentMode = UIViewContentMode.ScaleAspectFill
         imageView.clipsToBounds = true
@@ -119,9 +124,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
 
         Bakkle.sharedInstance.addItem(self.titleField.text, description: "", location: "", price: self.priceField.text, tags: self.tagsField.text, method: self.methodField.text, imageToSend: escapedString!)
   
-        
-
-        
+        Bakkle.sharedInstance.postImage(imageView.image!)
         
         let alertController = UIAlertController(title: "Bakkle", message:
             "Item uploaded to Bakkle.", preferredStyle: UIAlertControllerStyle.Alert)
