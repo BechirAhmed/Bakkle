@@ -107,6 +107,7 @@ static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
                               CGRectGetHeight(_informationView.frame) - topPadding);
     _nameLabel = [[UILabel alloc] initWithFrame:frame];
     _nameLabel.text = [NSString stringWithFormat:@"%s %s", "", ""];
+    _nameLabel.font = [UIFont fontWithName:@"Helvetica Light" size:17];
     [_informationView addSubview:_nameLabel];
 }
 

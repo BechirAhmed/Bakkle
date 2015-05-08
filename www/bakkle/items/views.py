@@ -4,6 +4,11 @@ import json
 import datetime
 import md5
 import os
+import base64
+
+import random
+from boto.s3.connection import S3Connection
+from boto.s3.key import Key
 
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.core.urlresolvers import reverse
@@ -23,6 +28,17 @@ from common import authenticate
 from django.conf import settings
 
 MAX_ITEM_IMAGE = 5
+
+config = {}
+config['S3_BUCKET'] = 'com.bakkle.prod'
+config['AWS_ACCESS_KEY'] = 'AKIAJIE2FPJIQGNZAMVQ' # server to s3
+config['AWS_SECRET_KEY'] = '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'
+
+config['AWS_ACCESS_KEY'] = 'AKIAJUCSHZSTNFVMEP3Q' # pethessa
+config['AWS_SECRET_KEY'] = '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'
+
+config['S3_URL'] = 'https://s3-us-west-2.amazonaws.com/com.bakkle.prod/'
+
 
 #--------------------------------------------#
 #               Web page requests            #
@@ -45,30 +61,32 @@ def detail(request, item_id):
         'item': item,
         'urls': urls,
     }
-    return render(request, 'items/detail.html', context) 
+    return render(request, 'items/detail.html', context)
 
 #--------------------------------------------#
 #               Item Methods                 #
 #--------------------------------------------#
 @csrf_exempt
 @require_POST
-@authenticate
+#TODO: Reinstate auth   @authenticate
 def add_item(request):
+
+    #import pdb; pdb.set_trace()
     # Get the authentication code
-    auth_token = request.POST.get('auth_token')
+    auth_token = request.GET.get('auth_token')
 
     # TODO: Handle location
     # Get the rest of the necessary params from the request
-    title = request.POST.get('title', "")
-    description = request.POST.get('description', "")
-    location = request.POST.get('location')
+    title = request.GET.get('title', "")
+    description = request.GET.get('description', "")
+    location = request.GET.get('location')
     seller_id = auth_token.split('_')[1]
-    price = request.POST.get('price')
-    tags = request.POST.get('tags',"")
-    method = request.POST.get('method')
+    price = request.GET.get('price')
+    tags = request.GET.get('tags',"")
+    method = request.GET.get('method')
 
     # Get the item id if present (If it is present an item will be edited not added)
-    item_id = request.POST.get('item_id', "")
+    item_id = request.GET.get('item_id', "")
 
     # Ensure that required fields are present otherwise send back a failed status
     if (title == None or title == "") or (tags == None or tags == "") or (price == None or price == "") or (method == None or method == ""):
@@ -83,32 +101,8 @@ def add_item(request):
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 
     # Check for the image params. The max number is 5 and is defined in settings
-    image_urls = ""
-    for i in range (1, MAX_ITEM_IMAGE + 1):
-        # Get the image from the request (of format imageX where X is the image number)
-        imageData = request.POST.get('image' + str(i), "" )
 
-        # Check to see if image data is present
-        if imageData != None and imageData != "":
-            # Convert the data to an image from base64
-            image = imageData.decode('base64')
-
-            # Get the filepath which includes the filename to save the image to (see helper method)
-            filepath = make_filepath(seller_id)
-
-            # if the filepath does not exist, create it (this includes folder and file creation)
-            if not os.path.exists(os.path.dirname(filepath)):
-                os.makedirs(os.path.dirname(filepath))
-
-            # Open the created file for writing
-            destination_file = open(filepath, 'wb+')
-
-            # Write the image data to the file and close it
-            destination_file.write(image)
-            destination_file.close()
-
-            # Add the new image url to the image_urls for the item
-            image_urls = image_urls + filepath + ","
+    image_urls = imgupload(request, seller_id)
 
     if (item_id == None or item_id == ""):
         # Create the item
@@ -127,12 +121,12 @@ def add_item(request):
         # Else get the item
         item = get_object_or_404(Items, pk=item_id);
 
+        # TODO: fix this
         # Remove all previous images
-        old_urls = item.image_urls.split(",")
-        for url in old_urls:
-            # if image exists remove the file
-            if os.path.exists(url):
-                os.remove(url)
+        # old_urls = item.image_urls.split(",")
+        # for url in old_urls:
+        #     # remove image from S3
+        #     handle_delete_file_s3(url)
 
         # Update item fields
         item.title = title
@@ -191,9 +185,9 @@ def feed(request):
     item_list = None
     if(search_text != None and search_text != ""):
         search_text.strip()
-        item_list = Items.objects.exclude(buyeritem = items_viewed).exclude(seller = buyer_id).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).filter(Q(tags__contains=search_text))
+        item_list = Items.objects.exclude(buyeritem = items_viewed).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).filter(Q(tags__contains=search_text))
     else:
-        item_list = Items.objects.exclude(buyeritem = items_viewed).exclude(seller = buyer_id).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING))
+        item_list = Items.objects.exclude(buyeritem = items_viewed).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING))
 
     item_array = []
     # get json representaion of item array
@@ -362,13 +356,53 @@ def get_buyer_transactions(request):
 #--------------------------------------------#
 #             Helper Functions               #
 #--------------------------------------------#
-# Helper for filepath generation
-def make_filepath(seller_id):
-    filename = str(seller_id) + "_" + (md5.new(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")).hexdigest())[0:10] + ".png"
-    filepath = os.path.join(os.getcwd(), "..", "img", datetime.datetime.now().strftime('%Y-%m'), filename)
-    print("Filepath\n")
-    print(filepath)
-    return filepath
+# Helper for uploading image to S3
+def handle_file_s3(image_key, f):
+    print "HERE"
+    image_string = ""
+    for chunk in f.chunks():
+        image_string = image_string + chunk
+
+    conn = S3Connection(config['AWS_ACCESS_KEY'], config['AWS_SECRET_KEY'])
+    #bucket = conn.create_bucket('com.bakkle.prod')
+    bucket = conn.get_bucket(config['S3_BUCKET'])
+    k = Key(bucket)
+    image_key = config['S3_BUCKET'] + "_" + image_key
+    k.key = image_key
+    # http://boto.readthedocs.org/en/latest/s3_tut.html
+    k.set_contents_from_string(image_string)
+    k.set_acl('public-read')
+    print config['S3_URL'] + image_key
+    return config['S3_URL'] + image_key
+    # TODO: Setup connection pool and queue for uploading at volume
+
+#TODO: Fix this
+def handle_delete_file_s3(image_path):
+    file_parts = image_path.split("_")
+    image_key = image_path.replace(config['S3_URL'], "")
+    bucket_name = config['S3_BUCKET']
+    if (len(file_parts) == 3):
+        bucket_name = file_parts[0]
+    conn = S3Connection(config['AWS_ACCESS_KEY'], config['AWS_SECRET_KEY'])
+    #bucket = conn.create_bucket('com.bakkle.prod')
+    bucket = conn.get_bucket(bucket_name)
+    print(image_key)
+    k = bucket.get_key(image_key)
+    k.delete()
+
+# Helper to handle image uploading
+def imgupload(request, seller_id):
+    image_urls = ""
+    #for i in request.FILES.getlist('image'):
+    i = request.FILES
+    uhash = hex(random.getrandbits(128))[2:-1]
+    image_key = "{}_{}.jpg".format(seller_id, uhash)
+    filename = handle_file_s3(image_key, i)
+    if image_urls == "":
+        image_urls = filename
+    else:
+        image_urls = image_urls + "," + filename
+    return image_urls
 
 # Helper for creating buyer items
 def add_item_to_buyer_items(request, status):
@@ -402,7 +436,16 @@ def add_item_to_buyer_items(request, status):
             status = status, 
             confirmed_price = item.price,
             view_duration = 0)
-        buyer_item.status = status
+
+        # If the item seller is the same as the buyer mark it as their item instead of the status
+        # TODO: Eventually put this back in to prevent errors from user trying to buy their own item
+        # if(str(item.seller.id) == str(buyer_id)):
+        #     print("Are same")
+        #     buyer_item.status = BuyerItem.MY_ITEM
+        # else:
+        #     buyer_item.status = status
+
+        print(BuyerItem.MY_ITEM)
         buyer_item.confirmed_price = item.price
         buyer_item.view_duration = view_duration
         buyer_item.save()
@@ -410,10 +453,17 @@ def add_item_to_buyer_items(request, status):
         buyer_item = get_object_or_404(BuyerItem, pk=buyer_item_id)
 
         # Update fields
-        buyer_item.status = status
-        buyer_item.confirmed_price = item.price
-        buyer_item.view_duration = view_duration
-        buyer_item.save()
+        # If the item seller is the same as the buyer mark it as their item instead of the status
+        # TODO: Eventually put this back in to prevent errors from user trying to buy their own item
+        # if(str(item.seller.id) == str(buyer_id)):
+        #     print("Are same")
+        #     buyer_item.status = BuyerItem.MY_ITEM
+        # else:
+        #     buyer_item.status = status
+
+        # buyer_item.confirmed_price = item.price
+        # buyer_item.view_duration = view_duration
+        # buyer_item.save()
 
     response_data = { 'status':1 }
     return HttpResponse(json.dumps(response_data), content_type="application/json")

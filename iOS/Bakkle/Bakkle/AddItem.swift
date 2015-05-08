@@ -44,12 +44,18 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         tagsField.becomeFirstResponder()
     }
     
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        validateTextFields()
+        return true
+    }
     func textFieldDidBeginEditing(textField: UITextField) {
-        animateViewMoving(true, moveValue: 130)
+        animateViewMoving(true, moveValue: 235)
+        formatPrice()
     }
     
     func textFieldDidEndEditing(textField: UITextField) {
-        animateViewMoving(false, moveValue: 130)
+        animateViewMoving(false, moveValue: 235)
+        formatPrice()
         validateTextFields()
     }
     
@@ -78,8 +84,24 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(true)
         add.enabled = false
-        imageView.image = self.itemImage!
-        imageView.contentMode = UIViewContentMode.ScaleAspectFit
+        if self.itemImage != nil {
+            imageView.image = self.itemImage!
+        } else {
+            /* This allows us to test adding image using simulator */
+            if UIDevice.currentDevice().model == "iPhone Simulator" {
+                imageView.image = UIImage(named: "tiger.jpg")
+                titleField.text = "Tiger"
+                priceField.text = "34000.00"
+                tagsField.text = "tiger predator dictator-loot"
+            } else {
+                imageView.image = UIImage(named: "blank.png")
+            }
+        }
+        imageView.contentMode = UIViewContentMode.ScaleAspectFill
+        imageView.clipsToBounds = true
+        
+        // Set default
+        methodField.text = "Pick-up"
     }
     
     func dismissKeyboard() {
@@ -98,15 +120,26 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         else {
             add.enabled = true
         }
+//        self.titleField.text = "title"
+//        self.priceField.text = "2.08"
+//        self.tagsField.text = "tag lindsey tag"
+//        self.methodField.text = "air"
+//        add.enabled = true
     }
     
     @IBOutlet weak var add: UIButton!    
     
+    func formatPrice() {
+        if (priceField.text as String).lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
+            priceField.text = String(format: "%.2f", (priceField.text! as NSString).floatValue )
+        }
+    }
     @IBAction func btnAdd(sender: AnyObject) {
-        var imageData = UIImageJPEGRepresentation(imageView.image, 0.5)
-        let base64String = imageData.base64EncodedStringWithOptions(NSDataBase64EncodingOptions.allZeros)
-        Bakkle.sharedInstance.addItem(self.titleField.text, description: "", location: "", price: self.priceField.text, tags: self.tagsField.text, method: self.methodField.text, imageToSend: base64String)
-        
+
+        //TODO: Add drop down 'Pick-up', 'Delivery', 'Meet', 'Ship'
+        //TODO: Get location from GPS
+        Bakkle.sharedInstance.addItem(self.titleField.text, description: "", location: "39.417672,-87.330438", price: self.priceField.text, tags: self.tagsField.text, method: /*self.methodField.text*/"Pick-up", image:imageView.image!)
+  
         let alertController = UIAlertController(title: "Bakkle", message:
             "Item uploaded to Bakkle.", preferredStyle: UIAlertControllerStyle.Alert)
         
@@ -137,8 +170,6 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         let fetchOptions = PHFetchOptions()
         fetchOptions.predicate = NSPredicate(format: "title = %@", albumName)
         
-        
-        
         if(UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera)){
             //load the camera interface
             var picker : UIImagePickerController = UIImagePickerController()
@@ -164,7 +195,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
         let chosen = info[UIImagePickerControllerOriginalImage] as! UIImage
-        imageView.contentMode = UIViewContentMode.ScaleAspectFit
+        imageView.contentMode = UIViewContentMode.ScaleAspectFill
         imageView.image = chosen
         dismissViewControllerAnimated(true, completion: nil)
     }
