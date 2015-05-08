@@ -6,6 +6,10 @@ import md5
 import os
 import base64
 
+import random
+from boto.s3.connection import S3Connection
+from boto.s3.key import Key
+
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.core.urlresolvers import reverse
 from django.template import RequestContext, loader
@@ -24,6 +28,15 @@ from common import authenticate
 from django.conf import settings
 
 MAX_ITEM_IMAGE = 5
+
+config = {}
+config['S3_BUCKET'] = 'com.bakkle.prod'
+config['AWS_ACCESS_KEY'] = 'AKIAJIE2FPJIQGNZAMVQ' # server to s3
+config['AWS_SECRET_KEY'] = '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'
+
+config['AWS_ACCESS_KEY'] = 'AKIAJUCSHZSTNFVMEP3Q' # pethessa
+config['AWS_SECRET_KEY'] = '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'
+
 
 #--------------------------------------------#
 #               Web page requests            #
@@ -46,11 +59,50 @@ def detail(request, item_id):
         'item': item,
         'urls': urls,
     }
-    return render(request, 'items/detail.html', context) 
+    return render(request, 'items/detail.html', context)
 
 #--------------------------------------------#
 #               Item Methods                 #
 #--------------------------------------------#
+config['local_image_path'] = '/bakkle/www/img/'
+def handle_file_local(image_key, f):
+    full_path = config['local_image_path']+image_key
+    print("Storing {} to {}".format(image_key, full_path))
+    local_destination = open(full_path, 'wb+')
+    for chunk in f.chunks():
+        local_destination.write(chunk)
+    local_destination.close()
+
+def handle_file_s3(image_key, f):
+    full_path = config['local_image_path']+image_key
+    print("Storing {} to S3 bucket {} as {}".format(full_path, config['S3_BUCKET'], image_key))
+    conn = S3Connection(config['AWS_ACCESS_KEY'], config['AWS_SECRET_KEY'])
+    #bucket = conn.create_bucket('com.bakkle.prod')
+    bucket = conn.get_bucket(config['S3_BUCKET'])
+    k = Key(bucket)
+    k.key = image_key
+    k.set_contents_from_filename(full_path)
+    # TODO: Setup connection pool and queue for uploading at volume
+
+
+@csrf_exempt
+@require_POST
+#@authenticate
+def imgupload(request):
+    # Get the authentication code
+    auth_token = request.GET.get('auth_token')
+    print("AT: {}".format(auth_token))
+
+    seller_id = auth_token.split('_')[1]
+    if request.method == 'POST':
+        uhash = hex(random.getrandbits(128))[2:-1]
+        image_key = "{}_{}.jpg".format(seller_id, uhash)
+        handle_file_local(image_key, request.FILES['image'])
+        handle_file_s3(image_key, request.FILES['image'])
+
+    response_data = { "status": 1 }
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
+
 @csrf_exempt
 @require_POST
 @authenticate

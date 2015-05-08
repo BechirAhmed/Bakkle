@@ -14,6 +14,9 @@ class DemoView: UIViewController {
         self.revealViewController().revealToggleAnimated(true)
     }
     
+    @IBAction func btnTestImage(sender: AnyObject) {
+        Bakkle.sharedInstance.postImage(UIImage(named: "tiger.jpg")!)
+    }
     @IBAction func btnReset(sender: AnyObject) {
         Bakkle.sharedInstance.resetDemo({
             

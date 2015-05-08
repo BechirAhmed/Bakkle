@@ -81,7 +81,8 @@ class Bakkle {
             case 1: self.url_base = "localhost"
             case 2: self.url_base = "http://bakkle.rhventures.org/"
             case 3: self.url_base = "http://137.112.63.186:8000/"
-        default: self.url_base = "https://app.bakkle.com/"
+            case 4: self.url_base = "http://137.112.57.140:8000/"
+            default: self.url_base = "https://app.bakkle.com/"
         }
     }
 
@@ -502,29 +503,54 @@ class Bakkle {
         task.resume()
     }
 
-//    /* Send image to server */
-//    func postImage(image: UIImage) {
-//
-//        let imageData: NSData = UIImageJPEGRepresentation(image, 0.5)
-//        let postLength: String = "\(imageData)"
-//
-//    NSData *imageData = UIImagePNGRepresentation(image);
-//    NSString *postLength = [NSString stringWithFormat:@"%d", [imageData length]];
-//    
-//    // Init the URLRequest
-//    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-//    [request setHTTPMethod:@"POST"];
-//    [request setURL:[NSURL URLWithString:[NSString stringWithString:@"http://yoururl.domain"]]];
-//    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-//    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-//    [request setHTTPBody:imageData];
-//    
-//    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-//    if (connection) {
-//    // response data of the request
-//    }
-//    [request release];
-//    }
+    /* Send image to server */
+    func postImage(image: UIImage) {
+
+        let imageData: NSData = UIImageJPEGRepresentation(image, 0.5)
+        let postLength: String = "\(imageData.length)"
+        
+        let url:NSURL? = NSURL(string: url_base + "items/imgupload/?auth_token=\(self.auth_token)")
+        let request = NSMutableURLRequest(URL: url!)
+        
+        request.HTTPMethod = "POST"
+//        let postString = "auth_token=\(self.auth_token)&device_uuid=\(self.deviceUUID)"
+//        request.HTTPBody = imageData
+//        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+//        request.setValue(postLength, forHTTPHeaderField: "Content-Length")
+        
+        
+        var boundary:String = "---------------------------14737809831466499882746641449"
+        var contentType:String = "multipart/form-data; boundary=\(boundary)"
+        request.addValue(contentType, forHTTPHeaderField: "Content-Type")
+        
+        var body:NSMutableData = NSMutableData()
+        body.appendData("\r\n--\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
+
+        body.appendData("Content-Disposition: form-data; name=\"image\"; filename=\"tiger.jpg\"\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
+        body.appendData("Content-Type: application/octet-stream\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
+        body.appendData(imageData)
+        body.appendData("\r\n--\(boundary)--\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
+        request.HTTPBody = body
+        
+        info("[Bakkle] imgupload")
+        info("URL: \(url) METHOD: \(request.HTTPMethod) BODY: --binary blob-- LENGTH: \(imageData.length)")
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
+            data, response, error in
+            
+            if error != nil {
+                self.err("error= \(error)")
+                return
+            }
+            
+            if let responseString = NSString(data: data, encoding: NSUTF8StringEncoding) {
+                self.debg("Response: \(responseString)")
+                
+                // TODO: Refresh UI
+                //success()
+            }
+        }
+        task.resume()
+    }
  
     func getFilter() {
         var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
