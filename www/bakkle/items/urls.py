@@ -5,6 +5,7 @@ from . import views
 urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^reset/$', views.reset, name='reset'),
+    url(r'^reset_items/$', views.reset_items, name='reset_items'),
     url(r'^feed/$', views.feed, name='feed'),
     url(r'^meh/$', views.meh, name='meh'),
     url(r'^want/$', views.want, name='want'),

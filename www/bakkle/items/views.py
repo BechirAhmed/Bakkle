@@ -556,10 +556,16 @@ def get_delivery_methods(request):
 def reset(request):
     #TODO: hardcoded values
     item_expire_time=7 #days
-    #TODO: Change to POST or DELETE
-    Items.objects.all().delete()
-    BuyerItem.objects.all().delete()
+    auth_token = request.POST.get('auth_token')
+    buyer_id = auth_token.split('_')[1]
+    BuyerItem.objects.filter(buyer=buyer_id).delete()
+    response_data = { "status":1 }
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
 
+@csrf_exempt
+def reset_items(request):
+    BuyerItem.objects.all().delete()
+    Items.objects.all().delete()
     # create dummy account
     try:
         a = Account.objects.get(
