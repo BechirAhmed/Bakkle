@@ -64,38 +64,32 @@ def detail(request, item_id):
 #--------------------------------------------#
 #               Item Methods                 #
 #--------------------------------------------#
-config['local_image_path'] = '/bakkle/www/img/'
-def handle_file_local(image_key, f):
-    full_path = config['local_image_path']+image_key
-    print("Storing {} to {}".format(image_key, full_path))
-    local_destination = open(full_path, 'wb+')
-    for chunk in f.chunks():
-        local_destination.write(chunk)
-    local_destination.close()
-
 def handle_file_s3(image_key, f):
     full_path = config['local_image_path']+image_key
     print("Storing {} to S3 bucket {} as {}".format(full_path, config['S3_BUCKET'], image_key))
+
+    image_string = ""
+    for chunk in f.chunks():
+        image_string = image_string + chunk
+
     conn = S3Connection(config['AWS_ACCESS_KEY'], config['AWS_SECRET_KEY'])
     #bucket = conn.create_bucket('com.bakkle.prod')
     bucket = conn.get_bucket(config['S3_BUCKET'])
     k = Key(bucket)
     k.key = image_key
     # http://boto.readthedocs.org/en/latest/s3_tut.html
-    k.set_contents_from_filename(full_path)
+    #k.set_contents_from_filename(full_path)
+    k.set_contents_from_string(image_string)
     k.set_acl('public-read')
     return "https://s3-us-west-2.amazonaws.com/com.bakkle.prod/" + image_key
-    #1_1b059fef000326dd9804173451a83dbf.jpg
     # TODO: Setup connection pool and queue for uploading at volume
-
 
 def imgupload(request, seller_id):
     image_urls = ""
-    for i in request.Files['image']):
+    for i in request.FILES.getlist('image'):
         uhash = hex(random.getrandbits(128))[2:-1]
         image_key = "{}_{}.jpg".format(seller_id, uhash)
-        handle_file_local(image_key, f)
-        filename = handle_file_s3(image_key, f)
+        filename = handle_file_s3(image_key, i)
         if image_urls == "":
             image_urls = filename
         else:
