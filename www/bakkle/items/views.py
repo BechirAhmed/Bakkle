@@ -64,48 +64,37 @@ def detail(request, item_id):
 #--------------------------------------------#
 #               Item Methods                 #
 #--------------------------------------------#
-config['local_image_path'] = '/bakkle/www/img/'
-def handle_file_local(image_key, f):
-    full_path = config['local_image_path']+image_key
-    print("Storing {} to {}".format(image_key, full_path))
-    local_destination = open(full_path, 'wb+')
-    for chunk in f.chunks():
-        local_destination.write(chunk)
-    local_destination.close()
-
 def handle_file_s3(image_key, f):
     full_path = config['local_image_path']+image_key
     print("Storing {} to S3 bucket {} as {}".format(full_path, config['S3_BUCKET'], image_key))
+
+    image_string = ""
+    for chunk in f.chunks():
+        image_string = image_string + chunk
+
     conn = S3Connection(config['AWS_ACCESS_KEY'], config['AWS_SECRET_KEY'])
     #bucket = conn.create_bucket('com.bakkle.prod')
     bucket = conn.get_bucket(config['S3_BUCKET'])
     k = Key(bucket)
     k.key = image_key
     # http://boto.readthedocs.org/en/latest/s3_tut.html
-    k.set_contents_from_filename(full_path)
+    #k.set_contents_from_filename(full_path)
+    k.set_contents_from_string(image_string)
     k.set_acl('public-read')
     return "https://s3-us-west-2.amazonaws.com/com.bakkle.prod/" + image_key
-    #1_1b059fef000326dd9804173451a83dbf.jpg
     # TODO: Setup connection pool and queue for uploading at volume
 
-
-@csrf_exempt
-@require_POST
-#@authenticate
-def imgupload(request):
-    # Get the authentication code
-    auth_token = request.GET.get('auth_token')
-    print("AT: {}".format(auth_token))
-
-    seller_id = auth_token.split('_')[1]
-    if request.method == 'POST':
+def imgupload(request, seller_id):
+    image_urls = ""
+    for i in request.FILES.getlist('image'):
         uhash = hex(random.getrandbits(128))[2:-1]
         image_key = "{}_{}.jpg".format(seller_id, uhash)
-        handle_file_local(image_key, request.FILES['image'])
-        handle_file_s3(image_key, request.FILES['image'])
-
-    response_data = { "status": 1 }
-    return HttpResponse(json.dumps(response_data), content_type="application/json")
+        filename = handle_file_s3(image_key, i)
+        if image_urls == "":
+            image_urls = filename
+        else:
+            image_urls = image_urls + "," + filename
+    return image_urls
 
 @csrf_exempt
 @require_POST
@@ -140,32 +129,8 @@ def add_item(request):
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 
     # Check for the image params. The max number is 5 and is defined in settings
-    image_urls = ""
-    for i in range (1, MAX_ITEM_IMAGE + 1):
-        # Get the image from the request (of format imageX where X is the image number)
-        imageData = request.POST.get('image' + str(i), "" )
-
-        # Check to see if image data is present
-        if imageData != None and imageData != "":
-            # Convert the data to an image from base64
-            image = base64.decodestring(imageData)#.decode('base64')
-
-            # Get the filepath which includes the filename to save the image to (see helper method)
-            filepath = make_filepath(seller_id)
-
-            # if the filepath does not exist, create it (this includes folder and file creation)
-            if not os.path.exists(os.path.dirname(filepath)):
-                os.makedirs(os.path.dirname(filepath))
-
-            # Open the created file for writing
-            destination_file = open(filepath, 'wb+')
-
-            # Write the image data to the file and close it
-            destination_file.write(image)
-            destination_file.close()
-
-            # Add the new image url to the image_urls for the item
-            image_urls = image_urls + filepath + ","
+    
+    image_urls = imgupload(request, seller_id)
 
     if (item_id == None or item_id == ""):
         # Create the item
