@@ -81,7 +81,11 @@ def handle_file_s3(image_key, f):
     bucket = conn.get_bucket(config['S3_BUCKET'])
     k = Key(bucket)
     k.key = image_key
+    # http://boto.readthedocs.org/en/latest/s3_tut.html
     k.set_contents_from_filename(full_path)
+    k.set_acl('public-read')
+    return "https://s3-us-west-2.amazonaws.com/com.bakkle.prod/" + image_key
+    #1_1b059fef000326dd9804173451a83dbf.jpg
     # TODO: Setup connection pool and queue for uploading at volume
 
 
