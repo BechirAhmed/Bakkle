@@ -84,10 +84,11 @@ class BuyersTrunkView: UITableViewController {
         cell.itemImage?.layer.cornerRadius = 4.0
         cell.itemImage?.clipsToBounds = true
         if Bakkle.sharedInstance.trunkItems.count > 0 {
-            let item : NSDictionary = Bakkle.sharedInstance.trunkItems[indexPath.row] as! NSDictionary
+            let trunkEntry : NSDictionary = Bakkle.sharedInstance.trunkItems[indexPath.row] as! NSDictionary
 //            if let x: AnyObject = topItem.valueForKey("pk") {
 //                self.item_id = Int(x.intValue)
 //            }
+            let item = trunkEntry.valueForKey("item") as! NSDictionary
             println(item.description)
             let imgURLs : [String] = item.valueForKey("image_urls") as! [String]
             let description : String = item.valueForKey("description") as! String
