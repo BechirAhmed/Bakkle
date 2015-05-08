@@ -44,12 +44,18 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         tagsField.becomeFirstResponder()
     }
     
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        validateTextFields()
+        return true
+    }
     func textFieldDidBeginEditing(textField: UITextField) {
-        animateViewMoving(true, moveValue: 165)
+        animateViewMoving(true, moveValue: 235)
+        formatPrice()
     }
     
     func textFieldDidEndEditing(textField: UITextField) {
-        animateViewMoving(false, moveValue: 165)
+        animateViewMoving(false, moveValue: 235)
+        formatPrice()
         validateTextFields()
     }
     
@@ -90,6 +96,9 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         }
         imageView.contentMode = UIViewContentMode.ScaleAspectFill
         imageView.clipsToBounds = true
+        
+        // Set default
+        methodField.text = "Pick-up"
     }
     
     func dismissKeyboard() {
@@ -102,7 +111,6 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     }
     
     func validateTextFields() {
-        formatPrice()
         if self.titleField.text.isEmpty || self.priceField.text.isEmpty || self.tagsField.text.isEmpty || self.methodField.text.isEmpty || imageView.image == nil {
             add.enabled = false
         }
@@ -125,8 +133,9 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     }
     @IBAction func btnAdd(sender: AnyObject) {
 
+        //TODO: Add drop down 'Pick-up', 'Delivery', 'Meet', 'Ship'
         //TODO: Get location from GPS
-        Bakkle.sharedInstance.addItem(self.titleField.text, description: "", location: "39.417672,-87.330438", price: self.priceField.text, tags: self.tagsField.text, method: self.methodField.text, image:imageView.image!)
+        Bakkle.sharedInstance.addItem(self.titleField.text, description: "", location: "39.417672,-87.330438", price: self.priceField.text, tags: self.tagsField.text, method: /*self.methodField.text*/"Pick-up", image:imageView.image!)
   
         let alertController = UIAlertController(title: "Bakkle", message:
             "Item uploaded to Bakkle.", preferredStyle: UIAlertControllerStyle.Alert)
