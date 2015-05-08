@@ -466,13 +466,13 @@ class Bakkle {
         var body:NSMutableData = NSMutableData()
         
         // auth_token
-        body.appendData("\r\n\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
-        body.appendData("Content-Disposition: form-data; name=\"auth_token\"; \r\n\(auth_token)".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
+//        body.appendData("\r\n\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
+//        body.appendData("Content-Disposition: form-data; name=\"auth_token\"; \r\n\(auth_token)".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
 
         
         body.appendData("\r\n--\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
         
-        body.appendData("Content-Disposition: form-data; name=\"image\"; \(postString)&filename=\"image.jpg\"\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
+        body.appendData("Content-Disposition: form-data; name=\"image\"; filename=\"image.jpg\"\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
         body.appendData("Content-Type: application/octet-stream\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
         body.appendData(imageData)
         body.appendData("\r\n--\(boundary)--\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)

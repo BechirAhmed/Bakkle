@@ -1696,16 +1696,10 @@
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zM0-y0-LRs">
                                 <rect key="frame" x="0.0" y="72" width="375" height="315"/>
                                 <color key="backgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <variation key="heightClass=regular-widthClass=compact" ambiguous="YES">
-                                    <rect key="frame" x="0.0" y="64" width="375" height="436"/>
-                                </variation>
                             </scrollView>
                             <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1QH-Oy-Msu">
                                 <rect key="frame" x="0.0" y="594" width="375" height="73"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <variation key="heightClass=regular-widthClass=compact" ambiguous="YES">
-                                    <rect key="frame" x="0.0" y="667" width="375" height="0.0"/>
-                                </variation>
                             </view>
                             <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8JN-bn-XkF">
                                 <rect key="frame" x="0.0" y="515" width="375" height="39"/>
@@ -1731,12 +1725,9 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="39" id="Rub-WA-2I9"/>
                                 </constraints>
-                                <variation key="heightClass=regular-widthClass=compact" ambiguous="YES">
-                                    <rect key="frame" x="0.0" y="628" width="375" height="39"/>
-                                </variation>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" red="0.20000000000000001" green="0.80392156859999997" blue="0.37254901959999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.1764705882" green="0.75294117650000003" blue="0.23529411759999999" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="1QH-Oy-Msu" firstAttribute="leading" secondItem="1mx-G8-fOz" secondAttribute="leadingMargin" constant="-16" id="59i-YO-tNB"/>
                             <constraint firstItem="zM0-y0-LRs" firstAttribute="leading" secondItem="1mx-G8-fOz" secondAttribute="leadingMargin" constant="-16" id="8lc-RS-GcF"/>
@@ -3144,12 +3135,12 @@
         <image name="btb-want.png" width="1058" height="205"/>
         <image name="btn-add-disabled.png" width="481" height="162"/>
         <image name="btn-add.png" width="481" height="162"/>
-        <image name="btn-addItem.png" width="44" height="35"/>
+        <image name="btn-addItem.png" width="35" height="35"/>
         <image name="btn-cancel.png" width="477" height="158"/>
         <image name="btn-check.png" width="545" height="207"/>
         <image name="btn-email40.png" width="230" height="40"/>
         <image name="btn-facebook40.png" width="230" height="40"/>
-        <image name="btn-menu.png" width="54" height="39"/>
+        <image name="btn-menu.png" width="35" height="35"/>
         <image name="btn-sign-in40.png" width="230" height="40"/>
         <image name="btn-x.png" width="546" height="207"/>
         <image name="icon-cart.png" width="108" height="108"/>
