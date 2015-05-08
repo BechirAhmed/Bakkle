@@ -68,23 +68,25 @@ def detail(request, item_id):
 #--------------------------------------------#
 @csrf_exempt
 @require_POST
-@authenticate
+#TODO: Reinstate auth   @authenticate
 def add_item(request):
+
+    #import pdb; pdb.set_trace()
     # Get the authentication code
-    auth_token = request.POST.get('auth_token')
+    auth_token = request.GET.get('auth_token')
 
     # TODO: Handle location
     # Get the rest of the necessary params from the request
-    title = request.POST.get('title', "")
-    description = request.POST.get('description', "")
-    location = request.POST.get('location')
+    title = request.GET.get('title', "")
+    description = request.GET.get('description', "")
+    location = request.GET.get('location')
     seller_id = auth_token.split('_')[1]
-    price = request.POST.get('price')
-    tags = request.POST.get('tags',"")
-    method = request.POST.get('method')
+    price = request.GET.get('price')
+    tags = request.GET.get('tags',"")
+    method = request.GET.get('method')
 
     # Get the item id if present (If it is present an item will be edited not added)
-    item_id = request.POST.get('item_id', "")
+    item_id = request.GET.get('item_id', "")
 
     # Ensure that required fields are present otherwise send back a failed status
     if (title == None or title == "") or (tags == None or tags == "") or (price == None or price == "") or (method == None or method == ""):
@@ -99,7 +101,7 @@ def add_item(request):
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 
     # Check for the image params. The max number is 5 and is defined in settings
-    
+
     image_urls = imgupload(request, seller_id)
 
     if (item_id == None or item_id == ""):
@@ -356,6 +358,7 @@ def get_buyer_transactions(request):
 #--------------------------------------------#
 # Helper for uploading image to S3
 def handle_file_s3(image_key, f):
+    print "HERE"
     image_string = ""
     for chunk in f.chunks():
         image_string = image_string + chunk
@@ -364,11 +367,12 @@ def handle_file_s3(image_key, f):
     #bucket = conn.create_bucket('com.bakkle.prod')
     bucket = conn.get_bucket(config['S3_BUCKET'])
     k = Key(bucket)
-    image_key = config['S3_BUCKET'] + "_" + image_key 
+    image_key = config['S3_BUCKET'] + "_" + image_key
     k.key = image_key
     # http://boto.readthedocs.org/en/latest/s3_tut.html
     k.set_contents_from_string(image_string)
     k.set_acl('public-read')
+    print config['S3_URL'] + image_key
     return config['S3_URL'] + image_key
     # TODO: Setup connection pool and queue for uploading at volume
 
@@ -389,14 +393,15 @@ def handle_delete_file_s3(image_path):
 # Helper to handle image uploading
 def imgupload(request, seller_id):
     image_urls = ""
-    for i in request.FILES.getlist('image'):
-        uhash = hex(random.getrandbits(128))[2:-1]
-        image_key = "{}_{}.jpg".format(seller_id, uhash)
-        filename = handle_file_s3(image_key, i)
-        if image_urls == "":
-            image_urls = filename
-        else:
-            image_urls = image_urls + "," + filename
+    #for i in request.FILES.getlist('image'):
+    i = request.FILES
+    uhash = hex(random.getrandbits(128))[2:-1]
+    image_key = "{}_{}.jpg".format(seller_id, uhash)
+    filename = handle_file_s3(image_key, i)
+    if image_urls == "":
+        image_urls = filename
+    else:
+        image_urls = image_urls + "," + filename
     return image_urls
 
 # Helper for creating buyer items
