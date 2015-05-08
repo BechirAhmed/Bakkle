@@ -37,6 +37,8 @@ config['AWS_SECRET_KEY'] = 'ghNRiWmxar16OWu9WstYi7x1xyK2z33LE157CCfK'
 config['AWS_ACCESS_KEY'] = 'AKIAJUCSHZSTNFVMEP3Q' # pethessa
 config['AWS_SECRET_KEY'] = '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'
 
+config['S3_URL'] = 'https://s3-us-west-2.amazonaws.com/com.bakkle.prod/'
+
 
 #--------------------------------------------#
 #               Web page requests            #
@@ -64,38 +66,6 @@ def detail(request, item_id):
 #--------------------------------------------#
 #               Item Methods                 #
 #--------------------------------------------#
-def handle_file_s3(image_key, f):
-    full_path = config['local_image_path']+image_key
-    print("Storing {} to S3 bucket {} as {}".format(full_path, config['S3_BUCKET'], image_key))
-
-    image_string = ""
-    for chunk in f.chunks():
-        image_string = image_string + chunk
-
-    conn = S3Connection(config['AWS_ACCESS_KEY'], config['AWS_SECRET_KEY'])
-    #bucket = conn.create_bucket('com.bakkle.prod')
-    bucket = conn.get_bucket(config['S3_BUCKET'])
-    k = Key(bucket)
-    k.key = image_key
-    # http://boto.readthedocs.org/en/latest/s3_tut.html
-    #k.set_contents_from_filename(full_path)
-    k.set_contents_from_string(image_string)
-    k.set_acl('public-read')
-    return "https://s3-us-west-2.amazonaws.com/com.bakkle.prod/" + image_key
-    # TODO: Setup connection pool and queue for uploading at volume
-
-def imgupload(request, seller_id):
-    image_urls = ""
-    for i in request.FILES.getlist('image'):
-        uhash = hex(random.getrandbits(128))[2:-1]
-        image_key = "{}_{}.jpg".format(seller_id, uhash)
-        filename = handle_file_s3(image_key, i)
-        if image_urls == "":
-            image_urls = filename
-        else:
-            image_urls = image_urls + "," + filename
-    return image_urls
-
 @csrf_exempt
 @require_POST
 @authenticate
@@ -149,12 +119,12 @@ def add_item(request):
         # Else get the item
         item = get_object_or_404(Items, pk=item_id);
 
+        # TODO: fix this
         # Remove all previous images
-        old_urls = item.image_urls.split(",")
-        for url in old_urls:
-            # if image exists remove the file
-            if os.path.exists(url):
-                os.remove(url)
+        # old_urls = item.image_urls.split(",")
+        # for url in old_urls:
+        #     # remove image from S3
+        #     handle_delete_file_s3(url)
 
         # Update item fields
         item.title = title
@@ -384,13 +354,50 @@ def get_buyer_transactions(request):
 #--------------------------------------------#
 #             Helper Functions               #
 #--------------------------------------------#
-# Helper for filepath generation
-def make_filepath(seller_id):
-    filename = str(seller_id) + "_" + (md5.new(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")).hexdigest())[0:10] + ".png"
-    filepath = os.path.join(os.getcwd(), "..", "img", datetime.datetime.now().strftime('%Y-%m'), filename)
-    print("Filepath\n")
-    print(filepath)
-    return filepath
+# Helper for uploading image to S3
+def handle_file_s3(image_key, f):
+    image_string = ""
+    for chunk in f.chunks():
+        image_string = image_string + chunk
+
+    conn = S3Connection(config['AWS_ACCESS_KEY'], config['AWS_SECRET_KEY'])
+    #bucket = conn.create_bucket('com.bakkle.prod')
+    bucket = conn.get_bucket(config['S3_BUCKET'])
+    k = Key(bucket)
+    image_key = config['S3_BUCKET'] + "_" + image_key 
+    k.key = image_key
+    # http://boto.readthedocs.org/en/latest/s3_tut.html
+    k.set_contents_from_string(image_string)
+    k.set_acl('public-read')
+    return config['S3_URL'] + image_key
+    # TODO: Setup connection pool and queue for uploading at volume
+
+#TODO: Fix this
+def handle_delete_file_s3(image_path):
+    file_parts = image_path.split("_")
+    image_key = image_path.replace(config['S3_URL'], "")
+    bucket_name = config['S3_BUCKET']
+    if (len(file_parts) == 3):
+        bucket_name = file_parts[0]
+    conn = S3Connection(config['AWS_ACCESS_KEY'], config['AWS_SECRET_KEY'])
+    #bucket = conn.create_bucket('com.bakkle.prod')
+    bucket = conn.get_bucket(bucket_name)
+    print(image_key)
+    k = bucket.get_key(image_key)
+    k.delete()
+
+# Helper to handle image uploading
+def imgupload(request, seller_id):
+    image_urls = ""
+    for i in request.FILES.getlist('image'):
+        uhash = hex(random.getrandbits(128))[2:-1]
+        image_key = "{}_{}.jpg".format(seller_id, uhash)
+        filename = handle_file_s3(image_key, i)
+        if image_urls == "":
+            image_urls = filename
+        else:
+            image_urls = image_urls + "," + filename
+    return image_urls
 
 # Helper for creating buyer items
 def add_item_to_buyer_items(request, status):
