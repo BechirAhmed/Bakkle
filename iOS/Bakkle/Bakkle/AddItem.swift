@@ -45,11 +45,11 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     }
     
     func textFieldDidBeginEditing(textField: UITextField) {
-        animateViewMoving(true, moveValue: 130)
+        animateViewMoving(true, moveValue: 165)
     }
     
     func textFieldDidEndEditing(textField: UITextField) {
-        animateViewMoving(false, moveValue: 130)
+        animateViewMoving(false, moveValue: 165)
         validateTextFields()
     }
     
@@ -102,6 +102,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     }
     
     func validateTextFields() {
+        formatPrice()
         if self.titleField.text.isEmpty || self.priceField.text.isEmpty || self.tagsField.text.isEmpty || self.methodField.text.isEmpty || imageView.image == nil {
             add.enabled = false
         }
@@ -117,15 +118,16 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     
     @IBOutlet weak var add: UIButton!    
     
+    func formatPrice() {
+        if (priceField.text as String).lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
+            priceField.text = String(format: "%.2f", (priceField.text! as NSString).floatValue )
+        }
+    }
     @IBAction func btnAdd(sender: AnyObject) {
-        var imageData = UIImageJPEGRepresentation(imageView.image, 0.5)
-        var base64String = imageData.base64EncodedStringWithOptions(NSDataBase64EncodingOptions.allZeros)
-        var escapedString = base64String.stringByAddingPercentEncodingWithAllowedCharacters(.URLHostAllowedCharacterSet())
 
-        Bakkle.sharedInstance.addItem(self.titleField.text, description: "", location: "", price: self.priceField.text, tags: self.tagsField.text, method: self.methodField.text, imageToSend: escapedString!)
+        //TODO: Get location from GPS
+        Bakkle.sharedInstance.addItem(self.titleField.text, description: "", location: "39.417672,-87.330438", price: self.priceField.text, tags: self.tagsField.text, method: self.methodField.text, image:imageView.image!)
   
-        Bakkle.sharedInstance.postImage(imageView.image!)
-        
         let alertController = UIAlertController(title: "Bakkle", message:
             "Item uploaded to Bakkle.", preferredStyle: UIAlertControllerStyle.Alert)
         

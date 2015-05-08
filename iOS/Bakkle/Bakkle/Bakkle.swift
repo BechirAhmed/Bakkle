@@ -440,17 +440,33 @@ class Bakkle {
         
     }
     
-    func addItem(title: String, description: String, location: String, price: String, tags: String, method: String, imageToSend: String) {
-        let url: NSURL? = NSURL(string: url_base + url_add_item)
+    func addItem(title: String, description: String, location: String, price: String, tags: String, method: String, image: UIImage) {
+        let url: NSURL? = NSURL(string: url_base + url_add_item + "?auth_token=\(self.auth_token)")
+        
         let request = NSMutableURLRequest(URL: url!)
-        let location = "39.417672,-87.330438"
-        
         request.HTTPMethod = "POST"
-        let postString = "device_uuid=\(self.deviceUUID)&title=\(title)&description=\(description)&location=\(location)&auth_token=\(self.auth_token)&price=\(price)&tags=\(tags)&method=\(method)&image1=\(imageToSend)"
-        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+        let postString = "device_uuid=\(self.deviceUUID)&title=\(title)&description=\(description)&location=\(location)&auth_token=\(self.auth_token)&price=\(price)&tags=\(tags)&method=\(method)"
         
-        info("[Bakkle] addItem")
-        info("URL: \(url) METHOD: \(request.HTTPMethod) BODY: --binary--")
+
+        let imageData: NSData = UIImageJPEGRepresentation(image, 0.5)
+        let postLength: String = "\(imageData.length)"
+        
+        
+        var boundary:String = "---------------------------14737809831466499882746641449"
+        var contentType:String = "multipart/form-data; boundary=\(boundary)"
+        request.addValue(contentType, forHTTPHeaderField: "Content-Type")
+        
+        var body:NSMutableData = NSMutableData()
+        body.appendData("\r\n--\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
+        
+        body.appendData("Content-Disposition: form-data; name=\"image\"; \(postString)&filename=\"image.jpg\"\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
+        body.appendData("Content-Type: application/octet-stream\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
+        body.appendData(imageData)
+        body.appendData("\r\n--\(boundary)--\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
+        request.HTTPBody = body
+        
+        info("[Bakkle] imgupload")
+        info("URL: \(url) METHOD: \(request.HTTPMethod) BODY: --binary blob-- LENGTH: \(imageData.length)")
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
             data, response, error in
             
@@ -459,19 +475,14 @@ class Bakkle {
                 return
             }
             
-            let responseString: String = NSString(data: data, encoding: NSUTF8StringEncoding)! as String
-            
-//            let responseString = "{\"status\": 1, feed\": [{\"pk\": \"121\", \"image_urls\": [{\"url\": "/bakkle/www/bakkle/img\2015\04\30\/7e8113cb22.png"}{\"url\": ""}], \"title\": \"Gd\", \"description\": "", \"location\": "", \"seller\": \"2\", \"price\": \"54.00\", \"tags\": [{\"tag\": \"Hs\"}], \"method\": \"Hs\", \"status\": \"Active\", \"post_date\": \"2015-04-30 18:43:46\", \"times_reported\": \"0\"}]}"
-            
-            
-            println("Response: \(responseString)")
-            var parseError: NSError?
-            
-            self.responseDict = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! NSDictionary!
-            self.debg("RESPONSE DICT IS: \(self.responseDict)")
+            if let responseString = NSString(data: data, encoding: NSUTF8StringEncoding) {
+                self.debg("Response: \(responseString)")
+                
+                // TODO: Refresh UI
+                //success()
+            }
         }
         task.resume()
-
     }
     
     /* reset feed items on server for DEMO */
@@ -503,55 +514,6 @@ class Bakkle {
         task.resume()
     }
 
-    /* Send image to server */
-    func postImage(image: UIImage) {
-
-        let imageData: NSData = UIImageJPEGRepresentation(image, 0.5)
-        let postLength: String = "\(imageData.length)"
-        
-        let url:NSURL? = NSURL(string: url_base + "items/imgupload/?auth_token=\(self.auth_token)")
-        let request = NSMutableURLRequest(URL: url!)
-        
-        request.HTTPMethod = "POST"
-//        let postString = "auth_token=\(self.auth_token)&device_uuid=\(self.deviceUUID)"
-//        request.HTTPBody = imageData
-//        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-//        request.setValue(postLength, forHTTPHeaderField: "Content-Length")
-        
-        
-        var boundary:String = "---------------------------14737809831466499882746641449"
-        var contentType:String = "multipart/form-data; boundary=\(boundary)"
-        request.addValue(contentType, forHTTPHeaderField: "Content-Type")
-        
-        var body:NSMutableData = NSMutableData()
-        body.appendData("\r\n--\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
-
-        body.appendData("Content-Disposition: form-data; name=\"image\"; filename=\"tiger.jpg\"\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
-        body.appendData("Content-Type: application/octet-stream\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
-        body.appendData(imageData)
-        body.appendData("\r\n--\(boundary)--\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
-        request.HTTPBody = body
-        
-        info("[Bakkle] imgupload")
-        info("URL: \(url) METHOD: \(request.HTTPMethod) BODY: --binary blob-- LENGTH: \(imageData.length)")
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
-            data, response, error in
-            
-            if error != nil {
-                self.err("error= \(error)")
-                return
-            }
-            
-            if let responseString = NSString(data: data, encoding: NSUTF8StringEncoding) {
-                self.debg("Response: \(responseString)")
-                
-                // TODO: Refresh UI
-                //success()
-            }
-        }
-        task.resume()
-    }
- 
     func getFilter() {
         var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
 
