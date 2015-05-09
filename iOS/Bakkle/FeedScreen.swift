@@ -58,7 +58,7 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
         
         /* Menu reveal */
         if self.revealViewController() != nil {
-            menuBtn.targetForAction("revealToggle:", withSender: self)
+            //menuBtn.targetForAction("revealToggle:", withSender: self)
             self.revealViewController().rearViewRevealWidth = 270
         }
         
@@ -83,11 +83,12 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
         super.viewWillAppear(animated)
         
         filterChanged()
-        
+
         // Reset the swipeview if it is missing
-        if self.swipeView == nil {
+//        if self.swipeView == nil {
             resetSwipeView()
-        }
+//        }
+        enableSwipe()
         
         println("Loading existing feed items")
         if fromCamera == false {
@@ -110,19 +111,44 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
 
     
     @IBAction func menuButtonPressed(sender: AnyObject) {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+        self.disableSwipe()
         self.revealViewController().revealToggleAnimated(true)
         
         //TODO: remove this when feed is updated via push
         requestUpdates()
     }
     @IBAction func btnX(sender: AnyObject) {
-        self.swipeView.mdc_swipe(MDCSwipeDirection.Left)
+        if self.swipeView != nil {
+            self.swipeView.mdc_swipe(MDCSwipeDirection.Left)
+        }
     }
     @IBAction func btnCheck(sender: AnyObject) {
-        self.swipeView.mdc_swipe(MDCSwipeDirection.Right)
+        if self.swipeView != nil {
+            self.swipeView.mdc_swipe(MDCSwipeDirection.Right)
+        }
     }
     
-    
+    func disableSwipe() {
+        if self.swipeView != nil {
+            self.swipeView.userInteractionEnabled = false
+            self.swipeView = nil
+        }
+        if self.bottomView != nil {
+            self.bottomView.userInteractionEnabled = false
+            self.bottomView = nil
+        }
+    }
+    func enableSwipe() {
+        if self.swipeView != nil {
+            self.swipeView.userInteractionEnabled = true
+            self.swipeView = nil
+        }
+        if self.bottomView != nil {
+            self.bottomView.userInteractionEnabled = true
+            self.bottomView = nil
+        }
+    }
     /* UISearch Bar delegate */
     
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
@@ -194,7 +220,8 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
         println("[FeedScreen] Resetting swipe view")
         
         /* First time page is loaded, swipe view will not exist and we need to create it. */
-        if Bakkle.sharedInstance.feedItems.count > 0 {
+        if Bakkle.sharedInstance.feedItems != nil &&
+           Bakkle.sharedInstance.feedItems.count > 0 {
             if self.swipeView != nil {
                 self.swipeView.removeFromSuperview()
                 self.swipeView = nil
@@ -267,7 +294,6 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
         if Bakkle.sharedInstance.feedItems.count > 0 {
             if self.swipeView != nil {
                 self.swipeView.alpha = 1
-            }
             
             let topItem = Bakkle.sharedInstance.feedItems[0]
             if let x: AnyObject = topItem.valueForKey("pk") {
@@ -298,25 +324,26 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
                     if Bakkle.sharedInstance.feedItems.count > 1 {
                         if self.bottomView != nil {
                             self.bottomView.alpha = 1
-                        }
-                        var bottomItem = Bakkle.sharedInstance.feedItems[1]
-                        let bottomURLs = bottomItem.valueForKey("image_urls") as! NSArray
-                        let bottomTitle: String = bottomItem.valueForKey("title") as! String
-                        let bottomPrice: String = bottomItem.valueForKey("price") as! String
-                        
-                        self.bottomView.userInteractionEnabled = false
-                        
-                        //println("[FeedScreen] Downloading image (bottom) \(bottomURLs)")
-                        let bottomURL = bottomURLs[0] as! String
-                        let imgURL = NSURL(string: bottomURL)
-                        dispatch_async(dispatch_get_main_queue()) {
-                            //println("[FeedScreen] displaying image (bottom)")
-                            if let x = imgURL {
-                                self.bottomView.imageView.hnk_setImageFromURL(imgURL!)
 
-                                self.bottomView.imageView.contentMode = UIViewContentMode.ScaleAspectFill
+                            var bottomItem = Bakkle.sharedInstance.feedItems[1]
+                            let bottomURLs = bottomItem.valueForKey("image_urls") as! NSArray
+                            let bottomTitle: String = bottomItem.valueForKey("title") as! String
+                            let bottomPrice: String = bottomItem.valueForKey("price") as! String
+                            
+                            self.bottomView.userInteractionEnabled = false
+                            
+                            //println("[FeedScreen] Downloading image (bottom) \(bottomURLs)")
+                            let bottomURL = bottomURLs[0] as! String
+                            let imgURL = NSURL(string: bottomURL)
+                            dispatch_async(dispatch_get_main_queue()) {
+                                //println("[FeedScreen] displaying image (bottom)")
+                                if let x = imgURL {
+                                    self.bottomView.imageView.hnk_setImageFromURL(imgURL!)
+
+                                    self.bottomView.imageView.contentMode = UIViewContentMode.ScaleAspectFill
+                                }
+                                self.bottomView.nameLabel.text = bottomTitle + ",  $" + bottomPrice
                             }
-                            self.bottomView.nameLabel.text = bottomTitle + ",  $" + bottomPrice
                         }
                     } else {
                         println("Only one item, hiding bottom card")
@@ -327,6 +354,7 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
                         }
                     }
                 }
+            }
         } else {
             println("No items, hiding both cards")
             /* No items left in feed */

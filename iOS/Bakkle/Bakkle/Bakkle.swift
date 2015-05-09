@@ -139,9 +139,10 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         /* TODO: this will request a data update from the server */
     }
     
-    func appVersion() -> (String, String) {
+    func appVersion() -> (build: String, bundle: String) {
         let build: String = NSBundle.mainBundle().infoDictionary?["CFBundleVersion"] as! String
-        let bundleName: String = NSBundle.mainBundle().infoDictionary?["CFBundleNameKey"] as! String
+        let bundleName: String = NSBundle.mainBundle().infoDictionary?["CFBundleName"] as! String
+        let shortVersion: String = NSBundle.mainBundle().infoDictionary?["CFBundleShortVersionString"] as! String
         
         return (build,bundleName)
     }
@@ -360,7 +361,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             
             var parseError: NSError?
             self.responseDict = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! NSDictionary!
-            self.debg("RESPONSE DICT IS: \(self.responseDict)")
+            self.info("RESPONSE DICT IS: \(self.responseDict)")
             
             if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
                 self.garageItems = self.responseDict.valueForKey("seller_garage") as! Array
@@ -635,27 +636,66 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     
     func restoreData() {
         var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
-        if let f = userDefaults.objectForKey("feedItems") as? NSString {
-            var parseError: NSError?
-            var jsonData: NSData = f.dataUsingEncoding(NSUTF8StringEncoding)!
-            self.feedItems = NSJSONSerialization.JSONObjectWithData(jsonData, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! Array
-            self.info("Restored \( (self.feedItems as Array).count) items.")
-            NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkFeedUpdate, object: self)
+        
+        // We force a version upgrade
+        if let version = userDefaults.objectForKey("version") as? NSString {
+            info("Stored version: \(version)")
+            info("Current version: \(self.appVersion().build)")
+            if version == self.appVersion().build {
+            
+                // restore FEED
+                if let f = userDefaults.objectForKey("feedItems") as? NSString {
+                    var parseError: NSError?
+                    var jsonData: NSData = f.dataUsingEncoding(NSUTF8StringEncoding)!
+                    self.feedItems = NSJSONSerialization.JSONObjectWithData(jsonData, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! Array
+                    self.info("Restored \( (self.feedItems as Array).count) feed items.")
+                    NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkFeedUpdate, object: self)
+                }
+                
+                // restore GARAGE
+                if let f = userDefaults.objectForKey("garageItems") as? NSString {
+                    var parseError: NSError?
+                    var jsonData: NSData = f.dataUsingEncoding(NSUTF8StringEncoding)!
+                    self.garageItems = NSJSONSerialization.JSONObjectWithData(jsonData, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! Array
+                    self.info("Restored \( (self.garageItems as Array).count) garage items.")
+                    NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkGarageUpdate, object: self)
+                }
+                
+                return
+                
+            }
         }
-        if let g = userDefaults.objectForKey("garageItems") as? [NSObject] {
-          //  self.garageItems = g
-        }
+        
+        // ELSE: Purge old version data
+        
     }
     func persistData() {
         var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
-        let data = NSJSONSerialization.dataWithJSONObject(self.feedItems, options: nil, error: nil)
-        let string = NSString(data: data!, encoding: NSUTF8StringEncoding)
-        userDefaults.setObject(string,   forKey: "feedItems")
-        self.info("Stored \( (self.feedItems as Array).count) items")
         
-//        let data = NSJSONSerialization.dataWithJSONObject(self.garageItems, options: nil, error: nil)
-//        let str = NSString(data: data!, encoding: NSUTF8StringEncoding)
-//        userDefaults.setObject(str, forKey: "garageItems")
+        // Store FEED
+        if self.feedItems != nil {
+            let data = NSJSONSerialization.dataWithJSONObject(self.feedItems, options: nil, error: nil)
+            let string = NSString(data: data!, encoding: NSUTF8StringEncoding)
+            userDefaults.setObject(string,   forKey: "feedItems")
+            self.info("Stored \( (self.feedItems as Array).count) feed items")
+        } else {
+            userDefaults.removeObjectForKey("feedItems")
+        }
+        
+        // Store GARAGE
+        if self.garageItems != nil {
+            let data2 = NSJSONSerialization.dataWithJSONObject(self.garageItems, options: nil, error: nil)
+            let string2 = NSString(data: data2!, encoding: NSUTF8StringEncoding)
+            userDefaults.setObject(string2,   forKey: "garageItems")
+            self.info("Stored \( (self.garageItems as Array).count) garage items")
+        } else {
+            userDefaults.removeObjectForKey("garageItems")
+        }
+        
+        // Store VERSION
+        userDefaults.setObject(self.appVersion().build, forKey: "version")
+        self.info("Stored version = \(self.appVersion().build)")
+        
         userDefaults.synchronize()
     }
     
