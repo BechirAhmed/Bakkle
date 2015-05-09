@@ -95,16 +95,16 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
             }
         }
         /* Temporary hack for developing to speed testing of add-item */
-        if Bakkle.sharedInstance.facebook_id == 686426858203 {
-            var formatter: NSDateFormatter = NSDateFormatter()
-            formatter.dateFormat = "MM-dd-HH-mm-ss"
-            let dateTimePrefix: String = formatter.stringFromDate(NSDate())
-            titleField.text = "Tiger \(dateTimePrefix)"
-            priceField.text = "34000.00"
-            tagsField.text = "tiger predator dictator-loot"
-            self.validateTextFields()
-            add.enabled = true
-        }
+//        if Bakkle.sharedInstance.facebook_id == 686426858203 {
+//            var formatter: NSDateFormatter = NSDateFormatter()
+//            formatter.dateFormat = "MM-dd-HH-mm-ss"
+//            let dateTimePrefix: String = formatter.stringFromDate(NSDate())
+//            titleField.text = "Tiger \(dateTimePrefix)"
+//            priceField.text = "34000.00"
+//            tagsField.text = "tiger predator dictator-loot"
+//            self.validateTextFields()
+//            add.enabled = true
+//        }
         imageView.contentMode = UIViewContentMode.ScaleAspectFill
         imageView.clipsToBounds = true
         
