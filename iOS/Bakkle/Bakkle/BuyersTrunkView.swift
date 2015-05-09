@@ -63,6 +63,9 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
         
         Bakkle.sharedInstance.populateTrunk({});
     }
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1

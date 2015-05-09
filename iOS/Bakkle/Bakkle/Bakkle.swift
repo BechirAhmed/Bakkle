@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Bakkle {
+class Bakkle : NSObject, CLLocationManagerDelegate {
     
     let apiVersion: Float = 1.2
     var url_base: String          = "https://app.bakkle.com/"
@@ -26,13 +26,17 @@ class Bakkle {
     let url_buyertransactions: String   = "items/get_buyer_transactions/"
     let url_sellertransactions: String  = "items/get_seller_transactions/"
 
-    static let bkTrunkUpdate = "com.bakkle.trunkUpdate"
+    static let bkFeedUpdate    = "com.bakkle.feedUpdate"
+    static let bkGarageUpdate  = "com.bakkle.garageUpdate"
+    static let bkTrunkUpdate   = "com.bakkle.trunkUpdate"
+    static let bkHoldingUpdate = "com.bakkle.holdingUpdate"
+    static let bkFilterChanged = "com.bakkle.filterChanged"
     
     /* 1 - ERROR
      * 2 - INFO
      * 3 - DEBUG
      */
-    var debug: Int = 3 // 0=off
+    var debug: Int = 2 // 0=off
     var serverNum: Int = 0
     var deviceUUID : String = UIDevice.currentDevice().identifierForVendor.UUIDString
     
@@ -56,6 +60,7 @@ class Bakkle {
     var filter_number: Float = 80
     
     var search_text: String = ""
+    var user_location: String = ""
     
     class var sharedInstance: Bakkle {
         struct Static {
@@ -64,15 +69,58 @@ class Bakkle {
         return Static.instance
     }
 
-    init() {
+    override init() {
+        super.init()
         info("API initialized \(apiVersion)");
         serverNum = NSUserDefaults.standardUserDefaults().integerForKey("server")
         setServer()
         info("Using server: \(self.serverNum) \(self.url_base)")
-        
+
         self.getFilter()
         self.restoreData()
+        self.initLocation()
     }
+    
+    /* Location */
+    let locationManager: CLLocationManager = CLLocationManager()
+    func initLocation() {
+        // Request permission
+        locationManager.requestWhenInUseAuthorization()
+        
+        // load last location (or set default)
+        var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        if let f = userDefaults.objectForKey("user_location") as? NSString {
+            self.user_location = f as String
+            self.info("Restored user's last location: \(self.user_location)")
+        } else {
+            // Phony "default" location
+            self.user_location = "39.417672,-87.330438"
+            self.info("Set phony default location: \(self.user_location)")
+        }
+
+        if CLLocationManager.locationServicesEnabled() {
+            locationManager.delegate = self
+            locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+            if CLLocationManager.significantLocationChangeMonitoringAvailable() {
+                locationManager.startMonitoringSignificantLocationChanges()
+            }
+        } else {
+            // TODO : Warn no location services available
+        }
+    }
+    func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
+    }
+    func locationManager(manager: CLLocationManager!, didUpdateToLocation newLocation: CLLocation!, fromLocation oldLocation: CLLocation!) {
+        
+        self.user_location = "\( newLocation.coordinate.latitude ), \( newLocation.coordinate.longitude )"
+        self.debg("Received new location: \(self.user_location)")
+        
+        // Store location
+        var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.setObject(self.user_location, forKey: "user_location")
+        userDefaults.synchronize()
+    }
+    /* End location */
     
     func setServer() {
         switch( serverNum )
@@ -81,7 +129,8 @@ class Bakkle {
             case 1: self.url_base = "localhost"
             case 2: self.url_base = "http://bakkle.rhventures.org/"
             case 3: self.url_base = "http://137.112.63.186:8000/"
-            case 4: self.url_base = "http://137.112.57.140:8000/"
+            case 4: self.url_base = "http://10.0.0.118:8000/"
+            //case 4: self.url_base = "http://137.112.57.140:8000/"
             default: self.url_base = "https://app.bakkle.com/"
         }
     }
@@ -256,6 +305,22 @@ class Bakkle {
                 //TODO: THIS IS WRONG
                 //if responseDict.valueForKey("status")?.integerValue == 1 {
                     self.persistData()
+                
+                switch(status){
+                case "meh":
+                    break
+                case "want":
+                    NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkGarageUpdate, object: self)
+                    break
+                case "hold":
+                    NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkHoldingUpdate, object: self)
+                    break
+                case "report":
+                    break
+                default:
+                    break;
+                    
+                }
                     success()
               //  }
 
@@ -300,6 +365,7 @@ class Bakkle {
             if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
                 self.garageItems = self.responseDict.valueForKey("seller_garage") as! Array
                 self.persistData()
+                NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkGarageUpdate, object: self)
                 success()
             }
             
@@ -341,6 +407,7 @@ class Bakkle {
             if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
                // self.holdingItems = self.responseDict.valueForKey("holding_item") as! Array
                 self.persistData()
+                NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkHoldingUpdate, object: self)
                 success()
             }
             
@@ -397,11 +464,10 @@ class Bakkle {
         let url: NSURL? = NSURL(string: url_base + url_feed)
         let request = NSMutableURLRequest(URL: url!)
         
-        //TODO: change this location
-//        let search_text = "mower"
+        let encLocation = user_location.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
         request.HTTPMethod = "POST"
-        let postString = "auth_token=\(self.auth_token)&device_uuid=\(self.deviceUUID)&search_text=\(self.search_text)&filter_distance=\(Int(self.filter_distance))&filter_price=\(Int(self.filter_price))&filter_number=\(Int(self.filter_number))"
+        let postString = "auth_token=\(self.auth_token)&device_uuid=\(self.deviceUUID)&search_text=\(self.search_text)&filter_distance=\(Int(self.filter_distance))&filter_price=\(Int(self.filter_price))&filter_number=\(Int(self.filter_number))&user_location=\(encLocation)"
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
         
         info("[Bakkle] populateFeed")
@@ -421,11 +487,15 @@ class Bakkle {
             
             var parseError: NSError?
             self.responseDict = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! NSDictionary!
-            self.debg("RESPONSE DICT IS: \(self.responseDict)")
+            self.info("RESPONSE DICT IS: \(self.responseDict)")
             
             if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
-                self.feedItems = self.responseDict.valueForKey("feed") as! Array
-                self.persistData()
+                if let feedEl: AnyObject = self.responseDict["feed"] {
+                    self.feedItems = self.responseDict.valueForKey("feed") as! Array
+                    self.persistData()
+                    NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkFeedUpdate, object: self)
+                }
+                //note called on success, not 'new items'
                 success()
             }
             
@@ -440,7 +510,7 @@ class Bakkle {
         
     }
     
-    func addItem(title: String, description: String, location: String, price: String, tags: String, method: String, image: UIImage) {
+    func addItem(title: String, description: String, location: String, price: String, tags: String, method: String, image: UIImage, success: ()->()) {
         
         // URL encode some vars.
         let escTitle = title.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
@@ -491,8 +561,7 @@ class Bakkle {
             if let responseString = NSString(data: data, encoding: NSUTF8StringEncoding) {
                 self.debg("Response: \(responseString)")
                 
-                // TODO: Refresh UI
-                //success()
+                success()
             }
         }
         task.resume()
@@ -548,6 +617,7 @@ class Bakkle {
         }else{
             self.filter_number = 100
         }
+        NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkFilterChanged, object: self)
     }
     func setFilter(ffilter_distance: Float, ffilter_price: Float, ffilter_number:Float) {
         self.filter_distance = ffilter_distance
@@ -559,12 +629,18 @@ class Bakkle {
         userDefaults.setFloat(self.filter_price,    forKey: "filter_price")
         userDefaults.setFloat(self.filter_number,   forKey: "filter_number")
         userDefaults.synchronize()
+        
+        NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkFilterChanged, object: self)
     }
     
     func restoreData() {
         var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
-        if let f = userDefaults.objectForKey("feedItems") as? [NSObject] {
-           self.feedItems = f
+        if let f = userDefaults.objectForKey("feedItems") as? NSString {
+            var parseError: NSError?
+            var jsonData: NSData = f.dataUsingEncoding(NSUTF8StringEncoding)!
+            self.feedItems = NSJSONSerialization.JSONObjectWithData(jsonData, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! Array
+            self.info("Restored \( (self.feedItems as Array).count) items.")
+            NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkFeedUpdate, object: self)
         }
         if let g = userDefaults.objectForKey("garageItems") as? [NSObject] {
           //  self.garageItems = g
@@ -572,8 +648,14 @@ class Bakkle {
     }
     func persistData() {
         var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
-        //userDefaults.setObject(self.feedItems,   forKey: "feedItems")
-      //  userDefaults.setObject(self.garageItems, forKey: "garageItems")
+        let data = NSJSONSerialization.dataWithJSONObject(self.feedItems, options: nil, error: nil)
+        let string = NSString(data: data!, encoding: NSUTF8StringEncoding)
+        userDefaults.setObject(string,   forKey: "feedItems")
+        self.info("Stored \( (self.feedItems as Array).count) items")
+        
+//        let data = NSJSONSerialization.dataWithJSONObject(self.garageItems, options: nil, error: nil)
+//        let str = NSString(data: data!, encoding: NSUTF8StringEncoding)
+//        userDefaults.setObject(str, forKey: "garageItems")
         userDefaults.synchronize()
     }
     

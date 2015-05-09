@@ -1085,7 +1085,7 @@
                                             <action selector="btnReset:" destination="Og7-OV-A1I" eventType="touchUpInside" id="DIJ-Hr-pIC"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LDH-xT-qeE">
+                                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LDH-xT-qeE">
                                         <rect key="frame" x="35" y="307" width="258" height="46"/>
                                         <state key="normal" title="(DEVELOPERS ONLY)">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>

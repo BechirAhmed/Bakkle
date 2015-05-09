@@ -90,12 +90,20 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
             /* This allows us to test adding image using simulator */
             if UIDevice.currentDevice().model == "iPhone Simulator" {
                 imageView.image = UIImage(named: "tiger.jpg")
-                titleField.text = "Tiger"
-                priceField.text = "34000.00"
-                tagsField.text = "tiger predator dictator-loot"
             } else {
                 imageView.image = UIImage(named: "blank.png")
             }
+        }
+        /* Temporary hack for developing to speed testing of add-item */
+        if Bakkle.sharedInstance.facebook_id == 686426858203 {
+            var formatter: NSDateFormatter = NSDateFormatter()
+            formatter.dateFormat = "MM-dd-HH-mm-ss"
+            let dateTimePrefix: String = formatter.stringFromDate(NSDate())
+            titleField.text = "Tiger \(dateTimePrefix)"
+            priceField.text = "34000.00"
+            tagsField.text = "tiger predator dictator-loot"
+            self.validateTextFields()
+            add.enabled = true
         }
         imageView.contentMode = UIViewContentMode.ScaleAspectFill
         imageView.clipsToBounds = true
@@ -120,11 +128,6 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         else {
             add.enabled = true
         }
-//        self.titleField.text = "title"
-//        self.priceField.text = "2.08"
-//        self.tagsField.text = "tag lindsey tag"
-//        self.methodField.text = "air"
-//        add.enabled = true
     }
     
     @IBOutlet weak var add: UIButton!    
@@ -135,19 +138,45 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         }
     }
     @IBAction func btnAdd(sender: AnyObject) {
-
+        self.titleField.enabled = false
+        self.priceField.enabled = false
+        self.tagsField.enabled = false
+        self.methodField.enabled = false
+        add.enabled = false
+        
+        var activityView: UIActivityIndicatorView = UIActivityIndicatorView()
+        activityView.center = self.view.center
+        activityView.startAnimating()
+        self.view.addSubview(activityView)
+        
         //TODO: Add drop down 'Pick-up', 'Delivery', 'Meet', 'Ship'
         //TODO: Get location from GPS
-        Bakkle.sharedInstance.addItem(self.titleField.text, description: "", location: "39.417672,-87.330438", price: self.priceField.text, tags: self.tagsField.text, method: /*self.methodField.text*/"Pick-up", image:imageView.image!)
-  
-        let alertController = UIAlertController(title: "Bakkle", message:
-            "Item uploaded to Bakkle.", preferredStyle: UIAlertControllerStyle.Alert)
-        
-        let dismissAction = UIAlertAction(title: "OK!", style: UIAlertActionStyle.Default) { (action) -> Void in
-            self.dismissViewControllerAnimated(true, completion: nil)
-        }
-        alertController.addAction(dismissAction)
-        self.presentViewController(alertController, animated: true, completion: nil)
+        var factor = imageView.image!.size.height/imageView.image!.size.width
+        var size = CGSize(width: 1100, height: 1100*factor)
+        imageView.image!.resize(size, completionHandler: {(scaledImg:UIImage,bob:NSData) -> () in
+            
+            Bakkle.sharedInstance.addItem(self.titleField.text, description: "", location: Bakkle.sharedInstance.user_location, price: self.priceField.text, tags: self.tagsField.text, method: /*self.methodField.text*/"Pick-up", image:scaledImg, success: {
+
+                activityView.stopAnimating()
+                activityView.removeFromSuperview()
+                
+                // We just added one so schedule an update.
+                // TODO: Could just add this to the feed
+                // and hope we are fairly current.
+                dispatch_async(dispatch_get_main_queue()) {
+                    Bakkle.sharedInstance.populateFeed({})
+                    
+                    let alertController = UIAlertController(title: "Bakkle", message:
+                        "Item uploaded to Bakkle.", preferredStyle: UIAlertControllerStyle.Alert)
+                    
+                    let dismissAction = UIAlertAction(title: "OK!", style: UIAlertActionStyle.Default) { (action) -> Void in
+                        self.dismissViewControllerAnimated(true, completion: nil)
+                    }
+                    alertController.addAction(dismissAction)
+                    self.presentViewController(alertController, animated: true, completion: nil)
+                }
+            } /* TODO: Fail, warn*/)
+        })
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
