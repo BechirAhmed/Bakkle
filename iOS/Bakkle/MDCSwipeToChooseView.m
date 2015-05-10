@@ -126,7 +126,9 @@ static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
     self.holdView = [[UIView alloc] initWithFrame:frame];
     [self.holdView constructBorderedLabelWithText:self.options.holdText
                                              color:self.options.holdColor
-                                             angle:self.options.holdRotationAngle];
+                                             angle:self.options.holdRotationAngle
+                                          textSize:self.options.holdTextSize
+                                                ];
     self.holdView.alpha = 0.f;
     [self.imageView addSubview:self.holdView];
 }
@@ -134,7 +136,11 @@ static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
 - (void)constructReportView {
     CGRect frame = CGRectMake(CGRectGetMidX(_imageView.bounds)/2, MDCSwipeToChooseViewTopPadding, CGRectGetMidX(_imageView.bounds), MDCSwipeToChooseViewLabelWidth);
     self.reportView = [[UIImageView alloc] initWithFrame:frame];
-    [self.reportView constructBorderedLabelWithText:self.options.reportText color:self.options.reportColor angle:self.options.reportRotationAngle];
+    [self.reportView constructBorderedLabelWithText:self.options.reportText
+                                              color:self.options.reportColor
+                                              angle:self.options.reportRotationAngle
+                                           textSize:self.options.reportTextSize
+        ];
     
     self.reportView.alpha =  0.f;
     [self.imageView addSubview:self.reportView];
@@ -148,7 +154,9 @@ static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
     self.likedView = [[UIView alloc] initWithFrame:frame];
     [self.likedView constructBorderedLabelWithText:self.options.likedText
                                              color:self.options.likedColor
-                                             angle:self.options.likedRotationAngle];
+                                             angle:self.options.likedRotationAngle
+                                          textSize:self.options.likedTextSize
+];
     self.likedView.alpha = 0.f;
     [self.imageView addSubview:self.likedView];
 }
@@ -162,7 +170,9 @@ static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
                                                                   MDCSwipeToChooseViewLabelWidth)];
     [self.nopeView constructBorderedLabelWithText:self.options.nopeText
                                             color:self.options.nopeColor
-                                            angle:self.options.nopeRotationAngle];
+                                            angle:self.options.nopeRotationAngle
+                                         textSize:self.options.nopeTextSize
+];
     self.nopeView.alpha = 0.f;
     [self.imageView addSubview:self.nopeView];
 }

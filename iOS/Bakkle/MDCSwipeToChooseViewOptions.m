@@ -33,18 +33,22 @@
         _likedText = [NSLocalizedString(@"WANT", nil) uppercaseString];
         _likedColor = [UIColor colorWith8BitRed:29.f green:245.f blue:106.f alpha:1.f];
         _likedRotationAngle = -15.f;
+        _likedTextSize = 57.0f;
 
         _nopeText = [NSLocalizedString(@"MEH", nil) uppercaseString];
         _nopeColor = [UIColor colorWith8BitRed:247.f green:91.f blue:37.f alpha:1.f];
         _nopeRotationAngle = 15.f;
+        _nopeTextSize = 60.0f;
         
         _holdText = [NSLocalizedString(@"HOLDING", nil) uppercaseString];
         _holdColor = [UIColor whiteColor];
         _holdRotationAngle = -15.f;
+        _holdTextSize = 38.0f;
         
         _reportText = [NSLocalizedString(@"REPORT", nil) uppercaseString];
         _reportColor = [UIColor blackColor];
         _reportRotationAngle = -15.f;
+        _reportTextSize = 43.0f;
 
         _threshold = 100.f;
     }
