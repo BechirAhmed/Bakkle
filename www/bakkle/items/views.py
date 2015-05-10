@@ -23,7 +23,7 @@ from decimal import *
 from django import forms
 
 from .models import Items, BuyerItem
-from account.models import Account
+from account.models import Account, Device
 from common import authenticate
 from django.conf import settings
 
@@ -110,7 +110,7 @@ def add_item(request):
             title = title,
             seller_id = seller_id,
             description = description,
-            location = "",
+            location = location,
             price = price,
             tags = tags,
             method = method,
@@ -137,7 +137,26 @@ def add_item(request):
         item.image_urls = image_urls
         item.save()
 
+    notify_all_new_item("New: ${} - {}".format(item.price, item.title))
     response_data = { "status":1 }
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+def notify_all_new_item(message):
+    # Get all devices
+
+    if message == None or message == "":
+        response_data = { "status": 0, "error": "No message supplied" }
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+    devices = Device.objects.filter() #todo: add active filter, add subscribed to notifications filter.
+
+    # notify each device
+    for device in devices:
+        # lookup number of unread messages
+        badge = 0 #TODO: count number of unread messages
+        device.send_notification(message, badge, "")
+
+    response_data = { "status": 1 }
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 @csrf_exempt
@@ -226,7 +245,7 @@ def report(request):
     if (item_id == None or item_id.strip() == ""):
         response_data = { "status":0, "error": "A required parameter was not provided." }
         return HttpResponse(json.dumps(response_data), content_type="application/json")
-     
+
     # Get item and update the times reported
     item = get_object_or_404(Items, pk=item_id)
     item.times_reported = item.times_reported + 1

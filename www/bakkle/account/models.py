@@ -52,11 +52,14 @@ class Device(models.Model):
     class Meta:
         unique_together = ("account_id", "uuid")
 
-    def send_notification(self, message, sound="default", badge=0):
+    """ Example usage device.send_notification("New item posted", "default", 10) """
+    def send_notification(self, message="", badge=0, sound=""):
         print(cert_file)
         apns = APNs(True, cert_file=cert_file, key_file=key_file)
-        payload = Payload(alert='bob', sound='default', badge='0')
+        payload = Payload(message, badge, sound)
         dt = self.apns_token.replace(' ', '').replace('<', '').replace('>', '')
         print("notifying {} token {}".format(self.account_id, dt))
         apns.gateway_server.send_notification(dt, payload)
         #TODO: Log this to db so we know what we did.
+
+

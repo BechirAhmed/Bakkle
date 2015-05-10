@@ -60,6 +60,7 @@
 		A058A2B81AFDADA2005E7432 /* mask-buyer-white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A058A2B21AFDADA2005E7432 /* mask-buyer-white@2x.png */; };
 		A058A2B91AFDADA2005E7432 /* mask-buyer-white@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = A058A2B31AFDADA2005E7432 /* mask-buyer-white@3x.png */; };
 		A058A2BB1AFDB87F005E7432 /* loading.png in Resources */ = {isa = PBXBuildFile; fileRef = A058A2BA1AFDB87F005E7432 /* loading.png */; };
+		A058A2BD1AFEF665005E7432 /* CLLocation+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = A058A2BC1AFEF665005E7432 /* CLLocation+String.swift */; };
 		A05DB74D1AF0180D0076D97D /* ImageLabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05DB74C1AF0180D0076D97D /* ImageLabelView.swift */; };
 		A05DB74F1AF1A4C80076D97D /* dot.png in Resources */ = {isa = PBXBuildFile; fileRef = A05DB74E1AF1A4C80076D97D /* dot.png */; };
 		A05DB7521AF1BC090076D97D /* btn-menu.png in Resources */ = {isa = PBXBuildFile; fileRef = A05DB7511AF1BC090076D97D /* btn-menu.png */; };
@@ -195,6 +196,7 @@
 		A058A2B21AFDADA2005E7432 /* mask-buyer-white@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mask-buyer-white@2x.png"; sourceTree = "<group>"; };
 		A058A2B31AFDADA2005E7432 /* mask-buyer-white@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mask-buyer-white@3x.png"; sourceTree = "<group>"; };
 		A058A2BA1AFDB87F005E7432 /* loading.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loading.png; sourceTree = "<group>"; };
+		A058A2BC1AFEF665005E7432 /* CLLocation+String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CLLocation+String.swift"; sourceTree = "<group>"; };
 		A05DB74C1AF0180D0076D97D /* ImageLabelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageLabelView.swift; sourceTree = SOURCE_ROOT; };
 		A05DB74E1AF1A4C80076D97D /* dot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dot.png; sourceTree = "<group>"; };
 		A05DB7511AF1BC090076D97D /* btn-menu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-menu.png"; sourceTree = "<group>"; };
@@ -311,6 +313,7 @@
 				5EBDD68E1AB211E600C7FBE7 /* Supporting Files */,
 				A0A5F71C1AEDAE54001A7D7A /* Settings.bundle */,
 				A058A2AA1AFD8EAD005E7432 /* UIImage+Resize.swift */,
+				A058A2BC1AFEF665005E7432 /* CLLocation+String.swift */,
 			);
 			path = Bakkle;
 			sourceTree = "<group>";
@@ -769,6 +772,7 @@
 				A06AA9EE1AD609530075D7F7 /* Bakkle.swift in Sources */,
 				5EE2C9B41AB9F0FB0031D8CD /* MDCSwipeOptions.m in Sources */,
 				5EE2C9B61AB9F0FB0031D8CD /* MDCSwipeResult.m in Sources */,
+				A058A2BD1AFEF665005E7432 /* CLLocation+String.swift in Sources */,
 				5E1DCCA51AD486D2002D41FD /* AddItem.swift in Sources */,
 				5EBDD6911AB211E600C7FBE7 /* AppDelegate.swift in Sources */,
 				A058A2A11AFC28BE005E7432 /* DemoView.swift in Sources */,

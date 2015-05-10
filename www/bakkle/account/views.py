@@ -223,13 +223,33 @@ def device_register_push(request):
     response_data = { "status":1 }
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
+""" Notify all devices of a new item """
+@csrf_exempt
+def device_notify_all_new_item(request):
+    # Get all devices
+    message = request.POST.get('message', request.GET.get('message', ""))
+    if message == None or message == "":
+        response_data = { "status": 0, "error": "No message supplied" }
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+    devices = Device.objects.filter() #todo: add active filter, add subscribed to notifications filter.
+
+    # notify each device
+    for device in devices:
+        # lookup number of unread messages
+        badge = "0" #TODO: count number of unread messages
+        device.send_notification(message, badge, "")
+
+    response_data = { "status": 1 }
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
+
 # Dispatch a notification to device
 @csrf_exempt
 def device_notify(request, device_id):
     # TODO: Send an actual message
     device = get_object_or_404(Device, pk=device_id)
-    device.send_notification("bob", "default", 42)
-    response_data = { "status":1 }
+    device.send_notification("Test notification", "default", 42)
+    response_data = { "status": 1 }
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 # Dispatch a notification to all devices for that user
@@ -241,7 +261,7 @@ def device_notify_all(request, account_id):
     # notify each device
     for device in devices:
         device_notify(request, device.id)
-        
+
     response_data = { "status":1 }
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
@@ -254,4 +274,4 @@ def get_client_ip(request):
         ip = request.META.get('REMOTE_ADDR')
     return ip
 
-    
+

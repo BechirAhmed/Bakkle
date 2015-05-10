@@ -17,7 +17,7 @@ class BuyersTrunkCell : UITableViewCell {
     @IBOutlet var tagLabel: UILabel?
     @IBOutlet var distanceLabel: UILabel?
     
-    func loadCell(imgURLs: [String], title: String, price: String, delivery: String, tags: [String], indexPath: NSIndexPath) {
+    func loadCell(imgURLs: [String], title: String, price: String, delivery: String, tags: [String], location: String, indexPath: NSIndexPath) {
         println("[BuyersTrunk] Attempting to load image in cell")
         dispatch_async(dispatch_get_global_queue(
             Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
@@ -39,7 +39,20 @@ class BuyersTrunkCell : UITableViewCell {
         deliveryLabel!.text = "Method of Delivery: " + delivery
         let tagString = ", ".join(tags)
         tagLabel!.text = "Tags: " + tagString
-        distanceLabel!.text = "3 miles away"
+        distanceLabel!.text = ""
+        if location.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
+            let start: CLLocation = CLLocation(locationString: location)
+            if let distance = Bakkle.sharedInstance.distanceTo(start) {
+                if distance >= 10 {
+                    var formatter:NSNumberFormatter = NSNumberFormatter()
+                    formatter.numberStyle = NSNumberFormatterStyle.DecimalStyle
+                    var formattedOutput = formatter.stringFromNumber(Int(distance))
+                    distanceLabel!.text = "\(formattedOutput!) miles away"
+                } else {
+                    distanceLabel!.text = String(format: "%.1f", distance) + " miles away"
+                }
+            }
+        }
     }
 }
 
@@ -100,7 +113,9 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
             let price : String = item.valueForKey("price") as! String
             let delivery : String = item.valueForKey("method") as! String
             let tags : [String] = item.valueForKey("tags") as! [String]
-            cell.loadCell(imgURLs, title: title, price: price, delivery: delivery, tags: tags, indexPath: indexPath)
+            let location : String =
+                item.valueForKey("location") as! String
+            cell.loadCell(imgURLs, title: title, price: price, delivery: delivery, tags: tags, location: location, indexPath: indexPath)
         } else {
             // No items in trunk
             println("[BuyersTrunk] Tried loading trunk items, none to be found")

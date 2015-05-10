@@ -61,6 +61,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     
     var search_text: String = ""
     var user_location: String = ""
+    var user_loc: CLLocation?
     
     class var sharedInstance: Bakkle {
         struct Static {
@@ -91,9 +92,11 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
         if let f = userDefaults.objectForKey("user_location") as? NSString {
             self.user_location = f as String
+            self.user_loc = CLLocation(locationString: self.user_location)
             self.info("Restored user's last location: \(self.user_location)")
         } else {
             // Phony "default" location
+            self.user_loc = CLLocation(latitude: 39.417672, longitude: -87.330438)
             self.user_location = "39.417672,-87.330438"
             self.info("Set phony default location: \(self.user_location)")
         }
@@ -104,16 +107,39 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             if CLLocationManager.significantLocationChangeMonitoringAvailable() {
                 locationManager.startMonitoringSignificantLocationChanges()
             }
+            
+            // Quirk to support simulating location in simulator
+//            if UIDevice.currentDevice().model == "iPhone Simulator" {
+                locationManager.startUpdatingLocation()
+  //          }
         } else {
             // TODO : Warn no location services available
         }
     }
+    // Returns miles
+    func distanceTo(destination: CLLocation) -> (CLLocationDistance?) {
+        if destination.coordinate.latitude == 0 {
+            return .None
+        }
+        if let start = user_loc {
+            println( destination.toString() )
+            println( user_loc!.toString())
+            println( destination.distanceFromLocation(start))
+            return destination.distanceFromLocation(start) / 1609.34
+        } else {
+            return .None
+        }
+    }
     func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
+        self.user_loc = locations[0] as? CLLocation
+        self.user_location = "\( locations[0].coordinate.latitude ), \( locations[0].coordinate.longitude )"
+        self.info("Received new location: \(self.user_location)")
     }
     func locationManager(manager: CLLocationManager!, didUpdateToLocation newLocation: CLLocation!, fromLocation oldLocation: CLLocation!) {
         
+        self.user_loc = newLocation
         self.user_location = "\( newLocation.coordinate.latitude ), \( newLocation.coordinate.longitude )"
-        self.debg("Received new location: \(self.user_location)")
+        self.info("Received new location: \(self.user_location)")
         
         // Store location
         var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
@@ -192,9 +218,14 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     func login(success: ()->(), fail: ()->()) {
             let url:NSURL? = NSURL(string: url_base + url_login)
             let request = NSMutableURLRequest(URL: url!)
-            
+        
+            // Get device capabilities
+            var bounds: CGRect = UIScreen.mainScreen().bounds
+            var screen_width:CGFloat = bounds.size.width
+            var screen_height:CGFloat = bounds.size.height
+        
             request.HTTPMethod = "POST"
-            let postString = "device_uuid=\(self.deviceUUID)&user_id=\(self.facebook_id_str)"
+            let postString = "device_uuid=\(self.deviceUUID)&user_id=\(self.facebook_id_str)&screen_width=\(screen_width)&screen_height=\(screen_height)"
             request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
             
             println("[Bakkle] login (facebook)")
@@ -602,19 +633,19 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
 
         if let x = userDefaults.objectForKey("filter_distance") as? Float {
             self.filter_distance = x
-            println("loaded \(x)")
+            self.debg("Restored filter_distance = \(x)")
         } else {
             self.filter_distance = 50
         }
         if let y = userDefaults.objectForKey("filter_price")    as? Float {
             self.filter_price = y
-            println("loaded \(y)")
+            println("Restored filter_price = \(y)")
         } else {
             self.filter_price = 50
         }
         if let z = userDefaults.objectForKey("filter_number")   as? Float {
             self.filter_number = z
-            println("loaded \(z)")
+            println("Restored filter_number = \(z)")
         }else{
             self.filter_number = 100
         }

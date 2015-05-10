@@ -298,7 +298,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cvc-cz-rgJ">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <subviews>
-                                    <searchBar contentMode="redraw" placeholder="Search" translatesAutoresizingMaskIntoConstraints="NO" id="uxF-IE-DWo">
+                                    <searchBar contentMode="redraw" placeholder="Search" scopeBarBackgroundImage="LoginScreen-bkg.png" translatesAutoresizingMaskIntoConstraints="NO" id="uxF-IE-DWo">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                         <color key="barTintColor" red="0.35294117650000001" green="0.84313725490000002" blue="0.4941176471" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="yes" spellCheckingType="yes"/>
