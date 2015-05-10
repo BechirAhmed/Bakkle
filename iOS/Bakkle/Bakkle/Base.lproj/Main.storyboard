@@ -2984,7 +2984,7 @@
                                             <action selector="btnMenu:" destination="tkY-pk-mEi" eventType="touchUpInside" id="rLG-Yl-6cQ"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SfJ-zL-yUW" userLabel="Add Button">
+                                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SfJ-zL-yUW" userLabel="Add Button">
                                         <rect key="frame" x="321" y="0.0" width="54" height="39"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="54" id="K6D-7r-Rb7"/>

@@ -151,8 +151,12 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         
         //TODO: Add drop down 'Pick-up', 'Delivery', 'Meet', 'Ship'
         //TODO: Get location from GPS
-        var factor = imageView.image!.size.height/imageView.image!.size.width
-        var size = CGSize(width: 1100, height: 1100*factor)
+        var factor: CGFloat = imageView.image!.size.height/imageView.image!.size.width
+        
+        //TODO: Identify best size to transfer. 950 is good iphone 6+ size. ip5=640px wide, ip6=750 ip6+=1242
+        let scaledImageWidth: CGFloat = 660.0;
+        
+        var size = CGSize(width: scaledImageWidth, height: scaledImageWidth*factor)
         imageView.image!.resize(size, completionHandler: {(scaledImg:UIImage,bob:NSData) -> () in
             
             Bakkle.sharedInstance.addItem(self.titleField.text, description: "", location: Bakkle.sharedInstance.user_location, price: self.priceField.text, tags: self.tagsField.text, method: /*self.methodField.text*/"Pick-up", image:scaledImg, success: {
