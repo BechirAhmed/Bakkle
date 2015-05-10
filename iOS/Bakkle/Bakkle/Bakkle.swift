@@ -133,13 +133,13 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
         self.user_loc = locations[0] as? CLLocation
         self.user_location = "\( locations[0].coordinate.latitude ), \( locations[0].coordinate.longitude )"
-        self.info("Received new location: \(self.user_location)")
+        self.debg("Received new location: \(self.user_location)")
     }
     func locationManager(manager: CLLocationManager!, didUpdateToLocation newLocation: CLLocation!, fromLocation oldLocation: CLLocation!) {
         
         self.user_loc = newLocation
         self.user_location = "\( newLocation.coordinate.latitude ), \( newLocation.coordinate.longitude )"
-        self.info("Received new location: \(self.user_location)")
+        self.debg("Received new location: \(self.user_location)")
         
         // Store location
         var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
@@ -368,9 +368,6 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         let url: NSURL? = NSURL(string: url_base + url_garage)
         let request = NSMutableURLRequest(URL: url!)
         
-        //TODO: change this location
-        //        let search_text = "mower"
-        
         request.HTTPMethod = "POST"
         let postString = "auth_token=\(self.auth_token)&device_uuid=\(self.deviceUUID)"
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
@@ -400,7 +397,6 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                 NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkGarageUpdate, object: self)
                 success()
             }
-            
         }
         task.resume()
     }
@@ -409,9 +405,6 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     func populateHolding(success: ()->()) {
         let url: NSURL? = NSURL(string: url_base + url_get_holding_pattern)
         let request = NSMutableURLRequest(URL: url!)
-        
-        //TODO: change this location
-        //        let search_text = "mower"
         
         request.HTTPMethod = "POST"
         let postString = "auth_token=\(self.auth_token)&device_uuid=\(self.deviceUUID)"
@@ -437,12 +430,11 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             self.debg("RESPONSE DICT IS: \(self.responseDict)")
             
             if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
-               // self.holdingItems = self.responseDict.valueForKey("holding_item") as! Array
+                self.holdingItems = self.responseDict.valueForKey("holding_pattern") as! Array
                 self.persistData()
                 NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkHoldingUpdate, object: self)
                 success()
             }
-            
         }
         task.resume()
     }
@@ -451,9 +443,6 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     func populateTrunk(success: ()->()) {
         let url: NSURL? = NSURL(string: url_base + url_buyers_trunk)
         let request = NSMutableURLRequest(URL: url!)
-        
-        //TODO: change this location
-        //        let search_text = "mower"
         
         request.HTTPMethod = "POST"
         let postString = "auth_token=\(self.auth_token)&device_uuid=\(self.deviceUUID)"
@@ -691,7 +680,16 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                     self.info("Restored \( (self.garageItems as Array).count) garage items.")
                     NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkGarageUpdate, object: self)
                 }
-                
+
+                // restore HOLDING
+                if let f = userDefaults.objectForKey("holdingItems") as? NSString {
+                    var parseError: NSError?
+                    var jsonData: NSData = f.dataUsingEncoding(NSUTF8StringEncoding)!
+                    self.holdingItems = NSJSONSerialization.JSONObjectWithData(jsonData, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! Array
+                    self.info("Restored \( (self.holdingItems as Array).count) holding items.")
+                    NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkHoldingUpdate, object: self)
+                }
+
                 return
                 
             }
@@ -722,7 +720,17 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         } else {
             userDefaults.removeObjectForKey("garageItems")
         }
-        
+
+        // Store HODLING
+        if self.holdingItems != nil {
+            let data3 = NSJSONSerialization.dataWithJSONObject(self.holdingItems, options: nil, error: nil)
+            let string3 = NSString(data: data3!, encoding: NSUTF8StringEncoding)
+            userDefaults.setObject(string3,   forKey: "holdingItems")
+            self.info("Stored \( (self.holdingItems as Array).count) holding items")
+        } else {
+            userDefaults.removeObjectForKey("holdingItems")
+        }
+
         // Store VERSION
         userDefaults.setObject(self.appVersion().build, forKey: "version")
         self.info("Stored version = \(self.appVersion().build)")
