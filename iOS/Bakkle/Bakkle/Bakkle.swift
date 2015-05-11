@@ -163,6 +163,8 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
 
     func refresh() {
         /* TODO: this will request a data update from the server */
+        self.populateFeed()
+        //TODO: update others too
     }
     
     func appVersion() -> (build: String, bundle: String) {
@@ -512,6 +514,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             
             if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
                 if let feedEl: AnyObject = self.responseDict["feed"] {
+                    //TODO: only update new items.
                     self.feedItems = self.responseDict.valueForKey("feed") as! Array
                     self.persistData()
                     NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkFeedUpdate, object: self)

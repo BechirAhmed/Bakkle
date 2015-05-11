@@ -77,6 +77,8 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
         var observer2 = notificationCenter.addObserverForName(Bakkle.bkFilterChanged, object: nil, queue: mainQueue) { _ in
             self.filterChanged()
         }
+        
+        //TODO: Timer to check for new feed items
     }
     
     override func viewWillAppear(animated: Bool) {
