@@ -28,14 +28,20 @@
 #import "UIView+MDCBorderedLabel.h"
 #import "UIColor+MDCRGB8Bit.h"
 #import <QuartzCore/QuartzCore.h>
+#import "ImageLabelView.h"
+
 
 static CGFloat const MDCSwipeToChooseViewHorizontalPadding = 10.f;
 static CGFloat const MDCSwipeToChooseViewTopPadding = 20.f;
 static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
 
+static const ChooseItemViewImageLabelWidth = 42.f;
+
+
 @interface MDCSwipeToChooseView ()
 @property (nonatomic, strong) MDCSwipeToChooseViewOptions *options;
 @property (nonatomic, strong) UIView *informationView;
+@property (nonatomic, strong) ImageLabelView *priceView;
 
 @end
 
@@ -96,6 +102,7 @@ static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
     [self addSubview:_informationView];
     
     [self constructNameLabel];
+    [self constructPriceLabel];
 }
 
 - (void)constructNameLabel {
@@ -103,12 +110,31 @@ static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
     CGFloat topPadding = 17.f;
     CGRect frame = CGRectMake(leftPadding,
                               topPadding,
-                              floorf(CGRectGetWidth(_informationView.frame)),
+                              floorf(CGRectGetWidth(_informationView.frame)/2),
                               CGRectGetHeight(_informationView.frame) - topPadding);
     _nameLabel = [[UILabel alloc] initWithFrame:frame];
-    _nameLabel.text = [NSString stringWithFormat:@"%s %s", "", ""];
+    _nameLabel.text = [NSString stringWithFormat:@"%s", ""];
     _nameLabel.font = [UIFont fontWithName:@"Helvetica Light" size:17];
     [_informationView addSubview:_nameLabel];
+}
+
+- (void)constructPriceLabel {
+    CGFloat rightPadding = 30.f;
+    UIImage *image = [UIImage imageNamed:@"icon"];
+    _priceView = [self buildImageLabelViewLeftOf:CGRectGetWidth(_informationView.bounds)-rightPadding image:image text:@"asdasd"];
+    [_informationView addSubview:_priceView];
+}
+
+- (ImageLabelView *)buildImageLabelViewLeftOf:(CGFloat)x image:(UIImage *)image text:(NSString *)text {
+    CGRect frame = CGRectMake(x - ChooseItemViewImageLabelWidth,
+                              0,
+                              ChooseItemViewImageLabelWidth,
+                              CGRectGetHeight(_informationView.bounds));
+    ImageLabelView *view = [[ImageLabelView alloc] initWithFrame:frame
+                                                           image:image
+                                                            text:text];
+    view.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+    return view;
 }
 
 - (void)constructImageView {

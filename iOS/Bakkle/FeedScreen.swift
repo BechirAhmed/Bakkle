@@ -15,7 +15,6 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
 
     var state : MDCPanState!
 
-    let ChooseItemViewImageLabelWidth:CGFloat = 42.0;
     let menuSegue = "presentNav"
     let addItemSegue = "AddItemSegue"
     let itemDetailSegue = "ItemDetailSegue"
@@ -306,7 +305,8 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
             let topPrice: String = topItem.valueForKey("price") as! String
             
             //println("[FeedScreen] Downloading image (top) \(imgURLs)")
-            self.swipeView.nameLabel.text = topTitle + ",  $" + topPrice
+            self.swipeView.nameLabel.text = topTitle
+         //   self.swipeView.priceLabel.text = "\(topPrice)"
             self.swipeView.imageView.image = UIImage(named: "loading.png")
             dispatch_async(dispatch_get_global_queue(
                 Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
@@ -344,7 +344,8 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
 
                                     self.bottomView.imageView.contentMode = UIViewContentMode.ScaleAspectFill
                                 }
-                                self.bottomView.nameLabel.text = bottomTitle + ",  $" + bottomPrice
+                                self.bottomView.nameLabel.text = bottomTitle
+                            //    self.bottomView.priceLabel.text = "$\(bottomPrice)"
                             }
                         }
                     } else {
@@ -377,16 +378,6 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
     func viewDidCancelSwipe(view: UIView!) {
         // Do nothing. Resets the swipe view
     }
-    
-    func buildImageLabelViewLeftOf(x:CGFloat, image:UIImage, text:NSString) -> ImageLabelView{
-        var frame:CGRect = CGRect(x:x-ChooseItemViewImageLabelWidth, y: 0,
-            width: ChooseItemViewImageLabelWidth,
-            height: CGRectGetHeight(self.infoView.bounds))
-        var view:ImageLabelView = ImageLabelView(frame:frame, image:image, text:text)
-        view.autoresizingMask = UIViewAutoresizing.FlexibleLeftMargin
-        return view
-    }
-
     
     func view(view: UIView!, shouldBeChosenWithDirection direction: MDCSwipeDirection) -> Bool {
         if direction == MDCSwipeDirection.Left || direction == MDCSwipeDirection.Right || direction == MDCSwipeDirection.Up || direction == MDCSwipeDirection.Down {
