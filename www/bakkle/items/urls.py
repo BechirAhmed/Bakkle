@@ -23,5 +23,7 @@ urlpatterns = [
     url(r'^get_buyer_transactions/$', views.get_buyer_transactions, name='get_buyer_transactions'),
     url(r'^get_delivery_methods/$', views.get_delivery_methods, name='get_delivery_methods'),
     url(r'^(?P<item_id>[0-9]+)/$', views.detail, name='detail'),
+    url(r'^(?P<item_id>[0-9]+)/spam/$', views.mark_as_spam, name='mark_as_spam'),
+    url(r'^(?P<item_id>[0-9]+)/delete/$', views.mark_as_deleted, name='mark_as_deleted'),
 
 ]
