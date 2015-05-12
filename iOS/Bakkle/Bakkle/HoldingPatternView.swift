@@ -184,8 +184,4 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
         self.revealViewController().revealToggleAnimated(true)
     }
     
-    @IBAction func btnAddItem(sender: AnyObject) {
-        // Probably a seque instead
-    }
-    
 }

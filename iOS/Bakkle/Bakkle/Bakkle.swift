@@ -163,7 +163,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
 
     func refresh() {
         /* TODO: this will request a data update from the server */
-        self.populateFeed()
+        self.populateFeed({})
         //TODO: update others too
     }
     
