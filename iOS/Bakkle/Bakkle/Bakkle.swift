@@ -73,7 +73,8 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     override init() {
         super.init()
         info("API initialized \(apiVersion)");
-        serverNum = NSUserDefaults.standardUserDefaults().integerForKey("server")
+
+        // Switch servers
         setServer()
         info("Using server: \(self.serverNum) \(self.url_base)")
 
@@ -149,6 +150,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     /* End location */
     
     func setServer() {
+        serverNum = NSUserDefaults.standardUserDefaults().integerForKey("server")
         switch( serverNum )
         {
             case 0: self.url_base = "https://app.bakkle.com/"
@@ -163,7 +165,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
 
     func refresh() {
         /* TODO: this will request a data update from the server */
-        self.populateFeed()
+        self.populateFeed({})
         //TODO: update others too
     }
     
@@ -205,12 +207,14 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             
             /* JSON parse */
             var error: NSError? = error
-            var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &error) as! NSDictionary
-            
-            if responseDict.valueForKey("status")?.integerValue == 1 {
-                self.display_name = username
-                self.email = email
-                success()
+            if (data != nil) {
+                var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &error) as! NSDictionary
+                
+                if responseDict.valueForKey("status")?.integerValue == 1 {
+                    self.display_name = username
+                    self.email = email
+                    success()
+                }
             }
         }
         task.resume()
@@ -226,8 +230,11 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             var screen_width:CGFloat = bounds.size.width
             var screen_height:CGFloat = bounds.size.height
         
+            let (a,b) = self.appVersion()
+            let encLocation = user_location.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
+        
             request.HTTPMethod = "POST"
-            let postString = "device_uuid=\(self.deviceUUID)&user_id=\(self.facebook_id_str)&screen_width=\(screen_width)&screen_height=\(screen_height)"
+            let postString = "device_uuid=\(self.deviceUUID)&user_id=\(self.facebook_id_str)&screen_width=\(screen_width)&screen_height=\(screen_height)&app_version=\(a)&app_build=\(b)&user_location_\(encLocation)"
             request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
             
             println("[Bakkle] login (facebook)")
@@ -512,17 +519,18 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             self.responseDict = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! NSDictionary!
             self.info("RESPONSE DICT IS: \(self.responseDict)")
             
-            if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
-                if let feedEl: AnyObject = self.responseDict["feed"] {
-                    //TODO: only update new items.
-                    self.feedItems = self.responseDict.valueForKey("feed") as! Array
-                    self.persistData()
-                    NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkFeedUpdate, object: self)
+            if self.responseDict != nil {
+                if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
+                    if let feedEl: AnyObject = self.responseDict["feed"] {
+                        //TODO: only update new items.
+                        self.feedItems = self.responseDict.valueForKey("feed") as! Array
+                        self.persistData()
+                        NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkFeedUpdate, object: self)
+                    }
+                    //note called on success, not 'new items'
+                    success()
                 }
-                //note called on success, not 'new items'
-                success()
             }
-            
         }
         task.resume()
     }
