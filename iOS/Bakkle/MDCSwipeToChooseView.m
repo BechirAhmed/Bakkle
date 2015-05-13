@@ -41,7 +41,6 @@ static const ChooseItemViewImageLabelWidth = 42.f;
 @interface MDCSwipeToChooseView ()
 @property (nonatomic, strong) MDCSwipeToChooseViewOptions *options;
 @property (nonatomic, strong) UIView *informationView;
-@property (nonatomic, strong) ImageLabelView *priceView;
 
 @end
 
@@ -110,7 +109,7 @@ static const ChooseItemViewImageLabelWidth = 42.f;
     CGFloat topPadding = 17.f;
     CGRect frame = CGRectMake(leftPadding,
                               topPadding,
-                              floorf(CGRectGetWidth(_informationView.frame)/2),
+                              floorf(CGRectGetWidth(_informationView.frame)*0.75),
                               CGRectGetHeight(_informationView.frame) - topPadding);
     _nameLabel = [[UILabel alloc] initWithFrame:frame];
     _nameLabel.text = [NSString stringWithFormat:@"%s", ""];
@@ -119,15 +118,26 @@ static const ChooseItemViewImageLabelWidth = 42.f;
 }
 
 - (void)constructPriceLabel {
-    CGFloat rightPadding = 30.f;
-    UIImage *image = [UIImage imageNamed:@"icon"];
-    _priceView = [self buildImageLabelViewLeftOf:CGRectGetWidth(_informationView.bounds)-rightPadding image:image text:@"asdasd"];
-    [_informationView addSubview:_priceView];
+    NSTextAttachment *attachment = [[NSTextAttachment alloc] init];
+    attachment.image = [UIImage imageNamed:@"dot.png"];
+    NSAttributedString *attachmentString = [NSAttributedString attributedStringWithAttachment:attachment];
+    NSMutableAttributedString *myString = [[NSMutableAttributedString alloc] initWithString:@""];
+    [myString appendAttributedString:attachmentString];
+    
+    _priceLabel.attributedText = myString;
+    
+    CGFloat topPadding = 17.f;
+    CGRect frame = CGRectMake(floorf(CGRectGetWidth(_informationView.frame)*0.75), topPadding, floorf((CGRectGetWidth(_informationView.frame)*0.25)), CGRectGetHeight(_informationView.frame) - topPadding);
+    _priceLabel = [[UILabel alloc] initWithFrame:frame];
+    _priceLabel.font = [UIFont fontWithName:@"Helvetica Light" size:17];
+    _priceLabel.textAlignment = NSTextAlignmentCenter;
+    [_informationView addSubview:_priceLabel];
 }
 
 - (ImageLabelView *)buildImageLabelViewLeftOf:(CGFloat)x image:(UIImage *)image text:(NSString *)text {
+    CGFloat topPadding = 17.f;
     CGRect frame = CGRectMake(x - ChooseItemViewImageLabelWidth,
-                              0,
+                              topPadding,
                               ChooseItemViewImageLabelWidth,
                               CGRectGetHeight(_informationView.bounds));
     ImageLabelView *view = [[ImageLabelView alloc] initWithFrame:frame

@@ -306,7 +306,7 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
             
             //println("[FeedScreen] Downloading image (top) \(imgURLs)")
             self.swipeView.nameLabel.text = topTitle
-         //   self.swipeView.priceLabel.text = "\(topPrice)"
+            self.swipeView.priceLabel.text = "$" + (topPrice)
             self.swipeView.imageView.image = UIImage(named: "loading.png")
             dispatch_async(dispatch_get_global_queue(
                 Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
@@ -345,7 +345,7 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
                                     self.bottomView.imageView.contentMode = UIViewContentMode.ScaleAspectFill
                                 }
                                 self.bottomView.nameLabel.text = bottomTitle
-                            //    self.bottomView.priceLabel.text = "$\(bottomPrice)"
+                                self.bottomView.priceLabel.text = "$" + bottomPrice
                             }
                         }
                     } else {
