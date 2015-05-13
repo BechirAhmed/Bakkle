@@ -59,6 +59,8 @@
 
 @property (nonatomic, strong) UILabel *nameLabel;
 
+@property (nonatomic, strong) UILabel *priceLabel;
+
 /*!
  * The designated initializer takes a `frame` and a set of options to customize
  * the behavior of the view.

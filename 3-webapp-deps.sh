@@ -7,3 +7,5 @@ sudo pip install boto
 
 #probably needed on ubuntus udo apt-get install libffi-dev libssl-dev
 sudo pip install requests[security]
+sudo pip install django --upgrade
+
