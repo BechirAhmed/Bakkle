@@ -4,6 +4,3 @@
 #apt-get dist-upgrade
 
 sudo apt-get install git python-setuptools python-pip
-
-
-
