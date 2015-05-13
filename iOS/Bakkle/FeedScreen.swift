@@ -114,7 +114,12 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
     
     @IBAction func menuButtonPressed(sender: AnyObject) {
         NSNotificationCenter.defaultCenter().removeObserver(self)
-        self.disableSwipe()
+        if revealViewController().isBeingDismissed() {
+            self.view.userInteractionEnabled = true
+        }
+        else if revealViewController().isBeingPresented() {
+            self.view.userInteractionEnabled = false
+        }
         self.revealViewController().revealToggleAnimated(true)
         
         //TODO: remove this when feed is updated via push
@@ -183,6 +188,7 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
         
     }
     
+    
     /* Used at end of swipe, this is used to load the next item in the view */
     func loadNext() {
         println("[FeedScreen] removing item from feed")
@@ -228,15 +234,19 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
                 self.swipeView.removeFromSuperview()
                 self.swipeView = nil
             }
-            self.swipeView = MDCSwipeToChooseView(frame: self.view.bounds, options: options)
-            self.swipeView.addGestureRecognizer(itemDetailTap)
+          //  if Bakkle.sharedInstance.feedItems.count > 0 {
+                self.swipeView = MDCSwipeToChooseView(frame: self.view.bounds, options: options)
+                self.swipeView.addGestureRecognizer(itemDetailTap)
+          //  }
             if Bakkle.sharedInstance.feedItems.count > 1 {
                 if self.bottomView != nil {
                     self.bottomView.removeFromSuperview()
                     self.bottomView = nil
                 }
-                self.bottomView = MDCSwipeToChooseView(frame: CGRectMake(self.swipeView.frame.origin.x , self.swipeView.frame.origin.y , self.swipeView.frame.width, self.swipeView.frame.height), options: nil)
-                self.view.insertSubview(self.bottomView, belowSubview: self.swipeView)
+           //     if Bakkle.sharedInstance.feedItems.count > 1 {
+                    self.bottomView = MDCSwipeToChooseView(frame: CGRectMake(self.swipeView.frame.origin.x , self.swipeView.frame.origin.y , self.swipeView.frame.width, self.swipeView.frame.height), options: nil)
+                    self.view.insertSubview(self.bottomView, belowSubview: self.swipeView)
+             //   }
             }
         }
         
@@ -411,7 +421,7 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
             loadNext()
         }
         
-        if bottomView != nil {
+        if Bakkle.sharedInstance.feedItems.count > 1 {
             self.bottomView.alpha = 0.0
             self.view.insertSubview(self.bottomView, belowSubview: self.swipeView)
             UIView.animateWithDuration(0.5, delay: 0.0, options: UIViewAnimationOptions.CurveEaseInOut, animations: { () -> Void in
