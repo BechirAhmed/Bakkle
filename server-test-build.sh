@@ -24,4 +24,5 @@ echo "### Copy Files to Test Server"
 #eval sudo $scpCommand $key ${DIR} $user@$address:$webRoot
 echo $sshCommand $webRoot/omnisite-bakkle/98-update-bkbuild.sh
 eval $sshCommand $webRoot/omnisite-bakkle/98-update-bkbuild.sh
+#eval $sshCommand $webRoot/omnisite-bakkle/1-system-deps.sh
 echo "### End Test";
