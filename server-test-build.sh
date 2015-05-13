@@ -21,6 +21,7 @@ sshCommand="ssh $address -l bkbuild -i $key"
 scpCommand="scp -r -i $key"
 
 echo "### Copy Files to Test Server"
-#eval $scpCommand $key ${DIR} $user@$address:$webRoot
-eval $sshCommand sudo $webRoot/omnisite-bakkle/1-system-deps.sh -y
+#eval sudo $scpCommand $key ${DIR} $user@$address:$webRoot
+echo $sshCommand $webRoot/omnisite-bakkle/98-update-bkbuild.sh
+eval $sshCommand $webRoot/omnisite-bakkle/98-update-bkbuild.sh
 echo "### End Test";
