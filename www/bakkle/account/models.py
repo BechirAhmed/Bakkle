@@ -33,7 +33,7 @@ class Account(models.Model):
     max_distance = models.IntegerField(default = 10)
     max_price = models.DecimalField(max_digits=7, decimal_places=2, default=100.00)
     display_num_items = models.IntegerField(default = 100)
-    seller_location = models.CharField(max_length=11, null = True)
+    user_location = models.CharField(max_length=15, null = True)
     disabled = models.BooleanField(default = False)
 
     def __str__(self):
@@ -48,6 +48,8 @@ class Device(models.Model):
     uuid = models.CharField(max_length=36)
     notifications_enabled = models.BooleanField(default = True)
     auth_token = models.CharField(max_length = 256, default = "")
+    user_location = models.CharField(max_length=15, null = True)
+    app_version = models.IntegerField(default=1)
 
     class Meta:
         unique_together = ("account_id", "uuid")
