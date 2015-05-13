@@ -10,6 +10,7 @@ import UIKit
 
 class ItemDetails: UIViewController {
 
+    var item: NSDictionary?
     @IBOutlet weak var itemTitleLabel: UILabel!
     
     @IBOutlet weak var itemMethodLabel: UILabel!
@@ -18,24 +19,26 @@ class ItemDetails: UIViewController {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.whiteColor()
         activityInd.startAnimating()
-
     }
     
     override func viewWillAppear(animated: Bool) {
-        var topItem = Bakkle.sharedInstance.feedItems[0]
-        let imgURLs = topItem.valueForKey("image_urls") as! NSArray
+        item = Bakkle.sharedInstance.feedItems[0] as? NSDictionary
+        let imgURLs = item!.valueForKey("image_urls") as! NSArray
         
         //TOOD: Load all images into an array and UIScrollView.
         let firstURL = imgURLs[0] as! String
-        let topTitle: String = topItem.valueForKey("title") as! String
-        let topPrice: String = topItem.valueForKey("price") as! String
-        let topMethod: String = topItem.valueForKey("method") as! String
+        let topTitle: String = item!.valueForKey("title") as! String
+        let topPrice: String = item!.valueForKey("price") as! String
+        let topMethod: String = item!.valueForKey("method") as! String
         
         itemTitleLabel.text = topTitle.uppercaseString
         itemPriceLabel.text = "$" + topPrice
         itemMethodLabel.text = topMethod
         
         let imgURL = NSURL(string: firstURL)
+        if imgURL == nil {
+            return
+        }
         if let imgData = NSData(contentsOfURL: imgURL!) {
             dispatch_async(dispatch_get_main_queue()) {
                 println("[FeedScreen] displaying image (top)")
@@ -48,10 +51,9 @@ class ItemDetails: UIViewController {
     }
     
     @IBAction func wantBtn(sender: AnyObject) {
-        let alertController = UIAlertController(title: "Bakkle", message:
-            "Not implemented yet.", preferredStyle: UIAlertControllerStyle.Alert)
-        alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default,handler: nil))
-        self.presentViewController(alertController, animated: true, completion: nil)
+        Bakkle.sharedInstance.markItem("want", item_id: self.item!.valueForKey("pk")!.integerValue, success: {}, fail: {})
+        self.dismissViewControllerAnimated(true, completion: nil)
+        //TODO: refresh feed screen to get rid of the top card.
     }
     @IBAction func goback(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: nil)

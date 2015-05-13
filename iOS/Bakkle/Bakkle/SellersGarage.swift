@@ -8,6 +8,7 @@
 
 import UIKit
 import Photos
+import Haneke
 
 class SellersGarageView: UIViewController, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
@@ -30,28 +31,35 @@ class SellersGarageView: UIViewController, UICollectionViewDelegate, UICollectio
         super.viewWillAppear(true)
         let scale: CGFloat = UIScreen.mainScreen().scale
         let cellSize = (self.collectionView.collectionViewLayout as! UICollectionViewFlowLayout).itemSize
-        Bakkle.sharedInstance.populateGarage({
-          //  self.refresh()
-            println("IT GETS HERE")
-        })
+        
+        // Register for garage updates
+        let notificationCenter = NSNotificationCenter.defaultCenter()
+        let mainQueue = NSOperationQueue.mainQueue()
+        var observer = notificationCenter.addObserverForName(Bakkle.bkGarageUpdate, object: nil, queue: mainQueue) { _ in
+            println("Received garage update")
+            self.refreshData()
+        }
+
+        requestUpdates()
     }
     
-    func refresh() {
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
+    /* New data arrived, update the garage on screen */
+    func refreshData() {
         Bakkle.sharedInstance.info("Refreshing sellers garage items")
         dispatch_async(dispatch_get_main_queue()) {
             self.collectionView.reloadData()
         }
     }
     
-    func updateGarage() {
-        println("[Sellers Garage] Requesting from server")
+    /* Request update from server */
+    func requestUpdates() {
+        println("[Sellers Garage] Requesting updates from server")
         dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
-            Bakkle.sharedInstance.populateGarage({ () -> () in
-                println("[Sellers Garage] garage updates reveived")
-                dispatch_async(dispatch_get_main_queue()) {
-                    
-                }
-            })
+            Bakkle.sharedInstance.populateGarage({})
         }
     }
     
@@ -64,12 +72,13 @@ class SellersGarageView: UIViewController, UICollectionViewDelegate, UICollectio
     
     /* MENUBAR ITEMS */
     @IBAction func btnMenu(sender: AnyObject) {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
         self.revealViewController().revealToggleAnimated(true)
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection: Int) -> Int {
-        return 10
-//        return Bakkle.sharedInstance.garageItems != nil ? Bakkle.sharedInstance.garageItems.count : 0
+//        return 10
+        return Bakkle.sharedInstance.garageItems != nil ? Bakkle.sharedInstance.garageItems.count : 0
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
@@ -82,12 +91,22 @@ class SellersGarageView: UIViewController, UICollectionViewDelegate, UICollectio
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell : CollectionThumbnail = collectionView.dequeueReusableCellWithReuseIdentifier(photoCellIdentifier, forIndexPath: indexPath) as! CollectionThumbnail
         
-//        populateCells(cell)
+        cell.setThumbnailImage(UIImage(named: "blank.png")!)
+        cell.contentMode = UIViewContentMode.ScaleAspectFill
+
+        //        populateCells(cell)
 //        collectionView.reloadData()
         
-        // MOCK
-        cell.setThumbnailImage(UIImage(named: "mock-tile.png")!)
-        cell.contentMode = UIViewContentMode.ScaleAspectFill
+        // Load image
+        if Bakkle.sharedInstance.garageItems != nil {
+            let item = Bakkle.sharedInstance.garageItems[indexPath.row]
+            let imgURLs = item.valueForKey("image_urls") as! NSArray
+            
+            let firstURL = imgURLs[0] as! String
+            let imgURL = NSURL(string: firstURL)
+            cell.imgView.hnk_setImageFromURL(imgURL!)
+            cell.contentMode = UIViewContentMode.ScaleAspectFill
+        }
         
 //        let asset: PHAsset = self.photosAsset[indexPath.item] as! PHAsset
 //

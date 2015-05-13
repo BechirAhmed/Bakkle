@@ -17,7 +17,7 @@ class BuyersTrunkCell : UITableViewCell {
     @IBOutlet var tagLabel: UILabel?
     @IBOutlet var distanceLabel: UILabel?
     
-    func loadCell(imgURLs: [String], title: String, price: String, delivery: String, tags: [String], indexPath: NSIndexPath) {
+    func loadCell(imgURLs: [String], title: String, price: String, delivery: String, tags: [String], location: String, indexPath: NSIndexPath) {
         println("[BuyersTrunk] Attempting to load image in cell")
         dispatch_async(dispatch_get_global_queue(
             Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
@@ -39,16 +39,30 @@ class BuyersTrunkCell : UITableViewCell {
         deliveryLabel!.text = "Method of Delivery: " + delivery
         let tagString = ", ".join(tags)
         tagLabel!.text = "Tags: " + tagString
-        distanceLabel!.text = "3 miles away"
+        distanceLabel!.text = ""
+        if location.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
+            let start: CLLocation = CLLocation(locationString: location)
+            if let distance = Bakkle.sharedInstance.distanceTo(start) {
+                if distance >= 10 {
+                    var formatter:NSNumberFormatter = NSNumberFormatter()
+                    formatter.numberStyle = NSNumberFormatterStyle.DecimalStyle
+                    var formattedOutput = formatter.stringFromNumber(Int(distance))
+                    distanceLabel!.text = "\(formattedOutput!) miles away"
+                } else {
+                    distanceLabel!.text = String(format: "%.1f", distance) + " miles away"
+                }
+            }
+        }
     }
 }
 
-class BuyersTrunkView: UITableViewController {
+class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
+    @IBOutlet weak var tableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
         var nib = UINib(nibName: "BuyersTrunkCell", bundle: nil)
-        tableView.registerNib(nib, forCellReuseIdentifier: "GarageRowCell")
+        self.tableView.registerNib(nib, forCellReuseIdentifier: "GarageCell")
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -62,11 +76,14 @@ class BuyersTrunkView: UITableViewController {
         
         Bakkle.sharedInstance.populateTrunk({});
     }
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let x = Bakkle.sharedInstance.trunkItems {
             println("Actually got items from the trunk!")
             println(String(Bakkle.sharedInstance.trunkItems.count) + " items in trunk")
@@ -76,7 +93,7 @@ class BuyersTrunkView: UITableViewController {
         return 0
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         println("[BuyersTrunk] Updating table view")
         let cell = self.tableView.dequeueReusableCellWithIdentifier("BuyersTrunkCell") as! BuyersTrunkCell
         cell.itemImage?.image = UIImage(named: "blank.png")
@@ -84,10 +101,11 @@ class BuyersTrunkView: UITableViewController {
         cell.itemImage?.layer.cornerRadius = 4.0
         cell.itemImage?.clipsToBounds = true
         if Bakkle.sharedInstance.trunkItems.count > 0 {
-            let item : NSDictionary = Bakkle.sharedInstance.trunkItems[indexPath.row] as! NSDictionary
+            let trunkEntry : NSDictionary = Bakkle.sharedInstance.trunkItems[indexPath.row] as! NSDictionary
 //            if let x: AnyObject = topItem.valueForKey("pk") {
 //                self.item_id = Int(x.intValue)
 //            }
+            let item = trunkEntry.valueForKey("item") as! NSDictionary
             println(item.description)
             let imgURLs : [String] = item.valueForKey("image_urls") as! [String]
             let description : String = item.valueForKey("description") as! String
@@ -95,7 +113,9 @@ class BuyersTrunkView: UITableViewController {
             let price : String = item.valueForKey("price") as! String
             let delivery : String = item.valueForKey("method") as! String
             let tags : [String] = item.valueForKey("tags") as! [String]
-            cell.loadCell(imgURLs, title: title, price: price, delivery: delivery, tags: tags, indexPath: indexPath)
+            let location : String =
+                item.valueForKey("location") as! String
+            cell.loadCell(imgURLs, title: title, price: price, delivery: delivery, tags: tags, location: location, indexPath: indexPath)
         } else {
             // No items in trunk
             println("[BuyersTrunk] Tried loading trunk items, none to be found")
@@ -106,10 +126,6 @@ class BuyersTrunkView: UITableViewController {
     /* MENUBAR ITEMS */
     @IBAction func btnMenu(sender: AnyObject) {
         self.revealViewController().revealToggleAnimated(true)
-    }
-    
-    @IBAction func btnAddItem(sender: AnyObject) {
-        // Probably a seque instead
     }
     
 }

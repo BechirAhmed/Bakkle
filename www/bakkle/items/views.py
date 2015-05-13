@@ -6,6 +6,10 @@ import md5
 import os
 import base64
 
+import random
+from boto.s3.connection import S3Connection
+from boto.s3.key import Key
+
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.core.urlresolvers import reverse
 from django.template import RequestContext, loader
@@ -19,11 +23,22 @@ from decimal import *
 from django import forms
 
 from .models import Items, BuyerItem
-from account.models import Account
+from account.models import Account, Device
 from common import authenticate
 from django.conf import settings
 
 MAX_ITEM_IMAGE = 5
+
+config = {}
+config['S3_BUCKET'] = 'com.bakkle.prod'
+config['AWS_ACCESS_KEY'] = 'AKIAJIE2FPJIQGNZAMVQ' # server to s3
+config['AWS_SECRET_KEY'] = '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'
+
+config['AWS_ACCESS_KEY'] = 'AKIAJUCSHZSTNFVMEP3Q' # pethessa
+config['AWS_SECRET_KEY'] = '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'
+
+config['S3_URL'] = 'https://s3-us-west-2.amazonaws.com/com.bakkle.prod/'
+
 
 #--------------------------------------------#
 #               Web page requests            #
@@ -46,30 +61,58 @@ def detail(request, item_id):
         'item': item,
         'urls': urls,
     }
-    return render(request, 'items/detail.html', context) 
+    return render(request, 'items/detail.html', context)
+
+@csrf_exempt
+def mark_as_spam(request, item_id):
+    # Get the item
+    item = Items.objects.get(pk=item_id)
+    item.status = Items.SPAM
+    item.save()
+
+    item_list = Items.objects.all()
+    context = {
+        'item_list': item_list,
+    }
+    return render(request, 'items/index.html', context)
+
+@csrf_exempt
+def mark_as_deleted(request, item_id):
+    # Get the item id 
+    item = Items.objects.get(pk=item_id)
+    item.status = Items.DELETED
+    item.save()
+
+    item_list = Items.objects.all()
+    context = {
+        'item_list': item_list,
+    }
+    return render(request, 'items/index.html', context)
 
 #--------------------------------------------#
 #               Item Methods                 #
 #--------------------------------------------#
 @csrf_exempt
 @require_POST
-@authenticate
+#TODO: Reinstate auth   @authenticate
 def add_item(request):
+
+    #import pdb; pdb.set_trace()
     # Get the authentication code
-    auth_token = request.POST.get('auth_token')
+    auth_token = request.GET.get('auth_token')
 
     # TODO: Handle location
     # Get the rest of the necessary params from the request
-    title = request.POST.get('title', "")
-    description = request.POST.get('description', "")
-    location = request.POST.get('location')
+    title = request.GET.get('title', "")
+    description = request.GET.get('description', "")
+    location = request.GET.get('location')
     seller_id = auth_token.split('_')[1]
-    price = request.POST.get('price')
-    tags = request.POST.get('tags',"")
-    method = request.POST.get('method')
+    price = request.GET.get('price')
+    tags = request.GET.get('tags',"")
+    method = request.GET.get('method')
 
     # Get the item id if present (If it is present an item will be edited not added)
-    item_id = request.POST.get('item_id', "")
+    item_id = request.GET.get('item_id', "")
 
     # Ensure that required fields are present otherwise send back a failed status
     if (title == None or title == "") or (tags == None or tags == "") or (price == None or price == "") or (method == None or method == ""):
@@ -84,32 +127,8 @@ def add_item(request):
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 
     # Check for the image params. The max number is 5 and is defined in settings
-    image_urls = ""
-    for i in range (1, MAX_ITEM_IMAGE + 1):
-        # Get the image from the request (of format imageX where X is the image number)
-        imageData = request.POST.get('image' + str(i), "" )
 
-        # Check to see if image data is present
-        if imageData != None and imageData != "":
-            # Convert the data to an image from base64
-            image = base64.decodestring(imageData)#.decode('base64')
-
-            # Get the filepath which includes the filename to save the image to (see helper method)
-            filepath = make_filepath(seller_id)
-
-            # if the filepath does not exist, create it (this includes folder and file creation)
-            if not os.path.exists(os.path.dirname(filepath)):
-                os.makedirs(os.path.dirname(filepath))
-
-            # Open the created file for writing
-            destination_file = open(filepath, 'wb+')
-
-            # Write the image data to the file and close it
-            destination_file.write(image)
-            destination_file.close()
-
-            # Add the new image url to the image_urls for the item
-            image_urls = image_urls + filepath + ","
+    image_urls = imgupload(request, seller_id)
 
     if (item_id == None or item_id == ""):
         # Create the item
@@ -117,7 +136,7 @@ def add_item(request):
             title = title,
             seller_id = seller_id,
             description = description,
-            location = "",
+            location = location,
             price = price,
             tags = tags,
             method = method,
@@ -128,12 +147,12 @@ def add_item(request):
         # Else get the item
         item = get_object_or_404(Items, pk=item_id);
 
+        # TODO: fix this
         # Remove all previous images
-        old_urls = item.image_urls.split(",")
-        for url in old_urls:
-            # if image exists remove the file
-            if os.path.exists(url):
-                os.remove(url)
+        # old_urls = item.image_urls.split(",")
+        # for url in old_urls:
+        #     # remove image from S3
+        #     handle_delete_file_s3(url)
 
         # Update item fields
         item.title = title
@@ -144,7 +163,26 @@ def add_item(request):
         item.image_urls = image_urls
         item.save()
 
+    notify_all_new_item("New: ${} - {}".format(item.price, item.title))
     response_data = { "status":1 }
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+def notify_all_new_item(message):
+    # Get all devices
+
+    if message == None or message == "":
+        response_data = { "status": 0, "error": "No message supplied" }
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+    devices = Device.objects.filter() #todo: add active filter, add subscribed to notifications filter.
+
+    # notify each device
+    for device in devices:
+        # lookup number of unread messages
+        badge = 0 #TODO: count number of unread messages
+        device.send_notification(message, badge, "")
+
+    response_data = { "status": 1 }
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 @csrf_exempt
@@ -161,7 +199,6 @@ def sell_item(request):
 
 # This will only be called by the system if an Item has been reported X amount of times.
 # TODO: implement this in the report 
-@csrf_exempt
 def spam_item(request):
     return update_status(request, Items.SPAM)
 
@@ -169,8 +206,9 @@ def spam_item(request):
 @require_POST
 @authenticate
 def feed(request):
-    # TODO: need to confirm order to display, chrono?, closest? "magic"?
     auth_token = request.POST.get('auth_token')
+    device_uuid = request.POST.get('device_uuid', "")
+    user_location = request.POST.get('user_location', "")
 
     # TODO: Use these for filtering
     search_text = request.POST.get('search_text')
@@ -179,12 +217,48 @@ def feed(request):
     filter_number = request.POST.get('filter_number')
 
     # Check that all require params are sent and are of the right format
-    if (auth_token == None or auth_token.strip() == "" or auth_token.find('_') == -1):
+    if (auth_token == None or auth_token.strip() == "" or auth_token.find('_') == -1) or (user_location == None or user_location == ""):
         response_data = { "status":0, "error": "A required parameter was not provided." }
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+    # Check that location was in the correct format
+    location = ""
+    try: 
+        positions = user_location.split(",")
+        if len(positions) < 2:
+            response_data = {"status":0, "error":"User location was not in the correct format."}
+            return HttpResponse(json.dumps(response_data), content_type="application/json")
+        else:
+            TWOPLACES = Decimal(10) ** -2
+            lat = Decimal(positions[0]).quantize(TWOPLACES)
+            lon = Decimal(positions[1]).quantize(TWOPLACES)
+            location = str(lat) + "," + str(lon)
+    except ValueError:
+        response_data = { "status":0, "error": "Latitude or Longitude was not a valid decimal." }
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 
     # get the account id 
     buyer_id = auth_token.split('_')[1]
+
+    # get the account object and the device and update location
+    try:
+        account = Account.objects.get(id=buyer_id)
+        account.user_location = location
+        account.save()
+
+        # Get the device
+        device = Device.objects.get(account_id = buyer_id, uuid = device_uuid)
+        device.user_location = location
+        device.save()
+    except Account.DoesNotExist:
+        account = None
+        response_data = {"status":0, "error":"Account {} does not exist.".format(buyer_id)}
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+    except Device.DoesNotExist:
+        device = None
+        response_data = {"status":0, "error":"Device {} does not exist.".format(device_uuid)}
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+
 
     # get items
     items_viewed = BuyerItem.objects.filter(buyer = buyer_id)
@@ -192,9 +266,9 @@ def feed(request):
     item_list = None
     if(search_text != None and search_text != ""):
         search_text.strip()
-        item_list = Items.objects.exclude(buyeritem = items_viewed).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).filter(Q(tags__contains=search_text))
+        item_list = Items.objects.exclude(buyeritem = items_viewed).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).filter(Q(tags__contains=search_text) | Q(title__contains=search_text)).order_by('-post_date')
     else:
-        item_list = Items.objects.exclude(buyeritem = items_viewed).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING))
+        item_list = Items.objects.exclude(buyeritem = items_viewed).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')
 
     item_array = []
     # get json representaion of item array
@@ -233,7 +307,7 @@ def report(request):
     if (item_id == None or item_id.strip() == ""):
         response_data = { "status":0, "error": "A required parameter was not provided." }
         return HttpResponse(json.dumps(response_data), content_type="application/json")
-     
+
     # Get item and update the times reported
     item = get_object_or_404(Items, pk=item_id)
     item.times_reported = item.times_reported + 1
@@ -363,13 +437,54 @@ def get_buyer_transactions(request):
 #--------------------------------------------#
 #             Helper Functions               #
 #--------------------------------------------#
-# Helper for filepath generation
-def make_filepath(seller_id):
-    filename = str(seller_id) + "_" + (md5.new(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")).hexdigest())[0:10] + ".png"
-    filepath = os.path.join(os.getcwd(), "..", "img", datetime.datetime.now().strftime('%Y-%m'), filename)
-    print("Filepath\n")
-    print(filepath)
-    return filepath
+# Helper for uploading image to S3
+def handle_file_s3(image_key, f):
+    print "HERE"
+    image_string = ""
+    for chunk in f.chunks():
+        image_string = image_string + chunk
+
+    conn = S3Connection(config['AWS_ACCESS_KEY'], config['AWS_SECRET_KEY'])
+    #bucket = conn.create_bucket('com.bakkle.prod')
+    bucket = conn.get_bucket(config['S3_BUCKET'])
+    k = Key(bucket)
+    image_key = config['S3_BUCKET'] + "_" + image_key
+    k.key = image_key
+    # http://boto.readthedocs.org/en/latest/s3_tut.html
+    k.set_contents_from_string(image_string)
+    k.set_acl('public-read')
+    print config['S3_URL'] + image_key
+    return config['S3_URL'] + image_key
+    # TODO: Setup connection pool and queue for uploading at volume
+
+#TODO: Fix this
+def handle_delete_file_s3(image_path):
+    file_parts = image_path.split("_")
+    image_key = image_path.replace(config['S3_URL'], "")
+    bucket_name = config['S3_BUCKET']
+    if (len(file_parts) == 3):
+        bucket_name = file_parts[0]
+    conn = S3Connection(config['AWS_ACCESS_KEY'], config['AWS_SECRET_KEY'])
+    #bucket = conn.create_bucket('com.bakkle.prod')
+    bucket = conn.get_bucket(bucket_name)
+    print(image_key)
+    k = bucket.get_key(image_key)
+    k.delete()
+
+# Helper to handle image uploading
+def imgupload(request, seller_id):
+    image_urls = ""
+    #import pdb; pdb.set_trace()
+    #for i in request.FILES.getlist('image'):
+    i = request.FILES['image']
+    uhash = hex(random.getrandbits(128))[2:-1]
+    image_key = "{}_{}.jpg".format(seller_id, uhash)
+    filename = handle_file_s3(image_key, i)
+    if image_urls == "":
+        image_urls = filename
+    else:
+        image_urls = image_urls + "," + filename
+    return image_urls
 
 # Helper for creating buyer items
 def add_item_to_buyer_items(request, status):
@@ -488,7 +603,7 @@ def get_account_dictionary(account):
         'display_name': account.display_name, 
         'seller_rating': account.seller_rating,
         'buyer_rating': account.buyer_rating,
-        'seller_location': account.seller_location}
+        'user_location': account.user_location}
     return seller_dict
 
 # Helper for making a BuyerItem into a dictionary for JSON
@@ -511,7 +626,7 @@ def get_buyer_item_dictionary(buyer_item):
 @require_POST
 @authenticate
 def get_delivery_methods(request):
-    response_data = { 'status': 1, 'deliver_methods': Items.METHOD_CHOICES}
+    response_data = { 'status': 1, 'deliver_methods': (dict(Items.METHOD_CHOICES)).values()}
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 #--------------------------------------------#
@@ -522,10 +637,16 @@ def get_delivery_methods(request):
 def reset(request):
     #TODO: hardcoded values
     item_expire_time=7 #days
-    #TODO: Change to POST or DELETE
-    Items.objects.all().delete()
-    BuyerItem.objects.all().delete()
+    auth_token = request.POST.get('auth_token')
+    buyer_id = auth_token.split('_')[1]
+    BuyerItem.objects.filter(buyer=buyer_id).delete()
+    response_data = { "status":1 }
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
 
+@csrf_exempt
+def reset_items(request):
+    BuyerItem.objects.all().delete()
+    Items.objects.all().delete()
     # create dummy account
     try:
         a = Account.objects.get(

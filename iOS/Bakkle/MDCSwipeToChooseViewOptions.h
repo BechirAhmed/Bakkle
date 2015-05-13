@@ -53,6 +53,7 @@
  * `-init` method.
  */
 @property (nonatomic, assign) CGFloat likedRotationAngle;
+@property (nonatomic, assign) CGFloat likedTextSize;
 
 /*!
  * The text displayed in the `nopeView`. A default value is provided in the
@@ -71,17 +72,20 @@
  * `-init` method.
  */
 @property (nonatomic, assign) CGFloat nopeRotationAngle;
+@property (nonatomic, assign) CGFloat nopeTextSize;
 
 
 @property (nonatomic, copy) NSString *holdText;
 @property (nonatomic, strong) UIColor * holdColor;
 @property (nonatomic, assign) CGFloat holdRotationAngle;
+@property (nonatomic, assign) CGFloat holdTextSize;
 
 
 
 @property (nonatomic, copy) NSString *reportText;
 @property (nonatomic, strong) UIColor * reportColor;
 @property (nonatomic, assign) CGFloat reportRotationAngle;
+@property (nonatomic, assign) CGFloat reportTextSize;
 
 /*!
  * The distance, in pixels, that a view must be panned in order to constitue a selection.

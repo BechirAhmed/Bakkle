@@ -12,6 +12,8 @@
   <br/>DateAdded: {{ device.date_added }} 
   <br/>Auth Token: {{ device.auth_token }}
   <br/>LastSeen: {{ device.last_seen_date }} (<a href="{% url 'account:device_notify' device.id %}">Notify</a>)
+  <br/>Location: {{ device.user_location }}
+  <br/>Software Version: {{ device.app_version }}
 {% else %}
   <p> No device with that id </p>
 {% endif %}

@@ -11,6 +11,7 @@ from django.utils import timezone
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from decimal import *
 
 from .models import Account, Device
 from items.models import Items, BuyerItem
@@ -31,15 +32,31 @@ def index(request):
 def login_facebook(request):
     facebook_id = request.POST.get('user_id', "")
     device_uuid = request.POST.get('device_uuid', "")
+    user_location = request.POST.get('user_location', "")
+    app_version = request.POST.get('app_version', "")
 
     # Check that all required params are sent
     # Check that all required fields are sent
-    if (facebook_id == None or facebook_id.strip() == "") or (device_uuid == None or device_uuid.strip() == ""): 
+    if (facebook_id == None or facebook_id.strip() == "") or (device_uuid == None or device_uuid.strip() == "") or (user_location == None or user_location == "") or (app_version == None or app_version == ""): 
         response_data = {"status":0, "error":"A required parameter was not provided."}
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 
+    location = ""
+    try: 
+        positions = user_location.split(",")
+        if len(positions) < 2:
+            response_data = {"status":0, "error":"User location was not in the correct format."}
+            return HttpResponse(json.dumps(response_data), content_type="application/json")
+        else:
+            TWOPLACES = Decimal(10) ** -2
+            lat = Decimal(positions[0]).quantize(TWOPLACES)
+            lon = Decimal(positions[1]).quantize(TWOPLACES)
+            location = str(lat) + "," + str(lon)
+    except ValueError:
+        response_data = { "status":0, "error": "Latitude or Longitude was not a valid decimal." }
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+
     # Get the account for that facebook ID and it's associated device
-    #account = get_object_or_404(Account, facebook_id=facebook_id)
     try:
         account = Account.objects.get(facebook_id=facebook_id)
     except Account.DoesNotExist:
@@ -47,8 +64,12 @@ def login_facebook(request):
         response_data = {"status":0, "error":"Account {} does not exist.".format(facebook_id)}
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 
+    # Update account location
+    account.user_location = location
+    account.save()
+
     # register the device
-    device = device_register(get_client_ip(request), device_uuid, account)
+    device = device_register(get_client_ip(request), device_uuid, account, location, app_version)
 
     # Create authentication token
     login_date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -182,13 +203,15 @@ def device_detail(request, device_id):
     return render(request, 'account/device_detail.html', context)
 
 # Register a new device
-def device_register(ip, uuid, user):
+def device_register(ip, uuid, user, location, app_version):
     device = Device.objects.get_or_create(
         uuid = uuid,
         account_id= user,
         defaults={'notifications_enabled': True, })[0]
     device.last_seen_date = datetime.datetime.now()
     device.ip_address = ip
+    device.user_location = location
+    device.app_version = app_version
     device.save()
     return device
 
@@ -223,13 +246,33 @@ def device_register_push(request):
     response_data = { "status":1 }
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
+""" Notify all devices of a new item """
+@csrf_exempt
+def device_notify_all_new_item(request):
+    # Get all devices
+    message = request.POST.get('message', request.GET.get('message', ""))
+    if message == None or message == "":
+        response_data = { "status": 0, "error": "No message supplied" }
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+    devices = Device.objects.filter() #todo: add active filter, add subscribed to notifications filter.
+
+    # notify each device
+    for device in devices:
+        # lookup number of unread messages
+        badge = "0" #TODO: count number of unread messages
+        device.send_notification(message, badge, "")
+
+    response_data = { "status": 1 }
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
+
 # Dispatch a notification to device
 @csrf_exempt
 def device_notify(request, device_id):
     # TODO: Send an actual message
     device = get_object_or_404(Device, pk=device_id)
-    device.send_notification("bob", "default", 42)
-    response_data = { "status":1 }
+    device.send_notification("Test notification", "default", 42)
+    response_data = { "status": 1 }
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 # Dispatch a notification to all devices for that user
@@ -241,7 +284,7 @@ def device_notify_all(request, account_id):
     # notify each device
     for device in devices:
         device_notify(request, device.id)
-        
+
     response_data = { "status":1 }
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
@@ -254,4 +297,4 @@ def get_client_ip(request):
         ip = request.META.get('REMOTE_ADDR')
     return ip
 
-    
+

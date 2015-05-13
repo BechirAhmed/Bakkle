@@ -33,7 +33,7 @@ class Account(models.Model):
     max_distance = models.IntegerField(default = 10)
     max_price = models.DecimalField(max_digits=7, decimal_places=2, default=100.00)
     display_num_items = models.IntegerField(default = 100)
-    seller_location = models.CharField(max_length=11, null = True)
+    user_location = models.CharField(max_length=15, null = True)
     disabled = models.BooleanField(default = False)
 
     def __str__(self):
@@ -48,15 +48,20 @@ class Device(models.Model):
     uuid = models.CharField(max_length=36)
     notifications_enabled = models.BooleanField(default = True)
     auth_token = models.CharField(max_length = 256, default = "")
+    user_location = models.CharField(max_length=15, null = True)
+    app_version = models.IntegerField(default=1)
 
     class Meta:
         unique_together = ("account_id", "uuid")
 
-    def send_notification(self, message, sound="default", badge=0):
+    """ Example usage device.send_notification("New item posted", "default", 10) """
+    def send_notification(self, message="", badge=0, sound=""):
         print(cert_file)
         apns = APNs(True, cert_file=cert_file, key_file=key_file)
-        payload = Payload(alert='bob', sound='default', badge='0')
+        payload = Payload(message, badge, sound)
         dt = self.apns_token.replace(' ', '').replace('<', '').replace('>', '')
         print("notifying {} token {}".format(self.account_id, dt))
         apns.gateway_server.send_notification(dt, payload)
         #TODO: Log this to db so we know what we did.
+
+
