@@ -1,6 +1,6 @@
 #!/bin/sh
 
-sudo apt-get install python-django python-pip python2.7-dev
+sudo apt-get install python-django python-pip python2.7-dev -y
 sudo pip install uwsgi
 sudo pip install apns
 sudo pip install boto

@@ -22,7 +22,9 @@ scpCommand="scp -r -i $key"
 
 echo "### Copy Files to Test Server"
 #eval sudo $scpCommand $key ${DIR} $user@$address:$webRoot
-echo $sshCommand $webRoot/omnisite-bakkle/98-update-bkbuild.sh
-eval $sshCommand $webRoot/omnisite-bakkle/98-update-bkbuild.sh
-#eval $sshCommand $webRoot/omnisite-bakkle/1-system-deps.sh
+eval $sshCommand sudo ssh-agent bash -c 'ssh-add ./ext-bakkle.key; git pull'
+eval $sshCommand $webRoot/omnisite-bakkle/1-system-deps.sh
+eval $sshCommand $webRoot/omnisite-bakkle/2-webserver.sh
+eval $sshCommand $webRoot/omnisite-bakkle/3-webapp.deps.sh
+eval $sshCommand $webRoot/omnisite-bakkle/5-update.sh
 echo "### End Test";

@@ -9,7 +9,7 @@ sudo install -m 644 etc/ssl/com.bakkle/com.bakkle.pem        /etc/ssl/com.bakkle
 sudo install -m 644 etc/nginx/sites-available/com.bakkle.app /etc/nginx/sites-available/
 sudo install -m 644 etc/nginx/sites-available/org.rhventures.bakkle /etc/nginx/sites-available/
 
-sudo apt-get install nginx
+sudo apt-get install nginx -y
 
 sudo ./bin/nginx_dissite 000-default
 if [ `hostname` == 'ip-172-31-21-18' ]; then
