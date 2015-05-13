@@ -34,7 +34,7 @@ class BuyersTrunkCell : UITableViewCell {
                     }
                 }
         }
-        titleLabel!.text = title.capitalizedString
+        titleLabel!.text = title.uppercaseString
         priceLabel!.text = "$" + price
         deliveryLabel!.text = "Method of Delivery: " + delivery
         let tagString = ", ".join(tags)
