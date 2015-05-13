@@ -61,7 +61,6 @@
 		A058A2B91AFDADA2005E7432 /* mask-buyer-white@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = A058A2B31AFDADA2005E7432 /* mask-buyer-white@3x.png */; };
 		A058A2BB1AFDB87F005E7432 /* loading.png in Resources */ = {isa = PBXBuildFile; fileRef = A058A2BA1AFDB87F005E7432 /* loading.png */; };
 		A058A2BD1AFEF665005E7432 /* CLLocation+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = A058A2BC1AFEF665005E7432 /* CLLocation+String.swift */; };
-		A05DB74D1AF0180D0076D97D /* ImageLabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05DB74C1AF0180D0076D97D /* ImageLabelView.swift */; };
 		A05DB74F1AF1A4C80076D97D /* dot.png in Resources */ = {isa = PBXBuildFile; fileRef = A05DB74E1AF1A4C80076D97D /* dot.png */; };
 		A05DB7521AF1BC090076D97D /* btn-menu.png in Resources */ = {isa = PBXBuildFile; fileRef = A05DB7511AF1BC090076D97D /* btn-menu.png */; };
 		A05DB7541AF3F22B0076D97D /* dot@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A05DB7531AF3F22B0076D97D /* dot@2x.png */; };
@@ -92,6 +91,7 @@
 		A0D96F881AD772DA0046DA13 /* HoldingPatternView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D96F871AD772DA0046DA13 /* HoldingPatternView.swift */; };
 		A0D96F8A1AD773DB0046DA13 /* FeedFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D96F891AD773DB0046DA13 /* FeedFilter.swift */; };
 		A0D96F901AD7751E0046DA13 /* mock-settings.png in Resources */ = {isa = PBXBuildFile; fileRef = A0D96F8F1AD7751E0046DA13 /* mock-settings.png */; };
+		DBC2C0CC1B01241A00F56792 /* ImageLabelView.m in Sources */ = {isa = PBXBuildFile; fileRef = DBC2C0CB1B01241A00F56792 /* ImageLabelView.m */; };
 		DBEE0E971AF3C464005E60BD /* item-detail-overlay.png in Resources */ = {isa = PBXBuildFile; fileRef = DBEE0E961AF3C464005E60BD /* item-detail-overlay.png */; };
 		DBEE0E991AF3C855005E60BD /* btb-want.png in Resources */ = {isa = PBXBuildFile; fileRef = DBEE0E981AF3C855005E60BD /* btb-want.png */; };
 		DBEE0E9B1AF3C85C005E60BD /* btn-want-disabled.png in Resources */ = {isa = PBXBuildFile; fileRef = DBEE0E9A1AF3C85C005E60BD /* btn-want-disabled.png */; };
@@ -197,7 +197,6 @@
 		A058A2B31AFDADA2005E7432 /* mask-buyer-white@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mask-buyer-white@3x.png"; sourceTree = "<group>"; };
 		A058A2BA1AFDB87F005E7432 /* loading.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loading.png; sourceTree = "<group>"; };
 		A058A2BC1AFEF665005E7432 /* CLLocation+String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CLLocation+String.swift"; sourceTree = "<group>"; };
-		A05DB74C1AF0180D0076D97D /* ImageLabelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageLabelView.swift; sourceTree = SOURCE_ROOT; };
 		A05DB74E1AF1A4C80076D97D /* dot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dot.png; sourceTree = "<group>"; };
 		A05DB7511AF1BC090076D97D /* btn-menu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-menu.png"; sourceTree = "<group>"; };
 		A05DB7531AF3F22B0076D97D /* dot@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dot@2x.png"; sourceTree = "<group>"; };
@@ -226,6 +225,8 @@
 		A0D96F871AD772DA0046DA13 /* HoldingPatternView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HoldingPatternView.swift; sourceTree = "<group>"; };
 		A0D96F891AD773DB0046DA13 /* FeedFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedFilter.swift; sourceTree = "<group>"; };
 		A0D96F8F1AD7751E0046DA13 /* mock-settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mock-settings.png"; sourceTree = "<group>"; };
+		DBC2C0CA1B01241A00F56792 /* ImageLabelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageLabelView.h; sourceTree = "<group>"; };
+		DBC2C0CB1B01241A00F56792 /* ImageLabelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageLabelView.m; sourceTree = "<group>"; };
 		DBEE0E961AF3C464005E60BD /* item-detail-overlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "item-detail-overlay.png"; sourceTree = "<group>"; };
 		DBEE0E981AF3C855005E60BD /* btb-want.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btb-want.png"; sourceTree = "<group>"; };
 		DBEE0E9A1AF3C85C005E60BD /* btn-want-disabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-want-disabled.png"; sourceTree = "<group>"; };
@@ -290,7 +291,6 @@
 		5EBDD68D1AB211E600C7FBE7 /* Bakkle */ = {
 			isa = PBXGroup;
 			children = (
-				A05DB74C1AF0180D0076D97D /* ImageLabelView.swift */,
 				A06AA9ED1AD609530075D7F7 /* Bakkle.swift */,
 				A0D96F7F1AD767BD0046DA13 /* MenuTableView.swift */,
 				5EE2C98A1AB9D1730031D8CD /* FeedScreen.swift */,
@@ -407,6 +407,8 @@
 				5EE2C9AE1AB9F0FB0031D8CD /* UIView+MDCBorderedLabel.m */,
 				5EE2C9AF1AB9F0FB0031D8CD /* MDCViewState.h */,
 				5EE2C9B01AB9F0FB0031D8CD /* MDCViewState.m */,
+				DBC2C0CA1B01241A00F56792 /* ImageLabelView.h */,
+				DBC2C0CB1B01241A00F56792 /* ImageLabelView.m */,
 			);
 			name = "MDCSwipe Library";
 			sourceTree = "<group>";
@@ -756,6 +758,7 @@
 				5EBDD6931AB211E600C7FBE7 /* ViewController.swift in Sources */,
 				5EE2C98B1AB9D1730031D8CD /* FeedScreen.swift in Sources */,
 				A0D96F801AD767BD0046DA13 /* MenuTableView.swift in Sources */,
+				DBC2C0CC1B01241A00F56792 /* ImageLabelView.m in Sources */,
 				A05DB7561AF463340076D97D /* ItemTile.swift in Sources */,
 				A0D96F8A1AD773DB0046DA13 /* FeedFilter.swift in Sources */,
 				5EE2C9B91AB9F0FB0031D8CD /* UIColor+MDCRGB8Bit.m in Sources */,
@@ -777,7 +780,6 @@
 				5EBDD6911AB211E600C7FBE7 /* AppDelegate.swift in Sources */,
 				A058A2A11AFC28BE005E7432 /* DemoView.swift in Sources */,
 				5E1FEE7C1AD8641900C08131 /* MDCSwipeToChooseView.m in Sources */,
-				A05DB74D1AF0180D0076D97D /* ImageLabelView.swift in Sources */,
 				5EE2C9B21AB9F0FB0031D8CD /* UIView+MDCSwipeToChoose.m in Sources */,
 				5EE2C9B51AB9F0FB0031D8CD /* MDCSwipeToChooseViewOptions.m in Sources */,
 			);

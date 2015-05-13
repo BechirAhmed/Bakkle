@@ -63,6 +63,32 @@ def detail(request, item_id):
     }
     return render(request, 'items/detail.html', context)
 
+@csrf_exempt
+def mark_as_spam(request, item_id):
+    # Get the item
+    item = Items.objects.get(pk=item_id)
+    item.status = Items.SPAM
+    item.save()
+
+    item_list = Items.objects.all()
+    context = {
+        'item_list': item_list,
+    }
+    return render(request, 'items/index.html', context)
+
+@csrf_exempt
+def mark_as_deleted(request, item_id):
+    # Get the item id 
+    item = Items.objects.get(pk=item_id)
+    item.status = Items.DELETED
+    item.save()
+
+    item_list = Items.objects.all()
+    context = {
+        'item_list': item_list,
+    }
+    return render(request, 'items/index.html', context)
+
 #--------------------------------------------#
 #               Item Methods                 #
 #--------------------------------------------#
@@ -173,7 +199,6 @@ def sell_item(request):
 
 # This will only be called by the system if an Item has been reported X amount of times.
 # TODO: implement this in the report 
-@csrf_exempt
 def spam_item(request):
     return update_status(request, Items.SPAM)
 
@@ -181,8 +206,9 @@ def spam_item(request):
 @require_POST
 @authenticate
 def feed(request):
-    # TODO: need to confirm order to display, chrono?, closest? "magic"?
     auth_token = request.POST.get('auth_token')
+    device_uuid = request.POST.get('device_uuid', "")
+    user_location = request.POST.get('user_location', "")
 
     # TODO: Use these for filtering
     search_text = request.POST.get('search_text')
@@ -191,12 +217,48 @@ def feed(request):
     filter_number = request.POST.get('filter_number')
 
     # Check that all require params are sent and are of the right format
-    if (auth_token == None or auth_token.strip() == "" or auth_token.find('_') == -1):
+    if (auth_token == None or auth_token.strip() == "" or auth_token.find('_') == -1) or (user_location == None or user_location == ""):
         response_data = { "status":0, "error": "A required parameter was not provided." }
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+    # Check that location was in the correct format
+    location = ""
+    try: 
+        positions = user_location.split(",")
+        if len(positions) < 2:
+            response_data = {"status":0, "error":"User location was not in the correct format."}
+            return HttpResponse(json.dumps(response_data), content_type="application/json")
+        else:
+            TWOPLACES = Decimal(10) ** -2
+            lat = Decimal(positions[0]).quantize(TWOPLACES)
+            lon = Decimal(positions[1]).quantize(TWOPLACES)
+            location = str(lat) + "," + str(lon)
+    except ValueError:
+        response_data = { "status":0, "error": "Latitude or Longitude was not a valid decimal." }
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 
     # get the account id 
     buyer_id = auth_token.split('_')[1]
+
+    # get the account object and the device and update location
+    try:
+        account = Account.objects.get(id=buyer_id)
+        account.user_location = location
+        account.save()
+
+        # Get the device
+        device = Device.objects.get(account_id = buyer_id, uuid = device_uuid)
+        device.user_location = location
+        device.save()
+    except Account.DoesNotExist:
+        account = None
+        response_data = {"status":0, "error":"Account {} does not exist.".format(buyer_id)}
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+    except Device.DoesNotExist:
+        device = None
+        response_data = {"status":0, "error":"Device {} does not exist.".format(device_uuid)}
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+
 
     # get items
     items_viewed = BuyerItem.objects.filter(buyer = buyer_id)
@@ -204,7 +266,7 @@ def feed(request):
     item_list = None
     if(search_text != None and search_text != ""):
         search_text.strip()
-        item_list = Items.objects.exclude(buyeritem = items_viewed).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).filter(Q(tags__contains=search_text)).order_by('-post_date')
+        item_list = Items.objects.exclude(buyeritem = items_viewed).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).filter(Q(tags__contains=search_text) | Q(title__contains=search_text)).order_by('-post_date')
     else:
         item_list = Items.objects.exclude(buyeritem = items_viewed).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')
 
@@ -541,7 +603,7 @@ def get_account_dictionary(account):
         'display_name': account.display_name, 
         'seller_rating': account.seller_rating,
         'buyer_rating': account.buyer_rating,
-        'seller_location': account.seller_location}
+        'user_location': account.user_location}
     return seller_dict
 
 # Helper for making a BuyerItem into a dictionary for JSON
@@ -564,7 +626,7 @@ def get_buyer_item_dictionary(buyer_item):
 @require_POST
 @authenticate
 def get_delivery_methods(request):
-    response_data = { 'status': 1, 'deliver_methods': Items.METHOD_CHOICES}
+    response_data = { 'status': 1, 'deliver_methods': (dict(Items.METHOD_CHOICES)).values()}
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 #--------------------------------------------#

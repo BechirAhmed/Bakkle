@@ -11,6 +11,7 @@ from django.utils import timezone
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from decimal import *
 
 from .models import Account, Device
 from items.models import Items, BuyerItem
@@ -31,15 +32,31 @@ def index(request):
 def login_facebook(request):
     facebook_id = request.POST.get('user_id', "")
     device_uuid = request.POST.get('device_uuid', "")
+    user_location = request.POST.get('user_location', "")
+    app_version = request.POST.get('app_version', "")
 
     # Check that all required params are sent
     # Check that all required fields are sent
-    if (facebook_id == None or facebook_id.strip() == "") or (device_uuid == None or device_uuid.strip() == ""): 
+    if (facebook_id == None or facebook_id.strip() == "") or (device_uuid == None or device_uuid.strip() == "") or (user_location == None or user_location == "") or (app_version == None or app_version == ""): 
         response_data = {"status":0, "error":"A required parameter was not provided."}
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 
+    location = ""
+    try: 
+        positions = user_location.split(",")
+        if len(positions) < 2:
+            response_data = {"status":0, "error":"User location was not in the correct format."}
+            return HttpResponse(json.dumps(response_data), content_type="application/json")
+        else:
+            TWOPLACES = Decimal(10) ** -2
+            lat = Decimal(positions[0]).quantize(TWOPLACES)
+            lon = Decimal(positions[1]).quantize(TWOPLACES)
+            location = str(lat) + "," + str(lon)
+    except ValueError:
+        response_data = { "status":0, "error": "Latitude or Longitude was not a valid decimal." }
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+
     # Get the account for that facebook ID and it's associated device
-    #account = get_object_or_404(Account, facebook_id=facebook_id)
     try:
         account = Account.objects.get(facebook_id=facebook_id)
     except Account.DoesNotExist:
@@ -47,8 +64,12 @@ def login_facebook(request):
         response_data = {"status":0, "error":"Account {} does not exist.".format(facebook_id)}
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 
+    # Update account location
+    account.user_location = location
+    account.save()
+
     # register the device
-    device = device_register(get_client_ip(request), device_uuid, account)
+    device = device_register(get_client_ip(request), device_uuid, account, location, app_version)
 
     # Create authentication token
     login_date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -182,13 +203,15 @@ def device_detail(request, device_id):
     return render(request, 'account/device_detail.html', context)
 
 # Register a new device
-def device_register(ip, uuid, user):
+def device_register(ip, uuid, user, location, app_version):
     device = Device.objects.get_or_create(
         uuid = uuid,
         account_id= user,
         defaults={'notifications_enabled': True, })[0]
     device.last_seen_date = datetime.datetime.now()
     device.ip_address = ip
+    device.user_location = location
+    device.app_version = app_version
     device.save()
     return device
 

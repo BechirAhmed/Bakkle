@@ -128,8 +128,4 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
         self.revealViewController().revealToggleAnimated(true)
     }
     
-    @IBAction func btnAddItem(sender: AnyObject) {
-        // Probably a seque instead
-    }
-    
 }
