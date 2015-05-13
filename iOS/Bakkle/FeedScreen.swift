@@ -59,6 +59,7 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
         if self.revealViewController() != nil {
             //menuBtn.targetForAction("revealToggle:", withSender: self)
             self.revealViewController().rearViewRevealWidth = 270
+            self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         }
         
         // Item detail tap
