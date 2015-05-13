@@ -22,5 +22,5 @@ scpCommand="scp -r -i $key"
 
 echo "### Copy Files to Test Server"
 #eval $scpCommand $key ${DIR} $user@$address:$webRoot
-eval $sshCommand . $webRoot/omnisite-bakkle/1-system-deps.sh
+eval $sshCommand sudo $webRoot/omnisite-bakkle/1-system-deps.sh -y
 echo "### End Test";

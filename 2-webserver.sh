@@ -18,6 +18,8 @@ fi
 if [ `hostname` == 'bakkle' ]; then
    sudo ./bin/nginx_ensite org.rhventures.bakkle
 fi
+if [ `hostname` == 'rhv-bakkle-bld' ]; then
+   sudo ./bin/nginx_ensite org.rhventures.bakkle-bld
+fi
 
 sudo service nginx restart
-
