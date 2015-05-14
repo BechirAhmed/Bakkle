@@ -12,6 +12,7 @@ class ItemDetails: UIViewController {
 
     var item: NSDictionary?
     @IBOutlet weak var itemTitleLabel: UILabel!
+    @IBOutlet weak var itemTagsLabel: UILabel!
     
     @IBOutlet weak var itemMethodLabel: UILabel!
     @IBOutlet weak var itemPriceLabel: UILabel!
@@ -30,10 +31,13 @@ class ItemDetails: UIViewController {
         let topTitle: String = item!.valueForKey("title") as! String
         let topPrice: String = item!.valueForKey("price") as! String
         let topMethod: String = item!.valueForKey("method") as! String
+        let tags : [String] = item!.valueForKey("tags") as! [String]
+        let tagString = ", ".join(tags)
         
         itemTitleLabel.text = topTitle.uppercaseString
         itemPriceLabel.text = "$" + topPrice
         itemMethodLabel.text = topMethod
+        itemTagsLabel.text = tagString
         
         let imgURL = NSURL(string: firstURL)
         if imgURL == nil {
