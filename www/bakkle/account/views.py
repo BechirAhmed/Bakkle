@@ -140,7 +140,7 @@ def facebook(request):
     account.save()
 
     # Register device to the client
-    device_register(get_client_ip(request), device_uuid, account)
+    ##device_register(get_client_ip(request), device_uuid, account)
     response_data = {"status":1}
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
