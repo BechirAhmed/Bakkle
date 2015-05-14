@@ -1,3 +1,0 @@
-#!/bin/sh
-
-curl http://sauron.rhventures.org:8765/lamp/A1/ON
