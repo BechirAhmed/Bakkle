@@ -234,19 +234,15 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
                 self.swipeView.removeFromSuperview()
                 self.swipeView = nil
             }
-          //  if Bakkle.sharedInstance.feedItems.count > 0 {
                 self.swipeView = MDCSwipeToChooseView(frame: self.view.bounds, options: options)
                 self.swipeView.addGestureRecognizer(itemDetailTap)
-          //  }
             if Bakkle.sharedInstance.feedItems.count > 1 {
                 if self.bottomView != nil {
                     self.bottomView.removeFromSuperview()
                     self.bottomView = nil
                 }
-           //     if Bakkle.sharedInstance.feedItems.count > 1 {
-                    self.bottomView = MDCSwipeToChooseView(frame: CGRectMake(self.swipeView.frame.origin.x , self.swipeView.frame.origin.y , self.swipeView.frame.width, self.swipeView.frame.height), options: nil)
-                    self.view.insertSubview(self.bottomView, belowSubview: self.swipeView)
-             //   }
+                self.bottomView = MDCSwipeToChooseView(frame: CGRectMake(self.swipeView.frame.origin.x , self.swipeView.frame.origin.y , self.swipeView.frame.width, self.swipeView.frame.height), options: nil)
+                self.view.insertSubview(self.bottomView, belowSubview: self.swipeView)
             }
         }
         
@@ -318,7 +314,9 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
             //println("[FeedScreen] Downloading image (top) \(imgURLs)")
             self.swipeView.nameLabel.text = topTitle
             self.swipeView.priceLabel.text = "$" + (topPrice)
-            self.swipeView.imageView.image = UIImage(named: "loading.png")
+            if swipeView.imageView.image == nil {
+                self.swipeView.imageView.image = UIImage(named: "loading.png")
+            }
             dispatch_async(dispatch_get_global_queue(
                 Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
                     let firstURL = imgURLs[0] as! String
