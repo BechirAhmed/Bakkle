@@ -22,6 +22,9 @@ echo "###Kick up Test Server"
 # eval sudo $scpCommand ${DIR} $user@$address:/
 echo $sshCommand sudo ssh-agent bash -c 'cd omnisite-bakkle;./98-update-bkbuild.sh'
 eval $sshCommand sudo ssh-agent bash -c 'cd omnisite-bakkle;./98-update-bkbuild.sh'
+echo "### Server End"
+echo "\r\n"
+echo "### Server Test"
 echo $sshCommand sudo ssh-agent bash -c 'cd omnisite-bakkle;./testScript.py'
 eval $sshCommand sudo ssh-agent bash -c 'cd omnisite-bakkle;./testScript.py'
-echo "### End Test";
+echo "### Test End"

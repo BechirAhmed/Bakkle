@@ -47,11 +47,13 @@ if buildStatus.has_key("health"):
         urllib2.urlopen(req)
         req = urllib2.Request("http://sauron.rhventures.org:8765/lamp/A2/ON")
         urllib2.urlopen(req)
+        print "Website is Healthy! Green GO! Red NO!"
     else:
         req = urllib2.Request("http://sauron.rhventures.org:8765/lamp/A2/OFF")
         urllib2.urlopen(req)
         req = urllib2.Request("http://sauron.rhventures.org:8765/lamp/A1/ON")
         urllib2.urlopen(req)
+        print "Website has Croaked! Red GO! Green NO!"
 else:
     sys.exit(5)
 
