@@ -20,11 +20,11 @@ scpCommand="scp -r -i $key"
 
 echo "###Kick up Test Server"
 # eval sudo $scpCommand ${DIR} $user@$address:/
-echo $sshCommand sudo ssh-agent bash -c 'cd omnisite-bakkle;./98-update-bkbuild.sh'
-eval $sshCommand sudo ssh-agent bash -c 'cd omnisite-bakkle;./98-update-bkbuild.sh'
+echo $sshCommand 'pushd omnisite-bakkle;./98-update-bkbuild.sh;popd'
+eval $sshCommand 'pushd omnisite-bakkle;./98-update-bkbuild.sh;popd'
 echo "### Server End"
 echo "\r\n"
 echo "### Server Test"
-echo $sshCommand sudo ssh-agent bash -c 'cd omnisite-bakkle;./testScript.py'
-eval $sshCommand sudo ssh-agent bash -c 'cd omnisite-bakkle;./testScript.py'
+echo $sshCommand 'pushd omnisite-bakkle;./testScript.py;popd'
+eval $sshCommand 'pushd omnisite-bakkle;./testScript.py;popd'
 echo "### Test End"
