@@ -8,7 +8,7 @@ address=rhv-bakkle-bld.rhventures.org
 # Username used for remote build
 user=bkbuild
 # Auth key for remote access
-key=${DIR}/keys/bkbuild
+key=keys/bkbuild
 # Root directory of web modules on remote machine
 webRoot=/omnisite-bakkle
 
