@@ -20,6 +20,8 @@ scpCommand="scp -r -i $key"
 
 echo "###Kick up Test Server"
 # eval sudo $scpCommand ${DIR} $user@$address:/
+chmod 600 keys/bkbuild
+
 echo $sshCommand 'pushd omnisite-bakkle;./98-update-bkbuild.sh;popd'
 eval $sshCommand 'pushd omnisite-bakkle;./98-update-bkbuild.sh;popd'
 echo "### Server End"
