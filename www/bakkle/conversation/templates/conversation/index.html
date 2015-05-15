@@ -7,7 +7,7 @@
 {% if conversation_list %}
   <ul>
     {% for conversation in conversation_list %}
-      <li><a href="{% url 'conversation:detail' conversation.id %}">{{ conversation.id }}</a>: {{ conversation.item_id.seller.display_name }} And {{ conversation.buyer_id.display_name }}</li>
+      <li><a href="{% url 'conversation:detail' conversation.id %}">{{ conversation.id }}</a>: {{ conversation.item.seller.display_name }} And {{ conversation.buyer.display_name }}</li>
     {% endfor %}
   </ul>
 {% else %}
