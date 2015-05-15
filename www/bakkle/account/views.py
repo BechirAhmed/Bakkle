@@ -137,7 +137,6 @@ def facebook(request):
     account.display_name = display_name
     account.email = email
     account.save()
-    
     response_data = {"status":1}
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
