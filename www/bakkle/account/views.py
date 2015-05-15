@@ -94,10 +94,22 @@ def logout(request):
 
     # get the account id and the device the user is logging in from
     account_id = auth_token.split('_')[1]
-    account = get_object_or_404(Account, pk=account_id)
+    try:
+        account = Account.objects.get(pk=account_id)
+    except Account.DoesNotExist:
+        account = None
+        response_data = {"status":0, "error":"Account {} does not exist.".format(account_id)}
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+
 
     # Get the device and update its fields. Also empty the auth_token
-    device = Device.objects.get(uuid = device_uuid, account_id = account)
+    try:
+        device = Device.objects.get(uuid = device_uuid, account_id = account)
+    except Device.DoesNotExist:
+        device = None
+        response_data = {"status":0, "error":"Device {} does not exist for account {}.".format(device_uuid, account_id)}
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+    
     device.last_seen_date = datetime.datetime.now()
     device.ip_address = get_client_ip(request)
     device.auth_token = ""
@@ -227,7 +239,12 @@ def device_register_push(request):
 
     # get the account id and the device the user is logging in from
     account_id = auth_token.split('_')[1]
-    account = get_object_or_404(Account, pk=account_id)
+    try:
+        account = Account.objects.get(pk=account_id)
+    except Account.DoesNotExist:
+        account = None
+        response_data = {"status":0, "error":"Account {} does not exist.".format(account_id)}
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
 
     # Either get the device or create it if it is a new one 
     device = Device.objects.get_or_create(
@@ -266,7 +283,13 @@ def device_notify_all_new_item(request):
 @csrf_exempt
 def device_notify(request, device_id):
     # TODO: Send an actual message
-    device = get_object_or_404(Device, pk=device_id)
+    try:
+        device = Device.objects.get(pk=device_id)
+    except Device.DoesNotExist:
+        device = None
+        response_data = {"status":0, "error":"Device {} does not exist.".format(device_id)}
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+
     device.send_notification("Test notification", "42", "default")
     response_data = { "status": 1 }
     return HttpResponse(json.dumps(response_data), content_type="application/json")

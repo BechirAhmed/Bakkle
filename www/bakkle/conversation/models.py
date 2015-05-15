@@ -9,6 +9,9 @@ class Conversation(models.Model):
     deleted = models.BooleanField(default = False)
     start_date = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        unique_together = ("item_id", "buyer_id")
+
 class Message(models.Model):
     conversation_id = models.ForeignKey(Conversation)
     buyer_seller_flag = models.BooleanField(default = True)

@@ -39,12 +39,14 @@ def index(request):
     return render(request, 'conversation/index.html', context) 
 
 @csrf_exempt
-def detail(request, item_id):
+def detail(request, conversation_id):
     # get the item with the item id (this is for web viewing of data only)
-    item = get_object_or_404(Items, pk=item_id)
-    urls = item.image_urls.split(',');
+    conversation = get_object_or_404(Conversation, pk=conversation_id)
     context = {
-        'item': item,
-        'urls': urls,
+        'convo': conversation,
     }
-    return render(request, 'items/detail.html', context)
+    return render(request, 'conversation/detail.html', context)
+
+#--------------------------------------------#
+#           Conversation Methods             #
+#--------------------------------------------#
