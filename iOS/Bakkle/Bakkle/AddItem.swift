@@ -18,8 +18,8 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     @IBOutlet weak var titleField: UITextField!
     @IBOutlet weak var priceField: UITextField!
     @IBOutlet weak var tagsField: UITextField!
-    @IBOutlet weak var methodField: UITextField!
-    
+    @IBOutlet weak var methodControl: UISegmentedControl!
+    @IBOutlet weak var add: UIButton!
     @IBOutlet weak var imageView: UIImageView!
 
     override func viewDidLoad() {
@@ -28,7 +28,6 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         titleField.delegate = self
         priceField.delegate = self
         tagsField.delegate = self
-        methodField.delegate = self
         
         var nextBtn = UIToolbar(frame: CGRectMake(0, 0, 320, 50))
         nextBtn.barStyle = UIBarStyle.Default
@@ -109,11 +108,11 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         imageView.clipsToBounds = true
         
         // Set default
-        methodField.text = "Pick-up"
+        methodControl.selectedSegmentIndex = 0;
     }
     
     func dismissKeyboard() {
-        self.titleField.resignFirstResponder() || self.priceField.resignFirstResponder() || self.tagsField.resignFirstResponder() || self.methodField.resignFirstResponder()
+        self.titleField.resignFirstResponder() || self.priceField.resignFirstResponder() || self.tagsField.resignFirstResponder()
         validateTextFields()
     }
 
@@ -122,7 +121,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     }
     
     func validateTextFields() {
-        if self.titleField.text.isEmpty || self.priceField.text.isEmpty || self.tagsField.text.isEmpty || self.methodField.text.isEmpty || imageView.image == nil {
+        if self.titleField.text.isEmpty || self.priceField.text.isEmpty || self.tagsField.text.isEmpty || imageView.image == nil {
             add.enabled = false
         }
         else {
@@ -130,18 +129,16 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         }
     }
     
-    @IBOutlet weak var add: UIButton!    
-    
     func formatPrice() {
         if (priceField.text as String).lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
             priceField.text = String(format: "%.2f", (priceField.text! as NSString).floatValue )
         }
     }
-    @IBAction func btnAdd(sender: AnyObject) {
+    @IBAction func btnConfirm(sender: AnyObject) {
         self.titleField.enabled = false
         self.priceField.enabled = false
         self.tagsField.enabled = false
-        self.methodField.enabled = false
+        self.methodControl.enabled = false
         add.enabled = false
         
         var activityView: UIActivityIndicatorView = UIActivityIndicatorView()
@@ -159,7 +156,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         var size = CGSize(width: scaledImageWidth, height: scaledImageWidth*factor)
         imageView.image!.resize(size, completionHandler: {(scaledImg:UIImage,bob:NSData) -> () in
             
-            Bakkle.sharedInstance.addItem(self.titleField.text, description: "", location: Bakkle.sharedInstance.user_location, price: self.priceField.text, tags: self.tagsField.text, method: /*self.methodField.text*/"Pick-up", image:scaledImg, success: {
+            Bakkle.sharedInstance.addItem(self.titleField.text, description: "", location: Bakkle.sharedInstance.user_location, price: self.priceField.text, tags: self.tagsField.text, method: self.methodControl.titleForSegmentAtIndex(self.methodControl.selectedSegmentIndex)!, image:scaledImg, success: {
 
                 activityView.stopAnimating()
                 activityView.removeFromSuperview()
@@ -187,14 +184,11 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         if textField == titleField {
             priceField.becomeFirstResponder()
         }
-        else if textField == tagsField {
-            methodField.becomeFirstResponder()
-        }
         else if textField == priceField {
             tagsField.becomeFirstResponder()
         }
-        else if textField == methodField {
-            methodField.resignFirstResponder()
+        else if textField == tagsField {
+            tagsField.resignFirstResponder()
         }
         return true
     }

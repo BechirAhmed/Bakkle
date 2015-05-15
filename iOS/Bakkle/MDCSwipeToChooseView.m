@@ -88,7 +88,7 @@ static const ChooseItemViewImageLabelWidth = 42.f;
 }
 
 - (void)constructInformationView {
-    CGFloat bottomHeight = 60.f;
+    CGFloat bottomHeight = 50.f;
     CGRect bottomFrame = CGRectMake(0,
                                     CGRectGetHeight(self.bounds) - bottomHeight,
                                     CGRectGetWidth(self.bounds),
@@ -106,14 +106,15 @@ static const ChooseItemViewImageLabelWidth = 42.f;
 
 - (void)constructNameLabel {
     CGFloat leftPadding = 12.f;
-    CGFloat topPadding = 17.f;
+    CGFloat topPadding = 0.f;
     CGRect frame = CGRectMake(leftPadding,
                               topPadding,
                               floorf(CGRectGetWidth(_informationView.frame)*0.75),
                               CGRectGetHeight(_informationView.frame) - topPadding);
     _nameLabel = [[UILabel alloc] initWithFrame:frame];
     _nameLabel.text = [NSString stringWithFormat:@"%s", ""];
-    _nameLabel.font = [UIFont fontWithName:@"Helvetica Light" size:17];
+    _nameLabel.font = [UIFont fontWithName:@"Avenir" size:21];
+    // _nameLabel.font = [UIFont fontWithName:@"Avenir-Black" size:19];
     [_informationView addSubview:_nameLabel];
 }
 
@@ -126,10 +127,11 @@ static const ChooseItemViewImageLabelWidth = 42.f;
     
     _priceLabel.attributedText = myString;
     
-    CGFloat topPadding = 17.f;
+    CGFloat topPadding = 0.f;
     CGRect frame = CGRectMake(floorf(CGRectGetWidth(_informationView.frame)*0.75), topPadding, floorf((CGRectGetWidth(_informationView.frame)*0.25)), CGRectGetHeight(_informationView.frame) - topPadding);
     _priceLabel = [[UILabel alloc] initWithFrame:frame];
-    _priceLabel.font = [UIFont fontWithName:@"Helvetica Light" size:17];
+    _priceLabel.font = [UIFont fontWithName:@"Avenir" size:21];
+    // _priceLabel.font = [UIFont fontWithName:@"Avenir-Black" size:19];
     _priceLabel.textAlignment = NSTextAlignmentCenter;
     [_informationView addSubview:_priceLabel];
 }
