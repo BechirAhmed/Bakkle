@@ -18,6 +18,13 @@ def authenticate(function):
         auth_token = request.POST.get('auth_token', "")
         device_uuid = request.POST.get('device_uuid', "")
 
+        if (auth_token == None or auth_token.strip == "" or auth_token.find('_') == -1):
+            auth_token = request.GET.get('auth_token', "")
+        
+        if (device_uuid == None or device_uuid.strip == ""):
+            device_uuid = request.GET.get('device_uuid', "")
+        
+
         # check if any of the required fields are empty
         if auth_token == None or auth_token.strip() == "" or auth_token.find('_') == -1 or device_uuid == None or device_uuid.strip() == "":
             response_data = { "status":0, "error":"Required parameters missing! Need auth_token and device_uuid. A: {} D: {}".format(auth_token, device_uuid) }
