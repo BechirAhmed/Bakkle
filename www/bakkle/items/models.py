@@ -2,7 +2,6 @@ import md5
 import datetime
 
 from django.db import models
-from django.forms import ModelForm
 from account.models import Account
 
 class Items(models.Model):

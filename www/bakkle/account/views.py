@@ -36,9 +36,8 @@ def login_facebook(request):
     app_version = request.POST.get('app_version', "")
 
     # Check that all required params are sent
-    # Check that all required fields are sent
     if (facebook_id == None or facebook_id.strip() == "") or (device_uuid == None or device_uuid.strip() == "") or (user_location == None or user_location == "") or (app_version == None or app_version == ""): 
-        response_data = {"status":0, "error":"A required parameter was not provided."}
+        response_data = {"status":0, "error":"A required parameter was not provided. User_id: {}, device_uuid: {}, user_location: {}, app_version: {}".format(facebook_id, device_uuid, user_location,app_version)}
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 
     location = ""
@@ -138,9 +137,7 @@ def facebook(request):
     account.display_name = display_name
     account.email = email
     account.save()
-
-    # Register device to the client
-    device_register(get_client_ip(request), device_uuid, account)
+    
     response_data = {"status":1}
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
@@ -271,7 +268,7 @@ def device_notify_all_new_item(request):
 def device_notify(request, device_id):
     # TODO: Send an actual message
     device = get_object_or_404(Device, pk=device_id)
-    device.send_notification("Test notification", "default", 42)
+    device.send_notification("Test notification", "42", "default")
     response_data = { "status": 1 }
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
