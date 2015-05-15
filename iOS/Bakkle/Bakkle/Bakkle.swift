@@ -207,7 +207,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             
             /* JSON parse */
             var error: NSError? = error
-            if (data != nil) {
+            if (data != nil || data.length == 0) {
                 var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &error) as! NSDictionary
                 
                 if responseDict.valueForKey("status")?.integerValue == 1 {

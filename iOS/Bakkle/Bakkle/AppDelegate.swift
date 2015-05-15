@@ -66,7 +66,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         FBAppEvents.activateApp();
         Bakkle.sharedInstance.setServer() //Settings may have changed
-        Bakkle.sharedInstance.refresh()
+        //Bakkle.sharedInstance.refresh()
     }
 
     func applicationWillTerminate(application: UIApplication) {
@@ -84,6 +84,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         println("Failed to register for notifications")
         /* DO nothing on failure */
     }
+    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
+
+        if application.applicationState == UIApplicationState.Active {
+            var localNotification: UILocalNotification = UILocalNotification()
+            localNotification.userInfo = userInfo
+            localNotification.soundName = UILocalNotificationDefaultSoundName
+            localNotification.fireDate = NSDate()
+
+//            application.applicationIconBadgeNumber = 0 //TODO: Set to unread message count.
+            
+            if let aps = userInfo["aps"] as? NSDictionary {
+                println("There is an aps")
+                if let message = aps["alert"] as? String {
+                    println("Message received: \(message)")
+                    localNotification.alertBody = message
+                }
+            }
+
+            application.scheduleLocalNotification(localNotification)
+            
+            //UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Did receive a Remote Notification" message:[NSString stringWithFormat:@"Your App name received this notification while it was running:\n%@",[[userInfo objectForKey:@"aps"] objectForKey:@"alert"]]delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        }
+    }
+    
 
 
 }

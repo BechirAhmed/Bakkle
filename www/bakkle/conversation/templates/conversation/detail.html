@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Bakkle Conversation detail{% endblock %}
+
+{% block content %}
+
+{% if convo %}
+  Details for Conversation: {{ convo.id }}
+  <br/>Start Date = {{ convo.start_date }}
+  <br/>Seller = {{ convo.item_id.seller.display_name }}
+  <br/>Buyer = {{ convo.buyer_id.display_name }}
+  <br/>Total number of messages = {{ message_count }}
+  <br/>Item:
+  <br/>&nbsp&nbspID: {{convo.item_id.id}}
+  <br/>&nbsp&nbspTitle: {{convo.item_id.title}}
+  <br/>
+
+  <br/>Messages: 
+  {% if messages %}
+    <ul>
+      {% for message in messages %} 
+         <li>{{ message.id }}: {{ message.message }}
+         {% if message.buyer_seller_flag %}
+          {{ convo.buyer_id.display_name }} 
+         {% else %}
+          {{ convo.item_id.seller.display_name }}
+         {% endif %}</li>
+      {% endfor %}
+    </ul> 
+  {% else %}
+   <p> This conversation has no messages </p>
+  {% endif %}
+
+{% else %}
+  <p> No Conversation with that id </p>
+{% endif %}
+
+{% endblock %}

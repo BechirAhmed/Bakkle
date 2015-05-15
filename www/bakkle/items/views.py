@@ -94,7 +94,7 @@ def mark_as_deleted(request, item_id):
 #--------------------------------------------#
 @csrf_exempt
 @require_POST
-#TODO: Reinstate auth   @authenticate
+@authenticate
 def add_item(request):
 
     #import pdb; pdb.set_trace()
