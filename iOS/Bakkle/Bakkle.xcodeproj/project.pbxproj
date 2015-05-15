@@ -90,7 +90,6 @@
 		A0D96F881AD772DA0046DA13 /* HoldingPatternView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D96F871AD772DA0046DA13 /* HoldingPatternView.swift */; };
 		A0D96F8A1AD773DB0046DA13 /* FeedFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D96F891AD773DB0046DA13 /* FeedFilter.swift */; };
 		A0D96F901AD7751E0046DA13 /* mock-settings.png in Resources */ = {isa = PBXBuildFile; fileRef = A0D96F8F1AD7751E0046DA13 /* mock-settings.png */; };
-		DB852E7A1B05748F00665CD4 /* InterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB852E791B05748F00665CD4 /* InterfaceController.swift */; };
 		DB852E7C1B05748F00665CD4 /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB852E7B1B05748F00665CD4 /* NotificationController.swift */; };
 		DB852E7E1B05748F00665CD4 /* GlanceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB852E7D1B05748F00665CD4 /* GlanceController.swift */; };
 		DB852E801B05748F00665CD4 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DB852E7F1B05748F00665CD4 /* Images.xcassets */; };
@@ -874,7 +873,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				DB852E7C1B05748F00665CD4 /* NotificationController.swift in Sources */,
-				DB852E7A1B05748F00665CD4 /* InterfaceController.swift in Sources */,
 				DB852E7E1B05748F00665CD4 /* GlanceController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1203,6 +1201,7 @@
 				DB852E941B05748F00665CD4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		DB852E951B05748F00665CD4 /* Build configuration list for PBXNativeTarget "Bakkle WatchKit Extension" */ = {
 			isa = XCConfigurationList;
@@ -1211,6 +1210,7 @@
 				DB852E971B05748F00665CD4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
