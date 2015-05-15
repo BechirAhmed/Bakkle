@@ -10,7 +10,7 @@ import random
 from boto.s3.connection import S3Connection
 from boto.s3.key import Key
 
-from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.template import RequestContext, loader
 from django.utils import timezone
@@ -97,8 +97,6 @@ def mark_as_deleted(request, item_id):
 @require_POST
 @authenticate
 def add_item(request):
-
-    #import pdb; pdb.set_trace()
     # Get the authentication code
     auth_token = request.GET.get('auth_token')
 
@@ -128,7 +126,6 @@ def add_item(request):
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 
     # Check for the image params. The max number is 5 and is defined in settings
-
     image_urls = imgupload(request, seller_id)
 
     if (item_id == None or item_id == ""):
@@ -146,7 +143,12 @@ def add_item(request):
         item.save()
     else:
         # Else get the item
-        item = get_object_or_404(Items, pk=item_id);
+        try:
+            item = Items.objects.get(pk=item_id)
+        except Item.DoesNotExist:
+            item = None
+            response_data = {"status":0, "error":"Item {} does not exist.".format(item_id)}
+            return HttpResponse(json.dumps(response_data), content_type="application/json")
 
         # TODO: fix this
         # Remove all previous images
@@ -316,8 +318,8 @@ def want(request):
 
     print("before conversation")
     conversation = Conversation.objects.get_or_create(
-        item_id = item,
-        buyer_id = buyer)[0]
+        item = item,
+        buyer = buyer)[0]
     conversation.start_time = datetime.datetime.now()
     conversation.save()
     print("after conversation")
@@ -557,9 +559,17 @@ def add_item_to_buyer_items(request, status):
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 
     if (buyer_item_id == None or buyer_item_id == ""):
+
+        try:
+            account = Account.objects.get(pk=buyer_id)
+        except Account.DoesNotExist:
+            account = None
+            response_data = {"status":0, "error":"Account {} does not exist.".format(buyer_id)}
+            return HttpResponse(json.dumps(response_data), content_type="application/json")
+
         # Create or update the buyer item
         buyer_item = BuyerItem.objects.create(
-            buyer = get_object_or_404(Account, pk=buyer_id),
+            buyer = account,
             item = item,
             status = status, 
             confirmed_price = item.price,
@@ -572,8 +582,7 @@ def add_item_to_buyer_items(request, status):
         #     buyer_item.status = BuyerItem.MY_ITEM
         # else:
         #     buyer_item.status = status
-
-        print(BuyerItem.MY_ITEM)
+        buyer_item.status = status
         buyer_item.confirmed_price = item.price
         buyer_item.view_duration = view_duration
         buyer_item.save()
@@ -708,8 +717,30 @@ def reset_items(request):
         a = Account(
             facebook_id="1020420",
             display_name="Test Seller",
-            email="testseller@bakkle.com" )
+            email="testseller@bakkle.com",
+            location="39.417672,-87.330438", )
         a.save()
+
+    # create dummy device
+    try:
+        d = Device.objects.get(
+            uuid = "E6264D84-C395-4132-8C63-3EF051480191",
+            account_id= a,
+            apns_token = "<224c36d9 4de49676 27c42676 ee3ba0a3 33adf555 79259e36 182abf83 8b86a35b>",
+            ip_address = "000.000.000.00",
+            notifcations_enabled = True,
+            auth_token = "asdfasdfasdfasdf_" + a.id,
+            app_version = "16" )
+    except Account.DoesNotExist:
+        d = Device(
+            uuid = "E6264D84-C395-4132-8C63-3EF051480191",
+            account_id= a,
+            apns_token = "<224c36d9 4de49676 27c42676 ee3ba0a3 33adf555 79259e36 182abf83 8b86a35b>",
+            ip_address = "000.000.000.00",
+            notifcations_enabled = True,
+            auth_token = "asdfasdfasdfasdf_" + a.id,
+            app_version = "16" )
+        d.save()
 
     i = Items(
         image_urls = "https://app.bakkle.com/img/b83bdbd.png",

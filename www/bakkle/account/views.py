@@ -26,6 +26,62 @@ def index(request):
     }
     return render(request, 'account/index.html', context)
 
+# Show detail on an account
+@csrf_exempt
+def detail(request, account_id):
+    account = get_object_or_404(Account, pk=account_id)
+    devices = Device.objects.filter(account_id=account_id)
+    buyer_items = BuyerItem.objects.filter(buyer=account_id)
+    items_viewed = buyer_items.count()
+    seller_items = Items.objects.filter(seller=account_id)
+    total_items = seller_items.count()
+    items_sold = Items.objects.filter(seller=account_id, status=Items.SOLD).count()
+    context = {
+        'account': account,
+        'devices': devices,
+        'items': buyer_items,
+        'selling': seller_items,
+        'item_count': total_items,
+        'items_sold': items_sold,
+        'items_viewed': items_viewed
+    }
+    print(context)
+    return render(request, 'account/detail.html', context)
+
+# Show detail on a device
+@csrf_exempt
+def device_detail(request, device_id):
+    device = get_object_or_404(Device, pk=device_id)
+    context = {
+        'device': device,
+    }
+    return render(request, 'account/device_detail.html', context)
+
+# Show detail on an account
+@csrf_exempt
+def dashboard(request):
+    registered_users = Account.objects.count()
+    active_users = Account.objects.filter(disabled = False).count()
+    total_items = Items.objects.count()
+    total_sold = Items.objects.filter(status = Items.SOLD).count()
+    total_expired = Items.objects.filter(status = Items.EXPIRED).count()
+    total_spam = Items.objects.filter(status = Items.SPAM).count()
+    total_deleted = Items.objects.filter(status = Items.DELETED).count()
+    total_pending = Items.objects.filter(status = Items.PENDING).count()
+    
+    context = {
+        'register_users': registered_users,
+        'active_users': active_users,
+        'total_items': total_items,
+        'total_sold': total_sold,
+        'total_expired': total_expired,
+        'total_deleted': total_deleted,
+        'total_spam': total_spam,
+        'total_pending': total_pending
+    }
+    print(context)
+    return render(request, 'account/dashboard.html', context)
+
 # Login to account using Facebook
 @csrf_exempt
 @require_POST
@@ -152,63 +208,7 @@ def facebook(request):
     response_data = {"status":1}
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
-# Show detail on an account
-@csrf_exempt
-def detail(request, account_id):
-    account = get_object_or_404(Account, pk=account_id)
-    devices = Device.objects.filter(account_id=account_id)
-    buyer_items = BuyerItem.objects.filter(buyer=account_id)
-    items_viewed = buyer_items.count()
-    seller_items = Items.objects.filter(seller=account_id)
-    total_items = seller_items.count()
-    items_sold = Items.objects.filter(seller=account_id, status=Items.SOLD).count()
-    context = {
-        'account': account,
-        'devices': devices,
-        'items': buyer_items,
-        'selling': seller_items,
-        'item_count': total_items,
-        'items_sold': items_sold,
-        'items_viewed': items_viewed
-    }
-    print(context)
-    return render(request, 'account/detail.html', context)
-
-# Show detail on an account
-@csrf_exempt
-def dashboard(request):
-    registered_users = Account.objects.count()
-    active_users = Account.objects.filter(disabled = False).count()
-    total_items = Items.objects.count()
-    total_sold = Items.objects.filter(status = Items.SOLD).count()
-    total_expired = Items.objects.filter(status = Items.EXPIRED).count()
-    total_spam = Items.objects.filter(status = Items.SPAM).count()
-    total_deleted = Items.objects.filter(status = Items.DELETED).count()
-    total_pending = Items.objects.filter(status = Items.PENDING).count()
-    
-    context = {
-        'register_users': registered_users,
-        'active_users': active_users,
-        'total_items': total_items,
-        'total_sold': total_sold,
-        'total_expired': total_expired,
-        'total_deleted': total_deleted,
-        'total_spam': total_spam,
-        'total_pending': total_pending
-    }
-    print(context)
-    return render(request, 'account/dashboard.html', context)
-
 ## DEVICE STUFF
-
-# Show detail on a device
-@csrf_exempt
-def device_detail(request, device_id):
-    device = get_object_or_404(Device, pk=device_id)
-    context = {
-        'device': device,
-    }
-    return render(request, 'account/device_detail.html', context)
 
 # Register a new device
 def device_register(ip, uuid, user, location, app_version):
