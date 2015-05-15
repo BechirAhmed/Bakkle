@@ -15,8 +15,8 @@ from account.models import Account, Device
 # Decorator for login authentication
 def authenticate(function):
     def wrap(request, *args, **kwargs):
-        auth_token = request.POST.get('auth_token', "")
-        device_uuid = request.POST.get('device_uuid', "")
+        auth_token = request.POST.get('auth_token', request.GET.get('auth_token', ""))
+        device_uuid = request.POST.get('device_uuid', request.GET.get('device_uuid', ""))        
 
         # check if any of the required fields are empty
         if auth_token == None or auth_token.strip() == "" or auth_token.find('_') == -1 or device_uuid == None or device_uuid.strip() == "":
@@ -25,7 +25,12 @@ def authenticate(function):
         
         # get the account id and the device the user is logging in from
         account_id = auth_token.split('_')[1]
-        device = get_object_or_404(Device, account_id = account_id, uuid = device_uuid)
+        try:
+            device = Device.objects.get(account_id = account_id, uuid = device_uuid)
+        except Device.DoesNotExist:
+            device = None
+            response_data = {"status":0, "error":"Device {} does not exist for account {}.".format(device_uuid, account_id)}
+            return HttpResponse(json.dumps(response_data), content_type="application/json")
 
         # check if the device has a token first (first time logging in)
         if device.auth_token == "":

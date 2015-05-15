@@ -36,9 +36,8 @@ def login_facebook(request):
     app_version = request.POST.get('app_version', "")
 
     # Check that all required params are sent
-    # Check that all required fields are sent
     if (facebook_id == None or facebook_id.strip() == "") or (device_uuid == None or device_uuid.strip() == "") or (user_location == None or user_location == "") or (app_version == None or app_version == ""): 
-        response_data = {"status":0, "error":"A required parameter was not provided."}
+        response_data = {"status":0, "error":"A required parameter was not provided. User_id: {}, device_uuid: {}, user_location: {}, app_version: {}".format(facebook_id, device_uuid, user_location,app_version)}
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 
     location = ""
@@ -95,10 +94,22 @@ def logout(request):
 
     # get the account id and the device the user is logging in from
     account_id = auth_token.split('_')[1]
-    account = get_object_or_404(Account, pk=account_id)
+    try:
+        account = Account.objects.get(pk=account_id)
+    except Account.DoesNotExist:
+        account = None
+        response_data = {"status":0, "error":"Account {} does not exist.".format(account_id)}
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+
 
     # Get the device and update its fields. Also empty the auth_token
-    device = Device.objects.get(uuid = device_uuid, account_id = account)
+    try:
+        device = Device.objects.get(uuid = device_uuid, account_id = account)
+    except Device.DoesNotExist:
+        device = None
+        response_data = {"status":0, "error":"Device {} does not exist for account {}.".format(device_uuid, account_id)}
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+    
     device.last_seen_date = datetime.datetime.now()
     device.ip_address = get_client_ip(request)
     device.auth_token = ""
@@ -138,9 +149,6 @@ def facebook(request):
     account.display_name = display_name
     account.email = email
     account.save()
-
-    # Register device to the client
-    device_register(get_client_ip(request), device_uuid, account)
     response_data = {"status":1}
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
@@ -231,7 +239,12 @@ def device_register_push(request):
 
     # get the account id and the device the user is logging in from
     account_id = auth_token.split('_')[1]
-    account = get_object_or_404(Account, pk=account_id)
+    try:
+        account = Account.objects.get(pk=account_id)
+    except Account.DoesNotExist:
+        account = None
+        response_data = {"status":0, "error":"Account {} does not exist.".format(account_id)}
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
 
     # Either get the device or create it if it is a new one 
     device = Device.objects.get_or_create(
@@ -270,8 +283,14 @@ def device_notify_all_new_item(request):
 @csrf_exempt
 def device_notify(request, device_id):
     # TODO: Send an actual message
-    device = get_object_or_404(Device, pk=device_id)
-    device.send_notification("Test notification", "default", 42)
+    try:
+        device = Device.objects.get(pk=device_id)
+    except Device.DoesNotExist:
+        device = None
+        response_data = {"status":0, "error":"Device {} does not exist.".format(device_id)}
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+    device.send_notification("Test notification", "42", "default")
     response_data = { "status": 1 }
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 

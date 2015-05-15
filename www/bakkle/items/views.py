@@ -23,6 +23,7 @@ from decimal import *
 from django import forms
 
 from .models import Items, BuyerItem
+from conversation.models import Conversation
 from account.models import Account, Device
 from common import authenticate
 from django.conf import settings
@@ -94,7 +95,7 @@ def mark_as_deleted(request, item_id):
 #--------------------------------------------#
 @csrf_exempt
 @require_POST
-#TODO: Reinstate auth   @authenticate
+@authenticate
 def add_item(request):
 
     #import pdb; pdb.set_trace()
@@ -289,6 +290,40 @@ def meh(request):
 @require_POST
 @authenticate
 def want(request):
+    print("Got to want request")
+    item_id = request.POST.get('item_id')
+    auth_token = request.POST.get('auth_token', "")
+    buyer_id = auth_token.split('_')[1]
+
+    # Check that all require params are sent and are of the right format
+    if (item_id == None or item_id.strip() == ""):
+        response_data = { "status":0, "error": "A required parameter was not provided." }
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+    try:
+        buyer = Account.objects.get(pk=buyer_id)
+    except Account.DoesNotExist:
+        buyer = None
+        response_data = {"status":0, "error":"Buyer {} does not exist.".format(buyer_id)}
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+    try:
+        item = Items.objects.get(pk=item_id)
+    except Items.DoesNotExist:
+        item = None
+        response_data = {"status":0, "error":"Item {} does not exist.".format(item_id)}
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+    print("before conversation")
+    conversation = Conversation.objects.get_or_create(
+        item_id = item,
+        buyer_id = buyer)[0]
+    conversation.start_time = datetime.datetime.now()
+    conversation.save()
+    print("after conversation")
+
+
+
     return add_item_to_buyer_items(request, BuyerItem.WANT)
 
 @csrf_exempt
@@ -309,7 +344,13 @@ def report(request):
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 
     # Get item and update the times reported
-    item = get_object_or_404(Items, pk=item_id)
+    try:
+        item = Items.objects.get(pk=item_id)
+    except Item.DoesNotExist:
+        item = None
+        response_data = {"status":0, "error":"Item {} does not exist.".format(item_id)}
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+
     item.times_reported = item.times_reported + 1
     item.save()
 
@@ -508,7 +549,12 @@ def add_item_to_buyer_items(request, status):
     buyer_id = auth_token.split('_')[1]
 
     # get the item
-    item = get_object_or_404(Items, pk=item_id)
+    try:
+        item = Items.objects.get(pk=item_id)
+    except Item.DoesNotExist:
+        item = None
+        response_data = {"status":0, "error":"Item {} does not exist.".format(item_id)}
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
 
     if (buyer_item_id == None or buyer_item_id == ""):
         # Create or update the buyer item
@@ -532,7 +578,12 @@ def add_item_to_buyer_items(request, status):
         buyer_item.view_duration = view_duration
         buyer_item.save()
     else:
-        buyer_item = get_object_or_404(BuyerItem, pk=buyer_item_id)
+        try:
+            buyer_item = BuyerItem.objects.get(pk=buyer_item_id)
+        except BuyerItem.DoesNotExist:
+            buyer_item = None
+            response_data = {"status":0, "error":"BuyerItem {} does not exist.".format(buyer_item_id)}
+            return HttpResponse(json.dumps(response_data), content_type="application/json")
 
         # Update fields
         # If the item seller is the same as the buyer mark it as their item instead of the status
@@ -542,10 +593,10 @@ def add_item_to_buyer_items(request, status):
         #     buyer_item.status = BuyerItem.MY_ITEM
         # else:
         #     buyer_item.status = status
-
-        # buyer_item.confirmed_price = item.price
-        # buyer_item.view_duration = view_duration
-        # buyer_item.save()
+        buyer_item.status = status
+        buyer_item.confirmed_price = item.price
+        buyer_item.view_duration = view_duration
+        buyer_item.save()
 
     response_data = { 'status':1 }
     return HttpResponse(json.dumps(response_data), content_type="application/json")
