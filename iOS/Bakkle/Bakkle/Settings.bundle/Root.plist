@@ -24,10 +24,10 @@
 			<key>Titles</key>
 			<array>
 				<string>Production Server (default)</string>
-				<string>Built-in (DEMO)</string>
+				<string>None</string>
 				<string>Test (Developers only)</string>
 				<string>Lindsey (Developers only)</string>
-				<string>Sandor (Deveopers only)</string>
+				<string>Sandor (Developers only)</string>
 			</array>
 		</dict>
 	</array>

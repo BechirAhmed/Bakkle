@@ -155,7 +155,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         {
             case 0: self.url_base = "https://app.bakkle.com/"
             case 1: self.url_base = "localhost"
-            case 2: self.url_base = "http://bakkle.rhventures.org/"
+            case 2: self.url_base = "http://bakkle.rhventures.org:8000/"
             case 3: self.url_base = "http://137.112.63.186:8000/"
             case 4: self.url_base = "http://10.0.0.118:8000/"
             //case 4: self.url_base = "http://137.112.57.140:8000/"
@@ -187,7 +187,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         self.facebook_id = userid.toInt()
             
         request.HTTPMethod = "POST"
-            let postString = "email=\(email)&name=\(name)&user_name=\(username)&gender=\(gender)&user_id=\(userid)&locale=\(locale)&first_name=\(first_name)&last_name=\(last_name)&device_uuid=\(self.deviceUUID)"
+        let postString = "email=\(email)&name=\(name)&user_name=\(username)&gender=\(gender)&user_id=\(userid)&locale=\(locale)&first_name=\(first_name)&last_name=\(last_name)&device_uuid=\(self.deviceUUID)"
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
         
         info("facebook")
@@ -207,7 +207,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             
             /* JSON parse */
             var error: NSError? = error
-            if (data != nil || data.length == 0) {
+            if (data != nil && data.length != 0) {
                 var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &error) as! NSDictionary
                 
                 if responseDict.valueForKey("status")?.integerValue == 1 {
@@ -215,6 +215,8 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                     self.email = email
                     success()
                 }
+            } else {
+                //TODO: Trigger reattempt to connect timer.
             }
         }
         task.resume()
