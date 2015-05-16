@@ -21,6 +21,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     let url_feed: String          = "items/feed/"
     let url_garage: String        = "items/get_seller_items/"
     let url_add_item: String      = "items/add_item/"
+    let url_view_item: String     = "items/"
     let url_buyers_trunk: String        = "items/get_buyers_trunk/"
     let url_get_holding_pattern: String = "items/get_holding_pattern/"
     let url_buyertransactions: String   = "items/get_buyer_transactions/"
@@ -81,6 +82,12 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         self.getFilter()
         self.restoreData()
         self.initLocation()
+    }
+    
+    /* Return a public URL to the item on the web */
+    /* In future we hope to have a URL shortener */
+    func getImageURL( item_id: Int ) -> ( String ) {
+        return url_base + url_view_item + "\(item_id)/"
     }
     
     /* Location */
