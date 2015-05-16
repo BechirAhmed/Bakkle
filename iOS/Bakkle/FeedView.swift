@@ -11,7 +11,7 @@ import Social
 import Photos
 import Haneke
 
-class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBarDelegate, UINavigationControllerDelegate, MDCSwipeToChooseDelegate {
+class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDelegate, UINavigationControllerDelegate, MDCSwipeToChooseDelegate {
 
     var state : MDCPanState!
 
@@ -35,16 +35,16 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
     
     @IBOutlet weak var progressIndicator: UIActivityIndicatorView!
     
-    @IBOutlet weak var seachBar: UISearchBar!
+    @IBOutlet weak var searchBar: UISearchBar!
     
     var hardCoded = false
     var itemDetailTap: UITapGestureRecognizer!
     
     var item_id = 42 //TODO: unhardcode this
     
-    @IBOutlet weak var navBar: UINavigationBar!
+    @IBOutlet weak var btnAddItem: UIButton!
+    @IBOutlet weak var titleBar: UIView!
     
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -78,6 +78,9 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
             self.filterChanged()
         }
         
+        // Insets set in Storyboard
+        //btnAddItem.imageEdgeInsets = UIEdgeInsetsMake(-10, -10, -10, -10);
+        
         //TODO: Timer to check for new feed items
     }
     
@@ -104,6 +107,11 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
         // Always look for updates
         requestUpdates()
         fromCamera = false
+        
+        // Removed border around search bar.
+        searchBar.barTintColor = titleBar.backgroundColor
+        searchBar.layer.borderColor = titleBar.backgroundColor?.CGColor
+        searchBar.layer.borderWidth = 1
     }
     
     deinit {
@@ -156,6 +164,7 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
             self.bottomView = nil
         }
     }
+
     /* UISearch Bar delegate */
     
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
@@ -164,11 +173,18 @@ class FeedScreen: UIViewController, UIImagePickerControllerDelegate, UISearchBar
         //TODO: need to fix queuing mechanism so multple requests are not dispatched.
     }
     
+    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
+    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
+    
     /* End search bar delegate */
     
     
     func dismissKeyboard() {
-        self.seachBar.resignFirstResponder()
+        self.searchBar.resignFirstResponder()
     }
     
     /* Call when filter parameters change. Updates text when all cards are exhausted */

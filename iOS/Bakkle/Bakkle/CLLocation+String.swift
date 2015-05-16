@@ -27,3 +27,30 @@ extension CLLocation {
         return "{ \"latitude\": \(self.coordinate.latitude), \"longitude\": \(self.coordinate.longitude) }"
     }
 }
+
+extension CLLocationDistance {
+    public func rangeString() -> ( String ) {
+        var distanceString = ""
+        switch Int(self) {
+            case 0...9:
+                distanceString = "0 to 10"
+            case 10...19:
+                distanceString = "10 to 20"
+            case 20...29:
+                distanceString = "20 to 30"
+            case 30...39:
+                distanceString = "30 to 40"
+            case 40...49:
+                distanceString = "40 to 50"
+            case 50...1000:
+                distanceString = "50 to 100"
+            case 100...500:
+                distanceString = "100 to 500"
+            case 100...500:
+                distanceString = "500 to 1,000"
+            default:
+                distanceString = "1,000+"
+        }
+        return distanceString
+    }
+}

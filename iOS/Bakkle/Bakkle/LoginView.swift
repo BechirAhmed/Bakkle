@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController, FBLoginViewDelegate {
+class LoginView: UIViewController, FBLoginViewDelegate {
 
     let mainScreenSegueIdentifier = "PushToFeedSegue" 
 
@@ -51,7 +51,6 @@ class ViewController: UIViewController, FBLoginViewDelegate {
                 Bakkle.sharedInstance.login({
                     
                     dispatch_async(dispatch_get_main_queue()) {
-                        let feedVC : FeedScreen = FeedScreen()
                         self.performSegueWithIdentifier(self.mainScreenSegueIdentifier, sender: self)
                     }
                     

@@ -9,6 +9,10 @@
 import UIKit
 import Photos
 
+//import FBSDKCoreKit
+//import FBSDKShareKit
+//import FBSDKLoginKit
+
 class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
     
     let albumName = "Bakkle"
@@ -45,6 +49,9 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         validateTextFields()
+        if textField == titleField {
+            populateTagsFromTitle()
+        }
         return true
     }
     func textFieldDidBeginEditing(textField: UITextField) {
@@ -111,6 +118,12 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         methodControl.selectedSegmentIndex = 0;
     }
     
+    @IBAction func beginEditingPrice(sender: AnyObject) {
+        if priceField.text == "take it!" {
+            priceField.text = "0"
+            println("setting to zero")
+        }
+    }
     func dismissKeyboard() {
         self.titleField.resignFirstResponder() || self.priceField.resignFirstResponder() || self.tagsField.resignFirstResponder()
         validateTextFields()
@@ -131,7 +144,14 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     
     func formatPrice() {
         if (priceField.text as String).lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
-            priceField.text = String(format: "%.2f", (priceField.text! as NSString).floatValue )
+            var str = (priceField.text! as NSString).stringByReplacingOccurrencesOfString("$", withString: "")
+            str = str.stringByReplacingOccurrencesOfString(" ", withString: "")
+            var value:Float = (str as NSString).floatValue
+            if value == 0 {
+                priceField.text = "take it!"
+            } else {
+                priceField.text = String(format: "$ %.2f", (str as NSString).floatValue )
+            }
         }
     }
     @IBAction func btnConfirm(sender: AnyObject) {
@@ -219,6 +239,37 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
         picker.dismissViewControllerAnimated(true, completion: nil)
     }
+
+    // TODO: Rewrie this so it removes punctuation and some symbols, splits the phrase into an array, then searches the array
+    // for unwanted common words, then puts into tags field
+    let commonWords = ["the","of","and","a","to","in","is","you","that","it","he","was","for","on","are","as","with","his","they","I","at","be","this","have","from","or","one","had","by","word","but","not","what","all","were","we","when","your","can","said","there","use","an","each","which","she","do","how","their","if","will","up","other","about","out","many","then","them","these","so","some","her","would","make","like","him","into","time","has","look","two","more","write","go","see","number","no","way","could","people","my","than","first","water","been","call","who","oil","its","now","find","long","down","day","did","get","come","made","may","part"]
+    func populateTagsFromTitle() {
+        if titleField.text.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
+            var tags: NSString = (titleField.text as NSString)
+            tags = tags.stringByReplacingOccurrencesOfString(".", withString: "")
+            tags = tags.stringByReplacingOccurrencesOfString(",", withString: "")
+            tags = tags.stringByReplacingOccurrencesOfString(";", withString: "")
+            for word in commonWords {
+                tags = tags.stringByReplacingOccurrencesOfString(word, withString: "")
+            }
+            if tagsField.text.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) == 0 ||
+                tags.substringToIndex(tags.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)-1) == tagsField.text {
+                    tagsField.text = tags as String
+            }
+        }
+        println(tagsToHashTags(tagsField.text))
+    }
+
+    //TODO run the above sanitizer first, then split and hashtag
+    func tagsToHashTags(tags: String) -> (String) {
+        var tagsArr = split(tags) {$0 == " "}
+        let hashTags = tagsArr.reduce("") {
+            a, b in
+            let comma = (b == tagsArr.last) ? "" : ", "
+            return "#\(a)\(b)\(comma)"
+        }
+        return hashTags
+    }
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
         let chosen = info[UIImagePickerControllerOriginalImage] as! UIImage
@@ -226,5 +277,110 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         imageView.image = chosen
         dismissViewControllerAnimated(true, completion: nil)
     }
+    
+    /* FACEBOOK */
+    func postOnWall() {
+        var conn: FBRequestConnection = FBRequestConnection()
+//        var handler: FBRequestHandler = conn
+        
+        var postString: String = "\(titleField.text) \(tagsToHashTags(tagsField.text))"
+
+       // if FBSession
+        
+    }
+    
+    
+//    
+//    if ([[FBSDKAccessToken currentAccessToken] hasGranted:@"publish_actions"]) {
+//    [[[FBSDKGraphRequest alloc]
+//    initWithGraphPath:@"me/feed"
+//    parameters: @{ @"message" : @"hello world"}
+//    HTTPMethod:@"POST"]
+//    startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+//    if (!error) {
+//    NSLog(@"Post id:%@", result[@"id"]);
+//    }
+//    }];
+//    }
+    
+    
+//- (void)postOnWall
+//{
+//NSNumber *testMessageIndex=[[NSNumber alloc] init];
+//if ([[NSUserDefaults standardUserDefaults] objectForKey:@"testMessageIndex"]==nil)
+//{
+//testMessageIndex=[NSNumber numberWithInt:100];
+//}
+//else
+//{
+//testMessageIndex=[[NSUserDefaults standardUserDefaults] objectForKey:@"testMessageIndex"];
+//};
+//testMessageIndex=[NSNumber numberWithInt:[testMessageIndex intValue]+1];
+//[[NSUserDefaults standardUserDefaults] setObject:testMessageIndex forKey:@"testMessageIndex"];
+//[[NSUserDefaults standardUserDefaults] synchronize];
+//
+//// create the connection object
+//FBRequestConnection *newConnection = [[FBRequestConnection alloc] init];
+//
+//// create a handler block to handle the results of the request for fbid's profile
+//FBRequestHandler handler =
+//^(FBRequestConnection *connection, id result, NSError *error) {
+//// output the results of the request
+//[self requestCompleted:connection forFbID:@"me" result:result error:error];
+//};
+//
+//// create the request object, using the fbid as the graph path
+//// as an alternative the request* static methods of the FBRequest class could
+//// be used to fetch common requests, such as /me and /me/friends
+//NSString *messageString=[NSString stringWithFormat:@"wk test message %i", [testMessageIndex intValue]];
+//FBRequest *request=[[FBRequest alloc] initWithSession:FBSession.activeSession graphPath:@"me/feed" parameters:[NSDictionary dictionaryWithObject:messageString forKey:@"message"] HTTPMethod:@"POST"];
+//
+//// add the request to the connection object, if more than one request is added
+//// the connection object will compose the requests as a batch request; whether or
+//// not the request is a batch or a singleton, the handler behavior is the same,
+//// allowing the application to be dynamic in regards to whether a single or multiple
+//// requests are occuring
+//[newConnection addRequest:request completionHandler:handler];
+//
+//// if there's an outstanding connection, just cancel
+//[self.requestConnection cancel];
+//
+//// keep track of our connection, and start it
+//self.requestConnection = newConnection;
+//[newConnection start];
+//}
+//
+//// FBSample logic
+//// Report any results.  Invoked once for each request we make.
+//- (void)requestCompleted:(FBRequestConnection *)connection
+//forFbID:fbID
+//result:(id)result
+//error:(NSError *)error
+//{
+//NSLog(@"request completed");
+//
+//// not the completion we were looking for...
+//if (self.requestConnection &&
+//connection != self.requestConnection)
+//{
+//NSLog(@"    not the completion we are looking for");
+//return;
+//}
+//
+//// clean this up, for posterity
+//self.requestConnection = nil;
+//
+//if (error)
+//{
+//NSLog(@"    error");
+//UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"error" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+//// error contains details about why the request failed
+//[alert show];
+//}
+//else
+//{
+//NSLog(@"   ok");
+//};
+//}
 
 }
