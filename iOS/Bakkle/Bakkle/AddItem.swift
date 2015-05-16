@@ -168,35 +168,38 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         
         //TODO: Add drop down 'Pick-up', 'Delivery', 'Meet', 'Ship'
         //TODO: Get location from GPS
-        var factor: CGFloat = imageView.image!.size.height/imageView.image!.size.width
+        var factor: CGFloat = 1.0 //imageView.image!.size.height/imageView.image!.size.width
         
-        //TODO: Identify best size to transfer. 950 is good iphone 6+ size. ip5=640px wide, ip6=750 ip6+=1242
+        //Scale image to improve transfer speeds 950 is good iphone 6+ size. ip5=640px wide, ip6=750 ip6+=1242
         let scaledImageWidth: CGFloat = 660.0;
         
         var size = CGSize(width: scaledImageWidth, height: scaledImageWidth*factor)
-        imageView.image!.resize(size, completionHandler: {(scaledImg:UIImage,bob:NSData) -> () in
-            
-            Bakkle.sharedInstance.addItem(self.titleField.text, description: "", location: Bakkle.sharedInstance.user_location, price: self.priceField.text, tags: self.tagsField.text, method: self.methodControl.titleForSegmentAtIndex(self.methodControl.selectedSegmentIndex)!, image:scaledImg, success: {
+        imageView.image!.cropToSquare({(croppedImg:UIImage,cropBob:NSData) -> () in
 
-                activityView.stopAnimating()
-                activityView.removeFromSuperview()
-                
-                // We just added one so schedule an update.
-                // TODO: Could just add this to the feed
-                // and hope we are fairly current.
-                dispatch_async(dispatch_get_main_queue()) {
-                    Bakkle.sharedInstance.populateFeed({})
+            croppedImg.resize(size, completionHandler: {(scaledImg:UIImage,scaleBob:NSData) -> () in
+
+                Bakkle.sharedInstance.addItem(self.titleField.text, description: "", location: Bakkle.sharedInstance.user_location, price: self.priceField.text, tags: self.tagsField.text, method: self.methodControl.titleForSegmentAtIndex(self.methodControl.selectedSegmentIndex)!, image:scaledImg, success: {
+
+                    activityView.stopAnimating()
+                    activityView.removeFromSuperview()
                     
-                    let alertController = UIAlertController(title: "Bakkle", message:
-                        "Item uploaded to Bakkle.", preferredStyle: UIAlertControllerStyle.Alert)
-                    
-                    let dismissAction = UIAlertAction(title: "OK!", style: UIAlertActionStyle.Default) { (action) -> Void in
-                        self.dismissViewControllerAnimated(true, completion: nil)
+                    // We just added one so schedule an update.
+                    // TODO: Could just add this to the feed
+                    // and hope we are fairly current.
+                    dispatch_async(dispatch_get_main_queue()) {
+                        Bakkle.sharedInstance.populateFeed({})
+                        
+                        let alertController = UIAlertController(title: "Bakkle", message:
+                            "Item uploaded to Bakkle.", preferredStyle: UIAlertControllerStyle.Alert)
+                        
+                        let dismissAction = UIAlertAction(title: "OK!", style: UIAlertActionStyle.Default) { (action) -> Void in
+                            self.dismissViewControllerAnimated(true, completion: nil)
+                        }
+                        alertController.addAction(dismissAction)
+                        self.presentViewController(alertController, animated: true, completion: nil)
                     }
-                    alertController.addAction(dismissAction)
-                    self.presentViewController(alertController, animated: true, completion: nil)
-                }
-            } /* TODO: Fail, warn*/)
+                } /* TODO: Fail, warn*/)
+            })
         })
     }
     
