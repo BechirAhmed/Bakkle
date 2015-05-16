@@ -109,17 +109,20 @@ def get_conversations(request):
         account = Account.objects.get(pk=account_id)
     except Account.DoesNotExist:
         account = None
-        response_data = {"status":0, "error":"Buyer {} does not exist.".format(account_id)}
+        response_data = {"status":0, "error":"Account {} does not exist.".format(account_id)}
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 
-
-    convos = Conversation.objects.filter(buyer=account).filter(deleted_buyer = False)
+    items_selling = Items.objects.filter(seller=account).exclude(status = Items.DELETED)
+    convos = Conversation.objects.filter(Q(buyer=account,deleted_buyer = False) | Q(item__in=items_selling, deleted_seller=False))
     #convos_selling = Conversation.object.filter()
     
+    convo_array = []
+    for convo in convos:
+        convo_dict = get_conversation_dictionary(convo)
+        convo_array.append(convo_dict)
 
-
-    response_data = {"status": 1}
+    response_data = {"status": 1, "conversations": convo_array}
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 
@@ -242,7 +245,7 @@ def view_message(request):
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 
     
-    # Determine which person deleted the conversation
+    # Determine which person viewed the conversation
     buyer_id = message.conversation.buyer.id
     if str(account_id) == str(buyer_id) and message.buyer_seller_flag == False:
         message.viewed = datetime.datetime.now()
@@ -252,6 +255,46 @@ def view_message(request):
     message.save()
 
     response_data = {"status": 1}
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+@csrf_exempt
+@require_POST
+@authenticate
+def get_messages(request):
+    # Get the authentication code
+    auth_token = request.POST.get('auth_token')
+    account_id = auth_token.split('_')[1]
+    
+    conversation_id = request.POST.get('conversation_id', "")
+
+    if (conversation_id == None or conversation_id == ""):
+        response_data = { "status":0, "error": "A required parameter was not provided." }
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+    try: 
+        convo = Conversation.objects.get(pk=conversation_id)
+    except Conversation.DoesNotExist:
+        convo = None
+        response_data = {"status":0, "error":"Conversation {} does not exist.".format(conversation_id)}
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+    buyer_id = convo.buyer.id
+    user_is_buyer = False
+    if str(account_id) == str(buyer_id):
+        user_is_buyer = True
+    
+
+    if(user_is_buyer):
+        messages = Message.objects.filter(conversation=convo, deleted_buyer = False)
+    else:
+        messages = Message.objects.filter(conversation=convo, deleted_seller = False)
+
+    message_array = []
+    for message in messages:
+        message_dict = get_message_dictionary(message, user_is_buyer)
+        message_array.append(message_dict)
+
+    response_data = {"status": 1, "messages": message_array}
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 
@@ -267,8 +310,31 @@ def get_conversation_dictionary(convo):
     conversation_dict = {'pk': convo.id,
         'buyer': buyer_dict,
         'item': item_dict,
-        'start_date': convo.start_date,
+        'start_date': convo.start_date.strftime("%Y-%m-%d %H:%M:%S"),
         'deleted_seller': convo.deleted_seller,
         'deleted_buyer': convo.deleted_seller}
 
     return conversation_dict
+
+def get_message_dictionary(message, user_is_buyer):
+    sent_by_user = False
+    if(user_is_buyer and message.buyer_seller_flag):
+        sent_by_user = True
+    elif (not user_is_buyer and not message.buyer_seller_flag):
+        sent_by_user = True
+
+    viewed = ""
+    if(message.viewed != None):
+        viewed = message.viewed.strftime("%Y-%m-%d %H:%M:%S")
+
+    message_dict = {'pk': message.id,
+        'sent_by_user': sent_by_user,
+        'date_sent': message.date_sent.strftime("%Y-%m-%d %H:%M:%S"),
+        'viewed': viewed,
+        'message': message.message,
+        'url': message.url,
+        'proposed_price': str(message.proposed_price),
+        'deleted_seller': message.deleted_seller,
+        'deleted_buyer': message.deleted_buyer }
+
+    return message_dict

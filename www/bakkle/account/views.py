@@ -48,6 +48,13 @@ def detail(request, account_id):
     print(context)
     return render(request, 'account/detail.html', context)
 
+# Method for reseting account feed (only for detail page)
+@csrf_exempt
+def reset(request, account_id):
+    BuyerItem.objects.filter(buyer=account_id).delete()
+    response_data = { "status":1 }
+    return detail(request, account_id)
+
 # Show detail on a device
 @csrf_exempt
 def device_detail(request, device_id):
