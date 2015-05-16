@@ -109,7 +109,7 @@ static const ChooseItemViewImageLabelWidth = 42.f;
     CGFloat topPadding = 0.f;
     CGRect frame = CGRectMake(leftPadding,
                               topPadding,
-                              floorf(CGRectGetWidth(_informationView.frame)*0.75),
+                              floorf(CGRectGetWidth(_informationView.frame)*0.65),
                               CGRectGetHeight(_informationView.frame) - topPadding);
     _nameLabel = [[UILabel alloc] initWithFrame:frame];
     _nameLabel.text = [NSString stringWithFormat:@"%s", ""];
@@ -128,11 +128,12 @@ static const ChooseItemViewImageLabelWidth = 42.f;
     _priceLabel.attributedText = myString;
     
     CGFloat topPadding = 0.f;
-    CGRect frame = CGRectMake(floorf(CGRectGetWidth(_informationView.frame)*0.75), topPadding, floorf((CGRectGetWidth(_informationView.frame)*0.25)), CGRectGetHeight(_informationView.frame) - topPadding);
+    CGRect frame = CGRectMake(floorf(CGRectGetWidth(_informationView.frame)*0.65), topPadding, floorf((CGRectGetWidth(_informationView.frame)*0.35))-5, CGRectGetHeight(_informationView.frame) - topPadding);
     _priceLabel = [[UILabel alloc] initWithFrame:frame];
     _priceLabel.font = [UIFont fontWithName:@"Avenir" size:21];
+    [_priceLabel setContentCompressionResistancePriority:800 forAxis:UILayoutConstraintAxisHorizontal];
     // _priceLabel.font = [UIFont fontWithName:@"Avenir-Black" size:19];
-    _priceLabel.textAlignment = NSTextAlignmentCenter;
+    _priceLabel.textAlignment = NSTextAlignmentRight;
     [_informationView addSubview:_priceLabel];
 }
 
