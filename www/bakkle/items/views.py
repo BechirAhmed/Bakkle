@@ -729,7 +729,7 @@ def reset_items(request):
             apns_token = "<224c36d9 4de49676 27c42676 ee3ba0a3 33adf555 79259e36 182abf83 8b86a35b>",
             ip_address = "000.000.000.00",
             notifcations_enabled = True,
-            auth_token = "asdfasdfasdfasdf_" + a.id,
+            auth_token = "asdfasdfasdfasdf_{}".format(a.id),
             app_version = "16" )
     except Account.DoesNotExist:
         d = Device(
@@ -738,7 +738,7 @@ def reset_items(request):
             apns_token = "<224c36d9 4de49676 27c42676 ee3ba0a3 33adf555 79259e36 182abf83 8b86a35b>",
             ip_address = "000.000.000.00",
             notifcations_enabled = True,
-            auth_token = "asdfasdfasdfasdf_" + a.id,
+            auth_token = "asdfasdfasdfasdf_{}".format(a.id),
             app_version = "16" )
         d.save()
 
