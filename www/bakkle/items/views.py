@@ -23,7 +23,7 @@ from decimal import *
 from django import forms
 
 from .models import Items, BuyerItem
-from conversation.models import Conversation
+from conversation.models import Conversation, Message
 from account.models import Account, Device
 from common import authenticate
 from django.conf import settings
@@ -387,9 +387,14 @@ def get_seller_items(request):
 
     item_list = Items.objects.filter(Q(seller=seller_id, status=Items.ACTIVE) | Q(seller=seller_id, status=Items.PENDING))
 
+
+
     item_array = []
     # get json representaion of item array
     for item in item_list:
+        # conversations = Conversation.objects.filter(item=item)
+        # for convo in conversation:
+        #     messages
         item_dict = get_item_dictionary(item)
         item_array.append(item_dict)
 
@@ -718,19 +723,20 @@ def reset_items(request):
             facebook_id="1020420",
             display_name="Test Seller",
             email="testseller@bakkle.com",
-            location="39.417672,-87.330438", )
+            user_location="39.417672,-87.330438", )
         a.save()
 
     # create dummy device
     try:
-        d = Device.objects.get(
+        d = Device.objects.get_or_create(
             uuid = "E6264D84-C395-4132-8C63-3EF051480191",
             account_id= a,
             apns_token = "<224c36d9 4de49676 27c42676 ee3ba0a3 33adf555 79259e36 182abf83 8b86a35b>",
             ip_address = "000.000.000.00",
-            notifcations_enabled = True,
+            notifications_enabled = True,
             auth_token = "asdfasdfasdfasdf_{}".format(a.id),
-            app_version = "16" )
+            app_version = "16" )[0]
+        d.save()
     except Account.DoesNotExist:
         d = Device(
             uuid = "E6264D84-C395-4132-8C63-3EF051480191",
