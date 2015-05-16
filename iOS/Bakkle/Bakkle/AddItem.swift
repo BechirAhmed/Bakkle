@@ -174,9 +174,9 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         let scaledImageWidth: CGFloat = 660.0;
         
         var size = CGSize(width: scaledImageWidth, height: scaledImageWidth*factor)
-//        imageView.image!.resize(size, completionHandler: {(scaledImg:UIImage,bob:NSData) -> () in
-//            
-            Bakkle.sharedInstance.addItem(self.titleField.text, description: "", location: Bakkle.sharedInstance.user_location, price: self.priceField.text, tags: self.tagsField.text, method: self.methodControl.titleForSegmentAtIndex(self.methodControl.selectedSegmentIndex)!, image:imageView.image!, success: {
+        imageView.image!.resize(size, completionHandler: {(scaledImg:UIImage,bob:NSData) -> () in
+            
+            Bakkle.sharedInstance.addItem(self.titleField.text, description: "", location: Bakkle.sharedInstance.user_location, price: self.priceField.text, tags: self.tagsField.text, method: self.methodControl.titleForSegmentAtIndex(self.methodControl.selectedSegmentIndex)!, image:scaledImg, success: {
 
                 activityView.stopAnimating()
                 activityView.removeFromSuperview()
@@ -197,7 +197,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
                     self.presentViewController(alertController, animated: true, completion: nil)
                 }
             } /* TODO: Fail, warn*/)
-//        })
+        })
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {

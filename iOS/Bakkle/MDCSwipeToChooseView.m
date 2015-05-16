@@ -105,7 +105,7 @@ static const ChooseItemViewImageLabelWidth = 42.f;
 }
 
 - (void)constructNameLabel {
-    CGFloat leftPadding = 12.f;
+    CGFloat leftPadding = 5.f;
     CGFloat topPadding = 0.f;
     CGRect frame = CGRectMake(leftPadding,
                               topPadding,
