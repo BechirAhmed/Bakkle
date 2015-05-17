@@ -24,8 +24,8 @@ class SellersGarageView: UIViewController, UICollectionViewDelegate, UICollectio
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
+        self.collectionView.contentMode = UIViewContentMode.ScaleAspectFill
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -67,7 +67,6 @@ class SellersGarageView: UIViewController, UICollectionViewDelegate, UICollectio
     func updateView(collectionView: UICollectionView) {
         println("[Sellers Garage] Updating View")
         if Bakkle.sharedInstance.garageItems.count > 0 {
-            
         }
     }
     
@@ -78,23 +77,33 @@ class SellersGarageView: UIViewController, UICollectionViewDelegate, UICollectio
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection: Int) -> Int {
-//        return 10
         return Bakkle.sharedInstance.garageItems != nil ? Bakkle.sharedInstance.garageItems.count : 0
     }
     
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
-        return 5.0
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+        
+        var screenWidth = CGRectGetWidth(collectionView.bounds)
+        var cellWidth = screenWidth/2
+        
+        return CGSize(width: cellWidth - 1, height: cellWidth - 1)
     }
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
-        return 5.0
+    
+    func collectionView(collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
+            return 2
+    }
+    
+    func collectionView(collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
+            return 2
     }
 
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell : CollectionThumbnail = collectionView.dequeueReusableCellWithReuseIdentifier(photoCellIdentifier, forIndexPath: indexPath) as! CollectionThumbnail
-        
-        cell.setThumbnailImage(UIImage(named: "blank.png")!)
         cell.contentMode = UIViewContentMode.ScaleAspectFill
-
+        cell.setThumbnailImage(UIImage(named: "blank.png")!)
         //        populateCells(cell)
 //        collectionView.reloadData()
         
@@ -105,8 +114,8 @@ class SellersGarageView: UIViewController, UICollectionViewDelegate, UICollectio
             
             let firstURL = imgURLs[0] as! String
             let imgURL = NSURL(string: firstURL)
-            cell.imgView.hnk_setImageFromURL(imgURL!)
             cell.contentMode = UIViewContentMode.ScaleAspectFill
+            cell.imgView.hnk_setImageFromURL(imgURL!)
         }
         
 //        let asset: PHAsset = self.photosAsset[indexPath.item] as! PHAsset
@@ -125,8 +134,8 @@ class SellersGarageView: UIViewController, UICollectionViewDelegate, UICollectio
             let firstURL = imgURLs[0] as! String
             let imgURL = NSURL(string: firstURL)
             if let imgData = NSData(contentsOfURL: imgURL!) {
-                cell.setThumbnailImage(UIImage(data: imgData)!)
                 cell.imgView.contentMode = UIViewContentMode.ScaleAspectFill
+                cell.setThumbnailImage(UIImage(data: imgData)!)
             }
         }
     }
