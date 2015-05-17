@@ -147,6 +147,10 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
             var str = (priceField.text! as NSString).stringByReplacingOccurrencesOfString("$", withString: "")
             str = str.stringByReplacingOccurrencesOfString(" ", withString: "")
             var value:Float = (str as NSString).floatValue
+            // Currently capping value at 100k
+            if value > 100000 {
+                value = 100000
+            }
             if value == 0 {
                 priceField.text = "take it!"
             } else {
@@ -178,8 +182,9 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
 
             croppedImg.resize(size, completionHandler: {(scaledImg:UIImage,scaleBob:NSData) -> () in
 
-                Bakkle.sharedInstance.addItem(self.titleField.text, description: "", location: Bakkle.sharedInstance.user_location, price: self.priceField.text, tags: self.tagsField.text, method: self.methodControl.titleForSegmentAtIndex(self.methodControl.selectedSegmentIndex)!, image:scaledImg, success: {
-
+                
+                Bakkle.sharedInstance.addItem(self.titleField.text, description: "", location: Bakkle.sharedInstance.user_location, price: self.priceField.text, tags: self.tagsField.text, method: self.methodControl.titleForSegmentAtIndex(self.methodControl.selectedSegmentIndex)!, image:scaledImg, success: {(item_id:Int?) -> () in
+                    
                     activityView.stopAnimating()
                     activityView.removeFromSuperview()
                     
@@ -188,6 +193,8 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
                     // and hope we are fairly current.
                     dispatch_async(dispatch_get_main_queue()) {
                         Bakkle.sharedInstance.populateFeed({})
+                        
+                        println("item_id=\(item_id)")
                         
                         let alertController = UIAlertController(title: "Bakkle", message:
                             "Item uploaded to Bakkle.", preferredStyle: UIAlertControllerStyle.Alert)
@@ -198,7 +205,10 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
                         alertController.addAction(dismissAction)
                         self.presentViewController(alertController, animated: true, completion: nil)
                     }
-                } /* TODO: Fail, warn*/)
+                    }, fail: {() -> () in
+                        //TODO: Show error popup and close.
+                })
+                
             })
         })
     }

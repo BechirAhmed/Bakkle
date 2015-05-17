@@ -551,7 +551,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         
     }
     
-    func addItem(title: String, description: String, location: String, price: String, tags: String, method: String, image: UIImage, success: ()->()) {
+    func addItem(title: String, description: String, location: String, price: String, tags: String, method: String, image: UIImage, success: (item_id: Int?)->(), fail: ()->() ) {
         
         // URL encode some vars.
         let escTitle = title.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
@@ -605,10 +605,18 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                 return
             }
             
-            if let responseString = NSString(data: data, encoding: NSUTF8StringEncoding) {
-                self.debg("Response: \(responseString)")
-                
-                success()
+            let responseString: String = NSString(data: data, encoding: NSUTF8StringEncoding)! as String
+            self.debg("Response: \(responseString)")
+            
+            var parseError: NSError?
+            self.responseDict = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! NSDictionary!
+            self.debg("RESPONSE DICT IS: \(self.responseDict)")
+            
+            if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
+                let item_id: Int = self.responseDict.valueForKey("item_id") as! Int
+                success(item_id: item_id)
+            } else {
+                fail()
             }
         }
         task.resume()

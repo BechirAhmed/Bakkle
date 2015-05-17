@@ -17,7 +17,7 @@ extension UIImage {
             self.drawInRect(rect)
             let newImage = UIGraphicsGetImageFromCurrentImageContext()
             UIGraphicsEndImageContext()
-            let imageData = UIImageJPEGRepresentation(newImage, 0.8)
+            let imageData = UIImageJPEGRepresentation(newImage, 0.7)
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 completionHandler(resizedImage: newImage, data:imageData)
             })
@@ -57,7 +57,7 @@ extension UIImage {
             // Create a new image based on the imageRef and rotate back to the original orientation
             let image: UIImage = UIImage(CGImage: imageRef, scale: self.scale, orientation: self.imageOrientation)!
             
-            let imageData = UIImageJPEGRepresentation(image, 0.8)
+            let imageData = UIImageJPEGRepresentation(image, 0.7)
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 completionHandler(resizedImage: image, data:imageData)
             })
