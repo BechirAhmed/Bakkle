@@ -140,18 +140,19 @@ def send_message(request):
     
     conversation_id = request.GET.get('conversation_id', "")
     message_text = request.GET.get('message', "")
-    proposed_price = request.GET.get('proposed_price', "0.0")
+    proposed_price = request.GET.get('proposed_price', None)
 
 
     if (conversation_id == None or conversation_id == ""):
         response_data = { "status":0, "error": "A required parameter was not provided." }
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 
-    try:
-        proposed_price = Decimal(proposed_price)
-    except ValueError:
-        response_data = { "status":0, "error": "Proposed Price was not a valid decimal." }
-        return HttpResponse(json.dumps(response_data), content_type="application/json")
+    if (proposed_price != None):
+        try:
+            proposed_price = Decimal(proposed_price)
+        except ValueError:
+            response_data = { "status":0, "error": "Proposed Price was not a valid decimal." }
+            return HttpResponse(json.dumps(response_data), content_type="application/json")
 
     try: 
         convo = Conversation.objects.get(pk=conversation_id)
@@ -327,13 +328,17 @@ def get_message_dictionary(message, user_is_buyer):
     if(message.viewed != None):
         viewed = message.viewed.strftime("%Y-%m-%d %H:%M:%S")
 
+    proposed_price = ""
+    if(message.proposed_price != None):
+        proposed_price = str(message.proposed_price)
+
     message_dict = {'pk': message.id,
         'sent_by_user': sent_by_user,
         'date_sent': message.date_sent.strftime("%Y-%m-%d %H:%M:%S"),
         'viewed': viewed,
         'message': message.message,
         'url': message.url,
-        'proposed_price': str(message.proposed_price),
+        'proposed_price': proposed_price,
         'deleted_seller': message.deleted_seller,
         'deleted_buyer': message.deleted_buyer }
 

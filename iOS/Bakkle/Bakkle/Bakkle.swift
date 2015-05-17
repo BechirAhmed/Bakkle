@@ -21,6 +21,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     let url_feed: String          = "items/feed/"
     let url_garage: String        = "items/get_seller_items/"
     let url_add_item: String      = "items/add_item/"
+    let url_view_item: String     = "items/"
     let url_buyers_trunk: String        = "items/get_buyers_trunk/"
     let url_get_holding_pattern: String = "items/get_holding_pattern/"
     let url_buyertransactions: String   = "items/get_buyer_transactions/"
@@ -81,6 +82,12 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         self.getFilter()
         self.restoreData()
         self.initLocation()
+    }
+    
+    /* Return a public URL to the item on the web */
+    /* In future we hope to have a URL shortener */
+    func getImageURL( item_id: Int ) -> ( String ) {
+        return url_base + url_view_item + "\(item_id)/"
     }
     
     /* Location */
@@ -544,7 +551,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         
     }
     
-    func addItem(title: String, description: String, location: String, price: String, tags: String, method: String, image: UIImage, success: ()->()) {
+    func addItem(title: String, description: String, location: String, price: String, tags: String, method: String, image: UIImage, success: (item_id: Int?, item_url: String?)->(), fail: ()->() ) {
         
         // URL encode some vars.
         let escTitle = title.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
@@ -598,10 +605,19 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                 return
             }
             
-            if let responseString = NSString(data: data, encoding: NSUTF8StringEncoding) {
-                self.debg("Response: \(responseString)")
-                
-                success()
+            let responseString: String = NSString(data: data, encoding: NSUTF8StringEncoding)! as String
+            self.debg("Response: \(responseString)")
+            
+            var parseError: NSError?
+            self.responseDict = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! NSDictionary!
+            self.debg("RESPONSE DICT IS: \(self.responseDict)")
+            
+            if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
+                let item_id: Int = self.responseDict.valueForKey("item_id") as! Int
+                let item_url: String = self.getImageURL(item_id)
+                success(item_id: item_id, item_url: item_url)
+            } else {
+                fail()
             }
         }
         task.resume()
