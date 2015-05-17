@@ -21,6 +21,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     let url_feed: String          = "items/feed/"
     let url_garage: String        = "items/get_seller_items/"
     let url_add_item: String      = "items/add_item/"
+    let url_send_chat: String     = "conversation/send_message/"
     let url_view_item: String     = "items/"
     let url_buyers_trunk: String        = "items/get_buyers_trunk/"
     let url_get_holding_pattern: String = "items/get_holding_pattern/"
@@ -544,8 +545,43 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         task.resume()
     }
     
-    func sendChat(conversation_id: Int, message: String) {
+    //http://localhost:8000/conversation/send_message/?auth_token=asdfasdfasdfasdf_1&message=I'd like 50 for it.&device_uuid=E6264D84-C395-4132-8C63-3EF051480191&conversation_id=7
+    func sendChat(conversation_id: Int, message: String, success: ()->(), fail: ()->() ) {
+        // URL encode some vars.
+        let escMessage = message.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
+        let postString = "device_uuid=\(self.deviceUUID)&auth_token=\(self.auth_token)&message=\(escMessage)&conversation_id=\(conversation_id)"
+        let url: NSURL? = NSURL(string: url_base + url_send_chat + "?\(postString)")
+        
+        let request = NSMutableURLRequest(URL: url!)
+        request.HTTPMethod = "POST"
+        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+        
+        info("[Bakkle] sendChat")
+        info("URL: \(url) METHOD: \(request.HTTPMethod) BODY: \(postString)")
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
+            data, response, error in
+            
+            if error != nil {
+                self.err("error= \(error)")
+                return
+            }
+            
+            let responseString: String = NSString(data: data, encoding: NSUTF8StringEncoding)! as String
+            self.debg("Response: \(responseString)")
+            
+            var parseError: NSError?
+            self.responseDict = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! NSDictionary!
+            self.debg("RESPONSE DICT IS: \(self.responseDict)")
+            if (data != nil && data.length != 0 && Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 ){
+    //                let item_id: Int = self.responseDict.valueForKey("item_id") as! Int
+    //                let item_url: String = self.getImageURL(item_id)
+                    success()
+            } else {
+                fail()
+            }
+        }
+        task.resume()
     }
     func onNewChat(conversation_id: Int, message: String, timestamp: time_t) {
         

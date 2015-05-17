@@ -128,6 +128,14 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
         return cell
     }
     
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+      //  let chat = chats[indexPath.row]
+        let chat = Chat(user: User(ID: 2, username: "big-haus", firstName: "Big", lastName: "Haus"), lastMessageText: "6 sounds good :-)", lastMessageSentDate: NSDate())
+        let chatViewController = ChatViewController(chat: chat)
+        self.presentViewController(chatViewController, animated: true, completion: {})
+//        navigationController?.pushViewController(chatViewController, animated: true)
+    }
+    
     /* MENUBAR ITEMS */
     @IBAction func btnMenu(sender: AnyObject) {
         self.revealViewController().revealToggleAnimated(true)
