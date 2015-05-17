@@ -25,7 +25,7 @@ from django import forms
 from .models import Items, BuyerItem
 from conversation.models import Conversation, Message
 from account.models import Account, Device
-from common import authenticate
+from common import authenticate,get_number_conversations_with_new_messages
 from django.conf import settings
 
 MAX_ITEM_IMAGE = 5
@@ -141,6 +141,7 @@ def add_item(request):
             image_urls = image_urls,
             status = Items.ACTIVE)
         item.save()
+        notify_all_new_item("New: ${} - {}".format(item.price, item.title))
     else:
         # Else get the item
         try:
@@ -166,8 +167,7 @@ def add_item(request):
         item.image_urls = image_urls
         item.save()
 
-    notify_all_new_item("New: ${} - {}".format(item.price, item.title))
-    response_data = { "status":1 }
+    response_data = { "status":1, "item_id":item.id }
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 def notify_all_new_item(message):
@@ -181,9 +181,11 @@ def notify_all_new_item(message):
 
     # notify each device
     for device in devices:
-        # lookup number of unread messages
-        badge = 0 #TODO: count number of unread messages
-        device.send_notification(message, badge, "")
+        if device.auth_token != "":
+            account_id = device.auth_token.split('_')[1]
+            # lookup number of unread messages
+            badge = get_number_conversations_with_new_messages(account_id)
+            device.send_notification(message, badge, "")
 
     response_data = { "status": 1 }
     return HttpResponse(json.dumps(response_data), content_type="application/json")
@@ -392,10 +394,14 @@ def get_seller_items(request):
     item_array = []
     # get json representaion of item array
     for item in item_list:
-        # conversations = Conversation.objects.filter(item=item)
-        # for convo in conversation:
-        #     messages
+        conversations = Conversation.objects.filter(item=item)
+        convos_with_new_message = 0
+        for convo in conversations:
+            messages = Message.objects.filter(viewed=None, buyer_seller_flag=True, conversation=convo).count()
+            if messages > 0:
+                convos_with_new_message = convos_with_new_message + 1
         item_dict = get_item_dictionary(item)
+        item_dict['convos_with_new_message'] = convos_with_new_message
         item_array.append(item_dict)
 
     # create json string
