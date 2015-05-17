@@ -23,7 +23,7 @@ from django import forms
 from items.models import Items, BuyerItem
 from account.models import Account, Device
 from .models import Conversation, Message
-from common import authenticate
+from common import authenticate,get_number_conversations_with_new_messages
 from items.views import imgupload, get_item_dictionary, get_account_dictionary
 from django.conf import settings
 
@@ -184,6 +184,52 @@ def send_message(request):
             url= image_url,
             buyer_seller_flag = buyer_flag)
     message.save()
+
+
+    """
+    Example new-offer:
+       device.send_notification("New offer received, $12.22, for Orange Mower", "default", num_conversations_with_new_messages, "",
+       {'chat_id': 23, 'message': 'New offer received, $12.22, for Orange Mower', 'offer': 12.22, 'name': 'Konger Smith'} )
+
+    Example new-chat-message:
+       device.send_notification("I want to buy your mower.", "default", num_conversations_with_new_messages, "",
+       {'chat_id': 24, 'message': 'I want to buy your mower', 'offer': 12.22, 'name': 'Konger Smith'} )
+
+    Example new-chat-image:
+       device.send_notification("Buyer/Seller sent new picture", "default", num_conversations_with_new_messages, "",
+       {'chat_id': 25, 'message': 'Buyer/Seller sent new picture', 'image': image_url, 'name': 'Taro Finnick'} )
+
+    """
+    # Try to notify the other person
+    if(buyer_flag):
+        notify_id = convo.item.seller.id
+    else:
+        notify_id = convo.buyer.id
+
+    device = Device.objects.filter(Q(account_id = notify_id) & ~Q(auth_token="")).order_by('-last_seen_date')
+    if device.count() > 0:
+        send_to_device = device[0]
+
+        name = ""
+        if buyer_flag:
+            name = convo.item.seller.display_name
+        else:
+            name = convo.buyer.display_name
+
+        content = {"conversation_id":convo.id, "name":name}
+
+        text = ""        
+        if message.proposed_price != None:
+            text = "New offer received, ${}, for {}".format(message.proposed_price, convo.item.title)
+            content["proposed_price"] = message.proposed_price
+        elif image_url != "":
+            text = "{} sent a new picture for {}".format(name, convo.item.title)
+            content["image"] = message.url
+        else:
+            text = message.message
+        content["message"] = text
+        badge = get_number_conversations_with_new_messages(notify_id)
+        send_to_device.send_notification(text, badge, "default", content)
 
     response_data = {"status": 1}
     return HttpResponse(json.dumps(response_data), content_type="application/json")

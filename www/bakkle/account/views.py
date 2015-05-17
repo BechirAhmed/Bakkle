@@ -289,7 +289,24 @@ def device_notify_all_new_item(request):
 # Dispatch a notification to device
 @csrf_exempt
 def device_notify(request, device_id):
-    # TODO: Send an actual message
+    """
+    Example new-item:
+       device.send_notification("New $12.22 - Apple mouse with scroll wheel", "default", num_conversations_with_new_messages, "",
+       {'item_id': 42, 'title': 'Apple mouse with scroll wheel'} )
+
+    Example new-offer:
+       device.send_notification("New offer received, $12.22, for Orange Mower", "default", num_conversations_with_new_messages, "",
+       {'chat_id': 23, 'message': 'New offer received, $12.22, for Orange Mower', 'offer': 12.22, 'name': 'Konger Smith'} )
+
+    Example new-chat-message:
+       device.send_notification("I want to buy your mower.", "default", num_conversations_with_new_messages, "",
+       {'chat_id': 24, 'message': 'I want to buy your mower', 'offer': 12.22, 'name': 'Konger Smith'} )
+
+    Example new-chat-image:
+       device.send_notification("Buyer/Seller sent new picture", "default", num_conversations_with_new_messages, "",
+       {'chat_id': 25, 'message': 'Buyer/Seller sent new picture', 'image': image_url, 'name': 'Taro Finnick'} )
+
+    """
     try:
         device = Device.objects.get(pk=device_id)
     except Device.DoesNotExist:
@@ -297,7 +314,10 @@ def device_notify(request, device_id):
         response_data = {"status":0, "error":"Device {} does not exist.".format(device_id)}
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 
-    device.send_notification("Test notification", "42", "default")
+    device.send_notification("Test: New Item", "0", "default", {'item_id': 42, 'title': 'Apple mouse with scroll wheel'})
+    device.send_notification("Test: New Chat Image", "1", "default", {'conversation_id': 25, 'message': 'Buyer/Seller sent new picture', 'image': 'https://app.bakkle.com/img/b8348df.jpg', 'name': 'Taro Finnick'})
+    device.send_notification("Test: New Chat", "2", "default", {'conversation_id': 24, 'message': 'I want to buy your mower', 'name': 'Konger Smith'})
+    device.send_notification("Test: New Offer", "3", "default", {'conversation_id': 24, 'message': 'New offer received, $12.22, for Orange Mower', 'proposed_price': 12.22, 'name': 'Konger Smith'})
     response_data = { "status": 1 }
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
