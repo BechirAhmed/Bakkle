@@ -20,6 +20,6 @@ class Message(models.Model):
     viewed = models.DateTimeField(null = True, auto_now = False)
     message = models.CharField(max_length=500)
     url = models.CharField(max_length=500)
-    proposed_price = models.DecimalField(max_digits = 7, decimal_places=2)
+    proposed_price = models.DecimalField(max_digits = 11, decimal_places=2, null = True)
     deleted_seller = models.BooleanField(default = False)
     deleted_buyer = models.BooleanField(default = False)

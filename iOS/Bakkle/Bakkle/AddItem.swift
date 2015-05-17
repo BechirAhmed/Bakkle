@@ -147,6 +147,10 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
             var str = (priceField.text! as NSString).stringByReplacingOccurrencesOfString("$", withString: "")
             str = str.stringByReplacingOccurrencesOfString(" ", withString: "")
             var value:Float = (str as NSString).floatValue
+            // Currently capping value at 100k
+            if value > 100000 {
+                value = 100000
+            }
             if value == 0 {
                 priceField.text = "take it!"
             } else {
@@ -168,35 +172,44 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         
         //TODO: Add drop down 'Pick-up', 'Delivery', 'Meet', 'Ship'
         //TODO: Get location from GPS
-        var factor: CGFloat = imageView.image!.size.height/imageView.image!.size.width
+        var factor: CGFloat = 1.0 //imageView.image!.size.height/imageView.image!.size.width
         
-        //TODO: Identify best size to transfer. 950 is good iphone 6+ size. ip5=640px wide, ip6=750 ip6+=1242
+        //Scale image to improve transfer speeds 950 is good iphone 6+ size. ip5=640px wide, ip6=750 ip6+=1242
         let scaledImageWidth: CGFloat = 660.0;
         
         var size = CGSize(width: scaledImageWidth, height: scaledImageWidth*factor)
-        imageView.image!.resize(size, completionHandler: {(scaledImg:UIImage,bob:NSData) -> () in
-            
-            Bakkle.sharedInstance.addItem(self.titleField.text, description: "", location: Bakkle.sharedInstance.user_location, price: self.priceField.text, tags: self.tagsField.text, method: self.methodControl.titleForSegmentAtIndex(self.methodControl.selectedSegmentIndex)!, image:scaledImg, success: {
+        imageView.image!.cropToSquare({(croppedImg:UIImage,cropBob:NSData) -> () in
 
-                activityView.stopAnimating()
-                activityView.removeFromSuperview()
+            croppedImg.resize(size, completionHandler: {(scaledImg:UIImage,scaleBob:NSData) -> () in
+
                 
-                // We just added one so schedule an update.
-                // TODO: Could just add this to the feed
-                // and hope we are fairly current.
-                dispatch_async(dispatch_get_main_queue()) {
-                    Bakkle.sharedInstance.populateFeed({})
+                Bakkle.sharedInstance.addItem(self.titleField.text, description: "", location: Bakkle.sharedInstance.user_location, price: self.priceField.text, tags: self.tagsField.text, method: self.methodControl.titleForSegmentAtIndex(self.methodControl.selectedSegmentIndex)!, image:scaledImg, success: {(item_id:Int?) -> () in
                     
-                    let alertController = UIAlertController(title: "Bakkle", message:
-                        "Item uploaded to Bakkle.", preferredStyle: UIAlertControllerStyle.Alert)
+                    activityView.stopAnimating()
+                    activityView.removeFromSuperview()
                     
-                    let dismissAction = UIAlertAction(title: "OK!", style: UIAlertActionStyle.Default) { (action) -> Void in
-                        self.dismissViewControllerAnimated(true, completion: nil)
+                    // We just added one so schedule an update.
+                    // TODO: Could just add this to the feed
+                    // and hope we are fairly current.
+                    dispatch_async(dispatch_get_main_queue()) {
+                        Bakkle.sharedInstance.populateFeed({})
+                        
+                        println("item_id=\(item_id)")
+                        
+                        let alertController = UIAlertController(title: "Bakkle", message:
+                            "Item uploaded to Bakkle.", preferredStyle: UIAlertControllerStyle.Alert)
+                        
+                        let dismissAction = UIAlertAction(title: "OK!", style: UIAlertActionStyle.Default) { (action) -> Void in
+                            self.dismissViewControllerAnimated(true, completion: nil)
+                        }
+                        alertController.addAction(dismissAction)
+                        self.presentViewController(alertController, animated: true, completion: nil)
                     }
-                    alertController.addAction(dismissAction)
-                    self.presentViewController(alertController, animated: true, completion: nil)
-                }
-            } /* TODO: Fail, warn*/)
+                    }, fail: {() -> () in
+                        //TODO: Show error popup and close.
+                })
+                
+            })
         })
     }
     
