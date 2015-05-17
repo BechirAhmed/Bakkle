@@ -612,6 +612,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             
             let responseString: String = NSString(data: data, encoding: NSUTF8StringEncoding)! as String
             self.debg("Response: \(responseString)")
+            println("Response: \(responseString)")
             
             var parseError: NSError?
             self.responseDict = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! NSDictionary!
