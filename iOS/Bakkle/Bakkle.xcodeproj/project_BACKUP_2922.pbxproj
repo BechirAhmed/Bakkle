@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		133467521B08528000ED47EF /* InterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB852E791B05748F00665CD4 /* InterfaceController.swift */; };
 		5E023F861AD592B80002AFBC /* btn-addItem.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E023F851AD592B80002AFBC /* btn-addItem.png */; };
 		5E023F881AD59F200002AFBC /* logo-white-design-png-transp-100.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E023F871AD59F200002AFBC /* logo-white-design-png-transp-100.png */; };
 		5E1DCC9F1AD44C72002D41FD /* tiger.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5E1DCC9E1AD44C71002D41FD /* tiger.jpg */; };
@@ -94,9 +93,7 @@
 		A0D96F881AD772DA0046DA13 /* HoldingPatternView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D96F871AD772DA0046DA13 /* HoldingPatternView.swift */; };
 		A0D96F8A1AD773DB0046DA13 /* FeedFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D96F891AD773DB0046DA13 /* FeedFilter.swift */; };
 		A0D96F901AD7751E0046DA13 /* mock-settings.png in Resources */ = {isa = PBXBuildFile; fileRef = A0D96F8F1AD7751E0046DA13 /* mock-settings.png */; };
-		D0C6A42D1B080ACB0027ACCF /* mock-rating-stars.png in Resources */ = {isa = PBXBuildFile; fileRef = D0C6A42C1B080ACB0027ACCF /* mock-rating-stars.png */; };
-		D0FCDFFA1B03B2E0006F76F7 /* btn-addCam.png in Resources */ = {isa = PBXBuildFile; fileRef = D0FCDFF91B03B2E0006F76F7 /* btn-addCam.png */; };
-		DB5372901B0806B600CC49B7 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB53728F1B0806B600CC49B7 /* FBSDKShareKit.framework */; };
+<<<<<<< HEAD
 		DB852E7C1B05748F00665CD4 /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB852E7B1B05748F00665CD4 /* NotificationController.swift */; };
 		DB852E7E1B05748F00665CD4 /* GlanceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB852E7D1B05748F00665CD4 /* GlanceController.swift */; };
 		DB852E801B05748F00665CD4 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DB852E7F1B05748F00665CD4 /* Images.xcassets */; };
@@ -104,6 +101,11 @@
 		DB852E8C1B05748F00665CD4 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DB852E8A1B05748F00665CD4 /* Interface.storyboard */; };
 		DB852E8E1B05748F00665CD4 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DB852E8D1B05748F00665CD4 /* Images.xcassets */; };
 		DB852E911B05748F00665CD4 /* Bakkle WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = DB852E741B05748F00665CD4 /* Bakkle WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+=======
+		D0C6A42D1B080ACB0027ACCF /* mock-rating-stars.png in Resources */ = {isa = PBXBuildFile; fileRef = D0C6A42C1B080ACB0027ACCF /* mock-rating-stars.png */; };
+		D0FCDFFA1B03B2E0006F76F7 /* btn-addCam.png in Resources */ = {isa = PBXBuildFile; fileRef = D0FCDFF91B03B2E0006F76F7 /* btn-addCam.png */; };
+		DB5372901B0806B600CC49B7 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB53728F1B0806B600CC49B7 /* FBSDKShareKit.framework */; };
+>>>>>>> 638a2bcd2b366e1b06f226ce939071e87d2d878a
 		DBC2C0CC1B01241A00F56792 /* ImageLabelView.m in Sources */ = {isa = PBXBuildFile; fileRef = DBC2C0CB1B01241A00F56792 /* ImageLabelView.m */; };
 		DBEE0E971AF3C464005E60BD /* item-detail-overlay.png in Resources */ = {isa = PBXBuildFile; fileRef = DBEE0E961AF3C464005E60BD /* item-detail-overlay.png */; };
 		DBEE0E991AF3C855005E60BD /* btb-want.png in Resources */ = {isa = PBXBuildFile; fileRef = DBEE0E981AF3C855005E60BD /* btb-want.png */; };
@@ -150,7 +152,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		136AB1E21B0835E200C76C71 /* BakkleNewItemNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = BakkleNewItemNotificationPayload.apns; sourceTree = "<group>"; };
 		1D710285C97E0FF7D33DEB9E /* Pods-Bakkle.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bakkle.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Bakkle/Pods-Bakkle.debug.xcconfig"; sourceTree = "<group>"; };
 		3E0CABDBE20E9D5B2EED4810 /* Pods_Bakkle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Bakkle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E023F851AD592B80002AFBC /* btn-addItem.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-addItem.png"; sourceTree = "<group>"; };
@@ -261,9 +262,7 @@
 		A0D96F871AD772DA0046DA13 /* HoldingPatternView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HoldingPatternView.swift; sourceTree = "<group>"; };
 		A0D96F891AD773DB0046DA13 /* FeedFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedFilter.swift; sourceTree = "<group>"; };
 		A0D96F8F1AD7751E0046DA13 /* mock-settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mock-settings.png"; sourceTree = "<group>"; };
-		D0C6A42C1B080ACB0027ACCF /* mock-rating-stars.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mock-rating-stars.png"; sourceTree = "<group>"; };
-		D0FCDFF91B03B2E0006F76F7 /* btn-addCam.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-addCam.png"; sourceTree = "<group>"; };
-		DB53728F1B0806B600CC49B7 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
+<<<<<<< HEAD
 		DB852E741B05748F00665CD4 /* Bakkle WatchKit Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Bakkle WatchKit Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB852E771B05748F00665CD4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DB852E781B05748F00665CD4 /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
@@ -275,6 +274,11 @@
 		DB852E891B05748F00665CD4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DB852E8B1B05748F00665CD4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
 		DB852E8D1B05748F00665CD4 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+=======
+		D0C6A42C1B080ACB0027ACCF /* mock-rating-stars.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mock-rating-stars.png"; sourceTree = "<group>"; };
+		D0FCDFF91B03B2E0006F76F7 /* btn-addCam.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-addCam.png"; sourceTree = "<group>"; };
+		DB53728F1B0806B600CC49B7 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
+>>>>>>> 638a2bcd2b366e1b06f226ce939071e87d2d878a
 		DBC2C0CA1B01241A00F56792 /* ImageLabelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageLabelView.h; sourceTree = "<group>"; };
 		DBC2C0CB1B01241A00F56792 /* ImageLabelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageLabelView.m; sourceTree = "<group>"; };
 		DBEE0E961AF3C464005E60BD /* item-detail-overlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "item-detail-overlay.png"; sourceTree = "<group>"; };
@@ -571,7 +575,6 @@
 			children = (
 				DB852E771B05748F00665CD4 /* Info.plist */,
 				DB852E781B05748F00665CD4 /* PushNotificationPayload.apns */,
-				136AB1E21B0835E200C76C71 /* BakkleNewItemNotificationPayload.apns */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -915,7 +918,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				133467521B08528000ED47EF /* InterfaceController.swift in Sources */,
 				DB852E7C1B05748F00665CD4 /* NotificationController.swift in Sources */,
 				DB852E7E1B05748F00665CD4 /* GlanceController.swift in Sources */,
 			);

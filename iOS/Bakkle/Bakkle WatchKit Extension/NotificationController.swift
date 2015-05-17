@@ -11,11 +11,10 @@ import Foundation
 
 
 class NotificationController: WKUserNotificationInterfaceController {
-
+    
     override init() {
         // Initialize variables here.
         super.init()
-        
         // Configure interface objects here.
     }
 

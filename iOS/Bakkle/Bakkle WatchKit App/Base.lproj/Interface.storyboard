@@ -10,10 +10,15 @@
             <objects>
                 <controller id="AgC-eL-Hgc" customClass="InterfaceController" customModule="Bakkle_WatchKit_App" customModuleProvider="target">
                     <items>
-                        <imageView width="1" height="1" alignment="center" verticalAlignment="center" id="5ZC-eZ-fDn"/>
+                        <button width="1" alignment="left" title="Button" id="Pdx-Af-NYs">
+                            <connections>
+                                <action selector="openAction" destination="AgC-eL-Hgc" id="LhQ-hw-yNE"/>
+                            </connections>
+                        </button>
+                        <imageView alignment="left" id="wbj-eq-sUv"/>
                     </items>
                     <connections>
-                        <outlet property="imgView" destination="5ZC-eZ-fDn" id="0yu-GD-NWX"/>
+                        <outlet property="imageViewer" destination="wbj-eq-sUv" id="KDw-fn-Q01"/>
                     </connections>
                 </controller>
             </objects>
@@ -37,11 +42,11 @@
             <objects>
                 <notificationController id="YCC-NB-fut">
                     <items>
-                        <label alignment="left" text="Alert Label" id="XkS-y5-khE"/>
+                        <label width="78" alignment="left" text="Alert Label" numberOfLines="0" id="XkS-y5-khE"/>
                     </items>
                     <notificationCategory key="notificationCategory" identifier="myCategory" id="JfB-70-Muf"/>
                     <connections>
-                        <outlet property="notificationAlertLabel" destination="XkS-y5-khE" id="49B-RR-99y"/>
+                        <outlet property="notificationAlertLabel" destination="XkS-y5-khE" id="rZx-CQ-vZd"/>
                         <segue destination="gdX-wl-uQE" kind="relationship" relationship="dynamicNotificationInterface" id="fKh-qV-3T2"/>
                     </connections>
                 </notificationController>
@@ -51,7 +56,14 @@
         <!--Notification Controller-->
         <scene sceneID="KIl-fV-djm">
             <objects>
-                <controller id="gdX-wl-uQE" customClass="NotificationController" customModule="Bakkle_WatchKit_App" customModuleProvider="target"/>
+                <controller id="gdX-wl-uQE" customClass="NotificationController" customModule="Bakkle_WatchKit_App" customModuleProvider="target">
+                    <items>
+                        <label alignment="left" text="Label" id="7kM-zO-44C"/>
+                    </items>
+                    <connections>
+                        <outlet property="label" destination="7kM-zO-44C" id="Ido-vR-TuV"/>
+                    </connections>
+                </controller>
             </objects>
             <point key="canvasLocation" x="553" y="1001"/>
         </scene>
