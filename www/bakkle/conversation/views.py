@@ -142,6 +142,11 @@ def send_message(request):
     message_text = request.GET.get('message', "")
     proposed_price = request.GET.get('proposed_price', None)
 
+    devices = Device.objects.all()
+    for device in devices:
+        content = {}
+        print("sending to ")
+        device.send_notification(message_text, "0", "default", content)
 
     if (conversation_id == None or conversation_id == ""):
         response_data = { "status":0, "error": "A required parameter was not provided." }
