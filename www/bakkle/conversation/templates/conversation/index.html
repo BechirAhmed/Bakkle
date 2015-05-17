@@ -6,12 +6,12 @@
 
 {% if conversation_list %}
   <ul>
-    {% for conv in conversation_list %}
-      <li><a href="{% url 'conversation:detail' conversation.id %}">{{ conversation.id }}: {{ conversation.item_id.seller.display_name }} And {{ conversation.buyer_id.display_name }}</a></li>
+    {% for conversation in conversation_list %}
+      <li><a href="{% url 'conversation:detail' conversation.id %}">{{ conversation.id }}</a>: {{ conversation.item.seller.display_name }} And {{ conversation.buyer.display_name }}</li>
     {% endfor %}
   </ul>
 {% else %}
-  <p> no conversations present </p>
+  <p>  no conversations present </p>
 {% endif %}
 
 {% endblock %}

@@ -54,11 +54,28 @@ class Device(models.Model):
     class Meta:
         unique_together = ("account_id", "uuid")
 
-    """ Example usage device.send_notification("New item posted", "default", 10) """
-    def send_notification(self, message="", badge=0, sound=""):
+    """
+    Example new-item:
+       device.send_notification("New $12.22 - Apple mouse with scroll wheel", "default", num_conversations_with_new_messages, "",
+       {'item_id': 42, 'title': 'Apple mouse with scroll wheel'} )
+
+    Example new-offer:
+       device.send_notification("New offer received, $12.22, for Orange Mower", "default", num_conversations_with_new_messages, "",
+       {'chat_id': 23, 'message': 'New offer received, $12.22, for Orange Mower', 'offer': 12.22, 'name': 'Konger Smith'} )
+
+    Example new-chat-message:
+       device.send_notification("I want to buy your mower.", "default", num_conversations_with_new_messages, "",
+       {'chat_id': 24, 'message': 'I want to buy your mower', 'offer': 12.22, 'name': 'Konger Smith'} )
+
+    Example new-chat-image:
+       device.send_notification("Buyer/Seller sent new picture", "default", num_conversations_with_new_messages, "",
+       {'chat_id': 25, 'message': 'Buyer/Seller sent new picture', 'image': image_url, 'name': 'Taro Finnick'} )
+
+    """
+    def send_notification(self, message="", badge=0, sound="", custom={}):
         print(cert_file)
         apns = APNs(True, cert_file=cert_file, key_file=key_file)
-        payload = Payload(message, badge, sound)
+        payload = Payload(alert=message, badge=badge, sound=sound, custom=custom)
         dt = self.apns_token.replace(' ', '').replace('<', '').replace('>', '')
         print("notifying {} token {}".format(self.account_id, dt))
         apns.gateway_server.send_notification(dt, payload)

@@ -16,12 +16,32 @@ class ItemDetails: UIViewController {
     
     @IBOutlet weak var itemMethodLabel: UILabel!
     @IBOutlet weak var itemPriceLabel: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = UIColor.whiteColor()
+        self.view.backgroundColor = Theme.ColorOffWhite
         activityInd.startAnimating()
+        
+        var swipeDown = UISwipeGestureRecognizer(target: self, action: "respondToSwipeGesture:")
+        swipeDown.direction = UISwipeGestureRecognizerDirection.Down
+        self.view.addGestureRecognizer(swipeDown)
     }
     
+    func respondToSwipeGesture(gesture: UIGestureRecognizer) {
+        
+        if let swipeGesture = gesture as? UISwipeGestureRecognizer {
+            
+            switch swipeGesture.direction {
+            case UISwipeGestureRecognizerDirection.Right:
+                break;
+            case UISwipeGestureRecognizerDirection.Down:
+                self.goback(self)
+                break;
+            default:
+                break
+            }
+        }
+    }
     override func viewWillAppear(animated: Bool) {
         item = Bakkle.sharedInstance.feedItems[0] as? NSDictionary
         let imgURLs = item!.valueForKey("image_urls") as! NSArray

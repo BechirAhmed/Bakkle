@@ -10,11 +10,6 @@ import UIKit
 
 class FeedFilterView: UIViewController {
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-    }
-
     @IBOutlet weak var distance: UISlider!
     @IBOutlet weak var price: UISlider!
     @IBOutlet weak var number: UISlider!
@@ -23,30 +18,12 @@ class FeedFilterView: UIViewController {
     @IBOutlet weak var priceLbl: UILabel!
     @IBOutlet weak var numberLbl: UILabel!
 
-    
-    @IBAction func filterRealtime(sender: AnyObject) {
-        //println("d:\(Int(distance.value)) p:\(price.value) n: \(number.value)")
-        distanceLbl.text = "\(Int(distance.value)) mi"
-        priceLbl.text = "$\(Int(price.value))"
-        numberLbl.text = "\(Int(number.value))"
-        if number.value >= 1000 {
-            numberLbl.text = "∞"
-        } else {
-        }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
     }
-    @IBAction func filterChanged(sender: AnyObject) {
-        println("SET d:\(Int(distance.value)) p:\(price.value) n: \(number.value)")
-        distanceLbl.text = "\(Int(distance.value)) mi"
-        priceLbl.text = "$\(Int(price.value))"
-        numberLbl.text = "\(Int(number.value))"
-        if number.value >= 1000 {
-            numberLbl.text = "∞"
-            Bakkle.sharedInstance.setFilter(distance.value, ffilter_price:price.value, ffilter_number:9999)
-        } else {
-            Bakkle.sharedInstance.setFilter(distance.value, ffilter_price:price.value, ffilter_number:number.value)
-        }
-    }
-    
+
     override func viewWillAppear(animated: Bool) {
         
         /* Custom skin for UISlideView */
@@ -84,5 +61,29 @@ class FeedFilterView: UIViewController {
         self.revealViewController().revealToggleAnimated(true)
     }
     
+    /* FILTER CONTROLS */
+    @IBAction func filterRealtime(sender: AnyObject) {
+        //println("d:\(Int(distance.value)) p:\(price.value) n: \(number.value)")
+        distanceLbl.text = "\(Int(distance.value)) mi"
+        priceLbl.text = "$\(Int(price.value))"
+        numberLbl.text = "\(Int(number.value))"
+        if number.value >= 1000 {
+            numberLbl.text = "∞"
+        } else {
+        }
+    }
+    @IBAction func filterChanged(sender: AnyObject) {
+        println("SET d:\(Int(distance.value)) p:\(price.value) n: \(number.value)")
+        distanceLbl.text = "\(Int(distance.value)) mi"
+        priceLbl.text = "$\(Int(price.value))"
+        numberLbl.text = "\(Int(number.value))"
+        if number.value >= 1000 {
+            numberLbl.text = "∞"
+            Bakkle.sharedInstance.setFilter(distance.value, ffilter_price:price.value, ffilter_number:9999)
+        } else {
+            Bakkle.sharedInstance.setFilter(distance.value, ffilter_price:price.value, ffilter_number:number.value)
+        }
+    }
+
 }
 

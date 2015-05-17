@@ -35,7 +35,7 @@ class HoldingPatternCell : UITableViewCell {
                     }
                 }
         }
-        titleLabel!.text = title.capitalizedString
+        titleLabel!.text = title.uppercaseString
         priceLabel!.text = "$" + price
         deliveryLabel!.text = "Method of Delivery: " + delivery
         let tagString = ", ".join(tags)
@@ -44,14 +44,8 @@ class HoldingPatternCell : UITableViewCell {
         if location.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
             let start: CLLocation = CLLocation(locationString: location)
             if let distance = Bakkle.sharedInstance.distanceTo(start) {
-                if distance >= 10 {
-                    var formatter:NSNumberFormatter = NSNumberFormatter()
-                    formatter.numberStyle = NSNumberFormatterStyle.DecimalStyle
-                    var formattedOutput = formatter.stringFromNumber(Int(distance))
-                    distanceLabel!.text = "\(formattedOutput!) miles away"
-                } else {
-                    distanceLabel!.text = String(format: "%.1f", distance) + " miles away"
-                }
+                var distanceString = distance.rangeString()
+                distanceLabel!.text = "\(distanceString) miles away"
             }
         }
         timeRemainingLabel!.text = "55:55" //TODO: Set this to count down
@@ -122,6 +116,8 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
             self.tableView.reloadData()
         }
         
+        self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
+
         Bakkle.sharedInstance.populateHolding({});
     }
     deinit {

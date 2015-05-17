@@ -34,7 +34,7 @@ class BuyersTrunkCell : UITableViewCell {
                     }
                 }
         }
-        titleLabel!.text = title.capitalizedString
+        titleLabel!.text = title.uppercaseString
         priceLabel!.text = "$" + price
         deliveryLabel!.text = "Method of Delivery: " + delivery
         let tagString = ", ".join(tags)
@@ -43,14 +43,17 @@ class BuyersTrunkCell : UITableViewCell {
         if location.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
             let start: CLLocation = CLLocation(locationString: location)
             if let distance = Bakkle.sharedInstance.distanceTo(start) {
-                if distance >= 10 {
-                    var formatter:NSNumberFormatter = NSNumberFormatter()
-                    formatter.numberStyle = NSNumberFormatterStyle.DecimalStyle
-                    var formattedOutput = formatter.stringFromNumber(Int(distance))
-                    distanceLabel!.text = "\(formattedOutput!) miles away"
-                } else {
-                    distanceLabel!.text = String(format: "%.1f", distance) + " miles away"
-                }
+                
+                var distanceString = distance.rangeString()
+                distanceLabel!.text = "\(distanceString) miles away"
+//                if distance >= 10 {
+//                    var formatter:NSNumberFormatter = NSNumberFormatter()
+//                    formatter.numberStyle = NSNumberFormatterStyle.DecimalStyle
+//                    var formattedOutput = formatter.stringFromNumber(Int(distance))
+//                    distanceLabel!.text = "\(formattedOutput!) miles away"
+//                } else {
+//                    distanceLabel!.text = String(format: "%.1f", distance) + " miles away"
+//                }
             }
         }
     }
@@ -63,6 +66,8 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
         super.viewDidLoad()
         var nib = UINib(nibName: "BuyersTrunkCell", bundle: nil)
         self.tableView.registerNib(nib, forCellReuseIdentifier: "GarageCell")
+        
+        self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
     }
     
     override func viewWillAppear(animated: Bool) {

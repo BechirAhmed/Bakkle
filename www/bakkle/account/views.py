@@ -26,9 +26,72 @@ def index(request):
     }
     return render(request, 'account/index.html', context)
 
+# Show detail on an account
+@csrf_exempt
+def detail(request, account_id):
+    account = get_object_or_404(Account, pk=account_id)
+    devices = Device.objects.filter(account_id=account_id)
+    buyer_items = BuyerItem.objects.filter(buyer=account_id)
+    items_viewed = buyer_items.count()
+    seller_items = Items.objects.filter(seller=account_id)
+    total_items = seller_items.count()
+    items_sold = Items.objects.filter(seller=account_id, status=Items.SOLD).count()
+    context = {
+        'account': account,
+        'devices': devices,
+        'items': buyer_items,
+        'selling': seller_items,
+        'item_count': total_items,
+        'items_sold': items_sold,
+        'items_viewed': items_viewed
+    }
+    print(context)
+    return render(request, 'account/detail.html', context)
+
+# Method for reseting account feed (only for detail page)
+@csrf_exempt
+def reset(request, account_id):
+    BuyerItem.objects.filter(buyer=account_id).delete()
+    response_data = { "status":1 }
+    return detail(request, account_id)
+
+# Show detail on a device
+@csrf_exempt
+def device_detail(request, device_id):
+    device = get_object_or_404(Device, pk=device_id)
+    context = {
+        'device': device,
+    }
+    return render(request, 'account/device_detail.html', context)
+
+# Show detail on an account
+@csrf_exempt
+def dashboard(request):
+    registered_users = Account.objects.count()
+    active_users = Account.objects.filter(disabled = False).count()
+    total_items = Items.objects.count()
+    total_sold = Items.objects.filter(status = Items.SOLD).count()
+    total_expired = Items.objects.filter(status = Items.EXPIRED).count()
+    total_spam = Items.objects.filter(status = Items.SPAM).count()
+    total_deleted = Items.objects.filter(status = Items.DELETED).count()
+    total_pending = Items.objects.filter(status = Items.PENDING).count()
+    
+    context = {
+        'register_users': registered_users,
+        'active_users': active_users,
+        'total_items': total_items,
+        'total_sold': total_sold,
+        'total_expired': total_expired,
+        'total_deleted': total_deleted,
+        'total_spam': total_spam,
+        'total_pending': total_pending
+    }
+    print(context)
+    return render(request, 'account/dashboard.html', context)
+
 # Login to account using Facebook
 @csrf_exempt
-@require_POST
+#@require_POST
 def login_facebook(request):
     facebook_id = request.POST.get('user_id', "")
     device_uuid = request.POST.get('device_uuid', "")
@@ -94,10 +157,22 @@ def logout(request):
 
     # get the account id and the device the user is logging in from
     account_id = auth_token.split('_')[1]
-    account = get_object_or_404(Account, pk=account_id)
+    try:
+        account = Account.objects.get(pk=account_id)
+    except Account.DoesNotExist:
+        account = None
+        response_data = {"status":0, "error":"Account {} does not exist.".format(account_id)}
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+
 
     # Get the device and update its fields. Also empty the auth_token
-    device = Device.objects.get(uuid = device_uuid, account_id = account)
+    try:
+        device = Device.objects.get(uuid = device_uuid, account_id = account)
+    except Device.DoesNotExist:
+        device = None
+        response_data = {"status":0, "error":"Device {} does not exist for account {}.".format(device_uuid, account_id)}
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+    
     device.last_seen_date = datetime.datetime.now()
     device.ip_address = get_client_ip(request)
     device.auth_token = ""
@@ -140,63 +215,7 @@ def facebook(request):
     response_data = {"status":1}
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
-# Show detail on an account
-@csrf_exempt
-def detail(request, account_id):
-    account = get_object_or_404(Account, pk=account_id)
-    devices = Device.objects.filter(account_id=account_id)
-    buyer_items = BuyerItem.objects.filter(buyer=account_id)
-    items_viewed = buyer_items.count()
-    seller_items = Items.objects.filter(seller=account_id)
-    total_items = seller_items.count()
-    items_sold = Items.objects.filter(seller=account_id, status=Items.SOLD).count()
-    context = {
-        'account': account,
-        'devices': devices,
-        'items': buyer_items,
-        'selling': seller_items,
-        'item_count': total_items,
-        'items_sold': items_sold,
-        'items_viewed': items_viewed
-    }
-    print(context)
-    return render(request, 'account/detail.html', context)
-
-# Show detail on an account
-@csrf_exempt
-def dashboard(request):
-    registered_users = Account.objects.count()
-    active_users = Account.objects.filter(disabled = False).count()
-    total_items = Items.objects.count()
-    total_sold = Items.objects.filter(status = Items.SOLD).count()
-    total_expired = Items.objects.filter(status = Items.EXPIRED).count()
-    total_spam = Items.objects.filter(status = Items.SPAM).count()
-    total_deleted = Items.objects.filter(status = Items.DELETED).count()
-    total_pending = Items.objects.filter(status = Items.PENDING).count()
-    
-    context = {
-        'register_users': registered_users,
-        'active_users': active_users,
-        'total_items': total_items,
-        'total_sold': total_sold,
-        'total_expired': total_expired,
-        'total_deleted': total_deleted,
-        'total_spam': total_spam,
-        'total_pending': total_pending
-    }
-    print(context)
-    return render(request, 'account/dashboard.html', context)
-
 ## DEVICE STUFF
-
-# Show detail on a device
-@csrf_exempt
-def device_detail(request, device_id):
-    device = get_object_or_404(Device, pk=device_id)
-    context = {
-        'device': device,
-    }
-    return render(request, 'account/device_detail.html', context)
 
 # Register a new device
 def device_register(ip, uuid, user, location, app_version):
@@ -227,7 +246,12 @@ def device_register_push(request):
 
     # get the account id and the device the user is logging in from
     account_id = auth_token.split('_')[1]
-    account = get_object_or_404(Account, pk=account_id)
+    try:
+        account = Account.objects.get(pk=account_id)
+    except Account.DoesNotExist:
+        account = None
+        response_data = {"status":0, "error":"Account {} does not exist.".format(account_id)}
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
 
     # Either get the device or create it if it is a new one 
     device = Device.objects.get_or_create(
@@ -265,9 +289,35 @@ def device_notify_all_new_item(request):
 # Dispatch a notification to device
 @csrf_exempt
 def device_notify(request, device_id):
-    # TODO: Send an actual message
-    device = get_object_or_404(Device, pk=device_id)
-    device.send_notification("Test notification", "42", "default")
+    """
+    Example new-item:
+       device.send_notification("New $12.22 - Apple mouse with scroll wheel", "default", num_conversations_with_new_messages, "",
+       {'item_id': 42, 'title': 'Apple mouse with scroll wheel'} )
+
+    Example new-offer:
+       device.send_notification("New offer received, $12.22, for Orange Mower", "default", num_conversations_with_new_messages, "",
+       {'chat_id': 23, 'message': 'New offer received, $12.22, for Orange Mower', 'offer': 12.22, 'name': 'Konger Smith'} )
+
+    Example new-chat-message:
+       device.send_notification("I want to buy your mower.", "default", num_conversations_with_new_messages, "",
+       {'chat_id': 24, 'message': 'I want to buy your mower', 'offer': 12.22, 'name': 'Konger Smith'} )
+
+    Example new-chat-image:
+       device.send_notification("Buyer/Seller sent new picture", "default", num_conversations_with_new_messages, "",
+       {'chat_id': 25, 'message': 'Buyer/Seller sent new picture', 'image': image_url, 'name': 'Taro Finnick'} )
+
+    """
+    try:
+        device = Device.objects.get(pk=device_id)
+    except Device.DoesNotExist:
+        device = None
+        response_data = {"status":0, "error":"Device {} does not exist.".format(device_id)}
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+    device.send_notification("Test: New Item", "0", "default", {'item_id': 42, 'title': 'Apple mouse with scroll wheel'})
+    device.send_notification("Test: New Chat Image", "1", "default", {'conversation_id': 25, 'message': 'Buyer/Seller sent new picture', 'image': 'https://app.bakkle.com/img/b8348df.jpg', 'name': 'Taro Finnick'})
+    device.send_notification("Test: New Chat", "2", "default", {'conversation_id': 24, 'message': 'I want to buy your mower', 'name': 'Konger Smith'})
+    device.send_notification("Test: New Offer", "3", "default", {'conversation_id': 24, 'message': 'New offer received, $12.22, for Orange Mower', 'proposed_price': 12.22, 'name': 'Konger Smith'})
     response_data = { "status": 1 }
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 

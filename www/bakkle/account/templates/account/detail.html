@@ -27,7 +27,7 @@
     <br/> &nbsp;&nbsp;&nbsp;&nbsp;Total Items Listed: {{ item_count }}
     <br/> &nbsp;&nbsp;&nbsp;&nbsp;Total Items Sold: {{ items_sold }}
 
-  <br/>Items Viewed:  
+  <br/>Items Viewed: <a href="{% url 'account:reset' account.id %}">Reset Feed</a>
     <br />&nbsp;&nbsp;&nbsp;&nbsp;Total Viewed: {{ items_viewed }}
   {% if items %}
     <ul>

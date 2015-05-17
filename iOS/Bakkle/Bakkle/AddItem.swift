@@ -9,6 +9,10 @@
 import UIKit
 import Photos
 
+//import FBSDKCoreKit
+//import FBSDKShareKit
+//import FBSDKLoginKit
+
 class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
     
     let albumName = "Bakkle"
@@ -18,8 +22,8 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     @IBOutlet weak var titleField: UITextField!
     @IBOutlet weak var priceField: UITextField!
     @IBOutlet weak var tagsField: UITextField!
-    @IBOutlet weak var methodField: UITextField!
-    
+    @IBOutlet weak var methodControl: UISegmentedControl!
+    @IBOutlet weak var add: UIButton!
     @IBOutlet weak var imageView: UIImageView!
 
     override func viewDidLoad() {
@@ -28,7 +32,6 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         titleField.delegate = self
         priceField.delegate = self
         tagsField.delegate = self
-        methodField.delegate = self
         
         var nextBtn = UIToolbar(frame: CGRectMake(0, 0, 320, 50))
         nextBtn.barStyle = UIBarStyle.Default
@@ -46,6 +49,9 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         validateTextFields()
+        if textField == titleField {
+            populateTagsFromTitle()
+        }
         return true
     }
     func textFieldDidBeginEditing(textField: UITextField) {
@@ -109,11 +115,17 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         imageView.clipsToBounds = true
         
         // Set default
-        methodField.text = "Pick-up"
+        methodControl.selectedSegmentIndex = 0;
     }
     
+    @IBAction func beginEditingPrice(sender: AnyObject) {
+        if priceField.text == "take it!" {
+            priceField.text = "0"
+            println("setting to zero")
+        }
+    }
     func dismissKeyboard() {
-        self.titleField.resignFirstResponder() || self.priceField.resignFirstResponder() || self.tagsField.resignFirstResponder() || self.methodField.resignFirstResponder()
+        self.titleField.resignFirstResponder() || self.priceField.resignFirstResponder() || self.tagsField.resignFirstResponder()
         validateTextFields()
     }
 
@@ -122,7 +134,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     }
     
     func validateTextFields() {
-        if self.titleField.text.isEmpty || self.priceField.text.isEmpty || self.tagsField.text.isEmpty || self.methodField.text.isEmpty || imageView.image == nil {
+        if self.titleField.text.isEmpty || self.priceField.text.isEmpty || self.tagsField.text.isEmpty || imageView.image == nil {
             add.enabled = false
         }
         else {
@@ -130,18 +142,27 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         }
     }
     
-    @IBOutlet weak var add: UIButton!    
-    
     func formatPrice() {
         if (priceField.text as String).lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
-            priceField.text = String(format: "%.2f", (priceField.text! as NSString).floatValue )
+            var str = (priceField.text! as NSString).stringByReplacingOccurrencesOfString("$", withString: "")
+            str = str.stringByReplacingOccurrencesOfString(" ", withString: "")
+            var value:Float = (str as NSString).floatValue
+            // Currently capping value at 100k
+            if value > 100000 {
+                value = 100000
+            }
+            if value == 0 {
+                priceField.text = "take it!"
+            } else {
+                priceField.text = String(format: "$ %.2f", (str as NSString).floatValue )
+            }
         }
     }
-    @IBAction func btnAdd(sender: AnyObject) {
+    @IBAction func btnConfirm(sender: AnyObject) {
         self.titleField.enabled = false
         self.priceField.enabled = false
         self.tagsField.enabled = false
-        self.methodField.enabled = false
+        self.methodControl.enabled = false
         add.enabled = false
         
         var activityView: UIActivityIndicatorView = UIActivityIndicatorView()
@@ -151,35 +172,44 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         
         //TODO: Add drop down 'Pick-up', 'Delivery', 'Meet', 'Ship'
         //TODO: Get location from GPS
-        var factor: CGFloat = imageView.image!.size.height/imageView.image!.size.width
+        var factor: CGFloat = 1.0 //imageView.image!.size.height/imageView.image!.size.width
         
-        //TODO: Identify best size to transfer. 950 is good iphone 6+ size. ip5=640px wide, ip6=750 ip6+=1242
+        //Scale image to improve transfer speeds 950 is good iphone 6+ size. ip5=640px wide, ip6=750 ip6+=1242
         let scaledImageWidth: CGFloat = 660.0;
         
         var size = CGSize(width: scaledImageWidth, height: scaledImageWidth*factor)
-        imageView.image!.resize(size, completionHandler: {(scaledImg:UIImage,bob:NSData) -> () in
-            
-            Bakkle.sharedInstance.addItem(self.titleField.text, description: "", location: Bakkle.sharedInstance.user_location, price: self.priceField.text, tags: self.tagsField.text, method: /*self.methodField.text*/"Pick-up", image:scaledImg, success: {
+        imageView.image!.cropToSquare({(croppedImg:UIImage,cropBob:NSData) -> () in
 
-                activityView.stopAnimating()
-                activityView.removeFromSuperview()
+            croppedImg.resize(size, completionHandler: {(scaledImg:UIImage,scaleBob:NSData) -> () in
+
                 
-                // We just added one so schedule an update.
-                // TODO: Could just add this to the feed
-                // and hope we are fairly current.
-                dispatch_async(dispatch_get_main_queue()) {
-                    Bakkle.sharedInstance.populateFeed({})
+                Bakkle.sharedInstance.addItem(self.titleField.text, description: "", location: Bakkle.sharedInstance.user_location, price: self.priceField.text, tags: self.tagsField.text, method: self.methodControl.titleForSegmentAtIndex(self.methodControl.selectedSegmentIndex)!, image:scaledImg, success: {(item_id:Int?, item_url: String?) -> () in
                     
-                    let alertController = UIAlertController(title: "Bakkle", message:
-                        "Item uploaded to Bakkle.", preferredStyle: UIAlertControllerStyle.Alert)
+                    activityView.stopAnimating()
+                    activityView.removeFromSuperview()
                     
-                    let dismissAction = UIAlertAction(title: "OK!", style: UIAlertActionStyle.Default) { (action) -> Void in
-                        self.dismissViewControllerAnimated(true, completion: nil)
+                    // We just added one so schedule an update.
+                    // TODO: Could just add this to the feed
+                    // and hope we are fairly current.
+                    dispatch_async(dispatch_get_main_queue()) {
+                        Bakkle.sharedInstance.populateFeed({})
+                        
+                        println("item_id=\(item_id) item_url=\(item_url)")
+                        
+                        let alertController = UIAlertController(title: "Bakkle", message:
+                            "Item uploaded to Bakkle.", preferredStyle: UIAlertControllerStyle.Alert)
+                        
+                        let dismissAction = UIAlertAction(title: "OK!", style: UIAlertActionStyle.Default) { (action) -> Void in
+                            self.dismissViewControllerAnimated(true, completion: nil)
+                        }
+                        alertController.addAction(dismissAction)
+                        self.presentViewController(alertController, animated: true, completion: nil)
                     }
-                    alertController.addAction(dismissAction)
-                    self.presentViewController(alertController, animated: true, completion: nil)
-                }
-            } /* TODO: Fail, warn*/)
+                    }, fail: {() -> () in
+                        //TODO: Show error popup and close.
+                })
+                
+            })
         })
     }
     
@@ -187,14 +217,11 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         if textField == titleField {
             priceField.becomeFirstResponder()
         }
-        else if textField == tagsField {
-            methodField.becomeFirstResponder()
-        }
         else if textField == priceField {
             tagsField.becomeFirstResponder()
         }
-        else if textField == methodField {
-            methodField.resignFirstResponder()
+        else if textField == tagsField {
+            tagsField.resignFirstResponder()
         }
         return true
     }
@@ -225,6 +252,37 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
         picker.dismissViewControllerAnimated(true, completion: nil)
     }
+
+    // TODO: Rewrie this so it removes punctuation and some symbols, splits the phrase into an array, then searches the array
+    // for unwanted common words, then puts into tags field
+    let commonWords = ["the","of","and","a","to","in","is","you","that","it","he","was","for","on","are","as","with","his","they","I","at","be","this","have","from","or","one","had","by","word","but","not","what","all","were","we","when","your","can","said","there","use","an","each","which","she","do","how","their","if","will","up","other","about","out","many","then","them","these","so","some","her","would","make","like","him","into","time","has","look","two","more","write","go","see","number","no","way","could","people","my","than","first","water","been","call","who","oil","its","now","find","long","down","day","did","get","come","made","may","part"]
+    func populateTagsFromTitle() {
+        if titleField.text.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
+            var tags: NSString = (titleField.text as NSString)
+            tags = tags.stringByReplacingOccurrencesOfString(".", withString: "")
+            tags = tags.stringByReplacingOccurrencesOfString(",", withString: "")
+            tags = tags.stringByReplacingOccurrencesOfString(";", withString: "")
+            for word in commonWords {
+                tags = tags.stringByReplacingOccurrencesOfString(word, withString: "")
+            }
+            if tagsField.text.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) == 0 ||
+                tags.substringToIndex(tags.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)-1) == tagsField.text {
+                    tagsField.text = tags as String
+            }
+        }
+        println(tagsToHashTags(tagsField.text))
+    }
+
+    //TODO run the above sanitizer first, then split and hashtag
+    func tagsToHashTags(tags: String) -> (String) {
+        var tagsArr = split(tags) {$0 == " "}
+        let hashTags = tagsArr.reduce("") {
+            a, b in
+            let comma = (b == tagsArr.last) ? "" : ", "
+            return "#\(a)\(b)\(comma)"
+        }
+        return hashTags
+    }
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
         let chosen = info[UIImagePickerControllerOriginalImage] as! UIImage
@@ -232,5 +290,110 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         imageView.image = chosen
         dismissViewControllerAnimated(true, completion: nil)
     }
+    
+    /* FACEBOOK */
+    func postOnWall() {
+        var conn: FBRequestConnection = FBRequestConnection()
+//        var handler: FBRequestHandler = conn
+        
+        var postString: String = "\(titleField.text) \(tagsToHashTags(tagsField.text))"
+
+       // if FBSession
+        
+    }
+    
+    
+//    
+//    if ([[FBSDKAccessToken currentAccessToken] hasGranted:@"publish_actions"]) {
+//    [[[FBSDKGraphRequest alloc]
+//    initWithGraphPath:@"me/feed"
+//    parameters: @{ @"message" : @"hello world"}
+//    HTTPMethod:@"POST"]
+//    startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+//    if (!error) {
+//    NSLog(@"Post id:%@", result[@"id"]);
+//    }
+//    }];
+//    }
+    
+    
+//- (void)postOnWall
+//{
+//NSNumber *testMessageIndex=[[NSNumber alloc] init];
+//if ([[NSUserDefaults standardUserDefaults] objectForKey:@"testMessageIndex"]==nil)
+//{
+//testMessageIndex=[NSNumber numberWithInt:100];
+//}
+//else
+//{
+//testMessageIndex=[[NSUserDefaults standardUserDefaults] objectForKey:@"testMessageIndex"];
+//};
+//testMessageIndex=[NSNumber numberWithInt:[testMessageIndex intValue]+1];
+//[[NSUserDefaults standardUserDefaults] setObject:testMessageIndex forKey:@"testMessageIndex"];
+//[[NSUserDefaults standardUserDefaults] synchronize];
+//
+//// create the connection object
+//FBRequestConnection *newConnection = [[FBRequestConnection alloc] init];
+//
+//// create a handler block to handle the results of the request for fbid's profile
+//FBRequestHandler handler =
+//^(FBRequestConnection *connection, id result, NSError *error) {
+//// output the results of the request
+//[self requestCompleted:connection forFbID:@"me" result:result error:error];
+//};
+//
+//// create the request object, using the fbid as the graph path
+//// as an alternative the request* static methods of the FBRequest class could
+//// be used to fetch common requests, such as /me and /me/friends
+//NSString *messageString=[NSString stringWithFormat:@"wk test message %i", [testMessageIndex intValue]];
+//FBRequest *request=[[FBRequest alloc] initWithSession:FBSession.activeSession graphPath:@"me/feed" parameters:[NSDictionary dictionaryWithObject:messageString forKey:@"message"] HTTPMethod:@"POST"];
+//
+//// add the request to the connection object, if more than one request is added
+//// the connection object will compose the requests as a batch request; whether or
+//// not the request is a batch or a singleton, the handler behavior is the same,
+//// allowing the application to be dynamic in regards to whether a single or multiple
+//// requests are occuring
+//[newConnection addRequest:request completionHandler:handler];
+//
+//// if there's an outstanding connection, just cancel
+//[self.requestConnection cancel];
+//
+//// keep track of our connection, and start it
+//self.requestConnection = newConnection;
+//[newConnection start];
+//}
+//
+//// FBSample logic
+//// Report any results.  Invoked once for each request we make.
+//- (void)requestCompleted:(FBRequestConnection *)connection
+//forFbID:fbID
+//result:(id)result
+//error:(NSError *)error
+//{
+//NSLog(@"request completed");
+//
+//// not the completion we were looking for...
+//if (self.requestConnection &&
+//connection != self.requestConnection)
+//{
+//NSLog(@"    not the completion we are looking for");
+//return;
+//}
+//
+//// clean this up, for posterity
+//self.requestConnection = nil;
+//
+//if (error)
+//{
+//NSLog(@"    error");
+//UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"error" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+//// error contains details about why the request failed
+//[alert show];
+//}
+//else
+//{
+//NSLog(@"   ok");
+//};
+//}
 
 }

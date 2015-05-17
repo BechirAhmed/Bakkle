@@ -8,6 +8,7 @@
 
 import WatchKit
 import Foundation
+import Bakkle
 
 
 class InterfaceController: WKInterfaceController {
@@ -24,18 +25,18 @@ class InterfaceController: WKInterfaceController {
         
         
         
-//        let topItem = Bakkle.sharedInstance.feedItems[0]
-//
-//        let imgURLs = topItem.valueForKey("image_urls") as! NSArray
-//        let topTitle: String = topItem.valueForKey("title") as! String
-//        let topPrice: String = topItem.valueForKey("price") as! String
-//        
-//        //println("[FeedScreen] Downloading image (top) \(imgURLs)")
-//       
-//        let firstURL = imgURLs[0] as! String
-//        let imgURL = NSURL(string: firstURL)
-//        var data = NSData(contentsOfURL: imgURL!)
-//        imgView.setImageData(data)
+        let topItem = Bakkle.sharedInstance.feedItems[0]
+
+        let imgURLs = topItem.valueForKey("image_urls") as! NSArray
+        let topTitle: String = topItem.valueForKey("title") as! String
+        let topPrice: String = topItem.valueForKey("price") as! String
+        
+        //println("[FeedScreen] Downloading image (top) \(imgURLs)")
+       
+        let firstURL = imgURLs[0] as! String
+        let imgURL = NSURL(string: firstURL)
+        var data = NSData(contentsOfURL: imgURL!)
+        imgView.setImageData(data)
         
     }
 

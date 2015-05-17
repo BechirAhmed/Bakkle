@@ -10,7 +10,7 @@ import random
 from boto.s3.connection import S3Connection
 from boto.s3.key import Key
 
-from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.template import RequestContext, loader
 from django.utils import timezone
@@ -23,8 +23,9 @@ from decimal import *
 from django import forms
 
 from .models import Items, BuyerItem
+from conversation.models import Conversation, Message
 from account.models import Account, Device
-from common import authenticate
+from common import authenticate,get_number_conversations_with_new_messages
 from django.conf import settings
 
 MAX_ITEM_IMAGE = 5
@@ -96,8 +97,6 @@ def mark_as_deleted(request, item_id):
 @require_POST
 @authenticate
 def add_item(request):
-
-    #import pdb; pdb.set_trace()
     # Get the authentication code
     auth_token = request.GET.get('auth_token')
 
@@ -127,7 +126,6 @@ def add_item(request):
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 
     # Check for the image params. The max number is 5 and is defined in settings
-
     image_urls = imgupload(request, seller_id)
 
     if (item_id == None or item_id == ""):
@@ -143,9 +141,15 @@ def add_item(request):
             image_urls = image_urls,
             status = Items.ACTIVE)
         item.save()
+        notify_all_new_item("New: ${} - {}".format(item.price, item.title))
     else:
         # Else get the item
-        item = get_object_or_404(Items, pk=item_id);
+        try:
+            item = Items.objects.get(pk=item_id)
+        except Item.DoesNotExist:
+            item = None
+            response_data = {"status":0, "error":"Item {} does not exist.".format(item_id)}
+            return HttpResponse(json.dumps(response_data), content_type="application/json")
 
         # TODO: fix this
         # Remove all previous images
@@ -163,8 +167,7 @@ def add_item(request):
         item.image_urls = image_urls
         item.save()
 
-    notify_all_new_item("New: ${} - {}".format(item.price, item.title))
-    response_data = { "status":1 }
+    response_data = { "status":1, "item_id":item.id }
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 def notify_all_new_item(message):
@@ -178,9 +181,11 @@ def notify_all_new_item(message):
 
     # notify each device
     for device in devices:
-        # lookup number of unread messages
-        badge = 0 #TODO: count number of unread messages
-        device.send_notification(message, badge, "")
+        if device.auth_token != "":
+            account_id = device.auth_token.split('_')[1]
+            # lookup number of unread messages
+            badge = get_number_conversations_with_new_messages(account_id)
+            device.send_notification(message, badge, "")
 
     response_data = { "status": 1 }
     return HttpResponse(json.dumps(response_data), content_type="application/json")
@@ -289,6 +294,40 @@ def meh(request):
 @require_POST
 @authenticate
 def want(request):
+    print("Got to want request")
+    item_id = request.POST.get('item_id')
+    auth_token = request.POST.get('auth_token', "")
+    buyer_id = auth_token.split('_')[1]
+
+    # Check that all require params are sent and are of the right format
+    if (item_id == None or item_id.strip() == ""):
+        response_data = { "status":0, "error": "A required parameter was not provided." }
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+    try:
+        buyer = Account.objects.get(pk=buyer_id)
+    except Account.DoesNotExist:
+        buyer = None
+        response_data = {"status":0, "error":"Buyer {} does not exist.".format(buyer_id)}
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+    try:
+        item = Items.objects.get(pk=item_id)
+    except Items.DoesNotExist:
+        item = None
+        response_data = {"status":0, "error":"Item {} does not exist.".format(item_id)}
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+    print("before conversation")
+    conversation = Conversation.objects.get_or_create(
+        item = item,
+        buyer = buyer)[0]
+    conversation.start_time = datetime.datetime.now()
+    conversation.save()
+    print("after conversation")
+
+
+
     return add_item_to_buyer_items(request, BuyerItem.WANT)
 
 @csrf_exempt
@@ -309,7 +348,13 @@ def report(request):
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 
     # Get item and update the times reported
-    item = get_object_or_404(Items, pk=item_id)
+    try:
+        item = Items.objects.get(pk=item_id)
+    except Item.DoesNotExist:
+        item = None
+        response_data = {"status":0, "error":"Item {} does not exist.".format(item_id)}
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+
     item.times_reported = item.times_reported + 1
     item.save()
 
@@ -344,10 +389,19 @@ def get_seller_items(request):
 
     item_list = Items.objects.filter(Q(seller=seller_id, status=Items.ACTIVE) | Q(seller=seller_id, status=Items.PENDING))
 
+
+
     item_array = []
     # get json representaion of item array
     for item in item_list:
+        conversations = Conversation.objects.filter(item=item)
+        convos_with_new_message = 0
+        for convo in conversations:
+            messages = Message.objects.filter(viewed=None, buyer_seller_flag=True, conversation=convo).count()
+            if messages > 0:
+                convos_with_new_message = convos_with_new_message + 1
         item_dict = get_item_dictionary(item)
+        item_dict['convos_with_new_message'] = convos_with_new_message
         item_array.append(item_dict)
 
     # create json string
@@ -508,12 +562,25 @@ def add_item_to_buyer_items(request, status):
     buyer_id = auth_token.split('_')[1]
 
     # get the item
-    item = get_object_or_404(Items, pk=item_id)
+    try:
+        item = Items.objects.get(pk=item_id)
+    except Item.DoesNotExist:
+        item = None
+        response_data = {"status":0, "error":"Item {} does not exist.".format(item_id)}
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
 
     if (buyer_item_id == None or buyer_item_id == ""):
+
+        try:
+            account = Account.objects.get(pk=buyer_id)
+        except Account.DoesNotExist:
+            account = None
+            response_data = {"status":0, "error":"Account {} does not exist.".format(buyer_id)}
+            return HttpResponse(json.dumps(response_data), content_type="application/json")
+
         # Create or update the buyer item
         buyer_item = BuyerItem.objects.create(
-            buyer = get_object_or_404(Account, pk=buyer_id),
+            buyer = account,
             item = item,
             status = status, 
             confirmed_price = item.price,
@@ -526,13 +593,17 @@ def add_item_to_buyer_items(request, status):
         #     buyer_item.status = BuyerItem.MY_ITEM
         # else:
         #     buyer_item.status = status
-
-        print(BuyerItem.MY_ITEM)
+        buyer_item.status = status
         buyer_item.confirmed_price = item.price
         buyer_item.view_duration = view_duration
         buyer_item.save()
     else:
-        buyer_item = get_object_or_404(BuyerItem, pk=buyer_item_id)
+        try:
+            buyer_item = BuyerItem.objects.get(pk=buyer_item_id)
+        except BuyerItem.DoesNotExist:
+            buyer_item = None
+            response_data = {"status":0, "error":"BuyerItem {} does not exist.".format(buyer_item_id)}
+            return HttpResponse(json.dumps(response_data), content_type="application/json")
 
         # Update fields
         # If the item seller is the same as the buyer mark it as their item instead of the status
@@ -542,10 +613,10 @@ def add_item_to_buyer_items(request, status):
         #     buyer_item.status = BuyerItem.MY_ITEM
         # else:
         #     buyer_item.status = status
-
-        # buyer_item.confirmed_price = item.price
-        # buyer_item.view_duration = view_duration
-        # buyer_item.save()
+        buyer_item.status = status
+        buyer_item.confirmed_price = item.price
+        buyer_item.view_duration = view_duration
+        buyer_item.save()
 
     response_data = { 'status':1 }
     return HttpResponse(json.dumps(response_data), content_type="application/json")
@@ -657,8 +728,31 @@ def reset_items(request):
         a = Account(
             facebook_id="1020420",
             display_name="Test Seller",
-            email="testseller@bakkle.com" )
+            email="testseller@bakkle.com",
+            user_location="39.417672,-87.330438", )
         a.save()
+
+    # create dummy device
+    try:
+        d = Device.objects.get_or_create(
+            uuid = "E6264D84-C395-4132-8C63-3EF051480191",
+            account_id= a,
+            apns_token = "<224c36d9 4de49676 27c42676 ee3ba0a3 33adf555 79259e36 182abf83 8b86a35b>",
+            ip_address = "000.000.000.00",
+            notifications_enabled = True,
+            auth_token = "asdfasdfasdfasdf_{}".format(a.id),
+            app_version = "16" )[0]
+        d.save()
+    except Account.DoesNotExist:
+        d = Device(
+            uuid = "E6264D84-C395-4132-8C63-3EF051480191",
+            account_id= a,
+            apns_token = "<224c36d9 4de49676 27c42676 ee3ba0a3 33adf555 79259e36 182abf83 8b86a35b>",
+            ip_address = "000.000.000.00",
+            notifcations_enabled = True,
+            auth_token = "asdfasdfasdfasdf_{}".format(a.id),
+            app_version = "16" )
+        d.save()
 
     i = Items(
         image_urls = "https://app.bakkle.com/img/b83bdbd.png",

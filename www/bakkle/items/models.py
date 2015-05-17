@@ -35,7 +35,7 @@ class Items(models.Model):
     #use django-location-field?
     location = models.CharField(max_length=11)
     seller = models.ForeignKey(Account)
-    price = models.DecimalField(max_digits=7, decimal_places=2)
+    price = models.DecimalField(max_digits=11, decimal_places=2)
     tags = models.CharField(max_length=300)
     method = models.CharField(max_length=11, choices=METHOD_CHOICES, default=PICK_UP)
     status = models.CharField(max_length=11, choices = STATUS_OPTIONS, default=ACTIVE)
@@ -72,3 +72,6 @@ class BuyerItem(models.Model):
     status = models.CharField(max_length=11, choices = STATUS_OPTIONS, default=ACTIVE)
     confirmed_price = models.DecimalField(max_digits = 7, decimal_places = 2)
     accepted_sale_price = models.BooleanField(default = False)
+
+    class Meta:
+        unique_together = ("buyer", "item")
