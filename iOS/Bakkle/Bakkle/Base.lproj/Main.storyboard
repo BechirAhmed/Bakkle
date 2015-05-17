@@ -1910,6 +1910,7 @@
                         <outlet property="imageView" destination="ewe-9c-ZWA" id="xkP-Tt-IlA"/>
                         <outlet property="methodControl" destination="2pJ-HO-Uo9" id="KgA-aA-926"/>
                         <outlet property="priceField" destination="EA5-8k-azS" id="nTU-88-VnC"/>
+                        <outlet property="shareToFacebookButton" destination="2NS-yE-zno" id="YmY-IV-MX0"/>
                         <outlet property="tagsField" destination="fAg-Ef-lbf" id="PEX-43-kAE"/>
                         <outlet property="titleField" destination="TXe-oK-ydu" id="bkE-oT-xiC"/>
                     </connections>

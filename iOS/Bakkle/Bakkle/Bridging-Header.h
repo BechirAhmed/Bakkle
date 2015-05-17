@@ -9,4 +9,5 @@
 #import <FacebookSDK/FacebookSDK.h>
 #import "MDCSwipeToChoose.h"
 #import "SWRevealViewController.h"
+#import <FBSDKShareKit/FBSDKShareKit.h>
 

@@ -8,6 +8,7 @@
 
 import UIKit
 import Photos
+import Social
 
 //import FBSDKCoreKit
 //import FBSDKShareKit
@@ -26,6 +27,8 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     @IBOutlet weak var add: UIButton!
     @IBOutlet weak var imageView: UIImageView!
 
+    @IBOutlet weak var shareToFacebookButton: UISwitch!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -177,7 +180,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         imageView.image!.resize(size, completionHandler: {(scaledImg:UIImage,bob:NSData) -> () in
             
             Bakkle.sharedInstance.addItem(self.titleField.text, description: "", location: Bakkle.sharedInstance.user_location, price: self.priceField.text, tags: self.tagsField.text, method: self.methodControl.titleForSegmentAtIndex(self.methodControl.selectedSegmentIndex)!, image:scaledImg, success: {
-
+                
                 activityView.stopAnimating()
                 activityView.removeFromSuperview()
                 
@@ -185,6 +188,16 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
                 // TODO: Could just add this to the feed
                 // and hope we are fairly current.
                 dispatch_async(dispatch_get_main_queue()) {
+                    if self.shareToFacebookButton.enabled {
+                        var photo: FBSDKSharePhoto! = FBSDKSharePhoto()
+                        photo.image = self.imageView.image
+                        photo.userGenerated = true
+                        var content: FBSDKSharePhotoContent! = FBSDKSharePhotoContent()
+                        content.photos = [photo]
+                        var shareBtn: FBSDKShareButton = FBSDKShareButton()
+                        shareBtn.shareContent = content
+                        
+                    }
                     Bakkle.sharedInstance.populateFeed({})
                     
                     let alertController = UIAlertController(title: "Bakkle", message:
