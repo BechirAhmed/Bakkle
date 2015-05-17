@@ -8,6 +8,7 @@
 
 import UIKit
 import Photos
+import Social
 
 //import FBSDKCoreKit
 //import FBSDKShareKit
@@ -26,6 +27,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     @IBOutlet weak var add: UIButton!
     @IBOutlet weak var imageView: UIImageView!
 
+    @IBOutlet weak var shareToFacebookBtn: UISwitch!
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -159,6 +161,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         }
     }
     @IBAction func btnConfirm(sender: AnyObject) {
+        
         self.titleField.enabled = false
         self.priceField.enabled = false
         self.tagsField.enabled = false
@@ -184,6 +187,28 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
 
                 
                 Bakkle.sharedInstance.addItem(self.titleField.text, description: "", location: Bakkle.sharedInstance.user_location, price: self.priceField.text, tags: self.tagsField.text, method: self.methodControl.titleForSegmentAtIndex(self.methodControl.selectedSegmentIndex)!, image:scaledImg, success: {(item_id:Int?, item_url: String?) -> () in
+                    
+                    if self.shareToFacebookBtn.enabled {
+                        let topImg = UIImage(named: "pendant-tag660.png")
+                        let bottomImg = scaledImg
+                        let size = scaledImg.size
+                        UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
+                        bottomImg.drawInRect(CGRect(origin: CGPointZero, size: size))
+                        topImg!.drawInRect(CGRect(origin: CGPointZero, size: size))
+                        
+                        let newImg = UIGraphicsGetImageFromCurrentImageContext()
+                        UIGraphicsEndImageContext()
+                        
+                        var photo: FBSDKSharePhoto! = FBSDKSharePhoto()
+                        photo.image = newImg
+                        photo.userGenerated = true
+                        
+                        var cont: FBSDKSharePhotoContent! = FBSDKSharePhotoContent()
+                        cont.photos = [photo]
+                        
+                        var dialog: FBSDKShareDialog = FBSDKShareDialog.showFromViewController(self, withContent: cont, delegate: nil)
+                        
+                    }
                     
                     activityView.stopAnimating()
                     activityView.removeFromSuperview()

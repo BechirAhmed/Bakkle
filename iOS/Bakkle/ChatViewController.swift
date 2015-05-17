@@ -12,6 +12,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     var tableView: UITableView!
     var toolBar: UIToolbar!
     var textView: UITextView!
+    var profileButton: UIButton!
     var sendButton: UIButton!
     var rotating = false
 
@@ -96,22 +97,30 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let buttonWidth: CGFloat = 96.0
         var backButton = UIButton(frame: CGRectMake(header.bounds.origin.x, header.bounds.origin.y+20, buttonWidth, headerHeight))
         backButton.setImage(UIImage(named: "icon-back.png"), forState: UIControlState.Normal)
-
-        //backButton.actionsForTarget(<#target: AnyObject#>, forControlEvent: <#UIControlEvents#>)
+        backButton.addTarget(self, action: "btnBack:", forControlEvents: UIControlEvents.TouchUpInside)
+        self.view.addSubview(backButton)
         header.addSubview(backButton)
         
-        var profileButton = UIButton(frame: CGRectMake(header.bounds.origin.x, header.bounds.origin.y, buttonWidth, headerHeight))
+        let profileButtonWidth: CGFloat = 44
+        let profileXpos:CGFloat = (header.bounds.size.width - header.bounds.origin.x
+            - profileButtonWidth) / 2.0
+        profileButton = UIButton(frame: CGRectMake(profileXpos, header.bounds.origin.y+topHeight, profileButtonWidth, headerHeight))
         profileButton.backgroundColor = Theme.ColorGreen
-//        profileButton.imageView?.hnk_setImage(., animated: <#Bool#>, success: <#((UIImage) -> ())?##(UIImage) -> ()#>)
-       // header.addSubview(profileButton)
+        profileButton.setImage(UIImage(named: "loading.png"), forState: UIControlState.Normal)
+        profileButton.imageView?.layer.cornerRadius = profileButton.imageView!.frame.size.width/2
+        
+
+        profileButton.addTarget(self, action: "btnProfile:", forControlEvents: UIControlEvents.TouchUpInside)
+        header.addSubview(profileButton)
         
         let infoButtonWidth:CGFloat = 50
         var infoButton = UIButton(frame: CGRectMake(header.bounds.origin.x+header.bounds.size.width-infoButtonWidth, header.bounds.origin.y+topHeight, infoButtonWidth, headerHeight))
         infoButton.setImage(UIImage(named: "icon-i.png"), forState: UIControlState.Normal)
+        infoButton.addTarget(self, action: "btnI:", forControlEvents: UIControlEvents.TouchUpInside)
         header.addSubview(infoButton)
         view.addSubview(header)
         
-        tableView = UITableView(frame: CGRectMake(view.bounds.origin.x, view.bounds.origin.y+headerHeight, view.bounds.size.width, view.bounds.size.height-headerHeight), style: .Plain)
+        tableView = UITableView(frame: CGRectMake(view.bounds.origin.x, view.bounds.origin.y+headerHeight+topHeight, view.bounds.size.width, view.bounds.size.height-headerHeight), style: .Plain)
         tableView.autoresizingMask = .FlexibleWidth | .FlexibleHeight
         tableView.backgroundColor = Theme.ColorOffWhite
         let edgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: toolBarMinHeight, right: 0)
@@ -122,6 +131,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         tableView.estimatedRowHeight = 44
         tableView.separatorStyle = .None
         tableView.registerClass(MessageSentDateCell.self, forCellReuseIdentifier: NSStringFromClass(MessageSentDateCell))
+        view.backgroundColor = Theme.ColorOffWhite
         view.addSubview(tableView)
 
         let notificationCenter = NSNotificationCenter.defaultCenter()
@@ -136,9 +146,16 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
 
+    override func viewWillAppear(animated: Bool) {
+    }
+    
     override func viewDidAppear(animated: Bool)  {
         super.viewDidAppear(animated)
         tableView.flashScrollIndicators()
+
+        var facebookProfileImageUrlString = "http://graph.facebook.com/\(Bakkle.sharedInstance.facebook_id_str)/picture?type=large"
+        let imgURL = NSURL(string: facebookProfileImageUrlString)
+        profileButton.hnk_setImageFromURL(imgURL!, state: UIControlState.Normal, placeholder: UIImage(named:"loading.png"), format: nil, failure: nil, success: nil)
     }
 
     override func viewWillDisappear(animated: Bool)  {
@@ -156,6 +173,26 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             textViewDidChange(textView)
             textView.becomeFirstResponder()
         }
+    }
+
+
+    func btnBack(sender:UIButton!)
+    {
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    func btnI(sender:UIButton!)
+    {
+        let sb: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc: UIViewController = sb.instantiateViewControllerWithIdentifier("ItemDetails") as! UIViewController
+        vc.modalTransitionStyle = UIModalTransitionStyle.FlipHorizontal
+        self.presentViewController(vc, animated: true, completion: nil)
+    }
+    func btnProfile(sender:UIButton!)
+    {
+        let sb: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc: UIViewController = sb.instantiateViewControllerWithIdentifier("ProfileView") as! UIViewController
+        vc.modalTransitionStyle = UIModalTransitionStyle.FlipHorizontal
+        self.presentViewController(vc, animated: true, completion: nil)
     }
 
 //    // #iOS7.1

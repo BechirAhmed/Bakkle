@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		133467521B08528000ED47EF /* InterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB852E791B05748F00665CD4 /* InterfaceController.swift */; };
 		5E023F861AD592B80002AFBC /* btn-addItem.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E023F851AD592B80002AFBC /* btn-addItem.png */; };
 		5E023F881AD59F200002AFBC /* logo-white-design-png-transp-100.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E023F871AD59F200002AFBC /* logo-white-design-png-transp-100.png */; };
 		5E1DCC9F1AD44C72002D41FD /* tiger.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5E1DCC9E1AD44C71002D41FD /* tiger.jpg */; };
@@ -20,6 +19,7 @@
 		5E6760881AD8138600EC899F /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E6760871AD8138600EC899F /* Photos.framework */; };
 		5E78D7E11AF121BA0014ED8F /* CollectionThumbnail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E78D7E01AF121BA0014ED8F /* CollectionThumbnail.swift */; };
 		5E8055421AE541460035521C /* ItemDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E8055411AE541460035521C /* ItemDetails.swift */; };
+		5E8055571AEA78790035521C /* Bakkle WatchKit App.app in Resources */ = {isa = PBXBuildFile; fileRef = 5E8055561AEA78790035521C /* Bakkle WatchKit App.app */; };
 		5EBDD6911AB211E600C7FBE7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EBDD6901AB211E600C7FBE7 /* AppDelegate.swift */; };
 		5EBDD6931AB211E600C7FBE7 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EBDD6921AB211E600C7FBE7 /* LoginView.swift */; };
 		5EBDD6981AB211E600C7FBE7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5EBDD6971AB211E600C7FBE7 /* Images.xcassets */; };
@@ -38,7 +38,6 @@
 		5EE2C9BB1AB9F0FB0031D8CD /* MDCViewState.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C9B01AB9F0FB0031D8CD /* MDCViewState.m */; };
 		A003EB141AD4CCA600EE51A1 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A003EB131AD4CCA600EE51A1 /* SWRevealViewController.m */; };
 		A003EB1A1AD4DB8800EE51A1 /* item-lawnmower.png in Resources */ = {isa = PBXBuildFile; fileRef = A003EB191AD4DB8800EE51A1 /* item-lawnmower.png */; };
-		A014B46C1B09215800E01FEF /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A014B46B1B09215800E01FEF /* ProfileView.swift */; };
 		A018DF881ADE07E700AF5550 /* btn-add.png in Resources */ = {isa = PBXBuildFile; fileRef = A018DF861ADE07E700AF5550 /* btn-add.png */; };
 		A018DF891ADE07E700AF5550 /* btn-cancel.png in Resources */ = {isa = PBXBuildFile; fileRef = A018DF871ADE07E700AF5550 /* btn-cancel.png */; };
 		A018DF8B1ADE08DB00AF5550 /* btn-add-disabled.png in Resources */ = {isa = PBXBuildFile; fileRef = A018DF8A1ADE08DB00AF5550 /* btn-add-disabled.png */; };
@@ -70,21 +69,6 @@
 		A08D53AF1B06D850000C406C /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53AE1B06D850000C406C /* Common.swift */; };
 		A08D53B11B06DBD8000C406C /* icon-x@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = A08D53B01B06DBD8000C406C /* icon-x@3x.png */; };
 		A08D53B91B07DE26000C406C /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53B81B07DE26000C406C /* Theme.swift */; };
-		A08D53C91B0815CB000C406C /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53BB1B0815CB000C406C /* Account.swift */; };
-		A08D53CA1B0815CB000C406C /* Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53BC1B0815CB000C406C /* Chat.swift */; };
-		A08D53CB1B0815CB000C406C /* ChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53BD1B0815CB000C406C /* ChatCell.swift */; };
-		A08D53CD1B0815CB000C406C /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53BF1B0815CB000C406C /* ChatViewController.swift */; };
-		A08D53CE1B0815CB000C406C /* ComposeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53C01B0815CB000C406C /* ComposeViewController.swift */; };
-		A08D53CF1B0815CB000C406C /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53C11B0815CB000C406C /* Message.swift */; };
-		A08D53D01B0815CB000C406C /* MessageBubbleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53C21B0815CB000C406C /* MessageBubbleCell.swift */; };
-		A08D53D11B0815CB000C406C /* MessageIncoming.aiff in Resources */ = {isa = PBXBuildFile; fileRef = A08D53C31B0815CB000C406C /* MessageIncoming.aiff */; };
-		A08D53D21B0815CB000C406C /* MessageOutgoing.aiff in Resources */ = {isa = PBXBuildFile; fileRef = A08D53C41B0815CB000C406C /* MessageOutgoing.aiff */; };
-		A08D53D31B0815CB000C406C /* MessageSentDateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53C51B0815CB000C406C /* MessageSentDateCell.swift */; };
-		A08D53D41B0815CB000C406C /* PlaceholderTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53C61B0815CB000C406C /* PlaceholderTextView.swift */; };
-		A08D53D51B0815CB000C406C /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53C71B0815CB000C406C /* User.swift */; };
-		A08D53D61B0815CB000C406C /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53C81B0815CB000C406C /* UserCell.swift */; };
-		A08D53D81B0825E7000C406C /* icon-back.png in Resources */ = {isa = PBXBuildFile; fileRef = A08D53D71B0825E7000C406C /* icon-back.png */; };
-		A08D53DA1B08269A000C406C /* icon-i.png in Resources */ = {isa = PBXBuildFile; fileRef = A08D53D91B08269A000C406C /* icon-i.png */; };
 		A0A200011ACE2F7500A42CD8 /* btn-email40.png in Resources */ = {isa = PBXBuildFile; fileRef = A0A2FFFE1ACE2F7500A42CD8 /* btn-email40.png */; };
 		A0A200021ACE2F7500A42CD8 /* btn-facebook40.png in Resources */ = {isa = PBXBuildFile; fileRef = A0A2FFFF1ACE2F7500A42CD8 /* btn-facebook40.png */; };
 		A0A200031ACE2F7500A42CD8 /* btn-sign-in40.png in Resources */ = {isa = PBXBuildFile; fileRef = A0A200001ACE2F7500A42CD8 /* btn-sign-in40.png */; };
@@ -114,13 +98,6 @@
 		DB5372901B0806B600CC49B7 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB53728F1B0806B600CC49B7 /* FBSDKShareKit.framework */; };
 		DB5372921B0823DD00CC49B7 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB5372911B0823DD00CC49B7 /* Social.framework */; };
 		DB5372941B0832E000CC49B7 /* pendant-tag660.png in Resources */ = {isa = PBXBuildFile; fileRef = DB5372931B0832E000CC49B7 /* pendant-tag660.png */; };
-		DB852E7C1B05748F00665CD4 /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB852E7B1B05748F00665CD4 /* NotificationController.swift */; };
-		DB852E7E1B05748F00665CD4 /* GlanceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB852E7D1B05748F00665CD4 /* GlanceController.swift */; };
-		DB852E801B05748F00665CD4 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DB852E7F1B05748F00665CD4 /* Images.xcassets */; };
-		DB852E841B05748F00665CD4 /* Bakkle WatchKit App.app in Resources */ = {isa = PBXBuildFile; fileRef = DB852E831B05748F00665CD4 /* Bakkle WatchKit App.app */; };
-		DB852E8C1B05748F00665CD4 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DB852E8A1B05748F00665CD4 /* Interface.storyboard */; };
-		DB852E8E1B05748F00665CD4 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DB852E8D1B05748F00665CD4 /* Images.xcassets */; };
-		DB852E911B05748F00665CD4 /* Bakkle WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = DB852E741B05748F00665CD4 /* Bakkle WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		DBC2C0CC1B01241A00F56792 /* ImageLabelView.m in Sources */ = {isa = PBXBuildFile; fileRef = DBC2C0CB1B01241A00F56792 /* ImageLabelView.m */; };
 		DBEE0E971AF3C464005E60BD /* item-detail-overlay.png in Resources */ = {isa = PBXBuildFile; fileRef = DBEE0E961AF3C464005E60BD /* item-detail-overlay.png */; };
 		DBEE0E991AF3C855005E60BD /* btb-want.png in Resources */ = {isa = PBXBuildFile; fileRef = DBEE0E981AF3C855005E60BD /* btb-want.png */; };
@@ -129,6 +106,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		5E8055581AEA78790035521C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5EBDD6831AB211E600C7FBE7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5E8055551AEA78790035521C;
+			remoteInfo = "Bakkle WatchKit App";
+		};
 		5EBDD6A11AB211E600C7FBE7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 5EBDD6831AB211E600C7FBE7 /* Project object */;
@@ -136,38 +120,9 @@
 			remoteGlobalIDString = 5EBDD68A1AB211E600C7FBE7;
 			remoteInfo = Bakkle;
 		};
-		DB852E851B05748F00665CD4 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5EBDD6831AB211E600C7FBE7 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = DB852E821B05748F00665CD4;
-			remoteInfo = "Bakkle WatchKit App";
-		};
-		DB852E8F1B05748F00665CD4 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5EBDD6831AB211E600C7FBE7 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = DB852E731B05748F00665CD4;
-			remoteInfo = "Bakkle WatchKit Extension";
-		};
 /* End PBXContainerItemProxy section */
 
-/* Begin PBXCopyFilesBuildPhase section */
-		DB852E981B05748F00665CD4 /* Embed App Extensions */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 13;
-			files = (
-				DB852E911B05748F00665CD4 /* Bakkle WatchKit Extension.appex in Embed App Extensions */,
-			);
-			name = "Embed App Extensions";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
-		136AB1E21B0835E200C76C71 /* BakkleNewItemNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = BakkleNewItemNotificationPayload.apns; sourceTree = "<group>"; };
 		1D710285C97E0FF7D33DEB9E /* Pods-Bakkle.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bakkle.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Bakkle/Pods-Bakkle.debug.xcconfig"; sourceTree = "<group>"; };
 		3E0CABDBE20E9D5B2EED4810 /* Pods_Bakkle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Bakkle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E023F851AD592B80002AFBC /* btn-addItem.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-addItem.png"; sourceTree = "<group>"; };
@@ -183,6 +138,8 @@
 		5E6760871AD8138600EC899F /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
 		5E78D7E01AF121BA0014ED8F /* CollectionThumbnail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionThumbnail.swift; sourceTree = "<group>"; };
 		5E8055411AE541460035521C /* ItemDetails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemDetails.swift; sourceTree = "<group>"; };
+		5E8055471AEA78790035521C /* Bakkle WatchKit Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Bakkle WatchKit Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5E8055561AEA78790035521C /* Bakkle WatchKit App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Bakkle WatchKit App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5EBDD68B1AB211E600C7FBE7 /* Bakkle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bakkle.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5EBDD68F1AB211E600C7FBE7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5EBDD6901AB211E600C7FBE7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -224,7 +181,6 @@
 		A003EB121AD4CCA600EE51A1 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
 		A003EB131AD4CCA600EE51A1 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
 		A003EB191AD4DB8800EE51A1 /* item-lawnmower.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "item-lawnmower.png"; sourceTree = "<group>"; };
-		A014B46B1B09215800E01FEF /* ProfileView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		A018DF861ADE07E700AF5550 /* btn-add.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-add.png"; sourceTree = "<group>"; };
 		A018DF871ADE07E700AF5550 /* btn-cancel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-cancel.png"; sourceTree = "<group>"; };
 		A018DF8A1ADE08DB00AF5550 /* btn-add-disabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-add-disabled.png"; sourceTree = "<group>"; };
@@ -256,22 +212,6 @@
 		A08D53AE1B06D850000C406C /* Common.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
 		A08D53B01B06DBD8000C406C /* icon-x@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-x@3x.png"; sourceTree = "<group>"; };
 		A08D53B81B07DE26000C406C /* Theme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
-		A08D53BB1B0815CB000C406C /* Account.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
-		A08D53BC1B0815CB000C406C /* Chat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Chat.swift; sourceTree = "<group>"; };
-		A08D53BD1B0815CB000C406C /* ChatCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatCell.swift; sourceTree = "<group>"; };
-		A08D53BE1B0815CB000C406C /* ChatsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatsViewController.swift; sourceTree = "<group>"; };
-		A08D53BF1B0815CB000C406C /* ChatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
-		A08D53C01B0815CB000C406C /* ComposeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComposeViewController.swift; sourceTree = "<group>"; };
-		A08D53C11B0815CB000C406C /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
-		A08D53C21B0815CB000C406C /* MessageBubbleCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageBubbleCell.swift; sourceTree = "<group>"; };
-		A08D53C31B0815CB000C406C /* MessageIncoming.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = MessageIncoming.aiff; sourceTree = "<group>"; };
-		A08D53C41B0815CB000C406C /* MessageOutgoing.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = MessageOutgoing.aiff; sourceTree = "<group>"; };
-		A08D53C51B0815CB000C406C /* MessageSentDateCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageSentDateCell.swift; sourceTree = "<group>"; };
-		A08D53C61B0815CB000C406C /* PlaceholderTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceholderTextView.swift; sourceTree = "<group>"; };
-		A08D53C71B0815CB000C406C /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		A08D53C81B0815CB000C406C /* UserCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
-		A08D53D71B0825E7000C406C /* icon-back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-back.png"; sourceTree = "<group>"; };
-		A08D53D91B08269A000C406C /* icon-i.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-i.png"; sourceTree = "<group>"; };
 		A0A200001ACE2F7500A42CD8 /* btn-sign-in40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-sign-in40.png"; sourceTree = "<group>"; };
 		A0A200041ACE30C200A42CD8 /* btn-logout40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-logout40.png"; sourceTree = "<group>"; };
 		A0A2FFF21ACE213F00A42CD8 /* logo-white-design-png-100.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-white-design-png-100.png"; sourceTree = "<group>"; };
@@ -299,17 +239,6 @@
 		DB53728F1B0806B600CC49B7 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
 		DB5372911B0823DD00CC49B7 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		DB5372931B0832E000CC49B7 /* pendant-tag660.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pendant-tag660.png"; sourceTree = "<group>"; };
-		DB852E741B05748F00665CD4 /* Bakkle WatchKit Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Bakkle WatchKit Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
-		DB852E771B05748F00665CD4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		DB852E781B05748F00665CD4 /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
-		DB852E791B05748F00665CD4 /* InterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceController.swift; sourceTree = "<group>"; };
-		DB852E7B1B05748F00665CD4 /* NotificationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationController.swift; sourceTree = "<group>"; };
-		DB852E7D1B05748F00665CD4 /* GlanceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlanceController.swift; sourceTree = "<group>"; };
-		DB852E7F1B05748F00665CD4 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		DB852E831B05748F00665CD4 /* Bakkle WatchKit App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Bakkle WatchKit App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		DB852E891B05748F00665CD4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		DB852E8B1B05748F00665CD4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
-		DB852E8D1B05748F00665CD4 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		DBC2C0CA1B01241A00F56792 /* ImageLabelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageLabelView.h; sourceTree = "<group>"; };
 		DBC2C0CB1B01241A00F56792 /* ImageLabelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageLabelView.m; sourceTree = "<group>"; };
 		DBEE0E961AF3C464005E60BD /* item-detail-overlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "item-detail-overlay.png"; sourceTree = "<group>"; };
@@ -318,6 +247,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		5E8055441AEA78790035521C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		5EBDD6881AB211E600C7FBE7 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -341,13 +277,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		DB852E711B05748F00665CD4 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -356,8 +285,6 @@
 			children = (
 				A003EB111ACF3BBC00EE51A1 /* SWRevealViewController */,
 				5EE2C9BC1AB9F1080031D8CD /* MDCSwipe Library */,
-				DB852E751B05748F00665CD4 /* Bakkle WatchKit Extension */,
-				DB852E871B05748F00665CD4 /* Bakkle WatchKit App */,
 				5EE2C98E1AB9E3BB0031D8CD /* Frameworks */,
 				5EBDD68D1AB211E600C7FBE7 /* Bakkle */,
 				5EBDD6A31AB211E600C7FBE7 /* BakkleTests */,
@@ -371,8 +298,8 @@
 			children = (
 				5EBDD68B1AB211E600C7FBE7 /* Bakkle.app */,
 				5EBDD6A01AB211E600C7FBE7 /* BakkleTests.xctest */,
-				DB852E741B05748F00665CD4 /* Bakkle WatchKit Extension.appex */,
-				DB852E831B05748F00665CD4 /* Bakkle WatchKit App.app */,
+				5E8055471AEA78790035521C /* Bakkle WatchKit Extension.appex */,
+				5E8055561AEA78790035521C /* Bakkle WatchKit App.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -380,7 +307,6 @@
 		5EBDD68D1AB211E600C7FBE7 /* Bakkle */ = {
 			isa = PBXGroup;
 			children = (
-				A08D53BA1B0815A9000C406C /* Chat */,
 				A08D53B41B07DC2C000C406C /* Views */,
 				A08D53AE1B06D850000C406C /* Common.swift */,
 				A06AA9ED1AD609530075D7F7 /* Bakkle.swift */,
@@ -510,7 +436,6 @@
 				5E1DCCA41AD486D2002D41FD /* AddItem.swift */,
 				5E8055411AE541460035521C /* ItemDetails.swift */,
 				A058A2A01AFC28BE005E7432 /* DemoView.swift */,
-				A014B46B1B09215800E01FEF /* ProfileView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -520,8 +445,6 @@
 			children = (
 				DB5372931B0832E000CC49B7 /* pendant-tag660.png */,
 				5EBDD6971AB211E600C7FBE7 /* Images.xcassets */,
-				A08D53D91B08269A000C406C /* icon-i.png */,
-				A08D53D71B0825E7000C406C /* icon-back.png */,
 				A03508F21AB3C34900CA6455 /* SplashScreen-bkg.png */,
 				A08D53B01B06DBD8000C406C /* icon-x@3x.png */,
 				A058A2BA1AFDB87F005E7432 /* loading.png */,
@@ -546,28 +469,6 @@
 				5E1DCC9E1AD44C71002D41FD /* tiger.jpg */,
 			);
 			name = Images;
-			sourceTree = "<group>";
-		};
-		A08D53BA1B0815A9000C406C /* Chat */ = {
-			isa = PBXGroup;
-			children = (
-				A08D53BB1B0815CB000C406C /* Account.swift */,
-				A08D53BC1B0815CB000C406C /* Chat.swift */,
-				A08D53BD1B0815CB000C406C /* ChatCell.swift */,
-				A08D53BE1B0815CB000C406C /* ChatsViewController.swift */,
-				A08D53BF1B0815CB000C406C /* ChatViewController.swift */,
-				A08D53C01B0815CB000C406C /* ComposeViewController.swift */,
-				A08D53C11B0815CB000C406C /* Message.swift */,
-				A08D53C21B0815CB000C406C /* MessageBubbleCell.swift */,
-				A08D53C31B0815CB000C406C /* MessageIncoming.aiff */,
-				A08D53C41B0815CB000C406C /* MessageOutgoing.aiff */,
-				A08D53C51B0815CB000C406C /* MessageSentDateCell.swift */,
-				A08D53C61B0815CB000C406C /* PlaceholderTextView.swift */,
-				A08D53C71B0815CB000C406C /* User.swift */,
-				A08D53C81B0815CB000C406C /* UserCell.swift */,
-			);
-			name = Chat;
-			path = ..;
 			sourceTree = "<group>";
 		};
 		A0D96F721AD765880046DA13 /* menuicons */ = {
@@ -617,46 +518,6 @@
 			name = buttons;
 			sourceTree = "<group>";
 		};
-		DB852E751B05748F00665CD4 /* Bakkle WatchKit Extension */ = {
-			isa = PBXGroup;
-			children = (
-				DB852E791B05748F00665CD4 /* InterfaceController.swift */,
-				DB852E7B1B05748F00665CD4 /* NotificationController.swift */,
-				DB852E7D1B05748F00665CD4 /* GlanceController.swift */,
-				DB852E7F1B05748F00665CD4 /* Images.xcassets */,
-				DB852E761B05748F00665CD4 /* Supporting Files */,
-			);
-			path = "Bakkle WatchKit Extension";
-			sourceTree = "<group>";
-		};
-		DB852E761B05748F00665CD4 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				DB852E771B05748F00665CD4 /* Info.plist */,
-				DB852E781B05748F00665CD4 /* PushNotificationPayload.apns */,
-				136AB1E21B0835E200C76C71 /* BakkleNewItemNotificationPayload.apns */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		DB852E871B05748F00665CD4 /* Bakkle WatchKit App */ = {
-			isa = PBXGroup;
-			children = (
-				DB852E8A1B05748F00665CD4 /* Interface.storyboard */,
-				DB852E8D1B05748F00665CD4 /* Images.xcassets */,
-				DB852E881B05748F00665CD4 /* Supporting Files */,
-			);
-			path = "Bakkle WatchKit App";
-			sourceTree = "<group>";
-		};
-		DB852E881B05748F00665CD4 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				DB852E891B05748F00665CD4 /* Info.plist */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
 		EE168E761A42906DDE93E5F8 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -669,6 +530,39 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		5E8055461AEA78790035521C /* Bakkle WatchKit Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5E80556A1AEA78790035521C /* Build configuration list for PBXNativeTarget "Bakkle WatchKit Extension" */;
+			buildPhases = (
+				5E8055431AEA78790035521C /* Sources */,
+				5E8055441AEA78790035521C /* Frameworks */,
+				5E8055451AEA78790035521C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5E8055591AEA78790035521C /* PBXTargetDependency */,
+			);
+			name = "Bakkle WatchKit Extension";
+			productName = "Bakkle WatchKit Extension";
+			productReference = 5E8055471AEA78790035521C /* Bakkle WatchKit Extension.appex */;
+			productType = "com.apple.product-type.watchkit-extension";
+		};
+		5E8055551AEA78790035521C /* Bakkle WatchKit App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5E8055691AEA78790035521C /* Build configuration list for PBXNativeTarget "Bakkle WatchKit App" */;
+			buildPhases = (
+				5E8055541AEA78790035521C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Bakkle WatchKit App";
+			productName = "Bakkle WatchKit App";
+			productReference = 5E8055561AEA78790035521C /* Bakkle WatchKit App.app */;
+			productType = "com.apple.product-type.application.watchapp";
+		};
 		5EBDD68A1AB211E600C7FBE7 /* Bakkle */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5EBDD6AA1AB211E600C7FBE7 /* Build configuration list for PBXNativeTarget "Bakkle" */;
@@ -679,12 +573,10 @@
 				5EBDD6891AB211E600C7FBE7 /* Resources */,
 				DAC119B602F64538F899B059 /* Embed Pods Frameworks */,
 				1BBD5791D628CB2AC4F68D73 /* Copy Pods Resources */,
-				DB852E981B05748F00665CD4 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				DB852E901B05748F00665CD4 /* PBXTargetDependency */,
 			);
 			name = Bakkle;
 			productName = Bakkle;
@@ -709,39 +601,6 @@
 			productReference = 5EBDD6A01AB211E600C7FBE7 /* BakkleTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		DB852E731B05748F00665CD4 /* Bakkle WatchKit Extension */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = DB852E951B05748F00665CD4 /* Build configuration list for PBXNativeTarget "Bakkle WatchKit Extension" */;
-			buildPhases = (
-				DB852E701B05748F00665CD4 /* Sources */,
-				DB852E711B05748F00665CD4 /* Frameworks */,
-				DB852E721B05748F00665CD4 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				DB852E861B05748F00665CD4 /* PBXTargetDependency */,
-			);
-			name = "Bakkle WatchKit Extension";
-			productName = "Bakkle WatchKit Extension";
-			productReference = DB852E741B05748F00665CD4 /* Bakkle WatchKit Extension.appex */;
-			productType = "com.apple.product-type.watchkit-extension";
-		};
-		DB852E821B05748F00665CD4 /* Bakkle WatchKit App */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = DB852E921B05748F00665CD4 /* Build configuration list for PBXNativeTarget "Bakkle WatchKit App" */;
-			buildPhases = (
-				DB852E811B05748F00665CD4 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "Bakkle WatchKit App";
-			productName = "Bakkle WatchKit App";
-			productReference = DB852E831B05748F00665CD4 /* Bakkle WatchKit App.app */;
-			productType = "com.apple.product-type.application.watchapp";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -751,6 +610,14 @@
 				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = "Ishank Tandon";
 				TargetAttributes = {
+					5E8055461AEA78790035521C = {
+						CreatedOnToolsVersion = 6.3;
+						DevelopmentTeam = GKAKES7JLX;
+					};
+					5E8055551AEA78790035521C = {
+						CreatedOnToolsVersion = 6.3;
+						DevelopmentTeam = GKAKES7JLX;
+					};
 					5EBDD68A1AB211E600C7FBE7 = {
 						CreatedOnToolsVersion = 6.1.1;
 						DevelopmentTeam = GKAKES7JLX;
@@ -758,14 +625,6 @@
 					5EBDD69F1AB211E600C7FBE7 = {
 						CreatedOnToolsVersion = 6.1.1;
 						TestTargetID = 5EBDD68A1AB211E600C7FBE7;
-					};
-					DB852E731B05748F00665CD4 = {
-						CreatedOnToolsVersion = 6.3.1;
-						DevelopmentTeam = GKAKES7JLX;
-					};
-					DB852E821B05748F00665CD4 = {
-						CreatedOnToolsVersion = 6.3.1;
-						DevelopmentTeam = GKAKES7JLX;
 					};
 				};
 			};
@@ -784,20 +643,34 @@
 			targets = (
 				5EBDD68A1AB211E600C7FBE7 /* Bakkle */,
 				5EBDD69F1AB211E600C7FBE7 /* BakkleTests */,
-				DB852E731B05748F00665CD4 /* Bakkle WatchKit Extension */,
-				DB852E821B05748F00665CD4 /* Bakkle WatchKit App */,
+				5E8055461AEA78790035521C /* Bakkle WatchKit Extension */,
+				5E8055551AEA78790035521C /* Bakkle WatchKit App */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		5E8055451AEA78790035521C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5E8055571AEA78790035521C /* Bakkle WatchKit App.app in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5E8055541AEA78790035521C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		5EBDD6891AB211E600C7FBE7 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				DBEE0E9B1AF3C85C005E60BD /* btn-want-disabled.png in Resources */,
 				A05DB7581AF4F8C60076D97D /* mock-tile.png in Resources */,
-				A08D53DA1B08269A000C406C /* icon-i.png in Resources */,
 				A0A5F71D1AEDAE54001A7D7A /* Settings.bundle in Resources */,
 				A03508F91AB3C6AE00CA6455 /* logo-white-design-png.png in Resources */,
 				A0A2FFF51ACE232F00A42CD8 /* LoginScreen-bkg.png in Resources */,
@@ -821,7 +694,6 @@
 				A058A2B71AFDADA2005E7432 /* mask-buyer-white.png in Resources */,
 				5EBDD6B11AB2139700C7FBE7 /* bakkleLogo.png in Resources */,
 				A018DF881ADE07E700AF5550 /* btn-add.png in Resources */,
-				A08D53D11B0815CB000C406C /* MessageIncoming.aiff in Resources */,
 				A058A2B61AFDADA2005E7432 /* mask-buyer-grey@3x.png in Resources */,
 				5E023F861AD592B80002AFBC /* btn-addItem.png in Resources */,
 				5EBDD6981AB211E600C7FBE7 /* Images.xcassets in Resources */,
@@ -829,7 +701,6 @@
 				A058A2A91AFD6024005E7432 /* btn-menu@3x.png in Resources */,
 				A0D96F7C1AD765990046DA13 /* icon-cart.png in Resources */,
 				A0D96F791AD765990046DA13 /* icon-gear.png in Resources */,
-				A08D53D21B0815CB000C406C /* MessageOutgoing.aiff in Resources */,
 				A0A200021ACE2F7500A42CD8 /* btn-facebook40.png in Resources */,
 				5E1DCCA31AD47C53002D41FD /* btn-x.png in Resources */,
 				DB5372941B0832E000CC49B7 /* pendant-tag660.png in Resources */,
@@ -842,7 +713,6 @@
 				A08D53B11B06DBD8000C406C /* icon-x@3x.png in Resources */,
 				A0D96F901AD7751E0046DA13 /* mock-settings.png in Resources */,
 				D0FCDFFA1B03B2E0006F76F7 /* btn-addCam.png in Resources */,
-				A08D53D81B0825E7000C406C /* icon-back.png in Resources */,
 				A058A2B51AFDADA2005E7432 /* mask-buyer-grey@2x.png in Resources */,
 				A0A200051ACE30C200A42CD8 /* btn-logout40.png in Resources */,
 				A058A2BB1AFDB87F005E7432 /* loading.png in Resources */,
@@ -861,24 +731,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DB852E721B05748F00665CD4 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				DB852E841B05748F00665CD4 /* Bakkle WatchKit App.app in Resources */,
-				DB852E801B05748F00665CD4 /* Images.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DB852E811B05748F00665CD4 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				DB852E8C1B05748F00665CD4 /* Interface.storyboard in Resources */,
-				DB852E8E1B05748F00665CD4 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -933,18 +785,22 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		5E8055431AEA78790035521C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		5EBDD6871AB211E600C7FBE7 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				5EE2C9B71AB9F0FB0031D8CD /* MDCPanState.m in Sources */,
 				A058A2AB1AFD8EAD005E7432 /* UIImage+Resize.swift in Sources */,
-				A08D53CB1B0815CB000C406C /* ChatCell.swift in Sources */,
-				A08D53CD1B0815CB000C406C /* ChatViewController.swift in Sources */,
 				5EBDD6931AB211E600C7FBE7 /* LoginView.swift in Sources */,
 				5EE2C98B1AB9D1730031D8CD /* FeedView.swift in Sources */,
 				A0D96F801AD767BD0046DA13 /* MenuTableView.swift in Sources */,
-				A08D53CA1B0815CB000C406C /* Chat.swift in Sources */,
 				DBC2C0CC1B01241A00F56792 /* ImageLabelView.m in Sources */,
 				A0D96F8A1AD773DB0046DA13 /* FeedFilter.swift in Sources */,
 				5EE2C9B91AB9F0FB0031D8CD /* UIColor+MDCRGB8Bit.m in Sources */,
@@ -954,31 +810,22 @@
 				5E8055421AE541460035521C /* ItemDetails.swift in Sources */,
 				5EE2C9BA1AB9F0FB0031D8CD /* UIView+MDCBorderedLabel.m in Sources */,
 				A0D96F821AD76D8E0046DA13 /* BuyersTrunkView.swift in Sources */,
-				A08D53C91B0815CB000C406C /* Account.swift in Sources */,
-				A08D53D51B0815CB000C406C /* User.swift in Sources */,
 				5EE2C9B81AB9F0FB0031D8CD /* MDCGeometry.m in Sources */,
-				A08D53D61B0815CB000C406C /* UserCell.swift in Sources */,
 				5EE2C9BB1AB9F0FB0031D8CD /* MDCViewState.m in Sources */,
 				5E78D7E11AF121BA0014ED8F /* CollectionThumbnail.swift in Sources */,
 				A0D96F861AD771900046DA13 /* SellersGarage.swift in Sources */,
 				A06AA9EE1AD609530075D7F7 /* Bakkle.swift in Sources */,
 				5EE2C9B41AB9F0FB0031D8CD /* MDCSwipeOptions.m in Sources */,
 				5EE2C9B61AB9F0FB0031D8CD /* MDCSwipeResult.m in Sources */,
-				A08D53D31B0815CB000C406C /* MessageSentDateCell.swift in Sources */,
 				A058A2BD1AFEF665005E7432 /* CLLocation+String.swift in Sources */,
 				5E1DCCA51AD486D2002D41FD /* AddItem.swift in Sources */,
-				A08D53CE1B0815CB000C406C /* ComposeViewController.swift in Sources */,
-				A08D53CF1B0815CB000C406C /* Message.swift in Sources */,
 				5EBDD6911AB211E600C7FBE7 /* AppDelegate.swift in Sources */,
-				A08D53D01B0815CB000C406C /* MessageBubbleCell.swift in Sources */,
 				A058A2A11AFC28BE005E7432 /* DemoView.swift in Sources */,
 				5E1FEE7C1AD8641900C08131 /* MDCSwipeToChooseView.m in Sources */,
 				5EE2C9B21AB9F0FB0031D8CD /* UIView+MDCSwipeToChoose.m in Sources */,
 				A08D53B91B07DE26000C406C /* Theme.swift in Sources */,
 				A08D53AF1B06D850000C406C /* Common.swift in Sources */,
 				5EE2C9B51AB9F0FB0031D8CD /* MDCSwipeToChooseViewOptions.m in Sources */,
-				A014B46C1B09215800E01FEF /* ProfileView.swift in Sources */,
-				A08D53D41B0815CB000C406C /* PlaceholderTextView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -990,33 +837,18 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		DB852E701B05748F00665CD4 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				133467521B08528000ED47EF /* InterfaceController.swift in Sources */,
-				DB852E7C1B05748F00665CD4 /* NotificationController.swift in Sources */,
-				DB852E7E1B05748F00665CD4 /* GlanceController.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		5E8055591AEA78790035521C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5E8055551AEA78790035521C /* Bakkle WatchKit App */;
+			targetProxy = 5E8055581AEA78790035521C /* PBXContainerItemProxy */;
+		};
 		5EBDD6A21AB211E600C7FBE7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 5EBDD68A1AB211E600C7FBE7 /* Bakkle */;
 			targetProxy = 5EBDD6A11AB211E600C7FBE7 /* PBXContainerItemProxy */;
-		};
-		DB852E861B05748F00665CD4 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = DB852E821B05748F00665CD4 /* Bakkle WatchKit App */;
-			targetProxy = DB852E851B05748F00665CD4 /* PBXContainerItemProxy */;
-		};
-		DB852E901B05748F00665CD4 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = DB852E731B05748F00665CD4 /* Bakkle WatchKit Extension */;
-			targetProxy = DB852E8F1B05748F00665CD4 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1037,17 +869,85 @@
 			name = LaunchScreen.xib;
 			sourceTree = "<group>";
 		};
-		DB852E8A1B05748F00665CD4 /* Interface.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				DB852E8B1B05748F00665CD4 /* Base */,
-			);
-			name = Interface.storyboard;
-			sourceTree = "<group>";
-		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		5E8055651AEA78790035521C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "Bakkle WatchKit Extension/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		5E8055661AEA78790035521C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "Bakkle WatchKit Extension/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		5E8055671AEA78790035521C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				IBSC_MODULE = Bakkle_WatchKit_Extension;
+				INFOPLIST_FILE = "Bakkle WatchKit App/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
+			};
+			name = Debug;
+		};
+		5E8055681AEA78790035521C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_NO_COMMON_BLOCKS = YES;
+				IBSC_MODULE = Bakkle_WatchKit_Extension;
+				INFOPLIST_FILE = "Bakkle WatchKit App/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
+			};
+			name = Release;
+		};
 		5EBDD6A81AB211E600C7FBE7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1213,83 +1113,27 @@
 			};
 			name = Release;
 		};
-		DB852E931B05748F00665CD4 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				IBSC_MODULE = Bakkle_WatchKit_Extension;
-				INFOPLIST_FILE = "Bakkle WatchKit App/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = 4;
-				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
-			};
-			name = Debug;
-		};
-		DB852E941B05748F00665CD4 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_NO_COMMON_BLOCKS = YES;
-				IBSC_MODULE = Bakkle_WatchKit_Extension;
-				INFOPLIST_FILE = "Bakkle WatchKit App/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = 4;
-				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
-			};
-			name = Release;
-		};
-		DB852E961B05748F00665CD4 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = "Bakkle WatchKit Extension/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_NAME = "${TARGET_NAME}";
-				SKIP_INSTALL = YES;
-			};
-			name = Debug;
-		};
-		DB852E971B05748F00665CD4 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "Bakkle WatchKit Extension/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_NAME = "${TARGET_NAME}";
-				SKIP_INSTALL = YES;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		5E8055691AEA78790035521C /* Build configuration list for PBXNativeTarget "Bakkle WatchKit App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5E8055671AEA78790035521C /* Debug */,
+				5E8055681AEA78790035521C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5E80556A1AEA78790035521C /* Build configuration list for PBXNativeTarget "Bakkle WatchKit Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5E8055651AEA78790035521C /* Debug */,
+				5E8055661AEA78790035521C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		5EBDD6861AB211E600C7FBE7 /* Build configuration list for PBXProject "Bakkle" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -1313,24 +1157,6 @@
 			buildConfigurations = (
 				5EBDD6AE1AB211E600C7FBE7 /* Debug */,
 				5EBDD6AF1AB211E600C7FBE7 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		DB852E921B05748F00665CD4 /* Build configuration list for PBXNativeTarget "Bakkle WatchKit App" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				DB852E931B05748F00665CD4 /* Debug */,
-				DB852E941B05748F00665CD4 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		DB852E951B05748F00665CD4 /* Build configuration list for PBXNativeTarget "Bakkle WatchKit Extension" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				DB852E961B05748F00665CD4 /* Debug */,
-				DB852E971B05748F00665CD4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

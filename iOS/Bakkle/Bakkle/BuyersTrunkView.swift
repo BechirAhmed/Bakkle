@@ -107,9 +107,6 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
         cell.itemImage?.clipsToBounds = true
         if Bakkle.sharedInstance.trunkItems.count > 0 {
             let trunkEntry : NSDictionary = Bakkle.sharedInstance.trunkItems[indexPath.row] as! NSDictionary
-//            if let x: AnyObject = topItem.valueForKey("pk") {
-//                self.item_id = Int(x.intValue)
-//            }
             let item = trunkEntry.valueForKey("item") as! NSDictionary
             println(item.description)
             let imgURLs : [String] = item.valueForKey("image_urls") as! [String]
@@ -129,11 +126,9 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-      //  let chat = chats[indexPath.row]
         let chat = Chat(user: User(ID: 2, username: "big-haus", firstName: "Big", lastName: "Haus"), lastMessageText: "6 sounds good :-)", lastMessageSentDate: NSDate())
         let chatViewController = ChatViewController(chat: chat)
         self.presentViewController(chatViewController, animated: true, completion: {})
-//        navigationController?.pushViewController(chatViewController, animated: true)
     }
     
     /* MENUBAR ITEMS */

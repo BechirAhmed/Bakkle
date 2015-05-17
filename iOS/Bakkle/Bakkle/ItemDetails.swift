@@ -20,7 +20,7 @@ class ItemDetails: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = Theme.ColorOffWhite
-        activityInd.startAnimating()
+        activityInd?.startAnimating()
         
         var swipeDown = UISwipeGestureRecognizer(target: self, action: "respondToSwipeGesture:")
         swipeDown.direction = UISwipeGestureRecognizerDirection.Down

@@ -93,6 +93,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             localNotification.fireDate = NSDate()
 
 //            application.applicationIconBadgeNumber = 0 //TODO: Set to unread message count.
+            let blob: Dictionary = userInfo as Dictionary
             
             if let aps = userInfo["aps"] as? NSDictionary {
                 println("There is an aps")
@@ -102,13 +103,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             }
 
+            if let custom = userInfo["custom"] as? NSDictionary {
+                println("There is a custom")
+            }
+            
             application.scheduleLocalNotification(localNotification)
             
             //UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Did receive a Remote Notification" message:[NSString stringWithFormat:@"Your App name received this notification while it was running:\n%@",[[userInfo objectForKey:@"aps"] objectForKey:@"alert"]]delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         }
     }
     
-
+    func application(application: UIApplication!, handleWatchKitExtensionRequest userInfo: [NSObject : AnyObject]!, reply: (([NSObject : AnyObject]!) -> Void)!) {
+        println("I WAS CALLED")
+        var dictionary = userInfo as NSDictionary
+        var dict: NSDictionary = NSDictionary()
+        dict.setValue(UIImage(named: "tiger.jpg"), forKey: "image")
+        //dict.setValue("yes", forkey: "success")
+        
+        if let type = dictionary.objectForKey("type") as? String
+        {
+            if type == "fetch"
+            {
+                reply(dict as [NSObject : AnyObject])
+            }
+        }
+    }
 
 }
 

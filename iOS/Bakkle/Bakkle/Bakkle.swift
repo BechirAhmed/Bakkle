@@ -140,12 +140,17 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         }
     }
     func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
+        if locations[0].latitude == nil {
+            return
+        }
         self.user_loc = locations[0] as? CLLocation
-        self.user_location = "\( locations[0].coordinate.latitude ), \( locations[0].coordinate.longitude )"
+        self.user_location = "\( locations[0].latitude ), \( locations[0].longitude )"
         self.debg("Received new location: \(self.user_location)")
     }
     func locationManager(manager: CLLocationManager!, didUpdateToLocation newLocation: CLLocation!, fromLocation oldLocation: CLLocation!) {
-        
+        if newLocation == nil {
+            return
+        }
         self.user_loc = newLocation
         self.user_location = "\( newLocation.coordinate.latitude ), \( newLocation.coordinate.longitude )"
         self.debg("Received new location: \(self.user_location)")
@@ -645,6 +650,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             
             let responseString: String = NSString(data: data, encoding: NSUTF8StringEncoding)! as String
             self.debg("Response: \(responseString)")
+            println("Response: \(responseString)")
             
             var parseError: NSError?
             self.responseDict = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! NSDictionary!
