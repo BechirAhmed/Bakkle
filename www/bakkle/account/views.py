@@ -91,7 +91,7 @@ def dashboard(request):
 
 # Login to account using Facebook
 @csrf_exempt
-@require_POST
+#@require_POST
 def login_facebook(request):
     facebook_id = request.POST.get('user_id', "")
     device_uuid = request.POST.get('device_uuid', "")
