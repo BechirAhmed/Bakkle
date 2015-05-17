@@ -551,7 +551,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         
     }
     
-    func addItem(title: String, description: String, location: String, price: String, tags: String, method: String, image: UIImage, success: (item_id: Int?)->(), fail: ()->() ) {
+    func addItem(title: String, description: String, location: String, price: String, tags: String, method: String, image: UIImage, success: (item_id: Int?, item_url: String?)->(), fail: ()->() ) {
         
         // URL encode some vars.
         let escTitle = title.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
@@ -614,7 +614,8 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             
             if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
                 let item_id: Int = self.responseDict.valueForKey("item_id") as! Int
-                success(item_id: item_id)
+                let item_url: String = self.getImageURL(item_id)
+                success(item_id: item_id, item_url: item_url)
             } else {
                 fail()
             }

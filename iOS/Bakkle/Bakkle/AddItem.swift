@@ -183,7 +183,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
             croppedImg.resize(size, completionHandler: {(scaledImg:UIImage,scaleBob:NSData) -> () in
 
                 
-                Bakkle.sharedInstance.addItem(self.titleField.text, description: "", location: Bakkle.sharedInstance.user_location, price: self.priceField.text, tags: self.tagsField.text, method: self.methodControl.titleForSegmentAtIndex(self.methodControl.selectedSegmentIndex)!, image:scaledImg, success: {(item_id:Int?) -> () in
+                Bakkle.sharedInstance.addItem(self.titleField.text, description: "", location: Bakkle.sharedInstance.user_location, price: self.priceField.text, tags: self.tagsField.text, method: self.methodControl.titleForSegmentAtIndex(self.methodControl.selectedSegmentIndex)!, image:scaledImg, success: {(item_id:Int?, item_url: String?) -> () in
                     
                     activityView.stopAnimating()
                     activityView.removeFromSuperview()
@@ -194,7 +194,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
                     dispatch_async(dispatch_get_main_queue()) {
                         Bakkle.sharedInstance.populateFeed({})
                         
-                        println("item_id=\(item_id)")
+                        println("item_id=\(item_id) item_url=\(item_url)")
                         
                         let alertController = UIAlertController(title: "Bakkle", message:
                             "Item uploaded to Bakkle.", preferredStyle: UIAlertControllerStyle.Alert)
