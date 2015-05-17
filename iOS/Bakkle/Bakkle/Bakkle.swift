@@ -573,7 +573,9 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             var parseError: NSError?
             self.responseDict = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! NSDictionary!
             self.debg("RESPONSE DICT IS: \(self.responseDict)")
-            if (data != nil && data.length != 0 && Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 ){
+            if (data != nil && data.length != 0 ) {
+                
+//            }&& Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 ){
     //                let item_id: Int = self.responseDict.valueForKey("item_id") as! Int
     //                let item_url: String = self.getImageURL(item_id)
                     success()

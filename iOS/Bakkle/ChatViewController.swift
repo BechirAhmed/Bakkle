@@ -87,26 +87,29 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
         view.backgroundColor = Theme.ColorOffWhite // smooths push animation
 
-        let headerHeight: CGFloat = 66.0
-        header = UIView(frame: CGRectMake(view.bounds.origin.x, view.bounds.origin.y, view.bounds.size.width, headerHeight))
+        let topHeight: CGFloat = 20
+        let headerHeight: CGFloat = 44
+        header = UIView(frame: CGRectMake(view.bounds.origin.x, view.bounds.origin.y, view.bounds.size.width, headerHeight+topHeight))
         header.backgroundColor = Theme.ColorGreen
-        view.addSubview(header)
-        
-        let buttonWidth: CGFloat = 66.0
-        var backButton = UIButton(frame: CGRectMake(view.bounds.origin.x, view.bounds.origin.y, buttonWidth, headerHeight))
-        backButton.backgroundColor = Theme.ColorGreen
-        backButton.imageView?.image = UIImage(named: "icon-back.png")
-        header.addSubview(backButton)
-        var profileButton = UIButton(frame: CGRectMake(view.bounds.origin.x, view.bounds.origin.y, buttonWidth, headerHeight))
-        profileButton.backgroundColor = Theme.ColorGreen
-//        profileButton.imageView?.hnk_setImage(<#image: UIImage#>, animated: <#Bool#>, success: <#((UIImage) -> ())?##(UIImage) -> ()#>)
-        header.addSubview(profileButton)
-        let infoButtonWidth:CGFloat = 90
-        var infoButton = UIButton(frame: CGRectMake(view.bounds.origin.x+view.bounds.size.width-infoButtonWidth, view.bounds.origin.y+view.bounds.size.height-headerHeight, infoButtonWidth, headerHeight))
-        infoButton.backgroundColor = Theme.ColorGreen
-        infoButton.imageView?.image = UIImage(named: "icon-i.png")
-        header.addSubview(infoButton)
 
+        
+        let buttonWidth: CGFloat = 96.0
+        var backButton = UIButton(frame: CGRectMake(header.bounds.origin.x, header.bounds.origin.y+20, buttonWidth, headerHeight))
+        backButton.setImage(UIImage(named: "icon-back.png"), forState: UIControlState.Normal)
+
+        //backButton.actionsForTarget(<#target: AnyObject#>, forControlEvent: <#UIControlEvents#>)
+        header.addSubview(backButton)
+        
+        var profileButton = UIButton(frame: CGRectMake(header.bounds.origin.x, header.bounds.origin.y, buttonWidth, headerHeight))
+        profileButton.backgroundColor = Theme.ColorGreen
+//        profileButton.imageView?.hnk_setImage(., animated: <#Bool#>, success: <#((UIImage) -> ())?##(UIImage) -> ()#>)
+       // header.addSubview(profileButton)
+        
+        let infoButtonWidth:CGFloat = 50
+        var infoButton = UIButton(frame: CGRectMake(header.bounds.origin.x+header.bounds.size.width-infoButtonWidth, header.bounds.origin.y+topHeight, infoButtonWidth, headerHeight))
+        infoButton.setImage(UIImage(named: "icon-i.png"), forState: UIControlState.Normal)
+        header.addSubview(infoButton)
+        view.addSubview(header)
         
         tableView = UITableView(frame: CGRectMake(view.bounds.origin.x, view.bounds.origin.y+headerHeight, view.bounds.size.width, view.bounds.size.height-headerHeight), style: .Plain)
         tableView.autoresizingMask = .FlexibleWidth | .FlexibleHeight
@@ -278,10 +281,12 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
     func sendAction() {
         // Autocomplete text before sending #hack
-        //textView.resignFirstResponder()
-        //textView.becomeFirstResponder()
+        textView.resignFirstResponder()
+        textView.becomeFirstResponder()
 
         chat.loadedMessages.append([Message(incoming: false, text: textView.text, sentDate: NSDate())])
+        //TODO: Trap response to show if message got transmitted or not.
+        Bakkle.sharedInstance.sendChat(1, message: textView.text, success: {()->() in }, fail: {()->() in })
         textView.text = nil
         updateTextViewHeight()
         sendButton.enabled = false
@@ -296,8 +301,6 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         tableView.endUpdates()
         tableViewScrollToBottomAnimated(true)
         AudioServicesPlaySystemSound(messageSoundOutgoing)
-        //TODO: Trap response to show if message got transmitted or not.
-        Bakkle.sharedInstance.sendChat(42, message: textView.text, success: {()->() in }, fail: {()->() in })
     }
 
     func tableViewScrollToBottomAnimated(animated: Bool) {
