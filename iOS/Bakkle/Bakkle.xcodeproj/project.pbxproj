@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		133467521B08528000ED47EF /* InterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB852E791B05748F00665CD4 /* InterfaceController.swift */; };
 		5E023F861AD592B80002AFBC /* btn-addItem.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E023F851AD592B80002AFBC /* btn-addItem.png */; };
 		5E023F881AD59F200002AFBC /* logo-white-design-png-transp-100.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E023F871AD59F200002AFBC /* logo-white-design-png-transp-100.png */; };
 		5E1DCC9F1AD44C72002D41FD /* tiger.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5E1DCC9E1AD44C71002D41FD /* tiger.jpg */; };
@@ -114,13 +113,6 @@
 		DB5372901B0806B600CC49B7 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB53728F1B0806B600CC49B7 /* FBSDKShareKit.framework */; };
 		DB5372921B0823DD00CC49B7 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB5372911B0823DD00CC49B7 /* Social.framework */; };
 		DB5372941B0832E000CC49B7 /* pendant-tag660.png in Resources */ = {isa = PBXBuildFile; fileRef = DB5372931B0832E000CC49B7 /* pendant-tag660.png */; };
-		DB852E7C1B05748F00665CD4 /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB852E7B1B05748F00665CD4 /* NotificationController.swift */; };
-		DB852E7E1B05748F00665CD4 /* GlanceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB852E7D1B05748F00665CD4 /* GlanceController.swift */; };
-		DB852E801B05748F00665CD4 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DB852E7F1B05748F00665CD4 /* Images.xcassets */; };
-		DB852E841B05748F00665CD4 /* Bakkle WatchKit App.app in Resources */ = {isa = PBXBuildFile; fileRef = DB852E831B05748F00665CD4 /* Bakkle WatchKit App.app */; };
-		DB852E8C1B05748F00665CD4 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DB852E8A1B05748F00665CD4 /* Interface.storyboard */; };
-		DB852E8E1B05748F00665CD4 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DB852E8D1B05748F00665CD4 /* Images.xcassets */; };
-		DB852E911B05748F00665CD4 /* Bakkle WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = DB852E741B05748F00665CD4 /* Bakkle WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		DBC2C0CC1B01241A00F56792 /* ImageLabelView.m in Sources */ = {isa = PBXBuildFile; fileRef = DBC2C0CB1B01241A00F56792 /* ImageLabelView.m */; };
 		DBEE0E971AF3C464005E60BD /* item-detail-overlay.png in Resources */ = {isa = PBXBuildFile; fileRef = DBEE0E961AF3C464005E60BD /* item-detail-overlay.png */; };
 		DBEE0E991AF3C855005E60BD /* btb-want.png in Resources */ = {isa = PBXBuildFile; fileRef = DBEE0E981AF3C855005E60BD /* btb-want.png */; };
@@ -136,20 +128,6 @@
 			remoteGlobalIDString = 5EBDD68A1AB211E600C7FBE7;
 			remoteInfo = Bakkle;
 		};
-		DB852E851B05748F00665CD4 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5EBDD6831AB211E600C7FBE7 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = DB852E821B05748F00665CD4;
-			remoteInfo = "Bakkle WatchKit App";
-		};
-		DB852E8F1B05748F00665CD4 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5EBDD6831AB211E600C7FBE7 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = DB852E731B05748F00665CD4;
-			remoteInfo = "Bakkle WatchKit Extension";
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -159,7 +137,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				DB852E911B05748F00665CD4 /* Bakkle WatchKit Extension.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -299,14 +276,12 @@
 		DB53728F1B0806B600CC49B7 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
 		DB5372911B0823DD00CC49B7 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		DB5372931B0832E000CC49B7 /* pendant-tag660.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pendant-tag660.png"; sourceTree = "<group>"; };
-		DB852E741B05748F00665CD4 /* Bakkle WatchKit Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Bakkle WatchKit Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB852E771B05748F00665CD4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DB852E781B05748F00665CD4 /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
 		DB852E791B05748F00665CD4 /* InterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceController.swift; sourceTree = "<group>"; };
 		DB852E7B1B05748F00665CD4 /* NotificationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationController.swift; sourceTree = "<group>"; };
 		DB852E7D1B05748F00665CD4 /* GlanceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlanceController.swift; sourceTree = "<group>"; };
 		DB852E7F1B05748F00665CD4 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		DB852E831B05748F00665CD4 /* Bakkle WatchKit App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Bakkle WatchKit App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB852E891B05748F00665CD4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DB852E8B1B05748F00665CD4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
 		DB852E8D1B05748F00665CD4 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -341,13 +316,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		DB852E711B05748F00665CD4 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -371,8 +339,6 @@
 			children = (
 				5EBDD68B1AB211E600C7FBE7 /* Bakkle.app */,
 				5EBDD6A01AB211E600C7FBE7 /* BakkleTests.xctest */,
-				DB852E741B05748F00665CD4 /* Bakkle WatchKit Extension.appex */,
-				DB852E831B05748F00665CD4 /* Bakkle WatchKit App.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -684,7 +650,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				DB852E901B05748F00665CD4 /* PBXTargetDependency */,
 			);
 			name = Bakkle;
 			productName = Bakkle;
@@ -709,39 +674,6 @@
 			productReference = 5EBDD6A01AB211E600C7FBE7 /* BakkleTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		DB852E731B05748F00665CD4 /* Bakkle WatchKit Extension */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = DB852E951B05748F00665CD4 /* Build configuration list for PBXNativeTarget "Bakkle WatchKit Extension" */;
-			buildPhases = (
-				DB852E701B05748F00665CD4 /* Sources */,
-				DB852E711B05748F00665CD4 /* Frameworks */,
-				DB852E721B05748F00665CD4 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				DB852E861B05748F00665CD4 /* PBXTargetDependency */,
-			);
-			name = "Bakkle WatchKit Extension";
-			productName = "Bakkle WatchKit Extension";
-			productReference = DB852E741B05748F00665CD4 /* Bakkle WatchKit Extension.appex */;
-			productType = "com.apple.product-type.watchkit-extension";
-		};
-		DB852E821B05748F00665CD4 /* Bakkle WatchKit App */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = DB852E921B05748F00665CD4 /* Build configuration list for PBXNativeTarget "Bakkle WatchKit App" */;
-			buildPhases = (
-				DB852E811B05748F00665CD4 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "Bakkle WatchKit App";
-			productName = "Bakkle WatchKit App";
-			productReference = DB852E831B05748F00665CD4 /* Bakkle WatchKit App.app */;
-			productType = "com.apple.product-type.application.watchapp";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -758,14 +690,6 @@
 					5EBDD69F1AB211E600C7FBE7 = {
 						CreatedOnToolsVersion = 6.1.1;
 						TestTargetID = 5EBDD68A1AB211E600C7FBE7;
-					};
-					DB852E731B05748F00665CD4 = {
-						CreatedOnToolsVersion = 6.3.1;
-						DevelopmentTeam = GKAKES7JLX;
-					};
-					DB852E821B05748F00665CD4 = {
-						CreatedOnToolsVersion = 6.3.1;
-						DevelopmentTeam = GKAKES7JLX;
 					};
 				};
 			};
@@ -784,8 +708,6 @@
 			targets = (
 				5EBDD68A1AB211E600C7FBE7 /* Bakkle */,
 				5EBDD69F1AB211E600C7FBE7 /* BakkleTests */,
-				DB852E731B05748F00665CD4 /* Bakkle WatchKit Extension */,
-				DB852E821B05748F00665CD4 /* Bakkle WatchKit App */,
 			);
 		};
 /* End PBXProject section */
@@ -861,24 +783,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DB852E721B05748F00665CD4 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				DB852E841B05748F00665CD4 /* Bakkle WatchKit App.app in Resources */,
-				DB852E801B05748F00665CD4 /* Images.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DB852E811B05748F00665CD4 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				DB852E8C1B05748F00665CD4 /* Interface.storyboard in Resources */,
-				DB852E8E1B05748F00665CD4 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -990,16 +894,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		DB852E701B05748F00665CD4 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				133467521B08528000ED47EF /* InterfaceController.swift in Sources */,
-				DB852E7C1B05748F00665CD4 /* NotificationController.swift in Sources */,
-				DB852E7E1B05748F00665CD4 /* GlanceController.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -1007,16 +901,6 @@
 			isa = PBXTargetDependency;
 			target = 5EBDD68A1AB211E600C7FBE7 /* Bakkle */;
 			targetProxy = 5EBDD6A11AB211E600C7FBE7 /* PBXContainerItemProxy */;
-		};
-		DB852E861B05748F00665CD4 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = DB852E821B05748F00665CD4 /* Bakkle WatchKit App */;
-			targetProxy = DB852E851B05748F00665CD4 /* PBXContainerItemProxy */;
-		};
-		DB852E901B05748F00665CD4 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = DB852E731B05748F00665CD4 /* Bakkle WatchKit Extension */;
-			targetProxy = DB852E8F1B05748F00665CD4 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1213,80 +1097,6 @@
 			};
 			name = Release;
 		};
-		DB852E931B05748F00665CD4 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				IBSC_MODULE = Bakkle_WatchKit_Extension;
-				INFOPLIST_FILE = "Bakkle WatchKit App/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = 4;
-				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
-			};
-			name = Debug;
-		};
-		DB852E941B05748F00665CD4 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_NO_COMMON_BLOCKS = YES;
-				IBSC_MODULE = Bakkle_WatchKit_Extension;
-				INFOPLIST_FILE = "Bakkle WatchKit App/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = 4;
-				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
-			};
-			name = Release;
-		};
-		DB852E961B05748F00665CD4 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = "Bakkle WatchKit Extension/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_NAME = "${TARGET_NAME}";
-				SKIP_INSTALL = YES;
-			};
-			name = Debug;
-		};
-		DB852E971B05748F00665CD4 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "Bakkle WatchKit Extension/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_NAME = "${TARGET_NAME}";
-				SKIP_INSTALL = YES;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1313,24 +1123,6 @@
 			buildConfigurations = (
 				5EBDD6AE1AB211E600C7FBE7 /* Debug */,
 				5EBDD6AF1AB211E600C7FBE7 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		DB852E921B05748F00665CD4 /* Build configuration list for PBXNativeTarget "Bakkle WatchKit App" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				DB852E931B05748F00665CD4 /* Debug */,
-				DB852E941B05748F00665CD4 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		DB852E951B05748F00665CD4 /* Build configuration list for PBXNativeTarget "Bakkle WatchKit Extension" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				DB852E961B05748F00665CD4 /* Debug */,
-				DB852E971B05748F00665CD4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
