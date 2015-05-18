@@ -20,7 +20,7 @@ class ItemDetails: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = Theme.ColorOffWhite
-        activityInd.startAnimating()
+        activityInd?.startAnimating()
         
         var swipeDown = UISwipeGestureRecognizer(target: self, action: "respondToSwipeGesture:")
         swipeDown.direction = UISwipeGestureRecognizerDirection.Down
@@ -43,6 +43,8 @@ class ItemDetails: UIViewController {
         }
     }
     override func viewWillAppear(animated: Bool) {
+        //TODO: This needs to load the item SENT to the view controller, not the top feed item.
+        
         item = Bakkle.sharedInstance.feedItems[0] as? NSDictionary
         let imgURLs = item!.valueForKey("image_urls") as! NSArray
         

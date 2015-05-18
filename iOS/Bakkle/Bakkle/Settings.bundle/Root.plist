@@ -23,8 +23,8 @@
 			<integer>0</integer>
 			<key>Titles</key>
 			<array>
-				<string>Production Server (default)</string>
-				<string>None</string>
+				<string>Production Server Cluster (default)</string>
+				<string>Production Server (old)</string>
 				<string>Test (Developers only)</string>
 				<string>Lindsey (Developers only)</string>
 				<string>Sandor (Developers only)</string>
