@@ -43,6 +43,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         
         var tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
         self.view.addGestureRecognizer(tap)
+        
     }
     
     func priceNextToggle() {
@@ -57,12 +58,15 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         return true
     }
     func textFieldDidBeginEditing(textField: UITextField) {
-        animateViewMoving(true, moveValue: 235)
+        animateViewMoving(true, moveValue: 215)
         formatPrice()
     }
     
     func textFieldDidEndEditing(textField: UITextField) {
-        animateViewMoving(false, moveValue: 235)
+        if textField == priceField {
+            animateViewMoving(false, moveValue: 30)
+        }
+        animateViewMoving(false, moveValue: 215)
         formatPrice()
         validateTextFields()
     }
@@ -77,6 +81,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         UIView.commitAnimations()
     }
     
+    /* Currently, not using it. Might use it in future. */
     func keboardWillShow(notification: NSNotification) {
         var info: NSDictionary = notification.userInfo!
         var keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
@@ -121,6 +126,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     }
     
     @IBAction func beginEditingPrice(sender: AnyObject) {
+        animateViewMoving(true, moveValue: 30)
         if priceField.text == "take it!" {
             priceField.text = "0"
             println("setting to zero")
@@ -129,6 +135,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     func dismissKeyboard() {
         self.titleField.resignFirstResponder() || self.priceField.resignFirstResponder() || self.tagsField.resignFirstResponder()
         validateTextFields()
+        
     }
 
     @IBAction func cancelAdd(sender: AnyObject) {
@@ -243,13 +250,14 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
             priceField.becomeFirstResponder()
         }
         else if textField == priceField {
-            tagsField.becomeFirstResponder()
+           tagsField.becomeFirstResponder()
         }
         else if textField == tagsField {
             tagsField.resignFirstResponder()
         }
         return true
     }
+    
 
     @IBAction func cameraBtn(sender: AnyObject) {
         let fetchOptions = PHFetchOptions()
