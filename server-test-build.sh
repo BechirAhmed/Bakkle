@@ -21,12 +21,12 @@ scpCommand="scp -r -i $key"
 echo "###Kick up Test Server"
 # eval sudo $scpCommand ${DIR} $user@$address:/
 chmod 600 keys/bkbuild
-
-echo $sshCommand 'pushd omnisite-bakkle;./98-update-bkbuild.sh;popd'
-eval $sshCommand 'pushd omnisite-bakkle;./98-update-bkbuild.sh;popd'
+eval $sshCommand ssh-agent bash -c 'ssh-add ./ext-bakkle.key; git pull'
+eval $sshCommand $webRoot/1-system-deps.sh
+eval $sshCommand $webRoot/2-webserver.sh
+eval $sshCommand $webRoot/3-webapp-deps.sh
+eval $sshCommand $webRoot/5-update.sh
 echo "### Server End"
-echo "\r\n"
 echo "### Server Test"
-echo $sshCommand 'pushd omnisite-bakkle;./testScript.py;popd'
-eval $sshCommand 'pushd omnisite-bakkle;./testScript.py;popd'
+eval $sshCommand $webRoot/testScript.py
 echo "### Test End"
