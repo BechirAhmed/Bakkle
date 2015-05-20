@@ -8,6 +8,10 @@ export DTE=`date +'%Y-%m-%d_%H%M%S'`
 sudo mkdir /archives/$DTE
 sudo cp -r /bakkle /archives/$DTE
 
+if [ `hostname` == 'rhv-bakkle-bld' ]; then
+   sudo rm -rf /bakkle/www
+fi
+
 sudo mkdir -m 755        /bakkle
 sudo mkdir -m 755        /bakkle/run
 sudo mkdir -m 755        /bakkle/www
