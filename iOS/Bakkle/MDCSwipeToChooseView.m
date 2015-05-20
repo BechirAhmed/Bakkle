@@ -35,12 +35,13 @@ static CGFloat const MDCSwipeToChooseViewHorizontalPadding = 10.f;
 static CGFloat const MDCSwipeToChooseViewTopPadding = 20.f;
 static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
 
-static const ChooseItemViewImageLabelWidth = 42.f;
+static CGFloat const ChooseItemViewImageLabelWidth = 42.f;
 
 
 @interface MDCSwipeToChooseView ()
 @property (nonatomic, strong) MDCSwipeToChooseViewOptions *options;
 @property (nonatomic, strong) UIView *informationView;
+@property (nonatomic, strong) UIView *topUserInfoView;
 
 @end
 
@@ -56,10 +57,10 @@ static const ChooseItemViewImageLabelWidth = 42.f;
 
 - (instancetype)initWithFrame:(CGRect)frame options:(MDCSwipeToChooseViewOptions *)options {
     CGRect screenBounds = [[UIScreen mainScreen] applicationFrame];
-    CGFloat itemWidth = screenBounds.size.width -20;
-    CGFloat itemHeight = screenBounds.size.height -215;
+    CGFloat itemWidth = screenBounds.size.width;
+    CGFloat itemHeight = screenBounds.size.height;
     
-    self = [super initWithFrame:CGRectMake(12, 125, itemWidth, itemHeight)];
+    self = [super initWithFrame:CGRectMake(0, 108, itemWidth, itemHeight-88)];
     if (self) {
         _options = options ? options : [MDCSwipeToChooseViewOptions new];
         [self setupView];
@@ -68,6 +69,7 @@ static const ChooseItemViewImageLabelWidth = 42.f;
         [self constructNopeImageView];
         [self constructHoldView];
         [self constructReportView];
+        [self constructTopUserInfoView];
         [self constructInformationView];
         [self setupSwipeToChoose];
     }
@@ -98,10 +100,27 @@ static const ChooseItemViewImageLabelWidth = 42.f;
     _informationView.clipsToBounds = YES;
     _informationView.autoresizingMask = UIViewAutoresizingFlexibleWidth |
     UIViewAutoresizingFlexibleTopMargin;
+    
     [self addSubview:_informationView];
     
     [self constructNameLabel];
     [self constructPriceLabel];
+}
+
+-(void)constructTopUserInfoView {
+    CGFloat topHeight = 50.f;
+    CGRect topFrame = CGRectMake(0, 0, CGRectGetWidth(self.bounds), topHeight);
+    _topUserInfoView = [[UIView alloc] initWithFrame:topFrame];
+    _topUserInfoView.clipsToBounds = YES;
+    _topUserInfoView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
+    
+    UIBlurEffect *blur = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
+    UIVisualEffectView *effectView = [[UIVisualEffectView alloc] initWithEffect:blur];
+    effectView.frame = _topUserInfoView.frame;
+    [_topUserInfoView addSubview:effectView];
+    
+    [self addSubview:_topUserInfoView];
+    
 }
 
 - (void)constructNameLabel {
@@ -151,7 +170,7 @@ static const ChooseItemViewImageLabelWidth = 42.f;
 }
 
 - (void)constructImageView {
-    _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height)];
+    _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 50, self.bounds.size.width, self.bounds.size.height-50)];
     [_imageView setContentMode:UIViewContentModeScaleAspectFill];
     _imageView.clipsToBounds = YES;
     [self addSubview:_imageView];

@@ -10,7 +10,7 @@ import UIKit
 
 class ItemDetails: UIViewController {
 
-    var item: NSDictionary?
+    var item: NSDictionary!
     @IBOutlet weak var itemTitleLabel: UILabel!
     @IBOutlet weak var itemTagsLabel: UILabel!
     
@@ -42,10 +42,11 @@ class ItemDetails: UIViewController {
             }
         }
     }
+    
     override func viewWillAppear(animated: Bool) {
         //TODO: This needs to load the item SENT to the view controller, not the top feed item.
-        
-        item = Bakkle.sharedInstance.feedItems[0] as? NSDictionary
+        super.viewWillAppear(true)
+        item = Bakkle.sharedInstance.feedItems[0] as! NSDictionary
         let imgURLs = item!.valueForKey("image_urls") as! NSArray
         
         //TOOD: Load all images into an array and UIScrollView.
