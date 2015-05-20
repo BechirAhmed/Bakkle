@@ -64,7 +64,11 @@ class FeedFilterView: UIViewController {
     /* FILTER CONTROLS */
     @IBAction func filterRealtime(sender: AnyObject) {
         //println("d:\(Int(distance.value)) p:\(price.value) n: \(number.value)")
-        distanceLbl.text = "\(Int(distance.value)) mi"
+        if number.value >= 100 {
+            distanceLbl.text = "100+ mi"
+        } else {
+            distanceLbl.text = "\(Int(distance.value)) mi"
+        }
         priceLbl.text = "$\(Int(price.value))"
         numberLbl.text = "\(Int(number.value))"
         if number.value >= 1000 {
@@ -74,7 +78,11 @@ class FeedFilterView: UIViewController {
     }
     @IBAction func filterChanged(sender: AnyObject) {
         println("SET d:\(Int(distance.value)) p:\(price.value) n: \(number.value)")
-        distanceLbl.text = "\(Int(distance.value)) mi"
+        if number.value >= 100 {
+            distanceLbl.text = "100+ mi"
+        } else {
+            distanceLbl.text = "\(Int(distance.value)) mi"
+        }
         priceLbl.text = "$\(Int(price.value))"
         numberLbl.text = "\(Int(number.value))"
         if number.value >= 1000 {
