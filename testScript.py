@@ -9,11 +9,11 @@ import urllib2
 import time
 
 def successLights():
-    req = urllib2.Request("http://sauron.rhventures.org:8765/lamp/A2/OFF")
-    urllib2.urlopen(req)
     req = urllib2.Request("http://sauron.rhventures.org:8765/lamp/A1/OFF")
     urllib2.urlopen(req)
-    req = urllib2.Request("http://sauron.rhventures.org:8765/lamp/A1/ON")
+    req = urllib2.Request("http://sauron.rhventures.org:8765/lamp/A2/OFF")
+    urllib2.urlopen(req)
+    req = urllib2.Request("http://sauron.rhventures.org:8765/lamp/A2/ON")
     urllib2.urlopen(req)
 
 def failureLights():
