@@ -2,7 +2,7 @@
 //  GlanceController.swift
 //  Bakkle WatchKit Extension
 //
-//  Created by local-tandoni on 5/14/15.
+//  Created by Watterson, Lindsey M on 5/20/15.
 //  Copyright (c) 2015 Ishank Tandon. All rights reserved.
 //
 

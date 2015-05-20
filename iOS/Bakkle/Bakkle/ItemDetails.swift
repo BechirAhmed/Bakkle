@@ -44,7 +44,7 @@ class ItemDetails: UIViewController {
     }
     override func viewWillAppear(animated: Bool) {
         //TODO: This needs to load the item SENT to the view controller, not the top feed item.
-        
+        
         item = Bakkle.sharedInstance.feedItems[0] as? NSDictionary
         let imgURLs = item!.valueForKey("image_urls") as! NSArray
         

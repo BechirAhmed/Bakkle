@@ -8,26 +8,14 @@
         <!--Interface Controller-->
         <scene sceneID="aou-V4-d1y">
             <objects>
-                <controller id="AgC-eL-Hgc" customClass="InterfaceController" customModule="Bakkle_WatchKit_App" customModuleProvider="target">
-                    <items>
-                        <button width="1" alignment="left" title="Button" id="Pdx-Af-NYs">
-                            <connections>
-                                <action selector="openAction" destination="AgC-eL-Hgc" id="LhQ-hw-yNE"/>
-                            </connections>
-                        </button>
-                        <imageView alignment="left" id="wbj-eq-sUv"/>
-                    </items>
-                    <connections>
-                        <outlet property="imageViewer" destination="wbj-eq-sUv" id="KDw-fn-Q01"/>
-                    </connections>
-                </controller>
+                <controller id="AgC-eL-Hgc" customClass="InterfaceController" customModuleProvider="target"/>
             </objects>
             <point key="canvasLocation" x="235" y="347"/>
         </scene>
         <!--Glance Interface Controller-->
         <scene sceneID="BOz-TT-tkC">
             <objects>
-                <glanceController spacing="0.0" id="0uZ-2p-rRc" customClass="GlanceController" customModule="Bakkle_WatchKit_App" customModuleProvider="target">
+                <glanceController spacing="0.0" id="0uZ-2p-rRc" customClass="GlanceController" customModuleProvider="target">
                     <items>
                         <group alignment="left" id="t8f-Gd-c4y"/>
                         <group alignment="left" id="uCw-4Q-Ouw"/>
@@ -42,30 +30,29 @@
             <objects>
                 <notificationController id="YCC-NB-fut">
                     <items>
-                        <label width="78" alignment="left" text="Alert Label" numberOfLines="0" id="XkS-y5-khE"/>
+                        <label alignment="left" text="Alert Label" id="XkS-y5-khE"/>
                     </items>
-                    <notificationCategory key="notificationCategory" identifier="myCategory" id="JfB-70-Muf"/>
+                    <notificationCategory key="notificationCategory" identifier="myCategory" id="JfB-70-Muf">
+                        <color key="sashColor" red="0.20000000000000001" green="0.80392156862745101" blue="0.37254901960784315" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </notificationCategory>
                     <connections>
-                        <outlet property="notificationAlertLabel" destination="XkS-y5-khE" id="rZx-CQ-vZd"/>
-                        <segue destination="gdX-wl-uQE" kind="relationship" relationship="dynamicNotificationInterface" id="fKh-qV-3T2"/>
+                        <outlet property="notificationAlertLabel" destination="XkS-y5-khE" id="49B-RR-99y"/>
+                        <segue destination="td2-30-g0M" kind="relationship" relationship="dynamicNotificationInterface" id="DMW-9Q-HYg"/>
                     </connections>
                 </notificationController>
             </objects>
             <point key="canvasLocation" x="235" y="1001"/>
         </scene>
-        <!--Notification Controller-->
-        <scene sceneID="KIl-fV-djm">
+        <!--Dynamic Notification Interface Controller-->
+        <scene sceneID="P1R-zO-zEv">
             <objects>
-                <controller id="gdX-wl-uQE" customClass="NotificationController" customModule="Bakkle_WatchKit_App" customModuleProvider="target">
+                <controller id="td2-30-g0M">
                     <items>
-                        <label alignment="left" text="Label" id="7kM-zO-44C"/>
+                        <label alignment="left" text="Label" id="iXO-3g-o8o"/>
                     </items>
-                    <connections>
-                        <outlet property="label" destination="7kM-zO-44C" id="Ido-vR-TuV"/>
-                    </connections>
                 </controller>
             </objects>
-            <point key="canvasLocation" x="553" y="1001"/>
+            <point key="canvasLocation" x="535" y="1001"/>
         </scene>
     </scenes>
 </document>
