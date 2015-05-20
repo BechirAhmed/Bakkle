@@ -30,8 +30,8 @@ statusUrl = "/system/health/"
 
 try:
     check = urllib2.urlopen(bldUrl + statusUrl)
-except urllib2.HTTPError, e:
-    print "URL Error: " + str(e.code)
+except:
+    print "URL Error: " + str(sys.exc_info()[0])
     failureLights()
     sys.exit(2)
 try:
