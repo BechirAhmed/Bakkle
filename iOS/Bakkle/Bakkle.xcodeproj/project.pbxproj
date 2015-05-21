@@ -14,6 +14,11 @@
 		130CBBAC1B0E2744004514CF /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DB852E8D1B05748F00665CD4 /* Images.xcassets */; };
 		139096881B0CD5C800C8BB33 /* Bakkle WatchKit App.app in Resources */ = {isa = PBXBuildFile; fileRef = 139096871B0CD5C800C8BB33 /* Bakkle WatchKit App.app */; };
 		139096951B0CD5C800C8BB33 /* Bakkle WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 139096781B0CD5C800C8BB33 /* Bakkle WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		13AB6F9D1B0E3C520092EE61 /* btn-meh.png in Resources */ = {isa = PBXBuildFile; fileRef = 13AB6F9C1B0E3C520092EE61 /* btn-meh.png */; };
+		13AB6FA21B0E404B0092EE61 /* btn-meh.png in Resources */ = {isa = PBXBuildFile; fileRef = 13AB6F9C1B0E3C520092EE61 /* btn-meh.png */; };
+		13AB6FA31B0E404F0092EE61 /* btb-want.png in Resources */ = {isa = PBXBuildFile; fileRef = DBEE0E981AF3C855005E60BD /* btb-want.png */; };
+		13AB6FA91B0E40E70092EE61 /* btn-meh.png in Resources */ = {isa = PBXBuildFile; fileRef = 13AB6FA81B0E40E70092EE61 /* btn-meh.png */; };
+		13AB6FAB1B0E40F60092EE61 /* btb-want.png in Resources */ = {isa = PBXBuildFile; fileRef = 13AB6FAA1B0E40F60092EE61 /* btb-want.png */; };
 		5E023F861AD592B80002AFBC /* btn-addItem.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E023F851AD592B80002AFBC /* btn-addItem.png */; };
 		5E023F881AD59F200002AFBC /* logo-white-design-png-transp-100.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E023F871AD59F200002AFBC /* logo-white-design-png-transp-100.png */; };
 		5E1DCC9F1AD44C72002D41FD /* tiger.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5E1DCC9E1AD44C71002D41FD /* tiger.jpg */; };
@@ -169,6 +174,9 @@
 		136AB1E21B0835E200C76C71 /* ChatNotification.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = ChatNotification.apns; sourceTree = "<group>"; };
 		139096781B0CD5C800C8BB33 /* Bakkle WatchKit Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Bakkle WatchKit Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		139096871B0CD5C800C8BB33 /* Bakkle WatchKit App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Bakkle WatchKit App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		13AB6F9C1B0E3C520092EE61 /* btn-meh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-meh.png"; sourceTree = "<group>"; };
+		13AB6FA81B0E40E70092EE61 /* btn-meh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-meh.png"; sourceTree = "<group>"; };
+		13AB6FAA1B0E40F60092EE61 /* btb-want.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btb-want.png"; sourceTree = "<group>"; };
 		1D710285C97E0FF7D33DEB9E /* Pods-Bakkle.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bakkle.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Bakkle/Pods-Bakkle.debug.xcconfig"; sourceTree = "<group>"; };
 		3E0CABDBE20E9D5B2EED4810 /* Pods_Bakkle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Bakkle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E023F851AD592B80002AFBC /* btn-addItem.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-addItem.png"; sourceTree = "<group>"; };
@@ -522,6 +530,7 @@
 		A08D53B71B07DC8E000C406C /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				13AB6F9C1B0E3C520092EE61 /* btn-meh.png */,
 				DB5372931B0832E000CC49B7 /* pendant-tag660.png */,
 				5EBDD6971AB211E600C7FBE7 /* Images.xcassets */,
 				A08D53D91B08269A000C406C /* icon-i.png */,
@@ -649,6 +658,8 @@
 		DB852E871B05748F00665CD4 /* Bakkle WatchKit App */ = {
 			isa = PBXGroup;
 			children = (
+				13AB6FAA1B0E40F60092EE61 /* btb-want.png */,
+				13AB6FA81B0E40E70092EE61 /* btn-meh.png */,
 				DB852E8A1B05748F00665CD4 /* Interface.storyboard */,
 				DB852E8D1B05748F00665CD4 /* Images.xcassets */,
 				DB852E881B05748F00665CD4 /* Supporting Files */,
@@ -812,7 +823,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				13AB6FA31B0E404F0092EE61 /* btb-want.png in Resources */,
 				139096881B0CD5C800C8BB33 /* Bakkle WatchKit App.app in Resources */,
+				13AB6FA21B0E404B0092EE61 /* btn-meh.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -820,7 +833,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				13AB6FA91B0E40E70092EE61 /* btn-meh.png in Resources */,
 				130CBBA71B0E227B004514CF /* Interface.storyboard in Resources */,
+				13AB6FAB1B0E40F60092EE61 /* btb-want.png in Resources */,
 				130CBBAC1B0E2744004514CF /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -874,6 +889,7 @@
 				A003EB1A1AD4DB8800EE51A1 /* item-lawnmower.png in Resources */,
 				A018DF8D1ADE09A500AF5550 /* mock-additem.png in Resources */,
 				A08D53B11B06DBD8000C406C /* icon-x@3x.png in Resources */,
+				13AB6F9D1B0E3C520092EE61 /* btn-meh.png in Resources */,
 				A0D96F901AD7751E0046DA13 /* mock-settings.png in Resources */,
 				D0FCDFFA1B03B2E0006F76F7 /* btn-addCam.png in Resources */,
 				A08D53D81B0825E7000C406C /* icon-back.png in Resources */,
