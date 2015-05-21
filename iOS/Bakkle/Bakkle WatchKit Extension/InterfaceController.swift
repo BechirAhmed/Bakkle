@@ -12,6 +12,11 @@ import Foundation
 
 class InterfaceController: WKInterfaceController {
 
+    @IBOutlet weak var lblItemTitle: WKInterfaceLabel!
+    @IBOutlet weak var lblItemPrice: WKInterfaceLabel!
+    
+    var item_id: String = ""
+    
     override func awakeWithContext(context: AnyObject?) {
         super.awakeWithContext(context)
         
@@ -28,6 +33,18 @@ class InterfaceController: WKInterfaceController {
             var dictionary = replyInfo as NSDictionary
             
             let successString = dictionary["success"] as! String
+            if successString == "yes"{
+                let item_title = dictionary["item_title"] as! String
+                let item_price = dictionary["item_price"] as! String
+                self.item_id = dictionary["item_id"] as! String
+                
+                
+                self.lblItemTitle.setText(item_title)
+                self.lblItemPrice.setText("$" + item_price)
+                //let image = dictionary["image"] as! UIImage
+            } else {
+                
+            }
             
             println(successString)
         })
@@ -40,14 +57,21 @@ class InterfaceController: WKInterfaceController {
 
     @IBAction func openAction()
     {
-        var dictonary = NSDictionary(objects: ["fetch"], forKeys: ["type"])
+        var dictonary = NSDictionary(objects: ["meh",item_id], forKeys: ["type", "item_id"])
         
         WKInterfaceController.openParentApplication(dictonary as! [NSObject : AnyObject], reply: { (replyInfo, error) -> Void in
             
             var dictionary = replyInfo as NSDictionary
             
             let successString = dictionary["success"] as! String
-            let image = dictionary["image"] as! UIImage
+            let item_title = dictionary["item_title"] as! String
+            let item_price = dictionary["item_price"] as! String
+            self.item_id = dictionary["item_id"] as! String
+            
+            
+            self.lblItemTitle.setText(item_title)
+            self.lblItemPrice.setText("$" + item_price)
+            //let image = dictionary["image"] as! UIImage
             
             println(successString)
         })

@@ -121,7 +121,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         {
             if type == "fetch"
             {
-                reply(["success":"yes"])
+                if Bakkle.sharedInstance.feedItems.count > 0{
+                    var topItem = Bakkle.sharedInstance.feedItems[0]
+                    let topTitle: String = topItem.valueForKey("title") as! String
+                    let topPrice: String = topItem.valueForKey("price") as! String
+                    let item_id: String = topItem.valueForKey("pk") as! String
+                    reply(["success":"yes","item_title":topTitle,"item_price":topPrice])
+                } else {
+                    reply(["success":"no","item_title":"no item","item_price":"no item"])
+                }
+            }else if type == "meh" {
+                
             }
         }
     }

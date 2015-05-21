@@ -10,12 +10,19 @@
             <objects>
                 <controller id="AgC-eL-Hgc" customClass="InterfaceController" customModule="Bakkle_WatchKit_App" customModuleProvider="target">
                     <items>
-                        <button width="1" alignment="left" title="Button" id="rvA-j6-VEx">
+                        <button width="1" alignment="center" verticalAlignment="bottom" title="Button" id="rvA-j6-VEx">
                             <connections>
                                 <action selector="openAction" destination="AgC-eL-Hgc" id="CN1-ZP-dog"/>
                             </connections>
                         </button>
+                        <label alignment="center" text="Feed Items" id="y9C-hi-6I7"/>
+                        <label alignment="left" text="Title" id="ly0-kk-U9g"/>
+                        <label alignment="left" text="Price" id="mC0-2d-pbC"/>
                     </items>
+                    <connections>
+                        <outlet property="lblItemPrice" destination="mC0-2d-pbC" id="8EX-Qc-CGR"/>
+                        <outlet property="lblItemTitle" destination="ly0-kk-U9g" id="pju-YL-5vF"/>
+                    </connections>
                 </controller>
             </objects>
             <point key="canvasLocation" x="235" y="347"/>
