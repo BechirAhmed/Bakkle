@@ -544,22 +544,17 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                         NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkFeedUpdate, object: self)
                     }
                     //note called on success, not 'new items'
+
                     
                     /* temp phone hack */
-                    var groupURL: NSURL = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier("group.bakkle")!;
-
-                    var fileURL: NSURL = groupURL.URLByAppendingPathComponent("tiger.png")
-
-                    
-                    
-//                    var p: NSFilePresenter = NSFilePresenter.de
-//                    var fc: NSFileCoordinator = NSFileCoordinator(filePresenter: p))
-//                    var fce: NSError = NSError()
-//                    
+                    var groupURL: NSURL = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier("group.bakklefeed")!;
                     var shareURL: NSURL = groupURL.URLByAppendingPathComponent("item.png")
-                    
-                    UIImagePNGRepresentation(UIImage(named: "tiger.png")).writeToURL(shareURL, atomically: true)
-                    
+                    //312 x 390
+                    var size = CGSizeMake(312, 312)
+                    var scaledImage: UIImage = UIImage(named: "tiger.jpg")!
+                    scaledImage.resize(size, completionHandler: { (resizedImage, data) -> () in
+                        UIImagePNGRepresentation(resizedImage).writeToURL(shareURL, atomically: true)
+                    })
                     /* end hack */
                     
                     

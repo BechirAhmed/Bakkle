@@ -95,8 +95,48 @@ class InterfaceController: WKInterfaceController {
         })
     }
     
+    @IBOutlet weak var itemImage: WKInterfaceImage!
+    
+    func loadImage(url:NSURL, forImageView: WKInterfaceImage) {
+        // load image
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+            var data:NSData = NSData(contentsOfURL: url)!
+            var placeholder = UIImage(data: data)!
+            
+            // update ui
+            dispatch_async(dispatch_get_main_queue()) {
+                forImageView.setImage(placeholder)
+            }
+        }
+        
+    }
+//    func loadImage(url:String, forImageView: WKInterfaceImage) {
+//        // load image
+//        let image_url:String = url
+//        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+//            let url:NSURL = NSURL(string:image_url)!
+//            var data:NSData = NSData(contentsOfURL: url)!
+//            var placeholder = UIImage(data: data)!
+//            
+//            // update ui
+//            dispatch_async(dispatch_get_main_queue()) {
+//                forImageView.setImage(placeholder)
+//            }
+//        }
+//        
+//    }
+
     @IBAction func wantAction()
     {
+        println("I'm hijacking the want button")
+        /* temp phone hack */
+        let url = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier("group.bakklefeed")
+        
+        var fileURL: NSURL = url!.URLByAppendingPathComponent("item.png")
+        
+        loadImage(fileURL, forImageView: itemImage)
+        return
+        
         var dictonary = NSDictionary(objects: ["want",item_id], forKeys: ["type", "item_id"])
         WKInterfaceController.openParentApplication(dictonary as! [NSObject : AnyObject], reply: { (replyInfo, error) -> Void in
             

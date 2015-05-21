@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="AgC-eL-Hgc">
+<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="AgC-eL-Hgc">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="3737"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="7701"/>
     </dependencies>
     <scenes>
         <!--Interface Controller-->
@@ -15,6 +15,7 @@
                                 <action selector="wantAction" destination="AgC-eL-Hgc" id="nhs-dP-Lxs"/>
                             </connections>
                         </button>
+                        <imageView width="134" height="134" alignment="left" contentMode="scaleAspectFill" id="CME-pV-Z3X"/>
                         <button width="1" alignment="center" verticalAlignment="bottom" backgroundImage="btn-meh.png" id="rvA-j6-VEx">
                             <connections>
                                 <action selector="mehAction" destination="AgC-eL-Hgc" id="r3C-O0-D8n"/>
@@ -26,13 +27,14 @@
                         <label alignment="left" id="mC0-2d-pbC"/>
                     </items>
                     <connections>
+                        <outlet property="itemImage" destination="CME-pV-Z3X" id="8TM-Bw-c0r"/>
                         <outlet property="lblItemPrice" destination="mC0-2d-pbC" id="8EX-Qc-CGR"/>
                         <outlet property="lblItemTitle" destination="ly0-kk-U9g" id="pju-YL-5vF"/>
                         <outlet property="lblNoItems" destination="pw7-m8-tHo" id="wvU-sQ-lER"/>
                     </connections>
                 </controller>
             </objects>
-            <point key="canvasLocation" x="235" y="347"/>
+            <point key="canvasLocation" x="235" y="362.75"/>
         </scene>
         <!--Glance Interface Controller-->
         <scene sceneID="BOz-TT-tkC">
