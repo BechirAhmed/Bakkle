@@ -113,7 +113,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
-    func application(application: UIApplication!, handleWatchKitExtensionRequest userInfo: [NSObject : AnyObject]!, reply: (([NSObject : AnyObject]!) -> Void)!)
+    func application(application: UIApplication, handleWatchKitExtensionRequest userInfo: [NSObject : AnyObject]?, reply: (([NSObject : AnyObject]!) -> Void)!)
     {
         var dictionary = userInfo as NSDictionary
         

@@ -283,6 +283,8 @@
 		A0A5F71C1AEDAE54001A7D7A /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		A0B765411B0E2B1A00107F7E /* NewItemNotification.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = NewItemNotification.apns; sourceTree = "<group>"; };
 		A0B765421B0E2C5800107F7E /* NewOfferNotification.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = NewOfferNotification.apns; sourceTree = "<group>"; };
+		A0B765431B0E3A2700107F7E /* Bakkle.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Bakkle.entitlements; sourceTree = "<group>"; };
+		A0B765441B0E3BD600107F7E /* Bakkle WatchKit Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Bakkle WatchKit Extension.entitlements"; sourceTree = "<group>"; };
 		A0B7F4B91AFB053B00065407 /* blank.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blank.png; sourceTree = "<group>"; };
 		A0D96F731AD765990046DA13 /* icon-gear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-gear.png"; sourceTree = "<group>"; };
 		A0D96F741AD765990046DA13 /* icon-filter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-filter.png"; sourceTree = "<group>"; };
@@ -381,6 +383,7 @@
 		5EBDD68D1AB211E600C7FBE7 /* Bakkle */ = {
 			isa = PBXGroup;
 			children = (
+				A0B765431B0E3A2700107F7E /* Bakkle.entitlements */,
 				A08D53BA1B0815A9000C406C /* Chat */,
 				A08D53B41B07DC2C000C406C /* Views */,
 				A08D53AE1B06D850000C406C /* Common.swift */,
@@ -621,6 +624,7 @@
 		DB852E751B05748F00665CD4 /* Bakkle WatchKit Extension */ = {
 			isa = PBXGroup;
 			children = (
+				A0B765441B0E3BD600107F7E /* Bakkle WatchKit Extension.entitlements */,
 				DB852E7B1B05748F00665CD4 /* NotificationController.swift */,
 				DB852E791B05748F00665CD4 /* InterfaceController.swift */,
 				DB852E7D1B05748F00665CD4 /* GlanceController.swift */,
@@ -757,6 +761,11 @@
 					139096771B0CD5C800C8BB33 = {
 						CreatedOnToolsVersion = 6.3.1;
 						DevelopmentTeam = GKAKES7JLX;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+						};
 					};
 					139096861B0CD5C800C8BB33 = {
 						CreatedOnToolsVersion = 6.3.1;
@@ -765,6 +774,11 @@
 					5EBDD68A1AB211E600C7FBE7 = {
 						CreatedOnToolsVersion = 6.1.1;
 						DevelopmentTeam = GKAKES7JLX;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+						};
 					};
 					5EBDD69F1AB211E600C7FBE7 = {
 						CreatedOnToolsVersion = 6.1.1;
@@ -1053,6 +1067,7 @@
 		139096961B0CD5C800C8BB33 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "Bakkle WatchKit Extension/Bakkle WatchKit Extension.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -1065,6 +1080,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_NAME = "${TARGET_NAME}";
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -1072,6 +1088,7 @@
 		139096971B0CD5C800C8BB33 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "Bakkle WatchKit Extension/Bakkle WatchKit Extension.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
@@ -1081,6 +1098,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_NAME = "${TARGET_NAME}";
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
@@ -1207,6 +1225,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_ENTITLEMENTS = Bakkle/Bakkle.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1234,6 +1253,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_ENTITLEMENTS = Bakkle/Bakkle.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
