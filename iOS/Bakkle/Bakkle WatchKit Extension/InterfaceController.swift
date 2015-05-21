@@ -41,6 +41,14 @@ class InterfaceController: WKInterfaceController {
                 self.btnWant.setHidden(false)
                 let successString = dictionary["success"] as! String
                 if successString == "yes"{
+                    /* temp phone hack */
+                    let item_image = dictionary["item_image"] as! String
+                    let url = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier("group.bakklefeed")
+                    
+                    var fileURL: NSURL = url!.URLByAppendingPathComponent(item_image)
+                    
+                    self.loadImage(fileURL, forImageView: self.itemImage)
+                    
                     self.lblNoItems.setHidden(true)
                     self.lblItemPrice.setHidden(false)
                     self.lblItemTitle.setHidden(false)
@@ -51,7 +59,6 @@ class InterfaceController: WKInterfaceController {
                     
                     self.lblItemTitle.setText(item_title)
                     self.lblItemPrice.setText("$" + item_price)
-                    //let image = dictionary["image"] as! UIImage
                 } else {
                     self.lblNoItems.setHidden(false)
                     self.lblItemPrice.setHidden(true)
@@ -86,6 +93,14 @@ class InterfaceController: WKInterfaceController {
                 self.btnWant.setHidden(false)
                 let successString = dictionary["success"] as! String
                 if successString == "yes"{
+                    /* temp phone hack */
+                    let item_image = dictionary["item_image"] as! String
+                    let url = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier("group.bakklefeed")
+                    
+                    var fileURL: NSURL = url!.URLByAppendingPathComponent(item_image)
+                    
+                    self.loadImage(fileURL, forImageView: self.itemImage)
+                    
                     self.lblNoItems.setHidden(true)
                     self.lblItemPrice.setHidden(false)
                     self.lblItemTitle.setHidden(false)
@@ -96,9 +111,6 @@ class InterfaceController: WKInterfaceController {
                     
                     self.lblItemTitle.setText(item_title)
                     self.lblItemPrice.setText("$" + item_price)
-                    //let image = dictionary["image"] as! UIImage
-                    
-                    
                 } else {
                     self.lblNoItems.setHidden(false)
                     self.lblItemPrice.setHidden(true)
@@ -147,15 +159,6 @@ class InterfaceController: WKInterfaceController {
 
     @IBAction func wantAction()
     {
-        println("I'm hijacking the want button")
-        /* temp phone hack */
-        let url = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier("group.bakklefeed")
-        
-        var fileURL: NSURL = url!.URLByAppendingPathComponent("item.png")
-        
-        loadImage(fileURL, forImageView: itemImage)
-        return
-        
         var dictonary = NSDictionary(objects: ["want",item_id], forKeys: ["type", "item_id"])
         WKInterfaceController.openParentApplication(dictonary as! [NSObject : AnyObject], reply: { (replyInfo, error) -> Void in
             
@@ -167,6 +170,14 @@ class InterfaceController: WKInterfaceController {
             
                 let successString = dictionary["success"] as! String
                 if successString == "yes"{
+                    /* temp phone hack */
+                    let item_image = dictionary["item_image"] as! String
+                    let url = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier("group.bakklefeed")
+                    
+                    var fileURL: NSURL = url!.URLByAppendingPathComponent(item_image)
+                    
+                    self.loadImage(fileURL, forImageView: self.itemImage)
+                    
                     self.lblNoItems.setHidden(true)
                     self.lblItemPrice.setHidden(false)
                     self.lblItemTitle.setHidden(false)
@@ -177,7 +188,6 @@ class InterfaceController: WKInterfaceController {
                     
                     self.lblItemTitle.setText(item_title)
                     self.lblItemPrice.setText("$" + item_price)
-                    //let image = dictionary["image"] as! UIImage
                     
                     
                 } else {

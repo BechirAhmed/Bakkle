@@ -544,17 +544,17 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                         NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkFeedUpdate, object: self)
                     }
                     //note called on success, not 'new items'
-
+                    self.prepareTopFeedItemsForWatch()
                     
                     /* temp phone hack */
-                    var groupURL: NSURL = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier("group.bakklefeed")!;
-                    var shareURL: NSURL = groupURL.URLByAppendingPathComponent("item.png")
-                    //312 x 390
-                    var size = CGSizeMake(312, 312)
-                    var scaledImage: UIImage = UIImage(named: "tiger.jpg")!
-                    scaledImage.resize(size, completionHandler: { (resizedImage, data) -> () in
-                        UIImagePNGRepresentation(resizedImage).writeToURL(shareURL, atomically: true)
-                    })
+//                    var groupURL: NSURL = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier("group.bakklefeed")!;
+//                    var shareURL: NSURL = groupURL.URLByAppendingPathComponent("item.png")
+//                    //312 x 390
+//                    var size = CGSizeMake(312, 312)
+//                    var scaledImage: UIImage = UIImage(named: "tiger.jpg")!
+//                    scaledImage.resize(size, completionHandler: { (resizedImage, data) -> () in
+//                        UIImagePNGRepresentation(resizedImage).writeToURL(shareURL, atomically: true)
+//                    })
                     /* end hack */
                     
                     
@@ -563,6 +563,25 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             }
         }
         task.resume()
+    }
+    
+    func prepareTopFeedItemsForWatch(){
+        for item in Bakkle.sharedInstance.feedItems{
+            let imgURLs = item.valueForKey("image_urls") as! NSArray
+            let imgURL = imgURLs[0] as! String
+            let fancyImgURL = NSURL(string: imgURL)
+            let data = NSData(contentsOfURL: fancyImgURL!)
+            let filename = fancyImgURL?.lastPathComponent
+            
+            var groupURL: NSURL = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier("group.bakklefeed")!;
+            var shareURL: NSURL = groupURL.URLByAppendingPathComponent(filename!)
+            //312 x 390
+            var size = CGSizeMake(312, 312)
+            var scaledImage: UIImage = UIImage(data: data!)!
+            scaledImage.resize(size, completionHandler: { (resizedImage, data) -> () in
+                UIImagePNGRepresentation(resizedImage).writeToURL(shareURL, atomically: true)
+            })
+        }
     }
     
     //http://localhost:8000/conversation/send_message/?auth_token=asdfasdfasdfasdf_1&message=I'd like 50 for it.&device_uuid=E6264D84-C395-4132-8C63-3EF051480191&conversation_id=7

@@ -119,17 +119,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         if let type = dictionary.objectForKey("type") as? String
         {
+            if Bakkle.sharedInstance.feedItems.count == 0 {
+                Bakkle.sharedInstance.populateFeed({ () -> () in
+                })
+            }
             if type == "fetch"
             {
                 if Bakkle.sharedInstance.feedItems.count > 0{
                     var topItem = Bakkle.sharedInstance.feedItems[0]
+                    let imgURLs = topItem.valueForKey("image_urls") as! NSArray
+                    let imgURL = imgURLs[0] as! String
+                    let fancyImgURL = NSURL(string: imgURL)
+                    let filename = fancyImgURL?.lastPathComponent
+                    
                     let topTitle: String = topItem.valueForKey("title") as! String
                     let topPrice: String = topItem.valueForKey("price") as! String
+                    let topImage: String = filename!
                     let topItempk = topItem.valueForKey("pk")
                     let item_id: String = "\(topItempk)"
-                    reply(["success":"yes","item_title":topTitle,"item_price":topPrice,"item_id":item_id])
+                    reply(["success":"yes","item_title":topTitle,"item_price":topPrice,"item_id":item_id, "item_image":topImage])
                 } else {
-                    reply(["success":"no","item_title":"no item","item_price":"no item","item_id":"no item"])
+                    reply(["success":"no","item_title":"no item","item_price":"no item","item_id":"no item","item_image":"no item"])
                 }
             }else if type == "meh" {
                 println("inside meh")
@@ -143,16 +153,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     }
                     if Bakkle.sharedInstance.feedItems.count > 0{
                         var topItem = Bakkle.sharedInstance.feedItems[0]
+                        let imgURLs = topItem.valueForKey("image_urls") as! NSArray
+                        let imgURL = imgURLs[0] as! String
+                        let fancyImgURL = NSURL(string: imgURL)
+                        let filename = fancyImgURL?.lastPathComponent
+                        
                         let topTitle: String = topItem.valueForKey("title") as! String
                         let topPrice: String = topItem.valueForKey("price") as! String
+                        let topImage: String = filename!
                         let topItempk = topItem.valueForKey("pk")
                         let item_id: String = "\(topItempk)"
-                        reply(["success":"yes","item_title":topTitle,"item_price":topPrice,"item_id":item_id])
+                        reply(["success":"yes","item_title":topTitle,"item_price":topPrice,"item_id":item_id, "item_image":topImage])
                     } else {
-                        reply(["success":"no","item_title":"no item","item_price":"no item","item_id":"no item"])
+                        reply(["success":"no","item_title":"no item","item_price":"no item","item_id":"no item","item_image":"no item"])
                     }
                 }else{
-                    reply(["success":"no","item_title":"no item","item_price":"no item","item_id":"no item"])
+                    reply(["success":"no","item_title":"no item","item_price":"no item","item_id":"no item","item_image":"no item"])
                 }
             }else if type == "want" {
                 println("inside want")
@@ -166,16 +182,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     }
                     if Bakkle.sharedInstance.feedItems.count > 0{
                         var topItem = Bakkle.sharedInstance.feedItems[0]
+                        let imgURLs = topItem.valueForKey("image_urls") as! NSArray
+                        let imgURL = imgURLs[0] as! String
+                        let fancyImgURL = NSURL(string: imgURL)
+                        let filename = fancyImgURL?.lastPathComponent
+                        
                         let topTitle: String = topItem.valueForKey("title") as! String
                         let topPrice: String = topItem.valueForKey("price") as! String
+                        let topImage: String = filename!
                         let topItempk = topItem.valueForKey("pk")
-                        let item_id: String = "\(topItempk!)"
-                        reply(["success":"yes","item_title":topTitle,"item_price":topPrice,"item_id":item_id])
+                        let item_id: String = "\(topItempk)"
+                        reply(["success":"yes","item_title":topTitle,"item_price":topPrice,"item_id":item_id, "item_image":topImage])
                     } else {
-                        reply(["success":"no","item_title":"no item","item_price":"no item","item_id":"no item"])
+                        reply(["success":"no","item_title":"no item","item_price":"no item","item_id":"no item","item_image":"no item"])
                     }
                 }else{
-                    reply(["success":"no","item_title":"no item","item_price":"no item","item_id":"no item"])
+                    reply(["success":"no","item_title":"no item","item_price":"no item","item_id":"no item","item_image":"no item"])
                 }
             }else {
                 println("Got Some other key")

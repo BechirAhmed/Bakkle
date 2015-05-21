@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		130CBBA71B0E227B004514CF /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DB852E8A1B05748F00665CD4 /* Interface.storyboard */; };
 		130CBBA81B0E2385004514CF /* InterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB852E791B05748F00665CD4 /* InterfaceController.swift */; };
-		130CBBA91B0E238B004514CF /* GlanceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB852E7D1B05748F00665CD4 /* GlanceController.swift */; };
 		130CBBAA1B0E238E004514CF /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB852E7B1B05748F00665CD4 /* NotificationController.swift */; };
 		130CBBAC1B0E2744004514CF /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DB852E8D1B05748F00665CD4 /* Images.xcassets */; };
 		139096881B0CD5C800C8BB33 /* Bakkle WatchKit App.app in Resources */ = {isa = PBXBuildFile; fileRef = 139096871B0CD5C800C8BB33 /* Bakkle WatchKit App.app */; };
@@ -316,7 +315,6 @@
 		DB852E781B05748F00665CD4 /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
 		DB852E791B05748F00665CD4 /* InterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceController.swift; sourceTree = "<group>"; };
 		DB852E7B1B05748F00665CD4 /* NotificationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationController.swift; sourceTree = "<group>"; };
-		DB852E7D1B05748F00665CD4 /* GlanceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlanceController.swift; sourceTree = "<group>"; };
 		DB852E7F1B05748F00665CD4 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		DB852E891B05748F00665CD4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DB852E8B1B05748F00665CD4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
@@ -636,7 +634,6 @@
 				A0B765441B0E3BD600107F7E /* Bakkle WatchKit Extension.entitlements */,
 				DB852E7B1B05748F00665CD4 /* NotificationController.swift */,
 				DB852E791B05748F00665CD4 /* InterfaceController.swift */,
-				DB852E7D1B05748F00665CD4 /* GlanceController.swift */,
 				DB852E7F1B05748F00665CD4 /* Images.xcassets */,
 				DB852E761B05748F00665CD4 /* Supporting Files */,
 			);
@@ -971,7 +968,6 @@
 			files = (
 				130CBBAA1B0E238E004514CF /* NotificationController.swift in Sources */,
 				130CBBA81B0E2385004514CF /* InterfaceController.swift in Sources */,
-				130CBBA91B0E238B004514CF /* GlanceController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
