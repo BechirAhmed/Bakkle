@@ -75,7 +75,7 @@ class Device(models.Model):
     def send_notification(self, message="", badge=0, sound="", custom={}):
         print(cert_file)
         apns = APNs(True, cert_file=cert_file, key_file=key_file)
-        payload = Payload(alert=message, badge=badge, sound=sound, custom=custom, category="bakkleNotification")
+        payload = Payload(alert=message, badge=badge, sound=sound, custom=custom, category="myCategory")
         dt = self.apns_token.replace(' ', '').replace('<', '').replace('>', '')
         print("notifying {} token {}".format(self.account_id, dt))
         apns.gateway_server.send_notification(dt, payload)
