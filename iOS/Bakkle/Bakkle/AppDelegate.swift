@@ -115,7 +115,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, handleWatchKitExtensionRequest userInfo: [NSObject : AnyObject]?, reply: (([NSObject : AnyObject]!) -> Void)!)
     {
-        var dictionary = userInfo as NSDictionary
+        var dictionary = userInfo! as NSDictionary
         
         if let type = dictionary.objectForKey("type") as? String
         {
@@ -126,7 +126,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     let topTitle: String = topItem.valueForKey("title") as! String
                     let topPrice: String = topItem.valueForKey("price") as! String
                     let topItempk = topItem.valueForKey("pk")
-                    let item_id: String = "\(topItempk!)"
+                    let item_id: String = "\(topItempk)"
                     reply(["success":"yes","item_title":topTitle,"item_price":topPrice,"item_id":item_id])
                 } else {
                     reply(["success":"no","item_title":"no item","item_price":"no item","item_id":"no item"])
@@ -146,7 +146,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         let topTitle: String = topItem.valueForKey("title") as! String
                         let topPrice: String = topItem.valueForKey("price") as! String
                         let topItempk = topItem.valueForKey("pk")
-                        let item_id: String = "\(topItempk!)"
+                        let item_id: String = "\(topItempk)"
                         reply(["success":"yes","item_title":topTitle,"item_price":topPrice,"item_id":item_id])
                     } else {
                         reply(["success":"no","item_title":"no item","item_price":"no item","item_id":"no item"])
