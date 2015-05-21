@@ -113,18 +113,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
-    func application(application: UIApplication!, handleWatchKitExtensionRequest userInfo: [NSObject : AnyObject]!, reply: (([NSObject : AnyObject]!) -> Void)!) {
-        println("I WAS CALLED")
+    func application(application: UIApplication!, handleWatchKitExtensionRequest userInfo: [NSObject : AnyObject]!, reply: (([NSObject : AnyObject]!) -> Void)!)
+    {
         var dictionary = userInfo as NSDictionary
-        var dict: NSDictionary = NSDictionary()
-        dict.setValue(UIImage(named: "tiger.jpg"), forKey: "image")
-        //dict.setValue("yes", forkey: "success")
         
         if let type = dictionary.objectForKey("type") as? String
         {
             if type == "fetch"
             {
-                reply(dict as [NSObject : AnyObject])
+                reply(["success":"yes"])
             }
         }
     }

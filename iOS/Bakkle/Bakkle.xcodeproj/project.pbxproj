@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		130CBBA71B0E227B004514CF /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DB852E8A1B05748F00665CD4 /* Interface.storyboard */; };
+		130CBBA81B0E2385004514CF /* InterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB852E791B05748F00665CD4 /* InterfaceController.swift */; };
+		130CBBA91B0E238B004514CF /* GlanceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB852E7D1B05748F00665CD4 /* GlanceController.swift */; };
+		130CBBAA1B0E238E004514CF /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB852E7B1B05748F00665CD4 /* NotificationController.swift */; };
+		130CBBAC1B0E2744004514CF /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DB852E8D1B05748F00665CD4 /* Images.xcassets */; };
 		139096881B0CD5C800C8BB33 /* Bakkle WatchKit App.app in Resources */ = {isa = PBXBuildFile; fileRef = 139096871B0CD5C800C8BB33 /* Bakkle WatchKit App.app */; };
 		139096951B0CD5C800C8BB33 /* Bakkle WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 139096781B0CD5C800C8BB33 /* Bakkle WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		5E023F861AD592B80002AFBC /* btn-addItem.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E023F851AD592B80002AFBC /* btn-addItem.png */; };
@@ -797,6 +802,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				130CBBA71B0E227B004514CF /* Interface.storyboard in Resources */,
+				130CBBAC1B0E2744004514CF /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -928,6 +935,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				130CBBAA1B0E238E004514CF /* NotificationController.swift in Sources */,
+				130CBBA81B0E2385004514CF /* InterfaceController.swift in Sources */,
+				130CBBA91B0E238B004514CF /* GlanceController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1285,6 +1295,7 @@
 				139096991B0CD5C800C8BB33 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		1390969B1B0CD5C800C8BB33 /* Build configuration list for PBXNativeTarget "Bakkle WatchKit Extension" */ = {
 			isa = XCConfigurationList;
@@ -1293,6 +1304,7 @@
 				139096971B0CD5C800C8BB33 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		5EBDD6861AB211E600C7FBE7 /* Build configuration list for PBXProject "Bakkle" */ = {
 			isa = XCConfigurationList;
