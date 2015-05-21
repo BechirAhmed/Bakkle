@@ -125,61 +125,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     var topItem = Bakkle.sharedInstance.feedItems[0]
                     let topTitle: String = topItem.valueForKey("title") as! String
                     let topPrice: String = topItem.valueForKey("price") as! String
-                    let topItempk = topItem.valueForKey("pk")
-                    let item_id: String = "\(topItempk!)"
-                    reply(["success":"yes","item_title":topTitle,"item_price":topPrice,"item_id":item_id])
+                    let item_id: String = topItem.valueForKey("pk") as! String
+                    reply(["success":"yes","item_title":topTitle,"item_price":topPrice])
                 } else {
-                    reply(["success":"no","item_title":"no item","item_price":"no item","item_id":"no item"])
+                    reply(["success":"no","item_title":"no item","item_price":"no item"])
                 }
             }else if type == "meh" {
-                println("inside meh")
-                if let id = dictionary.objectForKey("item_id") as? NSString {
-                    Bakkle.sharedInstance.markItem("meh", item_id: id.integerValue, success: { () -> () in
-                        }, fail: { () -> () in
-                    })
-                    // Remove the item that was just marked from the view
-                    if Bakkle.sharedInstance.feedItems.count>0 {
-                        Bakkle.sharedInstance.feedItems.removeAtIndex(0)
-                    }
-                    if Bakkle.sharedInstance.feedItems.count > 0{
-                        var topItem = Bakkle.sharedInstance.feedItems[0]
-                        let topTitle: String = topItem.valueForKey("title") as! String
-                        let topPrice: String = topItem.valueForKey("price") as! String
-                        let topItempk = topItem.valueForKey("pk")
-                        let item_id: String = "\(topItempk!)"
-                        reply(["success":"yes","item_title":topTitle,"item_price":topPrice,"item_id":item_id])
-                    } else {
-                        reply(["success":"no","item_title":"no item","item_price":"no item","item_id":"no item"])
-                    }
-                }else{
-                    reply(["success":"no","item_title":"no item","item_price":"no item","item_id":"no item"])
-                }
-            }else if type == "want" {
-                println("inside want")
-                if let id = dictionary.objectForKey("item_id") as? NSString {
-                    Bakkle.sharedInstance.markItem("want", item_id: id.integerValue, success: { () -> () in
-                        }, fail: { () -> () in
-                    })
-                    // Remove the item that was just marked from the view
-                    if Bakkle.sharedInstance.feedItems.count>0 {
-                        Bakkle.sharedInstance.feedItems.removeAtIndex(0)
-                    }
-                    if Bakkle.sharedInstance.feedItems.count > 0{
-                        var topItem = Bakkle.sharedInstance.feedItems[0]
-                        let topTitle: String = topItem.valueForKey("title") as! String
-                        let topPrice: String = topItem.valueForKey("price") as! String
-                        let topItempk = topItem.valueForKey("pk")
-                        let item_id: String = "\(topItempk!)"
-                        reply(["success":"yes","item_title":topTitle,"item_price":topPrice,"item_id":item_id])
-                    } else {
-                        reply(["success":"no","item_title":"no item","item_price":"no item","item_id":"no item"])
-                    }
-                }else{
-                    reply(["success":"no","item_title":"no item","item_price":"no item","item_id":"no item"])
-                }
-            }else {
-                println("Got Some other key")
-            }}
+                
+            }
+        }
     }
 
 }
