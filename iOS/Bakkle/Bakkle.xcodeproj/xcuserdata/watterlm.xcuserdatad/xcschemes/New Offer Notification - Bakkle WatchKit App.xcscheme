@@ -77,7 +77,7 @@
       debugDocumentVersioning = "YES"
       allowLocationSimulation = "YES"
       launchAutomaticallySubstyle = "16"
-      notificationPayloadFile = "Bakkle WatchKit Extension/BakkleNewItemNotificationPayload.apns">
+      notificationPayloadFile = "Bakkle WatchKit Extension/NewOfferNotification.apns">
       <RemoteRunnable
          runnableDebuggingMode = "2"
          BundleIdentifier = "com.apple.springboard"
@@ -109,7 +109,7 @@
       buildConfiguration = "Release"
       debugDocumentVersioning = "YES"
       launchAutomaticallySubstyle = "16"
-      notificationPayloadFile = "Bakkle WatchKit Extension/BakkleNewItemNotificationPayload.apns">
+      notificationPayloadFile = "Bakkle WatchKit Extension/PushNotificationPayload.apns">
       <RemoteRunnable
          runnableDebuggingMode = "2"
          BundleIdentifier = "com.apple.springboard"

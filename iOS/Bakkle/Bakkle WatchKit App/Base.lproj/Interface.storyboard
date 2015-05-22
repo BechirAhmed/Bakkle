@@ -15,13 +15,13 @@
                                 <action selector="wantAction" destination="AgC-eL-Hgc" id="nhs-dP-Lxs"/>
                             </connections>
                         </button>
-                        <imageView width="134" height="134" alignment="left" contentMode="scaleAspectFill" id="CME-pV-Z3X"/>
+                        <imageView width="125" height="125" alignment="center" contentMode="scaleAspectFill" id="CME-pV-Z3X"/>
                         <button width="1" alignment="center" verticalAlignment="bottom" backgroundImage="btn-meh.png" id="rvA-j6-VEx">
                             <connections>
                                 <action selector="mehAction" destination="AgC-eL-Hgc" id="r3C-O0-D8n"/>
                             </connections>
                         </button>
-                        <label alignment="center" text="Feed Items" id="y9C-hi-6I7"/>
+                        <label alignment="center" hidden="YES" text="Please run and login to Bakkle first." numberOfLines="0" id="y9C-hi-6I7"/>
                         <label alignment="center" hidden="YES" text="No New Items" id="pw7-m8-tHo"/>
                         <label alignment="left" id="ly0-kk-U9g"/>
                         <label alignment="left" id="mC0-2d-pbC"/>
