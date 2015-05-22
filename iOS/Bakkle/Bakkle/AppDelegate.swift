@@ -136,7 +136,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     let topPrice: String = topItem.valueForKey("price") as! String
                     let topImage: String = filename!
                     let topItempk = topItem.valueForKey("pk")
-                    let item_id: String = "\(topItempk)"
+                    let item_id: String = "\(topItempk!)"
                     reply(["success":"yes","item_title":topTitle,"item_price":topPrice,"item_id":item_id, "item_image":topImage])
                 } else {
                     reply(["success":"no","item_title":"no item","item_price":"no item","item_id":"no item","item_image":"no item"])
@@ -162,7 +162,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         let topPrice: String = topItem.valueForKey("price") as! String
                         let topImage: String = filename!
                         let topItempk = topItem.valueForKey("pk")
-                        let item_id: String = "\(topItempk)"
+                        let item_id: String = "\(topItempk!)"
                         reply(["success":"yes","item_title":topTitle,"item_price":topPrice,"item_id":item_id, "item_image":topImage])
                     } else {
                         reply(["success":"no","item_title":"no item","item_price":"no item","item_id":"no item","item_image":"no item"])
@@ -191,7 +191,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         let topPrice: String = topItem.valueForKey("price") as! String
                         let topImage: String = filename!
                         let topItempk = topItem.valueForKey("pk")
-                        let item_id: String = "\(topItempk)"
+                        let item_id: String = "\(topItempk!)"
                         reply(["success":"yes","item_title":topTitle,"item_price":topPrice,"item_id":item_id, "item_image":topImage])
                     } else {
                         reply(["success":"no","item_title":"no item","item_price":"no item","item_id":"no item","item_image":"no item"])

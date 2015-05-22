@@ -57,6 +57,7 @@ class InterfaceController: WKInterfaceController {
                     self.item_id = dictionary["item_id"] as! String
                     
                     
+                    
                     self.lblItemTitle.setText(item_title)
                     self.lblItemPrice.setText("$" + item_price)
                 } else {
