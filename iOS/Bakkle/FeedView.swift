@@ -342,8 +342,10 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                         if imgURL == nil {
                             
                         }else{
+                            self.swipeView.bottomBlurImg.hnk_setImageFromURL(imgURL!)
                             self.swipeView.imageView.hnk_setImageFromURL(imgURL!)
                             self.swipeView.imageView.contentMode = UIViewContentMode.ScaleAspectFill
+                            println("IMAGE WIDTH AND HEIGHT ARE: \(self.swipeView.imageView.frame.size.width), \(self.swipeView.imageView.frame.size.height)")
                         }
                         super.view.addSubview(self.swipeView)
                     }
@@ -365,6 +367,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                             dispatch_async(dispatch_get_main_queue()) {
                                 //println("[FeedScreen] displaying image (bottom)")
                                 if let x = imgURL {
+                                    self.bottomView.bottomBlurImg.hnk_setImageFromURL(imgURL!)
                                     self.bottomView.imageView.hnk_setImageFromURL(imgURL!)
 
                                     self.bottomView.imageView.contentMode = UIViewContentMode.ScaleAspectFill
