@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,9 +26,14 @@ public class SignInActivity extends Activity implements OnClickListener {
         // Set up custom Action Bar and enable up navigation
         getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getActionBar().setCustomView(R.layout.action_bar_title);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setDisplayHomeAsUpEnabled(false);
+        getActionBar().setDisplayShowHomeEnabled(false);
+        getActionBar().setHomeButtonEnabled(false);
+
         ((TextView)findViewById(R.id.action_bar_title)).setText(R.string.title_activity_sign_in);
-        ((ImageView)findViewById(R.id.action_bar_rightImage)).setVisibility(View.INVISIBLE);
+        ((ImageButton)findViewById(R.id.action_bar_right)).setVisibility(View.INVISIBLE);
+        ((ImageButton) findViewById(R.id.action_bar_home)).setImageResource(R.drawable.ic_action_cancel);
+        ((ImageButton) findViewById(R.id.action_bar_home)).setOnClickListener(this);
 
         // Add on click listeners to buttons
         ((Button)findViewById(R.id.btnSignIn)).setOnClickListener(this);
@@ -47,15 +53,6 @@ public class SignInActivity extends Activity implements OnClickListener {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        switch (id) {
-            case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
-                return true;
-
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -67,11 +64,16 @@ public class SignInActivity extends Activity implements OnClickListener {
                 // TODO: Implement Sign in Code
                 Intent homeIntent = new Intent(this, HomeActivity.class);
                 startActivity(homeIntent);
+                finish();
                 break;
             case R.id.btnSignInFacebook:
                 // TODO: Implement Sign in Code
                 Intent homeIntentFacebook = new Intent(this, HomeActivity.class);
                 startActivity(homeIntentFacebook);
+                finish();
+                break;
+            case R.id.action_bar_home:
+                NavUtils.navigateUpFromSameTask(this);
                 break;
         }
     }
