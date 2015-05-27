@@ -97,6 +97,7 @@ def login_facebook(request):
     device_uuid = request.POST.get('device_uuid', "")
     user_location = request.POST.get('user_location', "")
     app_version = request.POST.get('app_version', "")
+    is_ios = request.POST.get('is_ios', "true")
 
     # Check that all required params are sent
     if (facebook_id == None or facebook_id.strip() == "") or (device_uuid == None or device_uuid.strip() == "") or (user_location == None or user_location == "") or (app_version == None or app_version == ""): 
@@ -138,6 +139,10 @@ def login_facebook(request):
 
     # Set authentication token and save it
     device.auth_token = md5.new(login_date).hexdigest() + "_" + str(account.id)
+    if(is_ios.lower() == "true"):
+        device.is_ios = True
+    else: 
+        device.is_ios = False
     device.save()
 
     response_data = {"status":1, "auth_token": device.auth_token }
@@ -275,7 +280,7 @@ def device_notify_all_new_item(request):
         response_data = { "status": 0, "error": "No message supplied" }
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 
-    devices = Device.objects.filter() #todo: add active filter, add subscribed to notifications filter.
+    devices = Device.objects.filter(is_ios=True) #todo: add active filter, add subscribed to notifications filter.
 
     # notify each device
     for device in devices:
@@ -314,10 +319,11 @@ def device_notify(request, device_id):
         response_data = {"status":0, "error":"Device {} does not exist.".format(device_id)}
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 
-    device.send_notification("Test: New Item", "0", "default", {'item_id': 42, 'title': 'Apple mouse with scroll wheel'})
-    device.send_notification("Test: New Chat Image", "1", "default", {'conversation_id': 25, 'message': 'Buyer/Seller sent new picture', 'image': 'https://app.bakkle.com/img/b8348df.jpg', 'name': 'Taro Finnick'})
-    device.send_notification("Test: New Chat", "2", "default", {'conversation_id': 24, 'message': 'I want to buy your mower', 'name': 'Konger Smith'})
-    device.send_notification("Test: New Offer", "3", "default", {'conversation_id': 24, 'message': 'New offer received, $12.22, for Orange Mower', 'proposed_price': 12.22, 'name': 'Konger Smith'})
+    if (device.is_ios):
+        device.send_notification("Test: New Item", "0", "default", {'item_id': 42, 'title': 'Apple mouse with scroll wheel'})
+        device.send_notification("Test: New Chat Image", "1", "default", {'conversation_id': 25, 'message': 'Buyer/Seller sent new picture', 'image': 'https://app.bakkle.com/img/b8348df.jpg', 'name': 'Taro Finnick'})
+        device.send_notification("Test: New Chat", "2", "default", {'conversation_id': 24, 'message': 'I want to buy your mower', 'name': 'Konger Smith'})
+        device.send_notification("Test: New Offer", "3", "default", {'conversation_id': 24, 'message': 'New offer received, $12.22, for Orange Mower', 'proposed_price': 12.22, 'name': 'Konger Smith'})
     response_data = { "status": 1 }
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
@@ -325,7 +331,7 @@ def device_notify(request, device_id):
 @csrf_exempt
 def device_notify_all(request, account_id):
     # Get all devices for the account
-    devices = Device.objects.filter(account_id=account_id)
+    devices = Device.objects.filter(account_id=account_id,is_ios=True)
 
     # notify each device
     for device in devices:
