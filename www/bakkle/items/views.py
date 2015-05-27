@@ -674,7 +674,8 @@ def get_account_dictionary(account):
         'display_name': account.display_name, 
         'seller_rating': account.seller_rating,
         'buyer_rating': account.buyer_rating,
-        'user_location': account.user_location}
+        'user_location': account.user_location,
+        'facebook_id': account.facebook_id }
     return seller_dict
 
 # Helper for making a BuyerItem into a dictionary for JSON
