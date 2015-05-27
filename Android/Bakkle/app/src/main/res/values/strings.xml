@@ -25,6 +25,6 @@
     <string name="drawer_close"></string>
     <string name="title_activity_splash">SplashActivity</string>
 
-    <string name="facebook_app_id"></string>
-    <string name="facebook_authorities">com.facebook.app.FacebookContentProvider....</string>
+    <string name="facebook_app_id">1592001697724990</string>
+    <string name="facebook_authorities">com.facebook.app.FacebookContentProvider1592001697724990</string>
 </resources>

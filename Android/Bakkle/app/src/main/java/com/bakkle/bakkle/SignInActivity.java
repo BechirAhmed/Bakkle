@@ -15,13 +15,43 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+
+import java.util.Arrays;
+
 
 public class SignInActivity extends Activity implements OnClickListener {
+    private CallbackManager callbackManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        callbackManager = CallbackManager.Factory.create();
+        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+
+
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onError(FacebookException e) {
+
+            }
+        });
 
         // Set up custom Action Bar and enable up navigation
         getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
@@ -67,10 +97,11 @@ public class SignInActivity extends Activity implements OnClickListener {
                 finish();
                 break;
             case R.id.btnSignInFacebook:
-                // TODO: Implement Sign in Code
-                Intent homeIntentFacebook = new Intent(this, HomeActivity.class);
-                startActivity(homeIntentFacebook);
-                finish();
+//                // TODO: Implement Sign in Code
+//                Intent homeIntentFacebook = new Intent(this, HomeActivity.class);
+//                startActivity(homeIntentFacebook);
+//                finish();
+                LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "user_friends"));
                 break;
             case R.id.action_bar_home:
                 NavUtils.navigateUpFromSameTask(this);
