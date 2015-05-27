@@ -39,17 +39,17 @@ public class SignInActivity extends Activity implements OnClickListener {
 
             @Override
             public void onSuccess(LoginResult loginResult) {
-
+                System.out.println(loginResult);
             }
 
             @Override
             public void onCancel() {
-
+                System.out.println("Facebook Canceled");
             }
 
             @Override
             public void onError(FacebookException e) {
-
+                System.out.println(e.getMessage());
             }
         });
 
@@ -84,6 +84,12 @@ public class SignInActivity extends Activity implements OnClickListener {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
