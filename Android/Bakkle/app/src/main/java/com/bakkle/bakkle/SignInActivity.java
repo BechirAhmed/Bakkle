@@ -11,23 +11,59 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+
+import java.util.Arrays;
+
 
 public class SignInActivity extends Activity implements OnClickListener {
+    private CallbackManager callbackManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        callbackManager = CallbackManager.Factory.create();
+        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+
+
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                System.out.println(loginResult);
+            }
+
+            @Override
+            public void onCancel() {
+                System.out.println("Facebook Canceled");
+            }
+
+            @Override
+            public void onError(FacebookException e) {
+                System.out.println(e.getMessage());
+            }
+        });
 
         // Set up custom Action Bar and enable up navigation
         getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getActionBar().setCustomView(R.layout.action_bar_title);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setDisplayHomeAsUpEnabled(false);
+        getActionBar().setDisplayShowHomeEnabled(false);
+        getActionBar().setHomeButtonEnabled(false);
+
         ((TextView)findViewById(R.id.action_bar_title)).setText(R.string.title_activity_sign_in);
-        ((ImageView)findViewById(R.id.action_bar_rightImage)).setVisibility(View.INVISIBLE);
+        ((ImageButton)findViewById(R.id.action_bar_right)).setVisibility(View.INVISIBLE);
+        ((ImageButton) findViewById(R.id.action_bar_home)).setImageResource(R.drawable.ic_action_cancel);
+        ((ImageButton) findViewById(R.id.action_bar_home)).setOnClickListener(this);
 
         // Add on click listeners to buttons
         ((Button)findViewById(R.id.btnSignIn)).setOnClickListener(this);
@@ -47,16 +83,13 @@ public class SignInActivity extends Activity implements OnClickListener {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        switch (id) {
-            case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
-                return true;
-
-        }
-
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -67,11 +100,17 @@ public class SignInActivity extends Activity implements OnClickListener {
                 // TODO: Implement Sign in Code
                 Intent homeIntent = new Intent(this, HomeActivity.class);
                 startActivity(homeIntent);
+                finish();
                 break;
             case R.id.btnSignInFacebook:
-                // TODO: Implement Sign in Code
-                Intent homeIntentFacebook = new Intent(this, HomeActivity.class);
-                startActivity(homeIntentFacebook);
+//                // TODO: Implement Sign in Code
+//                Intent homeIntentFacebook = new Intent(this, HomeActivity.class);
+//                startActivity(homeIntentFacebook);
+//                finish();
+                LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "user_friends"));
+                break;
+            case R.id.action_bar_home:
+                NavUtils.navigateUpFromSameTask(this);
                 break;
         }
     }

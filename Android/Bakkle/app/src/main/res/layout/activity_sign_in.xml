@@ -77,7 +77,9 @@
             android:layout_gravity="center_horizontal"
             style="@style/textStyle"
             android:layout_marginTop="-14dp"
-            android:background="@color/green"/>
+            android:background="@color/green"
+            android:paddingRight="5dp"
+            android:paddingLeft="5dp" />
 
 
 
