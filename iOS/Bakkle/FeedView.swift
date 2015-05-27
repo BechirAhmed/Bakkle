@@ -133,16 +133,6 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         //TODO: remove this when feed is updated via push
         requestUpdates()
     }
-    @IBAction func btnX(sender: AnyObject) {
-        if self.swipeView != nil {
-            self.swipeView.mdc_swipe(MDCSwipeDirection.Left)
-        }
-    }
-    @IBAction func btnCheck(sender: AnyObject) {
-        if self.swipeView != nil {
-            self.swipeView.mdc_swipe(MDCSwipeDirection.Right)
-        }
-    }
     
     func disableSwipe() {
         if self.swipeView != nil {
@@ -332,13 +322,19 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                     let start: CLLocation = CLLocation(locationString: location)
                     if let distance = Bakkle.sharedInstance.distanceTo(start) {
                         var distanceString = distance.rangeString()
-                        self.swipeView.distLabel.text = "\(distanceString) miles"
+                        self.swipeView.distLabel.text = "\(Int(distance)) miles"
                     }
                 }
                 
                 let sellersProfile = topItem.valueForKey("seller") as! NSDictionary
                 let facebookID = sellersProfile.valueForKey("facebook_id") as! String
-                var facebookProfileImgString = "http://graph.facebook.com/\(facebookID)/picture?type=large"
+                let sellersName = sellersProfile.valueForKey("display_name") as! String
+                var facebookProfileImgString = "http://graph.facebook.com/\(facebookID)/picture?width=142&height=142"
+                
+                let dividedName = split(sellersName) {$0 == " "}
+                
+                let firstName = dividedName[0] as String
+                let lastName = String(Array(dividedName[1])[0])
                 
                 //println("[FeedScreen] Downloading image (top) \(imgURLs)")
                 self.swipeView.nameLabel.text = topTitle
@@ -347,6 +343,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                     self.swipeView.imageView.image = UIImage(named: "loading.png")
                 }
                 self.swipeView.methodLabel.text = topMethod
+                self.swipeView.sellerName.text = firstName + " " + lastName + "."
                 dispatch_async(dispatch_get_global_queue(
                     Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
                         let firstURL = imgURLs[0] as! String
@@ -359,10 +356,12 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                             }else{
                                 self.swipeView.bottomBlurImg.hnk_setImageFromURL(imgURL!)
                                 self.swipeView.imageView.hnk_setImageFromURL(imgURL!)
+                                println("IMAGE WIDTH AND HEIGHT ARE: \(self.swipeView.imageView.image?.size.width), \(self.swipeView.imageView.image?.size.height)")
                                 self.swipeView.imageView.contentMode = UIViewContentMode.ScaleAspectFill
+                                println("FACEBOOK PROFILE LINK IS: \(facebookProfileImgString)")
                                 self.swipeView.profileImg.image = UIImage(data: NSData(contentsOfURL: profileImgURL!)!)
                                 
-                                println("IMAGE WIDTH AND HEIGHT ARE: \(self.swipeView.imageView.frame.size.width), \(self.swipeView.imageView.frame.size.height)")
+                                println("IMAGE FRAME WIDTH AND HEIGHT ARE: \(self.swipeView.imageView.frame.size.width), \(self.swipeView.imageView.frame.size.height)")
                             }
                             super.view.addSubview(self.swipeView)
                         }
@@ -377,22 +376,35 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                                 let bottomPrice: String = bottomItem.valueForKey("price") as! String
                                 let bottomMethod = topItem.valueForKey("method") as! String
                                 
+                                let sellersProfile = bottomItem.valueForKey("seller") as! NSDictionary
+                                let facebookID = sellersProfile.valueForKey("facebook_id") as! String
+                                let sellersName = sellersProfile.valueForKey("display_name") as! String
+                                var facebookProfileImgString = "http://graph.facebook.com/\(facebookID)/picture?width=142&height=142"
+                                
+                                let dividedName = split(sellersName) {$0 == " "}
+                                
+                                let firstName = dividedName[0] as String
+                                let lastName = String(Array(dividedName[1])[0])
+                                
                                 self.bottomView.userInteractionEnabled = false
                                 
                                 //println("[FeedScreen] Downloading image (bottom) \(bottomURLs)")
                                 let bottomURL = bottomURLs[0] as! String
                                 let imgURL = NSURL(string: bottomURL)
+                                let profileImgURL = NSURL(string: facebookProfileImgString)
                                 dispatch_async(dispatch_get_main_queue()) {
                                     //println("[FeedScreen] displaying image (bottom)")
                                     if let x = imgURL {
                                         self.bottomView.bottomBlurImg.hnk_setImageFromURL(imgURL!)
                                         self.bottomView.imageView.hnk_setImageFromURL(imgURL!)
+                                        self.bottomView.profileImg.image = UIImage(data: NSData(contentsOfURL: profileImgURL!)!)
                                         
                                         self.bottomView.imageView.contentMode = UIViewContentMode.ScaleAspectFill
                                     }
                                     self.bottomView.nameLabel.text = bottomTitle
                                     self.bottomView.priceLabel.text = "$" + bottomPrice
                                     self.bottomView.methodLabel.text = bottomMethod
+                                    self.bottomView.sellerName.text = firstName + " " + lastName + "."
                                 }
                             }
                         } else {

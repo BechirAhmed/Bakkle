@@ -69,6 +69,8 @@
 
 @property (nonatomic, strong) UIImageView *profileImg;
 
+@property (nonatomic, strong) UILabel *sellerName;
+
 /*!
  * The designated initializer takes a `frame` and a set of options to customize
  * the behavior of the view.

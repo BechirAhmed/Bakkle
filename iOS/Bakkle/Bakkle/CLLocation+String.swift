@@ -11,7 +11,7 @@ import Foundation
 extension CLLocation {
     // Specific to this app string of format "latdegrees, londegrees"
     convenience init(locationString: String) {
-        let parts = split(locationString) {$0 == " "} as [NSString]
+        let parts = split(locationString) {$0 == ","} as [NSString]
         var lat: Double = 0
         var lon: Double = 0
         if parts.count == 2 {
