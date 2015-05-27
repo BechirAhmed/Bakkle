@@ -63,6 +63,12 @@
 
 @property (nonatomic, strong) UILabel *priceLabel;
 
+@property (nonatomic, strong) UILabel *distLabel;
+
+@property (nonatomic, strong) UILabel *methodLabel;
+
+@property (nonatomic, strong) UIImageView *profileImg;
+
 /*!
  * The designated initializer takes a `frame` and a set of options to customize
  * the behavior of the view.
