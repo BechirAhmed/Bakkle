@@ -50,6 +50,7 @@ class Device(models.Model):
     auth_token = models.CharField(max_length = 256, default = "")
     user_location = models.CharField(max_length=15, null = True)
     app_version = models.IntegerField(default=1)
+    is_ios = models.BooleanField(default = True)
 
     class Meta:
         unique_together = ("account_id", "uuid")

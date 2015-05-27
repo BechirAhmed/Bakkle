@@ -26,10 +26,10 @@ class SettingsView: UIViewController {
         dispatch_async(dispatch_get_global_queue(
             Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
                 let imgURL = NSURL(string: facebookProfileImageUrlString)
-                    dispatch_async(dispatch_get_main_queue()) {
-                        println("[SettingsView] displaying image \(facebookProfileImageUrlString)")
-                        self.avatar.hnk_setImageFromURL(imgURL!)
-                        self.avatar.layer.cornerRadius = self.avatar.frame.size.width/2
+                dispatch_async(dispatch_get_main_queue()) {
+                    println("[SettingsView] displaying image \(facebookProfileImageUrlString)")
+                    self.avatar.hnk_setImageFromURL(imgURL!)
+                    self.avatar.layer.cornerRadius = self.avatar.frame.size.width/2
                 }
         }
         

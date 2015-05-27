@@ -69,7 +69,7 @@ static CGFloat const ChooseItemViewImageLabelWidth = 42.f;
         [self constructNopeImageView];
         [self constructHoldView];
         [self constructReportView];
-       // [self constructTopUserInfoView];
+        // [self constructTopUserInfoView];
         [self constructInformationView];
         [self setupSwipeToChoose];
     }
@@ -107,22 +107,50 @@ static CGFloat const ChooseItemViewImageLabelWidth = 42.f;
     
     [self constructNameLabel];
     [self constructPriceLabel];
+    [self constructDistanceLabel];
+    [self constructMethodLabel];
 }
 
 -(void)constructTopUserInfoView {
-    CGFloat topHeight = 50.f;
+    CGFloat topHeight = 61.f;
     CGRect topFrame = CGRectMake(0, 0, CGRectGetWidth(self.bounds), topHeight);
     _topUserInfoView = [[UIView alloc] initWithFrame:topFrame];
     _topUserInfoView.clipsToBounds = YES;
     _topUserInfoView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
     
-    UIBlurEffect *blur = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
-    UIVisualEffectView *effectView = [[UIVisualEffectView alloc] initWithEffect:blur];
-    effectView.frame = _topUserInfoView.frame;
-    [_topUserInfoView addSubview:effectView];
-    
     [self addSubview:_topUserInfoView];
     
+}
+
+-(void)constructUserProfileImg {
+    CGFloat leftPadding = 5.f;
+    CGRect frame = CGRectMake(leftPadding, 0, 47.33, 47.33);
+    _profileImg = [[UIImageView alloc] initWithFrame:frame];
+    _profileImg.layer.cornerRadius = _profileImg.frame.size.width/2;
+    _profileImg.layer.masksToBounds = YES;
+    _profileImg.layer.borderWidth = 0;
+}
+
+- (void)constructDistanceLabel {
+    CGRect frame = CGRectMake(CGRectGetWidth(_informationView.frame)/3, floorf(CGRectGetHeight(_informationView.frame)/2), floorf(CGRectGetWidth(_informationView.frame)/3), CGRectGetHeight(_informationView.frame)/2);
+    _distLabel = [[UILabel alloc] initWithFrame:frame];
+    _distLabel.text = [NSString stringWithFormat:@"%s", ""];
+    _distLabel.font = [UIFont fontWithName:@"Avenir" size:21];
+    _distLabel.font = [UIFont boldSystemFontOfSize:21.0];
+    _distLabel.textColor = [UIColor whiteColor];
+    _distLabel.textAlignment = NSTextAlignmentCenter;
+    [_informationView addSubview:_distLabel];
+}
+
+- (void)constructMethodLabel {
+    CGRect frame = CGRectMake(CGRectGetWidth(_informationView.frame)*2/3, floorf(CGRectGetHeight(_informationView.frame)/2), floorf(CGRectGetWidth(_informationView.frame)/3), CGRectGetHeight(_informationView.frame)/2);
+    _methodLabel = [[UILabel alloc] initWithFrame:frame];
+    _methodLabel.text = [NSString stringWithFormat:@"%s", ""];
+    _methodLabel.font = [UIFont fontWithName:@"Avenir" size:21];
+    _methodLabel.font = [UIFont boldSystemFontOfSize:21.0];
+    _methodLabel.textColor = [UIColor whiteColor];
+    _methodLabel.textAlignment = NSTextAlignmentCenter;
+    [_informationView addSubview:_methodLabel];
 }
 
 - (void)constructNameLabel {
@@ -146,8 +174,6 @@ static CGFloat const ChooseItemViewImageLabelWidth = 42.f;
 }
 
 - (void)constructPriceLabel {
-    
-    CGFloat topPadding = 0.f;
     CGFloat leftPadding = 5.f;
     CGRect frame = CGRectMake(leftPadding, floorf(CGRectGetHeight(_informationView.frame)/2), floorf((CGRectGetWidth(_informationView.frame)/3)), CGRectGetHeight(_informationView.frame)/2);
     _priceLabel = [[UILabel alloc] initWithFrame:frame];
@@ -201,10 +227,10 @@ static CGFloat const ChooseItemViewImageLabelWidth = 42.f;
                               MDCSwipeToChooseViewLabelWidth);
     self.holdView = [[UIView alloc] initWithFrame:frame];
     [self.holdView constructBorderedLabelWithText:self.options.holdText
-                                             color:self.options.holdColor
-                                             angle:self.options.holdRotationAngle
-                                          textSize:self.options.holdTextSize
-                                                ];
+                                            color:self.options.holdColor
+                                            angle:self.options.holdRotationAngle
+                                         textSize:self.options.holdTextSize
+     ];
     self.holdView.alpha = 0.f;
     [self.imageView addSubview:self.holdView];
 }
@@ -216,7 +242,7 @@ static CGFloat const ChooseItemViewImageLabelWidth = 42.f;
                                               color:self.options.reportColor
                                               angle:self.options.reportRotationAngle
                                            textSize:self.options.reportTextSize
-        ];
+     ];
     
     self.reportView.alpha =  0.f;
     [self.imageView addSubview:self.reportView];
@@ -232,7 +258,7 @@ static CGFloat const ChooseItemViewImageLabelWidth = 42.f;
                                              color:self.options.likedColor
                                              angle:self.options.likedRotationAngle
                                           textSize:self.options.likedTextSize
-];
+     ];
     self.likedView.alpha = 0.f;
     [self.imageView addSubview:self.likedView];
 }
@@ -248,7 +274,7 @@ static CGFloat const ChooseItemViewImageLabelWidth = 42.f;
                                             color:self.options.nopeColor
                                             angle:self.options.nopeRotationAngle
                                          textSize:self.options.nopeTextSize
-];
+     ];
     self.nopeView.alpha = 0.f;
     [self.imageView addSubview:self.nopeView];
 }
@@ -257,7 +283,7 @@ static CGFloat const ChooseItemViewImageLabelWidth = 42.f;
     MDCSwipeOptions *options = [MDCSwipeOptions new];
     options.delegate = self.options.delegate;
     options.threshold = self.options.threshold;
-
+    
     __block UIView *likedImageView = self.likedView;
     __block UIView *nopeImageView = self.nopeView;
     __block UIView *holdImageView = self.holdView;
@@ -290,12 +316,12 @@ static CGFloat const ChooseItemViewImageLabelWidth = 42.f;
             nopeImageView.alpha = 0.f;
             likedImageView.alpha = 0.f;
         }
-
+        
         if (weakself.options.onPan) {
             weakself.options.onPan(state);
         }
     };
-
+    
     [self mdc_swipeToChooseSetup:options];
 }
 
