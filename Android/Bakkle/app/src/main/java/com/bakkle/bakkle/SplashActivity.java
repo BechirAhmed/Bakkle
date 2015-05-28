@@ -4,10 +4,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Base64;
+import android.util.Log;
 
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -19,6 +25,23 @@ public class SplashActivity extends Activity {
         getActionBar().hide();
         setContentView(R.layout.activity_splash);
         mContext = this;
+
+// TODO: Use this to get the Facebook Development hash for each new computer. The hash will appear in logcat. Send the hash to Rameen
+//        try {
+//            PackageInfo info = getPackageManager().getPackageInfo(
+//                    "com.bakkle.bakkle",
+//                    PackageManager.GET_SIGNATURES);
+//            for (Signature signature : info.signatures) {
+//                MessageDigest md = MessageDigest.getInstance("SHA");
+//                md.update(signature.toByteArray());
+//                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+//            }
+//        } catch (PackageManager.NameNotFoundException e) {
+//            e.printStackTrace();
+//
+//        } catch (NoSuchAlgorithmException e) {
+//            e.printStackTrace();
+//        }
 
         new Handler().postDelayed(new Runnable() {
 

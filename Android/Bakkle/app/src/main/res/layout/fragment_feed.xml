@@ -7,7 +7,8 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/green">
+        android:background="@color/green"
+        android:id="@+id/linearLayout">
 
         <LinearLayout
             android:orientation="vertical"
@@ -26,6 +27,15 @@
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true" />
         </LinearLayout>
+
     </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/card"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/linearLayout"
+        android:background="@drawable/login_screen" />
 
 </RelativeLayout>
