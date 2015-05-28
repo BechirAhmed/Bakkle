@@ -346,6 +346,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                 
                 if swipeView.imageView.image == nil {
                     self.swipeView.imageView.image = UIImage(named: "loading.png")
+                    self.swipeView.userInteractionEnabled = false
                 }
                 self.swipeView.methodLabel.text = topMethod
                 self.swipeView.sellerName.text = firstName + " " + lastName + "."
@@ -363,6 +364,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                             }else{
                                 self.swipeView.bottomBlurImg.hnk_setImageFromURL(imgURL!)
                                 self.swipeView.imageView.hnk_setImageFromURL(imgURL!)
+                                self.swipeView.userInteractionEnabled = true 
                                 println("IMAGE WIDTH AND HEIGHT ARE: \(self.swipeView.imageView.image?.size.width), \(self.swipeView.imageView.image?.size.height)")
                                 self.swipeView.imageView.contentMode = UIViewContentMode.ScaleAspectFill
                                 println("FACEBOOK PROFILE LINK IS: \(facebookProfileImgString)")
