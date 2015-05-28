@@ -26,7 +26,7 @@ sudo touch /bakkle/www/bakkle/version.py
 sudo chmod 777 /bakkle/www/bakkle/version.py
 sudo echo bakkle_server_version = \"`git rev-parse HEAD` --  `git describe --long`\" >> /bakkle/www/bakkle/version.py
 
-DATABASE=default
+DATABASE=dev
 if [ `hostname` == 'ip-172-31-21-18' ]; then
    DATABASE=production
 fi
@@ -34,7 +34,7 @@ if [ `hostname` == 'bakkle' ]; then
    DATABASE=testdb
 fi
 if [ `hostname` == 'rhv-bakkle-bld' ]; then
-   DATABASE=default
+   DATABASE=dev
 fi
 
 echo Updating database: $DATABASE
