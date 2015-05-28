@@ -23,6 +23,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "RateView.h"
 
 @class MDCSwipeToChooseViewOptions;
 
@@ -71,6 +72,11 @@
 
 @property (nonatomic, strong) UILabel *sellerName;
 
+@property (nonatomic, assign) float sellerRating;
+
+@property (strong, nonatomic) RateView *ratingView;
+
+
 /*!
  * The designated initializer takes a `frame` and a set of options to customize
  * the behavior of the view.
@@ -79,3 +85,5 @@
                       options:(MDCSwipeToChooseViewOptions *)options;
 
 @end
+
+
