@@ -26,9 +26,22 @@ sudo touch /bakkle/www/bakkle/version.py
 sudo chmod 777 /bakkle/www/bakkle/version.py
 sudo echo bakkle_server_version = \"`git rev-parse HEAD` --  `git describe --long`\" >> /bakkle/www/bakkle/version.py
 
+DATABASE=default
+if [ `hostname` == 'ip-172-31-21-18' ]; then
+   DATABASE=production
+fi
+if [ `hostname` == 'bakkle' ]; then
+   DATABASE=testdb
+fi
+if [ `hostname` == 'rhv-bakkle-bld' ]; then
+   DATABASE=default
+fi
+
+echo Updating database: $DATABASE
+rm -rf /bakkle/www/bakkle/*/migrations
 pushd /bakkle/www/bakkle
 sudo python manage.py makemigrations
-sudo python manage.py migrate
+sudo python manage.py migrate --database=$DATABASE
 popd
 
 # system service script

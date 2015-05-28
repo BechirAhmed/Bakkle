@@ -59,13 +59,22 @@ WSGI_APPLICATION = 'bakkle.wsgi.application'
 
 DATABASES = {
     'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    # },
-    # 'production': {
+         'ENGINE': 'django.db.backends.sqlite3',
+         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+     },
+     'testdb': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'bakkle.django.db',
+        'NAME': 'testdb',
         'USER': 'root',
+        'PASSWORD': 'Bakkle123',
+        'HOST': 'bakkle.cw8vja43bda8.us-west-2.rds.amazonaws.com',
+        'PORT': '5432',
+     },
+     'production': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'bakkle',
+        'USER': 'root',
+        'PASSWORD': 'Bakkle123',
         'HOST': 'bakkle.cw8vja43bda8.us-west-2.rds.amazonaws.com',
         'PORT': '5432',
     }
