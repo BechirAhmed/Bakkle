@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # chkconfig: 123456 90 10
 # webapp
 #
@@ -7,10 +7,21 @@ apppath=$workdir"manage.py"
 configfile="runserver 0.0.0.0:8000"
 #configfile=$workdir"dev.conf"
 
+DATABASE=default
+if [ `hostname` == 'ip-172-31-21-18' ]; then
+   DATABASE=production
+fi
+if [ `hostname` == 'bakkle' ]; then
+   DATABASE=testdb
+fi
+if [ `hostname` == 'rhv-bakkle-bld' ]; then
+   DATABASE=dev
+fi
+
 start() {
     cd $workdir
-    /usr/bin/python $apppath $configfile > /bakkle/log/bakkle.log &
-    echo "Server started."
+    DJANGO_DATABASE=$DATABASE /usr/bin/python $apppath $configfile > /bakkle/log/bakkle.log &
+    echo "Server started using DB=$DATABASE."
 }
 
 stop() {
