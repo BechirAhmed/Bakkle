@@ -33,7 +33,7 @@ class Account(models.Model):
     max_distance = models.IntegerField(default = 10)
     max_price = models.DecimalField(max_digits=7, decimal_places=2, default=100.00)
     display_num_items = models.IntegerField(default = 100)
-    user_location = models.CharField(max_length=15, null = True)
+    user_location = models.CharField(max_length=25, null = True)
     disabled = models.BooleanField(default = False)
 
     def __str__(self):
@@ -43,12 +43,12 @@ class Device(models.Model):
     account_id = models.ForeignKey(Account)
     date_added = models.DateTimeField(auto_now_add = True)
     last_seen_date = models.DateTimeField(auto_now = True)
-    apns_token = models.CharField(max_length=64)
+    apns_token = models.CharField(max_length=128)
     ip_address = models.CharField(max_length=15)
     uuid = models.CharField(max_length=36)
     notifications_enabled = models.BooleanField(default = True)
     auth_token = models.CharField(max_length = 256, default = "")
-    user_location = models.CharField(max_length=15, null = True)
+    user_location = models.CharField(max_length=25, null = True)
     app_version = models.IntegerField(default=1)
     is_ios = models.BooleanField(default = True)
 
