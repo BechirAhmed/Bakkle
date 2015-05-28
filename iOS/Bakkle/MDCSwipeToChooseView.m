@@ -30,7 +30,6 @@
 #import <QuartzCore/QuartzCore.h>
 #import "ImageLabelView.h"
 
-
 static CGFloat const MDCSwipeToChooseViewHorizontalPadding = 10.f;
 static CGFloat const MDCSwipeToChooseViewTopPadding = 20.f;
 static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
@@ -42,7 +41,6 @@ static CGFloat const ChooseItemViewImageLabelWidth = 42.f;
 @property (nonatomic, strong) MDCSwipeToChooseViewOptions *options;
 @property (nonatomic, strong) UIView *informationView;
 @property (nonatomic, strong) UIView *topUserInfoView;
-
 @end
 
 @implementation MDCSwipeToChooseView
@@ -112,6 +110,20 @@ static CGFloat const ChooseItemViewImageLabelWidth = 42.f;
     [self constructMethodLabel];
 }
 
+-(void)constructRatingView {
+    CGRect frame = CGRectMake(CGRectGetWidth(_topUserInfoView.frame)*3/4 - 18, 0, 90, CGRectGetHeight(_topUserInfoView.frame));
+    _ratingView = [[RateView alloc] initWithFrame:frame];
+    
+    self.ratingView.notSelectedImage = [UIImage imageNamed:@"star_none.png"];
+    self.ratingView.halfSelectedImage = [UIImage imageNamed:@"star_half.png"];
+    self.ratingView.fullSelectedImage = [UIImage imageNamed:@"star_full.png"];
+    self.ratingView.editable = NO;
+    self.ratingView.maxRating = 5;
+    
+    [_topUserInfoView addSubview:_ratingView];
+    
+}
+
 -(void)constructTopUserInfoView {
     CGFloat topHeight = 47.f;
     CGRect topFrame = CGRectMake(0, 0, CGRectGetWidth(self.bounds), topHeight);
@@ -124,6 +136,7 @@ static CGFloat const ChooseItemViewImageLabelWidth = 42.f;
     
     [self constructUserProfileImg];
     [self constructSellersName];
+    [self constructRatingView];
     
 }
 
@@ -139,22 +152,24 @@ static CGFloat const ChooseItemViewImageLabelWidth = 42.f;
 }
 
 - (void)constructDistanceLabel {
-    CGRect frame = CGRectMake(CGRectGetWidth(_informationView.frame)/3, floorf(CGRectGetHeight(_informationView.frame)/2), floorf(CGRectGetWidth(_informationView.frame)/3), CGRectGetHeight(_informationView.frame)/2);
+    CGFloat leftPadding = 10.f;
+    CGFloat priceLabel = floorf((CGRectGetWidth(_informationView.frame)- 2*leftPadding)/3);
+    CGRect frame = CGRectMake(priceLabel, floorf(CGRectGetHeight(_informationView.frame)/2), priceLabel , CGRectGetHeight(_informationView.frame)/2);
     _distLabel = [[UILabel alloc] initWithFrame:frame];
     _distLabel.text = [NSString stringWithFormat:@"%s", ""];
-    _distLabel.font = [UIFont fontWithName:@"Avenir" size:21];
-    _distLabel.font = [UIFont boldSystemFontOfSize:21.0];
+    _distLabel.font = [UIFont fontWithName:@"Avenir-Heavy" size:21];
     _distLabel.textColor = [UIColor whiteColor];
     _distLabel.textAlignment = NSTextAlignmentCenter;
     [_informationView addSubview:_distLabel];
 }
 
 - (void)constructMethodLabel {
-    CGRect frame = CGRectMake(CGRectGetWidth(_informationView.frame)*2/3, floorf(CGRectGetHeight(_informationView.frame)/2), floorf(CGRectGetWidth(_informationView.frame)/3), CGRectGetHeight(_informationView.frame)/2);
+    CGFloat leftPadding = 10.f;
+    CGFloat distLabel = floorf((CGRectGetWidth(_informationView.frame)- 2*leftPadding)/3);
+    CGRect frame = CGRectMake(2*distLabel, floorf(CGRectGetHeight(_informationView.frame)/2), distLabel, CGRectGetHeight(_informationView.frame)/2);
     _methodLabel = [[UILabel alloc] initWithFrame:frame];
     _methodLabel.text = [NSString stringWithFormat:@"%s", ""];
-    _methodLabel.font = [UIFont fontWithName:@"Avenir" size:21];
-    _methodLabel.font = [UIFont boldSystemFontOfSize:21.0];
+    _methodLabel.font = [UIFont fontWithName:@"Avenir-Heavy" size:21];
     _methodLabel.textColor = [UIColor whiteColor];
     _methodLabel.textAlignment = NSTextAlignmentCenter;
     [_informationView addSubview:_methodLabel];
@@ -164,44 +179,39 @@ static CGFloat const ChooseItemViewImageLabelWidth = 42.f;
     CGRect frame = CGRectMake(_profileImg.frame.size.width + 24, 0, (_topUserInfoView.frame.size.width*3/4)-(_profileImg.frame.size.width + 10), CGRectGetHeight(_topUserInfoView.frame));
     _sellerName = [[UILabel alloc] initWithFrame:frame];
     _sellerName.text = [NSString stringWithFormat:@"%s", ""];
-    _sellerName.font = [UIFont fontWithName:@"Avenir" size:21];
-    _sellerName.font = [UIFont boldSystemFontOfSize:21.0];
+    _sellerName.font = [UIFont fontWithName:@"Avenir-Heavy" size:21];
     _sellerName.textColor = [UIColor whiteColor];
     _sellerName.textAlignment = NSTextAlignmentLeft;
     [_topUserInfoView addSubview:_sellerName];
 }
 
 - (void)constructNameLabel {
-    CGFloat leftPadding = 0.f;
+    CGFloat leftPadding = 10.f;
     CGFloat topPadding = 0.f;
     CGRect frame = CGRectMake(leftPadding,
                               topPadding,
-                              floorf(CGRectGetWidth(_informationView.frame)),
+                              floorf(CGRectGetWidth(_informationView.frame)) - leftPadding,
                               CGRectGetHeight(_informationView.frame)/2);
     _nameLabel = [[UILabel alloc] initWithFrame:frame];
     
-    
-    
     _nameLabel.text = [NSString stringWithFormat:@"%s", ""];
-    _nameLabel.font = [UIFont fontWithName:@"Avenir" size:21];
-    _nameLabel.font = [UIFont boldSystemFontOfSize:25.0];
+    _nameLabel.font = [UIFont fontWithName:@"Avenir-Heavy" size:25];
     _nameLabel.textColor = [UIColor whiteColor];
     _nameLabel.textAlignment = NSTextAlignmentCenter;
     [_informationView addSubview:_nameLabel];
 }
 
 - (void)constructPriceLabel {
-    CGFloat leftPadding = 5.f;
-    CGRect frame = CGRectMake(leftPadding, floorf(CGRectGetHeight(_informationView.frame)/2), floorf((CGRectGetWidth(_informationView.frame)/3)), CGRectGetHeight(_informationView.frame)/2);
+    CGFloat leftPadding = 10.f;
+    CGRect frame = CGRectMake(leftPadding, floorf(CGRectGetHeight(_informationView.frame)/2), floorf((CGRectGetWidth(_informationView.frame)- 2*leftPadding)/3), CGRectGetHeight(_informationView.frame)/2);
     _priceLabel = [[UILabel alloc] initWithFrame:frame];
     
     
-    _priceLabel.font = [UIFont fontWithName:@"Avenir" size:21];
+    _priceLabel.font = [UIFont fontWithName:@"Avenir-Heavy" size:21];
     [_priceLabel setContentCompressionResistancePriority:800 forAxis:UILayoutConstraintAxisHorizontal];
     _priceLabel.text = [NSString stringWithFormat:@"%s", ""];
     _priceLabel.textColor = [UIColor whiteColor];
-    _priceLabel.textAlignment = NSTextAlignmentLeft;
-    _priceLabel.font = [UIFont boldSystemFontOfSize:21];
+    _priceLabel.textAlignment = NSTextAlignmentCenter;
     [_informationView addSubview:_priceLabel];
 }
 

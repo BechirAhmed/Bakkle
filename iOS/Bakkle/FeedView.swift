@@ -14,7 +14,6 @@ import Haneke
 class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDelegate, UINavigationControllerDelegate, MDCSwipeToChooseDelegate {
     
     var state : MDCPanState!
-    
     let menuSegue = "presentNav"
     let addItemSegue = "AddItemSegue"
     let itemDetailSegue = "ItemDetailSegue"
@@ -338,12 +337,20 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                 
                 //println("[FeedScreen] Downloading image (top) \(imgURLs)")
                 self.swipeView.nameLabel.text = topTitle
-                self.swipeView.priceLabel.text = "$" + (topPrice)
+                
+                if suffix(topPrice, 2) == "00" {
+                    self.swipeView.priceLabel.text = "$\((topPrice as NSString).integerValue)"
+                } else {
+                    self.swipeView.priceLabel.text = "$" + (topPrice)
+                }
+                
                 if swipeView.imageView.image == nil {
                     self.swipeView.imageView.image = UIImage(named: "loading.png")
+                    self.swipeView.userInteractionEnabled = false
                 }
                 self.swipeView.methodLabel.text = topMethod
                 self.swipeView.sellerName.text = firstName + " " + lastName + "."
+                self.swipeView.ratingView.rating = 3.5
                 dispatch_async(dispatch_get_global_queue(
                     Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
                         let firstURL = imgURLs[0] as! String
@@ -356,6 +363,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                             }else{
                                 self.swipeView.bottomBlurImg.hnk_setImageFromURL(imgURL!)
                                 self.swipeView.imageView.hnk_setImageFromURL(imgURL!)
+                                self.swipeView.userInteractionEnabled = true
                                 println("IMAGE WIDTH AND HEIGHT ARE: \(self.swipeView.imageView.image?.size.width), \(self.swipeView.imageView.image?.size.height)")
                                 self.swipeView.imageView.contentMode = UIViewContentMode.ScaleAspectFill
                                 println("FACEBOOK PROFILE LINK IS: \(facebookProfileImgString)")
@@ -379,12 +387,21 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                                 let sellersProfile = bottomItem.valueForKey("seller") as! NSDictionary
                                 let facebookID = sellersProfile.valueForKey("facebook_id") as! String
                                 let sellersName = sellersProfile.valueForKey("display_name") as! String
+                                let location = bottomItem.valueForKey("location") as! String
                                 var facebookProfileImgString = "http://graph.facebook.com/\(facebookID)/picture?width=142&height=142"
                                 
                                 let dividedName = split(sellersName) {$0 == " "}
                                 
                                 let firstName = dividedName[0] as String
                                 let lastName = String(Array(dividedName[1])[0])
+                                
+                                if location.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
+                                    let start: CLLocation = CLLocation(locationString: location)
+                                    if let distance = Bakkle.sharedInstance.distanceTo(start) {
+                                        var distanceString = distance.rangeString()
+                                        self.bottomView.distLabel.text = "\(Int(distance)) miles"
+                                    }
+                                }
                                 
                                 self.bottomView.userInteractionEnabled = false
                                 
@@ -401,10 +418,17 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                                         
                                         self.bottomView.imageView.contentMode = UIViewContentMode.ScaleAspectFill
                                     }
+                                    
+                                    if suffix(bottomPrice, 2) == "00" {
+                                        self.bottomView.priceLabel.text = "$\((bottomPrice as NSString).integerValue)"
+                                    } else {
+                                        self.bottomView.priceLabel.text = "$" + (bottomPrice)
+                                    }
+
                                     self.bottomView.nameLabel.text = bottomTitle
-                                    self.bottomView.priceLabel.text = "$" + bottomPrice
                                     self.bottomView.methodLabel.text = bottomMethod
                                     self.bottomView.sellerName.text = firstName + " " + lastName + "."
+                                    self.bottomView.ratingView.rating = 5
                                 }
                             }
                         } else {

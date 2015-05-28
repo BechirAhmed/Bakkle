@@ -1,0 +1,4 @@
+#!/bin/sh
+
+
+PGPASSWORD=Bakkle123 psql -h bakkle.cw8vja43bda8.us-west-2.rds.amazonaws.com --user root bakkle

@@ -10,4 +10,5 @@
 #import "MDCSwipeToChoose.h"
 #import "SWRevealViewController.h"
 #import <FBSDKShareKit/FBSDKShareKit.h>
+#import "RateView.h"
 
