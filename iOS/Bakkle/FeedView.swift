@@ -121,12 +121,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     
     @IBAction func menuButtonPressed(sender: AnyObject) {
         NSNotificationCenter.defaultCenter().removeObserver(self)
-        if revealViewController().isBeingDismissed() {
-            self.view.userInteractionEnabled = true
-        }
-        else if revealViewController().isBeingPresented() {
-            self.view.userInteractionEnabled = false
-        }
+    
         self.revealViewController().revealToggleAnimated(true)
         
         //TODO: remove this when feed is updated via push
