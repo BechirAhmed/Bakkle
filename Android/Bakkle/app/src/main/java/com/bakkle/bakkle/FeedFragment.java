@@ -60,8 +60,8 @@ public class FeedFragment extends Fragment implements View.OnTouchListener {
                         .getLayoutParams();
                 layoutParams.leftMargin = X - _xDelta;
                 layoutParams.topMargin = Y - _yDelta;
-                layoutParams.rightMargin = -250;
-                layoutParams.bottomMargin = -250;
+//                layoutParams.rightMargin = -250;
+//                layoutParams.bottomMargin = -250;
                 v.setLayoutParams(layoutParams);
                 break;
         }
