@@ -22,7 +22,7 @@ class SettingsView: UIViewController {
     override func viewWillAppear(animated: Bool) {
         
         println("facebook_id: \(Bakkle.sharedInstance.facebook_id_str)")
-        var facebookProfileImageUrlString = "http://graph.facebook.com/\(Bakkle.sharedInstance.facebook_id_str)/picture?width=250&height=250"
+        var facebookProfileImageUrlString = "http://graph.facebook.com/\(Bakkle.sharedInstance.facebook_id_str)/picture?type=large"
         dispatch_async(dispatch_get_global_queue(
             Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
                 let imgURL = NSURL(string: facebookProfileImageUrlString)

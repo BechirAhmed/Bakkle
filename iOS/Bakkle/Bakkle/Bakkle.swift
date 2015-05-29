@@ -271,7 +271,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                 var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &error) as! NSDictionary!
                 
                 if responseDict.valueForKey("status")?.integerValue == 1 {
-                    self.auth_token = responseDict.valueForKey("auth_token") as! String
+                    self.auth_token = responseDict.valueForKey("auth_token") as! String!
                     success()
                 } else {
                     Bakkle.sharedInstance.logout()

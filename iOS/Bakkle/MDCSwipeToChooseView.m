@@ -28,6 +28,7 @@
 #import "UIView+MDCBorderedLabel.h"
 #import "UIColor+MDCRGB8Bit.h"
 #import <QuartzCore/QuartzCore.h>
+#import "ImageLabelView.h"
 
 static CGFloat const MDCSwipeToChooseViewHorizontalPadding = 10.f;
 static CGFloat const MDCSwipeToChooseViewTopPadding = 20.f;
@@ -150,7 +151,7 @@ static CGFloat const ChooseItemViewImageLabelWidth = 42.f;
     [_topUserInfoView addSubview:_profileImg];
 }
 
-- (void)constructDistanceLabel {    
+- (void)constructDistanceLabel {
     CGFloat leftPadding = 10.f;
     CGFloat priceLabel = floorf((CGRectGetWidth(_informationView.frame)- 2*leftPadding)/3);
     CGRect frame = CGRectMake(priceLabel, floorf(CGRectGetHeight(_informationView.frame)/2), priceLabel , CGRectGetHeight(_informationView.frame)/2);
@@ -163,14 +164,14 @@ static CGFloat const ChooseItemViewImageLabelWidth = 42.f;
 }
 
 - (void)constructMethodLabel {
-    CGFloat leftPadding = 5.f;
+    CGFloat leftPadding = 10.f;
     CGFloat distLabel = floorf((CGRectGetWidth(_informationView.frame)- 2*leftPadding)/3);
     CGRect frame = CGRectMake(2*distLabel, floorf(CGRectGetHeight(_informationView.frame)/2), distLabel, CGRectGetHeight(_informationView.frame)/2);
     _methodLabel = [[UILabel alloc] initWithFrame:frame];
     _methodLabel.text = [NSString stringWithFormat:@"%s", ""];
     _methodLabel.font = [UIFont fontWithName:@"Avenir-Heavy" size:21];
     _methodLabel.textColor = [UIColor whiteColor];
-    _methodLabel.textAlignment = NSTextAlignmentRight;
+    _methodLabel.textAlignment = NSTextAlignmentCenter;
     [_informationView addSubview:_methodLabel];
 }
 
@@ -210,8 +211,21 @@ static CGFloat const ChooseItemViewImageLabelWidth = 42.f;
     [_priceLabel setContentCompressionResistancePriority:800 forAxis:UILayoutConstraintAxisHorizontal];
     _priceLabel.text = [NSString stringWithFormat:@"%s", ""];
     _priceLabel.textColor = [UIColor whiteColor];
-    _priceLabel.textAlignment = NSTextAlignmentLeft;
+    _priceLabel.textAlignment = NSTextAlignmentCenter;
     [_informationView addSubview:_priceLabel];
+}
+
+- (ImageLabelView *)buildImageLabelViewLeftOf:(CGFloat)x image:(UIImage *)image text:(NSString *)text {
+    CGFloat topPadding = 17.f;
+    CGRect frame = CGRectMake(x - ChooseItemViewImageLabelWidth,
+                              topPadding,
+                              ChooseItemViewImageLabelWidth,
+                              CGRectGetHeight(_informationView.bounds));
+    ImageLabelView *view = [[ImageLabelView alloc] initWithFrame:frame
+                                                           image:image
+                                                            text:text];
+    view.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+    return view;
 }
 
 - (void)constructImageView {
