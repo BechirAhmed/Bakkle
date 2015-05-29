@@ -6,7 +6,7 @@
 
 {% if item %}
 <meta name="apple-itunes-app" content="app-id=982411143, affiliate-data=myAffiliateData, app-argument=myURL">
-<div style="width:100%; background:#424242; padding-bottom: 50px;">
+<div style="width:100%; background:#424242; padding-bottom: 50px;font-family: 'Open Sans', sans-serif;">
   <div style="width:50%;background:#33CD5F;height:150px; margin: 0 auto; padding: 10px;" > 
       <h1 style="color: #FFFFFF; text-align: center; padding-top: 40px;" > BAKKLE: {{ item.title}} - ${{ item.price }} </h1>
   </div>
@@ -17,9 +17,6 @@
     Price: {{ item.price }}
     <br/>Tags: {{ item.tags }}
     <br/>Method of Delivery: {{ item.method }}
-
-  LOAD APP
-     WANT   MEH  REPORT
 
     {% if urls %}
       <ul style="list-style-type:none; margin:0 auto; padding: 0; width: 75%;">
