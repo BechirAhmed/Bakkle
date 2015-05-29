@@ -14,9 +14,37 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "5E8055551AEA78790035521C"
+               BlueprintIdentifier = "139096861B0CD5C800C8BB33"
                BuildableName = "Bakkle WatchKit App.app"
                BlueprintName = "Bakkle WatchKit App"
+               ReferencedContainer = "container:Bakkle.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "139096771B0CD5C800C8BB33"
+               BuildableName = "Bakkle WatchKit Extension.appex"
+               BlueprintName = "Bakkle WatchKit Extension"
+               ReferencedContainer = "container:Bakkle.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "5EBDD68A1AB211E600C7FBE7"
+               BuildableName = "Bakkle.app"
+               BlueprintName = "Bakkle"
                ReferencedContainer = "container:Bakkle.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -32,7 +60,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "5E8055551AEA78790035521C"
+            BlueprintIdentifier = "139096861B0CD5C800C8BB33"
             BuildableName = "Bakkle WatchKit App.app"
             BlueprintName = "Bakkle WatchKit App"
             ReferencedContainer = "container:Bakkle.xcodeproj">
@@ -51,10 +79,10 @@
       <RemoteRunnable
          runnableDebuggingMode = "2"
          BundleIdentifier = "com.apple.springboard"
-         RemotePath = "/(null)">
+         RemotePath = "/Bakkle">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "5E8055551AEA78790035521C"
+            BlueprintIdentifier = "139096861B0CD5C800C8BB33"
             BuildableName = "Bakkle WatchKit App.app"
             BlueprintName = "Bakkle WatchKit App"
             ReferencedContainer = "container:Bakkle.xcodeproj">
@@ -63,7 +91,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "5E8055551AEA78790035521C"
+            BlueprintIdentifier = "139096861B0CD5C800C8BB33"
             BuildableName = "Bakkle WatchKit App.app"
             BlueprintName = "Bakkle WatchKit App"
             ReferencedContainer = "container:Bakkle.xcodeproj">
@@ -81,10 +109,10 @@
       <RemoteRunnable
          runnableDebuggingMode = "2"
          BundleIdentifier = "com.apple.springboard"
-         RemotePath = "/(null)">
+         RemotePath = "/Bakkle">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "5E8055551AEA78790035521C"
+            BlueprintIdentifier = "139096861B0CD5C800C8BB33"
             BuildableName = "Bakkle WatchKit App.app"
             BlueprintName = "Bakkle WatchKit App"
             ReferencedContainer = "container:Bakkle.xcodeproj">
@@ -93,7 +121,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "5E8055551AEA78790035521C"
+            BlueprintIdentifier = "139096861B0CD5C800C8BB33"
             BuildableName = "Bakkle WatchKit App.app"
             BlueprintName = "Bakkle WatchKit App"
             ReferencedContainer = "container:Bakkle.xcodeproj">
