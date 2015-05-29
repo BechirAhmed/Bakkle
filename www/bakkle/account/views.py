@@ -12,12 +12,14 @@ from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from decimal import *
+from django.contrib.admin.views.decorators import staff_member_required
 
 from .models import Account, Device
 from items.models import Items, BuyerItem
 from common import authenticate
 
 # Show a list of all accounts in the system.
+@staff_member_required
 @csrf_exempt
 def index(request):
     account_list = Account.objects.all()

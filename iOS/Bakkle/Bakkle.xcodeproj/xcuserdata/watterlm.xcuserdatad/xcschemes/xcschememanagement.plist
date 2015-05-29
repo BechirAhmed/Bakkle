@@ -9,24 +9,39 @@
 			<key>orderHint</key>
 			<integer>3</integer>
 		</dict>
-		<key>Bakkle WatchKit Glance.xcscheme</key>
+		<key>Bakkle Watchkit App.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>4</integer>
-		</dict>
-		<key>Bakkle WatchKit Notifications.xcscheme</key>
-		<dict>
-			<key>orderHint</key>
-			<integer>5</integer>
+			<integer>3</integer>
 		</dict>
 		<key>Bakkle.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>2</integer>
 		</dict>
+		<key>Chat Notification - Bakkle WatchKit App.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>4</integer>
+		</dict>
+		<key>New Item Notification - Bakkle WatchKit App.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>5</integer>
+		</dict>
+		<key>New Offer Notification - Bakkle WatchKit App.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>6</integer>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>139096861B0CD5C800C8BB33</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>5E8055551AEA78790035521C</key>
 		<dict>
 			<key>primary</key>

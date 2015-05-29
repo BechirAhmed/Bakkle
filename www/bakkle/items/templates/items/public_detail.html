@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Bakkle item detail{% endblock %}
+
+{% block content %}
+
+{% if item %}
+
+<meta name="apple-itunes-app" content="app-id=982411143, affiliate-data=myAffiliateData, app-argument=myURL">
+
+  <br/>Title: {{ item.title }}
+  <br/>Description: {{ item.description }}
+  <br/>Price: {{ item.price }}
+  <br/>Tags: {{ item.tags }}
+  <br/>Method of Delivery: {{ item.method }}
+
+LOAD APP
+   WANT   MEH  REPORT
+
+  {% if urls %}
+    <ul>
+    {% for imageUrl in urls %}
+      <li>{{ imageUrl }} 
+      <br /><img src= {{ imageUrl }} /></li>
+    {% endfor %}
+  {% endif %}
+
+{% else %}
+  <p> No item with that id </p>
+{% endif %}
+
+{% endblock %}
