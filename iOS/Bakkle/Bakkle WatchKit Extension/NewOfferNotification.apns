@@ -1,0 +1,10 @@
+{
+    "aps": {
+        "alert": "Offer: $32.12 - Orange mower.",
+        "category": "myCategory"
+    },
+    
+    "custom_dict": {
+        "name": "Lindsey Watterson"
+    }
+}
