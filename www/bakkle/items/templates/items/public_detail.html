@@ -1,32 +1,36 @@
 {% extends "base.html" %}
 
-{% block title %}Bakkle item detail{% endblock %}
+{% block title %}{{ item.title}} - ${{ item.price }}{% endblock %}
 
 {% block content %}
 
 {% if item %}
-
 <meta name="apple-itunes-app" content="app-id=982411143, affiliate-data=myAffiliateData, app-argument=myURL">
+<div style="width:100%; background:#424242; padding-bottom: 50px;font-family: 'Open Sans', sans-serif;">
+  <div style="width:50%;background:#33CD5F;height:150px; margin: 0 auto; padding: 10px;" > 
+      <h1 style="color: #FFFFFF; text-align: center; padding-top: 40px;" > BAKKLE: {{ item.title}} - ${{ item.price }} </h1>
+  </div>
 
-  <br/>Title: {{ item.title }}
-  <br/>Description: {{ item.description }}
-  <br/>Price: {{ item.price }}
-  <br/>Tags: {{ item.tags }}
-  <br/>Method of Delivery: {{ item.method }}
+  <div style="width:50%;margin:0 auto;background: #FFFFFF; padding: 10px;">
 
-LOAD APP
-   WANT   MEH  REPORT
+    <p style="font-size:30px;"><b>{{ item.title }}</b></p>
+    Price: {{ item.price }}
+    <br/>Tags: {{ item.tags }}
+    <br/>Method of Delivery: {{ item.method }}
 
-  {% if urls %}
-    <ul>
-    {% for imageUrl in urls %}
-      <li>{{ imageUrl }} 
-      <br /><img src= {{ imageUrl }} /></li>
-    {% endfor %}
+    {% if urls %}
+      <ul style="list-style-type:none; margin:0 auto; padding: 0; width: 75%;">
+      {% for imageUrl in urls %}
+        <li>
+        <br /><img src= {{ imageUrl }} style="width:100%; "/></li>
+      {% endfor %}
+      </ul>
+    {% endif %}
+
+  {% else %}
+    <p> No item with that id </p>
   {% endif %}
 
-{% else %}
-  <p> No item with that id </p>
-{% endif %}
-
+  </div>
+</div>
 {% endblock %}
