@@ -572,15 +572,15 @@ def handle_delete_file_s3(image_path):
 def imgupload(request, seller_id):
     image_urls = ""
     #import pdb; pdb.set_trace()
-    #for i in request.FILES.getlist('image'):
-    i = request.FILES['image']
-    uhash = hex(random.getrandbits(128))[2:-1]
-    image_key = "{}_{}.jpg".format(seller_id, uhash)
-    filename = handle_file_s3(image_key, i)
-    if image_urls == "":
-        image_urls = filename
-    else:
-        image_urls = image_urls + "," + filename
+    for i in request.FILES.getlist('image'):
+        #i = request.FILES['image']
+        uhash = hex(random.getrandbits(128))[2:-1]
+        image_key = "{}_{}.jpg".format(seller_id, uhash)
+        filename = handle_file_s3(image_key, i)
+        if image_urls == "":
+            image_urls = filename
+        else:
+            image_urls = image_urls + "," + filename
     return image_urls
 
 # Helper for creating buyer items
