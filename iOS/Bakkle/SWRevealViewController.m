@@ -153,7 +153,6 @@ static CGFloat scaledValue( CGFloat v1, CGFloat min2, CGFloat max2, CGFloat min1
     [self _prepareForNewPosition:newPosition];
 }
 
-
 - (CGFloat)frontLocationForPosition:(FrontViewPosition)frontViewPosition
 {
     CGFloat revealWidth;

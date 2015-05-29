@@ -23,6 +23,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "RateView.h"
 
 @class MDCSwipeToChooseViewOptions;
 
@@ -36,6 +37,8 @@
  * The main image to be displayed and then "liked" or "disliked".
  */
 @property (nonatomic, strong) UIImageView *imageView;
+
+@property (nonatomic, strong) UIImageView *bottomBlurImg;
 
 /*!
  * The "liked" view, which fades in as the `MDCSwipeToChooseView` is panned to the right.
@@ -61,6 +64,19 @@
 
 @property (nonatomic, strong) UILabel *priceLabel;
 
+@property (nonatomic, strong) UILabel *distLabel;
+
+@property (nonatomic, strong) UILabel *methodLabel;
+
+@property (nonatomic, strong) UIImageView *profileImg;
+
+@property (nonatomic, strong) UILabel *sellerName;
+
+@property (nonatomic, assign) float sellerRating;
+
+@property (strong, nonatomic) RateView *ratingView;
+
+
 /*!
  * The designated initializer takes a `frame` and a set of options to customize
  * the behavior of the view.
@@ -69,3 +85,5 @@
                       options:(MDCSwipeToChooseViewOptions *)options;
 
 @end
+
+

@@ -10,7 +10,6 @@
     <string name="password_hint">PASSWORD</string>
     <string name="or"> OR </string>
 
-    <string name="hello_world">Hello world!</string>
     <string name="title_activity_sign_in">@string/sign_in</string>
     <string name="title_activity_login">@string/app_name</string>
     <string name="title_activity_home">FEED</string>
@@ -24,4 +23,11 @@
     <string name="drawer_title">ACCOUNT</string>
     <string name="drawer_open"></string>
     <string name="drawer_close"></string>
+    <string name="title_activity_splash">SplashActivity</string>
+
+    <string name="facebook_app_id">1592001697724990</string>
+    <string name="facebook_authorities">com.facebook.app.FacebookContentProvider1592001697724990</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

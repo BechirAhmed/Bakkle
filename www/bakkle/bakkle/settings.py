@@ -10,6 +10,8 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+from os import environ
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 # Quick-start development settings - unsuitable for production
@@ -58,11 +60,30 @@ WSGI_APPLICATION = 'bakkle.wsgi.application'
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    'dev': {
+         'ENGINE': 'django.db.backends.sqlite3',
+         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+     },
+     'testdb': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'testdb',
+        'USER': 'root',
+        'PASSWORD': 'Bakkle123',
+        'HOST': 'bakkle.cw8vja43bda8.us-west-2.rds.amazonaws.com',
+        'PORT': '5432',
+     },
+     'production': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'bakkle',
+        'USER': 'root',
+        'PASSWORD': 'Bakkle123',
+        'HOST': 'bakkle.cw8vja43bda8.us-west-2.rds.amazonaws.com',
+        'PORT': '5432',
     }
 }
+
+default_database = environ.get('DJANGO_DATABASE', 'dev')
+DATABASES['default'] = DATABASES[default_database]
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/

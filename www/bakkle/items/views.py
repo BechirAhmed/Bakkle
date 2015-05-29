@@ -21,6 +21,7 @@ from django.views.decorators.http import require_POST
 from django.db.models import Q
 from decimal import *
 from django import forms
+from django.contrib.admin.views.decorators import staff_member_required
 
 from .models import Items, BuyerItem
 from conversation.models import Conversation, Message
@@ -44,6 +45,7 @@ config['S3_URL'] = 'https://s3-us-west-2.amazonaws.com/com.bakkle.prod/'
 #--------------------------------------------#
 #               Web page requests            #
 #--------------------------------------------#
+@staff_member_required
 @csrf_exempt
 def index(request):
     # List all items (this is for web viewing of data only)
@@ -53,6 +55,18 @@ def index(request):
     }
     return render(request, 'items/index.html', context) 
 
+@csrf_exempt
+def public_detail(request, item_id):
+    # get the item with the item id (this is for web viewing of data only)
+    item = get_object_or_404(Items, pk=item_id)
+    urls = item.image_urls.split(',');
+    context = {
+        'item': item,
+        'urls': urls,
+    }
+    return render(request, 'items/public_detail.html', context)
+
+@staff_member_required
 @csrf_exempt
 def detail(request, item_id):
     # get the item with the item id (this is for web viewing of data only)
@@ -64,6 +78,7 @@ def detail(request, item_id):
     }
     return render(request, 'items/detail.html', context)
 
+@staff_member_required
 @csrf_exempt
 def mark_as_spam(request, item_id):
     # Get the item
@@ -77,6 +92,7 @@ def mark_as_spam(request, item_id):
     }
     return render(request, 'items/index.html', context)
 
+@staff_member_required
 @csrf_exempt
 def mark_as_deleted(request, item_id):
     # Get the item id 
@@ -674,7 +690,8 @@ def get_account_dictionary(account):
         'display_name': account.display_name, 
         'seller_rating': account.seller_rating,
         'buyer_rating': account.buyer_rating,
-        'user_location': account.user_location}
+        'user_location': account.user_location,
+        'facebook_id': account.facebook_id }
     return seller_dict
 
 # Helper for making a BuyerItem into a dictionary for JSON

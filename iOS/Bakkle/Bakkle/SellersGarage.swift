@@ -83,9 +83,9 @@ class SellersGarageView: UIViewController, UICollectionViewDelegate, UICollectio
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         
         var screenWidth = CGRectGetWidth(collectionView.bounds)
-        var cellWidth = screenWidth/2
+        var cellWidth = screenWidth
         
-        return CGSize(width: cellWidth - 1, height: cellWidth - 1)
+        return CGSize(width: cellWidth, height: cellWidth)
     }
     
     func collectionView(collectionView: UICollectionView,
@@ -116,6 +116,19 @@ class SellersGarageView: UIViewController, UICollectionViewDelegate, UICollectio
             let imgURL = NSURL(string: firstURL)
             cell.contentMode = UIViewContentMode.ScaleAspectFill
             cell.imgView.hnk_setImageFromURL(imgURL!)
+            cell.numHold.text = "9"
+            cell.numHold.layer.masksToBounds = true;
+            cell.numHold.layer.cornerRadius = cell.numHold.frame.height/2
+            cell.numLike.text = "24"
+            cell.numLike.layer.masksToBounds = true;
+            cell.numLike.layer.cornerRadius = cell.numLike.frame.height/2
+            cell.numNope.text = "89"
+            cell.numNope.layer.masksToBounds = true;
+            cell.numNope.layer.cornerRadius = cell.numNope.frame.height/2
+            cell.numComment.text = "3"
+            cell.numComment.layer.masksToBounds = true;
+            cell.numComment.layer.cornerRadius = cell.numComment.frame.height/2
+            cell.numViews.text = "125"
         }
         
 //        let asset: PHAsset = self.photosAsset[indexPath.item] as! PHAsset

@@ -51,22 +51,10 @@
                     </notificationCategory>
                     <connections>
                         <outlet property="notificationAlertLabel" destination="XkS-y5-khE" id="49B-RR-99y"/>
-                        <segue destination="td2-30-g0M" kind="relationship" relationship="dynamicNotificationInterface" id="DMW-9Q-HYg"/>
                     </connections>
                 </notificationController>
             </objects>
             <point key="canvasLocation" x="235" y="1001"/>
-        </scene>
-        <!--Dynamic Notification Interface Controller-->
-        <scene sceneID="P1R-zO-zEv">
-            <objects>
-                <controller id="td2-30-g0M">
-                    <items>
-                        <label alignment="left" text="Label" id="iXO-3g-o8o"/>
-                    </items>
-                </controller>
-            </objects>
-            <point key="canvasLocation" x="535" y="1001"/>
         </scene>
     </scenes>
 </document>

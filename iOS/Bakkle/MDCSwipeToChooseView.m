@@ -30,7 +30,6 @@
 #import <QuartzCore/QuartzCore.h>
 #import "ImageLabelView.h"
 
-
 static CGFloat const MDCSwipeToChooseViewHorizontalPadding = 10.f;
 static CGFloat const MDCSwipeToChooseViewTopPadding = 20.f;
 static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
@@ -42,7 +41,6 @@ static CGFloat const ChooseItemViewImageLabelWidth = 42.f;
 @property (nonatomic, strong) MDCSwipeToChooseViewOptions *options;
 @property (nonatomic, strong) UIView *informationView;
 @property (nonatomic, strong) UIView *topUserInfoView;
-
 @end
 
 @implementation MDCSwipeToChooseView
@@ -59,6 +57,7 @@ static CGFloat const ChooseItemViewImageLabelWidth = 42.f;
     CGRect screenBounds = [[UIScreen mainScreen] applicationFrame];
     CGFloat itemWidth = screenBounds.size.width;
     CGFloat itemHeight = screenBounds.size.height;
+    NSLog(@"SCREEN WIDTH and HEIGHT IS: %f, %f", itemWidth, itemHeight);
     
     self = [super initWithFrame:CGRectMake(0, 108, itemWidth, itemHeight-88)];
     if (self) {
@@ -80,9 +79,9 @@ static CGFloat const ChooseItemViewImageLabelWidth = 42.f;
 
 - (void)setupView {
     self.backgroundColor = [UIColor clearColor];
-    self.layer.cornerRadius = 5.f;
+    self.layer.cornerRadius = 0.f;
     self.layer.masksToBounds = YES;
-    self.layer.borderWidth = 2.f;
+    self.layer.borderWidth = 0.f;
     self.layer.borderColor = [UIColor colorWith8BitRed:220.f
                                                  green:220.f
                                                   blue:220.f
@@ -90,13 +89,15 @@ static CGFloat const ChooseItemViewImageLabelWidth = 42.f;
 }
 
 - (void)constructInformationView {
-    CGFloat bottomHeight = 50.f;
+    CGFloat bottomHeight = 95.f;
     CGRect bottomFrame = CGRectMake(0,
                                     CGRectGetHeight(self.bounds) - bottomHeight,
                                     CGRectGetWidth(self.bounds),
                                     bottomHeight);
     _informationView = [[UIView alloc] initWithFrame:bottomFrame];
-    _informationView.backgroundColor = [UIColor whiteColor];
+    
+    
+    _informationView.backgroundColor = [UIColor clearColor];
     _informationView.clipsToBounds = YES;
     _informationView.autoresizingMask = UIViewAutoresizingFlexibleWidth |
     UIViewAutoresizingFlexibleTopMargin;
@@ -105,54 +106,112 @@ static CGFloat const ChooseItemViewImageLabelWidth = 42.f;
     
     [self constructNameLabel];
     [self constructPriceLabel];
+    [self constructDistanceLabel];
+    [self constructMethodLabel];
+}
+
+-(void)constructRatingView {
+    CGRect frame = CGRectMake(CGRectGetWidth(_topUserInfoView.frame)*3/4 - 18, 0, 90, CGRectGetHeight(_topUserInfoView.frame));
+    _ratingView = [[RateView alloc] initWithFrame:frame];
+    
+    self.ratingView.notSelectedImage = [UIImage imageNamed:@"star_none.png"];
+    self.ratingView.halfSelectedImage = [UIImage imageNamed:@"star_half.png"];
+    self.ratingView.fullSelectedImage = [UIImage imageNamed:@"star_full.png"];
+    self.ratingView.editable = NO;
+    self.ratingView.maxRating = 5;
+    
+    [_topUserInfoView addSubview:_ratingView];
+    
 }
 
 -(void)constructTopUserInfoView {
-    CGFloat topHeight = 50.f;
+    CGFloat topHeight = 47.f;
     CGRect topFrame = CGRectMake(0, 0, CGRectGetWidth(self.bounds), topHeight);
     _topUserInfoView = [[UIView alloc] initWithFrame:topFrame];
+    _topUserInfoView.backgroundColor = [UIColor clearColor];
     _topUserInfoView.clipsToBounds = YES;
     _topUserInfoView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
     
-    UIBlurEffect *blur = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
-    UIVisualEffectView *effectView = [[UIVisualEffectView alloc] initWithEffect:blur];
-    effectView.frame = _topUserInfoView.frame;
-    [_topUserInfoView addSubview:effectView];
-    
     [self addSubview:_topUserInfoView];
+    
+    [self constructUserProfileImg];
+    [self constructSellersName];
+    [self constructRatingView];
     
 }
 
+-(void)constructUserProfileImg {
+    CGFloat leftPadding = 11.f;
+    CGRect frame = CGRectMake(leftPadding, 4, 38, 38);
+    _profileImg = [[UIImageView alloc] initWithFrame:frame];
+    _profileImg.layer.cornerRadius = _profileImg.frame.size.width/2;
+    _profileImg.layer.masksToBounds = YES;
+    _profileImg.layer.borderWidth = 0;
+    _profileImg.contentMode = UIViewContentModeScaleAspectFill;
+    [_topUserInfoView addSubview:_profileImg];
+}
+
+- (void)constructDistanceLabel {
+    CGFloat leftPadding = 10.f;
+    CGFloat priceLabel = floorf((CGRectGetWidth(_informationView.frame)- 2*leftPadding)/3);
+    CGRect frame = CGRectMake(priceLabel, floorf(CGRectGetHeight(_informationView.frame)/2), priceLabel , CGRectGetHeight(_informationView.frame)/2);
+    _distLabel = [[UILabel alloc] initWithFrame:frame];
+    _distLabel.text = [NSString stringWithFormat:@"%s", ""];
+    _distLabel.font = [UIFont fontWithName:@"Avenir-Heavy" size:21];
+    _distLabel.textColor = [UIColor whiteColor];
+    _distLabel.textAlignment = NSTextAlignmentCenter;
+    [_informationView addSubview:_distLabel];
+}
+
+- (void)constructMethodLabel {
+    CGFloat leftPadding = 10.f;
+    CGFloat distLabel = floorf((CGRectGetWidth(_informationView.frame)- 2*leftPadding)/3);
+    CGRect frame = CGRectMake(2*distLabel, floorf(CGRectGetHeight(_informationView.frame)/2), distLabel, CGRectGetHeight(_informationView.frame)/2);
+    _methodLabel = [[UILabel alloc] initWithFrame:frame];
+    _methodLabel.text = [NSString stringWithFormat:@"%s", ""];
+    _methodLabel.font = [UIFont fontWithName:@"Avenir-Heavy" size:21];
+    _methodLabel.textColor = [UIColor whiteColor];
+    _methodLabel.textAlignment = NSTextAlignmentCenter;
+    [_informationView addSubview:_methodLabel];
+}
+
+-(void)constructSellersName {
+    CGRect frame = CGRectMake(_profileImg.frame.size.width + 24, 0, (_topUserInfoView.frame.size.width*3/4)-(_profileImg.frame.size.width + 10), CGRectGetHeight(_topUserInfoView.frame));
+    _sellerName = [[UILabel alloc] initWithFrame:frame];
+    _sellerName.text = [NSString stringWithFormat:@"%s", ""];
+    _sellerName.font = [UIFont fontWithName:@"Avenir-Heavy" size:21];
+    _sellerName.textColor = [UIColor whiteColor];
+    _sellerName.textAlignment = NSTextAlignmentLeft;
+    [_topUserInfoView addSubview:_sellerName];
+}
+
 - (void)constructNameLabel {
-    CGFloat leftPadding = 5.f;
+    CGFloat leftPadding = 10.f;
     CGFloat topPadding = 0.f;
     CGRect frame = CGRectMake(leftPadding,
                               topPadding,
-                              floorf(CGRectGetWidth(_informationView.frame)*0.65),
-                              CGRectGetHeight(_informationView.frame) - topPadding);
+                              floorf(CGRectGetWidth(_informationView.frame)) - leftPadding,
+                              CGRectGetHeight(_informationView.frame)/2);
     _nameLabel = [[UILabel alloc] initWithFrame:frame];
+    
     _nameLabel.text = [NSString stringWithFormat:@"%s", ""];
-    _nameLabel.font = [UIFont fontWithName:@"Avenir" size:21];
-    // _nameLabel.font = [UIFont fontWithName:@"Avenir-Black" size:19];
+    _nameLabel.font = [UIFont fontWithName:@"Avenir-Heavy" size:25];
+    _nameLabel.textColor = [UIColor whiteColor];
+    _nameLabel.textAlignment = NSTextAlignmentCenter;
     [_informationView addSubview:_nameLabel];
 }
 
 - (void)constructPriceLabel {
-    NSTextAttachment *attachment = [[NSTextAttachment alloc] init];
-    attachment.image = [UIImage imageNamed:@"dot.png"];
-    NSAttributedString *attachmentString = [NSAttributedString attributedStringWithAttachment:attachment];
-    NSMutableAttributedString *myString = [[NSMutableAttributedString alloc] initWithString:@""];
-    [myString appendAttributedString:attachmentString];
-    
-    _priceLabel.attributedText = myString;
-    
-    CGFloat topPadding = 0.f;
-    CGRect frame = CGRectMake(floorf(CGRectGetWidth(_informationView.frame)*0.65), topPadding, floorf((CGRectGetWidth(_informationView.frame)*0.35))-5, CGRectGetHeight(_informationView.frame) - topPadding);
+    CGFloat leftPadding = 10.f;
+    CGRect frame = CGRectMake(leftPadding, floorf(CGRectGetHeight(_informationView.frame)/2), floorf((CGRectGetWidth(_informationView.frame)- 2*leftPadding)/3), CGRectGetHeight(_informationView.frame)/2);
     _priceLabel = [[UILabel alloc] initWithFrame:frame];
-    _priceLabel.font = [UIFont fontWithName:@"Avenir" size:21];
+    
+    
+    _priceLabel.font = [UIFont fontWithName:@"Avenir-Heavy" size:21];
     [_priceLabel setContentCompressionResistancePriority:800 forAxis:UILayoutConstraintAxisHorizontal];
-    // _priceLabel.font = [UIFont fontWithName:@"Avenir-Black" size:19];
-    _priceLabel.textAlignment = NSTextAlignmentRight;
+    _priceLabel.text = [NSString stringWithFormat:@"%s", ""];
+    _priceLabel.textColor = [UIColor whiteColor];
+    _priceLabel.textAlignment = NSTextAlignmentCenter;
     [_informationView addSubview:_priceLabel];
 }
 
@@ -170,7 +229,18 @@ static CGFloat const ChooseItemViewImageLabelWidth = 42.f;
 }
 
 - (void)constructImageView {
-    _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 50, self.bounds.size.width, self.bounds.size.height-50)];
+    UIVisualEffect *blur;
+    blur = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
+    UIVisualEffectView *effectView;
+    effectView = [[UIVisualEffectView alloc] initWithEffect:blur];
+    _bottomBlurImg = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height)];
+    effectView.frame = _bottomBlurImg.bounds;
+    [_bottomBlurImg setContentMode:UIViewContentModeScaleAspectFill];
+    _bottomBlurImg.clipsToBounds = YES;
+    [_bottomBlurImg addSubview:effectView];
+    [self addSubview:_bottomBlurImg];
+    
+    _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 47, self.bounds.size.width, self.bounds.size.height-140)];
     [_imageView setContentMode:UIViewContentModeScaleAspectFill];
     _imageView.clipsToBounds = YES;
     [self addSubview:_imageView];
@@ -183,10 +253,10 @@ static CGFloat const ChooseItemViewImageLabelWidth = 42.f;
                               MDCSwipeToChooseViewLabelWidth);
     self.holdView = [[UIView alloc] initWithFrame:frame];
     [self.holdView constructBorderedLabelWithText:self.options.holdText
-                                             color:self.options.holdColor
-                                             angle:self.options.holdRotationAngle
-                                          textSize:self.options.holdTextSize
-                                                ];
+                                            color:self.options.holdColor
+                                            angle:self.options.holdRotationAngle
+                                         textSize:self.options.holdTextSize
+     ];
     self.holdView.alpha = 0.f;
     [self.imageView addSubview:self.holdView];
 }
@@ -198,7 +268,7 @@ static CGFloat const ChooseItemViewImageLabelWidth = 42.f;
                                               color:self.options.reportColor
                                               angle:self.options.reportRotationAngle
                                            textSize:self.options.reportTextSize
-        ];
+     ];
     
     self.reportView.alpha =  0.f;
     [self.imageView addSubview:self.reportView];
@@ -214,7 +284,7 @@ static CGFloat const ChooseItemViewImageLabelWidth = 42.f;
                                              color:self.options.likedColor
                                              angle:self.options.likedRotationAngle
                                           textSize:self.options.likedTextSize
-];
+     ];
     self.likedView.alpha = 0.f;
     [self.imageView addSubview:self.likedView];
 }
@@ -230,7 +300,7 @@ static CGFloat const ChooseItemViewImageLabelWidth = 42.f;
                                             color:self.options.nopeColor
                                             angle:self.options.nopeRotationAngle
                                          textSize:self.options.nopeTextSize
-];
+     ];
     self.nopeView.alpha = 0.f;
     [self.imageView addSubview:self.nopeView];
 }
@@ -239,7 +309,7 @@ static CGFloat const ChooseItemViewImageLabelWidth = 42.f;
     MDCSwipeOptions *options = [MDCSwipeOptions new];
     options.delegate = self.options.delegate;
     options.threshold = self.options.threshold;
-
+    
     __block UIView *likedImageView = self.likedView;
     __block UIView *nopeImageView = self.nopeView;
     __block UIView *holdImageView = self.holdView;
@@ -272,12 +342,12 @@ static CGFloat const ChooseItemViewImageLabelWidth = 42.f;
             nopeImageView.alpha = 0.f;
             likedImageView.alpha = 0.f;
         }
-
+        
         if (weakself.options.onPan) {
             weakself.options.onPan(state);
         }
     };
-
+    
     [self mdc_swipeToChooseSetup:options];
 }
 
