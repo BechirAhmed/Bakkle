@@ -9,9 +9,9 @@
 import UIKit
 
 class LoginView: UIViewController, FBLoginViewDelegate {
-    
-    let mainScreenSegueIdentifier = "PushToFeedSegue"
-    
+
+    let mainScreenSegueIdentifier = "PushToFeedSegue" 
+
     @IBOutlet weak var fbLoginView: FBLoginView!
     @IBOutlet weak var fbLoginViewBtn: UIImageView!
     
@@ -29,7 +29,9 @@ class LoginView: UIViewController, FBLoginViewDelegate {
     }
     
     func loginViewShowingLoggedInUser(loginView : FBLoginView!) {
+        println("User Logged in")
         
+        self.performSegueWithIdentifier(self.mainScreenSegueIdentifier, sender: self)
     }
     
     func loginViewFetchedUserInfo(loginView : FBLoginView!, user: FBGraphUser) {
@@ -55,20 +57,20 @@ class LoginView: UIViewController, FBLoginViewDelegate {
                     }
                     
                     dispatch_async(dispatch_get_main_queue()) {
-                        
+
                         // Register for push notifications.
                         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate!
                         appDelegate.registerForPushNotifications(UIApplication.sharedApplication())
                     }
                     
-                    }, fail: {})
+                }, fail: {})
         })
         
         //TODO: Display error on fail?
     }
     
     func loginViewShowingLoggedOutUser(loginView : FBLoginView!) {
-        // Do nothing. Automatically segues back to login view.
+        println("User Logged Out")
     }
     
     func loginView(loginView : FBLoginView!, handleError:NSError) {
