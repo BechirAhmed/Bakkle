@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Social
 import Photos
 import Haneke
 
@@ -121,9 +120,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     
     @IBAction func menuButtonPressed(sender: AnyObject) {
         NSNotificationCenter.defaultCenter().removeObserver(self)
-    
         self.revealViewController().revealToggleAnimated(true)
-        
         //TODO: remove this when feed is updated via push
         requestUpdates()
     }
@@ -312,11 +309,20 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                 let topPrice: String = topItem.valueForKey("price") as! String
                 let location = topItem.valueForKey("location") as! String
                 let topMethod = topItem.valueForKey("method") as! String
+                
                 if location.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
                     let start: CLLocation = CLLocation(locationString: location)
                     if let distance = Bakkle.sharedInstance.distanceTo(start) {
                         var distanceString = distance.rangeString()
-                        self.swipeView.distLabel.text = "\(Int(distance)) miles"
+                        
+                        var attachment: NSTextAttachment = NSTextAttachment()
+                        attachment.image = UIImage(named: "icon-marker75.png")
+                        
+                        var attachmentString : NSAttributedString = NSAttributedString(attachment: attachment)
+                        var myString : NSMutableAttributedString = NSMutableAttributedString(string:  " " + String(stringInterpolationSegment: Int(distance)) + " miles")
+                        myString.insertAttributedString(attachmentString, atIndex: 0)
+                        
+                        self.swipeView.distLabel.attributedText = myString
                     }
                 }
                 
@@ -333,17 +339,35 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                 //println("[FeedScreen] Downloading image (top) \(imgURLs)")
                 self.swipeView.nameLabel.text = topTitle
                 
+                var priceAttachment: NSTextAttachment = NSTextAttachment()
+                priceAttachment.image = UIImage(named: "icon-tags75.png")
+                var attachmentString : NSAttributedString = NSAttributedString(attachment: priceAttachment)
+                
                 if suffix(topPrice, 2) == "00" {
-                    self.swipeView.priceLabel.text = "$\((topPrice as NSString).integerValue)"
+                    let withoutZeroes = "$\((topPrice as NSString).integerValue)"
+                    var myString : NSMutableAttributedString = NSMutableAttributedString(string: " " + withoutZeroes)
+                    myString.insertAttributedString(attachmentString, atIndex: 0)
+                    self.swipeView.priceLabel.attributedText = myString
                 } else {
-                    self.swipeView.priceLabel.text = "$" + (topPrice)
+                    var myString : NSMutableAttributedString = NSMutableAttributedString(string: " $" + (topPrice))
+                    myString.insertAttributedString(attachmentString, atIndex: 0)
+                    self.swipeView.priceLabel.attributedText = myString
                 }
                 
                 if swipeView.imageView.image == nil {
                     self.swipeView.imageView.image = UIImage(named: "loading.png")
                     self.swipeView.userInteractionEnabled = false
                 }
-                self.swipeView.methodLabel.text = topMethod
+                
+                var methodAttachment: NSTextAttachment = NSTextAttachment()
+                methodAttachment.image = UIImage(named: "icon-car75.png")
+                
+                var methodAttachmentString : NSAttributedString = NSAttributedString(attachment: methodAttachment)
+                var methodString : NSMutableAttributedString = NSMutableAttributedString(string: " " + topMethod)
+                methodString.insertAttributedString(methodAttachmentString, atIndex: 0)
+                
+                self.swipeView.methodLabel.attributedText = methodString
+                
                 self.swipeView.sellerName.text = firstName + " " + lastName + "."
                 self.swipeView.ratingView.rating = 3.5
                 dispatch_async(dispatch_get_global_queue(
