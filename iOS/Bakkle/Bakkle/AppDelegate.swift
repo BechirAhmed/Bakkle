@@ -27,6 +27,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject?) -> Bool {
         var wasHandled:Bool = FBAppCall.handleOpenURL(url, sourceApplication: sourceApplication)
+        
+//        // in this example, the URL from which the user came is http://example.com/profile/?12345
+//        // determine if the user was viewing a profile
+//        if ([[url path] isEqualToString:@"/profile"]) {
+//            // switch to profile view controller
+//            [self.tabBarController setSelectedViewController:profileViewController];
+//            // pull the profile id number found in the query string
+//            NSString *profileID = [url query];
+//            // pass profileID to profile view controller
+//            [profileViewController loadProfile:profileID];
+        
         return wasHandled
     }
 
