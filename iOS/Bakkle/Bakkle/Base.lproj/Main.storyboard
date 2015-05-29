@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14A388b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
@@ -1316,9 +1316,9 @@
                                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="2pJ-HO-Uo9">
                                                 <rect key="frame" x="-61" y="-14" width="123" height="29"/>
                                                 <segments>
-                                                    <segment title="PICK UP"/>
-                                                    <segment title="DELIVER"/>
-                                                    <segment title="MEET"/>
+                                                    <segment title="Pickup"/>
+                                                    <segment title="Deliver"/>
+                                                    <segment title="Meet"/>
                                                 </segments>
                                                 <color key="tintColor" red="0.20000000000000001" green="0.80392156859999997" blue="0.37254901959999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             </segmentedControl>
@@ -5757,7 +5757,7 @@
         <image name="mock-rating-stars.png" width="1600" height="373"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Rco-rv-njI"/>
-        <segue reference="Ay4-Il-I0O"/>
+        <segue reference="lk1-fc-YGc"/>
+        <segue reference="Chj-xB-zO6"/>
     </inferredMetricsTieBreakers>
 </document>

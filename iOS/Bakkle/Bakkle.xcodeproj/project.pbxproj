@@ -124,11 +124,13 @@
 		DB5372901B0806B600CC49B7 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB53728F1B0806B600CC49B7 /* FBSDKShareKit.framework */; };
 		DB5372921B0823DD00CC49B7 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB5372911B0823DD00CC49B7 /* Social.framework */; };
 		DB5372941B0832E000CC49B7 /* pendant-tag660.png in Resources */ = {isa = PBXBuildFile; fileRef = DB5372931B0832E000CC49B7 /* pendant-tag660.png */; };
+		DB5DB3561B18E18100734692 /* icon-car75.png in Resources */ = {isa = PBXBuildFile; fileRef = DB5DB3531B18E18100734692 /* icon-car75.png */; };
+		DB5DB3571B18E18100734692 /* icon-marker75.png in Resources */ = {isa = PBXBuildFile; fileRef = DB5DB3541B18E18100734692 /* icon-marker75.png */; };
+		DB5DB3581B18E18100734692 /* icon-tags75.png in Resources */ = {isa = PBXBuildFile; fileRef = DB5DB3551B18E18100734692 /* icon-tags75.png */; };
 		DB6726DF1B1765810014A896 /* RateView.m in Sources */ = {isa = PBXBuildFile; fileRef = DB6726DE1B1765810014A896 /* RateView.m */; };
 		DB6726E91B178F250014A896 /* star_full.png in Resources */ = {isa = PBXBuildFile; fileRef = DB6726E61B178F250014A896 /* star_full.png */; };
 		DB6726EA1B178F250014A896 /* star_half.png in Resources */ = {isa = PBXBuildFile; fileRef = DB6726E71B178F250014A896 /* star_half.png */; };
 		DB6726EB1B178F250014A896 /* star_none.png in Resources */ = {isa = PBXBuildFile; fileRef = DB6726E81B178F250014A896 /* star_none.png */; };
-		DBC2C0CC1B01241A00F56792 /* ImageLabelView.m in Sources */ = {isa = PBXBuildFile; fileRef = DBC2C0CB1B01241A00F56792 /* ImageLabelView.m */; };
 		DBEE0E971AF3C464005E60BD /* item-detail-overlay.png in Resources */ = {isa = PBXBuildFile; fileRef = DBEE0E961AF3C464005E60BD /* item-detail-overlay.png */; };
 		DBEE0E991AF3C855005E60BD /* btb-want.png in Resources */ = {isa = PBXBuildFile; fileRef = DBEE0E981AF3C855005E60BD /* btb-want.png */; };
 		DBEE0E9B1AF3C85C005E60BD /* btn-want-disabled.png in Resources */ = {isa = PBXBuildFile; fileRef = DBEE0E9A1AF3C85C005E60BD /* btn-want-disabled.png */; };
@@ -315,6 +317,9 @@
 		DB53728F1B0806B600CC49B7 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
 		DB5372911B0823DD00CC49B7 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		DB5372931B0832E000CC49B7 /* pendant-tag660.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pendant-tag660.png"; sourceTree = "<group>"; };
+		DB5DB3531B18E18100734692 /* icon-car75.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-car75.png"; sourceTree = "<group>"; };
+		DB5DB3541B18E18100734692 /* icon-marker75.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-marker75.png"; sourceTree = "<group>"; };
+		DB5DB3551B18E18100734692 /* icon-tags75.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-tags75.png"; sourceTree = "<group>"; };
 		DB6726DD1B1765810014A896 /* RateView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RateView.h; sourceTree = "<group>"; };
 		DB6726DE1B1765810014A896 /* RateView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RateView.m; sourceTree = "<group>"; };
 		DB6726E61B178F250014A896 /* star_full.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = star_full.png; sourceTree = "<group>"; };
@@ -328,8 +333,6 @@
 		DB852E891B05748F00665CD4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DB852E8B1B05748F00665CD4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
 		DB852E8D1B05748F00665CD4 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		DBC2C0CA1B01241A00F56792 /* ImageLabelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageLabelView.h; sourceTree = "<group>"; };
-		DBC2C0CB1B01241A00F56792 /* ImageLabelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageLabelView.m; sourceTree = "<group>"; };
 		DBEE0E961AF3C464005E60BD /* item-detail-overlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "item-detail-overlay.png"; sourceTree = "<group>"; };
 		DBEE0E981AF3C855005E60BD /* btb-want.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btb-want.png"; sourceTree = "<group>"; };
 		DBEE0E9A1AF3C85C005E60BD /* btn-want-disabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-want-disabled.png"; sourceTree = "<group>"; };
@@ -489,8 +492,6 @@
 				5EE2C9AE1AB9F0FB0031D8CD /* UIView+MDCBorderedLabel.m */,
 				5EE2C9AF1AB9F0FB0031D8CD /* MDCViewState.h */,
 				5EE2C9B01AB9F0FB0031D8CD /* MDCViewState.m */,
-				DBC2C0CA1B01241A00F56792 /* ImageLabelView.h */,
-				DBC2C0CB1B01241A00F56792 /* ImageLabelView.m */,
 			);
 			name = "MDCSwipe Library";
 			sourceTree = "<group>";
@@ -538,6 +539,9 @@
 		A08D53B71B07DC8E000C406C /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				DB5DB3531B18E18100734692 /* icon-car75.png */,
+				DB5DB3541B18E18100734692 /* icon-marker75.png */,
+				DB5DB3551B18E18100734692 /* icon-tags75.png */,
 				13AB6F9C1B0E3C520092EE61 /* btn-meh.png */,
 				DB5372931B0832E000CC49B7 /* pendant-tag660.png */,
 				5EBDD6971AB211E600C7FBE7 /* Images.xcassets */,
@@ -872,6 +876,7 @@
 				A0B7F4BA1AFB053B00065407 /* blank.png in Resources */,
 				A03508F71AB3C5FB00CA6455 /* logo-green-design-png-white.png in Resources */,
 				A058A2AD1AFDAD96005E7432 /* bkg-chat-text.png in Resources */,
+				DB5DB3581B18E18100734692 /* icon-tags75.png in Resources */,
 				5E1DCC9F1AD44C72002D41FD /* tiger.jpg in Resources */,
 				A058A2A61AFD6024005E7432 /* btn-addItem@2x.png in Resources */,
 				DBEE0E991AF3C855005E60BD /* btb-want.png in Resources */,
@@ -909,6 +914,7 @@
 				DB6726E91B178F250014A896 /* star_full.png in Resources */,
 				A018DF8D1ADE09A500AF5550 /* mock-additem.png in Resources */,
 				A08D53B11B06DBD8000C406C /* icon-x@3x.png in Resources */,
+				DB5DB3571B18E18100734692 /* icon-marker75.png in Resources */,
 				13AB6F9D1B0E3C520092EE61 /* btn-meh.png in Resources */,
 				A0D96F901AD7751E0046DA13 /* mock-settings.png in Resources */,
 				D0FCDFFA1B03B2E0006F76F7 /* btn-addCam.png in Resources */,
@@ -920,6 +926,7 @@
 				A058A2BB1AFDB87F005E7432 /* loading.png in Resources */,
 				A0D96F7B1AD765990046DA13 /* icon-down.png in Resources */,
 				DBEE0E971AF3C464005E60BD /* item-detail-overlay.png in Resources */,
+				DB5DB3561B18E18100734692 /* icon-car75.png in Resources */,
 				A0A200031ACE2F7500A42CD8 /* btn-sign-in40.png in Resources */,
 				A03508F31AB3C34900CA6455 /* SplashScreen-bkg.png in Resources */,
 				A0D96F7A1AD765990046DA13 /* icon-filter.png in Resources */,
@@ -1008,7 +1015,6 @@
 				5EE2C98B1AB9D1730031D8CD /* FeedView.swift in Sources */,
 				A0D96F801AD767BD0046DA13 /* MenuTableView.swift in Sources */,
 				A08D53CA1B0815CB000C406C /* Chat.swift in Sources */,
-				DBC2C0CC1B01241A00F56792 /* ImageLabelView.m in Sources */,
 				A0D96F8A1AD773DB0046DA13 /* FeedFilter.swift in Sources */,
 				5EE2C9B91AB9F0FB0031D8CD /* UIColor+MDCRGB8Bit.m in Sources */,
 				A0D96F881AD772DA0046DA13 /* HoldingPatternView.swift in Sources */,
