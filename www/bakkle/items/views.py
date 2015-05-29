@@ -410,14 +410,41 @@ def get_seller_items(request):
     item_array = []
     # get json representaion of item array
     for item in item_list:
+        # get the conversations involving this item
         conversations = Conversation.objects.filter(item=item)
         convos_with_new_message = 0
         for convo in conversations:
             messages = Message.objects.filter(viewed=None, buyer_seller_flag=True, conversation=convo).count()
             if messages > 0:
                 convos_with_new_message = convos_with_new_message + 1
+
+        # get the buyer items for this item
+        buyer_items = BuyerItem.objects.filter(item=item)
+        number_of_views = 0
+        number_of_meh = 0
+        number_of_want = 0
+        number_of_report = 0
+        number_of_holding = 0
+        for buyer_item in buyer_items:
+            number_of_views = number_of_views + 1
+            if buyer_item.status == BuyerItem.MEH:
+                number_of_meh = number_of_meh + 1
+            elif buyer_item.status == BuyerItem.REPORT:
+                number_of_report = number_of_report + 1
+            elif buyer_item.status == BuyerItem.HOLDING:
+                number_of_holding = number_of_holding + 1
+            elif buyer_item.status == BuyerItem.WANT or buyer_item.status == BuyerItem.NEGOCIATING or buyer_item.status == BuyerItem.PENDING:
+                number_of_want = number_of_want + 1
+
+
+        # create the dictionary for the item and append it
         item_dict = get_item_dictionary(item)
         item_dict['convos_with_new_message'] = convos_with_new_message
+        item_dict['number_of_views'] = number_of_views
+        item_dict['number_of_meh'] = number_of_meh
+        item_dict['number_of_want'] = number_of_want
+        item_dict['number_of_holding'] = number_of_holding
+        item_dict['number_of_report'] = number_of_report
         item_array.append(item_dict)
 
     # create json string
