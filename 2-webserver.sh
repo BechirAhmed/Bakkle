@@ -16,6 +16,9 @@ sudo ./bin/nginx_dissite 000-default
 if [ `hostname` == 'ip-172-31-21-18' ]; then
    sudo ./bin/nginx_ensite com.bakkle.app
 fi
+if [ `hostname` == 'ip-172-31-27-192' ]; then
+   sudo ./bin/nginx_ensite com.bakkle.app
+fi
 if [ `hostname` == 'bakkle' ]; then
    sudo ./bin/nginx_ensite org.rhventures.bakkle
 fi

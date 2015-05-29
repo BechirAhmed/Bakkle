@@ -14,7 +14,6 @@ import Haneke
 class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDelegate, UINavigationControllerDelegate, MDCSwipeToChooseDelegate {
     
     var state : MDCPanState!
-    
     let menuSegue = "presentNav"
     let addItemSegue = "AddItemSegue"
     let itemDetailSegue = "ItemDetailSegue"
@@ -122,26 +121,11 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     
     @IBAction func menuButtonPressed(sender: AnyObject) {
         NSNotificationCenter.defaultCenter().removeObserver(self)
-        if revealViewController().isBeingDismissed() {
-            self.view.userInteractionEnabled = true
-        }
-        else if revealViewController().isBeingPresented() {
-            self.view.userInteractionEnabled = false
-        }
+    
         self.revealViewController().revealToggleAnimated(true)
         
         //TODO: remove this when feed is updated via push
         requestUpdates()
-    }
-    @IBAction func btnX(sender: AnyObject) {
-        if self.swipeView != nil {
-            self.swipeView.mdc_swipe(MDCSwipeDirection.Left)
-        }
-    }
-    @IBAction func btnCheck(sender: AnyObject) {
-        if self.swipeView != nil {
-            self.swipeView.mdc_swipe(MDCSwipeDirection.Right)
-        }
     }
     
     func disableSwipe() {
@@ -332,21 +316,36 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                     let start: CLLocation = CLLocation(locationString: location)
                     if let distance = Bakkle.sharedInstance.distanceTo(start) {
                         var distanceString = distance.rangeString()
-                        self.swipeView.distLabel.text = "\(distanceString) miles"
+                        self.swipeView.distLabel.text = "\(Int(distance)) miles"
                     }
                 }
                 
                 let sellersProfile = topItem.valueForKey("seller") as! NSDictionary
                 let facebookID = sellersProfile.valueForKey("facebook_id") as! String
-                var facebookProfileImgString = "http://graph.facebook.com/\(facebookID)/picture?type=large"
+                let sellersName = sellersProfile.valueForKey("display_name") as! String
+                var facebookProfileImgString = "http://graph.facebook.com/\(facebookID)/picture?width=142&height=142"
+                
+                let dividedName = split(sellersName) {$0 == " "}
+                
+                let firstName = dividedName[0] as String
+                let lastName = String(Array(dividedName[1])[0])
                 
                 //println("[FeedScreen] Downloading image (top) \(imgURLs)")
                 self.swipeView.nameLabel.text = topTitle
-                self.swipeView.priceLabel.text = "$" + (topPrice)
+                
+                if suffix(topPrice, 2) == "00" {
+                    self.swipeView.priceLabel.text = "$\((topPrice as NSString).integerValue)"
+                } else {
+                    self.swipeView.priceLabel.text = "$" + (topPrice)
+                }
+                
                 if swipeView.imageView.image == nil {
                     self.swipeView.imageView.image = UIImage(named: "loading.png")
+                    self.swipeView.userInteractionEnabled = false
                 }
                 self.swipeView.methodLabel.text = topMethod
+                self.swipeView.sellerName.text = firstName + " " + lastName + "."
+                self.swipeView.ratingView.rating = 3.5
                 dispatch_async(dispatch_get_global_queue(
                     Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
                         let firstURL = imgURLs[0] as! String
@@ -359,10 +358,13 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                             }else{
                                 self.swipeView.bottomBlurImg.hnk_setImageFromURL(imgURL!)
                                 self.swipeView.imageView.hnk_setImageFromURL(imgURL!)
+                                self.swipeView.userInteractionEnabled = true
+                                println("IMAGE WIDTH AND HEIGHT ARE: \(self.swipeView.imageView.image?.size.width), \(self.swipeView.imageView.image?.size.height)")
                                 self.swipeView.imageView.contentMode = UIViewContentMode.ScaleAspectFill
+                                println("FACEBOOK PROFILE LINK IS: \(facebookProfileImgString)")
                                 self.swipeView.profileImg.image = UIImage(data: NSData(contentsOfURL: profileImgURL!)!)
                                 
-                                println("IMAGE WIDTH AND HEIGHT ARE: \(self.swipeView.imageView.frame.size.width), \(self.swipeView.imageView.frame.size.height)")
+                                println("IMAGE FRAME WIDTH AND HEIGHT ARE: \(self.swipeView.imageView.frame.size.width), \(self.swipeView.imageView.frame.size.height)")
                             }
                             super.view.addSubview(self.swipeView)
                         }
@@ -377,22 +379,51 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                                 let bottomPrice: String = bottomItem.valueForKey("price") as! String
                                 let bottomMethod = topItem.valueForKey("method") as! String
                                 
+                                let sellersProfile = bottomItem.valueForKey("seller") as! NSDictionary
+                                let facebookID = sellersProfile.valueForKey("facebook_id") as! String
+                                let sellersName = sellersProfile.valueForKey("display_name") as! String
+                                let location = bottomItem.valueForKey("location") as! String
+                                var facebookProfileImgString = "http://graph.facebook.com/\(facebookID)/picture?width=142&height=142"
+                                
+                                let dividedName = split(sellersName) {$0 == " "}
+                                
+                                let firstName = dividedName[0] as String
+                                let lastName = String(Array(dividedName[1])[0])
+                                
+                                if location.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
+                                    let start: CLLocation = CLLocation(locationString: location)
+                                    if let distance = Bakkle.sharedInstance.distanceTo(start) {
+                                        var distanceString = distance.rangeString()
+                                        self.bottomView.distLabel.text = "\(Int(distance)) miles"
+                                    }
+                                }
+                                
                                 self.bottomView.userInteractionEnabled = false
                                 
                                 //println("[FeedScreen] Downloading image (bottom) \(bottomURLs)")
                                 let bottomURL = bottomURLs[0] as! String
                                 let imgURL = NSURL(string: bottomURL)
+                                let profileImgURL = NSURL(string: facebookProfileImgString)
                                 dispatch_async(dispatch_get_main_queue()) {
                                     //println("[FeedScreen] displaying image (bottom)")
                                     if let x = imgURL {
                                         self.bottomView.bottomBlurImg.hnk_setImageFromURL(imgURL!)
                                         self.bottomView.imageView.hnk_setImageFromURL(imgURL!)
+                                        self.bottomView.profileImg.image = UIImage(data: NSData(contentsOfURL: profileImgURL!)!)
                                         
                                         self.bottomView.imageView.contentMode = UIViewContentMode.ScaleAspectFill
                                     }
+                                    
+                                    if suffix(bottomPrice, 2) == "00" {
+                                        self.bottomView.priceLabel.text = "$\((bottomPrice as NSString).integerValue)"
+                                    } else {
+                                        self.bottomView.priceLabel.text = "$" + (bottomPrice)
+                                    }
+
                                     self.bottomView.nameLabel.text = bottomTitle
-                                    self.bottomView.priceLabel.text = "$" + bottomPrice
                                     self.bottomView.methodLabel.text = bottomMethod
+                                    self.bottomView.sellerName.text = firstName + " " + lastName + "."
+                                    self.bottomView.ratingView.rating = 5
                                 }
                             }
                         } else {

@@ -30,6 +30,8 @@ class LoginView: UIViewController, FBLoginViewDelegate {
     
     func loginViewShowingLoggedInUser(loginView : FBLoginView!) {
         println("User Logged in")
+        
+        self.performSegueWithIdentifier(self.mainScreenSegueIdentifier, sender: self)
     }
     
     func loginViewFetchedUserInfo(loginView : FBLoginView!, user: FBGraphUser) {

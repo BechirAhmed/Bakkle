@@ -27,6 +27,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject?) -> Bool {
         var wasHandled:Bool = FBAppCall.handleOpenURL(url, sourceApplication: sourceApplication)
+        
+//        // in this example, the URL from which the user came is http://example.com/profile/?12345
+//        // determine if the user was viewing a profile
+//        if ([[url path] isEqualToString:@"/profile"]) {
+//            // switch to profile view controller
+//            [self.tabBarController setSelectedViewController:profileViewController];
+//            // pull the profile id number found in the query string
+//            NSString *profileID = [url query];
+//            // pass profileID to profile view controller
+//            [profileViewController loadProfile:profileID];
+        
         return wasHandled
     }
 
@@ -113,20 +124,95 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
-    func application(application: UIApplication!, handleWatchKitExtensionRequest userInfo: [NSObject : AnyObject]!, reply: (([NSObject : AnyObject]!) -> Void)!) {
-        println("I WAS CALLED")
-        var dictionary = userInfo as NSDictionary
-        var dict: NSDictionary = NSDictionary()
-        dict.setValue(UIImage(named: "tiger.jpg"), forKey: "image")
-        //dict.setValue("yes", forkey: "success")
+    func application(application: UIApplication, handleWatchKitExtensionRequest userInfo: [NSObject : AnyObject]?, reply: (([NSObject : AnyObject]!) -> Void)!)
+    {
+        var dictionary = userInfo! as NSDictionary
         
         if let type = dictionary.objectForKey("type") as? String
         {
+            if Bakkle.sharedInstance.feedItems.count == 0 {
+                Bakkle.sharedInstance.populateFeed({ () -> () in
+                })
+            }
             if type == "fetch"
             {
-                reply(dict as [NSObject : AnyObject])
-            }
-        }
+                if Bakkle.sharedInstance.feedItems.count > 0{
+                    var topItem = Bakkle.sharedInstance.feedItems[0]
+                    let imgURLs = topItem.valueForKey("image_urls") as! NSArray
+                    let imgURL = imgURLs[0] as! String
+                    let fancyImgURL = NSURL(string: imgURL)
+                    let filename = fancyImgURL?.lastPathComponent
+                    
+                    let topTitle: String = topItem.valueForKey("title") as! String
+                    let topPrice: String = topItem.valueForKey("price") as! String
+                    let topImage: String = filename!
+                    let topItempk = topItem.valueForKey("pk")
+                    let item_id: String = "\(topItempk!)"
+                    reply(["success":"yes","item_title":topTitle,"item_price":topPrice,"item_id":item_id, "item_image":topImage])
+                } else {
+                    reply(["success":"no","item_title":"no item","item_price":"no item","item_id":"no item","item_image":"no item"])
+                }
+            }else if type == "meh" {
+                println("inside meh")
+                if let id = dictionary.objectForKey("item_id") as? NSString {
+                    Bakkle.sharedInstance.markItem("meh", item_id: id.integerValue, success: { () -> () in
+                        }, fail: { () -> () in
+                    })
+                    // Remove the item that was just marked from the view
+                    if Bakkle.sharedInstance.feedItems.count>0 {
+                        Bakkle.sharedInstance.feedItems.removeAtIndex(0)
+                    }
+                    if Bakkle.sharedInstance.feedItems.count > 0{
+                        var topItem = Bakkle.sharedInstance.feedItems[0]
+                        let imgURLs = topItem.valueForKey("image_urls") as! NSArray
+                        let imgURL = imgURLs[0] as! String
+                        let fancyImgURL = NSURL(string: imgURL)
+                        let filename = fancyImgURL?.lastPathComponent
+                        
+                        let topTitle: String = topItem.valueForKey("title") as! String
+                        let topPrice: String = topItem.valueForKey("price") as! String
+                        let topImage: String = filename!
+                        let topItempk = topItem.valueForKey("pk")
+                        let item_id: String = "\(topItempk!)"
+                        reply(["success":"yes","item_title":topTitle,"item_price":topPrice,"item_id":item_id, "item_image":topImage])
+                    } else {
+                        reply(["success":"no","item_title":"no item","item_price":"no item","item_id":"no item","item_image":"no item"])
+                    }
+                }else{
+                    reply(["success":"no","item_title":"no item","item_price":"no item","item_id":"no item","item_image":"no item"])
+                }
+            }else if type == "want" {
+                println("inside want")
+                if let id = dictionary.objectForKey("item_id") as? NSString {
+                    Bakkle.sharedInstance.markItem("want", item_id: id.integerValue, success: { () -> () in
+                        }, fail: { () -> () in
+                    })
+                    // Remove the item that was just marked from the view
+                    if Bakkle.sharedInstance.feedItems.count>0 {
+                        Bakkle.sharedInstance.feedItems.removeAtIndex(0)
+                    }
+                    if Bakkle.sharedInstance.feedItems.count > 0{
+                        var topItem = Bakkle.sharedInstance.feedItems[0]
+                        let imgURLs = topItem.valueForKey("image_urls") as! NSArray
+                        let imgURL = imgURLs[0] as! String
+                        let fancyImgURL = NSURL(string: imgURL)
+                        let filename = fancyImgURL?.lastPathComponent
+                        
+                        let topTitle: String = topItem.valueForKey("title") as! String
+                        let topPrice: String = topItem.valueForKey("price") as! String
+                        let topImage: String = filename!
+                        let topItempk = topItem.valueForKey("pk")
+                        let item_id: String = "\(topItempk!)"
+                        reply(["success":"yes","item_title":topTitle,"item_price":topPrice,"item_id":item_id, "item_image":topImage])
+                    } else {
+                        reply(["success":"no","item_title":"no item","item_price":"no item","item_id":"no item","item_image":"no item"])
+                    }
+                }else{
+                    reply(["success":"no","item_title":"no item","item_price":"no item","item_id":"no item","item_image":"no item"])
+                }
+            }else {
+                println("Got Some other key")
+            }}
     }
 
 }

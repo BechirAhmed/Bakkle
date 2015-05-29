@@ -14,37 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DB852E821B05748F00665CD4"
-               BuildableName = "Bakkle WatchKit App.app"
-               BlueprintName = "Bakkle WatchKit App"
-               ReferencedContainer = "container:Bakkle.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "5EBDD68A1AB211E600C7FBE7"
                BuildableName = "Bakkle.app"
                BlueprintName = "Bakkle"
-               ReferencedContainer = "container:Bakkle.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DB852E731B05748F00665CD4"
-               BuildableName = "Bakkle WatchKit Extension.appex"
-               BlueprintName = "Bakkle WatchKit Extension"
                ReferencedContainer = "container:Bakkle.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -60,9 +32,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "DB852E821B05748F00665CD4"
-            BuildableName = "Bakkle WatchKit App.app"
-            BlueprintName = "Bakkle WatchKit App"
+            BlueprintIdentifier = "5EBDD68A1AB211E600C7FBE7"
+            BuildableName = "Bakkle.app"
+            BlueprintName = "Bakkle"
             ReferencedContainer = "container:Bakkle.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -76,15 +48,15 @@
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       allowLocationSimulation = "YES"
-      launchAutomaticallySubstyle = "4"
-      notificationPayloadFile = "Bakkle WatchKit Extension/PushNotificationPayload.apns">
+      launchAutomaticallySubstyle = "16"
+      notificationPayloadFile = "Bakkle WatchKit Extension/ChatNotification.apns">
       <RemoteRunnable
          runnableDebuggingMode = "2"
          BundleIdentifier = "com.apple.springboard"
          RemotePath = "/Bakkle">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "DB852E821B05748F00665CD4"
+            BlueprintIdentifier = "139096861B0CD5C800C8BB33"
             BuildableName = "Bakkle WatchKit App.app"
             BlueprintName = "Bakkle WatchKit App"
             ReferencedContainer = "container:Bakkle.xcodeproj">
@@ -93,7 +65,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "DB852E821B05748F00665CD4"
+            BlueprintIdentifier = "139096861B0CD5C800C8BB33"
             BuildableName = "Bakkle WatchKit App.app"
             BlueprintName = "Bakkle WatchKit App"
             ReferencedContainer = "container:Bakkle.xcodeproj">
@@ -108,27 +80,16 @@
       useCustomWorkingDirectory = "NO"
       buildConfiguration = "Release"
       debugDocumentVersioning = "YES">
-      <RemoteRunnable
-         runnableDebuggingMode = "2"
-         BundleIdentifier = "com.apple.springboard"
-         RemotePath = "/Bakkle">
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "DB852E821B05748F00665CD4"
-            BuildableName = "Bakkle WatchKit App.app"
-            BlueprintName = "Bakkle WatchKit App"
+            BlueprintIdentifier = "5EBDD68A1AB211E600C7FBE7"
+            BuildableName = "Bakkle.app"
+            BlueprintName = "Bakkle"
             ReferencedContainer = "container:Bakkle.xcodeproj">
          </BuildableReference>
-      </RemoteRunnable>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "DB852E821B05748F00665CD4"
-            BuildableName = "Bakkle WatchKit App.app"
-            BlueprintName = "Bakkle WatchKit App"
-            ReferencedContainer = "container:Bakkle.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

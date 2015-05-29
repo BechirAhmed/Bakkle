@@ -12,6 +12,11 @@ class CollectionThumbnail: UICollectionViewCell {
     
 
     @IBOutlet weak var imgView: UIImageView!
+    @IBOutlet weak var numHold: UILabel!
+    @IBOutlet weak var numNope: UILabel!
+    @IBOutlet weak var numLike: UILabel!
+    @IBOutlet weak var numComment: UILabel!
+    @IBOutlet weak var numViews: UILabel!
     
     func setThumbnailImage(thumbnailImage: UIImage) {
         self.imgView.image = thumbnailImage
