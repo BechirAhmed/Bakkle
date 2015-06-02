@@ -5,6 +5,7 @@
 //  Created by Ishank Tandon on 4/7/15.
 //  Copyright (c) 2015 Ishank Tandon. All rights reserved.
 //
+//  Edited by Patrick Barr 6/2/15.
 
 import UIKit
 import Photos
@@ -44,19 +45,16 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         var tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
         self.view.addGestureRecognizer(tap)
         
+        titleField.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
     }
     
     func priceNextToggle() {
         tagsField.becomeFirstResponder()
     }
-    
-    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-        validateTextFields()
-        if textField == titleField {
-            populateTagsFromTitle()
-        }
-        return true
+    func textFieldDidChange(textField: UITextField) {
+        populateTagsFromTitle(textField.text);
     }
+
     func textFieldDidBeginEditing(textField: UITextField) {
         animateViewMoving(true, moveValue: 215)
         formatPrice()
@@ -168,6 +166,8 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         }
     }
     @IBAction func btnConfirm(sender: AnyObject) {
+        // TODO (bug ID #36 don't post if Title > 30 characters, then alert the user saying "Title must be no longer than 30 characters."
+        // Array(titleField.text) to get the characters separated into an array, then check length
         
         self.titleField.enabled = false
         self.priceField.enabled = false
@@ -285,36 +285,61 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
         picker.dismissViewControllerAnimated(true, completion: nil)
     }
-
-    // TODO: Rewrie this so it removes punctuation and some symbols, splits the phrase into an array, then searches the array
-    // for unwanted common words, then puts into tags field
-    let commonWords = ["the","of","and","a","to","in","is","you","that","it","he","was","for","on","are","as","with","his","they","I","at","be","this","have","from","or","one","had","by","word","but","not","what","all","were","we","when","your","can","said","there","use","an","each","which","she","do","how","their","if","will","up","other","about","out","many","then","them","these","so","some","her","would","make","like","him","into","time","has","look","two","more","write","go","see","number","no","way","could","people","my","than","first","water","been","call","who","oil","its","now","find","long","down","day","did","get","come","made","may","part"]
-    func populateTagsFromTitle() {
-        if titleField.text.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
-            var tags: NSString = (titleField.text as NSString)
-            tags = tags.stringByReplacingOccurrencesOfString(".", withString: "")
-            tags = tags.stringByReplacingOccurrencesOfString(",", withString: "")
-            tags = tags.stringByReplacingOccurrencesOfString(";", withString: "")
-            for word in commonWords {
-                tags = tags.stringByReplacingOccurrencesOfString(word, withString: "")
-            }
-            if tagsField.text.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) == 0 ||
-                tags.substringToIndex(tags.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)-1) == tagsField.text {
-                    tagsField.text = tags as String
-            }
+    
+    let commonWords: Set<NSString> = ["the","of","and","a","to","in","is","you","that","it","he","was","for","on","are","as","with","his","they","i","at","be","this","have","from","or","one","had","by","word","but","not","what","all","were","we","when","your","can","said","there","use","an","each","which","she","do","how","their","if","will","up","other","about","out","many","then","them","these","so","some","her","would","make","like","him","into","time","has","look","two","more","write","go","see","number","no","way","could","people","my","than","first","water","been","call","who","its","now","find","long","down","day","did","get","come","made","may","part", "another", "any", "anybody", "anyone", "anything","both","either", "everybody", "everyone", "everything", "am"]
+    
+    var oldGeneratedTags = ""
+    
+    func populateTagsFromTitle(fullTitle: String) {
+        var generatedTags = generateTags(fullTitle)
+        if tagsField.text == oldGeneratedTags {
+            tagsField.text = generatedTags
+            oldGeneratedTags = generatedTags
+            return
         }
-        println(tagsToHashTags(tagsField.text))
     }
-
-    //TODO run the above sanitizer first, then split and hashtag
-    func tagsToHashTags(tags: String) -> (String) {
-        var tagsArr = split(tags) {$0 == " "}
-        let hashTags = tagsArr.reduce("") {
-            a, b in
-            let comma = (b == tagsArr.last) ? "" : ", "
-            return "#\(a)\(b)\(comma)"
+    
+    func generateTags(fullTitle: String) -> String {
+        var titleFieldText = trimString(fullTitle.uppercaseString)
+        var tagList: Set<String> = Set<String>()
+        
+        titleFieldText = titleFieldText.stringByReplacingOccurrencesOfString(".", withString: " ")
+        titleFieldText = titleFieldText.stringByReplacingOccurrencesOfString(",", withString: " ")
+        titleFieldText = titleFieldText.stringByReplacingOccurrencesOfString(";", withString: " ")
+        titleFieldText = titleFieldText.stringByReplacingOccurrencesOfString("  ", withString: " ")
+        
+        var titleWords = split(titleFieldText) {$0 == " "}
+        var tagOrder = [String]()
+        
+        var index = 0
+        for tag in titleWords {
+            if(!tagList.contains(tag)) {
+                tagOrder.append(tag)
+                tagList.insert(tag)
+            }
+            index++
         }
-        return hashTags
+        
+        var tagFieldText = ""
+        for tag in tagOrder {
+            if !commonWords.contains(tag.lowercaseString) {
+                tagFieldText = tagFieldText +  " \(tag),"
+            }
+        }
+        
+        var size = count(tagFieldText) - 1
+        if size > 0 && Array(tagFieldText)[size] == "," {
+            tagFieldText = tagFieldText.substringToIndex(advance(tagFieldText.startIndex, count(tagFieldText) - 1))
+        }
+        
+        return trimString(tagFieldText)
+    }
+    
+    /**
+     * This is just a short way to trim a string, return and variable may change to NSString if current code doesn't work
+     */
+    func trimString(str: String) -> (String) {
+        return str.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
     }
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
@@ -329,7 +354,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         var conn: FBRequestConnection = FBRequestConnection()
 //        var handler: FBRequestHandler = conn
         
-        var postString: String = "\(titleField.text) \(tagsToHashTags(tagsField.text))"
+        var postString: String = "\(titleField.text) \(tagsField.text))"
 
        // if FBSession
         
