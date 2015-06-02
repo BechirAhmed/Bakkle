@@ -51,6 +51,11 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     func priceNextToggle() {
         tagsField.becomeFirstResponder()
     }
+    
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        return (count(textField.text.utf16) + count(string.utf16) - range.length) <= 30
+    }
+    
     func textFieldDidChange(textField: UITextField) {
         populateTagsFromTitle(textField.text);
     }
