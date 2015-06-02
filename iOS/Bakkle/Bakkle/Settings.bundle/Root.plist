@@ -15,7 +15,10 @@
 				<integer>1</integer>
 				<integer>2</integer>
 				<integer>3</integer>
-				<string>4</string>
+				<integer>4</integer>
+				<integer>5</integer>
+				<integer>6</integer>
+				<integer>7</integer>
 			</array>
 			<key>Key</key>
 			<string>server</string>
@@ -26,8 +29,11 @@
 				<string>Production Server Cluster (default)</string>
 				<string>Production Server (old)</string>
 				<string>Test (Developers only)</string>
-				<string>Patrick (Developers only)</string>
+				<string>Ben (Developers only)</string>
 				<string>Sandor (Developers only)</string>
+				<string>Patrick (Developers only)</string>
+				<string>Xinyu (Developers only)</string>
+				<string>Joe (Developers only)</string>
 			</array>
 		</dict>
 	</array>
