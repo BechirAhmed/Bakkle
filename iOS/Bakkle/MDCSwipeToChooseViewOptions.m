@@ -35,7 +35,7 @@
         _likedRotationAngle = -15.f;
         _likedTextSize = 57.0f;
 
-        _nopeText = [NSLocalizedString(@"MEH", nil) uppercaseString];
+        _nopeText = [NSLocalizedString(@"NOPE", nil) uppercaseString];
         _nopeColor = [UIColor colorWith8BitRed:247.f green:91.f blue:37.f alpha:1.f];
         _nopeRotationAngle = 15.f;
         _nopeTextSize = 60.0f;

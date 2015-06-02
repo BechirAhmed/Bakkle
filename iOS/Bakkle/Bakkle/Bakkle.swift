@@ -566,7 +566,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     }
     
     func prepareTopFeedItemsForWatch(){
-        for item in Bakkle.sharedInstance.feedItems{
+        /*for item in Bakkle.sharedInstance.feedItems{
             let imgURLs = item.valueForKey("image_urls") as! NSArray
             let imgURL = imgURLs[0] as! String
             let fancyImgURL = NSURL(string: imgURL)
@@ -581,7 +581,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             scaledImage.resize(size, completionHandler: { (resizedImage, data) -> () in
                 UIImagePNGRepresentation(resizedImage).writeToURL(shareURL, atomically: true)
             })
-        }
+        }*/
     }
     
     //http://localhost:8000/conversation/send_message/?auth_token=asdfasdfasdfasdf_1&message=I'd like 50 for it.&device_uuid=E6264D84-C395-4132-8C63-3EF051480191&conversation_id=7
@@ -856,6 +856,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             println("[ERRR] \(file.lastPathComponent.stringByDeletingPathExtension):(\(line)): \(logMessage)")
         }
     }
+    
     func info(logMessage: String, functionName: String = __FUNCTION__, line: Int = __LINE__, file: String = __FILE__) {
         var prettyFunc = functionName
 //        var range = functionName.rangeOfString("(")
@@ -872,6 +873,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             println("[INFO] \(file.lastPathComponent.stringByDeletingPathExtension):\(prettyFunc)(\(line)): \(logMessage)")
         }
     }
+    
     func debg(logMessage: String, functionName: String = __FUNCTION__, line: Int = __LINE__, file: String = __FILE__) {
         if self.debug>=3 {
             println("[DEBG] \(file.lastPathComponent.stringByDeletingPathExtension):(\(line)): \(logMessage)")
