@@ -170,7 +170,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             //case 0: self.url_base = "https://PRODCLUSTER-16628191.us-west-2.elb.amazonaws.com/"
             case 1: self.url_base = "https://app.bakkle.com/"
             case 2: self.url_base = "http://bakkle.rhventures.org:8000/"
-            case 3: self.url_base = "http://137.112.63.186:8000/"
+            case 3: self.url_base = "http://wongb.rhventures.org:8000/"
             case 4: self.url_base = "http://10.0.0.118:8000/"
             //case 4: self.url_base = "http://137.112.57.140:8000/"
             default: self.url_base = "https://app.bakkle.com/"
