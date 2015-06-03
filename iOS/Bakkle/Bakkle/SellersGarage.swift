@@ -12,7 +12,7 @@ import Haneke
 
 class SellersGarageView: UIViewController, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
-    let photoCellIdentifier = "PhotoCell"
+    let garageCellIdentifier = "GarageCell"
     var assetCollection: PHAssetCollection!
     var photosAsset: PHFetchResult!
     var assetThumbnailSize: CGSize!
@@ -101,7 +101,7 @@ class SellersGarageView: UIViewController, UICollectionViewDelegate, UICollectio
     }
 
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell : CollectionThumbnail = collectionView.dequeueReusableCellWithReuseIdentifier(photoCellIdentifier, forIndexPath: indexPath) as! CollectionThumbnail
+        let cell : GarageCell = collectionView.dequeueReusableCellWithReuseIdentifier(garageCellIdentifier, forIndexPath: indexPath) as! GarageCell
         cell.contentMode = UIViewContentMode.ScaleAspectFill
         cell.setThumbnailImage(UIImage(named: "blank.png")!)
         //        populateCells(cell)
@@ -139,7 +139,7 @@ class SellersGarageView: UIViewController, UICollectionViewDelegate, UICollectio
         return cell
     }
     
-    func populateCells(cell: CollectionThumbnail) {
+    func populateCells(cell: GarageCell) {
         if Bakkle.sharedInstance.garageItems.count > 0 {
             let topItem = Bakkle.sharedInstance.garageItems[0]
             let imgURLs = topItem.valueForKey("image_urls") as! NSArray
