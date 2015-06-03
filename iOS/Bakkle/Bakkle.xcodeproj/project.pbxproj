@@ -28,7 +28,7 @@
 		5E1FEE6F1AD8432100C08131 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E1FEE6E1AD8432100C08131 /* UIKit.framework */; };
 		5E1FEE7C1AD8641900C08131 /* MDCSwipeToChooseView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E1FEE7B1AD8641900C08131 /* MDCSwipeToChooseView.m */; };
 		5E6760881AD8138600EC899F /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E6760871AD8138600EC899F /* Photos.framework */; };
-		5E78D7E11AF121BA0014ED8F /* CollectionThumbnail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E78D7E01AF121BA0014ED8F /* CollectionThumbnail.swift */; };
+		5E78D7E11AF121BA0014ED8F /* GarageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E78D7E01AF121BA0014ED8F /* GarageCell.swift */; };
 		5E8055421AE541460035521C /* ItemDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E8055411AE541460035521C /* ItemDetails.swift */; };
 		5EBDD6911AB211E600C7FBE7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EBDD6901AB211E600C7FBE7 /* AppDelegate.swift */; };
 		5EBDD6931AB211E600C7FBE7 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EBDD6921AB211E600C7FBE7 /* LoginView.swift */; };
@@ -46,6 +46,7 @@
 		5EE2C9B91AB9F0FB0031D8CD /* UIColor+MDCRGB8Bit.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C9AC1AB9F0FB0031D8CD /* UIColor+MDCRGB8Bit.m */; };
 		5EE2C9BA1AB9F0FB0031D8CD /* UIView+MDCBorderedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C9AE1AB9F0FB0031D8CD /* UIView+MDCBorderedLabel.m */; };
 		5EE2C9BB1AB9F0FB0031D8CD /* MDCViewState.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C9B01AB9F0FB0031D8CD /* MDCViewState.m */; };
+		720510341B1F839B00D059AB /* ListItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720510331B1F839B00D059AB /* ListItemCell.swift */; };
 		A003EB141AD4CCA600EE51A1 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A003EB131AD4CCA600EE51A1 /* SWRevealViewController.m */; };
 		A003EB1A1AD4DB8800EE51A1 /* item-lawnmower.png in Resources */ = {isa = PBXBuildFile; fileRef = A003EB191AD4DB8800EE51A1 /* item-lawnmower.png */; };
 		A014B46C1B09215800E01FEF /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A014B46B1B09215800E01FEF /* ProfileView.swift */; };
@@ -197,7 +198,7 @@
 		5E1FEE7B1AD8641900C08131 /* MDCSwipeToChooseView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDCSwipeToChooseView.m; sourceTree = "<group>"; };
 		5E5CB0A81AB7547800F32BE6 /* Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
 		5E6760871AD8138600EC899F /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
-		5E78D7E01AF121BA0014ED8F /* CollectionThumbnail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionThumbnail.swift; sourceTree = "<group>"; };
+		5E78D7E01AF121BA0014ED8F /* GarageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GarageCell.swift; sourceTree = "<group>"; };
 		5E8055411AE541460035521C /* ItemDetails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemDetails.swift; sourceTree = "<group>"; };
 		5EBDD68B1AB211E600C7FBE7 /* Bakkle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bakkle.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5EBDD68F1AB211E600C7FBE7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -237,6 +238,7 @@
 		5EE2C9B01AB9F0FB0031D8CD /* MDCViewState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDCViewState.m; sourceTree = "<group>"; };
 		5EE2C9B11AB9F0FB0031D8CD /* MDCSwipeToChoose-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MDCSwipeToChoose-Prefix.pch"; path = "../MDCSwipeToChoose-Prefix.pch"; sourceTree = "<group>"; };
 		698270E0C83AB2371F464BB2 /* Pods-Bakkle.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bakkle.release.xcconfig"; path = "Pods/Target Support Files/Pods-Bakkle/Pods-Bakkle.release.xcconfig"; sourceTree = "<group>"; };
+		720510331B1F839B00D059AB /* ListItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemCell.swift; sourceTree = "<group>"; };
 		A003EB121AD4CCA600EE51A1 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
 		A003EB131AD4CCA600EE51A1 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
 		A003EB191AD4DB8800EE51A1 /* item-lawnmower.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "item-lawnmower.png"; sourceTree = "<group>"; };
@@ -414,7 +416,8 @@
 				A06AA9ED1AD609530075D7F7 /* Bakkle.swift */,
 				A08D53B81B07DE26000C406C /* Theme.swift */,
 				5EBDD6901AB211E600C7FBE7 /* AppDelegate.swift */,
-				5E78D7E01AF121BA0014ED8F /* CollectionThumbnail.swift */,
+				5E78D7E01AF121BA0014ED8F /* GarageCell.swift */,
+				720510331B1F839B00D059AB /* ListItemCell.swift */,
 				A058A2AA1AFD8EAD005E7432 /* UIImage+Resize.swift */,
 				A058A2BC1AFEF665005E7432 /* CLLocation+String.swift */,
 				5EBDD6941AB211E600C7FBE7 /* Main.storyboard */,
@@ -1031,13 +1034,14 @@
 				5E8055421AE541460035521C /* ItemDetails.swift in Sources */,
 				5EE2C9BA1AB9F0FB0031D8CD /* UIView+MDCBorderedLabel.m in Sources */,
 				A0D96F821AD76D8E0046DA13 /* BuyersTrunkView.swift in Sources */,
+				720510341B1F839B00D059AB /* ListItemCell.swift in Sources */,
 				A08D53C91B0815CB000C406C /* Account.swift in Sources */,
 				A08D53D51B0815CB000C406C /* User.swift in Sources */,
 				5EE2C9B81AB9F0FB0031D8CD /* MDCGeometry.m in Sources */,
 				DB6726DF1B1765810014A896 /* RateView.m in Sources */,
 				A08D53D61B0815CB000C406C /* UserCell.swift in Sources */,
 				5EE2C9BB1AB9F0FB0031D8CD /* MDCViewState.m in Sources */,
-				5E78D7E11AF121BA0014ED8F /* CollectionThumbnail.swift in Sources */,
+				5E78D7E11AF121BA0014ED8F /* GarageCell.swift in Sources */,
 				A0D96F861AD771900046DA13 /* SellersGarage.swift in Sources */,
 				A06AA9EE1AD609530075D7F7 /* Bakkle.swift in Sources */,
 				5EE2C9B41AB9F0FB0031D8CD /* MDCSwipeOptions.m in Sources */,

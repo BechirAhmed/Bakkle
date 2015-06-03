@@ -22,6 +22,7 @@ from django.db.models import Q
 from decimal import *
 from django import forms
 from django.contrib.admin.views.decorators import staff_member_required
+from django.core.paginator import Paginator
 
 from .models import Items, BuyerItem
 from conversation.models import Conversation, Message
@@ -227,6 +228,9 @@ def spam_item(request):
 @require_POST
 @authenticate
 def feed(request):
+    
+    MAX_ITEM_PRICE = 100;
+    
     auth_token = request.POST.get('auth_token')
     device_uuid = request.POST.get('device_uuid', "")
     user_location = request.POST.get('user_location', "")
@@ -234,8 +238,8 @@ def feed(request):
     # TODO: Use these for filtering
     search_text = request.POST.get('search_text')
     filter_distance = request.POST.get('filter_distance')
-    filter_price = request.POST.get('filter_price')
-    filter_number = request.POST.get('filter_number')
+    filter_price = int(request.POST.get('filter_price'))
+    filter_number = int(request.POST.get('filter_number'))
 
     # Check that all require params are sent and are of the right format
     if (auth_token == None or auth_token.strip() == "" or auth_token.find('_') == -1) or (user_location == None or user_location == ""):
@@ -244,6 +248,8 @@ def feed(request):
 
     # Check that location was in the correct format
     location = ""
+    lat = 0;
+    lon = 0;
     try: 
         positions = user_location.split(",")
         if len(positions) < 2:
@@ -286,24 +292,49 @@ def feed(request):
 
     item_list = None
     users_list = None
+        
     if(search_text != None and search_text != ""):
         search_text.strip()
-        item_list = Items.objects.exclude(buyeritem = items_viewed).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).filter(Q(tags__contains=search_text) | Q(title__contains=search_text)).order_by('-post_date')[:100]
+        
+        #if filter price is 100+, ignore filter.
+        if(filter_price == MAX_ITEM_PRICE):
+            print(1);
+            item_list = Items.objects.exclude(buyeritem = items_viewed).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).filter(Q(tags__contains=search_text) | Q(title__contains=search_text)).order_by('-post_date')
+        else:
+            print(2);
+            item_list = Items.objects.exclude(buyeritem = items_viewed).filter(Q(price__lte = filter_price)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).filter(Q(tags__contains=search_text) | Q(title__contains=search_text)).order_by('-post_date')
     else:
-        item_list = Items.objects.exclude(buyeritem = items_viewed).exclude(Q(seller__pk = buyer_id)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')[:100]
-        users_list = Items.objects.exclude(buyeritem = items_viewed).filter(Q(seller__pk = buyer_id)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')[:1]
+        
+        #if filter price is 100+, ignore filter.
+        if(filter_price == MAX_ITEM_PRICE):
+            print(3);
+            item_list = Items.objects.exclude(buyeritem = items_viewed).exclude(Q(seller__pk = buyer_id)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')
+            users_list = Items.objects.exclude(buyeritem = items_viewed).filter(Q(seller__pk = buyer_id)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')[:1]
+        else:
+            print(4);
+            item_list = Items.objects.exclude(buyeritem = items_viewed).exclude(Q(seller__pk = buyer_id)).filter(Q(price__lte = filter_price)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')
+            users_list = Items.objects.exclude(buyeritem = items_viewed).filter(Q(seller__pk = buyer_id)).filter(Q(price__lte = filter_price)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')[:1]
    
     item_array = []
+    paginatedItems = Paginator(item_list, 100);
     numUserItems = 0;
     
-    for item in users_list:
-        item_dict = get_item_dictionary(item)
-        item_array.append(item_dict);
+    # show user's items before other items - place at top of array.
+    if(not users_list is None and len(users_list) != 0):
+        for item in users_list:
+            item_dict = get_item_dictionary(item)
+            item_array.append(item_dict);
     
-    # get json representaion of item array
-    for item in item_list:
-        item_dict = get_item_dictionary(item)
-        item_array.append(item_dict)
+    # add all other items - show after top user item
+    page = 1;
+    while len(item_array) < filter_number and page <= paginatedItems.num_pages:
+        itemPage = paginatedItems.page(page);
+        for item in itemPage.object_list:
+            if (len(item_array) < filter_number):
+                item_dict = get_item_dictionary(item)
+                item_array.append(item_dict)
+        
+        page += 1;
 
     response_data = { 'status': 1, 'feed': item_array }
     return HttpResponse(json.dumps(response_data), content_type="application/json")
@@ -580,6 +611,7 @@ def handle_delete_file_s3(image_path):
 def imgupload(request, seller_id):
     image_urls = ""
     #import pdb; pdb.set_trace()
+    
     for i in request.FILES.getlist('image'):
         #i = request.FILES['image']
         uhash = hex(random.getrandbits(128))[2:-1]
