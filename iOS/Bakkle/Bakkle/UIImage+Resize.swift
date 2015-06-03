@@ -17,7 +17,7 @@ extension UIImage {
             self.drawInRect(rect)
             let newImage = UIGraphicsGetImageFromCurrentImageContext()
             UIGraphicsEndImageContext()
-            let imageData = UIImageJPEGRepresentation(newImage, 0.7)
+            let imageData = UIImageJPEGRepresentation(newImage, 0.6)
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 completionHandler(resizedImage: newImage, data:imageData)
             })

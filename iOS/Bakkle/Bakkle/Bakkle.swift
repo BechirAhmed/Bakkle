@@ -166,9 +166,9 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         serverNum = NSUserDefaults.standardUserDefaults().integerForKey("server")
         switch( serverNum )
         {
-            case 0: self.url_base = "https://app-cluster.bakkle.com/"
+            case 0: self.url_base = "https://app.bakkle.com/"
             //case 0: self.url_base = "https://PRODCLUSTER-16628191.us-west-2.elb.amazonaws.com/"
-            case 1: self.url_base = "https://app.bakkle.com/"
+            case 1: self.url_base = "https://app-cluster.bakkle.com/"
             case 2: self.url_base = "http://bakkle.rhventures.org:8000/"
             case 3: self.url_base = "http://wongb.rhventures.org:8000/"
             case 4: self.url_base = "http://10.0.0.118:8000/"
