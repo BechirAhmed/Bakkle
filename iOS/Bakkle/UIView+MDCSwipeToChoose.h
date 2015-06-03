@@ -23,9 +23,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <AVFoundation/AVFoundation.h>
 #import "MDCSwipeDirection.h"
 
 @class MDCSwipeOptions;
+
+AVAudioPlayer* sndPlayer;
 
 /*!
  * The `UIView (MDCSwipeToChoose)` category adds a pan gesture recognizer
