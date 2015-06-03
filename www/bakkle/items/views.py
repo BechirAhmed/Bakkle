@@ -285,13 +285,21 @@ def feed(request):
     items_viewed = BuyerItem.objects.filter(buyer = buyer_id)
 
     item_list = None
+    users_list = None
     if(search_text != None and search_text != ""):
         search_text.strip()
-        item_list = Items.objects.exclude(buyeritem = items_viewed).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).filter(Q(tags__contains=search_text) | Q(title__contains=search_text)).order_by('-post_date')
+        item_list = Items.objects.exclude(buyeritem = items_viewed).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).filter(Q(tags__contains=search_text) | Q(title__contains=search_text)).order_by('-post_date')[:100]
     else:
-        item_list = Items.objects.exclude(buyeritem = items_viewed).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')
-
+        item_list = Items.objects.exclude(buyeritem = items_viewed).exclude(Q(seller__pk = buyer_id)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')[:100]
+        users_list = Items.objects.exclude(buyeritem = items_viewed).filter(Q(seller__pk = buyer_id)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')[:1]
+   
     item_array = []
+    numUserItems = 0;
+    
+    for item in users_list:
+        item_dict = get_item_dictionary(item)
+        item_array.append(item_dict);
+    
     # get json representaion of item array
     for item in item_list:
         item_dict = get_item_dictionary(item)
@@ -431,7 +439,7 @@ def get_seller_items(request):
                 number_of_meh = number_of_meh + 1
             elif buyer_item.status == BuyerItem.REPORT:
                 number_of_report = number_of_report + 1
-            elif buyer_item.status == BuyerItem.HOLDING:
+            elif buyer_item.status == BuyerItem.HOLD:
                 number_of_holding = number_of_holding + 1
             elif buyer_item.status == BuyerItem.WANT or buyer_item.status == BuyerItem.NEGOCIATING or buyer_item.status == BuyerItem.PENDING:
                 number_of_want = number_of_want + 1
