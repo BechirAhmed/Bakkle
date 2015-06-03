@@ -1213,7 +1213,7 @@
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                         <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
-                                            <rect key="frame" x="135" y="7.5" width="105" height="29"/>
+                                            <rect key="frame" x="135" y="7" width="105" height="29"/>
                                         </variation>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0sn-gT-lxF">
@@ -1319,11 +1319,14 @@
                                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="2pJ-HO-Uo9">
                                                 <rect key="frame" x="-61" y="-14" width="123" height="29"/>
                                                 <segments>
-                                                    <segment title="Pickup"/>
-                                                    <segment title="Deliver"/>
+                                                    <segment title="Pick up"/>
                                                     <segment title="Meet"/>
+                                                    <segment title="Ship"/>
                                                 </segments>
                                                 <color key="tintColor" red="0.20000000000000001" green="0.80392156859999997" blue="0.37254901959999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                                    <rect key="frame" x="197" y="185" width="170" height="29"/>
+                                                </variation>
                                             </segmentedControl>
                                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2NS-yE-zno">
                                                 <rect key="frame" x="-25" y="-15" width="51" height="31"/>
