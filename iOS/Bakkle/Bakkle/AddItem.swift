@@ -78,6 +78,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
      * *******************************************************************************
      */
     func textViewDidBeginEditing(textView: UITextView) {
+        animateViewMoving(true, moveValue: 215)
         if textView.textColor == AddItem.TAG_PLACEHOLDER_COLOR {
             textView.textColor = UIColor.blackColor()
             textView.text = ""
@@ -91,6 +92,8 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
             textView.textColor = AddItem.TAG_PLACEHOLDER_COLOR
             textView.text = AddItem.TAG_PLACEHOLDER_STR
         }
+        
+        animateViewMoving(false, moveValue: 215)
         
         // There is an odd bug with button text on this call, see
         // disableConfirmButtonHandler() documentation for more information
@@ -202,7 +205,6 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     func dismissKeyboard() {
         self.titleField.resignFirstResponder() || self.priceField.resignFirstResponder() || self.tagsField.resignFirstResponder()
         disableConfirmButtonHandler()
-        
     }
 
     @IBAction func cancelAdd(sender: AnyObject) {
