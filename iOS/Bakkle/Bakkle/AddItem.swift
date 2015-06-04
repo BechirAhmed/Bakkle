@@ -15,11 +15,11 @@ import Social
 //import FBSDKShareKit
 //import FBSDKLoginKit
 
-class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
+class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UICollectionViewDelegate, UICollectionViewDataSource {
     
     let albumName = "Bakkle"
     let listItemCellIdentifier = "ListItemCell"
-    var itemImages: [UIImage]?
+    var itemImages: [UIImage]? = [UIImage]()
     
     @IBOutlet weak var titleField: UITextField!
     @IBOutlet weak var priceField: UITextField!
@@ -264,6 +264,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
             var alert = UIAlertController(title: "Error", message: "There is no camera available", preferredStyle: .Alert)
             alert.addAction(UIAlertAction(title: "Okay", style: .Default, handler: {(alertAction)in
                 alert.dismissViewControllerAnimated(true, completion: nil)
+                
             }))
             self.presentViewController(alert, animated: true, completion: nil)
         }
@@ -273,6 +274,18 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
         picker.dismissViewControllerAnimated(true, completion: nil)
     }
+    
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
+        let chosen = info[UIImagePickerControllerOriginalImage] as! UIImage
+        itemImages?.insert(chosen, atIndex: itemImages!.count)
+        var index: NSIndexPath = NSIndexPath(forRow: itemImages!.count-1, inSection: 0)
+        collectionView.insertItemsAtIndexPaths([index])
+        //        imageView.contentMode = UIViewContentMode.ScaleAspectFill
+        //        imageView.image = chosen
+        dismissViewControllerAnimated(true, completion: nil)
+    }
+
+    
     
     let commonWords: Set<NSString> = ["the","of","and","a","to","in","is","you","that","it","he","was","for","on","are","as","with","his","they","i","at","be","this","have","from","or","one","had","by","word","but","not","what","all","were","we","when","your","can","said","there","use","an","each","which","she","do","how","their","if","will","up","other","about","out","many","then","them","these","so","some","her","would","make","like","him","into","time","has","look","two","more","write","go","see","number","no","way","could","people","my","than","first","water","been","call","who","its","now","find","long","down","day","did","get","come","made","may","part", "another", "any", "anybody", "anyone", "anything","both","either", "everybody", "everyone", "everything", "am"]
     
@@ -330,12 +343,6 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         return str.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
     }
     
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
-        let chosen = info[UIImagePickerControllerOriginalImage] as! UIImage
-//        imageView.contentMode = UIViewContentMode.ScaleAspectFill
-//        imageView.image = chosen
-        dismissViewControllerAnimated(true, completion: nil)
-    }
     
     /* FACEBOOK */
     func postOnWall() {
@@ -343,9 +350,10 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         var postString: String = "\(titleField.text) \(tagsField.text))"
     }
     
+    
+    /* collectionView display multiple pictures */
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection: Int) -> Int {
-        //return self.itemImages!.count
-        return 3
+        return self.itemImages!.count
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
@@ -354,64 +362,35 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         return CGSize(width: screenHeight, height: screenHeight)
     }
     
-//    func collectionView(collectionView: UICollectionView,
-//        layout collectionViewLayout: UICollectionViewLayout,
-//        minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
-//            return 2
-//    }
-//    
-//    func collectionView(collectionView: UICollectionView,
-//        layout collectionViewLayout: UICollectionViewLayout,
-//        minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
-//            return 2
-//    }
+    func collectionView(collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
+            return 5
+    }
+   
+    func collectionView(collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
+            return 2
+    }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell : ListItemCell = collectionView.dequeueReusableCellWithReuseIdentifier(listItemCellIdentifier, forIndexPath: indexPath) as! ListItemCell
-        cell.backgroundColor = UIColor.redColor()
-//        cell.imgView.contentMode = UIViewContentMode.ScaleAspectFill
-//        cell.imgView.clipsToBounds  = true
-//        if let images = self.itemImages {
-//            if images.count != 0 {
-//                cell.imgView.image = images[indexPath.row]
-//            } else {
-//                /* This allows us to test adding image using simulator */
-//                if UIDevice.currentDevice().model == "iPhone Simulator" {
-//                    cell.imgView.image = UIImage(named: "tiger.jpg")
-//                } else {
-//                    cell.imgView.image = UIImage(named: "blank.png")
-//                }
-//            }
-//        }
-        
-        
-        
-        /* Temporary hack for developing to speed testing of add-item */
-        //        if Bakkle.sharedInstance.facebook_id == 686426858203 {
-        //            var formatter: NSDateFormatter = NSDateFormatter()
-        //            formatter.dateFormat = "MM-dd-HH-mm-ss"
-        //            let dateTimePrefix: String = formatter.stringFromDate(NSDate())
-        //            titleField.text = "Tiger \(dateTimePrefix)"
-        //            priceField.text = "34000.00"
-        //            tagsField.text = "tiger predator dictator-loot"
-        //            self.validateTextFields()
-        //            add.enabled = true
-        //        }
-        
-//        cell.contentMode = UIViewContentMode.ScaleAspectFill
-//        cell.imgView.image = UIImage(named: "blank.png")!
-//        
-//        // Load image
-//        if Bakkle.sharedInstance.garageItems != nil {
-//            let item = Bakkle.sharedInstance.garageItems[indexPath.row]
-//            let imgURLs = item.valueForKey("image_urls") as! NSArray
-//            
-//            let firstURL = imgURLs[0] as! String
-//            let imgURL = NSURL(string: firstURL)
-//            cell.contentMode = UIViewContentMode.ScaleAspectFill
-//            cell.imgView.hnk_setImageFromURL(imgURL!)
-//        }
-        
+        //cell.backgroundColor = UIColor.redColor()
+        cell.getImageView().contentMode = UIViewContentMode.ScaleAspectFill
+        cell.imgView.clipsToBounds  = true
+        if let images = self.itemImages {
+            if images.count != 0 {
+                cell.imgView.image = images[indexPath.row]
+            } else {
+                /* This allows us to test adding image using simulator */
+                if UIDevice.currentDevice().model == "iPhone Simulator" {
+                    cell.imgView.image = UIImage(named: "tiger.jpg")
+                } else {
+                    cell.imgView.image = UIImage(named: "blank.png")
+                }
+            }
+        }
         return cell
     }
 

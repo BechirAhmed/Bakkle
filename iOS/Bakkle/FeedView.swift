@@ -587,6 +587,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                 
                 /* This allows us to test add item without camera on simulator */
                 if UIDevice.currentDevice().model == "iPhone Simulator" {
+                    self.chosenImage = UIImage(named: "tiger.jpg")
                     self.performSegueWithIdentifier(self.addItemSegue, sender: self)
                 }
                 
