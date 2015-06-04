@@ -275,8 +275,16 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     func refreshData() {
         dispatch_async(dispatch_get_main_queue()) {
             //TODO: Check items 0 and 1, if they are the same, do nothing
-            self.resetSwipeView()
-            self.updateView()
+            var revealViewController: SWRevealViewController! = self.revealViewController()
+            if revealViewController == nil {
+                self.resetSwipeView()
+                self.updateView()
+            }else{
+                if self.revealViewController().frontViewPosition == FrontViewPosition.Left{
+                    self.resetSwipeView()
+                    self.updateView()
+                }
+            }
         }
     }
     
