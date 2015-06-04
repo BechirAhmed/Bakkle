@@ -275,8 +275,16 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     func refreshData() {
         dispatch_async(dispatch_get_main_queue()) {
             //TODO: Check items 0 and 1, if they are the same, do nothing
-            self.resetSwipeView()
-            self.updateView()
+            var revealViewController: SWRevealViewController! = self.revealViewController()
+            if revealViewController == nil {
+                self.resetSwipeView()
+                self.updateView()
+            }else{
+                if self.revealViewController().frontViewPosition == FrontViewPosition.Left{
+                    self.resetSwipeView()
+                    self.updateView()
+                }
+            }
         }
     }
     
@@ -604,7 +612,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         if segue.identifier == self.addItemSegue {
             let destinationVC = segue.destinationViewController as! AddItem
-            destinationVC.itemImage = self.chosenImage
+            destinationVC.itemImages?.insert(self.chosenImage!, atIndex: 0)
         }
     }
 }

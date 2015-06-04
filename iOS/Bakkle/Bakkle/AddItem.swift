@@ -15,18 +15,19 @@ import Social
 //import FBSDKShareKit
 //import FBSDKLoginKit
 
-class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UITextViewDelegate {
+class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
     
     let albumName = "Bakkle"
-    
-    var itemImage: UIImage?
+    let listItemCellIdentifier = "ListItemCell"
+    var itemImages: [UIImage]?
     
     @IBOutlet weak var titleField: UITextField!
     @IBOutlet weak var priceField: UITextField!
-    @IBOutlet weak var tagsField: UITextView!
+    @IBOutlet weak var tagsField: UITextField!
     @IBOutlet weak var methodControl: UISegmentedControl!
     @IBOutlet weak var add: UIButton!
-    @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var camButtonBackground: UIView!
+    @IBOutlet weak var collectionView: UICollectionView!
 
     @IBOutlet weak var shareToFacebookBtn: UISwitch!
     override func viewDidLoad() {
@@ -36,12 +37,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         priceField.delegate = self
         tagsField.delegate = self
         
-        // sets placeholder text
-        textViewDidEndEditing(tagsField)
-        
-        // -8.0 and -4.0 are y and x respectively, this is just to keep alignment of text
-        // with the fields above it, because UITextView has different edges for scrolling
-        tagsField.contentInset = UIEdgeInsetsMake(-8.0, -5.0, 0, 0.0)
+        camButtonBackground.layer.cornerRadius = camButtonBackground.frame.size.width/2
         
         var nextBtn = UIToolbar(frame: CGRectMake(0, 0, 320, 50))
         nextBtn.barStyle = UIBarStyle.Default
@@ -59,41 +55,8 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         tagsField.becomeFirstResponder()
     }
     
-    static let TAG_PLACEHOLDER_STR = "5 WORDS TO DESCRIBE ITEM"
-    static let red = 201
-    static let green = 201
-    static let blue = 201
-    static let TAG_PLACEHOLDER_COLOR = UIColor(red: CGFloat(AddItem.red)/255.0, green: CGFloat(AddItem.green)/255.0, blue: CGFloat(AddItem.blue)/255.0, alpha: CGFloat(1.0))
-    
-    /**
-     * UITextView does not have placeholder text, the next 2 functions implement a placeholder
-     *
-     * ********************************* IMPORTANT ***********************************
-     *  TO CHANGE THE TEXT OF tagsView WITH CODE, YOU HAVE TO SIMULATE A USER EDITING
-     *  THE FIELD BY CALLING textViewDidBeginEditing(tagsView) AND END BY CALLING THE
-     *   FUNCTION textViewDidEndEditing(tagsView) (mainly for tag population checks)
-     * *******************************************************************************
-     */
-    func textViewDidBeginEditing(textView: UITextView) {
-        if textView.textColor == AddItem.TAG_PLACEHOLDER_COLOR {
-            textView.textColor = UIColor.blackColor()
-            textView.text = ""
-        }
-    }
-    
-    func textViewDidEndEditing(textView: UITextView) {
-        if textView.text.isEmpty {
-            textView.textColor = AddItem.TAG_PLACEHOLDER_COLOR
-            textView.text = AddItem.TAG_PLACEHOLDER_STR
-        }
-    }
-    
-    /**
-     * This func limits the characters in the title, a check was needed to stop other fields from
-     * this limitation.
-     */
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-        return textField == titleField ? (count(textField.text.utf16) + count(string.utf16) - range.length) <= 30 : true
+        return (count(textField.text.utf16) + count(string.utf16) - range.length) <= 30
     }
     
     func textFieldDidChange(textField: UITextField) {
@@ -140,29 +103,6 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(true)
         add.enabled = false
-        if self.itemImage != nil {
-            imageView.image = self.itemImage!
-        } else {
-            /* This allows us to test adding image using simulator */
-            if UIDevice.currentDevice().model == "iPhone Simulator" {
-                imageView.image = UIImage(named: "tiger.jpg")
-            } else {
-                imageView.image = UIImage(named: "blank.png")
-            }
-        }
-        /* Temporary hack for developing to speed testing of add-item */
-//        if Bakkle.sharedInstance.facebook_id == 686426858203 {
-//            var formatter: NSDateFormatter = NSDateFormatter()
-//            formatter.dateFormat = "MM-dd-HH-mm-ss"
-//            let dateTimePrefix: String = formatter.stringFromDate(NSDate())
-//            titleField.text = "Tiger \(dateTimePrefix)"
-//            priceField.text = "34000.00"
-//            tagsField.text = "tiger predator dictator-loot"
-//            self.validateTextFields()
-//            add.enabled = true
-//        }
-        imageView.contentMode = UIViewContentMode.ScaleAspectFill
-        imageView.clipsToBounds = true
         
         // Set default
         methodControl.selectedSegmentIndex = 0;
@@ -175,7 +115,6 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
             println("setting to zero")
         }
     }
-    
     func dismissKeyboard() {
         self.titleField.resignFirstResponder() || self.priceField.resignFirstResponder() || self.tagsField.resignFirstResponder()
         validateTextFields()
@@ -187,7 +126,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     }
     
     func validateTextFields() {
-        if self.titleField.text.isEmpty || self.priceField.text.isEmpty || self.tagsField.text.isEmpty || imageView.image == nil {
+        if self.titleField.text.isEmpty || self.priceField.text.isEmpty || self.tagsField.text.isEmpty || self.itemImages == nil {
             add.enabled = false
         }
         else {
@@ -217,6 +156,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         
         self.titleField.enabled = false
         self.priceField.enabled = false
+        self.tagsField.enabled = false
         self.methodControl.enabled = false
         add.enabled = false
         
@@ -233,62 +173,65 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         let scaledImageWidth: CGFloat = 660.0;
         
         var size = CGSize(width: scaledImageWidth, height: scaledImageWidth*factor)
-        imageView.image!.cropToSquare({(croppedImg:UIImage,cropBob:NSData) -> () in
-
-            croppedImg.resize(size, completionHandler: {(scaledImg:UIImage,scaleBob:NSData) -> () in
-
-                
-                Bakkle.sharedInstance.addItem(self.titleField.text, description: "", location: Bakkle.sharedInstance.user_location, price: self.priceField.text, tags: self.tagsField.text, method: self.methodControl.titleForSegmentAtIndex(self.methodControl.selectedSegmentIndex)!, images:[scaledImg], success: {(item_id:Int?, item_url: String?) -> () in
-                    
-                    if self.shareToFacebookBtn.on {
-                        let topImg = UIImage(named: "pendant-tag660.png")
-                        let bottomImg = scaledImg
-                        let size = scaledImg.size
-                        UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
-                        bottomImg.drawInRect(CGRect(origin: CGPointZero, size: size))
-                        topImg!.drawInRect(CGRect(origin: CGPointZero, size: size))
-                        
-                        let newImg = UIGraphicsGetImageFromCurrentImageContext()
-                        UIGraphicsEndImageContext()
-                        
-                        var photo: FBSDKSharePhoto! = FBSDKSharePhoto()
-                        photo.image = newImg
-                        photo.userGenerated = true
-                        
-                        var cont: FBSDKSharePhotoContent! = FBSDKSharePhotoContent()
-                        cont.photos = [photo]
-                        
-                        var dialog: FBSDKShareDialog = FBSDKShareDialog.showFromViewController(self, withContent: cont, delegate: nil)
-                        
-                    }
-                    
-                    activityView.stopAnimating()
-                    activityView.removeFromSuperview()
-                    
-                    // We just added one so schedule an update.
-                    // TODO: Could just add this to the feed
-                    // and hope we are fairly current.
-                    dispatch_async(dispatch_get_main_queue()) {
-                        Bakkle.sharedInstance.populateFeed({})
-                        
-                        println("item_id=\(item_id) item_url=\(item_url)")
-                        
-                        let alertController = UIAlertController(title: "Bakkle", message:
-                            "Item uploaded to Bakkle.", preferredStyle: UIAlertControllerStyle.Alert)
-                        
-                        let dismissAction = UIAlertAction(title: "OK!", style: UIAlertActionStyle.Default) { (action) -> Void in
-                            self.dismissViewControllerAnimated(true, completion: nil)
-                        }
-                        alertController.addAction(dismissAction)
-                        self.presentViewController(alertController, animated: true, completion: nil)
-                    }
-                    }, fail: {() -> () in
-                        //TODO: Show error popup and close.
+        if let images = self.itemImages {
+            for image in images {
+                image.cropToSquare({(croppedImg:UIImage,cropBob:NSData) -> () in
+                    croppedImg.resize(size, completionHandler: {(scaledImg:UIImage,scaleBob:NSData) -> () in
+                        // add item call
+                    })
                 })
-                
-            })
-        })
+            }
+        }
     }
+    
+//    Bakkle.sharedInstance.addItem(self.titleField.text, description: "", location: Bakkle.sharedInstance.user_location, price: self.priceField.text, tags: self.tagsField.text, method: self.methodControl.titleForSegmentAtIndex(self.methodControl.selectedSegmentIndex)!, image:scaledImg, success: {(item_id:Int?, item_url: String?) -> () in
+//    
+//    if self.shareToFacebookBtn.on {
+//    let topImg = UIImage(named: "pendant-tag660.png")
+//    let bottomImg = scaledImg
+//    let size = scaledImg.size
+//    UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
+//    bottomImg.drawInRect(CGRect(origin: CGPointZero, size: size))
+//    topImg!.drawInRect(CGRect(origin: CGPointZero, size: size))
+//    
+//    let newImg = UIGraphicsGetImageFromCurrentImageContext()
+//    UIGraphicsEndImageContext()
+//    
+//    var photo: FBSDKSharePhoto! = FBSDKSharePhoto()
+//    photo.image = newImg
+//    photo.userGenerated = true
+//    
+//    var cont: FBSDKSharePhotoContent! = FBSDKSharePhotoContent()
+//    cont.photos = [photo]
+//    
+//    var dialog: FBSDKShareDialog = FBSDKShareDialog.showFromViewController(self, withContent: cont, delegate: nil)
+//    
+//    }
+//    
+//    activityView.stopAnimating()
+//    activityView.removeFromSuperview()
+//    
+//    // We just added one so schedule an update.
+//    // TODO: Could just add this to the feed
+//    // and hope we are fairly current.
+//    dispatch_async(dispatch_get_main_queue()) {
+//    Bakkle.sharedInstance.populateFeed({})
+//    
+//    println("item_id=\(item_id) item_url=\(item_url)")
+//    
+//    let alertController = UIAlertController(title: "Bakkle", message:
+//    "Item uploaded to Bakkle.", preferredStyle: UIAlertControllerStyle.Alert)
+//    
+//    let dismissAction = UIAlertAction(title: "OK!", style: UIAlertActionStyle.Default) { (action) -> Void in
+//    self.dismissViewControllerAnimated(true, completion: nil)
+//    }
+//    alertController.addAction(dismissAction)
+//    self.presentViewController(alertController, animated: true, completion: nil)
+//    }
+//    }, fail: {() -> () in
+//    //TODO: Show error popup and close.
+//    })
+    
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         if textField == titleField {
@@ -308,7 +251,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         let fetchOptions = PHFetchOptions()
         fetchOptions.predicate = NSPredicate(format: "title = %@", albumName)
         
-        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
+        if(UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera)){
             //load the camera interface
             var picker : UIImagePickerController = UIImagePickerController()
             picker.sourceType = UIImagePickerControllerSourceType.Camera
@@ -335,31 +278,15 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     
     var oldGeneratedTags = ""
     
-    /**
-     * This generates tags if the last generation of tags is the same as the current tag field
-     * This is only called AFTER the title updates. The check is so that it doesn't overwrite
-     * any user added tags
-     */
     func populateTagsFromTitle(fullTitle: String) {
         var generatedTags = generateTags(fullTitle)
-        
-        // the lines before and after the statement make simulate a user accessing the text field
-        textViewDidBeginEditing(tagsField)
-        if tagsField.text == oldGeneratedTags || tagsField.text == AddItem.TAG_PLACEHOLDER_STR || tagsField.textColor == AddItem.TAG_PLACEHOLDER_COLOR {
+        if tagsField.text == oldGeneratedTags {
             tagsField.text = generatedTags
+            oldGeneratedTags = generatedTags
+            return
         }
-        textViewDidEndEditing(tagsField)
-        
-        oldGeneratedTags = generatedTags
     }
     
-    /**
-     * Generates tags from the title text:
-     * Splits title text into pices by spaces / punctuation
-     * Iterates through the array and makes sure there aren't any duplicate words
-     * Turns the list of words into a string and returns it
-     * Performance should not be a large issue due to the character limit on title
-     */
     func generateTags(fullTitle: String) -> String {
         var titleFieldText = trimString(fullTitle.uppercaseString)
         var tagList: Set<String> = Set<String>()
@@ -374,7 +301,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         
         var index = 0
         for tag in titleWords {
-            if !tagList.contains(tag) {
+            if(!tagList.contains(tag)) {
                 tagOrder.append(tag)
                 tagList.insert(tag)
             }
@@ -405,114 +332,87 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
         let chosen = info[UIImagePickerControllerOriginalImage] as! UIImage
-        imageView.contentMode = UIViewContentMode.ScaleAspectFill
-        imageView.image = chosen
+//        imageView.contentMode = UIViewContentMode.ScaleAspectFill
+//        imageView.image = chosen
         dismissViewControllerAnimated(true, completion: nil)
     }
     
     /* FACEBOOK */
     func postOnWall() {
         var conn: FBRequestConnection = FBRequestConnection()
-//        var handler: FBRequestHandler = conn
-        
         var postString: String = "\(titleField.text) \(tagsField.text))"
-
-       // if FBSession
-        
     }
     
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection: Int) -> Int {
+        //return self.itemImages!.count
+        return 3
+    }
     
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+        
+        let screenHeight = CGRectGetHeight(collectionView.bounds)
+        return CGSize(width: screenHeight, height: screenHeight)
+    }
+    
+//    func collectionView(collectionView: UICollectionView,
+//        layout collectionViewLayout: UICollectionViewLayout,
+//        minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
+//            return 2
+//    }
 //    
-//    if ([[FBSDKAccessToken currentAccessToken] hasGranted:@"publish_actions"]) {
-//    [[[FBSDKGraphRequest alloc]
-//    initWithGraphPath:@"me/feed"
-//    parameters: @{ @"message" : @"hello world"}
-//    HTTPMethod:@"POST"]
-//    startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
-//    if (!error) {
-//    NSLog(@"Post id:%@", result[@"id"]);
-//    }
-//    }];
+//    func collectionView(collectionView: UICollectionView,
+//        layout collectionViewLayout: UICollectionViewLayout,
+//        minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
+//            return 2
 //    }
     
-    
-//- (void)postOnWall
-//{
-//NSNumber *testMessageIndex=[[NSNumber alloc] init];
-//if ([[NSUserDefaults standardUserDefaults] objectForKey:@"testMessageIndex"]==nil)
-//{
-//testMessageIndex=[NSNumber numberWithInt:100];
-//}
-//else
-//{
-//testMessageIndex=[[NSUserDefaults standardUserDefaults] objectForKey:@"testMessageIndex"];
-//};
-//testMessageIndex=[NSNumber numberWithInt:[testMessageIndex intValue]+1];
-//[[NSUserDefaults standardUserDefaults] setObject:testMessageIndex forKey:@"testMessageIndex"];
-//[[NSUserDefaults standardUserDefaults] synchronize];
-//
-//// create the connection object
-//FBRequestConnection *newConnection = [[FBRequestConnection alloc] init];
-//
-//// create a handler block to handle the results of the request for fbid's profile
-//FBRequestHandler handler =
-//^(FBRequestConnection *connection, id result, NSError *error) {
-//// output the results of the request
-//[self requestCompleted:connection forFbID:@"me" result:result error:error];
-//};
-//
-//// create the request object, using the fbid as the graph path
-//// as an alternative the request* static methods of the FBRequest class could
-//// be used to fetch common requests, such as /me and /me/friends
-//NSString *messageString=[NSString stringWithFormat:@"wk test message %i", [testMessageIndex intValue]];
-//FBRequest *request=[[FBRequest alloc] initWithSession:FBSession.activeSession graphPath:@"me/feed" parameters:[NSDictionary dictionaryWithObject:messageString forKey:@"message"] HTTPMethod:@"POST"];
-//
-//// add the request to the connection object, if more than one request is added
-//// the connection object will compose the requests as a batch request; whether or
-//// not the request is a batch or a singleton, the handler behavior is the same,
-//// allowing the application to be dynamic in regards to whether a single or multiple
-//// requests are occuring
-//[newConnection addRequest:request completionHandler:handler];
-//
-//// if there's an outstanding connection, just cancel
-//[self.requestConnection cancel];
-//
-//// keep track of our connection, and start it
-//self.requestConnection = newConnection;
-//[newConnection start];
-//}
-//
-//// FBSample logic
-//// Report any results.  Invoked once for each request we make.
-//- (void)requestCompleted:(FBRequestConnection *)connection
-//forFbID:fbID
-//result:(id)result
-//error:(NSError *)error
-//{
-//NSLog(@"request completed");
-//
-//// not the completion we were looking for...
-//if (self.requestConnection &&
-//connection != self.requestConnection)
-//{
-//NSLog(@"    not the completion we are looking for");
-//return;
-//}
-//
-//// clean this up, for posterity
-//self.requestConnection = nil;
-//
-//if (error)
-//{
-//NSLog(@"    error");
-//UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"error" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
-//// error contains details about why the request failed
-//[alert show];
-//}
-//else
-//{
-//NSLog(@"   ok");
-//};
-//}
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        let cell : ListItemCell = collectionView.dequeueReusableCellWithReuseIdentifier(listItemCellIdentifier, forIndexPath: indexPath) as! ListItemCell
+        cell.backgroundColor = UIColor.redColor()
+//        cell.imgView.contentMode = UIViewContentMode.ScaleAspectFill
+//        cell.imgView.clipsToBounds  = true
+//        if let images = self.itemImages {
+//            if images.count != 0 {
+//                cell.imgView.image = images[indexPath.row]
+//            } else {
+//                /* This allows us to test adding image using simulator */
+//                if UIDevice.currentDevice().model == "iPhone Simulator" {
+//                    cell.imgView.image = UIImage(named: "tiger.jpg")
+//                } else {
+//                    cell.imgView.image = UIImage(named: "blank.png")
+//                }
+//            }
+//        }
+        
+        
+        
+        /* Temporary hack for developing to speed testing of add-item */
+        //        if Bakkle.sharedInstance.facebook_id == 686426858203 {
+        //            var formatter: NSDateFormatter = NSDateFormatter()
+        //            formatter.dateFormat = "MM-dd-HH-mm-ss"
+        //            let dateTimePrefix: String = formatter.stringFromDate(NSDate())
+        //            titleField.text = "Tiger \(dateTimePrefix)"
+        //            priceField.text = "34000.00"
+        //            tagsField.text = "tiger predator dictator-loot"
+        //            self.validateTextFields()
+        //            add.enabled = true
+        //        }
+        
+//        cell.contentMode = UIViewContentMode.ScaleAspectFill
+//        cell.imgView.image = UIImage(named: "blank.png")!
+//        
+//        // Load image
+//        if Bakkle.sharedInstance.garageItems != nil {
+//            let item = Bakkle.sharedInstance.garageItems[indexPath.row]
+//            let imgURLs = item.valueForKey("image_urls") as! NSArray
+//            
+//            let firstURL = imgURLs[0] as! String
+//            let imgURL = NSURL(string: firstURL)
+//            cell.contentMode = UIViewContentMode.ScaleAspectFill
+//            cell.imgView.hnk_setImageFromURL(imgURL!)
+//        }
+        
+        return cell
+    }
 
 }
