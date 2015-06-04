@@ -5,7 +5,7 @@
 //  Created by Ishank Tandon on 4/7/15.
 //  Copyright (c) 2015 Ishank Tandon. All rights reserved.
 //
-//  Edited by Patrick Barr 6/2/15.
+//  Edited by Patrick Barr 6/4/15.
 
 import UIKit
 import Photos
@@ -25,10 +25,12 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     @IBOutlet weak var priceField: UITextField!
     @IBOutlet weak var tagsField: UITextView!
     @IBOutlet weak var methodControl: UISegmentedControl!
-    @IBOutlet weak var add: UIButton!
     @IBOutlet weak var imageView: UIImageView!
-
+    @IBOutlet weak var confirmButton: UIButton!
+    @IBOutlet weak var confirmButtonText: UILabel!
+    @IBOutlet weak var confirmButtonView: UIView!
     @IBOutlet weak var shareToFacebookBtn: UISwitch!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -81,10 +83,20 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         }
     }
     
+    var initRun = true
+    
     func textViewDidEndEditing(textView: UITextView) {
         if textView.text.isEmpty {
             textView.textColor = AddItem.TAG_PLACEHOLDER_COLOR
             textView.text = AddItem.TAG_PLACEHOLDER_STR
+        }
+        
+        // There is an odd bug with button text on this call, see
+        // disableConfirmButtonHandler() documentation for more information
+        if !initRun {
+            disableConfirmButtonHandler()
+        } else {
+            initRun = false
         }
     }
     
@@ -111,7 +123,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         }
         animateViewMoving(false, moveValue: 215)
         formatPrice()
-        validateTextFields()
+        disableConfirmButtonHandler()
     }
     
     func animateViewMoving(up: Bool, moveValue: CGFloat) {
@@ -139,7 +151,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(true)
-        add.enabled = false
+        confirmButton.enabled = false
         if self.itemImage != nil {
             imageView.image = self.itemImage!
         } else {
@@ -178,7 +190,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     
     func dismissKeyboard() {
         self.titleField.resignFirstResponder() || self.priceField.resignFirstResponder() || self.tagsField.resignFirstResponder()
-        validateTextFields()
+        disableConfirmButtonHandler()
         
     }
 
@@ -186,13 +198,38 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
-    func validateTextFields() {
-        if self.titleField.text.isEmpty || self.priceField.text.isEmpty || self.tagsField.text.isEmpty || imageView.image == nil {
-            add.enabled = false
+    static let CONFIRM_BUTTON_RED = 51
+    static let CONFIRM_BUTTON_GREEN = 205
+    static let CONFIRM_BUTTON_BLUE = 95
+    static let CONFIRM_BUTTON_ENABLED_COLOR = UIColor(red: CGFloat(AddItem.CONFIRM_BUTTON_RED)/255.0, green: CGFloat(AddItem.CONFIRM_BUTTON_GREEN)/255.0, blue: CGFloat(AddItem.CONFIRM_BUTTON_BLUE)/255.0, alpha: CGFloat(1.0))
+    static let CONFIRM_BUTTON_DISABLED_COLOR = UIColor.lightGrayColor()
+    
+    /**
+     * @return Bool: true if confirm button is enabled
+     *
+     * This handles disabling and enabling the confirm button (changing color, etc).
+     * Updating the backgroundColor end up placing the confirmButtonText behind the
+     * button itself, so it needs to be brought back infront.
+     *
+     * Note: for some reason, if the background is changed before the first frame of
+     * this page is shown, the text will not be brought to the front until this function
+     * is called again.
+     *
+     * Note 2: To fix the initialization of the above note, the button is initialized as
+     * disabled and gray, the RGB color on the three variables above CONFIRM_BUTTON_RED,
+     * CONFIRM_BUTTON_GREEN, CONFIRM_BUTTON_BLUE will need to be changed if the color is
+     * ever to be changed
+     */
+    func disableConfirmButtonHandler() -> Bool{
+        if tagsField.textColor == AddItem.TAG_PLACEHOLDER_COLOR || self.titleField.text.isEmpty || self.priceField.text.isEmpty || self.tagsField.text.isEmpty || imageView.image == nil {
+            confirmButton.enabled = false
+            confirmButton.backgroundColor = AddItem.CONFIRM_BUTTON_DISABLED_COLOR
+        } else {
+            confirmButton.enabled = true
+            confirmButton.backgroundColor = AddItem.CONFIRM_BUTTON_ENABLED_COLOR
         }
-        else {
-            add.enabled = true
-        }
+        confirmButtonView.bringSubviewToFront(confirmButtonText)
+        return confirmButton.enabled
     }
     
     func formatPrice() {
@@ -211,21 +248,21 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
             }
         }
     }
+    
     @IBAction func btnConfirm(sender: AnyObject) {
-        // TODO (bug ID #36 don't post if Title > 30 characters, then alert the user saying "Title must be no longer than 30 characters."
-        // Array(titleField.text) to get the characters separated into an array, then check length
-        
         self.titleField.enabled = false
         self.priceField.enabled = false
         self.methodControl.enabled = false
-        add.enabled = false
+        
+        confirmButton.enabled = false
+        confirmButton.backgroundColor = AddItem.CONFIRM_BUTTON_DISABLED_COLOR
+        confirmButtonView.bringSubviewToFront(confirmButtonText)
         
         var activityView: UIActivityIndicatorView = UIActivityIndicatorView()
         activityView.center = self.view.center
         activityView.startAnimating()
         self.view.addSubview(activityView)
         
-        //TODO: Add drop down 'Pick-up', 'Delivery', 'Meet', 'Ship'
         //TODO: Get location from GPS
         var factor: CGFloat = 1.0 //imageView.image!.size.height/imageView.image!.size.width
         
@@ -331,7 +368,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         picker.dismissViewControllerAnimated(true, completion: nil)
     }
     
-    let commonWords: Set<NSString> = ["the","of","and","a","to","in","is","you","that","it","he","was","for","on","are","as","with","his","they","i","at","be","this","have","from","or","one","had","by","word","but","not","what","all","were","we","when","your","can","said","there","use","an","each","which","she","do","how","their","if","will","up","other","about","out","many","then","them","these","so","some","her","would","make","like","him","into","time","has","look","two","more","write","go","see","number","no","way","could","people","my","than","first","water","been","call","who","its","now","find","long","down","day","did","get","come","made","may","part", "another", "any", "anybody", "anyone", "anything","both","either", "everybody", "everyone", "everything", "am"]
+    let commonWords: Set<NSString> = ["the", "of", "and", "a", "to", "in", "is", "you", "that", "it", "he", "was", "for", "on", "are", "as", "with", "his", "they", "i", "at", "be", "this", "have", "from", "or", "one", "had", "by", "but", "not", "what", "all", "were", "we", "when", "your", "can", "said", "there", "use", "an", "each", "which", "she", "do", "how", "their", "if", "will", "up", "other", "about", "out", "many", "then", "them", "these", "so", "some", "her"," would", "make", "like", "him", "into", "has", "look", "more", "write", "go", "see", "no", "way", "could", "people", "my", "than", "first", "been", "call", "who","its","now","find","down","day","did","get","come","made","may","part", "another", "any", "anybody", "anyone", "anything", "both", "either", "everybody", "everyone", "everything", "am"]
     
     var oldGeneratedTags = ""
     
