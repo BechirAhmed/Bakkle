@@ -15,21 +15,25 @@ import Social
 //import FBSDKShareKit
 //import FBSDKLoginKit
 
-class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UICollectionViewDelegate, UICollectionViewDataSource {
+class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UITextViewDelegate {
     
     let albumName = "Bakkle"
+    
+    static let MAX_IMAGE_COUNT = 5
     let listItemCellIdentifier = "ListItemCell"
     var itemImages: [UIImage]? = [UIImage]()
     
     @IBOutlet weak var titleField: UITextField!
     @IBOutlet weak var priceField: UITextField!
-    @IBOutlet weak var tagsField: UITextField!
+    @IBOutlet weak var tagsField: UITextView!
     @IBOutlet weak var methodControl: UISegmentedControl!
-    @IBOutlet weak var add: UIButton!
+    @IBOutlet weak var confirmButton: UIButton!
+    @IBOutlet weak var confirmButtonText: UILabel!
+    @IBOutlet weak var confirmButtonView: UIView!
+    @IBOutlet weak var shareToFacebookBtn: UISwitch!
     @IBOutlet weak var camButtonBackground: UIView!
     @IBOutlet weak var collectionView: UICollectionView!
-
-    @IBOutlet weak var shareToFacebookBtn: UISwitch!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -37,7 +41,14 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         priceField.delegate = self
         tagsField.delegate = self
         
+        // sets placeholder text
+        textViewDidEndEditing(tagsField)
         camButtonBackground.layer.cornerRadius = camButtonBackground.frame.size.width/2
+        camButtonBackground.layer.cornerRadius = camButtonBackground.frame.size.width/2
+        
+        // -8.0 and -4.0 are y and x respectively, this is just to keep alignment of text
+        // with the fields above it, because UITextView has different edges for scrolling
+        tagsField.contentInset = UIEdgeInsetsMake(-8.0, -5.0, 0, 0.0)
         
         var nextBtn = UIToolbar(frame: CGRectMake(0, 0, 320, 50))
         nextBtn.barStyle = UIBarStyle.Default
@@ -49,32 +60,90 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         self.view.addGestureRecognizer(tap)
         
         titleField.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
+        priceField.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
     }
     
     func priceNextToggle() {
         tagsField.becomeFirstResponder()
     }
     
-    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-        return (count(textField.text.utf16) + count(string.utf16) - range.length) <= 30
+    static let TAG_PLACEHOLDER_STR = "5 WORDS TO DESCRIBE ITEM"
+    static let red = 201
+    static let green = 201
+    static let blue = 201
+    static let TAG_PLACEHOLDER_COLOR = UIColor(red: CGFloat(AddItem.red)/255.0, green: CGFloat(AddItem.green)/255.0, blue: CGFloat(AddItem.blue)/255.0, alpha: CGFloat(1.0))
+    
+    /**
+     * UITextView does not have placeholder text, the next 2 functions implement a placeholder
+     *
+     * ********************************* IMPORTANT ***********************************
+     *  TO CHANGE THE TEXT OF tagsView WITH CODE, YOU HAVE TO SIMULATE A USER EDITING
+     *  THE FIELD BY CALLING textViewDidBeginEditing(tagsView) AND END BY CALLING THE
+     *   FUNCTION textViewDidEndEditing(tagsView) (mainly for tag population checks)
+     * *******************************************************************************
+     */
+    func textViewDidBeginEditing(textView: UITextView) {
+        animateViewMoving(true, moveValue: 215)
+        if textView.textColor == AddItem.TAG_PLACEHOLDER_COLOR {
+            textView.textColor = UIColor.blackColor()
+            textView.text = ""
+        }
     }
     
+    var initRun = true
+    
+    func textViewDidEndEditing(textView: UITextView) {
+        if textView.text.isEmpty {
+            textView.textColor = AddItem.TAG_PLACEHOLDER_COLOR
+            textView.text = AddItem.TAG_PLACEHOLDER_STR
+        }
+        
+        animateViewMoving(false, moveValue: 215)
+        
+        // There is an odd bug with button text on this call, see
+        // disableConfirmButtonHandler() documentation for more information
+        if !initRun {
+            disableConfirmButtonHandler()
+        } else {
+            initRun = false
+        }
+    }
+    
+    /**
+     * This func limits the characters in the title, a check was needed to stop other fields from
+     * this limitation.
+     */
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        return textField == titleField ? (count(textField.text.utf16) + count(string.utf16) - range.length) <= 30 : true
+    }
+    
+    /**
+     * textFieldDidChange is called by titleField and priceField, specific cases for each
+     */
     func textFieldDidChange(textField: UITextField) {
-        populateTagsFromTitle(textField.text);
+        if (self.titleField == textField) {
+            populateTagsFromTitle(textField.text)
+        } else {
+            disableConfirmButtonHandler();
+        }
     }
 
+    
     func textFieldDidBeginEditing(textField: UITextField) {
         animateViewMoving(true, moveValue: 215)
         formatPrice()
     }
     
+    /**
+     * Handles disable / tag / formatting checks after user taps off of the field
+     */
     func textFieldDidEndEditing(textField: UITextField) {
         if textField == priceField {
             animateViewMoving(false, moveValue: 30)
         }
         animateViewMoving(false, moveValue: 215)
         formatPrice()
-        validateTextFields()
+        disableConfirmButtonHandler()
     }
     
     func animateViewMoving(up: Bool, moveValue: CGFloat) {
@@ -102,7 +171,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(true)
-        add.enabled = false
+        confirmButton.enabled = false
         
         // Set default
         methodControl.selectedSegmentIndex = 0;
@@ -112,26 +181,50 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         animateViewMoving(true, moveValue: 30)
         if priceField.text == "take it!" {
             priceField.text = "0"
-            println("setting to zero")
         }
     }
+    
     func dismissKeyboard() {
         self.titleField.resignFirstResponder() || self.priceField.resignFirstResponder() || self.tagsField.resignFirstResponder()
-        validateTextFields()
-        
+        disableConfirmButtonHandler()
     }
 
     @IBAction func cancelAdd(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
-    func validateTextFields() {
-        if self.titleField.text.isEmpty || self.priceField.text.isEmpty || self.tagsField.text.isEmpty || self.itemImages == nil {
-            add.enabled = false
+    static let CONFIRM_BUTTON_RED = 51
+    static let CONFIRM_BUTTON_GREEN = 205
+    static let CONFIRM_BUTTON_BLUE = 95
+    static let CONFIRM_BUTTON_ENABLED_COLOR = UIColor(red: CGFloat(AddItem.CONFIRM_BUTTON_RED)/255.0, green: CGFloat(AddItem.CONFIRM_BUTTON_GREEN)/255.0, blue: CGFloat(AddItem.CONFIRM_BUTTON_BLUE)/255.0, alpha: CGFloat(1.0))
+    static let CONFIRM_BUTTON_DISABLED_COLOR = UIColor.lightGrayColor()
+    
+    /**
+     * @return Bool: true if confirm button is enabled
+     *
+     * This handles disabling and enabling the confirm button (changing color, etc).
+     * Updating the backgroundColor end up placing the confirmButtonText behind the
+     * button itself, so it needs to be brought back infront.
+     *
+     * Note: for some reason, if the background is changed before the first frame of
+     * this page is shown, the text will not be brought to the front until this function
+     * is called again.
+     *
+     * Note 2: To fix the initialization of the above note, the button is initialized as
+     * disabled and gray, the RGB color on the three variables above CONFIRM_BUTTON_RED,
+     * CONFIRM_BUTTON_GREEN, CONFIRM_BUTTON_BLUE will need to be changed if the color is
+     * ever to be changed
+     */
+    func disableConfirmButtonHandler() -> Bool {
+        if trimString(self.priceField.text) == "$" || tagsField.textColor == AddItem.TAG_PLACEHOLDER_COLOR || self.titleField.text.isEmpty || self.priceField.text.isEmpty || self.tagsField.text.isEmpty || itemImages?.count < 1 || itemImages?.count > AddItem.MAX_IMAGE_COUNT {
+            confirmButton.enabled = false
+            confirmButton.backgroundColor = AddItem.CONFIRM_BUTTON_DISABLED_COLOR
+        } else {
+            confirmButton.enabled = true
+            confirmButton.backgroundColor = AddItem.CONFIRM_BUTTON_ENABLED_COLOR
         }
-        else {
-            add.enabled = true
-        }
+        confirmButtonView.bringSubviewToFront(confirmButtonText)
+        return confirmButton.enabled
     }
     
     func formatPrice() {
@@ -150,22 +243,21 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
             }
         }
     }
+    
     @IBAction func btnConfirm(sender: AnyObject) {
-        // TODO (bug ID #36 don't post if Title > 30 characters, then alert the user saying "Title must be no longer than 30 characters."
-        // Array(titleField.text) to get the characters separated into an array, then check length
-        
         self.titleField.enabled = false
         self.priceField.enabled = false
-        self.tagsField.enabled = false
         self.methodControl.enabled = false
-        add.enabled = false
+        
+        confirmButton.enabled = false
+        confirmButton.backgroundColor = AddItem.CONFIRM_BUTTON_DISABLED_COLOR
+        confirmButtonView.bringSubviewToFront(confirmButtonText)
         
         var activityView: UIActivityIndicatorView = UIActivityIndicatorView()
         activityView.center = self.view.center
         activityView.startAnimating()
         self.view.addSubview(activityView)
         
-        //TODO: Add drop down 'Pick-up', 'Delivery', 'Meet', 'Ship'
         //TODO: Get location from GPS
         var factor: CGFloat = 1.0 //imageView.image!.size.height/imageView.image!.size.width
         
@@ -184,54 +276,54 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         }
     }
     
-//    Bakkle.sharedInstance.addItem(self.titleField.text, description: "", location: Bakkle.sharedInstance.user_location, price: self.priceField.text, tags: self.tagsField.text, method: self.methodControl.titleForSegmentAtIndex(self.methodControl.selectedSegmentIndex)!, image:scaledImg, success: {(item_id:Int?, item_url: String?) -> () in
-//    
-//    if self.shareToFacebookBtn.on {
-//    let topImg = UIImage(named: "pendant-tag660.png")
-//    let bottomImg = scaledImg
-//    let size = scaledImg.size
-//    UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
-//    bottomImg.drawInRect(CGRect(origin: CGPointZero, size: size))
-//    topImg!.drawInRect(CGRect(origin: CGPointZero, size: size))
-//    
-//    let newImg = UIGraphicsGetImageFromCurrentImageContext()
-//    UIGraphicsEndImageContext()
-//    
-//    var photo: FBSDKSharePhoto! = FBSDKSharePhoto()
-//    photo.image = newImg
-//    photo.userGenerated = true
-//    
-//    var cont: FBSDKSharePhotoContent! = FBSDKSharePhotoContent()
-//    cont.photos = [photo]
-//    
-//    var dialog: FBSDKShareDialog = FBSDKShareDialog.showFromViewController(self, withContent: cont, delegate: nil)
-//    
-//    }
-//    
-//    activityView.stopAnimating()
-//    activityView.removeFromSuperview()
-//    
-//    // We just added one so schedule an update.
-//    // TODO: Could just add this to the feed
-//    // and hope we are fairly current.
-//    dispatch_async(dispatch_get_main_queue()) {
-//    Bakkle.sharedInstance.populateFeed({})
-//    
-//    println("item_id=\(item_id) item_url=\(item_url)")
-//    
-//    let alertController = UIAlertController(title: "Bakkle", message:
-//    "Item uploaded to Bakkle.", preferredStyle: UIAlertControllerStyle.Alert)
-//    
-//    let dismissAction = UIAlertAction(title: "OK!", style: UIAlertActionStyle.Default) { (action) -> Void in
-//    self.dismissViewControllerAnimated(true, completion: nil)
-//    }
-//    alertController.addAction(dismissAction)
-//    self.presentViewController(alertController, animated: true, completion: nil)
-//    }
-//    }, fail: {() -> () in
-//    //TODO: Show error popup and close.
-//    })
-    
+    //    Bakkle.sharedInstance.addItem(self.titleField.text, description: "", location: Bakkle.sharedInstance.user_location, price: self.priceField.text, tags: self.tagsField.text, method: self.methodControl.titleForSegmentAtIndex(self.methodControl.selectedSegmentIndex)!, image:scaledImg, success: {(item_id:Int?, item_url: String?) -> () in
+    //
+    //    if self.shareToFacebookBtn.on {
+    //    let topImg = UIImage(named: "pendant-tag660.png")
+    //    let bottomImg = scaledImg
+    //    let size = scaledImg.size
+    //    UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
+    //    bottomImg.drawInRect(CGRect(origin: CGPointZero, size: size))
+    //    topImg!.drawInRect(CGRect(origin: CGPointZero, size: size))
+    //
+    //    let newImg = UIGraphicsGetImageFromCurrentImageContext()
+    //    UIGraphicsEndImageContext()
+    //
+    //    var photo: FBSDKSharePhoto! = FBSDKSharePhoto()
+    //    photo.image = newImg
+    //    photo.userGenerated = true
+    //
+    //    var cont: FBSDKSharePhotoContent! = FBSDKSharePhotoContent()
+    //    cont.photos = [photo]
+    //
+    //    var dialog: FBSDKShareDialog = FBSDKShareDialog.showFromViewController(self, withContent: cont, delegate: nil)
+    //
+    //    }
+    //
+    //    activityView.stopAnimating()
+    //    activityView.removeFromSuperview()
+    //
+    //    // We just added one so schedule an update.
+    //    // TODO: Could just add this to the feed
+    //    // and hope we are fairly current.
+    //    dispatch_async(dispatch_get_main_queue()) {
+    //    Bakkle.sharedInstance.populateFeed({})
+    //
+    //    println("item_id=\(item_id) item_url=\(item_url)")
+    //
+    //    let alertController = UIAlertController(title: "Bakkle", message:
+    //    "Item uploaded to Bakkle.", preferredStyle: UIAlertControllerStyle.Alert)
+    //
+    //    let dismissAction = UIAlertAction(title: "OK!", style: UIAlertActionStyle.Default) { (action) -> Void in
+    //    self.dismissViewControllerAnimated(true, completion: nil)
+    //    }
+    //    alertController.addAction(dismissAction)
+    //    self.presentViewController(alertController, animated: true, completion: nil)
+    //    }
+    //    }, fail: {() -> () in
+    //    //TODO: Show error popup and close.
+    //    })
+
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         if textField == titleField {
@@ -251,7 +343,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         let fetchOptions = PHFetchOptions()
         fetchOptions.predicate = NSPredicate(format: "title = %@", albumName)
         
-        if(UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera)){
+        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
             //load the camera interface
             var picker : UIImagePickerController = UIImagePickerController()
             picker.sourceType = UIImagePickerControllerSourceType.Camera
@@ -287,19 +379,36 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
 
     
     
-    let commonWords: Set<NSString> = ["the","of","and","a","to","in","is","you","that","it","he","was","for","on","are","as","with","his","they","i","at","be","this","have","from","or","one","had","by","word","but","not","what","all","were","we","when","your","can","said","there","use","an","each","which","she","do","how","their","if","will","up","other","about","out","many","then","them","these","so","some","her","would","make","like","him","into","time","has","look","two","more","write","go","see","number","no","way","could","people","my","than","first","water","been","call","who","its","now","find","long","down","day","did","get","come","made","may","part", "another", "any", "anybody", "anyone", "anything","both","either", "everybody", "everyone", "everything", "am"]
+ 
+    let commonWords: Set<NSString> = ["the", "of", "and", "a", "to", "in", "is", "you", "that", "it", "he", "was", "for", "on", "are", "as", "with", "his", "they", "i", "at", "be", "this", "have", "from", "or", "one", "had", "by", "but", "not", "what", "all", "were", "we", "when", "your", "can", "said", "there", "use", "an", "each", "which", "she", "do", "how", "their", "if", "will", "up", "other", "about", "out", "many", "then", "them", "these", "so", "some", "her"," would", "make", "like", "him", "into", "has", "look", "more", "write", "go", "see", "no", "way", "could", "people", "my", "than", "first", "been", "call", "who","its","now","find","down","day","did","get","come","made","may","part", "another", "any", "anybody", "anyone", "anything", "both", "either", "everybody", "everyone", "everything", "am"]
     
     var oldGeneratedTags = ""
     
+    /**
+     * This generates tags if the last generation of tags is the same as the current tag field
+     * This is only called AFTER the title updates. The check is so that it doesn't overwrite
+     * any user added tags
+     */
     func populateTagsFromTitle(fullTitle: String) {
         var generatedTags = generateTags(fullTitle)
-        if tagsField.text == oldGeneratedTags {
+        
+        // the lines before and after the statement make simulate a user accessing the text field
+        textViewDidBeginEditing(tagsField)
+        if tagsField.text == oldGeneratedTags || tagsField.text == AddItem.TAG_PLACEHOLDER_STR || tagsField.textColor == AddItem.TAG_PLACEHOLDER_COLOR {
             tagsField.text = generatedTags
-            oldGeneratedTags = generatedTags
-            return
         }
+        textViewDidEndEditing(tagsField)
+        
+        oldGeneratedTags = generatedTags
     }
     
+    /**
+     * Generates tags from the title text:
+     * Splits title text into pices by spaces / punctuation
+     * Iterates through the array and makes sure there aren't any duplicate words
+     * Turns the list of words into a string and returns it
+     * Performance should not be a large issue due to the character limit on title
+     */
     func generateTags(fullTitle: String) -> String {
         var titleFieldText = trimString(fullTitle.uppercaseString)
         var tagList: Set<String> = Set<String>()
@@ -314,7 +423,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         
         var index = 0
         for tag in titleWords {
-            if(!tagList.contains(tag)) {
+            if !tagList.contains(tag) {
                 tagOrder.append(tag)
                 tagList.insert(tag)
             }
@@ -347,7 +456,12 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     /* FACEBOOK */
     func postOnWall() {
         var conn: FBRequestConnection = FBRequestConnection()
+//        var handler: FBRequestHandler = conn
+        
         var postString: String = "\(titleField.text) \(tagsField.text))"
+
+       // if FBSession
+        
     }
     
     
@@ -377,20 +491,17 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell : ListItemCell = collectionView.dequeueReusableCellWithReuseIdentifier(listItemCellIdentifier, forIndexPath: indexPath) as! ListItemCell
         //cell.backgroundColor = UIColor.redColor()
-        cell.getImageView().contentMode = UIViewContentMode.ScaleAspectFill
+        cell.imgView.contentMode = UIViewContentMode.ScaleAspectFill
         cell.imgView.clipsToBounds  = true
         if let images = self.itemImages {
-            if images.count != 0 {
-                cell.imgView.image = images[indexPath.row]
+            /* This allows us to test adding image using simulator */
+            if UIDevice.currentDevice().model == "iPhone Simulator" {
+                cell.imgView.image = UIImage(named: "tiger.jpg")
             } else {
-                /* This allows us to test adding image using simulator */
-                if UIDevice.currentDevice().model == "iPhone Simulator" {
-                    cell.imgView.image = UIImage(named: "tiger.jpg")
-                } else {
-                    cell.imgView.image = UIImage(named: "blank.png")
-                }
+                cell.imgView.image = images[indexPath.row]
             }
         }
+    
         return cell
     }
 

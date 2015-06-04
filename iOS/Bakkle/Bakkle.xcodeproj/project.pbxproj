@@ -409,7 +409,6 @@
 		5EBDD68D1AB211E600C7FBE7 /* Bakkle */ = {
 			isa = PBXGroup;
 			children = (
-				A0B765431B0E3A2700107F7E /* Bakkle.entitlements */,
 				A08D53BA1B0815A9000C406C /* Chat */,
 				A08D53B41B07DC2C000C406C /* Views */,
 				A08D53AE1B06D850000C406C /* Common.swift */,
@@ -430,6 +429,7 @@
 		5EBDD68E1AB211E600C7FBE7 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				A0B765431B0E3A2700107F7E /* Bakkle.entitlements */,
 				5E5CB0A81AB7547800F32BE6 /* Bridging-Header.h */,
 				A0A5F71C1AEDAE54001A7D7A /* Settings.bundle */,
 				A0A2FFF41ACE232F00A42CD8 /* LoginScreen-bkg.png */,
