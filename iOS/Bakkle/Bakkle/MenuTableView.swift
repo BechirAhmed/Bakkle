@@ -10,13 +10,38 @@ import UIKit
 
 class MenuTableController: UITableViewController {
     
+    var backView: UIView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         /* Reveal */
         if self.revealViewController() != nil {
-             self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
+            self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         }
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        /* set up the function of pushing back frontViewController when tapped frontViewController */
+        if self.revealViewController() != nil {
+            self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
+            
+            backView = UIView(frame: self.revealViewController().frontViewController.view.frame)
+            //backView.backgroundColor = UIColor(red: CGFloat(1.0), green: CGFloat(0.0), blue: CGFloat(0.0), alpha: CGFloat(1.0))
+            self.revealViewController().frontViewController.view.addSubview(backView)
+            self.revealViewController().frontViewController.view.addGestureRecognizer(self.revealViewController().tapGestureRecognizer())
+        }
+    }
+    
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        if self.revealViewController() != nil {
+           backView.removeFromSuperview()
+        }
+        
     }
     
     override func didReceiveMemoryWarning() {
