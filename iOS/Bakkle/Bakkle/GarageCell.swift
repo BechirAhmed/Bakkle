@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CollectionThumbnail: UICollectionViewCell {
+class GarageCell: UICollectionViewCell {
     
 
     @IBOutlet weak var imgView: UIImageView!

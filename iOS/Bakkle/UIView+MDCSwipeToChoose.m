@@ -125,6 +125,16 @@ const void * const MDCViewStateKey = &MDCViewStateKey;
             CGPoint translation = MDCCGPointSubtract(self.center,
                                                      self.mdc_viewState.originalCenter);
             [self mdc_exitSuperviewFromTranslation:translation];
+
+            BOOL enableSounds = [[NSUserDefaults standardUserDefaults] boolForKey:@"enableSounds"];
+            if (enableSounds==YES) {
+                if (sndPlayer == nil) {
+                    sndPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/cartoon_fast_whoosh_good_for_karate_chop_other_fast_movement_or_swipe_001.mp3", [[NSBundle mainBundle] resourcePath]]] error:nil];
+                    [sndPlayer setNumberOfLoops:1];
+                    [sndPlayer setVolume:1.0];
+                }
+                [sndPlayer play];
+            }
             break;
         }
         case MDCSwipeDirectionNone:
@@ -275,14 +285,6 @@ const void * const MDCViewStateKey = &MDCViewStateKey;
     } else if (panGestureRecognizer.state == UIGestureRecognizerStateEnded) {
         // Either move the view back to its original position or move it off screen.
         [self mdc_finalizePosition];
-        
-        if (sndPlayer == nil) {
-            sndPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/cartoon_fast_whoosh_good_for_karate_chop_other_fast_movement_or_swipe_001.mp3", [[NSBundle mainBundle] resourcePath]]] error:nil];
-            [sndPlayer setNumberOfLoops:1];
-            [sndPlayer setVolume:1.0];
-        }
-        [sndPlayer play];
-        
     } else {
         // Update the position and transform. Then, notify any listeners of
         // the updates via the pan block.
