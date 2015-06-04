@@ -116,19 +116,24 @@ class SellersGarageView: UIViewController, UICollectionViewDelegate, UICollectio
             let imgURL = NSURL(string: firstURL)
             cell.contentMode = UIViewContentMode.ScaleAspectFill
             cell.imgView.hnk_setImageFromURL(imgURL!)
-            cell.numHold.text = item.valueForKey("number_of_holding") as? String
+            //cell.numHold.text = item.valueForKey("number_of_holding") as? String
+            cell.numHold.text = "12"
             cell.numHold.layer.masksToBounds = true;
             cell.numHold.layer.cornerRadius = cell.numHold.frame.height/2
-            cell.numLike.text = item.valueForKey("number_of_want") as? String
+            //cell.numLike.text = item.valueForKey("number_of_want") as? String
+            cell.numLike.text = "12"
             cell.numLike.layer.masksToBounds = true;
             cell.numLike.layer.cornerRadius = cell.numLike.frame.height/2
-            cell.numNope.text = item.valueForKey("number_of_meh") as? String
+            //cell.numNope.text = item.valueForKey("number_of_meh") as? String
+            cell.numNope.text = "12"
             cell.numNope.layer.masksToBounds = true;
             cell.numNope.layer.cornerRadius = cell.numNope.frame.height/2
-            cell.numComment.text = item.valueForKey("number_of_report") as? String
+            //cell.numComment.text = item.valueForKey("number_of_report") as? String
+            cell.numComment.text = "12"
             cell.numComment.layer.masksToBounds = true;
             cell.numComment.layer.cornerRadius = cell.numComment.frame.height/2
-            cell.numViews.text = item.valueForKey("number_of_views") as? String
+            //cell.numViews.text = item.valueForKey("number_of_views") as? String
+            cell.numViews.text = "12"
         }
         
 //        let asset: PHAsset = self.photosAsset[indexPath.item] as! PHAsset
@@ -199,7 +204,7 @@ class SellersGarageView: UIViewController, UICollectionViewDelegate, UICollectio
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         if segue.identifier == self.addItemSegue {
             let destinationVC = segue.destinationViewController as! AddItem
-            destinationVC.itemImage = self.chosenImage
+            destinationVC.itemImages?.insert(self.chosenImage!, atIndex: 0)
         }
     }
     

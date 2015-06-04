@@ -604,7 +604,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         if segue.identifier == self.addItemSegue {
             let destinationVC = segue.destinationViewController as! AddItem
-            destinationVC.itemImage = self.chosenImage
+            destinationVC.itemImages?.insert(self.chosenImage!, atIndex: 0)
         }
     }
 }
