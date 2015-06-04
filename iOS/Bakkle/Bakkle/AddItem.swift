@@ -15,7 +15,7 @@ import Social
 //import FBSDKShareKit
 //import FBSDKLoginKit
 
-class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
+class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UITextViewDelegate {
     
     let albumName = "Bakkle"
     
@@ -23,7 +23,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     
     @IBOutlet weak var titleField: UITextField!
     @IBOutlet weak var priceField: UITextField!
-    @IBOutlet weak var tagsField: UITextField!
+    @IBOutlet weak var tagsField: UITextView!
     @IBOutlet weak var methodControl: UISegmentedControl!
     @IBOutlet weak var add: UIButton!
     @IBOutlet weak var imageView: UIImageView!
@@ -35,6 +35,13 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         titleField.delegate = self
         priceField.delegate = self
         tagsField.delegate = self
+        
+        // sets placeholder text
+        textViewDidEndEditing(tagsField)
+        
+        // -8.0 and -4.0 are y and x respectively, this is just to keep alignment of text
+        // with the fields above it, because UITextView has different edges for scrolling
+        tagsField.contentInset = UIEdgeInsetsMake(-8.0, -5.0, 0, 0.0)
         
         var nextBtn = UIToolbar(frame: CGRectMake(0, 0, 320, 50))
         nextBtn.barStyle = UIBarStyle.Default
@@ -52,8 +59,41 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         tagsField.becomeFirstResponder()
     }
     
+    static let TAG_PLACEHOLDER_STR = "5 WORDS TO DESCRIBE ITEM"
+    static let red = 201
+    static let green = 201
+    static let blue = 201
+    static let TAG_PLACEHOLDER_COLOR = UIColor(red: CGFloat(AddItem.red)/255.0, green: CGFloat(AddItem.green)/255.0, blue: CGFloat(AddItem.blue)/255.0, alpha: CGFloat(1.0))
+    
+    /**
+     * UITextView does not have placeholder text, the next 2 functions implement a placeholder
+     *
+     * ********************************* IMPORTANT ***********************************
+     *  TO CHANGE THE TEXT OF tagsView WITH CODE, YOU HAVE TO SIMULATE A USER EDITING
+     *  THE FIELD BY CALLING textViewDidBeginEditing(tagsView) AND END BY CALLING THE
+     *   FUNCTION textViewDidEndEditing(tagsView) (mainly for tag population checks)
+     * *******************************************************************************
+     */
+    func textViewDidBeginEditing(textView: UITextView) {
+        if textView.textColor == AddItem.TAG_PLACEHOLDER_COLOR {
+            textView.textColor = UIColor.blackColor()
+            textView.text = ""
+        }
+    }
+    
+    func textViewDidEndEditing(textView: UITextView) {
+        if textView.text.isEmpty {
+            textView.textColor = AddItem.TAG_PLACEHOLDER_COLOR
+            textView.text = AddItem.TAG_PLACEHOLDER_STR
+        }
+    }
+    
+    /**
+     * This func limits the characters in the title, a check was needed to stop other fields from
+     * this limitation.
+     */
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-        return (count(textField.text.utf16) + count(string.utf16) - range.length) <= 30
+        return textField == titleField ? (count(textField.text.utf16) + count(string.utf16) - range.length) <= 30 : true
     }
     
     func textFieldDidChange(textField: UITextField) {
@@ -135,6 +175,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
             println("setting to zero")
         }
     }
+    
     func dismissKeyboard() {
         self.titleField.resignFirstResponder() || self.priceField.resignFirstResponder() || self.tagsField.resignFirstResponder()
         validateTextFields()
@@ -176,7 +217,6 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         
         self.titleField.enabled = false
         self.priceField.enabled = false
-        self.tagsField.enabled = false
         self.methodControl.enabled = false
         add.enabled = false
         
@@ -198,7 +238,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
             croppedImg.resize(size, completionHandler: {(scaledImg:UIImage,scaleBob:NSData) -> () in
 
                 
-                Bakkle.sharedInstance.addItem(self.titleField.text, description: "", location: Bakkle.sharedInstance.user_location, price: self.priceField.text, tags: self.tagsField.text, method: self.methodControl.titleForSegmentAtIndex(self.methodControl.selectedSegmentIndex)!, image:scaledImg, success: {(item_id:Int?, item_url: String?) -> () in
+                Bakkle.sharedInstance.addItem(self.titleField.text, description: "", location: Bakkle.sharedInstance.user_location, price: self.priceField.text, tags: self.tagsField.text, method: self.methodControl.titleForSegmentAtIndex(self.methodControl.selectedSegmentIndex)!, images:[scaledImg], success: {(item_id:Int?, item_url: String?) -> () in
                     
                     if self.shareToFacebookBtn.on {
                         let topImg = UIImage(named: "pendant-tag660.png")
@@ -268,7 +308,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         let fetchOptions = PHFetchOptions()
         fetchOptions.predicate = NSPredicate(format: "title = %@", albumName)
         
-        if(UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera)){
+        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
             //load the camera interface
             var picker : UIImagePickerController = UIImagePickerController()
             picker.sourceType = UIImagePickerControllerSourceType.Camera
@@ -295,15 +335,31 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     
     var oldGeneratedTags = ""
     
+    /**
+     * This generates tags if the last generation of tags is the same as the current tag field
+     * This is only called AFTER the title updates. The check is so that it doesn't overwrite
+     * any user added tags
+     */
     func populateTagsFromTitle(fullTitle: String) {
         var generatedTags = generateTags(fullTitle)
-        if tagsField.text == oldGeneratedTags {
+        
+        // the lines before and after the statement make simulate a user accessing the text field
+        textViewDidBeginEditing(tagsField)
+        if tagsField.text == oldGeneratedTags || tagsField.text == AddItem.TAG_PLACEHOLDER_STR || tagsField.textColor == AddItem.TAG_PLACEHOLDER_COLOR {
             tagsField.text = generatedTags
-            oldGeneratedTags = generatedTags
-            return
         }
+        textViewDidEndEditing(tagsField)
+        
+        oldGeneratedTags = generatedTags
     }
     
+    /**
+     * Generates tags from the title text:
+     * Splits title text into pices by spaces / punctuation
+     * Iterates through the array and makes sure there aren't any duplicate words
+     * Turns the list of words into a string and returns it
+     * Performance should not be a large issue due to the character limit on title
+     */
     func generateTags(fullTitle: String) -> String {
         var titleFieldText = trimString(fullTitle.uppercaseString)
         var tagList: Set<String> = Set<String>()
@@ -318,7 +374,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         
         var index = 0
         for tag in titleWords {
-            if(!tagList.contains(tag)) {
+            if !tagList.contains(tag) {
                 tagOrder.append(tag)
                 tagList.insert(tag)
             }

@@ -631,7 +631,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         
     }
     
-    func addItem(title: String, description: String, location: String, price: String, tags: String, method: String, image: UIImage, success: (item_id: Int?, item_url: String?)->(), fail: ()->() ) {
+    func addItem(title: String, description: String, location: String, price: String, tags: String, method: String, images: [UIImage], success: (item_id: Int?, item_url: String?)->(), fail: ()->() ) {
         
         // URL encode some vars.
         let escTitle = title.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
@@ -645,15 +645,25 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         } else {
             escPrice = price.stringByReplacingOccurrencesOfString("$ ", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
         }
-
+        
         let postString = "device_uuid=\(self.deviceUUID)&title=\(escTitle)&description=\(escDescription)&location=\(escLocation)&auth_token=\(self.auth_token)&price=\(escPrice)&tags=\(escTags)&method=\(escMethod)"
         let url: NSURL? = NSURL(string: url_base + url_add_item + "?\(postString)")
         
         let request = NSMutableURLRequest(URL: url!)
         request.HTTPMethod = "POST"
-
-        let imageData: NSData = UIImageJPEGRepresentation(image, 0.5)
-        let postLength: String = "\(imageData.length)"
+        
+        var imageData: [NSData] = [NSData]();
+        
+        for i in images{
+            imageData.append(UIImageJPEGRepresentation(i, 0.5))
+        }
+        
+        var imageDataLength = 0;
+        for i in imageData{
+            imageDataLength += i.length;
+        }
+        
+        let postLength: String = "\(imageDataLength)"
         
         
         var boundary:String = "---------------------------14737809831466499882746641449"
@@ -661,22 +671,19 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         request.addValue(contentType, forHTTPHeaderField: "Content-Type")
         
         var body:NSMutableData = NSMutableData()
-        
-        // auth_token
-//        body.appendData("\r\n\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
-//        body.appendData("Content-Disposition: form-data; name=\"auth_token\"; \r\n\(auth_token)".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
-
-        
-        body.appendData("\r\n--\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
-        
-        body.appendData("Content-Disposition: form-data; name=\"image\"; filename=\"image.jpg\"\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
-        body.appendData("Content-Type: application/octet-stream\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
-        body.appendData(imageData)
-        body.appendData("\r\n--\(boundary)--\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
+                
+        //add all images as neccessary.
+        for i in imageData{
+            body.appendData("\r\n--\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
+            body.appendData("Content-Disposition: form-data; name=\"image\"; filename=\"image.jpg\"\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
+            body.appendData("Content-Type: application/octet-stream\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
+            body.appendData(i)
+            body.appendData("\r\n--\(boundary)--\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
+        }
         request.HTTPBody = body
         
         info("[Bakkle] addItem")
-        info("URL: \(url) METHOD: \(request.HTTPMethod) BODY: --binary blob-- LENGTH: \(imageData.length)")
+        info("URL: \(url) METHOD: \(request.HTTPMethod) BODY: --binary blob-- LENGTH: \(imageDataLength)")
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
             data, response, error in
             
