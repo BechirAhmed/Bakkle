@@ -476,11 +476,11 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         return CGSize(width: screenHeight, height: screenHeight)
     }
     
-    func collectionView(collectionView: UICollectionView,
-        layout collectionViewLayout: UICollectionViewLayout,
-        minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
-            return 5
-    }
+//    func collectionView(collectionView: UICollectionView,
+//        layout collectionViewLayout: UICollectionViewLayout,
+//        minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
+//            return 5
+//    }
    
     func collectionView(collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
