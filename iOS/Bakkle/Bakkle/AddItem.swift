@@ -55,6 +55,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         self.view.addGestureRecognizer(tap)
         
         titleField.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
+        priceField.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
     }
     
     func priceNextToggle() {
@@ -108,15 +109,26 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         return textField == titleField ? (count(textField.text.utf16) + count(string.utf16) - range.length) <= 30 : true
     }
     
+    /**
+     * textFieldDidChange is called by titleField and priceField, specific cases for each
+     */
     func textFieldDidChange(textField: UITextField) {
-        populateTagsFromTitle(textField.text);
+        if (self.titleField == textField) {
+            populateTagsFromTitle(textField.text)
+        } else {
+            disableConfirmButtonHandler();
+        }
     }
 
+    
     func textFieldDidBeginEditing(textField: UITextField) {
         animateViewMoving(true, moveValue: 215)
         formatPrice()
     }
     
+    /**
+     * Handles disable / tag / formatting checks after user taps off of the field
+     */
     func textFieldDidEndEditing(textField: UITextField) {
         if textField == priceField {
             animateViewMoving(false, moveValue: 30)
@@ -184,7 +196,6 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         animateViewMoving(true, moveValue: 30)
         if priceField.text == "take it!" {
             priceField.text = "0"
-            println("setting to zero")
         }
     }
     
@@ -221,7 +232,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
      * ever to be changed
      */
     func disableConfirmButtonHandler() -> Bool{
-        if tagsField.textColor == AddItem.TAG_PLACEHOLDER_COLOR || self.titleField.text.isEmpty || self.priceField.text.isEmpty || self.tagsField.text.isEmpty || imageView.image == nil {
+        if trimString(self.priceField.text) == "$" || tagsField.textColor == AddItem.TAG_PLACEHOLDER_COLOR || self.titleField.text.isEmpty || self.priceField.text.isEmpty || self.tagsField.text.isEmpty || imageView.image == nil {
             confirmButton.enabled = false
             confirmButton.backgroundColor = AddItem.CONFIRM_BUTTON_DISABLED_COLOR
         } else {
