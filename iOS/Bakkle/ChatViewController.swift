@@ -197,7 +197,8 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
 //    // #iOS7.1
     override func willAnimateRotationToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
-        super.willAnimateRotationToInterfaceOrientation(toInterfaceOrientation, duration: duration)
+//NOTE: We aren't using this, commented out to pacify warning
+        //super.willAnimateRotationToInterfaceOrientation(toInterfaceOrientation, duration: duration)
 
         if UIInterfaceOrientationIsLandscape(toInterfaceOrientation) {
             if toolBar.frame.height > textViewMaxHeight.landscape {
@@ -207,6 +208,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             updateTextViewHeight()
         }
     }
+    
 //    // #iOS8
 //    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator!) {
 //        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
@@ -304,7 +306,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
     func updateTextViewHeight() {
         let oldHeight = textView.frame.height
-        let maxHeight = UIInterfaceOrientationIsPortrait(interfaceOrientation) ? textViewMaxHeight.portrait : textViewMaxHeight.landscape
+        let maxHeight = UIDevice.currentDevice().orientation==UIDeviceOrientation.Portrait ? textViewMaxHeight.portrait : textViewMaxHeight.landscape
         var newHeight = min(textView.sizeThatFits(CGSize(width: textView.frame.width, height: CGFloat.max)).height, maxHeight)
         #if arch(x86_64) || arch(arm64)
             newHeight = ceil(newHeight)
