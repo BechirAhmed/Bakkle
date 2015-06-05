@@ -68,20 +68,23 @@ class ItemDetails: UIViewController {
         itemTagsLabel.text = tagString
         
         
-        let firstURL = imgURLs[0] as! String
-        let imgURL = NSURL(string: firstURL)
-        if imgURL == nil {
-            return
-        }
-        if let imgData = NSData(contentsOfURL: imgURL!) {
-            dispatch_async(dispatch_get_main_queue()) {
-                println("[FeedScreen] displaying image (top)")
-//                self.imgDet.image = UIImage(data: imgData)
-//                self.imgDet.clipsToBounds = true
-//                self.imgDet.contentMode = UIViewContentMode.ScaleAspectFill
+        for index in 0...imgURLs.count-1{
+            let firstURL = imgURLs[index] as! String
+            let imgURL = NSURL(string: firstURL)
+            if imgURL == nil {
+                return
             }
-        }
+            if let imgData = NSData(contentsOfURL: imgURL!) {
+                dispatch_async(dispatch_get_main_queue()) {
+                    println("[FeedScreen] displaying image (top)")
+                    self.itemImages?.insert(imgData, atIndex: index)
+                    var index: NSIndexPath = NSIndexPath(forRow: index, inSection: 0)
+                    self.collectionView.insertItemsAtIndexPaths([index])
+                }
+            }
 
+        }
+        
     }
     
     @IBAction func wantBtn(sender: AnyObject) {
@@ -105,8 +108,8 @@ class ItemDetails: UIViewController {
     
     /* collectionView display multiple pictures */
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection: Int) -> Int {
-        return 5
-//        return self.itemImages!.count
+
+        return self.itemImages!.count
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
@@ -123,21 +126,11 @@ class ItemDetails: UIViewController {
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell :ItemDetailsCell = collectionView.dequeueReusableCellWithReuseIdentifier(itemDetailsCellIdentifier, forIndexPath: indexPath) as! ItemDetailsCell
         cell.backgroundColor = UIColor.redColor()
-//        cell.imgView.contentMode = UIViewContentMode.ScaleAspectFill
-//        cell.imgView.clipsToBounds  = true
-//        if let images = self.itemImages {
-//            /* This allows us to test adding image using simulator */
-//            if UIDevice.currentDevice().model == "iPhone Simulator" {
-//                cell.imgView.image = UIImage(named: "tiger.jpg")
-//            } else {
-//                cell.imgView.image = images[indexPath.row]
-//            }
-//        }
-        
-//        self.imgDet.image = UIImage(data: imgData)
-//        self.imgDet.clipsToBounds = true
-//        self.imgDet.contentMode = UIViewContentMode.ScaleAspectFill
-        
+        cell.imgView.contentMode = UIViewContentMode.ScaleAspectFill
+        cell.imgView.clipsToBounds  = true
+        if let images = self.itemImages {
+            cell.imgView.image = UIImage(data: itemImages![indexPath.row])
+        }
         return cell
     }
 
