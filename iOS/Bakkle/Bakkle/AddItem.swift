@@ -22,6 +22,8 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     static let MAX_IMAGE_COUNT = 5
     let listItemCellIdentifier = "ListItemCell"
     var itemImages: [UIImage]? = [UIImage]()
+    var scaledImages: [UIImage]? = [UIImage]()
+    var itemCount: Int = 0
     
     @IBOutlet weak var titleField: UITextField!
     @IBOutlet weak var priceField: UITextField!
@@ -36,7 +38,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.itemCount = 1
         titleField.delegate = self
         priceField.delegate = self
         tagsField.delegate = self
@@ -261,68 +263,58 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         //TODO: Get location from GPS
         var factor: CGFloat = 1.0 //imageView.image!.size.height/imageView.image!.size.width
         
-        //Scale image to improve transfer speeds 950 is good iphone 6+ size. ip5=640px wide, ip6=750 ip6+=1242
-        let scaledImageWidth: CGFloat = 660.0;
-        
-        var size = CGSize(width: scaledImageWidth, height: scaledImageWidth*factor)
-        if let images = self.itemImages {
-            for image in images {
-                image.cropToSquare({(croppedImg:UIImage,cropBob:NSData) -> () in
-                    croppedImg.resize(size, completionHandler: {(scaledImg:UIImage,scaleBob:NSData) -> () in
-                        // add item call
-                    })
+        if scaledImages?.count == itemImages?.count {
+            Bakkle.sharedInstance.addItem(self.titleField.text, description: "", location: Bakkle.sharedInstance.user_location,
+                price: self.priceField.text, tags: self.tagsField.text, method: self.methodControl.titleForSegmentAtIndex(self.methodControl.selectedSegmentIndex)!,
+                images:self.scaledImages!, success: {
+                    (item_id:Int?, item_url: String?) -> () in
+                        if self.shareToFacebookBtn.on {
+                            let topImg = UIImage(named: "pendant-tag660.png")
+                            let bottomImg = self.scaledImages![0]
+                            let size = self.scaledImages![0].size
+                            UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
+                            bottomImg.drawInRect(CGRect(origin: CGPointZero, size: size))
+                            topImg!.drawInRect(CGRect(origin: CGPointZero, size: size))
+
+                            let newImg = UIGraphicsGetImageFromCurrentImageContext()
+                            UIGraphicsEndImageContext()
+
+                            var photo: FBSDKSharePhoto! = FBSDKSharePhoto()
+                            photo.image = newImg
+                            photo.userGenerated = true
+
+                            var cont: FBSDKSharePhotoContent! = FBSDKSharePhotoContent()
+                            cont.photos = [photo]
+
+                            var dialog: FBSDKShareDialog = FBSDKShareDialog.showFromViewController(self, withContent: cont, delegate: nil)
+                        }
+
+                        activityView.stopAnimating()
+                        activityView.removeFromSuperview()
+
+                        // We just added one so schedule an update.
+                        // TODO: Could just add this to the feed
+                        // and hope we are fairly current.
+                        dispatch_async(dispatch_get_main_queue()) {
+                            Bakkle.sharedInstance.populateFeed({})
+                            println("item_id=\(item_id) item_url=\(item_url)")
+
+                            let alertController = UIAlertController(title: "Bakkle", message:
+                                "Item uploaded to Bakkle.", preferredStyle: UIAlertControllerStyle.Alert)
+
+                            let dismissAction = UIAlertAction(title: "OK!", style: UIAlertActionStyle.Default) { (action) -> Void in
+                                self.dismissViewControllerAnimated(true, completion: nil)
+                            }
+                            alertController.addAction(dismissAction)
+                            self.presentViewController(alertController, animated: true, completion: nil)
+                        }
+                    }, fail: {() -> () in
+                    //TODO: Show error popup and close.
                 })
-            }
+        } else {
+            println("[LIST ITEM] Error: All images were not included in scaled images.")
         }
     }
-    
-    //    Bakkle.sharedInstance.addItem(self.titleField.text, description: "", location: Bakkle.sharedInstance.user_location, price: self.priceField.text, tags: self.tagsField.text, method: self.methodControl.titleForSegmentAtIndex(self.methodControl.selectedSegmentIndex)!, image:scaledImg, success: {(item_id:Int?, item_url: String?) -> () in
-    //
-    //    if self.shareToFacebookBtn.on {
-    //    let topImg = UIImage(named: "pendant-tag660.png")
-    //    let bottomImg = scaledImg
-    //    let size = scaledImg.size
-    //    UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
-    //    bottomImg.drawInRect(CGRect(origin: CGPointZero, size: size))
-    //    topImg!.drawInRect(CGRect(origin: CGPointZero, size: size))
-    //
-    //    let newImg = UIGraphicsGetImageFromCurrentImageContext()
-    //    UIGraphicsEndImageContext()
-    //
-    //    var photo: FBSDKSharePhoto! = FBSDKSharePhoto()
-    //    photo.image = newImg
-    //    photo.userGenerated = true
-    //
-    //    var cont: FBSDKSharePhotoContent! = FBSDKSharePhotoContent()
-    //    cont.photos = [photo]
-    //
-    //    var dialog: FBSDKShareDialog = FBSDKShareDialog.showFromViewController(self, withContent: cont, delegate: nil)
-    //
-    //    }
-    //
-    //    activityView.stopAnimating()
-    //    activityView.removeFromSuperview()
-    //
-    //    // We just added one so schedule an update.
-    //    // TODO: Could just add this to the feed
-    //    // and hope we are fairly current.
-    //    dispatch_async(dispatch_get_main_queue()) {
-    //    Bakkle.sharedInstance.populateFeed({})
-    //
-    //    println("item_id=\(item_id) item_url=\(item_url)")
-    //
-    //    let alertController = UIAlertController(title: "Bakkle", message:
-    //    "Item uploaded to Bakkle.", preferredStyle: UIAlertControllerStyle.Alert)
-    //
-    //    let dismissAction = UIAlertAction(title: "OK!", style: UIAlertActionStyle.Default) { (action) -> Void in
-    //    self.dismissViewControllerAnimated(true, completion: nil)
-    //    }
-    //    alertController.addAction(dismissAction)
-    //    self.presentViewController(alertController, animated: true, completion: nil)
-    //    }
-    //    }, fail: {() -> () in
-    //    //TODO: Show error popup and close.
-    //    })
 
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
@@ -369,14 +361,26 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
         let chosen = info[UIImagePickerControllerOriginalImage] as! UIImage
-        itemImages?.insert(chosen, atIndex: itemImages!.count)
+        itemImages?.append(chosen)
+        itemCount++
+        let itemIndex = self.itemCount - 1
+        
+        // Scaled image size
+        let scaledImageWidth: CGFloat = 660.0;
+        var size = CGSize(width: scaledImageWidth, height: scaledImageWidth)
+        dispatch_async(dispatch_get_global_queue(
+            Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
+                chosen.cropAndResize(size, completionHandler: { (resizedImage:UIImage, data:NSData) -> () in
+                    self.scaledImages?.insert(resizedImage, atIndex: itemIndex)
+                })
+        }
+        
         var index: NSIndexPath = NSIndexPath(forRow: itemImages!.count-1, inSection: 0)
         collectionView.insertItemsAtIndexPaths([index])
-        //        imageView.contentMode = UIViewContentMode.ScaleAspectFill
-        //        imageView.image = chosen
         dismissViewControllerAnimated(true, completion: nil)
     }
 
+    
     
     
  

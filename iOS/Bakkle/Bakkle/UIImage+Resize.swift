@@ -63,4 +63,17 @@ extension UIImage {
             })
         })
     }
+    
+    public func cropAndResize(size:CGSize, completionHandler:(resizedImage:UIImage, data:NSData)->()) {
+        dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), { () -> Void in
+            self.cropToSquare({(croppedImg:UIImage,cropBob:NSData) -> () in
+                croppedImg.resize(size, completionHandler: {(scaledImg:UIImage,scaleBob:NSData) -> () in
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        completionHandler(resizedImage: scaledImg, data:scaleBob)
+                    })
+                })
+            })
+        })
+    }
+    
 }
