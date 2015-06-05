@@ -327,7 +327,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                         attachment.image = UIImage(named: "icon-marker75.png")
                         
                         var attachmentString : NSAttributedString = NSAttributedString(attachment: attachment)
-                        var myString : NSMutableAttributedString = NSMutableAttributedString(string:  " " + String(stringInterpolationSegment: Int(distance)) + " miles")
+                        var myString : NSMutableAttributedString = NSMutableAttributedString(string:  " " + distanceString + " mi")
                         myString.insertAttributedString(attachmentString, atIndex: 0)
                         
                         self.swipeView.distLabel.attributedText = myString
@@ -431,7 +431,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                                         attachment.image = UIImage(named: "icon-marker75.png")
                                         
                                         var attachmentString : NSAttributedString = NSAttributedString(attachment: attachment)
-                                        var myString : NSMutableAttributedString = NSMutableAttributedString(string:  " " + String(stringInterpolationSegment: Int(distance)) + " miles")
+                                        var myString : NSMutableAttributedString = NSMutableAttributedString(string:  " " + distanceString + " mi")
                                         myString.insertAttributedString(attachmentString, atIndex: 0)
                                         
                                         self.bottomView.distLabel.attributedText = myString

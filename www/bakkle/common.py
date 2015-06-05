@@ -1,6 +1,7 @@
 from django.shortcuts import render
 
 import json
+import time
 
 from django.http import HttpResponse, HttpResponseRedirect, Http404, HttpResponseForbidden
 from django.core.urlresolvers import reverse
@@ -14,6 +15,7 @@ from django.db.models import Q
 from account.models import Account, Device
 from conversation.models import Conversation, Message
 from items.models import Items
+from timing.models import Timing
 
 # Decorator for login authentication
 def authenticate(function):
@@ -48,6 +50,25 @@ def authenticate(function):
             return HttpResponse(json.dumps(response_data), content_type="application/json")
     wrap.__doc__ = function.__doc__
     wrap.__name__=function.__name__
+    return wrap
+
+
+# Decorator for login authentication
+def time_method(function):
+    def wrap(request, *args, **kwargs):
+        time1 = time.time()
+        ret = function(request, *args, **kwargs)
+        time2 = time.time()
+
+        user = 0
+        try:
+            user = request.POST.get('auth_token').split('_')[1]
+        except:
+            pass
+
+        Timing.objects.create(user = user, func = function.func_name, time = int((time2-time1)*1000.0), args = args)
+        print '%s function took %0.3f ms' % (function.func_name, (time2-time1)*1000.0)
+        return ret
     return wrap
 
 def get_number_conversations_with_new_messages(account_id):

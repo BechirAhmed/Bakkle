@@ -29,6 +29,7 @@ from conversation.models import Conversation, Message
 from account.models import Account, Device
 from common import authenticate,get_number_conversations_with_new_messages
 from django.conf import settings
+from common import time_method
 
 MAX_ITEM_IMAGE = 5
 
@@ -48,6 +49,7 @@ config['S3_URL'] = 'https://s3-us-west-2.amazonaws.com/com.bakkle.prod/'
 #--------------------------------------------#
 @staff_member_required
 @csrf_exempt
+@time_method
 def index(request):
     # List all items (this is for web viewing of data only)
     item_list = Items.objects.all()
@@ -57,6 +59,7 @@ def index(request):
     return render(request, 'items/index.html', context) 
 
 @csrf_exempt
+@time_method
 def public_detail(request, item_id):
     # get the item with the item id (this is for web viewing of data only)
     item = get_object_or_404(Items, pk=item_id)
@@ -69,6 +72,7 @@ def public_detail(request, item_id):
 
 @staff_member_required
 @csrf_exempt
+@time_method
 def detail(request, item_id):
     # get the item with the item id (this is for web viewing of data only)
     item = get_object_or_404(Items, pk=item_id)
@@ -81,6 +85,7 @@ def detail(request, item_id):
 
 @staff_member_required
 @csrf_exempt
+@time_method
 def mark_as_spam(request, item_id):
     # Get the item
     item = Items.objects.get(pk=item_id)
@@ -95,6 +100,7 @@ def mark_as_spam(request, item_id):
 
 @staff_member_required
 @csrf_exempt
+@time_method
 def mark_as_deleted(request, item_id):
     # Get the item id 
     item = Items.objects.get(pk=item_id)
@@ -113,6 +119,7 @@ def mark_as_deleted(request, item_id):
 @csrf_exempt
 @require_POST
 @authenticate
+@time_method
 def add_item(request):
     # Get the authentication code
     auth_token = request.GET.get('auth_token')
@@ -187,6 +194,7 @@ def add_item(request):
     response_data = { "status":1, "item_id":item.id }
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
+@time_method
 def notify_all_new_item(message):
     # Get all devices
 
@@ -210,12 +218,14 @@ def notify_all_new_item(message):
 @csrf_exempt
 @require_POST
 @authenticate
+@time_method
 def delete_item(request):
     return update_status(request, Items.DELETED)
 
 @csrf_exempt
 @require_POST
 @authenticate
+@time_method
 def sell_item(request):
     return update_status(request, Items.SOLD)
 
@@ -227,8 +237,9 @@ def spam_item(request):
 @csrf_exempt
 @require_POST
 @authenticate
+@time_method
 def feed(request):
-    
+
     MAX_ITEM_PRICE = 100;
     
     auth_token = request.POST.get('auth_token')
@@ -266,6 +277,8 @@ def feed(request):
 
     # get the account id 
     buyer_id = auth_token.split('_')[1]
+
+
 
     # get the account object and the device and update location
     try:
@@ -342,14 +355,15 @@ def feed(request):
 @csrf_exempt
 @require_POST
 @authenticate
+@time_method
 def meh(request):
     return add_item_to_buyer_items(request, BuyerItem.MEH)
 
 @csrf_exempt
 @require_POST
 @authenticate
+@time_method
 def want(request):
-    print("Got to want request")
     item_id = request.POST.get('item_id')
     auth_token = request.POST.get('auth_token', "")
     buyer_id = auth_token.split('_')[1]
@@ -373,13 +387,11 @@ def want(request):
         response_data = {"status":0, "error":"Item {} does not exist.".format(item_id)}
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 
-    print("before conversation")
     conversation = Conversation.objects.get_or_create(
         item = item,
         buyer = buyer)[0]
     conversation.start_time = datetime.datetime.now()
     conversation.save()
-    print("after conversation")
 
 
 
@@ -388,12 +400,14 @@ def want(request):
 @csrf_exempt
 @require_POST
 @authenticate
+@time_method
 def hold(request):
     return add_item_to_buyer_items(request, BuyerItem.HOLD)
 
 @csrf_exempt
 @require_POST
 @authenticate
+@time_method
 def report(request):
     item_id = request.POST.get('item_id')
 
@@ -422,12 +436,14 @@ def report(request):
 @csrf_exempt
 @require_POST
 @authenticate
+@time_method
 def buyer_item_meh(request):
     return add_item_to_buyer_items(request, BuyerItem.MEH)
 
 @csrf_exempt
 @require_POST
 @authenticate
+@time_method
 def buyer_item_want(request):
     return add_item_to_buyer_items(request, BuyerItem.WANT)
 
@@ -437,6 +453,7 @@ def buyer_item_want(request):
 @csrf_exempt
 @require_POST
 @authenticate
+@time_method
 def get_seller_items(request):
     # Get the authentication code
     auth_token = request.POST.get('auth_token')
@@ -493,6 +510,7 @@ def get_seller_items(request):
 @csrf_exempt
 @require_POST
 @authenticate
+@time_method
 def get_seller_transactions(request):
     # Get the authentication code
     auth_token = request.POST.get('auth_token')
@@ -516,6 +534,7 @@ def get_seller_transactions(request):
 @csrf_exempt
 @require_POST
 @authenticate
+@time_method
 def get_buyers_trunk(request):
     # Get the authentication code
     auth_token = request.POST.get('auth_token')
@@ -535,6 +554,7 @@ def get_buyers_trunk(request):
 @csrf_exempt
 @require_POST
 @authenticate
+@time_method
 def get_holding_pattern(request):
     # Get the authentication code
     auth_token = request.POST.get('auth_token')
@@ -554,6 +574,7 @@ def get_holding_pattern(request):
 @csrf_exempt
 @require_POST
 @authenticate
+@time_method
 def get_buyer_transactions(request):
     # Get the authentication code
     auth_token = request.POST.get('auth_token')
