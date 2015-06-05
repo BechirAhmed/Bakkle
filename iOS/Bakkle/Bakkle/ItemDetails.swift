@@ -25,7 +25,7 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = Theme.ColorOffWhite
+        self.view.backgroundColor = UIColor.whiteColor()
         activityInd?.startAnimating()
         
         var swipeDown = UISwipeGestureRecognizer(target: self, action: "respondToSwipeGesture:")
