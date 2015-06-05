@@ -8,6 +8,7 @@ let messageSoundOutgoing: SystemSoundID = createMessageSoundOutgoing()
 
 class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextViewDelegate {
     let chat: Chat
+    let itemDetailSegue = "ItemDetailSegue"
     var header: UIView!
     var tableView: UITableView!
     var toolBar: UIToolbar!
@@ -15,6 +16,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     var profileButton: UIButton!
     var sendButton: UIButton!
     var rotating = false
+    var index: Int = 0
 
     override var inputAccessoryView: UIView! {
     get {
@@ -180,13 +182,17 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
+    
+    /* info button action - leads to item detail view */
     func btnI(sender:UIButton!)
     {
         let sb: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        let vc: UIViewController = sb.instantiateViewControllerWithIdentifier("ItemDetails") as! UIViewController
+        let vc: ItemDetails = sb.instantiateViewControllerWithIdentifier("ItemDetails") as! ItemDetails
         vc.modalTransitionStyle = UIModalTransitionStyle.FlipHorizontal
+        vc.item = Bakkle.sharedInstance.trunkItems[index].valueForKey("item") as! NSDictionary
         self.presentViewController(vc, animated: true, completion: nil)
     }
+
     func btnProfile(sender:UIButton!)
     {
         let sb: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
