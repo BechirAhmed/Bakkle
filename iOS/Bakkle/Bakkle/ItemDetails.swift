@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ItemDetails: UIViewController {
+class ItemDetails: UIViewController, UIScrollViewDelegate {
 
     var item: NSDictionary!
     let itemDetailsCellIdentifier = "ItemDetailsCell"
@@ -18,6 +18,7 @@ class ItemDetails: UIViewController {
     @IBOutlet weak var itemTitleLabel: UILabel!
     @IBOutlet weak var itemTagsLabel: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var pageControl: UIPageControl!
     
     @IBOutlet weak var itemMethodLabel: UILabel!
     @IBOutlet weak var itemPriceLabel: UILabel!
@@ -53,6 +54,13 @@ class ItemDetails: UIViewController {
         super.viewWillAppear(true)
         item = Bakkle.sharedInstance.feedItems[0] as! NSDictionary
         let imgURLs = item!.valueForKey("image_urls") as! NSArray
+        if imgURLs.count != 1 {
+            pageControl.numberOfPages = imgURLs.count
+        }else{
+            pageControl.numberOfPages = 0
+        }
+        
+        pageControl.currentPage = 0
         
         //TOOD: Load all images into an array and UIScrollView.
         
@@ -132,6 +140,12 @@ class ItemDetails: UIViewController {
             cell.imgView.image = UIImage(data: itemImages![indexPath.row])
         }
         return cell
+    }
+    
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        var pageWidth: CGFloat  = collectionView.bounds.size.width
+        var page: Int = Int(floor((collectionView.contentOffset.x - pageWidth / 2) / pageWidth)) + 1
+        pageControl.currentPage = page
     }
 
 }

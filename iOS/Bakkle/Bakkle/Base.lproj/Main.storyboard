@@ -712,6 +712,12 @@
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" defersCurrentPageDisplay="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LsM-C1-oOd">
+                                        <rect key="frame" x="-19" y="-18" width="39" height="37"/>
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="168" y="308" width="39" height="37"/>
+                                        </variation>
+                                    </pageControl>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -719,6 +725,7 @@
                                     <constraint firstAttribute="width" secondItem="eb5-ux-7Vh" secondAttribute="height" multiplier="1:1" id="8Cg-du-9Md"/>
                                     <constraint firstAttribute="bottom" secondItem="HGY-hR-A01" secondAttribute="bottom" id="9AE-aj-jbO"/>
                                     <constraint firstAttribute="bottom" secondItem="7lg-Vc-Sqa" secondAttribute="bottom" constant="8" id="BUH-AH-vqu"/>
+                                    <constraint firstItem="7lg-Vc-Sqa" firstAttribute="top" secondItem="LsM-C1-oOd" secondAttribute="bottom" constant="-7" id="DV7-Ww-gfl"/>
                                     <constraint firstItem="HGY-hR-A01" firstAttribute="top" secondItem="eb5-ux-7Vh" secondAttribute="top" id="FDw-Pq-9xu"/>
                                     <constraint firstAttribute="bottom" secondItem="VKL-bg-bJT" secondAttribute="bottom" id="M89-GP-bqU"/>
                                     <constraint firstItem="HGY-hR-A01" firstAttribute="top" secondItem="eb5-ux-7Vh" secondAttribute="top" id="Mbb-2L-LdA"/>
@@ -730,12 +737,14 @@
                                     <constraint firstItem="VKL-bg-bJT" firstAttribute="top" secondItem="eb5-ux-7Vh" secondAttribute="top" id="X4C-gn-BHE"/>
                                     <constraint firstAttribute="bottom" secondItem="HGY-hR-A01" secondAttribute="bottom" id="g0E-OI-CWj"/>
                                     <constraint firstAttribute="trailing" secondItem="VKL-bg-bJT" secondAttribute="trailing" id="myO-7B-1qm"/>
+                                    <constraint firstAttribute="centerX" secondItem="LsM-C1-oOd" secondAttribute="centerX" id="uEq-6F-dpX"/>
                                 </constraints>
                                 <variation key="default">
                                     <mask key="subviews">
                                         <exclude reference="VKL-bg-bJT"/>
                                         <exclude reference="HGY-hR-A01"/>
                                         <exclude reference="7lg-Vc-Sqa"/>
+                                        <exclude reference="LsM-C1-oOd"/>
                                     </mask>
                                     <mask key="constraints">
                                         <exclude reference="8Cg-du-9Md"/>
@@ -752,7 +761,9 @@
                                         <exclude reference="X4C-gn-BHE"/>
                                         <exclude reference="myO-7B-1qm"/>
                                         <exclude reference="BUH-AH-vqu"/>
+                                        <exclude reference="DV7-Ww-gfl"/>
                                         <exclude reference="Q9P-Fx-xW2"/>
+                                        <exclude reference="uEq-6F-dpX"/>
                                     </mask>
                                 </variation>
                                 <variation key="heightClass=regular-widthClass=compact">
@@ -760,6 +771,7 @@
                                         <include reference="VKL-bg-bJT"/>
                                         <include reference="HGY-hR-A01"/>
                                         <include reference="7lg-Vc-Sqa"/>
+                                        <include reference="LsM-C1-oOd"/>
                                     </mask>
                                     <mask key="constraints">
                                         <include reference="8Cg-du-9Md"/>
@@ -776,7 +788,9 @@
                                         <include reference="X4C-gn-BHE"/>
                                         <include reference="myO-7B-1qm"/>
                                         <include reference="BUH-AH-vqu"/>
+                                        <include reference="DV7-Ww-gfl"/>
                                         <include reference="Q9P-Fx-xW2"/>
+                                        <include reference="uEq-6F-dpX"/>
                                     </mask>
                                 </variation>
                             </view>
@@ -1070,6 +1084,7 @@
                         <outlet property="itemPriceLabel" destination="a2x-GI-GCJ" id="YkC-uS-lSx"/>
                         <outlet property="itemTagsLabel" destination="iKo-YW-tCx" id="fbp-Wn-hcS"/>
                         <outlet property="itemTitleLabel" destination="7lg-Vc-Sqa" id="syk-Ia-qQu"/>
+                        <outlet property="pageControl" destination="LsM-C1-oOd" id="UPS-iO-IoS"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4TP-4r-yld" userLabel="First Responder" sceneMemberID="firstResponder"/>
