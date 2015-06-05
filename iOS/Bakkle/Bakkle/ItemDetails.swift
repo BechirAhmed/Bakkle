@@ -8,11 +8,17 @@
 
 import UIKit
 
-class ItemDetails: UIViewController {
+class ItemDetails: UIViewController, UIScrollViewDelegate {
 
     var item: NSDictionary!
+    let itemDetailsCellIdentifier = "ItemDetailsCell"
+    var itemImages: [NSData]? = [NSData]()
+
+    
     @IBOutlet weak var itemTitleLabel: UILabel!
     @IBOutlet weak var itemTagsLabel: UILabel!
+    @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var pageControl: UIPageControl!
     
     @IBOutlet weak var itemMethodLabel: UILabel!
     @IBOutlet weak var itemPriceLabel: UILabel!
@@ -48,9 +54,16 @@ class ItemDetails: UIViewController {
         super.viewWillAppear(true)
         item = Bakkle.sharedInstance.feedItems[0] as! NSDictionary
         let imgURLs = item!.valueForKey("image_urls") as! NSArray
+        if imgURLs.count != 1 {
+            pageControl.numberOfPages = imgURLs.count
+        }else{
+            pageControl.numberOfPages = 0
+        }
+        
+        pageControl.currentPage = 0
         
         //TOOD: Load all images into an array and UIScrollView.
-        let firstURL = imgURLs[0] as! String
+        
         let topTitle: String = item!.valueForKey("title") as! String
         let topPrice: String = item!.valueForKey("price") as! String
         let topMethod: String = item!.valueForKey("method") as! String
@@ -62,19 +75,24 @@ class ItemDetails: UIViewController {
         itemMethodLabel.text = topMethod
         itemTagsLabel.text = tagString
         
-        let imgURL = NSURL(string: firstURL)
-        if imgURL == nil {
-            return
-        }
-        if let imgData = NSData(contentsOfURL: imgURL!) {
-            dispatch_async(dispatch_get_main_queue()) {
-                println("[FeedScreen] displaying image (top)")
-                self.imgDet.image = UIImage(data: imgData)
-                self.imgDet.clipsToBounds = true
-                self.imgDet.contentMode = UIViewContentMode.ScaleAspectFill
+        
+        for index in 0...imgURLs.count-1{
+            let firstURL = imgURLs[index] as! String
+            let imgURL = NSURL(string: firstURL)
+            if imgURL == nil {
+                return
             }
-        }
+            if let imgData = NSData(contentsOfURL: imgURL!) {
+                dispatch_async(dispatch_get_main_queue()) {
+                    println("[FeedScreen] displaying image (top)")
+                    self.itemImages?.insert(imgData, atIndex: index)
+                    var index: NSIndexPath = NSIndexPath(forRow: index, inSection: 0)
+                    self.collectionView.insertItemsAtIndexPaths([index])
+                }
+            }
 
+        }
+        
     }
     
     @IBAction func wantBtn(sender: AnyObject) {
@@ -95,15 +113,39 @@ class ItemDetails: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    
+    /* collectionView display multiple pictures */
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection: Int) -> Int {
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        return self.itemImages!.count
     }
-    */
+    
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+        
+        let screenHeight = CGRectGetHeight(collectionView.bounds)
+        return CGSize(width: screenHeight, height: screenHeight)
+    }
+    func collectionView(collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
+            return 0
+    }
+    
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        let cell :ItemDetailsCell = collectionView.dequeueReusableCellWithReuseIdentifier(itemDetailsCellIdentifier, forIndexPath: indexPath) as! ItemDetailsCell
+        cell.backgroundColor = UIColor.redColor()
+        cell.imgView.contentMode = UIViewContentMode.ScaleAspectFill
+        cell.imgView.clipsToBounds  = true
+        if let images = self.itemImages {
+            cell.imgView.image = UIImage(data: itemImages![indexPath.row])
+        }
+        return cell
+    }
+    
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        var pageWidth: CGFloat  = collectionView.bounds.size.width
+        var page: Int = Int(floor((collectionView.contentOffset.x - pageWidth / 2) / pageWidth)) + 1
+        pageControl.currentPage = page
+    }
 
 }

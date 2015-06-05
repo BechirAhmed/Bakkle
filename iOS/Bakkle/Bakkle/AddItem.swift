@@ -35,6 +35,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     @IBOutlet weak var shareToFacebookBtn: UISwitch!
     @IBOutlet weak var camButtonBackground: UIView!
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var loadingView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,6 +43,8 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         titleField.delegate = self
         priceField.delegate = self
         tagsField.delegate = self
+        
+        loadingView.hidden = true
         
         // sets placeholder text
         textViewDidEndEditing(tagsField)
@@ -109,6 +112,10 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         } else {
             initRun = false
         }
+    }
+    
+    func textViewDidChange(textView: UITextView) {
+        disableConfirmButtonHandler()
     }
     
     /**
@@ -200,25 +207,25 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     static let CONFIRM_BUTTON_BLUE = 95
     static let CONFIRM_BUTTON_ENABLED_COLOR = UIColor(red: CGFloat(AddItem.CONFIRM_BUTTON_RED)/255.0, green: CGFloat(AddItem.CONFIRM_BUTTON_GREEN)/255.0, blue: CGFloat(AddItem.CONFIRM_BUTTON_BLUE)/255.0, alpha: CGFloat(1.0))
     static let CONFIRM_BUTTON_DISABLED_COLOR = UIColor.lightGrayColor()
-    
+    var confirmHit = false
     /**
-     * @return Bool: true if confirm button is enabled
-     *
-     * This handles disabling and enabling the confirm button (changing color, etc).
-     * Updating the backgroundColor end up placing the confirmButtonText behind the
-     * button itself, so it needs to be brought back infront.
-     *
-     * Note: for some reason, if the background is changed before the first frame of
-     * this page is shown, the text will not be brought to the front until this function
-     * is called again.
-     *
-     * Note 2: To fix the initialization of the above note, the button is initialized as
-     * disabled and gray, the RGB color on the three variables above CONFIRM_BUTTON_RED,
-     * CONFIRM_BUTTON_GREEN, CONFIRM_BUTTON_BLUE will need to be changed if the color is
-     * ever to be changed
-     */
+    * @return Bool: true if confirm button is enabled
+    *
+    * This handles disabling and enabling the confirm button (changing color, etc).
+    * Updating the backgroundColor end up placing the confirmButtonText behind the
+    * button itself, so it needs to be brought back infront.
+    *
+    * Note: for some reason, if the background is changed before the first frame of
+    * this page is shown, the text will not be brought to the front until this function
+    * is called again.
+    *
+    * Note 2: To fix the initialization of the above note, the button is initialized as
+    * disabled and gray, the RGB color on the three variables above CONFIRM_BUTTON_RED,
+    * CONFIRM_BUTTON_GREEN, CONFIRM_BUTTON_BLUE will need to be changed if the color is
+    * ever to be changed
+    */
     func disableConfirmButtonHandler() -> Bool {
-        if trimString(self.priceField.text) == "$" || tagsField.textColor == AddItem.TAG_PLACEHOLDER_COLOR || self.titleField.text.isEmpty || self.priceField.text.isEmpty || self.tagsField.text.isEmpty || itemImages?.count < 1 || itemImages?.count > AddItem.MAX_IMAGE_COUNT {
+        if confirmHit || trimString(self.priceField.text) == "$" || tagsField.textColor == AddItem.TAG_PLACEHOLDER_COLOR || self.titleField.text.isEmpty || self.priceField.text.isEmpty || self.tagsField.text.isEmpty || itemImages?.count < 1 || itemImages?.count > AddItem.MAX_IMAGE_COUNT {
             confirmButton.enabled = false
             confirmButton.backgroundColor = AddItem.CONFIRM_BUTTON_DISABLED_COLOR
         } else {
@@ -249,16 +256,16 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     @IBAction func btnConfirm(sender: AnyObject) {
         self.titleField.enabled = false
         self.priceField.enabled = false
+        self.tagsField.editable = false
         self.methodControl.enabled = false
+        
+        confirmHit = true
         
         confirmButton.enabled = false
         confirmButton.backgroundColor = AddItem.CONFIRM_BUTTON_DISABLED_COLOR
         confirmButtonView.bringSubviewToFront(confirmButtonText)
         
-        var activityView: UIActivityIndicatorView = UIActivityIndicatorView()
-        activityView.center = self.view.center
-        activityView.startAnimating()
-        self.view.addSubview(activityView)
+        self.loadingView.hidden = false
         
         //TODO: Get location from GPS
         var factor: CGFloat = 1.0 //imageView.image!.size.height/imageView.image!.size.width
@@ -289,9 +296,6 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
                             var dialog: FBSDKShareDialog = FBSDKShareDialog.showFromViewController(self, withContent: cont, delegate: nil)
                         }
 
-                        activityView.stopAnimating()
-                        activityView.removeFromSuperview()
-
                         // We just added one so schedule an update.
                         // TODO: Could just add this to the feed
                         // and hope we are fairly current.
@@ -315,7 +319,6 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
             println("[LIST ITEM] Error: All images were not included in scaled images.")
         }
     }
-
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         if textField == titleField {
@@ -480,11 +483,11 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         return CGSize(width: screenHeight, height: screenHeight)
     }
     
-//    func collectionView(collectionView: UICollectionView,
-//        layout collectionViewLayout: UICollectionViewLayout,
-//        minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
-//            return 5
-//    }
+    func collectionView(collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
+            return 5
+    }
    
     func collectionView(collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
