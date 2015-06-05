@@ -8,6 +8,7 @@ let messageSoundOutgoing: SystemSoundID = createMessageSoundOutgoing()
 
 class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextViewDelegate {
     let chat: Chat
+    let itemDetailSegue = "ItemDetailSegue"
     var header: UIView!
     var tableView: UITableView!
     var toolBar: UIToolbar!
@@ -15,6 +16,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     var profileButton: UIButton!
     var sendButton: UIButton!
     var rotating = false
+    var index: Int = 0
 
     override var inputAccessoryView: UIView! {
     get {
@@ -22,7 +24,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             toolBar = UIToolbar(frame: CGRectMake(0, 0, 0, toolBarMinHeight-0.5))
 
             textView = InputTextView(frame: CGRectZero)
-            textView.backgroundColor = Theme.ColorOffWhite// .UIColor(white: 250/255, alpha: 1)
+            textView.backgroundColor = UIColor.whiteColor()
             textView.delegate = self
             textView.font = UIFont.systemFontOfSize(messageFontSize)
             textView.layer.borderColor = UIColor(red: 200/255, green: 200/255, blue: 205/255, alpha:1).CGColor
@@ -86,7 +88,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             ]
         ]
 
-        view.backgroundColor = Theme.ColorOffWhite // smooths push animation
+        view.backgroundColor = UIColor.whiteColor() // smooths push animation
 
         let topHeight: CGFloat = 20
         let headerHeight: CGFloat = 44
@@ -122,7 +124,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         tableView = UITableView(frame: CGRectMake(view.bounds.origin.x, view.bounds.origin.y+headerHeight+topHeight, view.bounds.size.width, view.bounds.size.height-headerHeight), style: .Plain)
         tableView.autoresizingMask = .FlexibleWidth | .FlexibleHeight
-        tableView.backgroundColor = Theme.ColorOffWhite
+        tableView.backgroundColor = UIColor.whiteColor()
         let edgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: toolBarMinHeight, right: 0)
         tableView.contentInset = edgeInsets
         tableView.dataSource = self
@@ -131,7 +133,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         tableView.estimatedRowHeight = 44
         tableView.separatorStyle = .None
         tableView.registerClass(MessageSentDateCell.self, forCellReuseIdentifier: NSStringFromClass(MessageSentDateCell))
-        view.backgroundColor = Theme.ColorOffWhite
+        view.backgroundColor = UIColor.whiteColor()
         view.addSubview(tableView)
 
         let notificationCenter = NSNotificationCenter.defaultCenter()
@@ -180,13 +182,17 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
+    
+    /* info button action - leads to item detail view */
     func btnI(sender:UIButton!)
     {
         let sb: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        let vc: UIViewController = sb.instantiateViewControllerWithIdentifier("ItemDetails") as! UIViewController
+        let vc: ItemDetails = sb.instantiateViewControllerWithIdentifier("ItemDetails") as! ItemDetails
         vc.modalTransitionStyle = UIModalTransitionStyle.FlipHorizontal
+        vc.item = Bakkle.sharedInstance.trunkItems[index].valueForKey("item") as! NSDictionary
         self.presentViewController(vc, animated: true, completion: nil)
     }
+
     func btnProfile(sender:UIButton!)
     {
         let sb: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)

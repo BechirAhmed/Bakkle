@@ -22,10 +22,11 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
     
     @IBOutlet weak var itemMethodLabel: UILabel!
     @IBOutlet weak var itemPriceLabel: UILabel!
+    @IBOutlet weak var wantLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = Theme.ColorOffWhite
+        self.view.backgroundColor = UIColor.whiteColor()
         activityInd?.startAnimating()
         
         var swipeDown = UISwipeGestureRecognizer(target: self, action: "respondToSwipeGesture:")
@@ -52,8 +53,13 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
     override func viewWillAppear(animated: Bool) {
         //TODO: This needs to load the item SENT to the view controller, not the top feed item.
         super.viewWillAppear(true)
-        item = Bakkle.sharedInstance.feedItems[0] as! NSDictionary
-        let imgURLs = item!.valueForKey("image_urls") as! NSArray
+        for index in 0...Bakkle.sharedInstance.trunkItems.count-1 {
+            if item == Bakkle.sharedInstance.trunkItems[index].valueForKey("item") as! NSDictionary {
+                wantLabel.text = "Accept Offer"
+                break
+            }
+        }
+        let imgURLs = item.valueForKey("image_urls") as! NSArray
         if imgURLs.count != 1 {
             pageControl.numberOfPages = imgURLs.count
         }else{
