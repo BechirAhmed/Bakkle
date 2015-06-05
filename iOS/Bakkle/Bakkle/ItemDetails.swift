@@ -11,8 +11,13 @@ import UIKit
 class ItemDetails: UIViewController {
 
     var item: NSDictionary!
+    let itemDetailsCellIdentifier = "ItemDetailsCell"
+    var itemImages: [NSData]? = [NSData]()
+
+    
     @IBOutlet weak var itemTitleLabel: UILabel!
     @IBOutlet weak var itemTagsLabel: UILabel!
+    @IBOutlet weak var collectionView: UICollectionView!
     
     @IBOutlet weak var itemMethodLabel: UILabel!
     @IBOutlet weak var itemPriceLabel: UILabel!
@@ -50,7 +55,7 @@ class ItemDetails: UIViewController {
         let imgURLs = item!.valueForKey("image_urls") as! NSArray
         
         //TOOD: Load all images into an array and UIScrollView.
-        let firstURL = imgURLs[0] as! String
+        
         let topTitle: String = item!.valueForKey("title") as! String
         let topPrice: String = item!.valueForKey("price") as! String
         let topMethod: String = item!.valueForKey("method") as! String
@@ -62,6 +67,8 @@ class ItemDetails: UIViewController {
         itemMethodLabel.text = topMethod
         itemTagsLabel.text = tagString
         
+        
+        let firstURL = imgURLs[0] as! String
         let imgURL = NSURL(string: firstURL)
         if imgURL == nil {
             return
@@ -69,9 +76,9 @@ class ItemDetails: UIViewController {
         if let imgData = NSData(contentsOfURL: imgURL!) {
             dispatch_async(dispatch_get_main_queue()) {
                 println("[FeedScreen] displaying image (top)")
-                self.imgDet.image = UIImage(data: imgData)
-                self.imgDet.clipsToBounds = true
-                self.imgDet.contentMode = UIViewContentMode.ScaleAspectFill
+//                self.imgDet.image = UIImage(data: imgData)
+//                self.imgDet.clipsToBounds = true
+//                self.imgDet.contentMode = UIViewContentMode.ScaleAspectFill
             }
         }
 
@@ -95,15 +102,43 @@ class ItemDetails: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    
+    /* collectionView display multiple pictures */
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection: Int) -> Int {
+        return 5
+//        return self.itemImages!.count
     }
-    */
+    
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+        
+        let screenHeight = CGRectGetHeight(collectionView.bounds)
+        return CGSize(width: screenHeight, height: screenHeight)
+    }
+    func collectionView(collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
+            return 0
+    }
+    
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        let cell :ItemDetailsCell = collectionView.dequeueReusableCellWithReuseIdentifier(itemDetailsCellIdentifier, forIndexPath: indexPath) as! ItemDetailsCell
+        cell.backgroundColor = UIColor.redColor()
+//        cell.imgView.contentMode = UIViewContentMode.ScaleAspectFill
+//        cell.imgView.clipsToBounds  = true
+//        if let images = self.itemImages {
+//            /* This allows us to test adding image using simulator */
+//            if UIDevice.currentDevice().model == "iPhone Simulator" {
+//                cell.imgView.image = UIImage(named: "tiger.jpg")
+//            } else {
+//                cell.imgView.image = images[indexPath.row]
+//            }
+//        }
+        
+//        self.imgDet.image = UIImage(data: imgData)
+//        self.imgDet.clipsToBounds = true
+//        self.imgDet.contentMode = UIViewContentMode.ScaleAspectFill
+        
+        return cell
+    }
 
 }

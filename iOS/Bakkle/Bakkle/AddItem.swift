@@ -374,6 +374,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         collectionView.insertItemsAtIndexPaths([index])
         //        imageView.contentMode = UIViewContentMode.ScaleAspectFill
         //        imageView.image = chosen
+        collectionView.scrollToItemAtIndexPath(index, atScrollPosition: UICollectionViewScrollPosition.Left, animated: false)
         dismissViewControllerAnimated(true, completion: nil)
     }
 
