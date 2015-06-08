@@ -48,7 +48,7 @@ class BuyerItem(models.Model):
     HOLD = 'Hold'
     WANT = 'Want'
     REPORT = 'Report'
-    NEGOCIATING = 'Negociating'
+    NEGOTIATING = 'Negotiating'
     PENDING = 'Pending'
     SOLD = 'Sold'
     SOLD_TO = 'Sold To'
@@ -59,7 +59,7 @@ class BuyerItem(models.Model):
         (HOLD, 'Hold'),
         (WANT, 'Want'),
         (REPORT, 'Report'),
-        (NEGOCIATING, 'Negociating'),
+        (NEGOTIATING, 'Negotiating'),
         (PENDING, 'Pending'),
         (SOLD, 'Sold'),
         (SOLD_TO, 'Sold To'),
