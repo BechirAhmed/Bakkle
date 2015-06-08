@@ -4941,7 +4941,7 @@
                                             <constraint firstAttribute="width" constant="44" id="8fU-T1-d0E"/>
                                             <constraint firstAttribute="height" constant="44" id="FTW-nQ-9rM"/>
                                         </constraints>
-                                        <state key="normal" image="btn-menu@3x.png">
+                                        <state key="normal" title="m">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <variation key="default">
@@ -5029,6 +5029,7 @@
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
+                        <outlet property="menuBtn" destination="vmo-0r-UxV" id="eaB-II-haS"/>
                         <outlet property="tableView" destination="JO0-sA-6eK" id="uQg-ss-grj"/>
                     </connections>
                 </viewController>

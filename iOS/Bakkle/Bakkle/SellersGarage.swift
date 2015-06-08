@@ -116,8 +116,7 @@ class SellersGarageView: UIViewController, UICollectionViewDelegate, UICollectio
             let imgURL = NSURL(string: firstURL)
             cell.contentMode = UIViewContentMode.ScaleAspectFill
             cell.imgView.hnk_setImageFromURL(imgURL!)
-            //cell.numHold.text = item.valueForKey("number_of_holding") as? String
-            cell.numHold.text = "12"
+            //cell.numHold.text = item.valueForKey("number_of_holding") as? String555
             cell.numHold.layer.masksToBounds = true;
             cell.numHold.layer.cornerRadius = cell.numHold.frame.height/2
             //cell.numLike.text = item.valueForKey("number_of_want") as? String

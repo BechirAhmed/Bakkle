@@ -8,6 +8,7 @@
 
 import UIKit
 import Haneke
+import FontAwesomeIconFactory
 
 class BuyersTrunkCell : UITableViewCell {
     @IBOutlet var itemImage: UIImageView?
@@ -62,11 +63,12 @@ class BuyersTrunkCell : UITableViewCell {
 class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var menuBtn: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
         var nib = UINib(nibName: "BuyersTrunkCell", bundle: nil)
         self.tableView.registerNib(nib, forCellReuseIdentifier: "GarageCell")
-        
+        setupButtons()
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
     }
     
@@ -81,8 +83,15 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
         
         Bakkle.sharedInstance.populateTrunk({});
     }
+    
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
+    func setupButtons(){
+        let factory = NIKFontAwesomeIconFactory.buttonIconFactory()
+        menuBtn.titleLabel?.text = ""
+        
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
