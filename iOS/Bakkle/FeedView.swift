@@ -16,6 +16,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     let menuSegue = "presentNav"
     let addItemSegue = "AddItemSegue"
     let itemDetailSegue = "ItemDetailSegue"
+    var searching = false
     
     let options = MDCSwipeToChooseViewOptions()
     var swipeView : MDCSwipeToChooseView!
@@ -61,8 +62,6 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         }
         
         // Item detail tap
-        var tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
-        self.view.addGestureRecognizer(tap)
         itemDetailTap = UITapGestureRecognizer(target: self, action: "goToDetails")
         
         // Register for feed updates
@@ -154,6 +153,9 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         //TODO: need to fix queuing mechanism so multple requests are not dispatched.
     }
     
+    func searchBarTextDidBeginEditing(searchBar: UISearchBar){
+        searching = true
+    }
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
     }
@@ -164,9 +166,6 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     /* End search bar delegate */
     
     
-    func dismissKeyboard() {
-        self.searchBar.resignFirstResponder()
-    }
     
     /* Call when filter parameters change. Updates text when all cards are exhausted */
     func filterChanged() {
@@ -179,10 +178,14 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     }
     
     func goToDetails() {
-        let itemDet = ItemDetails()
-        println("GOES IN DETAILS VIEW CONTROLLER")
-        self.performSegueWithIdentifier(itemDetailSegue, sender: self)
-        
+        if searching {
+            self.searchBar.resignFirstResponder()
+            searching = false
+        }else{
+            let itemDet = ItemDetails()
+            println("GOES IN DETAILS VIEW CONTROLLER")
+            self.performSegueWithIdentifier(itemDetailSegue, sender: self)
+        }
     }
     
     

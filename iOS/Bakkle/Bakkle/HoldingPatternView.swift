@@ -169,7 +169,14 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
         }
         return cell
     }
-
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let sb: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc: ItemDetails = sb.instantiateViewControllerWithIdentifier("ItemDetails") as! ItemDetails
+        vc.item = Bakkle.sharedInstance.holdingItems[indexPath.row].valueForKey("item") as! NSDictionary
+        self.presentViewController(vc, animated: true, completion: {})
+    }
+    
     func updateTimeRemaining() {
         let notification = NSNotification(name: HoldingPatternView.bkTimeRemainingUpdate, object: nil)
         NSNotificationCenter.defaultCenter().postNotification(notification)
