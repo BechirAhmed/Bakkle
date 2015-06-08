@@ -476,7 +476,7 @@ def get_seller_items(request):
                 convos_with_new_message = convos_with_new_message + 1
 
         # get the buyer items for this item
-        buyer_items = BuyerItem.objects.filter(item=item)
+        buyer_items = BuyerItem.objects.filter(item_id=item.id)
         number_of_views = 0
         number_of_meh = 0
         number_of_want = 0
