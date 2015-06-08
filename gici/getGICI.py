@@ -7,6 +7,8 @@ import json
 from Queue import Queue
 from threading import Thread
 import urllib
+import urllib2
+import base64
 #import Image
 
 server_id = 3 # SET to change server
@@ -144,10 +146,12 @@ class Bakkle():
         print(item)
         image_file_name = os.path.join(image_dir, item['image_url'].split('/')[-1])
         print image_file_name
+        image_abs_path = os.path.dirname(os.path.abspath(__file__)) + "/" + image_file_name
 
-        # upload( item['id'], item['image_url'], item['title'], item['price'] )
-        # and image from:
-
+        url = self.server_url() + '/items/add_item/?notify=0&device_uuid=E6264D84-C395-4132-8C63-3EF051480191&auth_token=asdfasdfasdfasdf_2&title=' + urllib.quote(item['title'], '') + '&description=dummyDesc&location=39.417672,-87.330438&tags=dummyTags&price=' + item['price'].replace("$", "") + '&method=Pick%20up' 
+        
+        files = {'image': open(image_abs_path, "rb") } #'file' => name of html input field
+        r = requests.post(url, files=files)
 
 b = Bakkle()
 for item in items:
