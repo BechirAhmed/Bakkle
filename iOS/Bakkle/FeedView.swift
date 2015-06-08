@@ -120,6 +120,8 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     @IBAction func menuButtonPressed(sender: AnyObject) {
         NSNotificationCenter.defaultCenter().removeObserver(self)
         self.revealViewController().revealToggleAnimated(true)
+        self.searchBar.resignFirstResponder()
+        searching = false
         //TODO: remove this when feed is updated via push
         requestUpdates()
     }
@@ -632,7 +634,6 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             let destinationVC = segue.destinationViewController as! ItemDetails
             
             destinationVC.item = Bakkle.sharedInstance.feedItems[0] as! NSDictionary
-//            destinationVC.wantLabel.text = "Want"
         }
     }
 }

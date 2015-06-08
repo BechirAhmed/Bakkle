@@ -109,12 +109,20 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
     
     @IBAction func wantBtn(sender: AnyObject) {
         if wanted {
-             Bakkle.sharedInstance.markItem("sold", item_id: self.item!.valueForKey("pk")!.integerValue, success: {}, fail: {})
+            Bakkle.sharedInstance.markItem("sold", item_id: self.item!.valueForKey("pk")!.integerValue, success: {
+                    self.dismissViewControllerAnimated(true, completion: nil)
+                }, fail: {
+                    self.dismissViewControllerAnimated(true, completion: nil)
+            })
         }
         else {
-            Bakkle.sharedInstance.markItem("want", item_id: self.item!.valueForKey("pk")!.integerValue, success: {}, fail: {})
+            Bakkle.sharedInstance.markItem("want", item_id: self.item!.valueForKey("pk")!.integerValue, success: {
+                NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkHoldingUpdate, object: nil)
+                self.dismissViewControllerAnimated(true, completion: nil)
+                }, fail: {
+                self.dismissViewControllerAnimated(true, completion: nil)
+                })
         }
-        self.dismissViewControllerAnimated(true, completion: nil)
         //TODO: refresh feed screen to get rid of the top card.
     }
     @IBAction func goback(sender: AnyObject) {

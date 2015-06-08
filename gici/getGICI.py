@@ -1,4 +1,6 @@
 #!/usr/bin/python
+#
+# run ./giciDeps.sh to install PIL before running this script
 
 import requests
 from lxml import html
@@ -7,7 +9,8 @@ import json
 from Queue import Queue
 from threading import Thread
 import urllib
-#import Image
+from PIL import Image
+import time
 
 server_id = 3 # SET to change server
 image_width = 660
@@ -72,12 +75,13 @@ if os.path.isfile(data_file):
 
 
 test_mode = True
-if test_mode:
-    max_page = 2 #20
+if not test_mode:
+    max_page = 2 #100
     for i in range(1,max_page):
         page_items = read_page(base_url, i)
         print("Page {} found {} items.".format(i, len(page_items)))
         items.update(page_items)
+        time.sleep(.4)
 
 
 print("Total items: {}".format(len(items)))
@@ -89,20 +93,29 @@ with open(data_file, 'w') as outfile:
 
 def download_item_image(item):
     image_file_name = os.path.join(image_dir, item['image_url'].split('/')[-1])
+    scaled_image_file_name = os.path.join(image_dir, "scaled_"+item['image_url'].split('/')[-1])
     if not os.path.isfile(image_file_name):
         print("Downloading image for {} ({})".format(item['id'], item['image_url']))
         urllib.urlretrieve(item['image_url'], image_file_name)
-        #im = Image.open(image_file_name)
-        #width, height = im.size
-        #if width > height:
-        #    # l,t,r,b
-        #    im.crop( (width-height)/2, 0, width+(width-height)/2, height )
-        #else:
-        #    im.crop( 0, (height-width)/2, width, height+(height-width)/2 )
-        ##im.resize( 660, 660 )
     else:
-        print("Image exists for {} ({})".format(item['id'], item['image_url']))
+        pass
+        #print("Image exists for {} ({})".format(item['id'], item['image_url']))
 
+    if not os.path.isfile(scaled_image_file_name):
+        print("Rescaling")
+        try:
+            im = Image.open(image_file_name)
+            width, height = im.size
+            if width > height:
+                # l,t,r,b
+                im = im.crop( ((width-height)/2, 0, height, height) )
+            else:
+                im = im.crop( (0, (height-width)/2, width, width) )
+            scaled_size = (image_width, image_height)
+            im = im.resize( scaled_size, Image.ANTIALIAS)
+            im.save(scaled_image_file_name)
+        except:
+            print("Error rescaling {}".format(item['id']))
 
 
 def worker():
@@ -140,10 +153,10 @@ class Bakkle():
             return "http://bakkle.rhventures.org"
 
     def addItem(self, item):
-        print("Uploading item to bakkle server")
-        print(item)
+        #print("Uploading item to bakkle server")
+        #print(item)
         image_file_name = os.path.join(image_dir, item['image_url'].split('/')[-1])
-        print image_file_name
+        #print image_file_name
 
         # upload( item['id'], item['image_url'], item['title'], item['price'] )
         # and image from:
