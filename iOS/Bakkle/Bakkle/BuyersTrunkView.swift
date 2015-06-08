@@ -128,6 +128,7 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let chat = Chat(user: User(ID: 2, username: "big-haus", firstName: "Big", lastName: "Haus"), lastMessageText: "6 sounds good :-)", lastMessageSentDate: NSDate())
         let chatViewController = ChatViewController(chat: chat)
+        chatViewController.index = indexPath.row
         self.presentViewController(chatViewController, animated: true, completion: {})
     }
     

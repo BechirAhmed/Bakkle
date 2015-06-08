@@ -625,5 +625,11 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                     })
             }
         }
+        if segue.identifier == self.itemDetailSegue {
+            let destinationVC = segue.destinationViewController as! ItemDetails
+            
+            destinationVC.item = Bakkle.sharedInstance.feedItems[0] as! NSDictionary
+//            destinationVC.wantLabel.text = "Want"
+        }
     }
 }
