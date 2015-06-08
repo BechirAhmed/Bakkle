@@ -54,13 +54,13 @@ class ItemData: AnyObject {
         self.facebookProfileImgString = "http://graph.facebook.com/\(facebookID)/picture?width=142&height=142"
     }
     
-    private init(item: NSObject, imgURLs: NSArray, title: String, price: String, distanceString: NSMutableAttributedString, method: String, sellerProfile: NSDictionary, sellerName: String, rating: Float32, facebookID: String, facebookProfileImgString: String) {
-        self.item = item
-        self.imgURLs = imgURLs
-        self.price = price
-        self.distanceString = distanceString
-        //TODO finish putting these variables in
-    }
+//    private init(item: NSObject, imgURLs: NSArray, title: String, price: String, distanceString: NSMutableAttributedString, method: String, sellerProfile: NSDictionary, sellerName: String, rating: Float32, facebookID: String, facebookProfileImgString: String) {
+//        self.item = item
+//        self.imgURLs = imgURLs
+//        self.price = price
+//        self.distanceString = distanceString
+//        //TODO finish putting these variables in
+//    }
     
     /**
      * I'm not quite sure what Ishank was doing when he wrote something like this
