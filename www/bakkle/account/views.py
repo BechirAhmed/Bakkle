@@ -33,6 +33,13 @@ def index(request):
 # Show detail on an account
 @csrf_exempt
 @time_method
+def settings(request):
+    response_data = {"status":1, "settings_dict":{"image_width": 660, "image_height":660, "image_quality":0.7, "feed_items_to_load":10, "image_precache":5}}
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+# Show detail on an account
+@csrf_exempt
+@time_method
 def detail(request, account_id):
     account = get_object_or_404(Account, pk=account_id)
     devices = Device.objects.filter(account_id=account_id)
