@@ -133,6 +133,7 @@ def add_item(request):
     price = request.GET.get('price')
     tags = request.GET.get('tags',"")
     method = request.GET.get('method')
+    notifyFlag = int(request.GET.get('notify'))
 
     # Get the item id if present (If it is present an item will be edited not added)
     item_id = request.GET.get('item_id', "")
@@ -165,7 +166,8 @@ def add_item(request):
             image_urls = image_urls,
             status = Items.ACTIVE)
         item.save()
-        notify_all_new_item("New: ${} - {}".format(item.price, item.title))
+        if(notifyFlag != 0):
+            notify_all_new_item("New: ${} - {}".format(item.price, item.title))
     else:
         # Else get the item
         try:
@@ -245,6 +247,10 @@ def feed(request):
     filter_distance = request.POST.get('filter_distance')
     filter_price = int(request.POST.get('filter_price'))
     filter_number = int(request.POST.get('filter_number'))
+
+    print("auth_token: " + str(auth_token));
+    print("device_uuid: " + str(device_uuid));
+    print("user_location: " + str(user_location));
 
     # Check that all require params are sent and are of the right format
     if (auth_token == None or auth_token.strip() == "" or auth_token.find('_') == -1) or (user_location == None or user_location == ""):
@@ -634,6 +640,8 @@ def imgupload(request, seller_id):
     image_urls = ""
     #import pdb; pdb.set_trace()
     
+    print(request)
+
     for i in request.FILES.getlist('image'):
         #i = request.FILES['image']
         uhash = hex(random.getrandbits(128))[2:-1]
