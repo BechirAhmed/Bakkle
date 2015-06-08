@@ -133,7 +133,7 @@ def add_item(request):
     price = request.GET.get('price')
     tags = request.GET.get('tags',"")
     method = request.GET.get('method')
-    notifyFlag = int(request.GET.get('notify'))
+    notifyFlag = request.GET.get('notify')
 
     # Get the item id if present (If it is present an item will be edited not added)
     item_id = request.GET.get('item_id', "")
@@ -166,7 +166,7 @@ def add_item(request):
             image_urls = image_urls,
             status = Items.ACTIVE)
         item.save()
-        if(notifyFlag != 0):
+        if(notifyFlag == None or notifyFlag == "" or int(notifyFlag) != 0):
             notify_all_new_item("New: ${} - {}".format(item.price, item.title))
     else:
         # Else get the item
