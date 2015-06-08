@@ -184,6 +184,13 @@ class SellersGarageView: UIViewController, UICollectionViewDelegate, UICollectio
             var alert = UIAlertController(title: "Sorry", message: "Bakkle requires a picture when selling items", preferredStyle: .Alert)
             alert.addAction(UIAlertAction(title: "Okay", style: .Default, handler: {(alertAction)in
                 alert.dismissViewControllerAnimated(false, completion: nil)
+                
+                /* This allows us to test add item without camera on simulator */
+                if UIDevice.currentDevice().model == "iPhone Simulator" {
+                    self.chosenImage = UIImage(named: "tiger.jpg")
+                    self.performSegueWithIdentifier(self.addItemSegue, sender: self)
+                }
+                
             }))
             self.presentViewController(alert, animated: false, completion: nil)
         }

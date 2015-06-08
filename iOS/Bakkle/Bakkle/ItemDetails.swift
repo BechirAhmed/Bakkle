@@ -12,6 +12,7 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
 
     var item: NSDictionary!
     let itemDetailsCellIdentifier = "ItemDetailsCell"
+    var wanted: Bool = false
     var itemImages: [NSData]? = [NSData]()
 
     
@@ -53,10 +54,15 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
     override func viewWillAppear(animated: Bool) {
         //TODO: This needs to load the item SENT to the view controller, not the top feed item.
         super.viewWillAppear(true)
-        for index in 0...Bakkle.sharedInstance.trunkItems.count-1 {
-            if item == Bakkle.sharedInstance.trunkItems[index].valueForKey("item") as! NSDictionary {
-                wantLabel.text = "Accept Offer"
-                break
+        if let index = Bakkle.sharedInstance.trunkItems {
+            if (Bakkle.sharedInstance.trunkItems.count != 0) {
+                for index in 0...Bakkle.sharedInstance.trunkItems.count-1 {
+                    if item == Bakkle.sharedInstance.trunkItems[index].valueForKey("item") as! NSDictionary {
+                        wanted = true
+                        wantLabel.text = "Accept Offer"
+                        break
+                    }
+                }
             }
         }
         let imgURLs = item.valueForKey("image_urls") as! NSArray
@@ -102,7 +108,12 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
     }
     
     @IBAction func wantBtn(sender: AnyObject) {
-        Bakkle.sharedInstance.markItem("want", item_id: self.item!.valueForKey("pk")!.integerValue, success: {}, fail: {})
+        if wanted {
+             Bakkle.sharedInstance.markItem("sold", item_id: self.item!.valueForKey("pk")!.integerValue, success: {}, fail: {})
+        }
+        else {
+            Bakkle.sharedInstance.markItem("want", item_id: self.item!.valueForKey("pk")!.integerValue, success: {}, fail: {})
+        }
         self.dismissViewControllerAnimated(true, completion: nil)
         //TODO: refresh feed screen to get rid of the top card.
     }
