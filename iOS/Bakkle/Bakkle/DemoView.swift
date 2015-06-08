@@ -9,6 +9,18 @@
 import UIKit
 
 class DemoView: UIViewController {
+    
+    @IBOutlet weak var menuBtn: UIButton!
+    
+    override func viewDidLoad() {
+        setupButtons()
+    }
+    
+    func setupButtons() {
+        menuBtn.setImage(IconImage().menu(), forState: .Normal)
+        menuBtn.setTitle("", forState: .Normal)
+    }
+    
 
     @IBAction func btnMenu(sender: AnyObject) {
         self.revealViewController().revealToggleAnimated(true)

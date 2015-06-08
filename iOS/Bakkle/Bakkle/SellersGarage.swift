@@ -21,11 +21,13 @@ class SellersGarageView: UIViewController, UICollectionViewDelegate, UICollectio
     let addItemSegue = "AddItemSegueFromGarage"
     
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var menuBtn: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         self.collectionView.contentMode = UIViewContentMode.ScaleAspectFill
+        setupButtons()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -46,6 +48,11 @@ class SellersGarageView: UIViewController, UICollectionViewDelegate, UICollectio
     
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
+    func setupButtons() {
+        menuBtn.setImage(IconImage().menu(), forState: .Normal)
+        menuBtn.setTitle("", forState: .Normal)
     }
     
     /* New data arrived, update the garage on screen */

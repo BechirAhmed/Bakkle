@@ -8,7 +8,6 @@
 
 import UIKit
 import Haneke
-import FontAwesomeIconFactory
 
 class BuyersTrunkCell : UITableViewCell {
     @IBOutlet var itemImage: UIImageView?
@@ -88,10 +87,9 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
-    func setupButtons(){
-        let factory = NIKFontAwesomeIconFactory.buttonIconFactory()
-        menuBtn.titleLabel?.text = ""
-        
+    func setupButtons() {
+        menuBtn.setImage(IconImage().menu(), forState: .Normal)
+        menuBtn.setTitle("", forState: .Normal)
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {

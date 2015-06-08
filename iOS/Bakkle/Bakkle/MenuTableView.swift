@@ -12,6 +12,13 @@ class MenuTableController: UITableViewController {
     
     var backView: UIView!
     
+    @IBOutlet weak var feedLbl: UILabel!
+    @IBOutlet weak var garageLbl: UILabel!
+    @IBOutlet weak var trunkLbl: UILabel!
+    @IBOutlet weak var holdingLbl: UILabel!
+    @IBOutlet weak var filterLbl: UILabel!
+    @IBOutlet weak var settingsLbl: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -19,6 +26,7 @@ class MenuTableController: UITableViewController {
         if self.revealViewController() != nil {
             self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         }
+        setupImages()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -47,6 +55,26 @@ class MenuTableController: UITableViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func setupImages() {
+        self.feedLbl.attributedText = stringWithIcon("FEED", image: IconImage().home())
+        self.garageLbl.attributedText = stringWithIcon("SELLER'S GARAGE", image: IconImage().edit())
+        self.trunkLbl.attributedText = stringWithIcon("BUYER'S TRUNK", image: IconImage().cart())
+        self.holdingLbl.attributedText = stringWithIcon("HOLDING PATTERN", image: IconImage().down())
+        self.filterLbl.attributedText = stringWithIcon("FEED FILTER", image: IconImage().filter())
+        self.settingsLbl.attributedText = stringWithIcon("SETTINGS", image: IconImage().settings())
+    }
+    
+    func stringWithIcon(label: String, image: UIImage) -> NSAttributedString {
+        var attachment: NSTextAttachment = NSTextAttachment()
+        attachment.image = image
+        
+        var attachmentString : NSAttributedString = NSAttributedString(attachment: attachment)
+        var stringFinal : NSMutableAttributedString = NSMutableAttributedString(string: " " + label)
+        stringFinal.insertAttributedString(attachmentString, atIndex: 0)
+        
+        return stringFinal
     }
     
     @IBAction func btnReset(sender: AnyObject) {

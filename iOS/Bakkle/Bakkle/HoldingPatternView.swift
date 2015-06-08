@@ -97,6 +97,8 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
     var timer: NSTimer!
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var menuBtn: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         var nib = UINib(nibName: "HoldingPatternCell", bundle: nil)
@@ -105,6 +107,7 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
         // Start time remaining timer
         self.timer = NSTimer(timeInterval: 1.0, target: self, selector: Selector("updateTimeRemaining"), userInfo: nil, repeats: true)
         NSRunLoop.currentRunLoop().addTimer(self.timer, forMode: NSRunLoopCommonModes)
+        setupButtons()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -125,6 +128,11 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
         
         self.timer?.invalidate()
         self.timer = nil
+    }
+    
+    func setupButtons() {
+        menuBtn.setImage(IconImage().menu(), forState: .Normal)
+        menuBtn.setTitle("", forState: .Normal)
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {

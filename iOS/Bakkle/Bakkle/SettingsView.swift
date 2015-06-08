@@ -11,13 +11,19 @@ import Haneke
 
 class SettingsView: UIViewController {
     
+    @IBOutlet weak var avatar: UIImageView!
+    @IBOutlet weak var menuBtn: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        setupButtons()
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
     }
     
-    @IBOutlet weak var avatar: UIImageView!
+    func setupButtons() {
+        menuBtn.setImage(IconImage().menu(), forState: .Normal)
+        menuBtn.setTitle("", forState: .Normal)
+    }
     
     override func viewWillAppear(animated: Bool) {
         

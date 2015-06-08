@@ -75,6 +75,13 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         var observer2 = notificationCenter.addObserverForName(Bakkle.bkFilterChanged, object: nil, queue: mainQueue) { _ in
             self.filterChanged()
         }
+        setupButtons()
+        for subview in self.searchBar.subviews {
+            if (subview.isKindOfClass(UITextField)) {
+                var searchField: UITextField = subview as! UITextField
+                searchField.font = UIFont (name: "Avenir-Black", size: 12)
+            }
+        }
         
         // Insets set in Storyboard
         //btnAddItem.imageEdgeInsets = UIEdgeInsetsMake(-10, -10, -10, -10);
@@ -116,7 +123,10 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
-    
+    func setupButtons() {
+        menuBtn.setImage(IconImage().menu(), forState: .Normal)
+        menuBtn.setTitle("", forState: .Normal)
+    }
     
     @IBAction func menuButtonPressed(sender: AnyObject) {
         NSNotificationCenter.defaultCenter().removeObserver(self)
@@ -324,7 +334,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                         var distanceString = distance.rangeString()
                         
                         var attachment: NSTextAttachment = NSTextAttachment()
-                        attachment.image = UIImage(named: "icon-marker75.png")
+                        attachment.image = IconImage().pin()
                         
                         var attachmentString : NSAttributedString = NSAttributedString(attachment: attachment)
                         var myString : NSMutableAttributedString = NSMutableAttributedString(string:  " " + distanceString + " mi")
@@ -348,7 +358,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                 self.swipeView.nameLabel.text = topTitle
                 
                 var priceAttachment: NSTextAttachment = NSTextAttachment()
-                priceAttachment.image = UIImage(named: "icon-tags75.png")
+                priceAttachment.image = IconImage().tags()
                 var attachmentString : NSAttributedString = NSAttributedString(attachment: priceAttachment)
                 
                 if suffix(topPrice, 2) == "00" {
@@ -368,7 +378,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                 }
                 
                 var methodAttachment: NSTextAttachment = NSTextAttachment()
-                methodAttachment.image = UIImage(named: "icon-car75.png")
+                methodAttachment.image = IconImage().car()
                 
                 var methodAttachmentString : NSAttributedString = NSAttributedString(attachment: methodAttachment)
                 var methodString : NSMutableAttributedString = NSMutableAttributedString(string: " " + topMethod)
@@ -428,7 +438,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                                         var distanceString = distance.rangeString()
                                         
                                         var attachment: NSTextAttachment = NSTextAttachment()
-                                        attachment.image = UIImage(named: "icon-marker75.png")
+                                        attachment.image = IconImage().pin()
                                         
                                         var attachmentString : NSAttributedString = NSAttributedString(attachment: attachment)
                                         var myString : NSMutableAttributedString = NSMutableAttributedString(string:  " " + distanceString + " mi")
@@ -455,7 +465,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                                     }
                                     
                                     var priceAttachment: NSTextAttachment = NSTextAttachment()
-                                    priceAttachment.image = UIImage(named: "icon-tags75.png")
+                                    priceAttachment.image = IconImage().tags()
                                     var attachmentString : NSAttributedString = NSAttributedString(attachment: priceAttachment)
                                     
                                     if suffix(bottomPrice, 2) == "00" {
@@ -473,7 +483,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                                     self.bottomView.nameLabel.text = bottomTitle
                                     
                                     var methodAttachment: NSTextAttachment = NSTextAttachment()
-                                    methodAttachment.image = UIImage(named: "icon-car75.png")
+                                    methodAttachment.image = IconImage().car()
                                     
                                     var methodAttachmentString : NSAttributedString = NSAttributedString(attachment: methodAttachment)
                                     var methodString : NSMutableAttributedString = NSMutableAttributedString(string: " " + bottomMethod)

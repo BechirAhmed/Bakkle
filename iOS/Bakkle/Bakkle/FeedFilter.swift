@@ -10,6 +10,8 @@ import UIKit
 
 class FeedFilterView: UIViewController {
     
+    @IBOutlet weak var menuBtn: UIButton!
+    
     @IBOutlet weak var distance: UISlider!
     @IBOutlet weak var price: UISlider!
     @IBOutlet weak var number: UISlider!
@@ -20,8 +22,8 @@ class FeedFilterView: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
+        setupButtons()
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -54,6 +56,11 @@ class FeedFilterView: UIViewController {
         number.setValue(Bakkle.sharedInstance.filter_number, animated: true)
         
         self.filterRealtime(0) // force labels to update
+    }
+    
+    func setupButtons() {
+        menuBtn.setImage(IconImage().menu(), forState: .Normal)
+        menuBtn.setTitle("", forState: .Normal)
     }
     
     /* MENUBAR ITEMS */
