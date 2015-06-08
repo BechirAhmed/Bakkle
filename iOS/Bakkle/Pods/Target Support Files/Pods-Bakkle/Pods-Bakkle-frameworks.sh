@@ -48,8 +48,10 @@ code_sign() {
 
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
+  install_framework 'FontAwesomeIconFactory.framework'
   install_framework 'Haneke.framework'
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
+  install_framework 'FontAwesomeIconFactory.framework'
   install_framework 'Haneke.framework'
 fi

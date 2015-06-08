@@ -6,6 +6,12 @@
 // project.
 
 
+// FontAwesomeIconFactory
+#define COCOAPODS_POD_AVAILABLE_FontAwesomeIconFactory
+#define COCOAPODS_VERSION_MAJOR_FontAwesomeIconFactory 2
+#define COCOAPODS_VERSION_MINOR_FontAwesomeIconFactory 0
+#define COCOAPODS_VERSION_PATCH_FontAwesomeIconFactory 0
+
 // HanekeSwift
 #define COCOAPODS_POD_AVAILABLE_HanekeSwift
 #define COCOAPODS_VERSION_MAJOR_HanekeSwift 0

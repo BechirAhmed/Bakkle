@@ -1,10 +1,13 @@
 PODS:
+  - FontAwesomeIconFactory (2.0)
   - HanekeSwift (0.9.1)
 
 DEPENDENCIES:
+  - FontAwesomeIconFactory
   - HanekeSwift
 
 SPEC CHECKSUMS:
+  FontAwesomeIconFactory: d161a1832f8220d764033e0fcc4f4a8388495ab7
   HanekeSwift: 50d37bfbc4432edc649167e538c259feccb4a2bb
 
-COCOAPODS: 0.37.1
+COCOAPODS: 0.37.2
