@@ -11,8 +11,11 @@ from threading import Thread
 import urllib
 from PIL import Image
 import time
+import urllib2
+import base64
+#import Image
 
-server_id = 3 # SET to change server
+server_id = 2 # SET to change server
 image_width = 660
 image_height = image_width
 
@@ -140,6 +143,10 @@ q.join()       # block until all tasks are done
 
 class Bakkle():
     def __init__(self):
+        self.location = "39.8661123,-86.1239327"
+        self.user_id = 0
+        self.auth_token = None
+        self.device_uuid = 42
         pass
 
     def server_url(self):
@@ -152,18 +159,84 @@ class Bakkle():
         else:
             return "http://bakkle.rhventures.org"
 
+    def set_location(self, location):
+        self.location = location
+
+    def facebook(self, email, gender, username, name, facebook_user_id, locale, first_name, last_name, device_uuid=0):
+        url = self.server_url() + '/account/facebook/'
+        data = { 'email': email,
+                 'gender': gender,
+                 'username':username,
+                 'name':name,
+                 'user_id':facebook_user_id,
+                 'locale':locale,
+                 'first_name':first_name,
+                 'last_name':last_name,
+                 'device_uuid':device_uuid,
+                 'user_location':self.location,
+                 'app_version':'1.1',
+        }
+        self.facebook_user_id = facebook_user_id
+        self.device_uuid = device_uuid
+        r = requests.post(url, data=data)
+        print("Create account. Return: {}".format(r.json()))
+
+    def login(self):
+        #let postString = "device_uuid=\(self.deviceUUID)&user_id=\(self.facebook_id_str)&screen_width=\(screen_width)&screen_height=\(screen_height)&app_version=\(a)&app_build=\(b)&user_location=\(encLocation)&is_ios=true"
+        url = self.server_url() + '/account/login_facebook/'
+        data = { 'device_uuid':self.device_uuid,
+                 'user_id':self.facebook_user_id,
+                 'screen_width':1,
+                 'screen_height':1,
+                 'user_location':'39.8661123,-86.1239327',
+                 'app_version':'1',
+                 'app_build':'1',
+                 'is_ios':False,
+        }
+        r = requests.post(url, data=data)
+        print("Login(facebook). Return: {}".format(r.text))
+        self.auth_token = r.json()['auth_token']
+
     def addItem(self, item):
         #print("Uploading item to bakkle server")
         #print(item)
         image_file_name = os.path.join(image_dir, item['image_url'].split('/')[-1])
-        #print image_file_name
+        trimmed_title = item['title'][0:item['title'][0:32].rfind(' ')]
+        print("{} - {}".format(trimmed_title.rjust(32), image_file_name))
 
-        # upload( item['id'], item['image_url'], item['title'], item['price'] )
-        # and image from:
+        image_abs_path = os.path.dirname(os.path.abspath(__file__)) + "/" + image_file_name
+
+        url = self.server_url() + '/items/add_item/?notify=0&device_uuid={}&auth_token={}&title='.format(self.device_uuid,self.auth_token) + urllib.quote(trimmed_title, '') + '&description={}&location={}&tags={}&price='.format(item['title'], self.location, item['title']) + item['price'].replace("$", "") + '&method=Pick%20up'
+
+        files = {'image': open(image_abs_path, "rb") } #'file' => name of html input field
+        r = requests.post(url, files=files)
+	print("Return: {}".format(r.json()))
 
 
+q = Queue()
 b = Bakkle()
+b.set_location = "39.8661123,-86.1239327"
+print("Uploading items to bakkle server: {}".format(b.server_url()))
+b.facebook("goodwill@pethes.com", "male", "goodwill", "Goodwill Industries", 2, "", "Goodwill", "Industries", 0)
+b.login()
+
+def addImageWorker():
+    while True:
+        item = q.get()
+        b.addItem(item)
+        q.task_done()
+
+for i in range(num_worker_threads):
+    t = Thread(target=addImageWorker)
+    t.daemon = True
+    t.start()
+
 for item in items:
-    b.addItem(items[item])
+    #b.addItem(items[item])
+    q.put(items[item])
+
+q.join()       # block until all tasks are done
+
+
 
 #import pdb; pdb.set_trace()

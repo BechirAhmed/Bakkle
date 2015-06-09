@@ -133,6 +133,7 @@ def add_item(request):
     price = request.GET.get('price')
     tags = request.GET.get('tags',"")
     method = request.GET.get('method')
+    notifyFlag = request.GET.get('notify')
 
     # Get the item id if present (If it is present an item will be edited not added)
     item_id = request.GET.get('item_id', "")
@@ -165,7 +166,8 @@ def add_item(request):
             image_urls = image_urls,
             status = Items.ACTIVE)
         item.save()
-        notify_all_new_item("New: ${} - {}".format(item.price, item.title))
+        if(notifyFlag == None or notifyFlag == "" or int(notifyFlag) != 0):
+            notify_all_new_item("New: ${} - {}".format(item.price, item.title))
     else:
         # Else get the item
         try:
@@ -222,12 +224,6 @@ def notify_all_new_item(message):
 def delete_item(request):
     return update_status(request, Items.DELETED)
 
-@csrf_exempt
-@require_POST
-@authenticate
-@time_method
-def sell_item(request):
-    return update_status(request, Items.SOLD)
 
 # This will only be called by the system if an Item has been reported X amount of times.
 # TODO: implement this in the report 
@@ -251,6 +247,10 @@ def feed(request):
     filter_distance = request.POST.get('filter_distance')
     filter_price = int(request.POST.get('filter_price'))
     filter_number = int(request.POST.get('filter_number'))
+
+    print("auth_token: " + str(auth_token));
+    print("device_uuid: " + str(device_uuid));
+    print("user_location: " + str(user_location));
 
     # Check that all require params are sent and are of the right format
     if (auth_token == None or auth_token.strip() == "" or auth_token.find('_') == -1) or (user_location == None or user_location == ""):
@@ -321,11 +321,11 @@ def feed(request):
         #if filter price is 100+, ignore filter.
         if(filter_price == MAX_ITEM_PRICE):
             print(3);
-            item_list = Items.objects.exclude(buyeritem = items_viewed).exclude(Q(seller__pk = buyer_id)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')
+            item_list = Items.objects.exclude(buyeritem = items_viewed).exclude(Q(seller__pk = buyer_id)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')[:10]
             users_list = Items.objects.exclude(buyeritem = items_viewed).filter(Q(seller__pk = buyer_id)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')[:1]
         else:
             print(4);
-            item_list = Items.objects.exclude(buyeritem = items_viewed).exclude(Q(seller__pk = buyer_id)).filter(Q(price__lte = filter_price)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')
+            item_list = Items.objects.exclude(buyeritem = items_viewed).exclude(Q(seller__pk = buyer_id)).filter(Q(price__lte = filter_price)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')[:10]
             users_list = Items.objects.exclude(buyeritem = items_viewed).filter(Q(seller__pk = buyer_id)).filter(Q(price__lte = filter_price)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')[:1]
    
     item_array = []
@@ -358,6 +358,13 @@ def feed(request):
 @time_method
 def meh(request):
     return add_item_to_buyer_items(request, BuyerItem.MEH)
+
+@csrf_exempt
+@require_POST
+@authenticate
+@time_method
+def sold(request):
+    return add_item_to_buyer_items(request, BuyerItem.SOLD)
 
 @csrf_exempt
 @require_POST
@@ -475,7 +482,7 @@ def get_seller_items(request):
                 convos_with_new_message = convos_with_new_message + 1
 
         # get the buyer items for this item
-        buyer_items = BuyerItem.objects.filter(item=item)
+        buyer_items = BuyerItem.objects.filter(item_id=item.id)
         number_of_views = 0
         number_of_meh = 0
         number_of_want = 0
@@ -489,7 +496,7 @@ def get_seller_items(request):
                 number_of_report = number_of_report + 1
             elif buyer_item.status == BuyerItem.HOLD:
                 number_of_holding = number_of_holding + 1
-            elif buyer_item.status == BuyerItem.WANT or buyer_item.status == BuyerItem.NEGOCIATING or buyer_item.status == BuyerItem.PENDING:
+            elif buyer_item.status == BuyerItem.WANT or buyer_item.status == BuyerItem.NEGOTIATING or buyer_item.status == BuyerItem.PENDING:
                 number_of_want = number_of_want + 1
 
 
@@ -540,7 +547,7 @@ def get_buyers_trunk(request):
     auth_token = request.POST.get('auth_token')
     buyer_id = auth_token.split('_')[1]
 
-    item_list = BuyerItem.objects.filter(Q(buyer=buyer_id, status=BuyerItem.WANT) | Q(buyer=buyer_id, status=BuyerItem.PENDING) | Q(buyer=buyer_id, status=BuyerItem.NEGOCIATING))
+    item_list = BuyerItem.objects.filter(Q(buyer=buyer_id, status=BuyerItem.WANT) | Q(buyer=buyer_id, status=BuyerItem.PENDING) | Q(buyer=buyer_id, status=BuyerItem.NEGOTIATING))
 
     item_array = []
     # get json representaion of item array
@@ -633,6 +640,8 @@ def imgupload(request, seller_id):
     image_urls = ""
     #import pdb; pdb.set_trace()
     
+    print(request)
+
     for i in request.FILES.getlist('image'):
         #i = request.FILES['image']
         uhash = hex(random.getrandbits(128))[2:-1]
@@ -665,6 +674,8 @@ def add_item_to_buyer_items(request, status):
     # get the account id 
     buyer_id = auth_token.split('_')[1]
 
+
+
     # get the item
     try:
         item = Items.objects.get(pk=item_id)
@@ -673,54 +684,55 @@ def add_item_to_buyer_items(request, status):
         response_data = {"status":0, "error":"Item {} does not exist.".format(item_id)}
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 
-    if (buyer_item_id == None or buyer_item_id == ""):
+    #check if item already sold - if so, return an error:
+    print(item.status);
+    if(item.status == Items.SOLD):
+        item = None
+        response_data = {"status":0, "error":"Item has already been sold."}
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
 
-        try:
-            account = Account.objects.get(pk=buyer_id)
-        except Account.DoesNotExist:
-            account = None
-            response_data = {"status":0, "error":"Account {} does not exist.".format(buyer_id)}
-            return HttpResponse(json.dumps(response_data), content_type="application/json")
 
+    try:
+        account = Account.objects.get(pk=buyer_id)
         # Create or update the buyer item
-        buyer_item = BuyerItem.objects.create(
-            buyer = account,
-            item = item,
-            status = status, 
-            confirmed_price = item.price,
-            view_duration = 0)
-
-        # If the item seller is the same as the buyer mark it as their item instead of the status
-        # TODO: Eventually put this back in to prevent errors from user trying to buy their own item
-        # if(str(item.seller.id) == str(buyer_id)):
-        #     print("Are same")
-        #     buyer_item.status = BuyerItem.MY_ITEM
-        # else:
-        #     buyer_item.status = status
-        buyer_item.status = status
-        buyer_item.confirmed_price = item.price
-        buyer_item.view_duration = view_duration
-        buyer_item.save()
-    else:
         try:
-            buyer_item = BuyerItem.objects.get(pk=buyer_item_id)
+            buyer_item = BuyerItem.objects.get(item = item.pk, buyer = buyer_id)
         except BuyerItem.DoesNotExist:
-            buyer_item = None
-            response_data = {"status":0, "error":"BuyerItem {} does not exist.".format(buyer_item_id)}
-            return HttpResponse(json.dumps(response_data), content_type="application/json")
 
-        # Update fields
-        # If the item seller is the same as the buyer mark it as their item instead of the status
-        # TODO: Eventually put this back in to prevent errors from user trying to buy their own item
-        # if(str(item.seller.id) == str(buyer_id)):
-        #     print("Are same")
-        #     buyer_item.status = BuyerItem.MY_ITEM
-        # else:
-        #     buyer_item.status = status
+            buyer_item = BuyerItem.objects.create(
+                buyer = account,
+                item = item,
+                status = status, 
+                confirmed_price = item.price,
+                view_duration = 0)
+
+            # If the item seller is the same as the buyer mark it as their item instead of the status
+            # TODO: Eventually put this back in to prevent errors from user trying to buy their own item
+            # if(str(item.seller.id) == str(buyer_id)):
+            #     print("Are same")
+            #     buyer_item.status = BuyerItem.MY_ITEM
+            # else:
+            #     buyer_item.status = status
+
+
+        if (status == BuyerItem.SOLD):
+            buyer_item.accepted_sale_price = buyer_item.confirmed_price
+            item.status = Items.SOLD
+            item.save()
+        else:
+            buyer_item.confirmed_price = item.price
+
         buyer_item.status = status
-        buyer_item.confirmed_price = item.price
         buyer_item.view_duration = view_duration
         buyer_item.save()
+
+    except Account.DoesNotExist:
+        account = None
+        response_data = {"status":0, "error":"Account {} does not exist.".format(buyer_id)}
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+    
+    
 
     response_data = { 'status':1 }
     return HttpResponse(json.dumps(response_data), content_type="application/json")
@@ -827,12 +839,12 @@ def reset_items(request):
     try:
         a = Account.objects.get(
             facebook_id="1020420",
-            display_name="Test Seller",
+            display_name="Goodwill Industries",
             email="testseller@bakkle.com" )
     except Account.DoesNotExist:
         a = Account(
             facebook_id="1020420",
-            display_name="Test Seller",
+            display_name="Goodwill Industries",
             email="testseller@bakkle.com",
             user_location="39.417672,-87.330438", )
         a.save()

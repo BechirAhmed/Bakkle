@@ -139,6 +139,19 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
         self.presentViewController(chatViewController, animated: true, completion: {})
     }
     
+    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if editingStyle == UITableViewCellEditingStyle.Delete {
+            let item = Bakkle.sharedInstance.trunkItems[indexPath.row].valueForKey("item") as! NSDictionary
+            Bakkle.sharedInstance.markItem("meh", item_id: item.valueForKey("pk")!.integerValue, success: {}, fail: {})
+            Bakkle.sharedInstance.trunkItems.removeAtIndex(indexPath.row)
+            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+        }
+    }
+    
     /* MENUBAR ITEMS */
     @IBAction func btnMenu(sender: AnyObject) {
         self.revealViewController().revealToggleAnimated(true)

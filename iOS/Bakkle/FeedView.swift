@@ -16,6 +16,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     let menuSegue = "presentNav"
     let addItemSegue = "AddItemSegue"
     let itemDetailSegue = "ItemDetailSegue"
+    var searching = false
     
     let options = MDCSwipeToChooseViewOptions()
     var swipeView : MDCSwipeToChooseView!
@@ -61,8 +62,6 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         }
         
         // Item detail tap
-        var tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
-        self.view.addGestureRecognizer(tap)
         itemDetailTap = UITapGestureRecognizer(target: self, action: "goToDetails")
         
         // Register for feed updates
@@ -131,6 +130,8 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     @IBAction func menuButtonPressed(sender: AnyObject) {
         NSNotificationCenter.defaultCenter().removeObserver(self)
         self.revealViewController().revealToggleAnimated(true)
+        self.searchBar.resignFirstResponder()
+        searching = false
         //TODO: remove this when feed is updated via push
         requestUpdates()
     }
@@ -151,7 +152,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             self.swipeView = nil
         }
         if self.bottomView != nil {
-            self.bottomView.userInteractionEnabled = true
+            self.bottomView.userInteractionEnabled = false
             self.bottomView = nil
         }
     }
@@ -164,6 +165,9 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         //TODO: need to fix queuing mechanism so multple requests are not dispatched.
     }
     
+    func searchBarTextDidBeginEditing(searchBar: UISearchBar){
+        searching = true
+    }
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
     }
@@ -174,9 +178,6 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     /* End search bar delegate */
     
     
-    func dismissKeyboard() {
-        self.searchBar.resignFirstResponder()
-    }
     
     /* Call when filter parameters change. Updates text when all cards are exhausted */
     func filterChanged() {
@@ -189,10 +190,14 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     }
     
     func goToDetails() {
-        let itemDet = ItemDetails()
-        println("GOES IN DETAILS VIEW CONTROLLER")
-        self.performSegueWithIdentifier(itemDetailSegue, sender: self)
-        
+        if searching {
+            self.searchBar.resignFirstResponder()
+            searching = false
+        }else{
+            let itemDet = ItemDetails()
+            println("GOES IN DETAILS VIEW CONTROLLER")
+            self.performSegueWithIdentifier(itemDetailSegue, sender: self)
+        }
     }
     
     
@@ -201,7 +206,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         println("[FeedScreen] removing item from feed")
         
         // Put the swipe view back in the correct location
-        resetSwipeView()
+//        resetSwipeView()
         
         // Remove the item that was just marked from the view
         if Bakkle.sharedInstance.feedItems.count>0 {
@@ -255,21 +260,22 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         
         
         /* If view is off the page we need to reset the view */
-        if (state != nil && state.direction != MDCSwipeDirection.None) {
+        else if (state != nil && state.direction != MDCSwipeDirection.None) {
+            
+            //if view is still on page, yet has been swiped in a direction, remove it.
             if self.swipeView != nil {
                 self.swipeView.removeFromSuperview()
                 self.swipeView = nil
             }
-            self.swipeView = MDCSwipeToChooseView(frame: self.view.bounds, options: options)
-            if self.bottomView != nil {
-                self.bottomView.removeFromSuperview()
-                self.bottomView = nil
-            }
+            
+            //promote bottomView to prevent having to recreate swipeView
+            self.swipeView = self.bottomView
+            
+            //create new bottomView
             self.bottomView = MDCSwipeToChooseView(frame: CGRectMake(self.swipeView.frame.origin.x, self.swipeView.frame.origin.y, self.swipeView.frame.width, self.swipeView.frame.height), options: nil)
-            self.view.insertSubview(self.bottomView, belowSubview: self.swipeView)
+            
+            //add gesture recognizer to top view (swipeView)
             self.swipeView.addGestureRecognizer(itemDetailTap)
-        } else {
-            //  View is already on the page AND is still visible. Do nothing
         }
     }
     
@@ -388,12 +394,9 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                 
                 self.swipeView.sellerName.text = firstName + " " + lastName + "."
                 self.swipeView.ratingView.rating = 3.5
-                dispatch_async(dispatch_get_global_queue(
-                    Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
                         let firstURL = imgURLs[0] as! String
                         let imgURL = NSURL(string: firstURL)
                         let profileImgURL = NSURL(string: facebookProfileImgString)
-                        dispatch_async(dispatch_get_main_queue()) {
                             //println("[FeedScreen] displaying image (top)")
                             if imgURL == nil {
                                 
@@ -409,7 +412,6 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                                 println("IMAGE FRAME WIDTH AND HEIGHT ARE: \(self.swipeView.imageView.frame.size.width), \(self.swipeView.imageView.frame.size.height)")
                             }
                             super.view.addSubview(self.swipeView)
-                        }
                         
                         if Bakkle.sharedInstance.feedItems.count > 1 {
                             if self.bottomView != nil {
@@ -454,7 +456,6 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                                 let bottomURL = bottomURLs[0] as! String
                                 let imgURL = NSURL(string: bottomURL)
                                 let profileImgURL = NSURL(string: facebookProfileImgString)
-                                dispatch_async(dispatch_get_main_queue()) {
                                     //println("[FeedScreen] displaying image (bottom)")
                                     if let x = imgURL {
                                         self.bottomView.bottomBlurImg.hnk_setImageFromURL(imgURL!)
@@ -492,9 +493,8 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                                     self.bottomView.methodLabel.attributedText = methodString
                                     
                                     self.bottomView.sellerName.text = firstName + " " + lastName + "."
-                                    self.bottomView.ratingView.rating = 5
+                                    self.bottomView.ratingView.rating = 3.5
                                 }
-                            }
                         } else {
                             println("Only one item, hiding bottom card")
                             // only 1 item (top card)
@@ -504,7 +504,6 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                             }
                         }
                 }
-            }
         } else {
             println("No items, hiding both cards")
             /* No items left in feed */
@@ -555,14 +554,6 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         else if direction == MDCSwipeDirection.Down {
             Bakkle.sharedInstance.markItem("report", item_id: self.item_id, success: {}, fail: {})
             loadNext()
-        }
-        
-        if Bakkle.sharedInstance.feedItems.count > 1 {
-            self.bottomView.alpha = 0.0
-            self.view.insertSubview(self.bottomView, belowSubview: self.swipeView)
-            UIView.animateWithDuration(0.5, delay: 0.0, options: UIViewAnimationOptions.CurveEaseInOut, animations: { () -> Void in
-                self.bottomView.alpha = 1.0
-                }, completion: nil)
         }
     }
     
@@ -639,7 +630,6 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             let destinationVC = segue.destinationViewController as! ItemDetails
             
             destinationVC.item = Bakkle.sharedInstance.feedItems[0] as! NSDictionary
-//            destinationVC.wantLabel.text = "Want"
         }
     }
 }

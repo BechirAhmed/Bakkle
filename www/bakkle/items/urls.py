@@ -10,10 +10,11 @@ urlpatterns = [
     url(r'^meh/$', views.meh, name='meh'),
     url(r'^want/$', views.want, name='want'),
     url(r'^hold/$', views.hold, name='hold'),
+    url(r'^sold/$', views.sold, name='hold'),
     url(r'^report/$', views.report, name='report'),
     url(r'^add_item/$', views.add_item, name='add_item'),
     url(r'^delete_item/$', views.delete_item, name='delete_item'),
-    url(r'^sell_item/$', views.sell_item, name='sell_item'),
+    #url(r'^sell_item/$', views.sell_item, name='sell_item'),
     # TODO: Remove the spam entry so that can no longer be reached once testing is complete
     url(r'^spam_item/$', views.spam_item, name='spam_item'),
     url(r'^get_seller_items/$', views.get_seller_items, name='get_seller_items'),

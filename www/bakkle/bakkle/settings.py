@@ -39,7 +39,8 @@ INSTALLED_APPS = (
     'items',
     'account',
     'system',
-    'conversation'
+    'conversation',
+    'timing'
 )
 
 MIDDLEWARE_CLASSES = (
