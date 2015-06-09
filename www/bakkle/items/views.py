@@ -321,11 +321,11 @@ def feed(request):
         #if filter price is 100+, ignore filter.
         if(filter_price == MAX_ITEM_PRICE):
             print(3);
-            item_list = Items.objects.exclude(buyeritem = items_viewed).exclude(Q(seller__pk = buyer_id)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')
+            item_list = Items.objects.exclude(buyeritem = items_viewed).exclude(Q(seller__pk = buyer_id)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')[:10]
             users_list = Items.objects.exclude(buyeritem = items_viewed).filter(Q(seller__pk = buyer_id)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')[:1]
         else:
             print(4);
-            item_list = Items.objects.exclude(buyeritem = items_viewed).exclude(Q(seller__pk = buyer_id)).filter(Q(price__lte = filter_price)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')
+            item_list = Items.objects.exclude(buyeritem = items_viewed).exclude(Q(seller__pk = buyer_id)).filter(Q(price__lte = filter_price)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')[:10]
             users_list = Items.objects.exclude(buyeritem = items_viewed).filter(Q(seller__pk = buyer_id)).filter(Q(price__lte = filter_price)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')[:1]
    
     item_array = []
@@ -839,12 +839,12 @@ def reset_items(request):
     try:
         a = Account.objects.get(
             facebook_id="1020420",
-            display_name="Test Seller",
+            display_name="Goodwill Industries",
             email="testseller@bakkle.com" )
     except Account.DoesNotExist:
         a = Account(
             facebook_id="1020420",
-            display_name="Test Seller",
+            display_name="Goodwill Industries",
             email="testseller@bakkle.com",
             user_location="39.417672,-87.330438", )
         a.save()
