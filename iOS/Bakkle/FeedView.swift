@@ -329,10 +329,11 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                 let sellersName = sellersProfile.valueForKey("display_name") as! String
                 var facebookProfileImgString = "http://graph.facebook.com/\(facebookID)/picture?width=142&height=142"
                 
+                //TODO: handle case where sellers name is null
                 let dividedName = split(sellersName) {$0 == " "}
                 
                 let firstName = dividedName[0] as String
-                let lastName = String(Array(dividedName[1])[0])
+                let lastName = ""// String(Array(dividedName[1])[0])
                 
                 //println("[FeedScreen] Downloading image (top) \(imgURLs)")
                 self.swipeView.nameLabel.text = topTitle
@@ -353,7 +354,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                 
                 self.swipeView.methodLabel.attributedText = self.stringWithIcon(topMethod, image: IconImage().car())
                 
-                self.swipeView.sellerName.text = firstName + " " + lastName + "."
+                self.swipeView.sellerName.text = firstName // + " " + lastName + "."
                 self.swipeView.ratingView.rating = 3.5
                         let firstURL = imgURLs[0] as! String
                         let imgURL = NSURL(string: firstURL)
@@ -393,7 +394,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                                 let dividedName = split(sellersName) {$0 == " "}
                                 
                                 let firstName = dividedName[0] as String
-                                let lastName = String(Array(dividedName[1])[0])
+                                let lastName = "" //String(Array(dividedName[1])[0])
                                 
                                 if location.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
                                     let start: CLLocation = CLLocation(locationString: location)
@@ -431,7 +432,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                                     
                                     self.bottomView.methodLabel.attributedText = self.stringWithIcon(bottomMethod, image: IconImage().car())
                                     
-                                    self.bottomView.sellerName.text = firstName + " " + lastName + "."
+                                    self.bottomView.sellerName.text = firstName // + " " + lastName + "."
                                     self.bottomView.ratingView.rating = 3.5
                                 }
                         } else {
