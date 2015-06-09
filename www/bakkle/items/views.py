@@ -222,12 +222,6 @@ def notify_all_new_item(message):
 def delete_item(request):
     return update_status(request, Items.DELETED)
 
-@csrf_exempt
-@require_POST
-@authenticate
-@time_method
-def sell_item(request):
-    return update_status(request, Items.SOLD)
 
 # This will only be called by the system if an Item has been reported X amount of times.
 # TODO: implement this in the report 
@@ -363,6 +357,13 @@ def meh(request):
 @require_POST
 @authenticate
 @time_method
+def sold(request):
+    return add_item_to_buyer_items(request, BuyerItem.SOLD)
+
+@csrf_exempt
+@require_POST
+@authenticate
+@time_method
 def want(request):
     item_id = request.POST.get('item_id')
     auth_token = request.POST.get('auth_token', "")
@@ -475,7 +476,7 @@ def get_seller_items(request):
                 convos_with_new_message = convos_with_new_message + 1
 
         # get the buyer items for this item
-        buyer_items = BuyerItem.objects.filter(item=item)
+        buyer_items = BuyerItem.objects.filter(item_id=item.id)
         number_of_views = 0
         number_of_meh = 0
         number_of_want = 0
@@ -489,7 +490,7 @@ def get_seller_items(request):
                 number_of_report = number_of_report + 1
             elif buyer_item.status == BuyerItem.HOLD:
                 number_of_holding = number_of_holding + 1
-            elif buyer_item.status == BuyerItem.WANT or buyer_item.status == BuyerItem.NEGOCIATING or buyer_item.status == BuyerItem.PENDING:
+            elif buyer_item.status == BuyerItem.WANT or buyer_item.status == BuyerItem.NEGOTIATING or buyer_item.status == BuyerItem.PENDING:
                 number_of_want = number_of_want + 1
 
 
@@ -540,7 +541,7 @@ def get_buyers_trunk(request):
     auth_token = request.POST.get('auth_token')
     buyer_id = auth_token.split('_')[1]
 
-    item_list = BuyerItem.objects.filter(Q(buyer=buyer_id, status=BuyerItem.WANT) | Q(buyer=buyer_id, status=BuyerItem.PENDING) | Q(buyer=buyer_id, status=BuyerItem.NEGOCIATING))
+    item_list = BuyerItem.objects.filter(Q(buyer=buyer_id, status=BuyerItem.WANT) | Q(buyer=buyer_id, status=BuyerItem.PENDING) | Q(buyer=buyer_id, status=BuyerItem.NEGOTIATING))
 
     item_array = []
     # get json representaion of item array
@@ -665,6 +666,8 @@ def add_item_to_buyer_items(request, status):
     # get the account id 
     buyer_id = auth_token.split('_')[1]
 
+
+
     # get the item
     try:
         item = Items.objects.get(pk=item_id)
@@ -673,54 +676,55 @@ def add_item_to_buyer_items(request, status):
         response_data = {"status":0, "error":"Item {} does not exist.".format(item_id)}
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 
-    if (buyer_item_id == None or buyer_item_id == ""):
+    #check if item already sold - if so, return an error:
+    print(item.status);
+    if(item.status == Items.SOLD):
+        item = None
+        response_data = {"status":0, "error":"Item has already been sold."}
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
 
-        try:
-            account = Account.objects.get(pk=buyer_id)
-        except Account.DoesNotExist:
-            account = None
-            response_data = {"status":0, "error":"Account {} does not exist.".format(buyer_id)}
-            return HttpResponse(json.dumps(response_data), content_type="application/json")
 
+    try:
+        account = Account.objects.get(pk=buyer_id)
         # Create or update the buyer item
-        buyer_item = BuyerItem.objects.create(
-            buyer = account,
-            item = item,
-            status = status, 
-            confirmed_price = item.price,
-            view_duration = 0)
-
-        # If the item seller is the same as the buyer mark it as their item instead of the status
-        # TODO: Eventually put this back in to prevent errors from user trying to buy their own item
-        # if(str(item.seller.id) == str(buyer_id)):
-        #     print("Are same")
-        #     buyer_item.status = BuyerItem.MY_ITEM
-        # else:
-        #     buyer_item.status = status
-        buyer_item.status = status
-        buyer_item.confirmed_price = item.price
-        buyer_item.view_duration = view_duration
-        buyer_item.save()
-    else:
         try:
-            buyer_item = BuyerItem.objects.get(pk=buyer_item_id)
+            buyer_item = BuyerItem.objects.get(item = item.pk, buyer = buyer_id)
         except BuyerItem.DoesNotExist:
-            buyer_item = None
-            response_data = {"status":0, "error":"BuyerItem {} does not exist.".format(buyer_item_id)}
-            return HttpResponse(json.dumps(response_data), content_type="application/json")
 
-        # Update fields
-        # If the item seller is the same as the buyer mark it as their item instead of the status
-        # TODO: Eventually put this back in to prevent errors from user trying to buy their own item
-        # if(str(item.seller.id) == str(buyer_id)):
-        #     print("Are same")
-        #     buyer_item.status = BuyerItem.MY_ITEM
-        # else:
-        #     buyer_item.status = status
+            buyer_item = BuyerItem.objects.create(
+                buyer = account,
+                item = item,
+                status = status, 
+                confirmed_price = item.price,
+                view_duration = 0)
+
+            # If the item seller is the same as the buyer mark it as their item instead of the status
+            # TODO: Eventually put this back in to prevent errors from user trying to buy their own item
+            # if(str(item.seller.id) == str(buyer_id)):
+            #     print("Are same")
+            #     buyer_item.status = BuyerItem.MY_ITEM
+            # else:
+            #     buyer_item.status = status
+
+
+        if (status == BuyerItem.SOLD):
+            buyer_item.accepted_sale_price = buyer_item.confirmed_price
+            item.status = Items.SOLD
+            item.save()
+        else:
+            buyer_item.confirmed_price = item.price
+
         buyer_item.status = status
-        buyer_item.confirmed_price = item.price
         buyer_item.view_duration = view_duration
         buyer_item.save()
+
+    except Account.DoesNotExist:
+        account = None
+        response_data = {"status":0, "error":"Account {} does not exist.".format(buyer_id)}
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+    
+    
 
     response_data = { 'status':1 }
     return HttpResponse(json.dumps(response_data), content_type="application/json")
