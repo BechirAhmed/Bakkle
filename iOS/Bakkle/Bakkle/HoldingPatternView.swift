@@ -177,6 +177,19 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
         self.presentViewController(vc, animated: true, completion: {})
     }
     
+    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if editingStyle == UITableViewCellEditingStyle.Delete {
+            let item = Bakkle.sharedInstance.holdingItems[indexPath.row].valueForKey("item") as! NSDictionary
+            Bakkle.sharedInstance.markItem("meh", item_id: item.valueForKey("pk")!.integerValue, success: {}, fail: {})
+            Bakkle.sharedInstance.holdingItems.removeAtIndex(indexPath.row)
+            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+        }
+    }
+    
     func updateTimeRemaining() {
         let notification = NSNotification(name: HoldingPatternView.bkTimeRemainingUpdate, object: nil)
         NSNotificationCenter.defaultCenter().postNotification(notification)
