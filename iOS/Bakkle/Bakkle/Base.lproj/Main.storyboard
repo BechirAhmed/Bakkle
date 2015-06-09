@@ -706,15 +706,15 @@
                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="item-detail-overlay.png" translatesAutoresizingMaskIntoConstraints="NO" id="HGY-hR-A01">
                                         <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                     </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SAMPLE ITEM NAME" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7lg-Vc-Sqa">
+                                    <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="Zpk-N0-i3M">
+                                        <rect key="frame" x="-19" y="-18" width="39" height="37"/>
+                                    </pageControl>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SAMPLE ITEM NAME" textAlignment="center" lineBreakMode="clip" baselineAdjustment="alignBaselines" minimumFontSize="6" translatesAutoresizingMaskIntoConstraints="NO" id="7lg-Vc-Sqa">
                                         <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
                                         <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="21"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="Zpk-N0-i3M">
-                                        <rect key="frame" x="-19" y="-18" width="39" height="37"/>
-                                    </pageControl>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -735,22 +735,24 @@
                                         <variation key="heightClass=regular-widthClass=compact" constant="-5"/>
                                     </constraint>
                                     <constraint firstAttribute="bottom" secondItem="HGY-hR-A01" secondAttribute="bottom" id="g0E-OI-CWj"/>
+                                    <constraint firstAttribute="trailing" secondItem="7lg-Vc-Sqa" secondAttribute="trailing" constant="8" id="ime-G0-dUG">
+                                        <variation key="heightClass=regular-widthClass=compact" constant="4"/>
+                                    </constraint>
                                     <constraint firstAttribute="trailing" secondItem="VKL-bg-bJT" secondAttribute="trailing" id="myO-7B-1qm"/>
                                     <constraint firstAttribute="centerX" secondItem="Zpk-N0-i3M" secondAttribute="centerX" id="pk7-S1-hbI"/>
+                                    <constraint firstItem="7lg-Vc-Sqa" firstAttribute="leading" secondItem="eb5-ux-7Vh" secondAttribute="leading" constant="8" id="t9a-qV-h75">
+                                        <variation key="heightClass=regular-widthClass=compact" constant="4"/>
+                                    </constraint>
                                 </constraints>
                                 <variation key="default">
                                     <mask key="subviews">
                                         <exclude reference="VKL-bg-bJT"/>
                                         <exclude reference="HGY-hR-A01"/>
-                                        <exclude reference="7lg-Vc-Sqa"/>
                                         <exclude reference="Zpk-N0-i3M"/>
+                                        <exclude reference="7lg-Vc-Sqa"/>
                                     </mask>
                                     <mask key="constraints">
                                         <exclude reference="8Cg-du-9Md"/>
-                                        <exclude reference="BUH-AH-vqu"/>
-                                        <exclude reference="Q9P-Fx-xW2"/>
-                                        <exclude reference="c5J-Im-poM"/>
-                                        <exclude reference="pk7-S1-hbI"/>
                                         <exclude reference="9AE-aj-jbO"/>
                                         <exclude reference="FDw-Pq-9xu"/>
                                         <exclude reference="Mbb-2L-LdA"/>
@@ -763,21 +765,23 @@
                                         <exclude reference="M89-GP-bqU"/>
                                         <exclude reference="X4C-gn-BHE"/>
                                         <exclude reference="myO-7B-1qm"/>
+                                        <exclude reference="BUH-AH-vqu"/>
+                                        <exclude reference="Q9P-Fx-xW2"/>
+                                        <exclude reference="c5J-Im-poM"/>
+                                        <exclude reference="ime-G0-dUG"/>
+                                        <exclude reference="t9a-qV-h75"/>
+                                        <exclude reference="pk7-S1-hbI"/>
                                     </mask>
                                 </variation>
                                 <variation key="heightClass=regular-widthClass=compact">
                                     <mask key="subviews">
                                         <include reference="VKL-bg-bJT"/>
                                         <include reference="HGY-hR-A01"/>
-                                        <include reference="7lg-Vc-Sqa"/>
                                         <include reference="Zpk-N0-i3M"/>
+                                        <include reference="7lg-Vc-Sqa"/>
                                     </mask>
                                     <mask key="constraints">
                                         <include reference="8Cg-du-9Md"/>
-                                        <include reference="BUH-AH-vqu"/>
-                                        <include reference="Q9P-Fx-xW2"/>
-                                        <include reference="c5J-Im-poM"/>
-                                        <include reference="pk7-S1-hbI"/>
                                         <include reference="9AE-aj-jbO"/>
                                         <include reference="FDw-Pq-9xu"/>
                                         <include reference="Mbb-2L-LdA"/>
@@ -790,6 +794,12 @@
                                         <include reference="M89-GP-bqU"/>
                                         <include reference="X4C-gn-BHE"/>
                                         <include reference="myO-7B-1qm"/>
+                                        <include reference="BUH-AH-vqu"/>
+                                        <include reference="Q9P-Fx-xW2"/>
+                                        <include reference="c5J-Im-poM"/>
+                                        <include reference="ime-G0-dUG"/>
+                                        <include reference="t9a-qV-h75"/>
+                                        <include reference="pk7-S1-hbI"/>
                                     </mask>
                                 </variation>
                             </view>
@@ -2931,21 +2941,21 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                             </button>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zM0-y0-LRs">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zM0-y0-LRs">
                                 <rect key="frame" x="0.0" y="72" width="375" height="315"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
                                     <rect key="frame" x="0.0" y="64" width="375" height="0.0"/>
                                 </variation>
                             </scrollView>
-                            <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1QH-Oy-Msu">
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1QH-Oy-Msu">
                                 <rect key="frame" x="0.0" y="594" width="375" height="73"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
                                     <rect key="frame" x="0.0" y="231" width="375" height="436"/>
                                 </variation>
                             </view>
-                            <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8JN-bn-XkF">
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8JN-bn-XkF">
                                 <rect key="frame" x="0.0" y="515" width="375" height="39"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="bkg-chat-text.png" translatesAutoresizingMaskIntoConstraints="NO" id="Nbd-wu-q3t">

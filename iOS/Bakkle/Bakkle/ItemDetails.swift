@@ -59,7 +59,7 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
                 for index in 0...Bakkle.sharedInstance.trunkItems.count-1 {
                     if item == Bakkle.sharedInstance.trunkItems[index].valueForKey("item") as! NSDictionary {
                         wanted = true
-                        wantLabel.text = "Accept Offer"
+                        wantLabel.text = "ACCEPT OFFER"
                         break
                     }
                 }
