@@ -67,7 +67,9 @@ class MenuTableController: UITableViewController {
     }
     
     func stringWithIcon(label: String, image: UIImage) -> NSAttributedString {
-        var attachment: NSTextAttachment = NSTextAttachment()
+        var attachment: OffsetTextAttachment = OffsetTextAttachment()
+        let font: UIFont = self.feedLbl.font
+        attachment.fontDescender = font.descender
         attachment.image = image
         
         var attachmentString : NSAttributedString = NSAttributedString(attachment: attachment)

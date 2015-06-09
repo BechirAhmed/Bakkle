@@ -338,15 +338,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                     let start: CLLocation = CLLocation(locationString: location)
                     if let distance = Bakkle.sharedInstance.distanceTo(start) {
                         var distanceString = distance.rangeString()
-                        
-                        var attachment: NSTextAttachment = NSTextAttachment()
-                        attachment.image = IconImage().pin()
-                        
-                        var attachmentString : NSAttributedString = NSAttributedString(attachment: attachment)
-                        var myString : NSMutableAttributedString = NSMutableAttributedString(string:  " " + distanceString + " mi")
-                        myString.insertAttributedString(attachmentString, atIndex: 0)
-                        
-                        self.swipeView.distLabel.attributedText = myString
+                        self.swipeView.distLabel.attributedText = self.stringWithIcon(distanceString + " mi", image: IconImage().pin())
                     }
                 }
                 
@@ -363,34 +355,21 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                 //println("[FeedScreen] Downloading image (top) \(imgURLs)")
                 self.swipeView.nameLabel.text = topTitle
                 
-                var priceAttachment: NSTextAttachment = NSTextAttachment()
-                priceAttachment.image = IconImage().tags()
-                var attachmentString : NSAttributedString = NSAttributedString(attachment: priceAttachment)
-                
+                var myString : String = ""
                 if suffix(topPrice, 2) == "00" {
                     let withoutZeroes = "$\((topPrice as NSString).integerValue)"
-                    var myString : NSMutableAttributedString = NSMutableAttributedString(string: " " + withoutZeroes)
-                    myString.insertAttributedString(attachmentString, atIndex: 0)
-                    self.swipeView.priceLabel.attributedText = myString
+                    myString = " " + withoutZeroes
                 } else {
-                    var myString : NSMutableAttributedString = NSMutableAttributedString(string: " $" + (topPrice))
-                    myString.insertAttributedString(attachmentString, atIndex: 0)
-                    self.swipeView.priceLabel.attributedText = myString
+                    myString = " $" + topPrice
                 }
+                self.swipeView.priceLabel.attributedText = self.stringWithIcon(myString, image: IconImage().tags())
                 
                 if swipeView.imageView.image == nil {
                     self.swipeView.imageView.image = UIImage(named: "loading.png")
                     self.swipeView.userInteractionEnabled = false
                 }
                 
-                var methodAttachment: NSTextAttachment = NSTextAttachment()
-                methodAttachment.image = IconImage().car()
-                
-                var methodAttachmentString : NSAttributedString = NSAttributedString(attachment: methodAttachment)
-                var methodString : NSMutableAttributedString = NSMutableAttributedString(string: " " + topMethod)
-                methodString.insertAttributedString(methodAttachmentString, atIndex: 0)
-                
-                self.swipeView.methodLabel.attributedText = methodString
+                self.swipeView.methodLabel.attributedText = self.stringWithIcon(topMethod, image: IconImage().car())
                 
                 self.swipeView.sellerName.text = firstName + " " + lastName + "."
                 self.swipeView.ratingView.rating = 3.5
@@ -438,15 +417,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                                     let start: CLLocation = CLLocation(locationString: location)
                                     if let distance = Bakkle.sharedInstance.distanceTo(start) {
                                         var distanceString = distance.rangeString()
-                                        
-                                        var attachment: NSTextAttachment = NSTextAttachment()
-                                        attachment.image = IconImage().pin()
-                                        
-                                        var attachmentString : NSAttributedString = NSAttributedString(attachment: attachment)
-                                        var myString : NSMutableAttributedString = NSMutableAttributedString(string:  " " + distanceString + " mi")
-                                        myString.insertAttributedString(attachmentString, atIndex: 0)
-                                        
-                                        self.bottomView.distLabel.attributedText = myString
+                                        self.bottomView.distLabel.attributedText = self.stringWithIcon(distanceString + " mi", image: IconImage().pin())
                                     }
                                 }
                                 
@@ -465,32 +436,18 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                                         self.bottomView.imageView.contentMode = UIViewContentMode.ScaleAspectFill
                                     }
                                     
-                                    var priceAttachment: NSTextAttachment = NSTextAttachment()
-                                    priceAttachment.image = IconImage().tags()
-                                    var attachmentString : NSAttributedString = NSAttributedString(attachment: priceAttachment)
-                                    
+                                    var myString : String = ""
                                     if suffix(bottomPrice, 2) == "00" {
                                         let withoutZeroes = "$\((bottomPrice as NSString).integerValue)"
-                                        var myString : NSMutableAttributedString = NSMutableAttributedString(string: " " + withoutZeroes)
-                                        myString.insertAttributedString(attachmentString, atIndex: 0)
-                                        self.bottomView.priceLabel.attributedText = myString
+                                        myString = " " + withoutZeroes
                                     } else {
-                                        var myString : NSMutableAttributedString = NSMutableAttributedString(string: " $" + (bottomPrice))
-                                        myString.insertAttributedString(attachmentString, atIndex: 0)
-                                        self.bottomView.priceLabel.attributedText = myString
+                                        myString = " $" + bottomPrice
                                     }
-
+                                    self.bottomView.priceLabel.attributedText = self.stringWithIcon(myString, image: IconImage().tags())
 
                                     self.bottomView.nameLabel.text = bottomTitle
                                     
-                                    var methodAttachment: NSTextAttachment = NSTextAttachment()
-                                    methodAttachment.image = IconImage().car()
-                                    
-                                    var methodAttachmentString : NSAttributedString = NSAttributedString(attachment: methodAttachment)
-                                    var methodString : NSMutableAttributedString = NSMutableAttributedString(string: " " + bottomMethod)
-                                    methodString.insertAttributedString(methodAttachmentString, atIndex: 0)
-                                    
-                                    self.bottomView.methodLabel.attributedText = methodString
+                                    self.bottomView.methodLabel.attributedText = self.stringWithIcon(bottomMethod, image: IconImage().car())
                                     
                                     self.bottomView.sellerName.text = firstName + " " + lastName + "."
                                     self.bottomView.ratingView.rating = 3.5
@@ -519,6 +476,19 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             self.progressIndicator.alpha = 0
             noNewItemsLabel.alpha = 1
         }
+    }
+    
+    func stringWithIcon(label: String, image: UIImage) -> NSAttributedString {
+        var attachment: OffsetTextAttachment = OffsetTextAttachment()
+        let font: UIFont = self.swipeView.distLabel.font
+        attachment.fontDescender = font.descender
+        attachment.image = image
+        
+        var attachmentString : NSAttributedString = NSAttributedString(attachment: attachment)
+        var stringFinal : NSMutableAttributedString = NSMutableAttributedString(string: " " + label)
+        stringFinal.insertAttributedString(attachmentString, atIndex: 0)
+        
+        return stringFinal
     }
     
     func viewDidCancelSwipe(view: UIView!) {
