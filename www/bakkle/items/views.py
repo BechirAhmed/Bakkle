@@ -133,7 +133,7 @@ def add_item(request):
     price = request.GET.get('price')
     tags = request.GET.get('tags',"")
     method = request.GET.get('method')
-    notifyFlag = int(request.GET.get('notify'))
+    notifyFlag = request.GET.get('notify')
 
     # Get the item id if present (If it is present an item will be edited not added)
     item_id = request.GET.get('item_id', "")
@@ -166,7 +166,7 @@ def add_item(request):
             image_urls = image_urls,
             status = Items.ACTIVE)
         item.save()
-        if(notifyFlag != 0):
+        if(notifyFlag == None or notifyFlag == "" or int(notifyFlag) != 0):
             notify_all_new_item("New: ${} - {}".format(item.price, item.title))
     else:
         # Else get the item
@@ -321,11 +321,11 @@ def feed(request):
         #if filter price is 100+, ignore filter.
         if(filter_price == MAX_ITEM_PRICE):
             print(3);
-            item_list = Items.objects.exclude(buyeritem = items_viewed).exclude(Q(seller__pk = buyer_id)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')
+            item_list = Items.objects.exclude(buyeritem = items_viewed).exclude(Q(seller__pk = buyer_id)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')[:10]
             users_list = Items.objects.exclude(buyeritem = items_viewed).filter(Q(seller__pk = buyer_id)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')[:1]
         else:
             print(4);
-            item_list = Items.objects.exclude(buyeritem = items_viewed).exclude(Q(seller__pk = buyer_id)).filter(Q(price__lte = filter_price)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')
+            item_list = Items.objects.exclude(buyeritem = items_viewed).exclude(Q(seller__pk = buyer_id)).filter(Q(price__lte = filter_price)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')[:10]
             users_list = Items.objects.exclude(buyeritem = items_viewed).filter(Q(seller__pk = buyer_id)).filter(Q(price__lte = filter_price)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')[:1]
    
     item_array = []
@@ -839,12 +839,12 @@ def reset_items(request):
     try:
         a = Account.objects.get(
             facebook_id="1020420",
-            display_name="Test Seller",
+            display_name="Goodwill Industries",
             email="testseller@bakkle.com" )
     except Account.DoesNotExist:
         a = Account(
             facebook_id="1020420",
-            display_name="Test Seller",
+            display_name="Goodwill Industries",
             email="testseller@bakkle.com",
             user_location="39.417672,-87.330438", )
         a.save()
