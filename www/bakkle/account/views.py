@@ -117,7 +117,7 @@ def login_facebook(request):
 
     # Check that all required params are sent
     if (facebook_id == None or facebook_id.strip() == "") or (device_uuid == None or device_uuid.strip() == "") or (user_location == None or user_location == "") or (app_version == None or app_version == ""): 
-        response_data = {"status":0, "error":"A required parameter was not provided. User_id: {}, device_uuid: {}, user_location: {}, app_version: {}".format(facebook_id, device_uuid, user_location,app_version)}
+        response_data = {"status":0, "error":"A required parameter was not provided. User_id(facebook): {}, device_uuid: {}, user_location: {}, app_version: {}".format(facebook_id, device_uuid, user_location,app_version)}
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 
     location = ""

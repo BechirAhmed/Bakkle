@@ -1,35 +1,42 @@
 from django.shortcuts import render
 
-import json
+import base64
 import datetime
+import json
 import md5
 import os
-import base64
 
 import random
+
 from boto.s3.connection import S3Connection
 from boto.s3.key import Key
 
-from django.http import HttpResponse, HttpResponseRedirect
-from django.core.urlresolvers import reverse
-from django.template import RequestContext, loader
-from django.utils import timezone
-from django.shortcuts import get_object_or_404
-from django.core import serializers
-from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_POST
-from django.db.models import Q
 from decimal import *
 from django import forms
 from django.contrib.admin.views.decorators import staff_member_required
+from django.core import serializers
 from django.core.paginator import Paginator
+from django.core.urlresolvers import reverse
+from django.db.models import Q
+from django.http import HttpResponse
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
+from django.template import RequestContext
+from django.template import loader
+from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 
-from .models import Items, BuyerItem
-from conversation.models import Conversation, Message
-from account.models import Account, Device
-from common import authenticate,get_number_conversations_with_new_messages
-from django.conf import settings
+from .models import BuyerItem
+from .models import Items
+from account.models import Account
+from account.models import Device
+from common import authenticate
+from common import get_number_conversations_with_new_messages
 from common import time_method
+from conversation.models import Conversation
+from conversation.models import Message
+from django.conf import settings
 
 MAX_ITEM_IMAGE = 5
 
@@ -237,6 +244,7 @@ def spam_item(request):
 def feed(request):
 
     MAX_ITEM_PRICE = 100;
+    RETURN_ITEM_ARRAY_SIZE = 20;
     
     auth_token = request.POST.get('auth_token')
     device_uuid = request.POST.get('device_uuid', "")
@@ -246,11 +254,6 @@ def feed(request):
     search_text = request.POST.get('search_text')
     filter_distance = request.POST.get('filter_distance')
     filter_price = int(request.POST.get('filter_price'))
-    filter_number = int(request.POST.get('filter_number'))
-
-    print("auth_token: " + str(auth_token));
-    print("device_uuid: " + str(device_uuid));
-    print("user_location: " + str(user_location));
 
     # Check that all require params are sent and are of the right format
     if (auth_token == None or auth_token.strip() == "" or auth_token.find('_') == -1) or (user_location == None or user_location == ""):
@@ -311,22 +314,18 @@ def feed(request):
         
         #if filter price is 100+, ignore filter.
         if(filter_price == MAX_ITEM_PRICE):
-            print(1);
-            item_list = Items.objects.exclude(buyeritem = items_viewed).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).filter(Q(tags__contains=search_text) | Q(title__contains=search_text)).order_by('-post_date')
+            item_list = Items.objects.exclude(buyeritem = items_viewed).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).filter(Q(tags__contains=search_text) | Q(title__contains=search_text)).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
         else:
-            print(2);
-            item_list = Items.objects.exclude(buyeritem = items_viewed).filter(Q(price__lte = filter_price)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).filter(Q(tags__contains=search_text) | Q(title__contains=search_text)).order_by('-post_date')
+            item_list = Items.objects.exclude(buyeritem = items_viewed).filter(Q(price__lte = filter_price)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).filter(Q(tags__contains=search_text) | Q(title__contains=search_text)).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
     else:
         
         #if filter price is 100+, ignore filter.
         if(filter_price == MAX_ITEM_PRICE):
-            print(3);
-            item_list = Items.objects.exclude(buyeritem = items_viewed).exclude(Q(seller__pk = buyer_id)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')[:10]
-            users_list = Items.objects.exclude(buyeritem = items_viewed).filter(Q(seller__pk = buyer_id)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')[:1]
+            item_list = Items.objects.exclude(buyeritem = items_viewed).exclude(Q(seller__pk = buyer_id)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
+            users_list = Items.objects.filter(Q(seller__pk = buyer_id)).order_by('-post_date')[:1]
         else:
-            print(4);
-            item_list = Items.objects.exclude(buyeritem = items_viewed).exclude(Q(seller__pk = buyer_id)).filter(Q(price__lte = filter_price)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')[:10]
-            users_list = Items.objects.exclude(buyeritem = items_viewed).filter(Q(seller__pk = buyer_id)).filter(Q(price__lte = filter_price)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')[:1]
+            item_list = Items.objects.exclude(buyeritem = items_viewed).exclude(Q(seller__pk = buyer_id)).filter(Q(price__lte = filter_price)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
+            users_list = Items.objects.filter(Q(seller__pk = buyer_id)).filter(Q(price__lte = filter_price)).order_by('-post_date')[:1]
    
     item_array = []
     paginatedItems = Paginator(item_list, 100);
@@ -335,21 +334,23 @@ def feed(request):
     # show user's items before other items - place at top of array.
     if(not users_list is None and len(users_list) != 0):
         for item in users_list:
-            item_dict = get_item_dictionary(item)
-            item_array.append(item_dict);
+            if(len(BuyerItem.objects.filter(buyer = buyer_id).filter(item = item.pk)) == 0):
+                item_dict = get_item_dictionary(item)
+                item_array.append(item_dict)
     
     # add all other items - show after top user item
     page = 1;
-    while len(item_array) < filter_number and page <= paginatedItems.num_pages:
+    while len(item_array) < RETURN_ITEM_ARRAY_SIZE and page <= paginatedItems.num_pages:
         itemPage = paginatedItems.page(page);
         for item in itemPage.object_list:
-            if (len(item_array) < filter_number):
+            if (len(item_array) < RETURN_ITEM_ARRAY_SIZE):
                 item_dict = get_item_dictionary(item)
                 item_array.append(item_dict)
         
         page += 1;
 
     response_data = { 'status': 1, 'feed': item_array }
+    print "returning feed list of size: " + str(len(item_array))
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 @csrf_exempt

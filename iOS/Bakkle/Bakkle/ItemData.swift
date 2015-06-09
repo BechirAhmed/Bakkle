@@ -47,7 +47,7 @@ class ItemData: AnyObject {
         self.method = item.valueForKey("method") as! String
         
         self.sellerProfile = item.valueForKey("seller") as! NSDictionary
-        self.sellerName = sellerProfile.valueForKey("display_name") as! String
+        self.sellerName = "" //sellerProfile.valueForKey("display_name") as! String
         var localRating = item.valueForKey("seller_rating") as! String
         self.rating = localRating.isEmpty ? ItemData.DEFAULT_RATING : (localRating as NSString).floatValue
         self.facebookID = sellerProfile.valueForKey("facebook_id") as! String

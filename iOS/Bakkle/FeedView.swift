@@ -97,7 +97,6 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         //        if self.swipeView == nil {
         resetSwipeView()
         //        }
-        enableSwipe()
         
         println("Loading existing feed items")
         if fromCamera == false {
@@ -134,27 +133,6 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         searching = false
         //TODO: remove this when feed is updated via push
         requestUpdates()
-    }
-    
-    func disableSwipe() {
-        if self.swipeView != nil {
-            self.swipeView.userInteractionEnabled = false
-            self.swipeView = nil
-        }
-        if self.bottomView != nil {
-            self.bottomView.userInteractionEnabled = false
-            self.bottomView = nil
-        }
-    }
-    func enableSwipe() {
-        if self.swipeView != nil {
-            self.swipeView.userInteractionEnabled = true
-            self.swipeView = nil
-        }
-        if self.bottomView != nil {
-            self.bottomView.userInteractionEnabled = false
-            self.bottomView = nil
-        }
     }
     
     /* UISearch Bar delegate */
@@ -207,6 +185,10 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         
         // Put the swipe view back in the correct location
 //        resetSwipeView()
+        
+        if(Bakkle.sharedInstance.feedItems.count < 10){
+            requestUpdates();
+        }
         
         // Remove the item that was just marked from the view
         if Bakkle.sharedInstance.feedItems.count>0 {
@@ -347,10 +329,11 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                 let sellersName = sellersProfile.valueForKey("display_name") as! String
                 var facebookProfileImgString = "http://graph.facebook.com/\(facebookID)/picture?width=142&height=142"
                 
+                //TODO: handle case where sellers name is null
                 let dividedName = split(sellersName) {$0 == " "}
                 
                 let firstName = dividedName[0] as String
-                let lastName = String(Array(dividedName[1])[0])
+                let lastName = ""// String(Array(dividedName[1])[0])
                 
                 //println("[FeedScreen] Downloading image (top) \(imgURLs)")
                 self.swipeView.nameLabel.text = topTitle
@@ -371,7 +354,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                 
                 self.swipeView.methodLabel.attributedText = self.stringWithIcon(topMethod, image: IconImage().car())
                 
-                self.swipeView.sellerName.text = firstName + " " + lastName + "."
+                self.swipeView.sellerName.text = firstName // + " " + lastName + "."
                 self.swipeView.ratingView.rating = 3.5
                         let firstURL = imgURLs[0] as! String
                         let imgURL = NSURL(string: firstURL)
@@ -411,7 +394,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                                 let dividedName = split(sellersName) {$0 == " "}
                                 
                                 let firstName = dividedName[0] as String
-                                let lastName = String(Array(dividedName[1])[0])
+                                let lastName = "" //String(Array(dividedName[1])[0])
                                 
                                 if location.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
                                     let start: CLLocation = CLLocation(locationString: location)
@@ -449,7 +432,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                                     
                                     self.bottomView.methodLabel.attributedText = self.stringWithIcon(bottomMethod, image: IconImage().car())
                                     
-                                    self.bottomView.sellerName.text = firstName + " " + lastName + "."
+                                    self.bottomView.sellerName.text = firstName // + " " + lastName + "."
                                     self.bottomView.ratingView.rating = 3.5
                                 }
                         } else {
