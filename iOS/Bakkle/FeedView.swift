@@ -97,7 +97,6 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         //        if self.swipeView == nil {
         resetSwipeView()
         //        }
-        enableSwipe()
         
         println("Loading existing feed items")
         if fromCamera == false {
@@ -134,27 +133,6 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         searching = false
         //TODO: remove this when feed is updated via push
         requestUpdates()
-    }
-    
-    func disableSwipe() {
-        if self.swipeView != nil {
-            self.swipeView.userInteractionEnabled = false
-            self.swipeView = nil
-        }
-        if self.bottomView != nil {
-            self.bottomView.userInteractionEnabled = false
-            self.bottomView = nil
-        }
-    }
-    func enableSwipe() {
-        if self.swipeView != nil {
-            self.swipeView.userInteractionEnabled = true
-            self.swipeView = nil
-        }
-        if self.bottomView != nil {
-            self.bottomView.userInteractionEnabled = false
-            self.bottomView = nil
-        }
     }
     
     /* UISearch Bar delegate */
