@@ -186,6 +186,10 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         // Put the swipe view back in the correct location
 //        resetSwipeView()
         
+        if(Bakkle.sharedInstance.feedItems.count < 10){
+            requestUpdates();
+        }
+        
         // Remove the item that was just marked from the view
         if Bakkle.sharedInstance.feedItems.count>0 {
             Bakkle.sharedInstance.feedItems.removeAtIndex(0)
