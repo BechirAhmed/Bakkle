@@ -74,6 +74,13 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         var observer2 = notificationCenter.addObserverForName(Bakkle.bkFilterChanged, object: nil, queue: mainQueue) { _ in
             self.filterChanged()
         }
+        setupButtons()
+        for subview in self.searchBar.subviews {
+            if (subview.isKindOfClass(UITextField)) {
+                var searchField: UITextField = subview as! UITextField
+                searchField.font = UIFont (name: "Avenir-Black", size: 12)
+            }
+        }
         
         // Insets set in Storyboard
         //btnAddItem.imageEdgeInsets = UIEdgeInsetsMake(-10, -10, -10, -10);
@@ -115,7 +122,10 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
-    
+    func setupButtons() {
+        menuBtn.setImage(IconImage().menu(), forState: .Normal)
+        menuBtn.setTitle("", forState: .Normal)
+    }
     
     @IBAction func menuButtonPressed(sender: AnyObject) {
         NSNotificationCenter.defaultCenter().removeObserver(self)
@@ -142,7 +152,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             self.swipeView = nil
         }
         if self.bottomView != nil {
-            self.bottomView.userInteractionEnabled = true
+            self.bottomView.userInteractionEnabled = false
             self.bottomView = nil
         }
     }
@@ -196,7 +206,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         println("[FeedScreen] removing item from feed")
         
         // Put the swipe view back in the correct location
-        resetSwipeView()
+//        resetSwipeView()
         
         // Remove the item that was just marked from the view
         if Bakkle.sharedInstance.feedItems.count>0 {
@@ -250,21 +260,22 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         
         
         /* If view is off the page we need to reset the view */
-        if (state != nil && state.direction != MDCSwipeDirection.None) {
+        else if (state != nil && state.direction != MDCSwipeDirection.None) {
+            
+            //if view is still on page, yet has been swiped in a direction, remove it.
             if self.swipeView != nil {
                 self.swipeView.removeFromSuperview()
                 self.swipeView = nil
             }
-            self.swipeView = MDCSwipeToChooseView(frame: self.view.bounds, options: options)
-            if self.bottomView != nil {
-                self.bottomView.removeFromSuperview()
-                self.bottomView = nil
-            }
+            
+            //promote bottomView to prevent having to recreate swipeView
+            self.swipeView = self.bottomView
+            
+            //create new bottomView
             self.bottomView = MDCSwipeToChooseView(frame: CGRectMake(self.swipeView.frame.origin.x, self.swipeView.frame.origin.y, self.swipeView.frame.width, self.swipeView.frame.height), options: nil)
-            self.view.insertSubview(self.bottomView, belowSubview: self.swipeView)
+            
+            //add gesture recognizer to top view (swipeView)
             self.swipeView.addGestureRecognizer(itemDetailTap)
-        } else {
-            //  View is already on the page AND is still visible. Do nothing
         }
     }
     
@@ -327,15 +338,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                     let start: CLLocation = CLLocation(locationString: location)
                     if let distance = Bakkle.sharedInstance.distanceTo(start) {
                         var distanceString = distance.rangeString()
-                        
-                        var attachment: NSTextAttachment = NSTextAttachment()
-                        attachment.image = UIImage(named: "icon-marker75.png")
-                        
-                        var attachmentString : NSAttributedString = NSAttributedString(attachment: attachment)
-                        var myString : NSMutableAttributedString = NSMutableAttributedString(string:  " " + distanceString + " mi")
-                        myString.insertAttributedString(attachmentString, atIndex: 0)
-                        
-                        self.swipeView.distLabel.attributedText = myString
+                        self.swipeView.distLabel.attributedText = self.stringWithIcon(distanceString + " mi", image: IconImage().pin())
                     }
                 }
                 
@@ -352,43 +355,27 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                 //println("[FeedScreen] Downloading image (top) \(imgURLs)")
                 self.swipeView.nameLabel.text = topTitle
                 
-                var priceAttachment: NSTextAttachment = NSTextAttachment()
-                priceAttachment.image = UIImage(named: "icon-tags75.png")
-                var attachmentString : NSAttributedString = NSAttributedString(attachment: priceAttachment)
-                
+                var myString : String = ""
                 if suffix(topPrice, 2) == "00" {
                     let withoutZeroes = "$\((topPrice as NSString).integerValue)"
-                    var myString : NSMutableAttributedString = NSMutableAttributedString(string: " " + withoutZeroes)
-                    myString.insertAttributedString(attachmentString, atIndex: 0)
-                    self.swipeView.priceLabel.attributedText = myString
+                    myString = " " + withoutZeroes
                 } else {
-                    var myString : NSMutableAttributedString = NSMutableAttributedString(string: " $" + (topPrice))
-                    myString.insertAttributedString(attachmentString, atIndex: 0)
-                    self.swipeView.priceLabel.attributedText = myString
+                    myString = " $" + topPrice
                 }
+                self.swipeView.priceLabel.attributedText = self.stringWithIcon(myString, image: IconImage().tags())
                 
                 if swipeView.imageView.image == nil {
                     self.swipeView.imageView.image = UIImage(named: "loading.png")
                     self.swipeView.userInteractionEnabled = false
                 }
                 
-                var methodAttachment: NSTextAttachment = NSTextAttachment()
-                methodAttachment.image = UIImage(named: "icon-car75.png")
-                
-                var methodAttachmentString : NSAttributedString = NSAttributedString(attachment: methodAttachment)
-                var methodString : NSMutableAttributedString = NSMutableAttributedString(string: " " + topMethod)
-                methodString.insertAttributedString(methodAttachmentString, atIndex: 0)
-                
-                self.swipeView.methodLabel.attributedText = methodString
+                self.swipeView.methodLabel.attributedText = self.stringWithIcon(topMethod, image: IconImage().car())
                 
                 self.swipeView.sellerName.text = firstName + " " + lastName + "."
                 self.swipeView.ratingView.rating = 3.5
-                dispatch_async(dispatch_get_global_queue(
-                    Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
                         let firstURL = imgURLs[0] as! String
                         let imgURL = NSURL(string: firstURL)
                         let profileImgURL = NSURL(string: facebookProfileImgString)
-                        dispatch_async(dispatch_get_main_queue()) {
                             //println("[FeedScreen] displaying image (top)")
                             if imgURL == nil {
                                 
@@ -404,7 +391,6 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                                 println("IMAGE FRAME WIDTH AND HEIGHT ARE: \(self.swipeView.imageView.frame.size.width), \(self.swipeView.imageView.frame.size.height)")
                             }
                             super.view.addSubview(self.swipeView)
-                        }
                         
                         if Bakkle.sharedInstance.feedItems.count > 1 {
                             if self.bottomView != nil {
@@ -431,15 +417,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                                     let start: CLLocation = CLLocation(locationString: location)
                                     if let distance = Bakkle.sharedInstance.distanceTo(start) {
                                         var distanceString = distance.rangeString()
-                                        
-                                        var attachment: NSTextAttachment = NSTextAttachment()
-                                        attachment.image = UIImage(named: "icon-marker75.png")
-                                        
-                                        var attachmentString : NSAttributedString = NSAttributedString(attachment: attachment)
-                                        var myString : NSMutableAttributedString = NSMutableAttributedString(string:  " " + distanceString + " mi")
-                                        myString.insertAttributedString(attachmentString, atIndex: 0)
-                                        
-                                        self.bottomView.distLabel.attributedText = myString
+                                        self.bottomView.distLabel.attributedText = self.stringWithIcon(distanceString + " mi", image: IconImage().pin())
                                     }
                                 }
                                 
@@ -449,7 +427,6 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                                 let bottomURL = bottomURLs[0] as! String
                                 let imgURL = NSURL(string: bottomURL)
                                 let profileImgURL = NSURL(string: facebookProfileImgString)
-                                dispatch_async(dispatch_get_main_queue()) {
                                     //println("[FeedScreen] displaying image (bottom)")
                                     if let x = imgURL {
                                         self.bottomView.bottomBlurImg.hnk_setImageFromURL(imgURL!)
@@ -459,37 +436,22 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                                         self.bottomView.imageView.contentMode = UIViewContentMode.ScaleAspectFill
                                     }
                                     
-                                    var priceAttachment: NSTextAttachment = NSTextAttachment()
-                                    priceAttachment.image = UIImage(named: "icon-tags75.png")
-                                    var attachmentString : NSAttributedString = NSAttributedString(attachment: priceAttachment)
-                                    
+                                    var myString : String = ""
                                     if suffix(bottomPrice, 2) == "00" {
                                         let withoutZeroes = "$\((bottomPrice as NSString).integerValue)"
-                                        var myString : NSMutableAttributedString = NSMutableAttributedString(string: " " + withoutZeroes)
-                                        myString.insertAttributedString(attachmentString, atIndex: 0)
-                                        self.bottomView.priceLabel.attributedText = myString
+                                        myString = " " + withoutZeroes
                                     } else {
-                                        var myString : NSMutableAttributedString = NSMutableAttributedString(string: " $" + (bottomPrice))
-                                        myString.insertAttributedString(attachmentString, atIndex: 0)
-                                        self.bottomView.priceLabel.attributedText = myString
+                                        myString = " $" + bottomPrice
                                     }
-
+                                    self.bottomView.priceLabel.attributedText = self.stringWithIcon(myString, image: IconImage().tags())
 
                                     self.bottomView.nameLabel.text = bottomTitle
                                     
-                                    var methodAttachment: NSTextAttachment = NSTextAttachment()
-                                    methodAttachment.image = UIImage(named: "icon-car75.png")
-                                    
-                                    var methodAttachmentString : NSAttributedString = NSAttributedString(attachment: methodAttachment)
-                                    var methodString : NSMutableAttributedString = NSMutableAttributedString(string: " " + bottomMethod)
-                                    methodString.insertAttributedString(methodAttachmentString, atIndex: 0)
-                                    
-                                    self.bottomView.methodLabel.attributedText = methodString
+                                    self.bottomView.methodLabel.attributedText = self.stringWithIcon(bottomMethod, image: IconImage().car())
                                     
                                     self.bottomView.sellerName.text = firstName + " " + lastName + "."
-                                    self.bottomView.ratingView.rating = 5
+                                    self.bottomView.ratingView.rating = 3.5
                                 }
-                            }
                         } else {
                             println("Only one item, hiding bottom card")
                             // only 1 item (top card)
@@ -499,7 +461,6 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                             }
                         }
                 }
-            }
         } else {
             println("No items, hiding both cards")
             /* No items left in feed */
@@ -515,6 +476,19 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             self.progressIndicator.alpha = 0
             noNewItemsLabel.alpha = 1
         }
+    }
+    
+    func stringWithIcon(label: String, image: UIImage) -> NSAttributedString {
+        var attachment: OffsetTextAttachment = OffsetTextAttachment()
+        let font: UIFont = self.swipeView.distLabel.font
+        attachment.fontDescender = font.descender
+        attachment.image = image
+        
+        var attachmentString : NSAttributedString = NSAttributedString(attachment: attachment)
+        var stringFinal : NSMutableAttributedString = NSMutableAttributedString(string: " " + label)
+        stringFinal.insertAttributedString(attachmentString, atIndex: 0)
+        
+        return stringFinal
     }
     
     func viewDidCancelSwipe(view: UIView!) {
@@ -550,14 +524,6 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         else if direction == MDCSwipeDirection.Down {
             Bakkle.sharedInstance.markItem("report", item_id: self.item_id, success: {}, fail: {})
             loadNext()
-        }
-        
-        if Bakkle.sharedInstance.feedItems.count > 1 {
-            self.bottomView.alpha = 0.0
-            self.view.insertSubview(self.bottomView, belowSubview: self.swipeView)
-            UIView.animateWithDuration(0.5, delay: 0.0, options: UIViewAnimationOptions.CurveEaseInOut, animations: { () -> Void in
-                self.bottomView.alpha = 1.0
-                }, completion: nil)
         }
     }
     

@@ -24,6 +24,7 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var itemMethodLabel: UILabel!
     @IBOutlet weak var itemPriceLabel: UILabel!
     @IBOutlet weak var wantLabel: UILabel!
+    @IBOutlet weak var closeBtn: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,6 +34,13 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
         var swipeDown = UISwipeGestureRecognizer(target: self, action: "respondToSwipeGesture:")
         swipeDown.direction = UISwipeGestureRecognizerDirection.Down
         self.view.addGestureRecognizer(swipeDown)
+        
+        setupButtons()
+    }
+    
+    func setupButtons() {
+        closeBtn.setImage(IconImage().close(), forState: .Normal)
+        closeBtn.setTitle("", forState: .Normal)
     }
     
     func respondToSwipeGesture(gesture: UIGestureRecognizer) {

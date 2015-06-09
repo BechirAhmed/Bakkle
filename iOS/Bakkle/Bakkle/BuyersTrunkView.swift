@@ -62,11 +62,12 @@ class BuyersTrunkCell : UITableViewCell {
 class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var menuBtn: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
         var nib = UINib(nibName: "BuyersTrunkCell", bundle: nil)
         self.tableView.registerNib(nib, forCellReuseIdentifier: "GarageCell")
-        
+        setupButtons()
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
     }
     
@@ -81,8 +82,14 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
         
         Bakkle.sharedInstance.populateTrunk({});
     }
+    
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
+    func setupButtons() {
+        menuBtn.setImage(IconImage().menu(), forState: .Normal)
+        menuBtn.setTitle("", forState: .Normal)
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {

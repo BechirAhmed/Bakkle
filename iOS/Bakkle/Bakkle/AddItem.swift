@@ -25,6 +25,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     var scaledImages: [UIImage]? = [UIImage]()
     var itemCount: Int = 0
     
+    @IBOutlet weak var closeBtn: UIButton!
     @IBOutlet weak var titleField: UITextField!
     @IBOutlet weak var priceField: UITextField!
     @IBOutlet weak var tagsField: UITextView!
@@ -66,6 +67,13 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         
         titleField.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
         priceField.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
+        
+        setupButtons()
+    }
+    
+    func setupButtons() {
+        closeBtn.setImage(IconImage().close(), forState: .Normal)
+        closeBtn.setTitle("", forState: .Normal)
     }
     
     func priceNextToggle() {
