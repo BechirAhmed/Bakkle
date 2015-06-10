@@ -37,6 +37,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     @IBOutlet weak var camButtonBackground: UIView!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var loadingView: UIView!
+    @IBOutlet var overlayView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -341,18 +342,93 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         return true
     }
     
+    func changeImageOverlay(imagePicker: UIImagePickerController) {
+        if !UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera){
+            return
+        }
+        
+        let screenSize = UIScreen.mainScreen().bounds
+        let imgWidth = screenSize.width < screenSize.height ? screenSize.width : screenSize.height
+        let imgWidthScale = imgWidth / (screenSize.width < screenSize.height ? screenSize.height :screenSize.width)
+        
+        let pickerFrame = CGRectMake(0, UIApplication.sharedApplication().statusBarFrame.size.height, imagePicker.view.bounds.width, imagePicker.view.bounds.height - imagePicker.navigationBar.bounds.size.height - imagePicker.toolbar.bounds.size.height)
+        let squareFrame = CGRectMake(pickerFrame.width/2 - imgWidth/2, pickerFrame.height/2 - imgWidth/2, imgWidth, imgWidth)
+        UIGraphicsBeginImageContext(pickerFrame.size)
+        
+        let context = UIGraphicsGetCurrentContext()
+        CGContextSaveGState(context)
+        CGContextAddRect(context, CGContextGetClipBoundingBox(context))
+        CGContextMoveToPoint(context, squareFrame.origin.x, squareFrame.origin.y)
+        CGContextAddLineToPoint(context, squareFrame.origin.x + squareFrame.width, squareFrame.origin.y)
+        CGContextAddLineToPoint(context, squareFrame.origin.x + squareFrame.width, squareFrame.origin.y + squareFrame.size.height)
+        CGContextAddLineToPoint(context, squareFrame.origin.x, squareFrame.origin.y + squareFrame.size.height)
+        CGContextAddLineToPoint(context, squareFrame.origin.x, squareFrame.origin.y)
+        CGContextEOClip(context)
+        CGContextMoveToPoint(context, pickerFrame.origin.x, pickerFrame.origin.y)
+        CGContextSetRGBFillColor(context, 0, 0, 0, 1)
+        CGContextFillRect(context, pickerFrame)
+        CGContextRestoreGState(context)
+        
+        let overlayImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext();
+        
+        let overlayView = UIImageView(frame: pickerFrame)
+        overlayView.image = overlayImage
+        imagePicker.cameraOverlayView = overlayView
+        self.presentViewController(imagePicker, animated: true, completion: nil)
+        
+        //NSBundle.mainBundle().loadNibNamed("CameraOverlay", owner: self, options: nil)
+        //self.overlayView.frame = imagePickerController.cameraOverlayView!.frame;
+        //imagePickerController.cameraOverlayView = self.overlayView
+        //cameraOverlay.frame = camera.cameraOverlayView!.frame
+        //imagePickerController.cameraOverlayView = overlay
+    }
 
     @IBAction func cameraBtn(sender: AnyObject) {
         let fetchOptions = PHFetchOptions()
         fetchOptions.predicate = NSPredicate(format: "title = %@", albumName)
         
         if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
-            //load the camera interface
-            var picker : UIImagePickerController = UIImagePickerController()
-            picker.sourceType = UIImagePickerControllerSourceType.Camera
-            picker.delegate = self
-            picker.allowsEditing = false
-            self.presentViewController(picker, animated: true, completion: nil)
+//            //load the camera interface
+//            var picker : UIImagePickerController = UIImagePickerController()
+//            picker.sourceType = UIImagePickerControllerSourceType.Camera
+//            picker.delegate = self
+//            picker.allowsEditing = false
+//            //changeImageOverlay(picker)
+//            self.presentViewController(picker, animated: true, completion: nil)
+            var imagePicker = UIImagePickerController()
+            imagePicker.delegate = self
+            imagePicker.sourceType = UIImagePickerControllerSourceType.Camera
+            
+            let screenSize = UIScreen.mainScreen().bounds
+            let imgWidth = screenSize.width < screenSize.height ? screenSize.width : screenSize.height
+            let imgWidthScale = imgWidth / (screenSize.width < screenSize.height ? screenSize.height :screenSize.width)
+            
+            let pickerFrame = CGRectMake(0, UIApplication.sharedApplication().statusBarFrame.size.height, imagePicker.view.bounds.width, imagePicker.view.bounds.height - imagePicker.navigationBar.bounds.size.height - imagePicker.toolbar.bounds.size.height)
+            let squareFrame = CGRectMake(pickerFrame.width/2 - imgWidth/2, pickerFrame.height/2 - imgWidth/2, imgWidth, imgWidth)
+            UIGraphicsBeginImageContext(pickerFrame.size)
+            
+            let context = UIGraphicsGetCurrentContext()
+            CGContextSaveGState(context)
+            CGContextAddRect(context, CGContextGetClipBoundingBox(context))
+            CGContextMoveToPoint(context, squareFrame.origin.x, squareFrame.origin.y)
+            CGContextAddLineToPoint(context, squareFrame.origin.x + squareFrame.width, squareFrame.origin.y)
+            CGContextAddLineToPoint(context, squareFrame.origin.x + squareFrame.width, squareFrame.origin.y + squareFrame.size.height)
+            CGContextAddLineToPoint(context, squareFrame.origin.x, squareFrame.origin.y + squareFrame.size.height)
+            CGContextAddLineToPoint(context, squareFrame.origin.x, squareFrame.origin.y)
+            CGContextEOClip(context)
+            CGContextMoveToPoint(context, pickerFrame.origin.x, pickerFrame.origin.y)
+            CGContextSetRGBFillColor(context, 0, 0, 0, 1)
+            CGContextFillRect(context, pickerFrame)
+            CGContextRestoreGState(context)
+            
+            let overlayImage = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext();
+            
+            let overlayView = UIImageView(frame: pickerFrame)
+            overlayView.image = overlayImage
+            imagePicker.cameraOverlayView = overlayView
+            self.presentViewController(imagePicker, animated: true, completion: nil)
             
         } else{
             //no camera available
@@ -461,7 +537,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     }
     
     /**
-     * This is just a short way to trim a string, return and variable may change to NSString if current code doesn't work
+     * This method trims a string
      */
     func trimString(str: String) -> (String) {
         return str.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
