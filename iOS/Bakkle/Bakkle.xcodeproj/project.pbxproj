@@ -126,6 +126,130 @@
 		A0D96F881AD772DA0046DA13 /* HoldingPatternView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D96F871AD772DA0046DA13 /* HoldingPatternView.swift */; };
 		A0D96F8A1AD773DB0046DA13 /* FeedFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D96F891AD773DB0046DA13 /* FeedFilter.swift */; };
 		A0D96F901AD7751E0046DA13 /* mock-settings.png in Resources */ = {isa = PBXBuildFile; fileRef = A0D96F8F1AD7751E0046DA13 /* mock-settings.png */; };
+		A0E1EB4B1B2B5B2200662C08 /* MDCPanState.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C9A81AB9F0FA0031D8CD /* MDCPanState.m */; };
+		A0E1EB4C1B2B5B2200662C08 /* UIImage+Resize.swift in Sources */ = {isa = PBXBuildFile; fileRef = A058A2AA1AFD8EAD005E7432 /* UIImage+Resize.swift */; };
+		A0E1EB4D1B2B5B2200662C08 /* ChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53BD1B0815CB000C406C /* ChatCell.swift */; };
+		A0E1EB4E1B2B5B2200662C08 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53BF1B0815CB000C406C /* ChatViewController.swift */; };
+		A0E1EB4F1B2B5B2200662C08 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EBDD6921AB211E600C7FBE7 /* LoginView.swift */; };
+		A0E1EB501B2B5B2200662C08 /* FeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C98A1AB9D1730031D8CD /* FeedView.swift */; };
+		A0E1EB511B2B5B2200662C08 /* MenuTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D96F7F1AD767BD0046DA13 /* MenuTableView.swift */; };
+		A0E1EB521B2B5B2200662C08 /* Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53BC1B0815CB000C406C /* Chat.swift */; };
+		A0E1EB531B2B5B2200662C08 /* FeedFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D96F891AD773DB0046DA13 /* FeedFilter.swift */; };
+		A0E1EB541B2B5B2200662C08 /* ItemData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B00CB1A1B22231B00710C01 /* ItemData.swift */; };
+		A0E1EB551B2B5B2200662C08 /* UIColor+MDCRGB8Bit.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C9AC1AB9F0FB0031D8CD /* UIColor+MDCRGB8Bit.m */; };
+		A0E1EB561B2B5B2200662C08 /* HoldingPatternView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D96F871AD772DA0046DA13 /* HoldingPatternView.swift */; };
+		A0E1EB571B2B5B2200662C08 /* OffsetTextAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 723D532D1B2718590067A80A /* OffsetTextAttachment.swift */; };
+		A0E1EB581B2B5B2200662C08 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A003EB131AD4CCA600EE51A1 /* SWRevealViewController.m */; };
+		A0E1EB591B2B5B2200662C08 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D96F831AD76F1F0046DA13 /* SettingsView.swift */; };
+		A0E1EB5A1B2B5B2200662C08 /* ItemDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E8055411AE541460035521C /* ItemDetails.swift */; };
+		A0E1EB5B1B2B5B2200662C08 /* UIView+MDCBorderedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C9AE1AB9F0FB0031D8CD /* UIView+MDCBorderedLabel.m */; };
+		A0E1EB5C1B2B5B2200662C08 /* BuyersTrunkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D96F811AD76D8E0046DA13 /* BuyersTrunkView.swift */; };
+		A0E1EB5D1B2B5B2200662C08 /* ListItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720510331B1F839B00D059AB /* ListItemCell.swift */; };
+		A0E1EB5E1B2B5B2200662C08 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53BB1B0815CB000C406C /* Account.swift */; };
+		A0E1EB5F1B2B5B2200662C08 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53C71B0815CB000C406C /* User.swift */; };
+		A0E1EB601B2B5B2200662C08 /* MDCGeometry.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C9AA1AB9F0FB0031D8CD /* MDCGeometry.m */; };
+		A0E1EB611B2B5B2200662C08 /* RateView.m in Sources */ = {isa = PBXBuildFile; fileRef = DB6726DE1B1765810014A896 /* RateView.m */; };
+		A0E1EB621B2B5B2200662C08 /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53C81B0815CB000C406C /* UserCell.swift */; };
+		A0E1EB631B2B5B2200662C08 /* MDCViewState.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C9B01AB9F0FB0031D8CD /* MDCViewState.m */; };
+		A0E1EB641B2B5B2200662C08 /* GarageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E78D7E01AF121BA0014ED8F /* GarageCell.swift */; };
+		A0E1EB651B2B5B2200662C08 /* SellersGarage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D96F851AD771900046DA13 /* SellersGarage.swift */; };
+		A0E1EB661B2B5B2200662C08 /* IconImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 723D532B1B25F42B0067A80A /* IconImage.swift */; };
+		A0E1EB671B2B5B2200662C08 /* Bakkle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A06AA9ED1AD609530075D7F7 /* Bakkle.swift */; };
+		A0E1EB681B2B5B2200662C08 /* MDCSwipeOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C9A11AB9F0FA0031D8CD /* MDCSwipeOptions.m */; };
+		A0E1EB691B2B5B2200662C08 /* MDCSwipeResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C9A61AB9F0FA0031D8CD /* MDCSwipeResult.m */; };
+		A0E1EB6A1B2B5B2200662C08 /* MessageSentDateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53C51B0815CB000C406C /* MessageSentDateCell.swift */; };
+		A0E1EB6B1B2B5B2200662C08 /* ItemDetailsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6001F3401B21D004009C1A04 /* ItemDetailsCell.swift */; };
+		A0E1EB6C1B2B5B2200662C08 /* CLLocation+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = A058A2BC1AFEF665005E7432 /* CLLocation+String.swift */; };
+		A0E1EB6D1B2B5B2200662C08 /* AddItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E1DCCA41AD486D2002D41FD /* AddItem.swift */; };
+		A0E1EB6E1B2B5B2200662C08 /* ComposeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53C01B0815CB000C406C /* ComposeViewController.swift */; };
+		A0E1EB6F1B2B5B2200662C08 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53C11B0815CB000C406C /* Message.swift */; };
+		A0E1EB701B2B5B2200662C08 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EBDD6901AB211E600C7FBE7 /* AppDelegate.swift */; };
+		A0E1EB711B2B5B2200662C08 /* MessageBubbleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53C21B0815CB000C406C /* MessageBubbleCell.swift */; };
+		A0E1EB721B2B5B2200662C08 /* DemoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A058A2A01AFC28BE005E7432 /* DemoView.swift */; };
+		A0E1EB731B2B5B2200662C08 /* MDCSwipeToChooseView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E1FEE7B1AD8641900C08131 /* MDCSwipeToChooseView.m */; };
+		A0E1EB741B2B5B2200662C08 /* UIView+MDCSwipeToChoose.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C99D1AB9F0FA0031D8CD /* UIView+MDCSwipeToChoose.m */; };
+		A0E1EB751B2B5B2200662C08 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53B81B07DE26000C406C /* Theme.swift */; };
+		A0E1EB761B2B5B2200662C08 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53AE1B06D850000C406C /* Common.swift */; };
+		A0E1EB771B2B5B2200662C08 /* MDCSwipeToChooseViewOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C9A31AB9F0FA0031D8CD /* MDCSwipeToChooseViewOptions.m */; };
+		A0E1EB781B2B5B2200662C08 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A014B46B1B09215800E01FEF /* ProfileView.swift */; };
+		A0E1EB791B2B5B2200662C08 /* PlaceholderTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53C61B0815CB000C406C /* PlaceholderTextView.swift */; };
+		A0E1EB7B1B2B5B2200662C08 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0A8F8FF1B1F2C870055BBC0 /* AVFoundation.framework */; };
+		A0E1EB7C1B2B5B2200662C08 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB5372911B0823DD00CC49B7 /* Social.framework */; };
+		A0E1EB7D1B2B5B2200662C08 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB53728F1B0806B600CC49B7 /* FBSDKShareKit.framework */; };
+		A0E1EB7E1B2B5B2200662C08 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E1FEE6E1AD8432100C08131 /* UIKit.framework */; };
+		A0E1EB7F1B2B5B2200662C08 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E1FEE6C1AD8431B00C08131 /* CoreGraphics.framework */; };
+		A0E1EB801B2B5B2200662C08 /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E6760871AD8138600EC899F /* Photos.framework */; };
+		A0E1EB811B2B5B2200662C08 /* FacebookSDK in Frameworks */ = {isa = PBXBuildFile; fileRef = A04AAE3F1ACA2E6600BA7CBD /* FacebookSDK */; };
+		A0E1EB821B2B5B2200662C08 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0A2FFF61ACE276200A42CD8 /* FBSDKCoreKit.framework */; };
+		A0E1EB831B2B5B2200662C08 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5EE2C98C1AB9E3B40031D8CD /* Foundation.framework */; };
+		A0E1EB841B2B5B2200662C08 /* Pods_Bakkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E0CABDBE20E9D5B2EED4810 /* Pods_Bakkle.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		A0E1EB861B2B5B2200662C08 /* btn-want-disabled.png in Resources */ = {isa = PBXBuildFile; fileRef = DBEE0E9A1AF3C85C005E60BD /* btn-want-disabled.png */; };
+		A0E1EB871B2B5B2200662C08 /* mock-tile.png in Resources */ = {isa = PBXBuildFile; fileRef = A05DB7571AF4F8C60076D97D /* mock-tile.png */; };
+		A0E1EB881B2B5B2200662C08 /* icon-i.png in Resources */ = {isa = PBXBuildFile; fileRef = A08D53D91B08269A000C406C /* icon-i.png */; };
+		A0E1EB891B2B5B2200662C08 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A0A5F71C1AEDAE54001A7D7A /* Settings.bundle */; };
+		A0E1EB8A1B2B5B2200662C08 /* logo-white-design-png.png in Resources */ = {isa = PBXBuildFile; fileRef = A03508F81AB3C6AE00CA6455 /* logo-white-design-png.png */; };
+		A0E1EB8B1B2B5B2200662C08 /* LoginScreen-bkg.png in Resources */ = {isa = PBXBuildFile; fileRef = A0A2FFF41ACE232F00A42CD8 /* LoginScreen-bkg.png */; };
+		A0E1EB8C1B2B5B2200662C08 /* blank.png in Resources */ = {isa = PBXBuildFile; fileRef = A0B7F4B91AFB053B00065407 /* blank.png */; };
+		A0E1EB8D1B2B5B2200662C08 /* logo-green-design-png-white.png in Resources */ = {isa = PBXBuildFile; fileRef = A03508F61AB3C5FB00CA6455 /* logo-green-design-png-white.png */; };
+		A0E1EB8E1B2B5B2200662C08 /* bkg-chat-text.png in Resources */ = {isa = PBXBuildFile; fileRef = A058A2AC1AFDAD96005E7432 /* bkg-chat-text.png */; };
+		A0E1EB8F1B2B5B2200662C08 /* icon-tags75.png in Resources */ = {isa = PBXBuildFile; fileRef = DB5DB3551B18E18100734692 /* icon-tags75.png */; };
+		A0E1EB901B2B5B2200662C08 /* tiger.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5E1DCC9E1AD44C71002D41FD /* tiger.jpg */; };
+		A0E1EB911B2B5B2200662C08 /* btn-addItem@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A058A2A21AFD6024005E7432 /* btn-addItem@2x.png */; };
+		A0E1EB921B2B5B2200662C08 /* btb-want.png in Resources */ = {isa = PBXBuildFile; fileRef = DBEE0E981AF3C855005E60BD /* btb-want.png */; };
+		A0E1EB931B2B5B2200662C08 /* mask-buyer-grey.png in Resources */ = {isa = PBXBuildFile; fileRef = A058A2AE1AFDADA2005E7432 /* mask-buyer-grey.png */; };
+		A0E1EB941B2B5B2200662C08 /* btn-email40.png in Resources */ = {isa = PBXBuildFile; fileRef = A0A2FFFE1ACE2F7500A42CD8 /* btn-email40.png */; };
+		A0E1EB951B2B5B2200662C08 /* mask-buyer-white@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = A058A2B31AFDADA2005E7432 /* mask-buyer-white@3x.png */; };
+		A0E1EB961B2B5B2200662C08 /* cartoon_fast_whoosh_good_for_karate_chop_other_fast_movement_or_swipe_001.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = A0A8F8FD1B1F2BB70055BBC0 /* cartoon_fast_whoosh_good_for_karate_chop_other_fast_movement_or_swipe_001.mp3 */; };
+		A0E1EB971B2B5B2200662C08 /* btn-check.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E1DCCA01AD47C53002D41FD /* btn-check.png */; };
+		A0E1EB981B2B5B2200662C08 /* btn-add-disabled.png in Resources */ = {isa = PBXBuildFile; fileRef = A018DF8A1ADE08DB00AF5550 /* btn-add-disabled.png */; };
+		A0E1EB991B2B5B2200662C08 /* dot.png in Resources */ = {isa = PBXBuildFile; fileRef = A05DB74E1AF1A4C80076D97D /* dot.png */; };
+		A0E1EB9A1B2B5B2200662C08 /* btn-cancel.png in Resources */ = {isa = PBXBuildFile; fileRef = A018DF871ADE07E700AF5550 /* btn-cancel.png */; };
+		A0E1EB9B1B2B5B2200662C08 /* logo-white-design-png-transp-100.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E023F871AD59F200002AFBC /* logo-white-design-png-transp-100.png */; };
+		A0E1EB9C1B2B5B2200662C08 /* logo-white-design-png-100.png in Resources */ = {isa = PBXBuildFile; fileRef = A0A2FFF21ACE213F00A42CD8 /* logo-white-design-png-100.png */; };
+		A0E1EB9D1B2B5B2200662C08 /* dot@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A05DB7531AF3F22B0076D97D /* dot@2x.png */; };
+		A0E1EB9E1B2B5B2200662C08 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5EBDD6941AB211E600C7FBE7 /* Main.storyboard */; };
+		A0E1EB9F1B2B5B2200662C08 /* mask-buyer-white.png in Resources */ = {isa = PBXBuildFile; fileRef = A058A2B11AFDADA2005E7432 /* mask-buyer-white.png */; };
+		A0E1EBA01B2B5B2200662C08 /* bakkleLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 5EBDD6B01AB2139700C7FBE7 /* bakkleLogo.png */; };
+		A0E1EBA11B2B5B2200662C08 /* btn-add.png in Resources */ = {isa = PBXBuildFile; fileRef = A018DF861ADE07E700AF5550 /* btn-add.png */; };
+		A0E1EBA21B2B5B2200662C08 /* MessageIncoming.aiff in Resources */ = {isa = PBXBuildFile; fileRef = A08D53C31B0815CB000C406C /* MessageIncoming.aiff */; };
+		A0E1EBA31B2B5B2200662C08 /* mask-buyer-grey@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = A058A2B01AFDADA2005E7432 /* mask-buyer-grey@3x.png */; };
+		A0E1EBA41B2B5B2200662C08 /* btn-addItem.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E023F851AD592B80002AFBC /* btn-addItem.png */; };
+		A0E1EBA51B2B5B2200662C08 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5EBDD6971AB211E600C7FBE7 /* Images.xcassets */; };
+		A0E1EBA61B2B5B2200662C08 /* btn-menu.png in Resources */ = {isa = PBXBuildFile; fileRef = A05DB7511AF1BC090076D97D /* btn-menu.png */; };
+		A0E1EBA71B2B5B2200662C08 /* btn-menu@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = A058A2A51AFD6024005E7432 /* btn-menu@3x.png */; };
+		A0E1EBA81B2B5B2200662C08 /* icon-cart.png in Resources */ = {isa = PBXBuildFile; fileRef = A0D96F761AD765990046DA13 /* icon-cart.png */; };
+		A0E1EBA91B2B5B2200662C08 /* icon-gear.png in Resources */ = {isa = PBXBuildFile; fileRef = A0D96F731AD765990046DA13 /* icon-gear.png */; };
+		A0E1EBAA1B2B5B2200662C08 /* MessageOutgoing.aiff in Resources */ = {isa = PBXBuildFile; fileRef = A08D53C41B0815CB000C406C /* MessageOutgoing.aiff */; };
+		A0E1EBAB1B2B5B2200662C08 /* btn-facebook40.png in Resources */ = {isa = PBXBuildFile; fileRef = A0A2FFFF1ACE2F7500A42CD8 /* btn-facebook40.png */; };
+		A0E1EBAC1B2B5B2200662C08 /* btn-x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E1DCCA11AD47C53002D41FD /* btn-x.png */; };
+		A0E1EBAD1B2B5B2200662C08 /* pendant-tag660.png in Resources */ = {isa = PBXBuildFile; fileRef = DB5372931B0832E000CC49B7 /* pendant-tag660.png */; };
+		A0E1EBAE1B2B5B2200662C08 /* btn-menu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A058A2A41AFD6024005E7432 /* btn-menu@2x.png */; };
+		A0E1EBAF1B2B5B2200662C08 /* mock-rating-stars.png in Resources */ = {isa = PBXBuildFile; fileRef = D0C6A42C1B080ACB0027ACCF /* mock-rating-stars.png */; };
+		A0E1EBB01B2B5B2200662C08 /* btn-addItem@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = A058A2A31AFD6024005E7432 /* btn-addItem@3x.png */; };
+		A0E1EBB11B2B5B2200662C08 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5EBDD6991AB211E600C7FBE7 /* LaunchScreen.xib */; };
+		A0E1EBB21B2B5B2200662C08 /* item-lawnmower.png in Resources */ = {isa = PBXBuildFile; fileRef = A003EB191AD4DB8800EE51A1 /* item-lawnmower.png */; };
+		A0E1EBB31B2B5B2200662C08 /* star_full.png in Resources */ = {isa = PBXBuildFile; fileRef = DB6726E61B178F250014A896 /* star_full.png */; };
+		A0E1EBB41B2B5B2200662C08 /* mock-additem.png in Resources */ = {isa = PBXBuildFile; fileRef = A018DF8C1ADE09A500AF5550 /* mock-additem.png */; };
+		A0E1EBB51B2B5B2200662C08 /* icon-x@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = A08D53B01B06DBD8000C406C /* icon-x@3x.png */; };
+		A0E1EBB61B2B5B2200662C08 /* icon-marker75.png in Resources */ = {isa = PBXBuildFile; fileRef = DB5DB3541B18E18100734692 /* icon-marker75.png */; };
+		A0E1EBB71B2B5B2200662C08 /* btn-meh.png in Resources */ = {isa = PBXBuildFile; fileRef = 13AB6F9C1B0E3C520092EE61 /* btn-meh.png */; };
+		A0E1EBB81B2B5B2200662C08 /* mock-settings.png in Resources */ = {isa = PBXBuildFile; fileRef = A0D96F8F1AD7751E0046DA13 /* mock-settings.png */; };
+		A0E1EBB91B2B5B2200662C08 /* btn-addCam.png in Resources */ = {isa = PBXBuildFile; fileRef = D0FCDFF91B03B2E0006F76F7 /* btn-addCam.png */; };
+		A0E1EBBA1B2B5B2200662C08 /* icon-back.png in Resources */ = {isa = PBXBuildFile; fileRef = A08D53D71B0825E7000C406C /* icon-back.png */; };
+		A0E1EBBB1B2B5B2200662C08 /* star_half.png in Resources */ = {isa = PBXBuildFile; fileRef = DB6726E71B178F250014A896 /* star_half.png */; };
+		A0E1EBBC1B2B5B2200662C08 /* mask-buyer-grey@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A058A2AF1AFDADA2005E7432 /* mask-buyer-grey@2x.png */; };
+		A0E1EBBD1B2B5B2200662C08 /* btn-logout40.png in Resources */ = {isa = PBXBuildFile; fileRef = A0A200041ACE30C200A42CD8 /* btn-logout40.png */; };
+		A0E1EBBE1B2B5B2200662C08 /* star_none.png in Resources */ = {isa = PBXBuildFile; fileRef = DB6726E81B178F250014A896 /* star_none.png */; };
+		A0E1EBBF1B2B5B2200662C08 /* loading.png in Resources */ = {isa = PBXBuildFile; fileRef = A058A2BA1AFDB87F005E7432 /* loading.png */; };
+		A0E1EBC01B2B5B2200662C08 /* icon-down.png in Resources */ = {isa = PBXBuildFile; fileRef = A0D96F751AD765990046DA13 /* icon-down.png */; };
+		A0E1EBC11B2B5B2200662C08 /* item-detail-overlay.png in Resources */ = {isa = PBXBuildFile; fileRef = DBEE0E961AF3C464005E60BD /* item-detail-overlay.png */; };
+		A0E1EBC21B2B5B2200662C08 /* icon-car75.png in Resources */ = {isa = PBXBuildFile; fileRef = DB5DB3531B18E18100734692 /* icon-car75.png */; };
+		A0E1EBC31B2B5B2200662C08 /* btn-sign-in40.png in Resources */ = {isa = PBXBuildFile; fileRef = A0A200001ACE2F7500A42CD8 /* btn-sign-in40.png */; };
+		A0E1EBC41B2B5B2200662C08 /* SplashScreen-bkg.png in Resources */ = {isa = PBXBuildFile; fileRef = A03508F21AB3C34900CA6455 /* SplashScreen-bkg.png */; };
+		A0E1EBC51B2B5B2200662C08 /* icon-filter.png in Resources */ = {isa = PBXBuildFile; fileRef = A0D96F741AD765990046DA13 /* icon-filter.png */; };
+		A0E1EBC61B2B5B2200662C08 /* icon-pencil.png in Resources */ = {isa = PBXBuildFile; fileRef = A0D96F771AD765990046DA13 /* icon-pencil.png */; };
+		A0E1EBC71B2B5B2200662C08 /* icon-house.png in Resources */ = {isa = PBXBuildFile; fileRef = A0D96F781AD765990046DA13 /* icon-house.png */; };
+		A0E1EBC81B2B5B2200662C08 /* mask-buyer-white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A058A2B21AFDADA2005E7432 /* mask-buyer-white@2x.png */; };
 		D0C6A42D1B080ACB0027ACCF /* mock-rating-stars.png in Resources */ = {isa = PBXBuildFile; fileRef = D0C6A42C1B080ACB0027ACCF /* mock-rating-stars.png */; };
 		D0FCDFFA1B03B2E0006F76F7 /* btn-addCam.png in Resources */ = {isa = PBXBuildFile; fileRef = D0FCDFF91B03B2E0006F76F7 /* btn-addCam.png */; };
 		DB5372901B0806B600CC49B7 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB53728F1B0806B600CC49B7 /* FBSDKShareKit.framework */; };
@@ -326,6 +450,8 @@
 		A0D96F871AD772DA0046DA13 /* HoldingPatternView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HoldingPatternView.swift; sourceTree = "<group>"; };
 		A0D96F891AD773DB0046DA13 /* FeedFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedFilter.swift; sourceTree = "<group>"; };
 		A0D96F8F1AD7751E0046DA13 /* mock-settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mock-settings.png"; sourceTree = "<group>"; };
+		A0E1EBD01B2B5B2200662C08 /* Bakkle copy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Bakkle copy.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A0E1EBD11B2B5B2200662C08 /* Bakkle copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Bakkle copy-Info.plist"; path = "/working/bakkle/iOS/Bakkle/Bakkle copy-Info.plist"; sourceTree = "<absolute>"; };
 		D0C6A42C1B080ACB0027ACCF /* mock-rating-stars.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mock-rating-stars.png"; sourceTree = "<group>"; };
 		D0FCDFF91B03B2E0006F76F7 /* btn-addCam.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-addCam.png"; sourceTree = "<group>"; };
 		DB53728F1B0806B600CC49B7 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
@@ -384,6 +510,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A0E1EB7A1B2B5B2200662C08 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A0E1EB7B1B2B5B2200662C08 /* AVFoundation.framework in Frameworks */,
+				A0E1EB7C1B2B5B2200662C08 /* Social.framework in Frameworks */,
+				A0E1EB7D1B2B5B2200662C08 /* FBSDKShareKit.framework in Frameworks */,
+				A0E1EB7E1B2B5B2200662C08 /* UIKit.framework in Frameworks */,
+				A0E1EB7F1B2B5B2200662C08 /* CoreGraphics.framework in Frameworks */,
+				A0E1EB801B2B5B2200662C08 /* Photos.framework in Frameworks */,
+				A0E1EB811B2B5B2200662C08 /* FacebookSDK in Frameworks */,
+				A0E1EB821B2B5B2200662C08 /* FBSDKCoreKit.framework in Frameworks */,
+				A0E1EB831B2B5B2200662C08 /* Foundation.framework in Frameworks */,
+				A0E1EB841B2B5B2200662C08 /* Pods_Bakkle.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -400,6 +543,7 @@
 				5EBDD6A31AB211E600C7FBE7 /* BakkleTests */,
 				5EBDD68C1AB211E600C7FBE7 /* Products */,
 				EE168E761A42906DDE93E5F8 /* Pods */,
+				A0E1EBD11B2B5B2200662C08 /* Bakkle copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -410,6 +554,7 @@
 				5EBDD6A01AB211E600C7FBE7 /* BakkleTests.xctest */,
 				139096781B0CD5C800C8BB33 /* Bakkle WatchKit Extension.appex */,
 				139096871B0CD5C800C8BB33 /* Bakkle WatchKit App.app */,
+				A0E1EBD01B2B5B2200662C08 /* Bakkle copy.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -805,6 +950,26 @@
 			productReference = 5EBDD6A01AB211E600C7FBE7 /* BakkleTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		A0E1EB461B2B5B2100662C08 /* Goodwill */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A0E1EBCD1B2B5B2200662C08 /* Build configuration list for PBXNativeTarget "Goodwill" */;
+			buildPhases = (
+				A0E1EB491B2B5B2200662C08 /* Check Pods Manifest.lock */,
+				A0E1EB4A1B2B5B2200662C08 /* Sources */,
+				A0E1EB7A1B2B5B2200662C08 /* Frameworks */,
+				A0E1EB851B2B5B2200662C08 /* Resources */,
+				A0E1EBC91B2B5B2200662C08 /* Embed Pods Frameworks */,
+				A0E1EBCA1B2B5B2200662C08 /* Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Goodwill;
+			productName = Bakkle;
+			productReference = A0E1EBD01B2B5B2200662C08 /* Bakkle copy.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -840,6 +1005,9 @@
 						CreatedOnToolsVersion = 6.1.1;
 						TestTargetID = 5EBDD68A1AB211E600C7FBE7;
 					};
+					A0E1EB461B2B5B2100662C08 = {
+						DevelopmentTeam = GKAKES7JLX;
+					};
 				};
 			};
 			buildConfigurationList = 5EBDD6861AB211E600C7FBE7 /* Build configuration list for PBXProject "Bakkle" */;
@@ -859,6 +1027,7 @@
 				5EBDD69F1AB211E600C7FBE7 /* BakkleTests */,
 				139096771B0CD5C800C8BB33 /* Bakkle WatchKit Extension */,
 				139096861B0CD5C800C8BB33 /* Bakkle WatchKit App */,
+				A0E1EB461B2B5B2100662C08 /* Goodwill */,
 			);
 		};
 /* End PBXProject section */
@@ -966,6 +1135,80 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A0E1EB851B2B5B2200662C08 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A0E1EB861B2B5B2200662C08 /* btn-want-disabled.png in Resources */,
+				A0E1EB871B2B5B2200662C08 /* mock-tile.png in Resources */,
+				A0E1EB881B2B5B2200662C08 /* icon-i.png in Resources */,
+				A0E1EB891B2B5B2200662C08 /* Settings.bundle in Resources */,
+				A0E1EB8A1B2B5B2200662C08 /* logo-white-design-png.png in Resources */,
+				A0E1EB8B1B2B5B2200662C08 /* LoginScreen-bkg.png in Resources */,
+				A0E1EB8C1B2B5B2200662C08 /* blank.png in Resources */,
+				A0E1EB8D1B2B5B2200662C08 /* logo-green-design-png-white.png in Resources */,
+				A0E1EB8E1B2B5B2200662C08 /* bkg-chat-text.png in Resources */,
+				A0E1EB8F1B2B5B2200662C08 /* icon-tags75.png in Resources */,
+				A0E1EB901B2B5B2200662C08 /* tiger.jpg in Resources */,
+				A0E1EB911B2B5B2200662C08 /* btn-addItem@2x.png in Resources */,
+				A0E1EB921B2B5B2200662C08 /* btb-want.png in Resources */,
+				A0E1EB931B2B5B2200662C08 /* mask-buyer-grey.png in Resources */,
+				A0E1EB941B2B5B2200662C08 /* btn-email40.png in Resources */,
+				A0E1EB951B2B5B2200662C08 /* mask-buyer-white@3x.png in Resources */,
+				A0E1EB961B2B5B2200662C08 /* cartoon_fast_whoosh_good_for_karate_chop_other_fast_movement_or_swipe_001.mp3 in Resources */,
+				A0E1EB971B2B5B2200662C08 /* btn-check.png in Resources */,
+				A0E1EB981B2B5B2200662C08 /* btn-add-disabled.png in Resources */,
+				A0E1EB991B2B5B2200662C08 /* dot.png in Resources */,
+				A0E1EB9A1B2B5B2200662C08 /* btn-cancel.png in Resources */,
+				A0E1EB9B1B2B5B2200662C08 /* logo-white-design-png-transp-100.png in Resources */,
+				A0E1EB9C1B2B5B2200662C08 /* logo-white-design-png-100.png in Resources */,
+				A0E1EB9D1B2B5B2200662C08 /* dot@2x.png in Resources */,
+				A0E1EB9E1B2B5B2200662C08 /* Main.storyboard in Resources */,
+				A0E1EB9F1B2B5B2200662C08 /* mask-buyer-white.png in Resources */,
+				A0E1EBA01B2B5B2200662C08 /* bakkleLogo.png in Resources */,
+				A0E1EBA11B2B5B2200662C08 /* btn-add.png in Resources */,
+				A0E1EBA21B2B5B2200662C08 /* MessageIncoming.aiff in Resources */,
+				A0E1EBA31B2B5B2200662C08 /* mask-buyer-grey@3x.png in Resources */,
+				A0E1EBA41B2B5B2200662C08 /* btn-addItem.png in Resources */,
+				A0E1EBA51B2B5B2200662C08 /* Images.xcassets in Resources */,
+				A0E1EBA61B2B5B2200662C08 /* btn-menu.png in Resources */,
+				A0E1EBA71B2B5B2200662C08 /* btn-menu@3x.png in Resources */,
+				A0E1EBA81B2B5B2200662C08 /* icon-cart.png in Resources */,
+				A0E1EBA91B2B5B2200662C08 /* icon-gear.png in Resources */,
+				A0E1EBAA1B2B5B2200662C08 /* MessageOutgoing.aiff in Resources */,
+				A0E1EBAB1B2B5B2200662C08 /* btn-facebook40.png in Resources */,
+				A0E1EBAC1B2B5B2200662C08 /* btn-x.png in Resources */,
+				A0E1EBAD1B2B5B2200662C08 /* pendant-tag660.png in Resources */,
+				A0E1EBAE1B2B5B2200662C08 /* btn-menu@2x.png in Resources */,
+				A0E1EBAF1B2B5B2200662C08 /* mock-rating-stars.png in Resources */,
+				A0E1EBB01B2B5B2200662C08 /* btn-addItem@3x.png in Resources */,
+				A0E1EBB11B2B5B2200662C08 /* LaunchScreen.xib in Resources */,
+				A0E1EBB21B2B5B2200662C08 /* item-lawnmower.png in Resources */,
+				A0E1EBB31B2B5B2200662C08 /* star_full.png in Resources */,
+				A0E1EBB41B2B5B2200662C08 /* mock-additem.png in Resources */,
+				A0E1EBB51B2B5B2200662C08 /* icon-x@3x.png in Resources */,
+				A0E1EBB61B2B5B2200662C08 /* icon-marker75.png in Resources */,
+				A0E1EBB71B2B5B2200662C08 /* btn-meh.png in Resources */,
+				A0E1EBB81B2B5B2200662C08 /* mock-settings.png in Resources */,
+				A0E1EBB91B2B5B2200662C08 /* btn-addCam.png in Resources */,
+				A0E1EBBA1B2B5B2200662C08 /* icon-back.png in Resources */,
+				A0E1EBBB1B2B5B2200662C08 /* star_half.png in Resources */,
+				A0E1EBBC1B2B5B2200662C08 /* mask-buyer-grey@2x.png in Resources */,
+				A0E1EBBD1B2B5B2200662C08 /* btn-logout40.png in Resources */,
+				A0E1EBBE1B2B5B2200662C08 /* star_none.png in Resources */,
+				A0E1EBBF1B2B5B2200662C08 /* loading.png in Resources */,
+				A0E1EBC01B2B5B2200662C08 /* icon-down.png in Resources */,
+				A0E1EBC11B2B5B2200662C08 /* item-detail-overlay.png in Resources */,
+				A0E1EBC21B2B5B2200662C08 /* icon-car75.png in Resources */,
+				A0E1EBC31B2B5B2200662C08 /* btn-sign-in40.png in Resources */,
+				A0E1EBC41B2B5B2200662C08 /* SplashScreen-bkg.png in Resources */,
+				A0E1EBC51B2B5B2200662C08 /* icon-filter.png in Resources */,
+				A0E1EBC61B2B5B2200662C08 /* icon-pencil.png in Resources */,
+				A0E1EBC71B2B5B2200662C08 /* icon-house.png in Resources */,
+				A0E1EBC81B2B5B2200662C08 /* mask-buyer-white@2x.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
@@ -997,6 +1240,51 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		A0E1EB491B2B5B2200662C08 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		A0E1EBC91B2B5B2200662C08 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Bakkle/Pods-Bakkle-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A0E1EBCA1B2B5B2200662C08 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Bakkle/Pods-Bakkle-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		DAC119B602F64538F899B059 /* Embed Pods Frameworks */ = {
@@ -1085,6 +1373,60 @@
 			buildActionMask = 2147483647;
 			files = (
 				5EBDD6A71AB211E600C7FBE7 /* BakkleTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A0E1EB4A1B2B5B2200662C08 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A0E1EB4B1B2B5B2200662C08 /* MDCPanState.m in Sources */,
+				A0E1EB4C1B2B5B2200662C08 /* UIImage+Resize.swift in Sources */,
+				A0E1EB4D1B2B5B2200662C08 /* ChatCell.swift in Sources */,
+				A0E1EB4E1B2B5B2200662C08 /* ChatViewController.swift in Sources */,
+				A0E1EB4F1B2B5B2200662C08 /* LoginView.swift in Sources */,
+				A0E1EB501B2B5B2200662C08 /* FeedView.swift in Sources */,
+				A0E1EB511B2B5B2200662C08 /* MenuTableView.swift in Sources */,
+				A0E1EB521B2B5B2200662C08 /* Chat.swift in Sources */,
+				A0E1EB531B2B5B2200662C08 /* FeedFilter.swift in Sources */,
+				A0E1EB541B2B5B2200662C08 /* ItemData.swift in Sources */,
+				A0E1EB551B2B5B2200662C08 /* UIColor+MDCRGB8Bit.m in Sources */,
+				A0E1EB561B2B5B2200662C08 /* HoldingPatternView.swift in Sources */,
+				A0E1EB571B2B5B2200662C08 /* OffsetTextAttachment.swift in Sources */,
+				A0E1EB581B2B5B2200662C08 /* SWRevealViewController.m in Sources */,
+				A0E1EB591B2B5B2200662C08 /* SettingsView.swift in Sources */,
+				A0E1EB5A1B2B5B2200662C08 /* ItemDetails.swift in Sources */,
+				A0E1EB5B1B2B5B2200662C08 /* UIView+MDCBorderedLabel.m in Sources */,
+				A0E1EB5C1B2B5B2200662C08 /* BuyersTrunkView.swift in Sources */,
+				A0E1EB5D1B2B5B2200662C08 /* ListItemCell.swift in Sources */,
+				A0E1EB5E1B2B5B2200662C08 /* Account.swift in Sources */,
+				A0E1EB5F1B2B5B2200662C08 /* User.swift in Sources */,
+				A0E1EB601B2B5B2200662C08 /* MDCGeometry.m in Sources */,
+				A0E1EB611B2B5B2200662C08 /* RateView.m in Sources */,
+				A0E1EB621B2B5B2200662C08 /* UserCell.swift in Sources */,
+				A0E1EB631B2B5B2200662C08 /* MDCViewState.m in Sources */,
+				A0E1EB641B2B5B2200662C08 /* GarageCell.swift in Sources */,
+				A0E1EB651B2B5B2200662C08 /* SellersGarage.swift in Sources */,
+				A0E1EB661B2B5B2200662C08 /* IconImage.swift in Sources */,
+				A0E1EB671B2B5B2200662C08 /* Bakkle.swift in Sources */,
+				A0E1EB681B2B5B2200662C08 /* MDCSwipeOptions.m in Sources */,
+				A0E1EB691B2B5B2200662C08 /* MDCSwipeResult.m in Sources */,
+				A0E1EB6A1B2B5B2200662C08 /* MessageSentDateCell.swift in Sources */,
+				A0E1EB6B1B2B5B2200662C08 /* ItemDetailsCell.swift in Sources */,
+				A0E1EB6C1B2B5B2200662C08 /* CLLocation+String.swift in Sources */,
+				A0E1EB6D1B2B5B2200662C08 /* AddItem.swift in Sources */,
+				A0E1EB6E1B2B5B2200662C08 /* ComposeViewController.swift in Sources */,
+				A0E1EB6F1B2B5B2200662C08 /* Message.swift in Sources */,
+				A0E1EB701B2B5B2200662C08 /* AppDelegate.swift in Sources */,
+				A0E1EB711B2B5B2200662C08 /* MessageBubbleCell.swift in Sources */,
+				A0E1EB721B2B5B2200662C08 /* DemoView.swift in Sources */,
+				A0E1EB731B2B5B2200662C08 /* MDCSwipeToChooseView.m in Sources */,
+				A0E1EB741B2B5B2200662C08 /* UIView+MDCSwipeToChoose.m in Sources */,
+				A0E1EB751B2B5B2200662C08 /* Theme.swift in Sources */,
+				A0E1EB761B2B5B2200662C08 /* Common.swift in Sources */,
+				A0E1EB771B2B5B2200662C08 /* MDCSwipeToChooseViewOptions.m in Sources */,
+				A0E1EB781B2B5B2200662C08 /* ProfileView.swift in Sources */,
+				A0E1EB791B2B5B2200662C08 /* PlaceholderTextView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1385,6 +1727,64 @@
 			};
 			name = Release;
 		};
+		A0E1EBCE1B2B5B2200662C08 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1D710285C97E0FF7D33DEB9E /* Pods-Bakkle.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = Goodwill;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_ENTITLEMENTS = Bakkle/Bakkle.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEFINES_MODULE = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				INFOPLIST_FILE = "Bakkle copy-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/FacebookSDK.framework/Versions/A",
+				);
+				PRODUCT_NAME = "Bakkle copy";
+				PROVISIONING_PROFILE = "";
+				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "Bakkle/Bridging-Header.h";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		A0E1EBCF1B2B5B2200662C08 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 698270E0C83AB2371F464BB2 /* Pods-Bakkle.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = Goodwill;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_ENTITLEMENTS = Bakkle/Bakkle.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEFINES_MODULE = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				INFOPLIST_FILE = "Bakkle copy-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/FacebookSDK.framework/Versions/A",
+				);
+				PRODUCT_NAME = "Bakkle copy";
+				PROVISIONING_PROFILE = "";
+				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "Bakkle/Bridging-Header.h";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1429,6 +1829,15 @@
 			buildConfigurations = (
 				5EBDD6AE1AB211E600C7FBE7 /* Debug */,
 				5EBDD6AF1AB211E600C7FBE7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A0E1EBCD1B2B5B2200662C08 /* Build configuration list for PBXNativeTarget "Goodwill" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A0E1EBCE1B2B5B2200662C08 /* Debug */,
+				A0E1EBCF1B2B5B2200662C08 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
