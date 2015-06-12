@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "A0E1EB461B2B5B2100662C08"
-               BuildableName = "Bakkle copy.app"
+               BuildableName = "Goodwill.app"
                BlueprintName = "Goodwill"
                ReferencedContainer = "container:Bakkle.xcodeproj">
             </BuildableReference>
@@ -33,7 +33,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "A0E1EB461B2B5B2100662C08"
-            BuildableName = "Bakkle copy.app"
+            BuildableName = "Goodwill.app"
             BlueprintName = "Goodwill"
             ReferencedContainer = "container:Bakkle.xcodeproj">
          </BuildableReference>
@@ -53,7 +53,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "A0E1EB461B2B5B2100662C08"
-            BuildableName = "Bakkle copy.app"
+            BuildableName = "Goodwill.app"
             BlueprintName = "Goodwill"
             ReferencedContainer = "container:Bakkle.xcodeproj">
          </BuildableReference>
@@ -72,7 +72,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "A0E1EB461B2B5B2100662C08"
-            BuildableName = "Bakkle copy.app"
+            BuildableName = "Goodwill.app"
             BlueprintName = "Goodwill"
             ReferencedContainer = "container:Bakkle.xcodeproj">
          </BuildableReference>
