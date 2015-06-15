@@ -1,12 +1,13 @@
 import UIKit
 
 class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextViewDelegate  {
-    let joe = User(ID: 69, username: "lilswaqq", firstName: "Joseph", lastName: "Carroll")
+    let testUser = User(ID: 99, username: "testuser", firstName: "Test", lastName: "User")
     var account: Account!
     var chats: [Chat] = []
     var header: UIView!
     var tableView: UITableView!
     var textView: UITextView!
+    var chatItemID: String!
     
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -24,10 +25,10 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let joe = User(ID: 69, username: "lilswaqq", firstName: "Joseph", lastName: "Carroll")
-        self.account = Account(user: joe)
-        
+        let testUser = User(ID: 99, username: "testuser", firstName: "Test", lastName: "User")
+        self.account = Account(user: testUser)
         let minute: NSTimeInterval = 60, hour = minute * 60, day = hour * 24
+        //WSManager.enqueueWorkPayload(payload: WSStartChatRequest(itemId: chatItemID))
         account.chats = [
             Chat(user: User(ID: 2, username: "samihah", firstName: "Angel", lastName: "Rao"), lastMessageText: "6 sounds good :-)", lastMessageSentDate: NSDate()),
             Chat(user: User(ID: 3, username: "walterstephanie", firstName: "Valentine", lastName: "Sanchez"), lastMessageText: "Haha", lastMessageSentDate: NSDate(timeIntervalSinceNow: -minute)),
@@ -53,15 +54,6 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
             Chat(user: User(ID: 21, username: "stushona", firstName: "Jade", lastName: "Roger"), lastMessageText: "😊", lastMessageSentDate: NSDate(timeIntervalSinceNow: -day*11))
         ]
         self.chats = self.account!.chats
-        //navigationItem.leftBarButtonItem = editButtonItem() // TODO: KVO
-//        self.tableView = UITableView(frame: CGRectZero, style: UITableViewStyle.Plain)
-//        self.tableView.backgroundColor = UIColor.whiteColor()
-//        self.tableView.rowHeight = chatCellHeight
-//        self.tableView.separatorInset.left = chatCellInsetLeft
-//        self.tableView.registerClass(ChatCell.self, forCellReuseIdentifier: NSStringFromClass(ChatCell))
-        
-        
-        //view.backgroundColor = UIColor.whiteColor() // smooths push animation
         
         let topHeight: CGFloat = 20
         let headerHeight: CGFloat = 44
@@ -75,16 +67,6 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
         self.view.addSubview(backButton)
         header.addSubview(backButton)
         
-//        let profileButtonWidth: CGFloat = 44
-//        let profileXpos:CGFloat = (header.bounds.size.width - header.bounds.origin.x
-//            - profileButtonWidth) / 2.0
-//        profileButton = UIButton(frame: CGRectMake(profileXpos, header.bounds.origin.y+topHeight, profileButtonWidth, headerHeight))
-//        profileButton.backgroundColor = Theme.ColorGreen
-//        profileButton.setImage(UIImage(named: "loading.png"), forState: UIControlState.Normal)
-//        profileButton.imageView?.layer.cornerRadius = profileButton.imageView!.frame.size.width/2
-//        profileButton.addTarget(self, action: "btnProfile:", forControlEvents: UIControlEvents.TouchUpInside)
-//        header.addSubview(profileButton)
-        
         var title = UILabel(frame: CGRectMake(view.bounds.origin.x, view.bounds.origin.y + topHeight, view.bounds.size.width, headerHeight))
         title.center = CGPointMake((view.bounds.size.width/2), topHeight + (headerHeight/2))
         title.textAlignment = NSTextAlignment.Center
@@ -93,11 +75,6 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
         title.textColor = UIColor.whiteColor()
         
         header.addSubview(title)
-//        let infoButtonWidth:CGFloat = 50
-//        var infoButton = UIButton(frame: CGRectMake(header.bounds.origin.x+header.bounds.size.width-infoButtonWidth, header.bounds.origin.y+topHeight, infoButtonWidth, headerHeight))
-//        infoButton.setImage(UIImage(named: "icon-i.png"), forState: UIControlState.Normal)
-//        infoButton.addTarget(self, action: "btnI:", forControlEvents: UIControlEvents.TouchUpInside)
-//        header.addSubview(infoButton)
         view.addSubview(header)
         
         tableView = UITableView(frame: CGRectMake(view.bounds.origin.x, view.bounds.origin.y+headerHeight+topHeight, view.bounds.size.width, view.bounds.size.height-headerHeight-topHeight), style: .Plain)
@@ -122,10 +99,6 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
     override func viewDidAppear(animated: Bool)  {
         super.viewDidAppear(animated)
         tableView.flashScrollIndicators()
-        
-//        var facebookProfileImageUrlString = "http://graph.facebook.com/\(Bakkle.sharedInstance.facebook_id_str)/picture?type=large"
-//        let imgURL = NSURL(string: facebookProfileImageUrlString)
-//        profileButton.hnk_setImageFromURL(imgURL!, state: UIControlState.Normal, placeholder: UIImage(named:"loading.png"), format: nil, failure: nil, success: nil)
     }
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
