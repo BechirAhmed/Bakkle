@@ -3,6 +3,7 @@ import UIKit
 
 let messageFontSize: CGFloat = 17
 let toolBarMinHeight: CGFloat = 44
+let messageFont = "Avenir-Book"
 let textViewMaxHeight: (portrait: CGFloat, landscape: CGFloat) = (portrait: 272, landscape: 90)
 let messageSoundOutgoing: SystemSoundID = createMessageSoundOutgoing()
 
@@ -26,7 +27,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             textView = InputTextView(frame: CGRectZero)
             textView.backgroundColor = UIColor.whiteColor()
             textView.delegate = self
-            textView.font = UIFont.systemFontOfSize(messageFontSize)
+            textView.font = UIFont(name: messageFont, size: messageFontSize)
             textView.layer.borderColor = UIColor(red: 200/255, green: 200/255, blue: 205/255, alpha:1).CGColor
             textView.layer.borderWidth = 0.5
             textView.layer.cornerRadius = 5
@@ -37,7 +38,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
             sendButton = UIButton.buttonWithType(.System) as! UIButton
             sendButton.enabled = false
-            sendButton.titleLabel?.font = UIFont.boldSystemFontOfSize(17)
+            sendButton.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 17)
             sendButton.setTitle("Send", forState: .Normal)
             sendButton.setTitleColor(UIColor(red: 142/255, green: 142/255, blue: 147/255, alpha: 1), forState: .Disabled)
             sendButton.setTitleColor(UIColor(red: 1/255, green: 122/255, blue: 255/255, alpha: 1), forState: .Normal)
@@ -103,10 +104,10 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         self.view.addSubview(backButton)
         header.addSubview(backButton)
         
-        let profileButtonWidth: CGFloat = 44
+        let profileButtonWidth: CGFloat = 36
         let profileXpos:CGFloat = (header.bounds.size.width - header.bounds.origin.x
             - profileButtonWidth) / 2.0
-        profileButton = UIButton(frame: CGRectMake(profileXpos, header.bounds.origin.y+topHeight, profileButtonWidth, headerHeight))
+        profileButton = UIButton(frame: CGRectMake(profileXpos, header.bounds.origin.y+topHeight+4, profileButtonWidth, headerHeight-4))
         profileButton.backgroundColor = Theme.ColorGreen
         profileButton.setImage(UIImage(named: "loading.png"), forState: UIControlState.Normal)
         profileButton.imageView?.layer.cornerRadius = profileButton.imageView!.frame.size.width/2

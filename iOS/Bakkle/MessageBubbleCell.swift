@@ -6,6 +6,7 @@ let bubbleTag = 8
 class MessageBubbleCell: UITableViewCell {
     let bubbleImageView: UIImageView
     let messageLabel: UILabel
+    let messageFont = "Avenir-Book"
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         bubbleImageView = UIImageView(image: bubbleImage.incoming, highlightedImage: bubbleImage.incomingHighlighed)
@@ -13,7 +14,7 @@ class MessageBubbleCell: UITableViewCell {
         bubbleImageView.userInteractionEnabled = true // #CopyMesage
 
         messageLabel = UILabel(frame: CGRectZero)
-        messageLabel.font = UIFont.systemFontOfSize(messageFontSize)
+        messageLabel.font = UIFont(name: messageFont, size: messageFontSize)
         messageLabel.numberOfLines = 0
         messageLabel.userInteractionEnabled = false   // #CopyMessage
 

@@ -9,6 +9,8 @@ class ChatCell: UITableViewCell {
     let lastMessageTextLabel: UILabel
     let lastMessageSentDateLabel: UILabel
     let userNameInitialsLabel: UILabel
+    let bakkleFont = "Avenir-Heavy"
+    let messageFont = "Avenir-Book"
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         let pictureSize: CGFloat = 64
@@ -19,22 +21,26 @@ class ChatCell: UITableViewCell {
 
         userNameLabel = UILabel(frame: CGRectZero)
         userNameLabel.backgroundColor = UIColor.whiteColor()
-        userNameLabel.font = UIFont.systemFontOfSize(17)
+        userNameLabel.font = UIFont(name: bakkleFont, size: 17)
+        //userNameLabel.font = UIFont.systemFontOfSize(17)
 
         lastMessageTextLabel = UILabel(frame: CGRectZero)
         lastMessageTextLabel.backgroundColor = UIColor.whiteColor()
-        lastMessageTextLabel.font = UIFont.systemFontOfSize(15)
+        lastMessageTextLabel.font = UIFont(name: messageFont, size: 15)
+        //lastMessageTextLabel.font = UIFont.systemFontOfSize(15)
         lastMessageTextLabel.numberOfLines = 2
         lastMessageTextLabel.textColor = UIColor(red: 142/255, green: 142/255, blue: 147/255, alpha: 1)
 
         lastMessageSentDateLabel = UILabel(frame: CGRectZero)
         lastMessageSentDateLabel.autoresizingMask = .FlexibleLeftMargin
         lastMessageSentDateLabel.backgroundColor = UIColor.whiteColor()
-        lastMessageSentDateLabel.font = UIFont.systemFontOfSize(15)
+        lastMessageSentDateLabel.font = UIFont(name: bakkleFont, size: 15)
+        //lastMessageSentDateLabel.font = UIFont.systemFontOfSize(15)
         lastMessageSentDateLabel.textColor = lastMessageTextLabel.textColor
 
         userNameInitialsLabel = UILabel(frame: CGRectZero)
-        userNameInitialsLabel.font = UIFont.systemFontOfSize(33)
+        userNameInitialsLabel.font = UIFont(name: bakkleFont, size: 33)
+        //userNameInitialsLabel.font = UIFont.systemFontOfSize(33)
         userNameInitialsLabel.textAlignment = .Center
         userNameInitialsLabel.textColor = UIColor.whiteColor()
 

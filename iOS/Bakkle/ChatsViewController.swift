@@ -6,58 +6,7 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
     var chats: [Chat] = []
     var header: UIView!
     var tableView: UITableView!
-    var toolBar: UIToolbar!
     var textView: UITextView!
-    var profileButton: UIButton!
-    var sendButton: UIButton!
-    
-    override var inputAccessoryView: UIView! {
-        get {
-            if toolBar == nil {
-                toolBar = UIToolbar(frame: CGRectMake(0, 0, 0, toolBarMinHeight-0.5))
-//                
-//                textView = InputTextView(frame: CGRectZero)
-//                textView.backgroundColor = UIColor.whiteColor()
-//                textView.delegate = self
-//                textView.font = UIFont.systemFontOfSize(messageFontSize)
-//                textView.layer.borderColor = UIColor(red: 200/255, green: 200/255, blue: 205/255, alpha:1).CGColor
-//                textView.layer.borderWidth = 0.5
-//                textView.layer.cornerRadius = 5
-//                //        textView.placeholder = "Message"
-//                textView.scrollsToTop = false
-//                textView.textContainerInset = UIEdgeInsetsMake(4, 3, 3, 3)
-//                
-//                sendButton = UIButton.buttonWithType(.System) as! UIButton
-//                sendButton.enabled = false
-//                sendButton.titleLabel?.font = UIFont.boldSystemFontOfSize(17)
-//                sendButton.setTitle("Send", forState: .Normal)
-//                sendButton.setTitleColor(UIColor(red: 142/255, green: 142/255, blue: 147/255, alpha: 1), forState: .Disabled)
-//                sendButton.setTitleColor(UIColor(red: 1/255, green: 122/255, blue: 255/255, alpha: 1), forState: .Normal)
-//                sendButton.contentEdgeInsets = UIEdgeInsets(top: 6, left: 6, bottom: 6, right: 6)
-//                sendButton.addTarget(self, action: "sendAction", forControlEvents: UIControlEvents.TouchUpInside)
-//                toolBar.addSubview(sendButton)
-//                
-//                // Auto Layout allows `sendButton` to change width, e.g., for localization.
-//                textView.setTranslatesAutoresizingMaskIntoConstraints(false)
-//                sendButton.setTranslatesAutoresizingMaskIntoConstraints(false)
-                toolBar.addConstraint(NSLayoutConstraint(item: textView, attribute: .Left, relatedBy: .Equal, toItem: toolBar, attribute: .Left, multiplier: 1, constant: 8))
-                toolBar.addConstraint(NSLayoutConstraint(item: textView, attribute: .Top, relatedBy: .Equal, toItem: toolBar, attribute: .Top, multiplier: 1, constant: 7.5))
-                toolBar.addConstraint(NSLayoutConstraint(item: textView, attribute: .Right, relatedBy: .Equal, toItem: sendButton, attribute: .Left, multiplier: 1, constant: -2))
-                toolBar.addConstraint(NSLayoutConstraint(item: textView, attribute: .Bottom, relatedBy: .Equal, toItem: toolBar, attribute: .Bottom, multiplier: 1, constant: -8))
-                toolBar.addConstraint(NSLayoutConstraint(item: sendButton, attribute: .Right, relatedBy: .Equal, toItem: toolBar, attribute: .Right, multiplier: 1, constant: 0))
-                toolBar.addConstraint(NSLayoutConstraint(item: sendButton, attribute: .Bottom, relatedBy: .Equal, toItem: toolBar, attribute: .Bottom, multiplier: 1, constant: -4.5))
-            }
-            return toolBar
-        }
-    }
-
-    
-    
-//    convenience init() {
-//        self.init(style: .Plain)
-//        title = "Chats"
-//        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Compose, target: self, action: "composeAction")
-//    }
     
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -104,12 +53,79 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
             Chat(user: User(ID: 21, username: "stushona", firstName: "Jade", lastName: "Roger"), lastMessageText: "😊", lastMessageSentDate: NSDate(timeIntervalSinceNow: -day*11))
         ]
         self.chats = self.account!.chats
-        navigationItem.leftBarButtonItem = editButtonItem() // TODO: KVO
-        self.tableView = UITableView(frame: CGRectZero, style: UITableViewStyle.Plain)
-        self.tableView.backgroundColor = UIColor.whiteColor()
-        self.tableView.rowHeight = chatCellHeight
-        self.tableView.separatorInset.left = chatCellInsetLeft
-        self.tableView.registerClass(ChatCell.self, forCellReuseIdentifier: NSStringFromClass(ChatCell))
+        //navigationItem.leftBarButtonItem = editButtonItem() // TODO: KVO
+//        self.tableView = UITableView(frame: CGRectZero, style: UITableViewStyle.Plain)
+//        self.tableView.backgroundColor = UIColor.whiteColor()
+//        self.tableView.rowHeight = chatCellHeight
+//        self.tableView.separatorInset.left = chatCellInsetLeft
+//        self.tableView.registerClass(ChatCell.self, forCellReuseIdentifier: NSStringFromClass(ChatCell))
+        
+        
+        //view.backgroundColor = UIColor.whiteColor() // smooths push animation
+        
+        let topHeight: CGFloat = 20
+        let headerHeight: CGFloat = 44
+        header = UIView(frame: CGRectMake(view.bounds.origin.x, view.bounds.origin.y, view.bounds.size.width, headerHeight+topHeight))
+        header.backgroundColor = Theme.ColorGreen
+        
+        let buttonWidth: CGFloat = 96.0
+        var backButton = UIButton(frame: CGRectMake(header.bounds.origin.x, header.bounds.origin.y+20, buttonWidth, headerHeight))
+        backButton.setImage(UIImage(named: "icon-back.png"), forState: UIControlState.Normal)
+        backButton.addTarget(self, action: "btnBack:", forControlEvents: UIControlEvents.TouchUpInside)
+        self.view.addSubview(backButton)
+        header.addSubview(backButton)
+        
+//        let profileButtonWidth: CGFloat = 44
+//        let profileXpos:CGFloat = (header.bounds.size.width - header.bounds.origin.x
+//            - profileButtonWidth) / 2.0
+//        profileButton = UIButton(frame: CGRectMake(profileXpos, header.bounds.origin.y+topHeight, profileButtonWidth, headerHeight))
+//        profileButton.backgroundColor = Theme.ColorGreen
+//        profileButton.setImage(UIImage(named: "loading.png"), forState: UIControlState.Normal)
+//        profileButton.imageView?.layer.cornerRadius = profileButton.imageView!.frame.size.width/2
+//        profileButton.addTarget(self, action: "btnProfile:", forControlEvents: UIControlEvents.TouchUpInside)
+//        header.addSubview(profileButton)
+        
+        var title = UILabel(frame: CGRectMake(view.bounds.origin.x, view.bounds.origin.y + topHeight, view.bounds.size.width, headerHeight))
+        title.center = CGPointMake((view.bounds.size.width/2), topHeight + (headerHeight/2))
+        title.textAlignment = NSTextAlignment.Center
+        title.text = "CHATS"
+        title.font = UIFont(name: "Avenir-Black", size: 21)
+        title.textColor = UIColor.whiteColor()
+        
+        header.addSubview(title)
+//        let infoButtonWidth:CGFloat = 50
+//        var infoButton = UIButton(frame: CGRectMake(header.bounds.origin.x+header.bounds.size.width-infoButtonWidth, header.bounds.origin.y+topHeight, infoButtonWidth, headerHeight))
+//        infoButton.setImage(UIImage(named: "icon-i.png"), forState: UIControlState.Normal)
+//        infoButton.addTarget(self, action: "btnI:", forControlEvents: UIControlEvents.TouchUpInside)
+//        header.addSubview(infoButton)
+        view.addSubview(header)
+        
+        tableView = UITableView(frame: CGRectMake(view.bounds.origin.x, view.bounds.origin.y+headerHeight+topHeight, view.bounds.size.width, view.bounds.size.height-headerHeight-topHeight), style: .Plain)
+        tableView.autoresizingMask = .FlexibleWidth | .FlexibleHeight
+        tableView.backgroundColor = UIColor.whiteColor()
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.rowHeight = chatCellHeight
+        tableView.separatorInset.left = chatCellInsetLeft
+        tableView.registerClass(ChatCell.self, forCellReuseIdentifier: NSStringFromClass(ChatCell))
+        view.backgroundColor = UIColor.whiteColor()
+        view.addSubview(tableView)
+    }
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+    }
+    
+    override func viewDidAppear(animated: Bool)  {
+        super.viewDidAppear(animated)
+        tableView.flashScrollIndicators()
+        
+//        var facebookProfileImageUrlString = "http://graph.facebook.com/\(Bakkle.sharedInstance.facebook_id_str)/picture?type=large"
+//        let imgURL = NSURL(string: facebookProfileImageUrlString)
+//        profileButton.hnk_setImageFromURL(imgURL!, state: UIControlState.Normal, placeholder: UIImage(named:"loading.png"), format: nil, failure: nil, success: nil)
     }
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -135,11 +151,18 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let chat = chats[indexPath.row]
         let chatViewController = ChatViewController(chat: chat)
-        navigationController?.pushViewController(chatViewController, animated: true)
+        chatViewController.index = indexPath.row
+        self.presentViewController(chatViewController, animated: true, completion: {})
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
 
     func composeAction() {
         let navigationController = UINavigationController(rootViewController: ComposeViewController())
         presentViewController(navigationController, animated: true, completion: nil)
+    }
+    
+    func btnBack(sender:UIButton!)
+    {
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
 }
