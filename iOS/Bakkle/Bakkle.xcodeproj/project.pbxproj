@@ -268,6 +268,8 @@
 		DBEE0E991AF3C855005E60BD /* btb-want.png in Resources */ = {isa = PBXBuildFile; fileRef = DBEE0E981AF3C855005E60BD /* btb-want.png */; };
 		DBEE0E9B1AF3C85C005E60BD /* btn-want-disabled.png in Resources */ = {isa = PBXBuildFile; fileRef = DBEE0E9A1AF3C85C005E60BD /* btn-want-disabled.png */; };
 		E5016D9C10A43489915BBFC7 /* Pods_Bakkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E0CABDBE20E9D5B2EED4810 /* Pods_Bakkle.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		F0E7C5081B2F2B3E006B013A /* WSManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F0E7C5071B2F2B3E006B013A /* WSManager.m */; };
+		F0E7C50B1B2F2B4B006B013A /* WSRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E7C50A1B2F2B4B006B013A /* WSRequest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -478,6 +480,9 @@
 		DBEE0E961AF3C464005E60BD /* item-detail-overlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "item-detail-overlay.png"; sourceTree = "<group>"; };
 		DBEE0E981AF3C855005E60BD /* btb-want.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btb-want.png"; sourceTree = "<group>"; };
 		DBEE0E9A1AF3C85C005E60BD /* btn-want-disabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-want-disabled.png"; sourceTree = "<group>"; };
+		F0E7C5061B2F2B3E006B013A /* WSManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSManager.h; sourceTree = "<group>"; };
+		F0E7C5071B2F2B3E006B013A /* WSManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WSManager.m; sourceTree = "<group>"; };
+		F0E7C50A1B2F2B4B006B013A /* WSRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WSRequest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -563,6 +568,7 @@
 		5EBDD68D1AB211E600C7FBE7 /* Bakkle */ = {
 			isa = PBXGroup;
 			children = (
+				F0E7C5051B2F2B1B006B013A /* WebSocket */,
 				A08D53BA1B0815A9000C406C /* Chat */,
 				A08D53B41B07DC2C000C406C /* Views */,
 				A08D53AE1B06D850000C406C /* Common.swift */,
@@ -874,6 +880,24 @@
 				698270E0C83AB2371F464BB2 /* Pods-Bakkle.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		F0E7C5051B2F2B1B006B013A /* WebSocket */ = {
+			isa = PBXGroup;
+			children = (
+				F0E7C5091B2F2B42006B013A /* DTOs */,
+				F0E7C5061B2F2B3E006B013A /* WSManager.h */,
+				F0E7C5071B2F2B3E006B013A /* WSManager.m */,
+			);
+			name = WebSocket;
+			sourceTree = "<group>";
+		};
+		F0E7C5091B2F2B42006B013A /* DTOs */ = {
+			isa = PBXGroup;
+			children = (
+				F0E7C50A1B2F2B4B006B013A /* WSRequest.swift */,
+			);
+			name = DTOs;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1336,6 +1360,7 @@
 				A0D96F8A1AD773DB0046DA13 /* FeedFilter.swift in Sources */,
 				1B00CB1B1B22231B00710C01 /* ItemData.swift in Sources */,
 				5EE2C9B91AB9F0FB0031D8CD /* UIColor+MDCRGB8Bit.m in Sources */,
+				F0E7C5081B2F2B3E006B013A /* WSManager.m in Sources */,
 				A0D96F881AD772DA0046DA13 /* HoldingPatternView.swift in Sources */,
 				723D532E1B2718590067A80A /* OffsetTextAttachment.swift in Sources */,
 				A003EB141AD4CCA600EE51A1 /* SWRevealViewController.m in Sources */,
@@ -1360,6 +1385,7 @@
 				A08D53D31B0815CB000C406C /* MessageSentDateCell.swift in Sources */,
 				6001F3411B21D004009C1A04 /* ItemDetailsCell.swift in Sources */,
 				A058A2BD1AFEF665005E7432 /* CLLocation+String.swift in Sources */,
+				F0E7C50B1B2F2B4B006B013A /* WSRequest.swift in Sources */,
 				5E1DCCA51AD486D2002D41FD /* AddItem.swift in Sources */,
 				A08D53CE1B0815CB000C406C /* ComposeViewController.swift in Sources */,
 				A08D53CF1B0815CB000C406C /* Message.swift in Sources */,

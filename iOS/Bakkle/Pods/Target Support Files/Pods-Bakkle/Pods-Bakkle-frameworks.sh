@@ -50,8 +50,10 @@ code_sign() {
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework 'FontAwesomeIconFactory.framework'
   install_framework 'Haneke.framework'
+  install_framework 'SocketRocket.framework'
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework 'FontAwesomeIconFactory.framework'
   install_framework 'Haneke.framework'
+  install_framework 'SocketRocket.framework'
 fi
