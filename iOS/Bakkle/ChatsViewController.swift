@@ -1,17 +1,83 @@
 import UIKit
 
-class ChatsViewController: UITableViewController {
-    var chats: [Chat] { return account.chats }
+class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextViewDelegate  {
+    let joe = User(ID: 69, username: "lilswaqq", firstName: "Joseph", lastName: "Carroll")
+    var account: Account!
+    var chats: [Chat] = []
+    var header: UIView!
+    var tableView: UITableView!
+    var toolBar: UIToolbar!
+    var textView: UITextView!
+    var profileButton: UIButton!
+    var sendButton: UIButton!
+    
+    override var inputAccessoryView: UIView! {
+        get {
+            if toolBar == nil {
+                toolBar = UIToolbar(frame: CGRectMake(0, 0, 0, toolBarMinHeight-0.5))
+//                
+//                textView = InputTextView(frame: CGRectZero)
+//                textView.backgroundColor = UIColor.whiteColor()
+//                textView.delegate = self
+//                textView.font = UIFont.systemFontOfSize(messageFontSize)
+//                textView.layer.borderColor = UIColor(red: 200/255, green: 200/255, blue: 205/255, alpha:1).CGColor
+//                textView.layer.borderWidth = 0.5
+//                textView.layer.cornerRadius = 5
+//                //        textView.placeholder = "Message"
+//                textView.scrollsToTop = false
+//                textView.textContainerInset = UIEdgeInsetsMake(4, 3, 3, 3)
+//                
+//                sendButton = UIButton.buttonWithType(.System) as! UIButton
+//                sendButton.enabled = false
+//                sendButton.titleLabel?.font = UIFont.boldSystemFontOfSize(17)
+//                sendButton.setTitle("Send", forState: .Normal)
+//                sendButton.setTitleColor(UIColor(red: 142/255, green: 142/255, blue: 147/255, alpha: 1), forState: .Disabled)
+//                sendButton.setTitleColor(UIColor(red: 1/255, green: 122/255, blue: 255/255, alpha: 1), forState: .Normal)
+//                sendButton.contentEdgeInsets = UIEdgeInsets(top: 6, left: 6, bottom: 6, right: 6)
+//                sendButton.addTarget(self, action: "sendAction", forControlEvents: UIControlEvents.TouchUpInside)
+//                toolBar.addSubview(sendButton)
+//                
+//                // Auto Layout allows `sendButton` to change width, e.g., for localization.
+//                textView.setTranslatesAutoresizingMaskIntoConstraints(false)
+//                sendButton.setTranslatesAutoresizingMaskIntoConstraints(false)
+                toolBar.addConstraint(NSLayoutConstraint(item: textView, attribute: .Left, relatedBy: .Equal, toItem: toolBar, attribute: .Left, multiplier: 1, constant: 8))
+                toolBar.addConstraint(NSLayoutConstraint(item: textView, attribute: .Top, relatedBy: .Equal, toItem: toolBar, attribute: .Top, multiplier: 1, constant: 7.5))
+                toolBar.addConstraint(NSLayoutConstraint(item: textView, attribute: .Right, relatedBy: .Equal, toItem: sendButton, attribute: .Left, multiplier: 1, constant: -2))
+                toolBar.addConstraint(NSLayoutConstraint(item: textView, attribute: .Bottom, relatedBy: .Equal, toItem: toolBar, attribute: .Bottom, multiplier: 1, constant: -8))
+                toolBar.addConstraint(NSLayoutConstraint(item: sendButton, attribute: .Right, relatedBy: .Equal, toItem: toolBar, attribute: .Right, multiplier: 1, constant: 0))
+                toolBar.addConstraint(NSLayoutConstraint(item: sendButton, attribute: .Bottom, relatedBy: .Equal, toItem: toolBar, attribute: .Bottom, multiplier: 1, constant: -4.5))
+            }
+            return toolBar
+        }
+    }
 
-    convenience init() {
-        self.init(style: .Plain)
+    
+    
+//    convenience init() {
+//        self.init(style: .Plain)
+//        title = "Chats"
+//        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Compose, target: self, action: "composeAction")
+//    }
+    
+    init() {
+        super.init(nibName: nil, bundle: nil)
         title = "Chats"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Compose, target: self, action: "composeAction")
+    }
+    
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func canBecomeFirstResponder() -> Bool {
+        return true
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        let joe = User(ID: 69, username: "lilswaqq", firstName: "Joseph", lastName: "Carroll")
+        self.account = Account(user: joe)
+        
         let minute: NSTimeInterval = 60, hour = minute * 60, day = hour * 24
         account.chats = [
             Chat(user: User(ID: 2, username: "samihah", firstName: "Angel", lastName: "Rao"), lastMessageText: "6 sounds good :-)", lastMessageSentDate: NSDate()),
@@ -37,35 +103,36 @@ class ChatsViewController: UITableViewController {
             Chat(user: User(ID: 20, username: "cynthiasavard", firstName: "Saanvi", lastName: "Sarin"), lastMessageText: "See you soon!", lastMessageSentDate: NSDate(timeIntervalSinceNow: -day*11)),
             Chat(user: User(ID: 21, username: "stushona", firstName: "Jade", lastName: "Roger"), lastMessageText: "😊", lastMessageSentDate: NSDate(timeIntervalSinceNow: -day*11))
         ]
-
+        self.chats = self.account!.chats
         navigationItem.leftBarButtonItem = editButtonItem() // TODO: KVO
-        tableView.backgroundColor = UIColor.whiteColor()
-        tableView.rowHeight = chatCellHeight
-        tableView.separatorInset.left = chatCellInsetLeft
-        tableView.registerClass(ChatCell.self, forCellReuseIdentifier: NSStringFromClass(ChatCell))
+        self.tableView = UITableView(frame: CGRectZero, style: UITableViewStyle.Plain)
+        self.tableView.backgroundColor = UIColor.whiteColor()
+        self.tableView.rowHeight = chatCellHeight
+        self.tableView.separatorInset.left = chatCellInsetLeft
+        self.tableView.registerClass(ChatCell.self, forCellReuseIdentifier: NSStringFromClass(ChatCell))
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return chats.count
     }
 
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(ChatCell), forIndexPath: indexPath) as! ChatCell
-        cell.configureWithChat(account.chats[indexPath.row])
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = self.tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(ChatCell), forIndexPath: indexPath) as! ChatCell
+        cell.configureWithChat(self.account!.chats[indexPath.row])
         return cell
     }
 
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
-            account.chats.removeAtIndex(indexPath.row)
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-            if account.chats.count == 0 {
+            self.account!.chats.removeAtIndex(indexPath.row)
+            self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+            if self.account!.chats.count == 0 {
                 navigationItem.leftBarButtonItem = nil  // TODO: KVO
             }
         }
     }
 
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let chat = chats[indexPath.row]
         let chatViewController = ChatViewController(chat: chat)
         navigationController?.pushViewController(chatViewController, animated: true)

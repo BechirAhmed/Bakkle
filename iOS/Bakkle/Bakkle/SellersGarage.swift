@@ -143,12 +143,6 @@ class SellersGarageView: UIViewController, UICollectionViewDelegate, UICollectio
             cell.numViews.text = (item.valueForKey("number_of_views") as! NSNumber).stringValue
 
         }
-        
-//        let asset: PHAsset = self.photosAsset[indexPath.item] as! PHAsset
-//
-//        PHImageManager.defaultManager().requestImageForAsset(asset, targetSize: self.assetThumbnailSize, contentMode: PHImageContentMode.AspectFill, options: nil, resultHandler: {(result, info) in
-//            cell.setThumbnailImage(result)
-//        })
         return cell
     }
     
@@ -164,6 +158,13 @@ class SellersGarageView: UIViewController, UICollectionViewDelegate, UICollectio
                 cell.setThumbnailImage(UIImage(data: imgData)!)
             }
         }
+    }
+    
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+//        let joe = User(ID: 69, username: "lilswaqq", firstName: "Geosef", lastName: "Kerol")
+//        let account = Account(user: joe)
+        let chatsViewController = ChatsViewController()
+        self.presentViewController(chatsViewController, animated: true, completion: {})
     }
 
     /* Camera */

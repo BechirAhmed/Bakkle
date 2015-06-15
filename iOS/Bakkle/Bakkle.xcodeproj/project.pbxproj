@@ -51,6 +51,8 @@
 		720510341B1F839B00D059AB /* ListItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720510331B1F839B00D059AB /* ListItemCell.swift */; };
 		723D532C1B25F42B0067A80A /* IconImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 723D532B1B25F42B0067A80A /* IconImage.swift */; };
 		723D532E1B2718590067A80A /* OffsetTextAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 723D532D1B2718590067A80A /* OffsetTextAttachment.swift */; };
+		728647EB1B2F0E3F009A24C9 /* ChatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53BE1B0815CB000C406C /* ChatsViewController.swift */; };
+		728647EC1B2F0E46009A24C9 /* ChatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53BE1B0815CB000C406C /* ChatsViewController.swift */; };
 		A003EB141AD4CCA600EE51A1 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A003EB131AD4CCA600EE51A1 /* SWRevealViewController.m */; };
 		A003EB1A1AD4DB8800EE51A1 /* item-lawnmower.png in Resources */ = {isa = PBXBuildFile; fileRef = A003EB191AD4DB8800EE51A1 /* item-lawnmower.png */; };
 		A014B46C1B09215800E01FEF /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A014B46B1B09215800E01FEF /* ProfileView.swift */; };
@@ -1345,6 +1347,7 @@
 				A08D53C91B0815CB000C406C /* Account.swift in Sources */,
 				A08D53D51B0815CB000C406C /* User.swift in Sources */,
 				5EE2C9B81AB9F0FB0031D8CD /* MDCGeometry.m in Sources */,
+				728647EB1B2F0E3F009A24C9 /* ChatsViewController.swift in Sources */,
 				DB6726DF1B1765810014A896 /* RateView.m in Sources */,
 				A08D53D61B0815CB000C406C /* UserCell.swift in Sources */,
 				5EE2C9BB1AB9F0FB0031D8CD /* MDCViewState.m in Sources */,
@@ -1407,6 +1410,7 @@
 				A0E1EB5E1B2B5B2200662C08 /* Account.swift in Sources */,
 				A0E1EB5F1B2B5B2200662C08 /* User.swift in Sources */,
 				A0E1EB601B2B5B2200662C08 /* MDCGeometry.m in Sources */,
+				728647EC1B2F0E46009A24C9 /* ChatsViewController.swift in Sources */,
 				A0E1EB611B2B5B2200662C08 /* RateView.m in Sources */,
 				A0E1EB621B2B5B2200662C08 /* UserCell.swift in Sources */,
 				A0E1EB631B2B5B2200662C08 /* MDCViewState.m in Sources */,
