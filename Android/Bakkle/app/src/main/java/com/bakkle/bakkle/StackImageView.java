@@ -6,8 +6,6 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
-import java.util.Random;
-
 /**
  * Created by vanshgandhi on 6/15/15.
  */
@@ -15,21 +13,21 @@ public class StackImageView extends ImageView {
 
     private int mHeight;
     private int mWidth;
-    private float mRotate;
+    //private float mRotate;
 
     public StackImageView(Context context) {
         super(context);
-        initRotate();
+        //initRotate();
     }
 
     public StackImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initRotate();
+        //initRotate();
     }
 
-    private void initRotate(){
-        mRotate = (new Random().nextFloat() - 0.5f) * 30;
-    }
+//    private void initRotate(){
+//        mRotate = (new Random().nextFloat() - 0.5f) * 30;
+//    }
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
@@ -42,7 +40,7 @@ public class StackImageView extends ImageView {
     protected void onDraw(Canvas canvas) {
         int borderWidth = 2;
         canvas.save();
-        canvas.rotate(mRotate, mWidth / 2, mHeight / 2);
+        //canvas.rotate(mRotate, mWidth / 2, mHeight / 2);
         Paint paint = new Paint();
         paint.setAntiAlias(true);
         paint.setColor(0xffffffff);
