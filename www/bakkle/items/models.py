@@ -42,6 +42,33 @@ class Items(models.Model):
     post_date = models.DateTimeField(auto_now_add=True)
     times_reported = models.IntegerField(default=0)
 
+    def toDictionary(self):
+        images = []
+        hashtags = []
+
+        urls = self.image_urls.split(",")
+        for url in urls:
+            if url != "" and url != " ":
+                images.append(url)
+
+        tags = self.tags.split(",")
+        for tag in tags:
+            if tag != "" and tag != " ":
+                hashtags.append(tag)
+
+        valuesDict = {'pk':self.pk, 
+            'description': self.description, 
+            'seller': self.seller.toDictionary(),
+            'image_urls': images,
+            'tags': hashtags,
+            'title': self.title,
+            'location': self.location,
+            'price': str(self.price),
+            'method': self.method,
+            'status': self.status,
+            'post_date': self.post_date.strftime("%Y-%m-%d %H:%M:%S")}
+        return valuesDict
+
 class BuyerItem(models.Model):
     ACTIVE = 'Active'
     MEH = 'Meh'
@@ -75,3 +102,16 @@ class BuyerItem(models.Model):
 
     class Meta:
         unique_together = ("buyer", "item")
+
+
+    def toDictionary(self):
+        valuesDict = {
+            'pk': self.pk,
+            'view_time': self.view_time.strftime("%Y-%m-%d %H:%M:%S"),
+            'view_duration': str(self.view_duration),
+            'status': self.status,
+            'confirmed_price': str(self.confirmed_price),
+            'accepted_sale_price': self.accepted_sale_price,
+            'item': self.item.toDictionary(),
+            'buyer': self.buyer.toDictionary()}
+        return valuesDict

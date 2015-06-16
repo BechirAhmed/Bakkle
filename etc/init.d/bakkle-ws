@@ -19,7 +19,7 @@ fi
 if [ `hostname` == 'rhv-bakkle-bld' ]; then
    DATABASE=dev
 fi
-if [ `hostname` == 'rhv-291scs-linux' ]; then
+if [ `hostname` == 'RHV-291SCS-Linux' ]; then
    DATABASE=dev
 fi
 

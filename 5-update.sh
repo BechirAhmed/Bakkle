@@ -53,6 +53,6 @@ sudo install -m 755      ./etc/init.d/bakkle /etc/init.d/bakkle
 sudo update-rc.d bakkle defaults
 sudo service bakkle start
 
-sudo install -m 755      ./etc/init.d/bakkle /etc/init.d/bakkle-ws
+sudo install -m 755      ./etc/init.d/bakkle-ws /etc/init.d/bakkle-ws
 sudo update-rc.d bakkle-ws defaults
 sudo service bakkle-ws start
