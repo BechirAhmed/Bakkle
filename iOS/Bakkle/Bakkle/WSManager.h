@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import <SocketRocket/SRWebSocket.h>
-#import "Bakkle-Swift.h"
+
+@class WSRequest;
 
 @interface WSManager : NSObject <SRWebSocketDelegate>
 
