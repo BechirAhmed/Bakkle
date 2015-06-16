@@ -1,1 +1,0 @@
-PODS_BAKKLE_FONTAWESOMEICONFACTORY_OTHER_LDFLAGS = -framework "CoreGraphics" -framework "CoreText"
