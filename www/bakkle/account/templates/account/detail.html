@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Bakkle account detail{% endblock %}
+
+{% block content %}
+
+{% if account %}
+  Details for account: {{ account.id }}
+  <br/>Display Name = {{ account.display_name }}
+  <br/>Facebook ID = {{ account.facebook_id }}
+  <br/>Email = {{ account.email }}
+  <br/>Location = {{ account.user_location }}
+  <br/>
+
+  <br/>Devices: (<a href="{% url 'account:device_notify_all' account.id %}">Notify All</a>)
+  {% if devices %}
+    <ul>
+      {% for device in devices %} 
+         <li><a href="{% url 'account:device_detail' device.id %}">{{ device.id }}</a>: {{ device.uuid }} (<a href="{% url 'account:device_notify' device.id %}">Notify</a>)</li>
+      {% endfor %}
+    </ul> 
+  {% else %}
+   <p> This account has no registered devices </p>
+  {% endif %}
+
+  <br/> Seller Stats:
+    <br/> &nbsp;&nbsp;&nbsp;&nbsp;Total Items Listed: {{ item_count }}
+    <br/> &nbsp;&nbsp;&nbsp;&nbsp;Total Items Sold: {{ items_sold }}
+
+  <br/>Items Viewed: <a href="{% url 'account:reset' account.id %}">Reset Feed</a>
+    <br />&nbsp;&nbsp;&nbsp;&nbsp;Total Viewed: {{ items_viewed }}
+  {% if items %}
+    <ul>
+      {% for buyer_item in items %}
+        <li><a href="{% url 'items:detail' buyer_item.item.id %}">{{ buyer_item.item.id }}:</a> {{ buyer_item.item.title }} <br /> Item Status For Buyer: {{ buyer_item.status }} <br /> BuyerItem Id: {{ buyer_item.id }}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+   <p> This account has not viewed any items </p>
+  {% endif %}
+  <br/>Items Selling:
+  {% if selling %}
+    <ul>
+      {% for seller_item in selling %}
+        <li><a href="{% url 'items:detail' seller_item.id %}">{{ seller_item.id }}:</a> {{ seller_item.title }} </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+   <p> This account is not selling any items </p>
+  {% endif %}
+
+{% else %}
+  <p> No account with that id </p>
+{% endif %}
+
+{% endblock %}

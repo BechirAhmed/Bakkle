@@ -1,0 +1,10 @@
+{
+    "aps": {
+        "alert": "I would like to buy your mower",
+        "category": "myCategory"
+    },
+    
+    "custom_dict": {
+        "name": "John Smith"
+    }
+}

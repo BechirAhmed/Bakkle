@@ -1,0 +1,4 @@
+#!/bin/sh
+
+sudo uwsgi --ini /bakkle/www/bakkle/bakkle_uwsgi.ini
+

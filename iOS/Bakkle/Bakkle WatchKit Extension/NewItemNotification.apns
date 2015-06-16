@@ -1,0 +1,10 @@
+{
+    "aps": {
+        "alert": "New: $199.00 - Polygon phone",
+        "category": "myCategory"
+    },
+    
+    "custom_dict": {
+        "name": "Lindsey Watterson"
+    }
+}
