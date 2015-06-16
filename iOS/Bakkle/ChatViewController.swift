@@ -156,7 +156,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         super.viewDidAppear(animated)
         tableView.flashScrollIndicators()
 
-        var facebookProfileImageUrlString = "http://graph.facebook.com/\(Bakkle.sharedInstance.facebook_id_str)/picture?type=large"
+        var facebookProfileImageUrlString = "http://graph.facebook.com/\(Bakkle.sharedInstance.facebook_id_str)/picture?width=142&height=142"
         let imgURL = NSURL(string: facebookProfileImageUrlString)
         profileButton.hnk_setImageFromURL(imgURL!, state: UIControlState.Normal, placeholder: UIImage(named:"loading.png"), format: nil, failure: nil, success: nil)
     }

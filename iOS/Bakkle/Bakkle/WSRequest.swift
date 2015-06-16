@@ -68,8 +68,10 @@ class WSStartChatRequest: WSRequest{
 
 class WSGetChatsRequest: WSRequest{
     
-    init(){
+    init(itemId: NSString){
         super.init(method:methodType.getChats.rawValue);
+        
+        super.data["itemId"] = itemId
     }
 }
 

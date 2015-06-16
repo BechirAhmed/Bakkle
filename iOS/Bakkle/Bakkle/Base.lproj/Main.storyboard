@@ -2949,14 +2949,14 @@
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zM0-y0-LRs">
                                 <rect key="frame" x="0.0" y="72" width="375" height="315"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                <variation key="heightClass=regular-widthClass=compact" ambiguous="YES" misplaced="YES">
                                     <rect key="frame" x="0.0" y="64" width="375" height="0.0"/>
                                 </variation>
                             </scrollView>
                             <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1QH-Oy-Msu">
                                 <rect key="frame" x="0.0" y="594" width="375" height="73"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                <variation key="heightClass=regular-widthClass=compact" ambiguous="YES" misplaced="YES">
                                     <rect key="frame" x="0.0" y="231" width="375" height="436"/>
                                 </variation>
                             </view>
@@ -2984,7 +2984,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="39" id="Rub-WA-2I9"/>
                                 </constraints>
-                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                <variation key="heightClass=regular-widthClass=compact" ambiguous="YES" misplaced="YES">
                                     <rect key="frame" x="0.0" y="192" width="375" height="39"/>
                                 </variation>
                             </view>
@@ -3028,6 +3028,7 @@
                         <viewControllerLayoutGuide type="bottom" id="xJa-mE-mBe"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="A3l-X3-xaH" userLabel="Container">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XVq-Oh-ZS4" userLabel="Title Bar">
@@ -3092,16 +3093,16 @@
                                 <exclude reference="QV7-21-dFq"/>
                             </mask>
                             <mask key="constraints">
+                                <exclude reference="5To-9a-95W"/>
+                                <exclude reference="2mg-T8-QF2"/>
+                                <exclude reference="Mqd-V5-luJ"/>
+                                <exclude reference="y7c-bO-rNe"/>
                                 <exclude reference="NKd-W2-htT"/>
                                 <exclude reference="YCF-Hg-eeu"/>
                                 <exclude reference="Ytn-oU-EZV"/>
                                 <exclude reference="YNM-Mj-znt"/>
                                 <exclude reference="dc0-zb-RqT"/>
                                 <exclude reference="kJD-F2-cdM"/>
-                                <exclude reference="2mg-T8-QF2"/>
-                                <exclude reference="Mqd-V5-luJ"/>
-                                <exclude reference="y7c-bO-rNe"/>
-                                <exclude reference="5To-9a-95W"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
@@ -3111,16 +3112,16 @@
                                 <include reference="QV7-21-dFq"/>
                             </mask>
                             <mask key="constraints">
+                                <include reference="5To-9a-95W"/>
+                                <include reference="2mg-T8-QF2"/>
+                                <include reference="Mqd-V5-luJ"/>
+                                <include reference="y7c-bO-rNe"/>
                                 <include reference="NKd-W2-htT"/>
                                 <include reference="YCF-Hg-eeu"/>
                                 <include reference="Ytn-oU-EZV"/>
                                 <include reference="YNM-Mj-znt"/>
                                 <include reference="dc0-zb-RqT"/>
                                 <include reference="kJD-F2-cdM"/>
-                                <include reference="2mg-T8-QF2"/>
-                                <include reference="Mqd-V5-luJ"/>
-                                <include reference="y7c-bO-rNe"/>
-                                <include reference="5To-9a-95W"/>
                             </mask>
                         </variation>
                     </view>

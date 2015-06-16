@@ -90,7 +90,8 @@ static BOOL debug = true;
     
     webSocket.delegate = nil;
     webSocket = nil;
-    NSString *urlString = @"ws://wongb.rhventures.org:8080/ws/";
+    //NSString *urlString = @"ws://wongb.rhventures.org:8080/ws/";
+    NSString *urlString = @"ws://bakkle.rhventures.org:8080/ws/";
     SRWebSocket *newWebSocket = [[SRWebSocket alloc] initWithURL:[NSURL URLWithString:urlString]];
     
     newWebSocket.delegate = self;

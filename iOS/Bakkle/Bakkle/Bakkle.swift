@@ -277,9 +277,9 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                     self.auth_token = responseDict.valueForKey("auth_token") as! String
                     
                     // Connect to web socket
-//                    WSManager.setAuthenticationWithUUID(uuid: self.deviceUUID, withToken: self.auth_token)
-//                    WSManager.setAutoRegister(true)
-//                    WSManager.connectWS()
+                    WSManager.setAuthenticationWithUUID(self.deviceUUID, withToken: self.auth_token)
+                    WSManager.setAutoRegister(true)
+                    WSManager.connectWS()
                     success()
                 } else {
                     Bakkle.sharedInstance.logout()
