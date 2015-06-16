@@ -19,6 +19,7 @@
 		13AB6FA91B0E40E70092EE61 /* btn-meh.png in Resources */ = {isa = PBXBuildFile; fileRef = 13AB6FA81B0E40E70092EE61 /* btn-meh.png */; };
 		13AB6FAB1B0E40F60092EE61 /* btb-want.png in Resources */ = {isa = PBXBuildFile; fileRef = 13AB6FAA1B0E40F60092EE61 /* btb-want.png */; };
 		1B00CB1B1B22231B00710C01 /* ItemData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B00CB1A1B22231B00710C01 /* ItemData.swift */; };
+		1B56D5D41B30709F009D81C6 /* UIDevice+ModelName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B56D5D31B30709F009D81C6 /* UIDevice+ModelName.swift */; };
 		5E023F861AD592B80002AFBC /* btn-addItem.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E023F851AD592B80002AFBC /* btn-addItem.png */; };
 		5E023F881AD59F200002AFBC /* logo-white-design-png-transp-100.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E023F871AD59F200002AFBC /* logo-white-design-png-transp-100.png */; };
 		5E1DCC9F1AD44C72002D41FD /* tiger.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5E1DCC9E1AD44C71002D41FD /* tiger.jpg */; };
@@ -318,6 +319,7 @@
 		13AB6FA81B0E40E70092EE61 /* btn-meh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-meh.png"; sourceTree = "<group>"; };
 		13AB6FAA1B0E40F60092EE61 /* btb-want.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btb-want.png"; sourceTree = "<group>"; };
 		1B00CB1A1B22231B00710C01 /* ItemData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemData.swift; sourceTree = "<group>"; };
+		1B56D5D31B30709F009D81C6 /* UIDevice+ModelName.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIDevice+ModelName.swift"; sourceTree = "<group>"; };
 		1D710285C97E0FF7D33DEB9E /* Pods-Bakkle.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bakkle.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Bakkle/Pods-Bakkle.debug.xcconfig"; sourceTree = "<group>"; };
 		3E0CABDBE20E9D5B2EED4810 /* Pods_Bakkle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Bakkle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E023F851AD592B80002AFBC /* btn-addItem.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-addItem.png"; sourceTree = "<group>"; };
@@ -580,6 +582,7 @@
 				720510331B1F839B00D059AB /* ListItemCell.swift */,
 				6001F3401B21D004009C1A04 /* ItemDetailsCell.swift */,
 				A058A2AA1AFD8EAD005E7432 /* UIImage+Resize.swift */,
+				1B56D5D31B30709F009D81C6 /* UIDevice+ModelName.swift */,
 				A058A2BC1AFEF665005E7432 /* CLLocation+String.swift */,
 				723D532B1B25F42B0067A80A /* IconImage.swift */,
 				5EBDD6941AB211E600C7FBE7 /* Main.storyboard */,
@@ -1362,6 +1365,7 @@
 				5EE2C9B91AB9F0FB0031D8CD /* UIColor+MDCRGB8Bit.m in Sources */,
 				F0E7C5081B2F2B3E006B013A /* WSManager.m in Sources */,
 				A0D96F881AD772DA0046DA13 /* HoldingPatternView.swift in Sources */,
+				1B56D5D41B30709F009D81C6 /* UIDevice+ModelName.swift in Sources */,
 				723D532E1B2718590067A80A /* OffsetTextAttachment.swift in Sources */,
 				A003EB141AD4CCA600EE51A1 /* SWRevealViewController.m in Sources */,
 				A0D96F841AD76F1F0046DA13 /* SettingsView.swift in Sources */,
