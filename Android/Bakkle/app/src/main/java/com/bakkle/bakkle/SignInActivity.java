@@ -5,14 +5,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.facebook.CallbackManager;
@@ -103,10 +101,10 @@ public class SignInActivity extends Activity implements OnClickListener {
                 finish();
                 break;
             case R.id.btnSignInFacebook:
-//                // TODO: Implement Sign in Code
-//                Intent homeIntentFacebook = new Intent(this, HomeActivity.class);
-//                startActivity(homeIntentFacebook);
-//                finish();
+                // TODO: Implement Sign in Code
+                Intent homeIntentFacebook = new Intent(this, HomeActivity.class);
+                startActivity(homeIntentFacebook);
+                finish();
                 LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "user_friends"));
                 break;
             case R.id.action_bar_home:
