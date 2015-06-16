@@ -230,6 +230,11 @@ static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
     [_imageView setContentMode:UIViewContentModeScaleAspectFill];
     _imageView.clipsToBounds = YES;
     [self addSubview:_imageView];
+    
+    _transparentImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height-140)];
+    _transparentImage.backgroundColor = [UIColor blackColor];
+    _transparentImage.alpha = 0.f;
+    [self.imageView addSubview:_transparentImage];
 }
 
 - (void)constructHoldView {
@@ -300,6 +305,7 @@ static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
     __block UIView *nopeImageView = self.nopeView;
     __block UIView *holdImageView = self.holdView;
     __block UIView *reportImageView = self.reportView;
+    __block UIView *transparentImageView = self.transparentImage;
     __weak MDCSwipeToChooseView *weakself = self;
     options.onPan = ^(MDCPanState *state) {
         if (state.direction == MDCSwipeDirectionNone) {
@@ -308,21 +314,25 @@ static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
             holdImageView.alpha = 0.f;
             reportImageView.alpha = 0.f;
         } else if (state.direction == MDCSwipeDirectionLeft) {
+           transparentImageView.alpha = state.thresholdRatio / 2;
             likedImageView.alpha = 0.f;
             reportImageView.alpha = 0.f;
             holdImageView.alpha = 0.f;
             nopeImageView.alpha = state.thresholdRatio;
         } else if (state.direction == MDCSwipeDirectionRight) {
+            transparentImageView.alpha = state.thresholdRatio / 2;
             likedImageView.alpha = state.thresholdRatio;
             nopeImageView.alpha = 0.f;
             holdImageView.alpha = 0.f;
             reportImageView.alpha = 0.f;
         } else if (state.direction == MDCSwipeDirectionUp) {
+            transparentImageView.alpha = state.thresholdRatio / 2;
             reportImageView.alpha = state.thresholdRatio;
             nopeImageView.alpha = 0.f;
             likedImageView.alpha = 0.f;
             holdImageView.alpha = 0.f;
         } else if (state.direction == MDCSwipeDirectionDown) {
+            transparentImageView.alpha = state.thresholdRatio / 2;
             holdImageView.alpha = state.thresholdRatio;
             reportImageView.alpha = 0.f;
             nopeImageView.alpha = 0.f;
