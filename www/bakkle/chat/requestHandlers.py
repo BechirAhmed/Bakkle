@@ -69,6 +69,8 @@ class ChatWSHandler(websocket.WebSocketHandler):
             response = self.getChats(request);
         elif method == 'sendChatMessage':
             response = self.sendChatMessage(request);
+        elif method == 'getMessagesForChat':
+            response = self.getMessagesForChat(request);
         elif method == 'test':
             response = self.test(request);
         else:
@@ -209,6 +211,25 @@ class ChatWSHandler(websocket.WebSocketHandler):
                 clients[chat.buyer.pk][uuid].write_message({'success': 1, 'messageOrigin': self.clientId, 'notificationType': 'newMessage', 'message': message});
 
         return {'success': 1}
+
+    def getMessagesForChat(self, request):
+        try:
+            chat = Chat.objects.filter(Q(pk=request['chatId'])).filter(Q(buyer__pk = self.clientId) | Q(item__seller__pk = self.clientId)).sort('-date_sent')
+            messages = Message.objects.filter(chat = chat)
+
+        except KeyError as e:
+            return {'success': 0, 'error': 'Missing parameter ' + str(e)}
+        except Chat.DoesNotExist:
+            return {'success': 0, 'error': 'Invalid chatId provided'}
+
+
+        userMessages = []
+
+        for message in messages:
+            userMessages.append(message.toDictionary())
+
+        print(userMessages);
+        return {'success': 1, 'messages': userMessages};
 
     def test(self, request):
 

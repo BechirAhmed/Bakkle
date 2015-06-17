@@ -33,7 +33,9 @@ class Items(models.Model):
     title = models.CharField(max_length=200)
     description = models.CharField(max_length=4000)
     #use django-location-field?
-    location = models.CharField(max_length=25)
+    # location = models.CharField(max_length=25)
+    latitude = models.DecimalField(max_digits=5, decimal_places=2, default=37.47)
+    longitude = models.DecimalField(max_digits=5, decimal_places=2, default=122.25)
     seller = models.ForeignKey(Account)
     price = models.DecimalField(max_digits=11, decimal_places=2)
     tags = models.CharField(max_length=300)

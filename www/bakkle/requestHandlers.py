@@ -11,6 +11,8 @@ from chat.models import Chat
 from chat.models import Message
 from tornado import websocket
 
+from common.sysVars import getSysVars
+
 clients = dict();
 
 class BaseWSHandler(websocket.WebSocketHandler):
@@ -112,4 +114,4 @@ class BaseWSHandler(websocket.WebSocketHandler):
         return {'success': 1, 'message': message}
 
     def sysVars(self, request):
-        return {'success': 1}
+        return {'success': 1, 'sysVars': getSysVars()}

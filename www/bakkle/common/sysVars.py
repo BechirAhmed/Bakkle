@@ -47,3 +47,8 @@ def getDATABASES():
 def getActiveDB():
     return activeDB
 
+def getSysVars():
+    valuesDict = {
+        'activeDB': activeDB,
+    }
+    return valuesDict
