@@ -3,7 +3,9 @@ package com.bakkle.bakkle;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,13 +14,13 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -38,50 +40,45 @@ public class SignInActivity extends Activity implements OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         callbackManager = CallbackManager.Factory.create();
-        /*accessTokenTracker = new AccessTokenTracker() {
-            @Override
-            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken,
-                                                       AccessToken currentAccessToken) {
-                if (isResumed) {
-                    //FragmentManager manager = getSupportFragmentManager();
-                    int backStackSize = manager.getBackStackEntryCount();
-                    for (int i = 0; i < backStackSize; i++) {
-                        manager.popBackStack();
-                    }
-                    if (currentAccessToken != null) {
-                        Intent intent = new Intent(this, HomeActivity.class);
-                        //showFragment(SELECTION, false);
-                    } else {
-                        //showFragment(SPLASH, false);
-                    }
-                }
-            }
-        };*/
+        //final Context mContext = this;
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor editor = preferences.edit();
+
+        if(preferences.getBoolean("LoggedIn", false)) {
+            Intent intent = new Intent(this, HomeActivity.class);
+            startActivity(intent);
+        }
 
 
 
-
-        //FacebookSdk.sdkInitialize(getApplicationContext());
+        FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_sign_in);
         LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
 
 
             @Override
             public void onSuccess(LoginResult loginResult) {
-                System.out.println(loginResult);
-                Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor editor = preferences.edit();
+                AccessToken token = AccessToken.getCurrentAccessToken();
+                if(token != null) {
+                    editor.putBoolean("LoggedIn", true);
+                    editor.apply();
+                    Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                    startActivity(intent);
+                }
+
+
             }
 
             @Override
             public void onCancel() {
                 System.out.println("Facebook Canceled");
-                Toast.makeText(getApplicationContext(), "Canceled", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onError(FacebookException e) {
                 System.out.println(e.getMessage());
-                Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -130,24 +127,21 @@ public class SignInActivity extends Activity implements OnClickListener {
         switch (id) {
             case R.id.btnSignIn:
                 // TODO: Implement Sign in Code
-
                 Intent homeIntent = new Intent(this, HomeActivity.class);
                 startActivity(homeIntent);
                 finish();
                 break;
             case R.id.btnSignInFacebook:
-                // TODO: Implement Sign in Code
-                AccessToken token = AccessToken.getCurrentAccessToken();
-                if(token != null)
-                    Toast.makeText(getApplicationContext(), token.toString(), Toast.LENGTH_SHORT).show();
-                else
-                    Toast.makeText(getApplicationContext(), "Not working", Toast.LENGTH_SHORT).show();
-                //
-                LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "user_friends"));
-
-//                Intent homeIntentFacebook = new Intent(this, HomeActivity.class);
-//                startActivity(homeIntentFacebook);
-//                finish();
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor editor = preferences.edit();
+                if(preferences.getBoolean("LoggedIn", false)){
+                    LoginManager.getInstance().logOut();
+                    editor.putBoolean("LoggedIn", false);
+                }
+                else{
+                    LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "user_friends"));
+                    editor.putBoolean("LoggedIn", true);
+                }
                 break;
             case R.id.action_bar_home:
                 NavUtils.navigateUpFromSameTask(this);

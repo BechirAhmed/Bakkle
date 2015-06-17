@@ -2,12 +2,7 @@ package com.bakkle.bakkle;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
-
-import com.facebook.AccessToken;
-import com.facebook.FacebookSdk;
 
 public class SplashActivity extends Activity {
     private Context mContext;
@@ -56,7 +51,7 @@ public class SplashActivity extends Activity {
                         startActivity(intent);
                         finish();
                     }else {
-                        Intent intent = new Intent(mContext, LoginActivity.class);
+                        Intent intent = new Intent(`, LoginActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         try {
                             Thread.sleep(3000);
@@ -94,20 +89,18 @@ public class SplashActivity extends Activity {
             }
         }, 5000);*/
 
+        /*SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        FacebookSdk.sdkInitialize(getApplicationContext());
-
-        AccessToken token = AccessToken.getCurrentAccessToken();
-        if(token != null) {
-            Toast.makeText(getApplicationContext(), token.toString(), Toast.LENGTH_SHORT).show();
+        if(preferences.getBoolean("LoggedIn", true)) {
             Intent intent = new Intent(this, HomeActivity.class);
             startActivity(intent);
         }
         else {
-            Toast.makeText(getApplicationContext(), "Not working", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
-        }
+        }*/
+
+
 
 
 

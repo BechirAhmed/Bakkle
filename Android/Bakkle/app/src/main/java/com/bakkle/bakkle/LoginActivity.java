@@ -2,17 +2,12 @@ package com.bakkle.bakkle;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
-import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
 
 
 public class LoginActivity extends Activity implements OnClickListener {
@@ -22,9 +17,23 @@ public class LoginActivity extends Activity implements OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         getActionBar().hide();
-        FacebookSdk.sdkInitialize(this.getApplicationContext());
-        CallbackManager callbackManager = CallbackManager.Factory.create();
 
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        if(preferences.getBoolean("LoggedIn", false)) {
+            Intent intent = new Intent(this, HomeActivity.class);
+            startActivity(intent);
+        }
+        else {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
+
+        ((Button)findViewById(R.id.btnSignIn)).setOnClickListener(this);
+        ((Button)findViewById(R.id.btnSignUpEmail)).setOnClickListener(this);
+
+        /*FacebookSdk.sdkInitialize(this.getApplicationContext());
+        CallbackManager callbackManager = CallbackManager.Factory.create();
         LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -40,11 +49,10 @@ public class LoginActivity extends Activity implements OnClickListener {
             public void onError(FacebookException e) {
 
             }
-        });
+        });*/
 
 
-        ((Button)findViewById(R.id.btnSignIn)).setOnClickListener(this);
-        ((Button)findViewById(R.id.btnSignUpEmail)).setOnClickListener(this);
+
 
     }
 
@@ -55,10 +63,9 @@ public class LoginActivity extends Activity implements OnClickListener {
             case R.id.btnSignUpEmail:
                 break;
             case R.id.btnSignIn:
-                Intent intent = new Intent(this, SignInActivity.class);
-                startActivity(intent);
+                startActivity(new Intent(this, SignInActivity.class));
+                finish();
                 break;
-
         }
     }
 }
