@@ -4,16 +4,18 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.drawable.ColorDrawable;
-import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -44,7 +46,7 @@ public class HomeActivity extends Activity {
         mDrawerAdapter = new DrawerRowAdapter(this, mDrawerItems, mDrawerIcons);
         mDrawerList.setAdapter(mDrawerAdapter);
         // Set the list's click listener
-        //mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
                 R.string.drawer_open, R.string.drawer_close) {
@@ -122,6 +124,53 @@ public class HomeActivity extends Activity {
             return true;
         }
 
+
+//        ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+//        List<ActivityManager.RunningTaskInfo> taskInfo = activityManager.getRunningTasks(1);
+//        ComponentName currentActivity = taskInfo.get(0).topActivity;
+
+
+
         return super.onOptionsItemSelected(item);
     }
+
+    private class DrawerItemClickListener implements ListView.OnItemClickListener{
+        @Override
+        public void onItemClick(AdapterView parent, View view, int position, long id){
+
+
+            //TODO: don't re-launch home activity if already in there
+            
+            switch(position){
+                case 0:
+                    //if(){}
+                    startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                    break;
+                case 1:
+                    //startActivity(new Intent(getApplicationContext(), SellersGarage.class));
+                    break;
+                case 2:
+                    startActivity(new Intent(getApplicationContext(), BuyersTrunk.class));
+                    break;
+                case 3:
+                    //startActivity(new Intent(getApplicationContext(), HoldingPattern.class));
+                    break;
+                case 4:
+                    //startActivity(new Intent(getApplicationContext(), FeedFilter.class));
+                    break;
+                case 5:
+                    //startActivity(new Intent(getApplicationContext(), BakkleSettings.class));
+                    break;
+                case 6:
+                    //startActivity(new Intent(getApplicationContext(), DemoOptions.class));
+                    break;
+                case 7:
+                    //startActivity(new Intent(getApplicationContext(), Logout.class));
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
 }
