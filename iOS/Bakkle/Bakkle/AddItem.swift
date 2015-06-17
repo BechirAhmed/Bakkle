@@ -5,7 +5,6 @@
 //  Created by Ishank Tandon on 4/7/15.
 //  Copyright (c) 2015 Ishank Tandon. All rights reserved.
 //
-//  Edited by Patrick Barr 6/2/15.
 
 import UIKit
 import Photos
@@ -20,10 +19,12 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     let albumName = "Bakkle"
     
     static let MAX_IMAGE_COUNT = 5
+    private static let CAPTURE_NOTIFICATION_TEXT = "_UIImagePickerControllerUserDidCaptureItem"
+    private static let REJECT_NOTIFICATION_TEXT = "_UIImagePickerControllerUserDidRejectItem"
+    private static let DEVICE_MODEL: String = UIDevice.currentDevice().modelName
     let listItemCellIdentifier = "ListItemCell"
     var itemImages: [UIImage]? = [UIImage]()
     var scaledImages: [UIImage]? = [UIImage]()
-    var itemCount: Int = 0
     
     @IBOutlet weak var closeBtn: UIButton!
     @IBOutlet weak var titleField: UITextField!
@@ -41,7 +42,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.itemCount = 1
+        
         titleField.delegate = self
         priceField.delegate = self
         tagsField.delegate = self
@@ -68,6 +69,9 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         
         titleField.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
         priceField.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleNotification:", name: AddItem.CAPTURE_NOTIFICATION_TEXT, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleNotification:", name: AddItem.REJECT_NOTIFICATION_TEXT, object: nil)
         
         setupButtons()
     }
@@ -342,20 +346,120 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         return true
     }
     
-    func changeImageOverlay(imagePicker: UIImagePickerController) {
-        if !UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera){
-            return
-        }
+    var imagePicker = UIImagePickerController()
+    internal static let frameHeightAdjust = ["iPhone 4S" : CGFloat(20.0),
+                                            "iPhone 5" : CGFloat(20.0), // Confirmed
+                                            "iPhone 5S" : CGFloat(20.0),
+                                            "iPhone 5C" : CGFloat(20.0),
+                                            "iPhone 6" : CGFloat(20.0), // Confirmed
+                                            "iPhone 6 Plus" : CGFloat(22.0), // Confirmed
+                                            "iPad 2" : CGFloat(20.0),
+                                            "iPad 3" : CGFloat(20.0),
+                                            "iPad 4" : CGFloat(0.0), // testing -> needs a lot of work
+                                            "iPad Air" : CGFloat(20.0),
+                                            "iPad Mini" : CGFloat(20.0),
+                                            "iPad Mini 2" : CGFloat(20.0),
+                                            "iPod 5" : CGFloat(20.0)]
+    
+    internal static let retakeFrameAdjust = ["iPhone 4S" : CGFloat(20.0),
+                                             "iPhone 5" : CGFloat(22.0), // Confirmed
+                                             "iPhone 5S" : CGFloat(0.0),
+                                             "iPhone 5C" : CGFloat(0.0),
+                                             "iPhone 6" : CGFloat(20.0), // Confirmed
+                                             "iPhone 6 Plus" : CGFloat(20.0), // Confirmed
+                                             "iPad 2" : CGFloat(20.0),
+                                             "iPad 3" : CGFloat(20.0),
+                                             "iPad 4" : CGFloat(0.0), // testing -> needs a lot of work
+                                             "iPad Air" : CGFloat(20.0),
+                                             "iPad Mini" : CGFloat(20.0),
+                                             "iPad Mini 2" : CGFloat(20.0),
+                                             "iPod 5" : CGFloat(20.0)]
+    
+    internal static let captureFrameAdjust = ["iPhone 4S" : CGFloat(20.0),
+                                             "iPhone 5" : CGFloat(4.0), // Confirmed
+                                             "iPhone 5S" : CGFloat(0.0),
+                                             "iPhone 5C" : CGFloat(0.0),
+                                             "iPhone 6" : CGFloat(0.0), // Confirmed
+                                             "iPhone 6 Plus" : CGFloat(26.0), // Confirmed
+                                             "iPad 2" : CGFloat(20.0),
+                                             "iPad 3" : CGFloat(20.0),
+                                             "iPad 4" : CGFloat(0.0), // testing -> needs a lot of work
+                                             "iPad Air" : CGFloat(20.0),
+                                             "iPad Mini" : CGFloat(20.0),
+                                             "iPad Mini 2" : CGFloat(20.0),
+                                             "iPod 5" : CGFloat(20.0)]
+    
+    
+    @IBAction func cameraBtn(sender: AnyObject) {
+        let fetchOptions = PHFetchOptions()
+        fetchOptions.predicate = NSPredicate(format: "title = %@", albumName)
         
+        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
+            self.imagePicker.delegate = self
+            self.imagePicker.sourceType = UIImagePickerControllerSourceType.Camera
+            
+            drawCameraOverlay()
+            self.presentViewController(imagePicker, animated: true, completion: nil)
+        } else{
+            //no camera available
+            var alert = UIAlertController(title: "Error", message: "There is no camera available.", preferredStyle: .Alert)
+            alert.addAction(UIAlertAction(title: "Okay", style: .Default, handler: {(alertAction)in
+                alert.dismissViewControllerAnimated(true, completion: nil)
+                
+            }))
+            self.presentViewController(alert, animated: true, completion: nil)
+        }
+    }
+    
+    private static var firstChange: CGFloat?
+    private static var statusBarHeight = UIScreen.mainScreen().bounds.height
+    private static var dontChangeBar = false
+    private var secondIteration = false
+    private var secondStatusBarHeight = UIApplication.sharedApplication().statusBarFrame.size.height
+    
+    func drawCameraOverlay() {
+        drawCameraOverlay(false)
+    }
+    
+    
+    /**
+     * This function either defaults as the initial camera overlay
+     */
+    func drawCameraOverlay(retakeView: Bool) {
         let screenSize = UIScreen.mainScreen().bounds
         let imgWidth = screenSize.width < screenSize.height ? screenSize.width : screenSize.height
-        let imgWidthScale = imgWidth / (screenSize.width < screenSize.height ? screenSize.height :screenSize.width)
         
-        let pickerFrame = CGRectMake(0, UIApplication.sharedApplication().statusBarFrame.size.height, imagePicker.view.bounds.width, imagePicker.view.bounds.height - imagePicker.navigationBar.bounds.size.height - imagePicker.toolbar.bounds.size.height)
-        let squareFrame = CGRectMake(pickerFrame.width/2 - imgWidth/2, pickerFrame.height/2 - imgWidth/2, imgWidth, imgWidth)
+        if !AddItem.dontChangeBar {
+            AddItem.statusBarHeight = UIApplication.sharedApplication().statusBarFrame.size.height
+            AddItem.dontChangeBar = true
+        }
+        
+        let newStatusBarHeight: CGFloat
+        let pickerFrame: CGRect
+        let squareFrame: CGRect
+        var adjust = imagePicker.view.bounds.height - imagePicker.navigationBar.bounds.size.height - imagePicker.toolbar.bounds.size.height
+        
+        if retakeView {
+            newStatusBarHeight = UIApplication.sharedApplication().statusBarFrame.size.height
+            // temp, as soon as the dictionary is complete this can be removed
+            if AddItem.firstChange == nil {
+                AddItem.firstChange = abs(AddItem.statusBarHeight - newStatusBarHeight)
+            }
+            
+            pickerFrame = CGRectMake(0, 0, imagePicker.view.bounds.width, adjust + AddItem.frameHeightAdjust[AddItem.DEVICE_MODEL]!)
+            squareFrame = CGRectMake(pickerFrame.width/2 - imgWidth/2, adjust/2 - imgWidth/2 + AddItem.firstChange! + AddItem.retakeFrameAdjust[AddItem.DEVICE_MODEL]!, imgWidth, imgWidth)
+        } else {
+            // 20.0 is the default height for the menu near the origin of the canvas
+            pickerFrame = CGRectMake(0, 20.0, imagePicker.view.bounds.width, adjust - AddItem.frameHeightAdjust[AddItem.DEVICE_MODEL]!)
+            squareFrame = CGRectMake(pickerFrame.width/2 - imgWidth/2, adjust/2 - imgWidth/2 - AddItem.captureFrameAdjust[AddItem.DEVICE_MODEL]!, imgWidth, imgWidth)
+        }
+
         UIGraphicsBeginImageContext(pickerFrame.size)
         
         let context = UIGraphicsGetCurrentContext()
+        
+        CGContextClearRect(context, screenSize)
+        
         CGContextSaveGState(context)
         CGContextAddRect(context, CGContextGetClipBoundingBox(context))
         CGContextMoveToPoint(context, squareFrame.origin.x, squareFrame.origin.y)
@@ -367,79 +471,22 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         CGContextMoveToPoint(context, pickerFrame.origin.x, pickerFrame.origin.y)
         CGContextSetRGBFillColor(context, 0, 0, 0, 1)
         CGContextFillRect(context, pickerFrame)
-        CGContextRestoreGState(context)
         
+        CGContextRestoreGState(context)
         let overlayImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext();
         
         let overlayView = UIImageView(frame: pickerFrame)
         overlayView.image = overlayImage
         imagePicker.cameraOverlayView = overlayView
-        self.presentViewController(imagePicker, animated: true, completion: nil)
-        
-        //NSBundle.mainBundle().loadNibNamed("CameraOverlay", owner: self, options: nil)
-        //self.overlayView.frame = imagePickerController.cameraOverlayView!.frame;
-        //imagePickerController.cameraOverlayView = self.overlayView
-        //cameraOverlay.frame = camera.cameraOverlayView!.frame
-        //imagePickerController.cameraOverlayView = overlay
     }
-
-    @IBAction func cameraBtn(sender: AnyObject) {
-        let fetchOptions = PHFetchOptions()
-        fetchOptions.predicate = NSPredicate(format: "title = %@", albumName)
-        
-        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
-//            //load the camera interface
-//            var picker : UIImagePickerController = UIImagePickerController()
-//            picker.sourceType = UIImagePickerControllerSourceType.Camera
-//            picker.delegate = self
-//            picker.allowsEditing = false
-//            //changeImageOverlay(picker)
-//            self.presentViewController(picker, animated: true, completion: nil)
-            var imagePicker = UIImagePickerController()
-            imagePicker.delegate = self
-            imagePicker.sourceType = UIImagePickerControllerSourceType.Camera
-            
-            let screenSize = UIScreen.mainScreen().bounds
-            let imgWidth = screenSize.width < screenSize.height ? screenSize.width : screenSize.height
-            let imgWidthScale = imgWidth / (screenSize.width < screenSize.height ? screenSize.height :screenSize.width)
-            
-            let pickerFrame = CGRectMake(0, UIApplication.sharedApplication().statusBarFrame.size.height, imagePicker.view.bounds.width, imagePicker.view.bounds.height - imagePicker.navigationBar.bounds.size.height - imagePicker.toolbar.bounds.size.height)
-            let squareFrame = CGRectMake(pickerFrame.width/2 - imgWidth/2, pickerFrame.height/2 - imgWidth/2, imgWidth, imgWidth)
-            UIGraphicsBeginImageContext(pickerFrame.size)
-            
-            let context = UIGraphicsGetCurrentContext()
-            CGContextSaveGState(context)
-            CGContextAddRect(context, CGContextGetClipBoundingBox(context))
-            CGContextMoveToPoint(context, squareFrame.origin.x, squareFrame.origin.y)
-            CGContextAddLineToPoint(context, squareFrame.origin.x + squareFrame.width, squareFrame.origin.y)
-            CGContextAddLineToPoint(context, squareFrame.origin.x + squareFrame.width, squareFrame.origin.y + squareFrame.size.height)
-            CGContextAddLineToPoint(context, squareFrame.origin.x, squareFrame.origin.y + squareFrame.size.height)
-            CGContextAddLineToPoint(context, squareFrame.origin.x, squareFrame.origin.y)
-            CGContextEOClip(context)
-            CGContextMoveToPoint(context, pickerFrame.origin.x, pickerFrame.origin.y)
-            CGContextSetRGBFillColor(context, 0, 0, 0, 1)
-            CGContextFillRect(context, pickerFrame)
-            CGContextRestoreGState(context)
-            
-            let overlayImage = UIGraphicsGetImageFromCurrentImageContext()
-            UIGraphicsEndImageContext();
-            
-            let overlayView = UIImageView(frame: pickerFrame)
-            overlayView.image = overlayImage
-            imagePicker.cameraOverlayView = overlayView
-            self.presentViewController(imagePicker, animated: true, completion: nil)
-            
-        } else{
-            //no camera available
-            var alert = UIAlertController(title: "Error", message: "There is no camera available", preferredStyle: .Alert)
-            alert.addAction(UIAlertAction(title: "Okay", style: .Default, handler: {(alertAction)in
-                alert.dismissViewControllerAnimated(true, completion: nil)
-                
-            }))
-            self.presentViewController(alert, animated: true, completion: nil)
+    
+    func handleNotification(message: NSNotification) {
+        if message.name == AddItem.CAPTURE_NOTIFICATION_TEXT {
+            drawCameraOverlay(true)
+        } else if message.name == AddItem.REJECT_NOTIFICATION_TEXT {
+            drawCameraOverlay()
         }
-
     }
     
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
@@ -449,8 +496,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
         let chosen = info[UIImagePickerControllerOriginalImage] as! UIImage
         itemImages?.append(chosen)
-        itemCount++
-        let itemIndex = self.itemCount - 1
+        let itemIndex = self.itemImages!.count - 1 <= 0 ? 0 : self.itemImages!.count - 1
         
         // Scaled image size
         let scaledImageWidth: CGFloat = 660.0;
@@ -466,10 +512,6 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         collectionView.insertItemsAtIndexPaths([index])
         dismissViewControllerAnimated(true, completion: nil)
     }
-
-    
-    
-    
  
     let commonWords: Set<NSString> = ["the", "of", "and", "a", "to", "in", "is", "you", "that", "it", "he", "was", "for", "on", "are", "as", "with", "his", "they", "i", "at", "be", "this", "have", "from", "or", "one", "had", "by", "but", "not", "what", "all", "were", "we", "when", "your", "can", "said", "there", "use", "an", "each", "which", "she", "do", "how", "their", "if", "will", "up", "other", "about", "out", "many", "then", "them", "these", "so", "some", "her"," would", "make", "like", "him", "into", "has", "look", "more", "write", "go", "see", "no", "way", "could", "people", "my", "than", "first", "been", "call", "who","its","now","find","down","day","did","get","come","made","may","part", "another", "any", "anybody", "anyone", "anything", "both", "either", "everybody", "everyone", "everything", "am"]
     
