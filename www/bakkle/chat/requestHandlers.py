@@ -212,7 +212,6 @@ class ChatWSHandler(websocket.WebSocketHandler):
 
     def test(self, request):
 
-        account = Account.objects.get(pk = self.clientId)
-        return {'success': 1, 'unreadMessages': totalUnreadMessagesForAccount(account)}
+        return {'success': 1}
 
 

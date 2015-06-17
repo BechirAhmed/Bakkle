@@ -11,5 +11,6 @@ sudo pip install tornado
 
 #probably needed on ubuntus udo apt-get install libffi-dev libssl-dev
 sudo pip install requests[security]
-sudo pip install django --upgrade
+# sudo pip install django --upgrade
+sudo pip install django
 

@@ -62,6 +62,8 @@ class BaseWSHandler(websocket.WebSocketHandler):
         if not "_" in method:
             if method == 'echo':
                 response = self.echo(request)
+            elif method == 'sysVars':
+                response = self.sysVars()
 
         elif method.split("_")[0] == "chat":
             response = chatRequestHandlers.WSHandler.handleRequest(request)
@@ -108,3 +110,6 @@ class BaseWSHandler(websocket.WebSocketHandler):
             return {'success': 0, 'error': 'Missing parameter ' + str(e)}
 
         return {'success': 1, 'message': message}
+
+    def sysVars(self, request):
+        return {'success': 1}

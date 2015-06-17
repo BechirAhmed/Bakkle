@@ -62,7 +62,7 @@ def index(requestHandler):
     context = {
         'item_list': item_list,
     }
-    return requestHandler.render('templates/items/index.html', item_list = item_list) 
+#    return requestHandler.render('templates/items/index.html', item_list = item_list) 
 
 @csrf_exempt
 @time_method
@@ -74,7 +74,7 @@ def public_detail(request, item_id):
         'item': item,
         'urls': urls,
     }
-    return render(request, 'items/public_detail.html', context)
+#    return render(request, 'items/public_detail.html', context)
 
 @staff_member_required
 @csrf_exempt
@@ -87,7 +87,7 @@ def detail(request, item_id):
         'item': item,
         'urls': urls,
     }
-    return render(request, 'items/detail.html', context)
+#    return render(request, 'items/detail.html', context)
 
 @staff_member_required
 @csrf_exempt
@@ -102,7 +102,7 @@ def mark_as_spam(request, item_id):
     context = {
         'item_list': item_list,
     }
-    return render(request, 'items/index.html', context)
+#    return render(request, 'items/index.html', context)
 
 @staff_member_required
 @csrf_exempt
@@ -117,7 +117,7 @@ def mark_as_deleted(request, item_id):
     context = {
         'item_list': item_list,
     }
-    return render(request, 'items/index.html', context)
+#    return render(request, 'items/index.html', context)
 
 #--------------------------------------------#
 #               Item Methods                 #
