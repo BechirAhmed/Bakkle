@@ -41,6 +41,11 @@ class IconImage {
         return factory.createImageForIcon(NIKFontAwesomeIcon.ChevronLeft)
     }
     
+    func gallery() -> UIImage {
+        setup(NAV_SIZE)
+        return factory.createImageForIcon(NIKFontAwesomeIcon.Image)
+    }
+    
     /* SWIPE MENU ICONS */
     
     func home() -> UIImage {
