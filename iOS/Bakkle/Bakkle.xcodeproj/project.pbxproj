@@ -48,6 +48,7 @@
 		5EE2C9BA1AB9F0FB0031D8CD /* UIView+MDCBorderedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C9AE1AB9F0FB0031D8CD /* UIView+MDCBorderedLabel.m */; };
 		5EE2C9BB1AB9F0FB0031D8CD /* MDCViewState.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C9B01AB9F0FB0031D8CD /* MDCViewState.m */; };
 		6001F3411B21D004009C1A04 /* ItemDetailsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6001F3401B21D004009C1A04 /* ItemDetailsCell.swift */; };
+		60E0203A1B30A8F50029B474 /* bakkle-inst-overlay.png in Resources */ = {isa = PBXBuildFile; fileRef = 60E020391B30A8F50029B474 /* bakkle-inst-overlay.png */; };
 		720510341B1F839B00D059AB /* ListItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720510331B1F839B00D059AB /* ListItemCell.swift */; };
 		723D532C1B25F42B0067A80A /* IconImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 723D532B1B25F42B0067A80A /* IconImage.swift */; };
 		723D532E1B2718590067A80A /* OffsetTextAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 723D532D1B2718590067A80A /* OffsetTextAttachment.swift */; };
@@ -371,6 +372,7 @@
 		5EE2C9B01AB9F0FB0031D8CD /* MDCViewState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDCViewState.m; sourceTree = "<group>"; };
 		5EE2C9B11AB9F0FB0031D8CD /* MDCSwipeToChoose-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MDCSwipeToChoose-Prefix.pch"; path = "../MDCSwipeToChoose-Prefix.pch"; sourceTree = "<group>"; };
 		6001F3401B21D004009C1A04 /* ItemDetailsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemDetailsCell.swift; sourceTree = "<group>"; };
+		60E020391B30A8F50029B474 /* bakkle-inst-overlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bakkle-inst-overlay.png"; path = "../../../../Downloads/bakkle-inst-overlay.png"; sourceTree = "<group>"; };
 		698270E0C83AB2371F464BB2 /* Pods-Bakkle.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bakkle.release.xcconfig"; path = "Pods/Target Support Files/Pods-Bakkle/Pods-Bakkle.release.xcconfig"; sourceTree = "<group>"; };
 		720510331B1F839B00D059AB /* ListItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemCell.swift; sourceTree = "<group>"; };
 		723D532B1B25F42B0067A80A /* IconImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IconImage.swift; sourceTree = "<group>"; };
@@ -714,6 +716,7 @@
 		A08D53B71B07DC8E000C406C /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				60E020391B30A8F50029B474 /* bakkle-inst-overlay.png */,
 				DB5DB3531B18E18100734692 /* icon-car75.png */,
 				DB5DB3541B18E18100734692 /* icon-marker75.png */,
 				DB5DB3551B18E18100734692 /* icon-tags75.png */,
@@ -1139,6 +1142,7 @@
 				A08D53B11B06DBD8000C406C /* icon-x@3x.png in Resources */,
 				DB5DB3571B18E18100734692 /* icon-marker75.png in Resources */,
 				13AB6F9D1B0E3C520092EE61 /* btn-meh.png in Resources */,
+				60E0203A1B30A8F50029B474 /* bakkle-inst-overlay.png in Resources */,
 				A0D96F901AD7751E0046DA13 /* mock-settings.png in Resources */,
 				D0FCDFFA1B03B2E0006F76F7 /* btn-addCam.png in Resources */,
 				A08D53D81B0825E7000C406C /* icon-back.png in Resources */,

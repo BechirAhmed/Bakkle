@@ -36,6 +36,13 @@ class IconImage {
         return factory.createImageForIcon(NIKFontAwesomeIcon.Close)
     }
     
+    func closeBlack() -> UIImage {
+        setup(NAV_SIZE)
+        factory.strokeColor = UIColor.blackColor()
+        factory.colors = [UIColor.blackColor()]
+        return factory.createImageForIcon(NIKFontAwesomeIcon.Close)
+    }
+    
     func chevron() -> UIImage {
         setup(NAV_SIZE)
         return factory.createImageForIcon(NIKFontAwesomeIcon.ChevronLeft)
