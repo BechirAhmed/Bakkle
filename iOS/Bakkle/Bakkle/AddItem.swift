@@ -491,7 +491,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         
         if !retakeView && UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.SavedPhotosAlbum) {
             imagePicker.cameraOverlayView?.addSubview(squareOverlayView)
-            imagePicker.cameraOverlayView?.addSubview(galleryButton)
+            //imagePicker.cameraOverlayView?.addSubview(galleryButton)
         } else {
             imagePicker.cameraOverlayView = squareOverlayView
         }
@@ -508,9 +508,6 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     func changeImagePickerSourceType(sender: AnyObject) {
         if imagePicker.sourceType == UIImagePickerControllerSourceType.Camera {
             imagePicker.sourceType = UIImagePickerControllerSourceType.SavedPhotosAlbum
-            var cameraButton: UIBarButtonItem = UIBarButtonItem(title: "Camera", style: UIBarButtonItemStyle.Done, target: self, action: "changeImagePickerSourceType:")
-            imagePicker.navigationItem.leftBarButtonItems = [cameraButton]
-            imagePicker.navigationController?.navigationBarHidden = false
         } else {
             imagePicker.sourceType = UIImagePickerControllerSourceType.Camera
             drawCameraOverlay()
@@ -518,6 +515,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     }
     
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+        picker.sourceType = UIImagePickerControllerSourceType.Camera
         picker.dismissViewControllerAnimated(true, completion: nil)
     }
     
