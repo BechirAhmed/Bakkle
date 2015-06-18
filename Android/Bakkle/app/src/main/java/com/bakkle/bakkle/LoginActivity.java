@@ -21,13 +21,14 @@ public class LoginActivity extends Activity implements OnClickListener {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         if(preferences.getBoolean("LoggedIn", false)) {
-            Intent intent = new Intent(this, HomeActivity.class);
+            Intent intent = new Intent(this, SignInActivity.class);
             startActivity(intent);
+
         }
-        else {
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
-        }
+//        else {
+//            Intent intent = new Intent(this, LoginActivity.class);
+//            startActivity(intent);
+//        }
 
         ((Button)findViewById(R.id.btnSignIn)).setOnClickListener(this);
         ((Button)findViewById(R.id.btnSignUpEmail)).setOnClickListener(this);
@@ -64,7 +65,6 @@ public class LoginActivity extends Activity implements OnClickListener {
                 break;
             case R.id.btnSignIn:
                 startActivity(new Intent(this, SignInActivity.class));
-                finish();
                 break;
         }
     }

@@ -2,6 +2,7 @@ package com.bakkle.bakkle;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -21,6 +22,8 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.Profile;
+import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -40,32 +43,54 @@ public class SignInActivity extends Activity implements OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         callbackManager = CallbackManager.Factory.create();
-        //final Context mContext = this;
+        final Context mContext = this;
+        FacebookSdk.sdkInitialize(getApplicationContext());
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         SharedPreferences.Editor editor = preferences.edit();
 
         if(preferences.getBoolean("LoggedIn", false)) {
+
             Intent intent = new Intent(this, HomeActivity.class);
             startActivity(intent);
+            finish();
         }
 
 
 
-        FacebookSdk.sdkInitialize(getApplicationContext());
+
         setContentView(R.layout.activity_sign_in);
         LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
 
 
+            private ProfileTracker mProfileTracker;
+
             @Override
             public void onSuccess(LoginResult loginResult) {
+
+
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 SharedPreferences.Editor editor = preferences.edit();
-                AccessToken token = AccessToken.getCurrentAccessToken();
+                //AccessToken token = AccessToken.getCurrentAccessToken();
+                AccessToken token = loginResult.getAccessToken();
+                mProfileTracker = new ProfileTracker() {
+                    @Override
+                    protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
+                        Profile.setCurrentProfile(currentProfile);
+                        mProfileTracker.stopTracking();
+                    }
+                };
+
+                mProfileTracker.startTracking();
+
                 if(token != null) {
+                    String userID = Profile.getCurrentProfile().getId();
                     editor.putBoolean("LoggedIn", true);
+                    editor.apply();
+                    editor.putString("userID", userID);
                     editor.apply();
                     Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                     startActivity(intent);
+                    finish();
                 }
 
 

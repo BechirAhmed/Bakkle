@@ -5,10 +5,12 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.LayoutInflater;
@@ -17,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,6 +38,12 @@ public class HomeActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor editor = preferences.edit();
+
+        preferences.getString("userID", "0");
+
+        Toast.makeText(this, preferences.getString("userID", "NOT LOGGED IN"), Toast.LENGTH_SHORT).show();
 
         // Setup drawer
         mDrawerItems = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.drawer_items)));
@@ -139,8 +148,9 @@ public class HomeActivity extends Activity {
         public void onItemClick(AdapterView parent, View view, int position, long id){
 
 
+            //TODO: put this code in a separate class so that it can be called from anywhere
             //TODO: don't re-launch home activity if already in there
-            
+
             switch(position){
                 case 0:
                     //if(){}
