@@ -51,7 +51,7 @@ public class SplashActivity extends Activity {
                         startActivity(intent);
                         finish();
                     }else {
-                        Intent intent = new Intent(`, LoginActivity.class);
+                        Intent intent = new Intent(`, SignupActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         try {
                             Thread.sleep(3000);
@@ -77,7 +77,7 @@ public class SplashActivity extends Activity {
                     SharedPreferences.Editor ed = sp.edit();
                     ed.putString(Constants.DEVICE_ID, deviceID);
 
-                    Intent intent = new Intent(mContext, LoginActivity.class);
+                    Intent intent = new Intent(mContext, SignupActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     try {
                         Thread.sleep(2000);
@@ -96,7 +96,7 @@ public class SplashActivity extends Activity {
             startActivity(intent);
         }
         else {
-            Intent intent = new Intent(this, LoginActivity.class);
+            Intent intent = new Intent(this, SignupActivity.class);
             startActivity(intent);
         }*/
 

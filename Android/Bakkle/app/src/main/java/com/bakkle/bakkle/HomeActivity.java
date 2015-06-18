@@ -4,7 +4,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.Intent;
+import android.app.FragmentTransaction;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
@@ -19,13 +19,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 
-public class HomeActivity extends Activity {
+public class HomeActivity extends Activity implements SellersGarage.OnFragmentInteractionListener,
+        BuyersTrunk.OnFragmentInteractionListener, HoldingPattern.OnFragmentInteractionListener{
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private DrawerRowAdapter mDrawerAdapter;
@@ -42,8 +42,6 @@ public class HomeActivity extends Activity {
         SharedPreferences.Editor editor = preferences.edit();
 
         preferences.getString("userID", "0");
-
-        Toast.makeText(this, preferences.getString("userID", "NOT LOGGED IN"), Toast.LENGTH_SHORT).show();
 
         // Setup drawer
         mDrawerItems = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.drawer_items)));
@@ -143,6 +141,11 @@ public class HomeActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onFragmentInteraction(String id) {
+
+    }
+
     private class DrawerItemClickListener implements ListView.OnItemClickListener{
         @Override
         public void onItemClick(AdapterView parent, View view, int position, long id){
@@ -154,16 +157,24 @@ public class HomeActivity extends Activity {
             switch(position){
                 case 0:
                     //if(){}
-                    startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                    getFragmentManager().beginTransaction().replace(R.id.content_frame,
+                            new FeedFragment()).addToBackStack(null).
+                            setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
                     break;
                 case 1:
-                    //startActivity(new Intent(getApplicationContext(), SellersGarage.class));
+                    getFragmentManager().beginTransaction().replace(R.id.content_frame,
+                            new SellersGarage()).addToBackStack(null).
+                            setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
                     break;
                 case 2:
-                    startActivity(new Intent(getApplicationContext(), BuyersTrunk.class));
+                    getFragmentManager().beginTransaction().replace(R.id.content_frame,
+                            new BuyersTrunk()).addToBackStack(null).
+                            setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
                     break;
                 case 3:
-                    //startActivity(new Intent(getApplicationContext(), HoldingPattern.class));
+                    getFragmentManager().beginTransaction().replace(R.id.content_frame,
+                            new HoldingPattern()).addToBackStack(null).
+                            setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
                     break;
                 case 4:
                     //startActivity(new Intent(getApplicationContext(), FeedFilter.class));
