@@ -7,16 +7,42 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+
 
 public class LoginActivity extends Activity implements OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        getActionBar().hide();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        getActionBar().hide();
+        FacebookSdk.sdkInitialize(this.getApplicationContext());
+        CallbackManager callbackManager = CallbackManager.Factory.create();
 
-        ((Button)findViewById(R.id.btnSignUpFacebook)).setOnClickListener(this);
+        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onError(FacebookException e) {
+
+            }
+        });
+
+
         ((Button)findViewById(R.id.btnSignIn)).setOnClickListener(this);
         ((Button)findViewById(R.id.btnSignUpEmail)).setOnClickListener(this);
 
@@ -26,8 +52,6 @@ public class LoginActivity extends Activity implements OnClickListener {
     public void onClick(View v) {
         // TODO: Handle button actions
         switch(v.getId()){
-            case R.id.btnSignUpFacebook:
-                break;
             case R.id.btnSignUpEmail:
                 break;
             case R.id.btnSignIn:
