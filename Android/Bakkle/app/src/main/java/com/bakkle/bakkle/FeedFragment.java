@@ -1,15 +1,13 @@
 package com.bakkle.bakkle;
 
 
-import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.SearchView;
+import android.widget.LinearLayout;
 
 
 /**
@@ -17,10 +15,10 @@ import android.widget.SearchView;
  */
 public class FeedFragment extends Fragment implements View.OnTouchListener {
 
-    private ImageView card;
     private ViewGroup mRrootLayout;
     private int _xDelta;
     private int _yDelta;
+
 
     public FeedFragment() {
         // Required empty public constructor
@@ -32,16 +30,36 @@ public class FeedFragment extends Fragment implements View.OnTouchListener {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
         mRrootLayout = (ViewGroup) view;
-        card = (ImageView) view.findViewById(R.id.card);
-        card.setOnTouchListener(this);
-
+        addCard(view, nextItemImage());
+//        StackImageView card;
+//        card = (StackImageView) view.findViewById(R.id.card);
+//        card.setOnTouchListener(this);
         return view;
+    }
+
+    public void addCard(View view, int imageID) //where imageID is something like R.drawable.bakkle_icon
+    {
+        LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.feed);
+        StackImageView card = new StackImageView(this.getActivity());
+        card.setImageResource(imageID);
+        card.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT
+        ));
+
+        linearLayout.addView(card);
+
+    }
+
+    //In future, make code to check to see if there even is a next image.
+    public int nextItemImage(){
+        return R.drawable.bakkle_icon;
     }
 
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        final int X = (int) event.getRawX();
+        /*final int X = (int) event.getRawX();
         final int Y = (int) event.getRawY();
         switch (event.getAction() & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN:
@@ -65,7 +83,7 @@ public class FeedFragment extends Fragment implements View.OnTouchListener {
                 v.setLayoutParams(layoutParams);
                 break;
         }
-        mRrootLayout.invalidate();
+        mRrootLayout.invalidate();*/
         return true;
     }
 }

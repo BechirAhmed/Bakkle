@@ -785,10 +785,19 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     func restoreData() {
         var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
         
+        // reset instructional overlay
+        if let f = userDefaults.objectForKey("instruction") as? Bool{
+            
+        }else{
+            userDefaults.setBool(true, forKey: "instruction")
+        }
         // We force a version upgrade
         if let version = userDefaults.objectForKey("version") as? NSString {
             info("Stored version: \(version)")
             info("Current version: \(self.appVersion().build)")
+            if version != self.appVersion().build {
+                userDefaults.setBool(true, forKey: "instruction")
+            }
             if version == self.appVersion().build {
             
                 // restore FEED

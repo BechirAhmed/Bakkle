@@ -21,7 +21,6 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     let options = MDCSwipeToChooseViewOptions()
     var swipeView : MDCSwipeToChooseView!
     var bottomView : MDCSwipeToChooseView!
-    var infoView: UIView!
     
     private static let CAPTURE_NOTIFICATION_TEXT = "_UIImagePickerControllerUserDidCaptureItem"
     private static let REJECT_NOTIFICATION_TEXT = "_UIImagePickerControllerUserDidRejectItem"
@@ -38,6 +37,9 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     @IBOutlet weak var progressIndicator: UIActivityIndicatorView!
     
     @IBOutlet weak var searchBar: UISearchBar!
+    
+    var instructionImgView: UIImageView!
+    var closeBtn: UIButton!
     
     var hardCoded = false
     var itemDetailTap: UITapGestureRecognizer!
@@ -124,6 +126,30 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         searchBar.layer.borderWidth = 1
     }
     
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(true)
+        // add instructional overlay for the first time usage
+        var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        if userDefaults.boolForKey("instruction") {
+            self.itemDetailTap.enabled = false
+            self.constructInstructionView()
+        }
+    }
+    
+    func constructInstructionView() {
+        instructionImgView = UIImageView(frame: swipeView.frame)
+        instructionImgView.contentMode = UIViewContentMode.ScaleToFill
+        instructionImgView.clipsToBounds = true
+        instructionImgView.image = UIImage(named: "bakkle-inst-overlay.png")
+        closeBtn = UIButton(frame: CGRect(x: 0, y: 0, width: 25, height: 25))
+        closeBtn.setImage(IconImage().closeBlack(), forState: .Normal)
+        closeBtn.addTarget(self, action: "closeBtnPressed:", forControlEvents: .TouchUpInside)
+        instructionImgView.addSubview(closeBtn)
+        instructionImgView.userInteractionEnabled = true
+        var mainWindow: UIWindow = UIApplication .sharedApplication().keyWindow!
+        mainWindow.addSubview(instructionImgView)
+    }
+    
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
@@ -140,6 +166,13 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         searching = false
         //TODO: remove this when feed is updated via push
         requestUpdates()
+    }
+    
+    func closeBtnPressed(sender: UIButton!) {
+        var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults();
+        userDefaults.setBool(false, forKey: "instruction")
+        userDefaults.synchronize()
+        self.instructionImgView.removeFromSuperview()
     }
     
     /* UISearch Bar delegate */
@@ -291,16 +324,6 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                 }
             }
         }
-    }
-    
-    func constructInfoView() {
-        var bottomHeight: CGFloat = 60.0
-        var bottomFrame: CGRect = CGRectMake(0, CGRectGetHeight(swipeView.bounds) - bottomHeight, CGRectGetWidth(swipeView.bounds), bottomHeight)
-        self.infoView = UIView(frame: bottomFrame)
-        self.infoView.backgroundColor = UIColor.yellowColor()
-        self.infoView.clipsToBounds = true
-        self.infoView.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleTopMargin
-        swipeView.addSubview(self.infoView)
     }
     
     func updateView() {
