@@ -83,10 +83,7 @@ public class LoginActivity extends Activity implements OnClickListener {
                 mProfileTracker.startTracking();
 
                 if(token != null) {
-                    String userID = Profile.getCurrentProfile().getId();
                     editor.putBoolean("LoggedIn", true);
-                    editor.apply();
-                    editor.putString("userID", userID);
                     editor.apply();
                     Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                     startActivity(intent);
@@ -162,10 +159,17 @@ public class LoginActivity extends Activity implements OnClickListener {
                 if(preferences.getBoolean("LoggedIn", false)){
                     LoginManager.getInstance().logOut();
                     editor.putBoolean("LoggedIn", false);
+                    editor.apply();
                 }
                 else{
-                    LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "user_friends"));
+                    LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList
+                            ("public_profile", "email", "user_friends"));
+                    LoginManager.getInstance().logInWithPublishPermissions(
+                            this, Arrays.asList("publish_actions"));
+
                     editor.putBoolean("LoggedIn", true);
+                    editor.apply();
+
                 }
                 break;
             case R.id.action_bar_home:
@@ -173,4 +177,17 @@ public class LoginActivity extends Activity implements OnClickListener {
                 break;
         }
     }
+
+
+
+
+
+
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(this, SignupActivity.class));
+        finish();
+    }
+
 }
