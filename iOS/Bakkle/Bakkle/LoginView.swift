@@ -13,16 +13,9 @@ class LoginView: UIViewController, FBLoginViewDelegate {
     let mainScreenSegueIdentifier = "PushToFeedSegue"
     
     @IBOutlet weak var fbLoginView: FBLoginView!
-    @IBOutlet weak var fbLoginViewBtn: UIImageView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        fbLoginView.frame = fbLoginViewBtn.frame;
-        
-        self.view.addSubview(fbLoginView)
-        
-        fbLoginView.frame.origin = CGPointMake(200, 400)
         
         self.fbLoginView.delegate = self
         self.fbLoginView.readPermissions = ["public_profile", "email", "user_friends", "publish_actions"]
