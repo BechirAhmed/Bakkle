@@ -4,20 +4,22 @@ var dateFormatter = NSDateFormatter()
 
 class Chat {
     let user: User
+    var chatId: Int
     var lastMessageText: String
     var lastMessageSentDate: NSDate
     var lastMessageSentDateString: String {
     return formatDate(lastMessageSentDate)
     }
-    var loadedMessages = [[Message]]()
+    var loadedMessages = [Message]()
     var unreadMessageCount: Int = 0 // subtacted from total when read
     var hasUnloadedMessages = false
     var draft = ""
 
-    init(user: User, lastMessageText: String, lastMessageSentDate: NSDate) {
+    init(user: User, lastMessageText: String, lastMessageSentDate: NSDate, chatId: Int) {
         self.user = user
         self.lastMessageText = lastMessageText
         self.lastMessageSentDate = lastMessageSentDate
+        self.chatId = chatId
     }
 
     func formatDate(date: NSDate) -> String {

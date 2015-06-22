@@ -59,13 +59,9 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func loadChats(){
-        //let userName = Bakkle.sharedInstance.display_name
-        let userName = "Joseph Carroll"
-        let userDividedName = split(userName) {$0 == " "}
-        let userFirstName = userDividedName[0] as String
-        let userLastName = userDividedName[1] as String
         
-        let seller = User(facebookID: Bakkle.sharedInstance.facebook_id_str, firstName: userFirstName, lastName: userLastName)
+        let seller = User(facebookID: Bakkle.sharedInstance.facebook_id_str,
+            firstName: Bakkle.sharedInstance.first_name, lastName: Bakkle.sharedInstance.last_name)
         self.account = Account(user: seller)
         
         var chatPayload: WSRequest = WSGetChatsRequest(itemId: chatItemID)
@@ -79,12 +75,14 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
                 var message: String = ""
                 var dateString: String = ""
                 var date: NSDate = NSDate()
+                var id: Int = 0
                 
                 if let lastMessage = chat.valueForKey("last_message") as? NSDictionary {
                     message = lastMessage.valueForKey("message") as! String
                     dateString = lastMessage.valueForKey("date") as! String
                     date = NSDate().dateFromString(dateString, format:  "yyyy-MM-dd HH:mm:ss")
                 }
+                id = chat.valueForKey("pk") as! Int
                 
                 var buyer: NSDictionary = chat.valueForKey("buyer") as! NSDictionary
                 let facebookID = buyer.valueForKey("facebook_id") as! String
@@ -95,7 +93,7 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
                 let lastName = dividedName[1] as String
                 
                 let buyerUser = User(facebookID: facebookID, firstName: firstName, lastName: lastName)
-                let buyerChat = Chat(user: buyerUser, lastMessageText: message, lastMessageSentDate: date)
+                var buyerChat = Chat(user: buyerUser, lastMessageText: message, lastMessageSentDate: date, chatId: id)
                 self.account.chats.append(buyerChat)
                 self.tableView.reloadData()
             }
@@ -139,6 +137,7 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
         let chat = self.account!.chats[indexPath.row]
         let chatViewController = ChatViewController(chat: chat)
         chatViewController.index = indexPath.row
+        chatViewController.isBuyer = false
         self.presentViewController(chatViewController, animated: true, completion: {})
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }

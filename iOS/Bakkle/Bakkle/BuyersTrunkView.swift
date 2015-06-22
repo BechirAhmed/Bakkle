@@ -133,10 +133,24 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let chat = Chat(user: User(facebookID: "big-haus", firstName: "Big", lastName: "Haus"), lastMessageText: "6 sounds good :-)", lastMessageSentDate: NSDate())
-        let chatViewController = ChatViewController(chat: chat)
-        chatViewController.index = indexPath.row
-        self.presentViewController(chatViewController, animated: true, completion: {})
+        let buyer = User(facebookID: Bakkle.sharedInstance.facebook_id_str,
+            firstName: Bakkle.sharedInstance.first_name, lastName: Bakkle.sharedInstance.last_name)
+        let account = Account(user: buyer)
+        let chatItem = Bakkle.sharedInstance.trunkItems[indexPath.row].valueForKey("item") as! NSDictionary
+        let chatItemId = (chatItem.valueForKey("pk") as! NSNumber).stringValue
+        var chatId: Int = 0
+        var chatPayload: WSRequest = WSStartChatRequest(itemId: chatItemId)
+        chatPayload.successHandler = {
+            (var success: NSDictionary) in
+            chatId = success.valueForKey("chatId") as! Int
+            var buyerChat = Chat(user: buyer, lastMessageText: "", lastMessageSentDate: NSDate(), chatId: chatId)
+            let chatViewController = ChatViewController(chat: buyerChat)
+            chatViewController.index = indexPath.row
+            chatViewController.isBuyer = true
+            self.presentViewController(chatViewController, animated: true, completion: {})
+            tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        }
+        WSManager.enqueueWorkPayload(chatPayload)  
     }
     
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {

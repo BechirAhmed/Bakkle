@@ -132,7 +132,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
         if userDefaults.boolForKey("instruction") {
             self.itemDetailTap.enabled = false
-            self.constructInstructionView()
+            //self.constructInstructionView()
         }
     }
     

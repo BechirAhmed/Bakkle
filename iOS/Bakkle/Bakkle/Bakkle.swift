@@ -48,6 +48,8 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     var email: String!
     var facebook_id: Int!
     var facebook_id_str: String!
+    var first_name: String!
+    var last_name: String!
     
     var feedItems: [NSObject]!
     var garageItems: [NSObject]!
@@ -230,6 +232,8 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                 if responseDict.valueForKey("status")?.integerValue == 1 {
                     self.display_name = username
                     self.email = email
+                    self.first_name = first_name
+                    self.last_name = last_name
                     success()
                 }
             } else {

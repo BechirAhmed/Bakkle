@@ -17,7 +17,9 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     var profileButton: UIButton!
     var sendButton: UIButton!
     var rotating = false
+    var chatID: String!
     var index: Int = 0
+    var isBuyer: Bool = false
 
     override var inputAccessoryView: UIView! {
     get {
@@ -77,18 +79,6 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        chat.loadedMessages = [
-            [
-                Message(incoming: true, text: "Does that lawn mower run OK?", sentDate: NSDate(timeIntervalSinceNow: -60*60*24*2-60*60)),
-                Message(incoming: false, text: "It runs well, I got a new zero-turn and need to sell this one ASAP :-)", sentDate: NSDate(timeIntervalSinceNow: -60*60*24*2))
-            ],
-            [
-                Message(incoming: true, text: "Perfect, would you take $50? I can pick it up any night this week after 5.", sentDate: NSDate(timeIntervalSinceNow: -33)),
-                Message(incoming: false, text: "Sure, How's 6 PM on Thursday?", sentDate: NSDate(timeIntervalSinceNow: -19)),
-                Message(incoming: true, text: "6 sounds good :-)", sentDate: NSDate())
-            ]
-        ]
-
         view.backgroundColor = UIColor.whiteColor() // smooths push animation
 
         let topHeight: CGFloat = 20
@@ -141,7 +131,8 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         notificationCenter.addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
         notificationCenter.addObserver(self, selector: "keyboardDidShow:", name: UIKeyboardDidShowNotification, object: nil)
         notificationCenter.addObserver(self, selector: "menuControllerWillHide:", name: UIMenuControllerWillHideMenuNotification, object: nil) // #CopyMessage
-
+        
+        loadMessages()
         // tableViewScrollToBottomAnimated(false) // doesn't work
     }
 
@@ -155,7 +146,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     override func viewDidAppear(animated: Bool)  {
         super.viewDidAppear(animated)
         tableView.flashScrollIndicators()
-
+        
         var facebookProfileImageUrlString = "http://graph.facebook.com/\(Bakkle.sharedInstance.facebook_id_str)/picture?width=142&height=142"
         let imgURL = NSURL(string: facebookProfileImageUrlString)
         profileButton.hnk_setImageFromURL(imgURL!, state: UIControlState.Normal, placeholder: UIImage(named:"loading.png"), format: nil, failure: nil, success: nil)
@@ -176,6 +167,55 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             textViewDidChange(textView)
             textView.becomeFirstResponder()
         }
+    }
+    
+    func loadMessages() {
+        var loadedMessages: [Message] = []
+        
+        // Load messages from server
+        var chatPayload: WSRequest = WSGetMessagesForChatRequest(chatId: String(chat.chatId))
+        chatPayload.successHandler = {
+            (var success: NSDictionary) in
+            var messages: [NSDictionary] = success.valueForKey("messages") as! [NSDictionary]
+            var loadedMessage: Message!
+            for message in messages {
+                let messageText = message.valueForKey("message") as! String
+                let dateString = message.valueForKey("date_sent") as! String
+                let date = NSDate().dateFromString(dateString, format:  "yyyy-MM-dd HH:mm:ss")
+                let incoming = message.valueForKey("sent_by_buyer") as! Bool
+                if !self.isBuyer {
+                    loadedMessage = Message(incoming: incoming, text: messageText, sentDate: date)
+                } else {
+                    loadedMessage = Message(incoming: !incoming, text: messageText, sentDate: date)
+                }
+                loadedMessages.append(loadedMessage)
+            }
+            self.chat.loadedMessages = loadedMessages.reverse()
+            self.tableView.reloadData()
+        }
+        WSManager.enqueueWorkPayload(chatPayload)
+        
+        // Register for messages sent via websocket
+        WSManager.registerMessageHandler({ (data : [NSObject : AnyObject]!) -> Void in
+            var dict: NSDictionary = data as NSDictionary
+            
+            var message: NSDictionary = NSDictionary()
+            var messageOrigin: String = ""
+            
+            if(dict.objectForKey("message") != nil){
+                message = dict.objectForKey("message") as! NSDictionary
+                
+                let messageText = message.valueForKey("message") as! String
+                let dateString = message.valueForKey("date_sent") as! String
+                let date = NSDate().dateFromString(dateString, format:  "yyyy-MM-dd HH:mm:ss")
+                let incoming = message.valueForKey("sent_by_buyer") as! Bool
+                let loadedMessage = Message(incoming: incoming, text: messageText, sentDate: date)
+                loadedMessages.append(loadedMessage)
+                
+                print("[NewMessageHandler] NewMessageHandler received new message '\(messageText)' from userId \(messageOrigin)");
+            }
+            self.tableView.reloadData()
+        }, forNotification: "newMessage")
     }
 
 
@@ -222,17 +262,18 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
 //    }
 
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return chat.loadedMessages.count
+        return 1
     }
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return chat.loadedMessages[section].count + 1 // for sent-date cell
+        return chat.loadedMessages.count * 2 // for sent-date cell
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if indexPath.row == 0 {
+        if (indexPath.row % 2) == 0 {
             let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(MessageSentDateCell), forIndexPath: indexPath) as! MessageSentDateCell
-            let message = chat.loadedMessages[indexPath.section][0]
+            var indexFloor: Int = Int(floor(Double(indexPath.row) * 0.5))
+            let message = chat.loadedMessages[indexFloor]
             dateFormatter.dateStyle = .ShortStyle
             dateFormatter.timeStyle = .ShortStyle
             cell.sentDateLabel.text = dateFormatter.stringFromDate(message.sentDate)
@@ -250,7 +291,8 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 cell.bubbleImageView.addGestureRecognizer(doubleTapGestureRecognizer)
                 cell.bubbleImageView.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: action))
             }
-            let message = chat.loadedMessages[indexPath.section][indexPath.row-1]
+            var indexFloor: Int = Int(floor(Double(indexPath.row) * 0.5))
+            let message = chat.loadedMessages[indexFloor]
             cell.configureWithMessage(message)
             return cell
         }
@@ -330,22 +372,30 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         textView.resignFirstResponder()
         textView.becomeFirstResponder()
 
-        chat.loadedMessages.append([Message(incoming: false, text: textView.text, sentDate: NSDate())])
+        chat.loadedMessages.append(Message(incoming: false, text: textView.text, sentDate: NSDate()))
         //TODO: Trap response to show if message got transmitted or not.
-        Bakkle.sharedInstance.sendChat(1, message: textView.text, success: {()->() in }, fail: {()->() in })
+        //Bakkle.sharedInstance.sendChat(1, message: textView.text, success: {()->() in }, fail: {()->() in })
+        
+        var sendPayload: WSRequest = WSSendChatMessageRequest(chatId: String(chat.chatId), message: textView.text)
+        sendPayload.successHandler = {
+            (var success: NSDictionary) in
+            self.tableView.reloadData()
+        }
+        WSManager.enqueueWorkPayload(sendPayload)
+        
         textView.text = nil
         updateTextViewHeight()
         sendButton.enabled = false
 
-        let lastSection = tableView.numberOfSections()
-        tableView.beginUpdates()
-        tableView.insertSections(NSIndexSet(index: lastSection), withRowAnimation: .Automatic)
-        tableView.insertRowsAtIndexPaths([
-            NSIndexPath(forRow: 0, inSection: lastSection),
-            NSIndexPath(forRow: 1, inSection: lastSection)
-            ], withRowAnimation: .Automatic)
-        tableView.endUpdates()
-        tableViewScrollToBottomAnimated(true)
+//        let lastSection = tableView.numberOfSections()
+//        tableView.beginUpdates()
+//        tableView.insertSections(NSIndexSet(index: lastSection), withRowAnimation: .Automatic)
+//        tableView.insertRowsAtIndexPaths([
+//            NSIndexPath(forRow: 0, inSection: lastSection),
+//            NSIndexPath(forRow: 1, inSection: lastSection)
+//            ], withRowAnimation: .Automatic)
+//        tableView.endUpdates()
+//        tableViewScrollToBottomAnimated(true)
         AudioServicesPlaySystemSound(messageSoundOutgoing)
     }
 
@@ -376,7 +426,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     // 2. Copy text to pasteboard
     func messageCopyTextAction(menuController: UIMenuController) {
         let selectedIndexPath = tableView.indexPathForSelectedRow()
-        let selectedMessage = chat.loadedMessages[selectedIndexPath!.section][selectedIndexPath!.row-1]
+        let selectedMessage = chat.loadedMessages[selectedIndexPath!.row-1]
         UIPasteboard.generalPasteboard().string = selectedMessage.text
     }
     // 3. Deselect row
