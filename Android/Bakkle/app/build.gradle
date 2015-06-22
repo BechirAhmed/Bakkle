@@ -28,4 +28,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.0.0'
     compile 'com.facebook.android:facebook-android-sdk:4.1.0'
     compile 'com.github.kikoso:SwipeableCards:1.1-RELEASE@aar'
+    compile 'com.koushikdutta.ion:ion:2.+'
 }

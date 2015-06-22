@@ -59,10 +59,6 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
         preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         editor = preferences.edit();
 
-
-
-        preferences.getString("userID", "0");
-
         // Setup drawer
         mDrawerItems = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.drawer_items)));
         mDrawerIcons = getResources().obtainTypedArray(R.array.drawer_icons);
@@ -124,10 +120,11 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
         mDrawerToggle.syncState();
 
         if(preferences.getBoolean("newuser", true)){
-            GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback(){
+            GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(),
+                    new GraphRequest.GraphJSONObjectCallback(){
                 @Override
                 public void onCompleted(JSONObject object, GraphResponse response) {
-                    getUserInfo(object);
+                    addUserInfoToPreferences(object);
                 }
             });
 
@@ -144,9 +141,20 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
                     preferences.getString("locale", "null"),
                     preferences.getString("first_name", "null"),
                     preferences.getString("last_name", "null"));
+            /*
 
-            Toast.makeText(getApplicationContext(), "Did the server call and next Toast is result string", Toast.LENGTH_SHORT).show();
-            Toast.makeText(getApplicationContext(), testresult, Toast.LENGTH_SHORT).show();
+            String email = preferences.getString("email", "null");
+            String gender = preferences.getString("gender", "null");
+            String username = preferences.getString("username", "null");
+            String name = preferences.getString("name", "null");
+            String userid = preferences.getString("userID", "null");
+            String locale = preferences.getString("locale", "null");
+            String first_name = preferences.getString("first_name", "null");
+            String last_name = preferences.getString("last_name", "null");
+
+            */
+
+            Toast.makeText(this, testresult, Toast.LENGTH_SHORT).show();
         }
 
 
@@ -154,8 +162,8 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
         editor.apply();
     }
 
-    public void getUserInfo(JSONObject object){
-        try {
+    public void addUserInfoToPreferences(JSONObject object){
+        try{
 
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             SharedPreferences.Editor editor = preferences.edit();
@@ -167,12 +175,9 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
             editor.putString("locale", object.getString("locale"));
             editor.putString("first_name", Profile.getCurrentProfile().getFirstName());
             editor.putString("last_name", Profile.getCurrentProfile().getLastName());
-            Toast.makeText(getApplicationContext(), object.getString("locale"), Toast.LENGTH_SHORT).show();
             editor.apply();
         }
         catch(Exception e){
-            Toast.makeText(getApplicationContext(), "Uhhh, didn't work as expected", Toast.LENGTH_SHORT).show();
-            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
             Log.d("debug", e.getMessage());
         }
     }
@@ -203,13 +208,6 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-
-
-//        ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-//        List<ActivityManager.RunningTaskInfo> taskInfo = activityManager.getRunningTasks(1);
-//        ComponentName currentActivity = taskInfo.get(0).topActivity;
-
-
 
         return super.onOptionsItemSelected(item);
     }
@@ -251,39 +249,6 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
                     break;
                 case 4:
                     //startActivity(new Intent(getApplicationContext(), FeedFilter.class));
-                    //String response = "";
-//                  try {
-//                        URL url = new URL("https://bakkle.rhventures.org/account/facebook/?email=vansh.gandhi@hotmail.com&name=Vansh Gandhi&username=vanshgandhi&gender=Male&user_id=953976251314552&locale=en_US&first_name=Vansh&last_name=Gandhi&device_uuid=123456");
-//                        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-//                        urlConnection.setDoOutput(true);
-//                        urlConnection.setRequestMethod("POST");
-//                        urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-                        String email = preferences.getString("email", "null");
-                        String gender = preferences.getString("gender", "null");
-                        String username = preferences.getString("username", "null");
-                        String name = preferences.getString("name", "null");
-                        String userid = preferences.getString("userID", "null");
-                        String locale = preferences.getString("locale", "null");
-                        String first_name = preferences.getString("first_name", "null");
-                        String last_name = preferences.getString("last_name", "null");
-//                        PrintWriter out = new PrintWriter(urlConnection.getOutputStream());
-//                        out.print("email=" + email + "name=" + name + "user_name=" + username +
-//                                "gender=" + gender + "user_id=" + userid + "locale=" + locale + "first_name=" +
-//                                first_name + "last_name=" + last_name + "device_uuid=" + Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID));
-//                        out.close();
-//
-//
-//                        Scanner in = new Scanner(urlConnection.getInputStream());
-//                        while (in.hasNextLine()) {
-//                            response += in.nextLine();
-//                        }
-//                    }
-//                    catch(Exception e){
-//                        System.out.println(e.getMessage());
-//                    }
-                    ServerCalls serverCalls = new ServerCalls(getApplicationContext());
-                    String test = serverCalls.loginFacebook(email, gender, "", name, userid, locale, first_name, last_name);
-                    Toast.makeText(getApplicationContext(), test, Toast.LENGTH_SHORT).show();
                     break;
                 case 5:
                     //startActivity(new Intent(getApplicationContext(), BakkleSettings.class));

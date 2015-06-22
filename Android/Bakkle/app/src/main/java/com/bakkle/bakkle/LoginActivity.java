@@ -166,7 +166,6 @@ public class LoginActivity extends Activity implements OnClickListener {
                             ("public_profile", "email", "user_friends"));
                     LoginManager.getInstance().logInWithPublishPermissions(
                             this, Arrays.asList("publish_actions"));
-
                     editor.putBoolean("LoggedIn", true);
                     editor.apply();
 
