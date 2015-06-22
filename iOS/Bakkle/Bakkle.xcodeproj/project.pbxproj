@@ -51,6 +51,7 @@
 		6001F3411B21D004009C1A04 /* ItemDetailsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6001F3401B21D004009C1A04 /* ItemDetailsCell.swift */; };
 		602C38971B389A1F005CB493 /* InstructionScreen.png in Resources */ = {isa = PBXBuildFile; fileRef = 602C38961B389A1F005CB493 /* InstructionScreen.png */; };
 		602C38991B389A2E005CB493 /* WrongLocationForPhone.png in Resources */ = {isa = PBXBuildFile; fileRef = 602C38981B389A2E005CB493 /* WrongLocationForPhone.png */; };
+		602C389B1B38AF1E005CB493 /* x-image.png in Resources */ = {isa = PBXBuildFile; fileRef = 602C389A1B38AF1E005CB493 /* x-image.png */; };
 		720510341B1F839B00D059AB /* ListItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720510331B1F839B00D059AB /* ListItemCell.swift */; };
 		723D532C1B25F42B0067A80A /* IconImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 723D532B1B25F42B0067A80A /* IconImage.swift */; };
 		723D532E1B2718590067A80A /* OffsetTextAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 723D532D1B2718590067A80A /* OffsetTextAttachment.swift */; };
@@ -377,6 +378,7 @@
 		6001F3401B21D004009C1A04 /* ItemDetailsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemDetailsCell.swift; sourceTree = "<group>"; };
 		602C38961B389A1F005CB493 /* InstructionScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = InstructionScreen.png; sourceTree = "<group>"; };
 		602C38981B389A2E005CB493 /* WrongLocationForPhone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = WrongLocationForPhone.png; sourceTree = "<group>"; };
+		602C389A1B38AF1E005CB493 /* x-image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "x-image.png"; sourceTree = "<group>"; };
 		698270E0C83AB2371F464BB2 /* Pods-Bakkle.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bakkle.release.xcconfig"; path = "Pods/Target Support Files/Pods-Bakkle/Pods-Bakkle.release.xcconfig"; sourceTree = "<group>"; };
 		720510331B1F839B00D059AB /* ListItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemCell.swift; sourceTree = "<group>"; };
 		723D532B1B25F42B0067A80A /* IconImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IconImage.swift; sourceTree = "<group>"; };
@@ -721,6 +723,7 @@
 		A08D53B71B07DC8E000C406C /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				602C389A1B38AF1E005CB493 /* x-image.png */,
 				602C38981B389A2E005CB493 /* WrongLocationForPhone.png */,
 				602C38961B389A1F005CB493 /* InstructionScreen.png */,
 				DB5DB3531B18E18100734692 /* icon-car75.png */,
@@ -1142,6 +1145,7 @@
 				A058A2A81AFD6024005E7432 /* btn-menu@2x.png in Resources */,
 				D0C6A42D1B080ACB0027ACCF /* mock-rating-stars.png in Resources */,
 				A058A2A71AFD6024005E7432 /* btn-addItem@3x.png in Resources */,
+				602C389B1B38AF1E005CB493 /* x-image.png in Resources */,
 				A0A709CF1ACAC9DB00E772B9 /* LaunchScreen.xib in Resources */,
 				A003EB1A1AD4DB8800EE51A1 /* item-lawnmower.png in Resources */,
 				DB6726E91B178F250014A896 /* star_full.png in Resources */,
