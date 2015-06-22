@@ -400,7 +400,6 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
             self.imagePicker.delegate = self
             self.imagePicker.sourceType = UIImagePickerControllerSourceType.Camera
-            
             drawCameraOverlay()
             self.presentViewController(imagePicker, animated: true, completion: nil)
         } else{
@@ -507,10 +506,13 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     
     func changeImagePickerSourceType(sender: AnyObject) {
         if imagePicker.sourceType == UIImagePickerControllerSourceType.Camera {
-            imagePicker.sourceType = UIImagePickerControllerSourceType.SavedPhotosAlbum
-            var cameraButton: UIBarButtonItem = UIBarButtonItem(title: "Camera", style: UIBarButtonItemStyle.Done, target: self, action: "changeImagePickerSourceType:")
-            imagePicker.navigationItem.leftBarButtonItems = [cameraButton]
-            imagePicker.navigationController?.navigationBarHidden = false
+            //imagePicker.sourceType = UIImagePickerControllerSourceType.SavedPhotosAlbum
+            imagePicker.dismissViewControllerAnimated(false, completion: {
+                self.imagePicker = UIImagePickerController()
+                self.imagePicker.delegate = self
+                self.imagePicker.sourceType = UIImagePickerControllerSourceType.SavedPhotosAlbum
+                self.presentViewController(self.imagePicker, animated: true, completion: nil)
+            })
         } else {
             imagePicker.sourceType = UIImagePickerControllerSourceType.Camera
             drawCameraOverlay()
@@ -518,6 +520,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     }
     
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+        picker.sourceType = UIImagePickerControllerSourceType.Camera
         picker.dismissViewControllerAnimated(true, completion: nil)
     }
     

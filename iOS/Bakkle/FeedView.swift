@@ -39,6 +39,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     @IBOutlet weak var searchBar: UISearchBar!
     
     var instructionImgView: UIImageView!
+    var blurImg: UIImageView!
     var closeBtn: UIButton!
     
     var hardCoded = false
@@ -131,23 +132,37 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         // add instructional overlay for the first time usage
         var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
         if userDefaults.boolForKey("instruction") {
+            // disable user interaction and show instruction
             self.itemDetailTap.enabled = false
             self.constructInstructionView()
         }
     }
     
+    // create the instruction image and show it on screen
     func constructInstructionView() {
-        instructionImgView = UIImageView(frame: swipeView.frame)
-        instructionImgView.contentMode = UIViewContentMode.ScaleToFill
-        instructionImgView.clipsToBounds = true
-        instructionImgView.image = UIImage(named: "bakkle-inst-overlay.png")
-        closeBtn = UIButton(frame: CGRect(x: 0, y: 0, width: 25, height: 25))
-        closeBtn.setImage(IconImage().closeBlack(), forState: .Normal)
-        closeBtn.addTarget(self, action: "closeBtnPressed:", forControlEvents: .TouchUpInside)
-        instructionImgView.addSubview(closeBtn)
-        instructionImgView.userInteractionEnabled = true
-        var mainWindow: UIWindow = UIApplication .sharedApplication().keyWindow!
-        mainWindow.addSubview(instructionImgView)
+        if self.swipeView != nil {
+            var blur: UIVisualEffect! = UIBlurEffect(style: UIBlurEffectStyle.Dark)
+            var effectView: UIVisualEffectView = UIVisualEffectView(effect: blur)
+            blurImg = UIImageView(frame: swipeView.frame)
+            effectView.frame = blurImg.bounds
+            blurImg.contentMode = UIViewContentMode.ScaleAspectFill
+            blurImg.clipsToBounds = true
+            blurImg.addSubview(effectView)
+
+            instructionImgView = UIImageView(frame: swipeView.frame)
+            instructionImgView.contentMode = UIViewContentMode.ScaleToFill
+            instructionImgView.clipsToBounds = true
+            instructionImgView.userInteractionEnabled = true
+            instructionImgView.image = UIImage(named: "InstructionScreen.png")
+            closeBtn = UIButton(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
+            closeBtn.addTarget(self, action: "closeBtnPressed:", forControlEvents: .TouchUpInside)
+            instructionImgView.addSubview(closeBtn)
+            instructionImgView.userInteractionEnabled = true
+            var mainWindow: UIWindow = UIApplication .sharedApplication().keyWindow!
+            mainWindow.addSubview(blurImg)
+            mainWindow.addSubview(instructionImgView)
+        }
+        
     }
     
     deinit {
@@ -172,7 +187,8 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults();
         userDefaults.setBool(false, forKey: "instruction")
         userDefaults.synchronize()
-        self.instructionImgView.removeFromSuperview()
+        instructionImgView.removeFromSuperview()
+        blurImg.removeFromSuperview()
     }
     
     /* UISearch Bar delegate */
