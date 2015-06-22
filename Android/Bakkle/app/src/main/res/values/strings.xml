@@ -17,8 +17,10 @@
     <string name="title_activity_sellers_garage">SELLER\'S GARAGE</string>
     <string name="title_activity_buyers_trunk">BUYER\'S TRUNK</string>
     <string name="title_activity_holding_pattern">HOLDING PATTERN</string>
-    <string name="title_activity_feed_filter">FEED_FILTER</string>
+    <string name="title_activity_feed_filter">FEED FILTER</string>
     <string name="title_activity_settings">SETTINGS</string>
+    <string name="title_activity_demo_options">DEMO OPTIONS</string>
+
 
     <string name="logout">LOGOUT</string>
     <string name="drawer_title">ACCOUNT</string>
