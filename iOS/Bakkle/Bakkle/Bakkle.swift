@@ -241,6 +241,9 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     
     /* login and get account details */
     func login(success: ()->(), fail: ()->()) {
+        var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.setBool(true, forKey: "login")
+        
             let url:NSURL? = NSURL(string: url_base + url_login)
             let request = NSMutableURLRequest(URL: url!)
         
@@ -292,6 +295,9 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     
     /* logout */
     func logout() {
+        var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.setBool(false, forKey: "login")
+        
         let url:NSURL? = NSURL(string: url_base + url_logout)
         let request = NSMutableURLRequest(URL: url!)
         
@@ -790,6 +796,9 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             
         }else{
             userDefaults.setBool(true, forKey: "instruction")
+        }
+        if userDefaults.objectForKey("login") == nil {
+            userDefaults.setBool(false, forKey: "login")
         }
         // We force a version upgrade
         if let version = userDefaults.objectForKey("version") as? NSString {

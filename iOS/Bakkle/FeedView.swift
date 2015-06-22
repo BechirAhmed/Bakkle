@@ -137,17 +137,20 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     }
     
     func constructInstructionView() {
-        instructionImgView = UIImageView(frame: swipeView.frame)
-        instructionImgView.contentMode = UIViewContentMode.ScaleToFill
-        instructionImgView.clipsToBounds = true
-        instructionImgView.image = UIImage(named: "bakkle-inst-overlay.png")
-        closeBtn = UIButton(frame: CGRect(x: 0, y: 0, width: 25, height: 25))
-        closeBtn.setImage(IconImage().closeBlack(), forState: .Normal)
-        closeBtn.addTarget(self, action: "closeBtnPressed:", forControlEvents: .TouchUpInside)
-        instructionImgView.addSubview(closeBtn)
-        instructionImgView.userInteractionEnabled = true
-        var mainWindow: UIWindow = UIApplication .sharedApplication().keyWindow!
-        mainWindow.addSubview(instructionImgView)
+        if self.swipeView != nil {
+            instructionImgView = UIImageView(frame: swipeView.frame)
+            instructionImgView.contentMode = UIViewContentMode.ScaleToFill
+            instructionImgView.clipsToBounds = true
+            instructionImgView.image = UIImage(named: "bakkle-inst-overlay.png")
+            closeBtn = UIButton(frame: CGRect(x: 0, y: 0, width: 25, height: 25))
+            closeBtn.setImage(IconImage().closeBlack(), forState: .Normal)
+            closeBtn.addTarget(self, action: "closeBtnPressed:", forControlEvents: .TouchUpInside)
+            instructionImgView.addSubview(closeBtn)
+            instructionImgView.userInteractionEnabled = true
+            var mainWindow: UIWindow = UIApplication .sharedApplication().keyWindow!
+            mainWindow.addSubview(instructionImgView)
+        }
+        
     }
     
     deinit {
