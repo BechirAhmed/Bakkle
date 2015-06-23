@@ -186,7 +186,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     func closeBtnPressed(sender: UIButton!) {
         var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults();
         userDefaults.setBool(false, forKey: "instruction")
-        userDefaults.synchronize()
+        self.itemDetailTap.enabled = true
         instructionImgView.removeFromSuperview()
         blurImg.removeFromSuperview()
     }
