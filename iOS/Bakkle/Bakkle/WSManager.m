@@ -71,6 +71,10 @@ static BOOL debug = true;
 }
 
 +(void) enqueueWorkPayload:(WSRequest*) payload {
+    if(!_wsManagerInstance.socketOpen && ![payload isKindOfClass:[WSRegisterChatRequest class] ]){
+        [self connectWS];
+    }
+    
     if(_wsManagerInstance.uuid == nil || _wsManagerInstance.auth_token == nil){
         [NSException raise:@"Authentication token/uuid not initialized. Call setAuthenticationWithUUID:withToken: first." format:@"Invalid token/UUID value: nil"];
     }
@@ -87,6 +91,10 @@ static BOOL debug = true;
 }
 
 - (void)connectWebSocket {
+    
+    if(self.socketOpen){
+        return;
+    }
     
     webSocket.delegate = nil;
     webSocket = nil;
@@ -145,6 +153,7 @@ static BOOL debug = true;
 #pragma mark - SRWebSocket delegate methods
 
 - (void)webSocketDidOpen:(SRWebSocket *)newWebSocket {
+    if(debug){NSLog(@"[SocketOpenedHandler] %@\n\n", @"Websocket opened");}
     webSocket = newWebSocket;
     
     self.socketOpen = true;
