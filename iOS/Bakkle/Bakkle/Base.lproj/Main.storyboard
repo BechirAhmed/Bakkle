@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -26,8 +26,21 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ARj-JV-7MY">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                             </view>
-                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="logo-white-design-png-100.png" translatesAutoresizingMaskIntoConstraints="NO" id="A3C-sg-V8F">
+                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" image="logo-white-design-clear.png" translatesAutoresizingMaskIntoConstraints="NO" id="A3C-sg-V8F">
                                 <rect key="frame" x="36" y="69" width="248" height="100"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="A3C-sg-V8F" secondAttribute="height" multiplier="62:25" id="7hl-Cc-pmE"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="7hl-Cc-pmE"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=regular-widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="7hl-Cc-pmE"/>
+                                    </mask>
+                                </variation>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SIGN UP WITH" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vxf-aK-VXy">
                                 <rect key="frame" x="74" y="274" width="177" height="22"/>
@@ -38,10 +51,10 @@
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="btn-email40.png" translatesAutoresizingMaskIntoConstraints="NO" id="AKQ-6X-cVL">
+                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" misplaced="YES" image="btn-email40.png" translatesAutoresizingMaskIntoConstraints="NO" id="AKQ-6X-cVL">
                                 <rect key="frame" x="45" y="373" width="230" height="40"/>
                             </imageView>
-                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="btn-sign-in40.png" translatesAutoresizingMaskIntoConstraints="NO" id="YRx-jL-q0e">
+                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" misplaced="YES" image="btn-sign-in40.png" translatesAutoresizingMaskIntoConstraints="NO" id="YRx-jL-q0e">
                                 <rect key="frame" x="45" y="448" width="230" height="40"/>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="M2Y-Q2-c87" customClass="FBLoginView">
@@ -90,6 +103,7 @@
                             <constraint firstAttribute="trailingMargin" secondItem="qfH-YC-Z4o" secondAttribute="trailing" constant="-16" id="If7-CR-kwN"/>
                             <constraint firstAttribute="centerX" secondItem="AKQ-6X-cVL" secondAttribute="centerX" id="IzB-nd-tJ7"/>
                             <constraint firstItem="qfH-YC-Z4o" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="-16" id="KaS-c6-O8M"/>
+                            <constraint firstItem="A3C-sg-V8F" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="36" id="MAB-ks-BzS"/>
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="qfH-YC-Z4o" secondAttribute="bottom" id="MmF-6n-eju"/>
                             <constraint firstItem="ARj-JV-7MY" firstAttribute="leading" secondItem="qfH-YC-Z4o" secondAttribute="leading" id="Nlk-Ed-xHH"/>
                             <constraint firstItem="ARj-JV-7MY" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="topMargin" id="Q5K-fa-dXt"/>
@@ -99,6 +113,7 @@
                             <constraint firstItem="qfH-YC-Z4o" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="-16" id="dRD-aq-2kE">
                                 <variation key="heightClass=regular-widthClass=compact" constant="-16"/>
                             </constraint>
+                            <constraint firstAttribute="trailing" secondItem="A3C-sg-V8F" secondAttribute="trailing" constant="36" id="ek2-b7-5sw"/>
                             <constraint firstItem="qfH-YC-Z4o" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="topMargin" id="ilU-fb-cM0"/>
                             <constraint firstItem="AKQ-6X-cVL" firstAttribute="top" secondItem="M2Y-Q2-c87" secondAttribute="bottom" constant="17" id="mEL-9I-Cd1"/>
                             <constraint firstItem="vxf-aK-VXy" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="58" id="ni0-GJ-j8o"/>
@@ -119,11 +134,13 @@
                                 <exclude reference="16W-zF-i6Y"/>
                                 <exclude reference="Nlk-Ed-xHH"/>
                                 <exclude reference="Q5K-fa-dXt"/>
-                                <exclude reference="7XN-gH-iYK"/>
-                                <exclude reference="8i6-sO-wsx"/>
                                 <exclude reference="If7-CR-kwN"/>
                                 <exclude reference="KaS-c6-O8M"/>
                                 <exclude reference="om7-rQ-YCI"/>
+                                <exclude reference="MAB-ks-BzS"/>
+                                <exclude reference="ek2-b7-5sw"/>
+                                <exclude reference="7XN-gH-iYK"/>
+                                <exclude reference="8i6-sO-wsx"/>
                                 <exclude reference="mEL-9I-Cd1"/>
                                 <exclude reference="Bgp-rf-pLY"/>
                                 <exclude reference="Uvz-Nl-Ilp"/>
@@ -138,13 +155,15 @@
                                 <include reference="16W-zF-i6Y"/>
                                 <include reference="Nlk-Ed-xHH"/>
                                 <include reference="Q5K-fa-dXt"/>
-                                <include reference="7XN-gH-iYK"/>
-                                <include reference="8i6-sO-wsx"/>
                                 <exclude reference="If7-CR-kwN"/>
                                 <exclude reference="KaS-c6-O8M"/>
                                 <exclude reference="d8U-sq-9Vx"/>
                                 <include reference="om7-rQ-YCI"/>
                                 <exclude reference="s6m-Dz-kiN"/>
+                                <include reference="MAB-ks-BzS"/>
+                                <include reference="ek2-b7-5sw"/>
+                                <include reference="7XN-gH-iYK"/>
+                                <include reference="8i6-sO-wsx"/>
                                 <include reference="mEL-9I-Cd1"/>
                                 <include reference="Bgp-rf-pLY"/>
                                 <include reference="Uvz-Nl-Ilp"/>
@@ -5850,7 +5869,7 @@
         <image name="btn-sign-in40.png" width="230" height="40"/>
         <image name="icon-back.png" width="258" height="118"/>
         <image name="item-detail-overlay.png" width="320" height="209"/>
-        <image name="logo-white-design-png-100.png" width="248" height="100"/>
+        <image name="logo-white-design-clear.png" width="1001" height="404"/>
         <image name="logo-white-design-png-transp-100.png" width="248" height="100"/>
         <image name="mock-rating-stars.png" width="1600" height="373"/>
     </resources>
