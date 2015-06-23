@@ -143,6 +143,8 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         refreshControl.addTarget(self, action: Selector("refreshChat"), forControlEvents: UIControlEvents.ValueChanged)
         self.tableView.addSubview(refreshControl)
         tableViewScrollToBottomAnimated(true) // doesn't work
+        
+        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "dismissKeyboard"))
     }
 
     deinit {
@@ -258,7 +260,10 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
     func btnBack(sender:UIButton!)
     {
+        self.dismissKeyboard()
+        self.toolBar.hidden = true
         self.dismissViewControllerAnimated(true, completion: nil)
+        
     }
     
     /* info button action - leads to item detail view */
@@ -272,6 +277,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         } else {
             vc.item = Bakkle.sharedInstance.garageItems[index] as! NSDictionary
         }
+        self.dismissKeyboard()
         self.presentViewController(vc, animated: true, completion: nil)
     }
 
@@ -283,6 +289,11 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         self.presentViewController(vc, animated: true, completion: nil)
     }
 
+    func dismissKeyboard(){
+        //self.textView
+        self.textView.resignFirstResponder()
+    }
+    
 //    // #iOS7.1
     override func willAnimateRotationToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
 
