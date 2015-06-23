@@ -51,6 +51,9 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
     SharedPreferences.Editor editor;
     SharedPreferences preferences;
 
+    ServerCalls serverCalls;
+
+    int result = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +61,10 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
         setContentView(R.layout.activity_home);
         preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         editor = preferences.edit();
+        if(preferences.getBoolean("newuser", true)){
+            editor.putBoolean("done", false);
+            editor.apply();
+        }
 
         // Setup drawer
         mDrawerItems = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.drawer_items)));
@@ -115,6 +122,7 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
         }*/
 
 
+        serverCalls = new ServerCalls(this);
 
         Fragment fragment = new FeedFragment();
 
@@ -125,6 +133,7 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
+
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
         mDrawerToggle.syncState();
@@ -135,6 +144,18 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
                 @Override
                 public void onCompleted(JSONObject object, GraphResponse response) {
                     addUserInfoToPreferences(object);
+                    result = serverCalls.registerFacebook(
+                            preferences.getString("email", "null"),
+                            preferences.getString("gender", "null"),
+                            preferences.getString("username", "null"),
+                            preferences.getString("name", "null"),
+                            preferences.getString("userID", "null"),
+                            preferences.getString("locale", "null"),
+                            preferences.getString("first_name", "null"),
+                            preferences.getString("last_name", "null"),
+                            preferences.getString("uuid", "0"));
+                    editor.putBoolean("done", true);
+                    editor.apply();
                 }
                     });
 
@@ -142,15 +163,6 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
             parameters.putString("fields", "locale, email, gender");
             request.executeAsync();
 
-            int result = new ServerCalls(this).registerFacebook(
-                    preferences.getString("email", "null"),
-                    preferences.getString("gender", "null"),
-                    preferences.getString("username", "null"),
-                    preferences.getString("name", "null"),
-                    preferences.getString("userID", "null"),
-                    preferences.getString("locale", "null"),
-                    preferences.getString("first_name", "null"),
-                    preferences.getString("last_name", "null"));
             /*
 
             String email = preferences.getString("email", "null");
@@ -167,7 +179,21 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
                 Toast.makeText(this, "Logged in successfully!", Toast.LENGTH_SHORT).show();
             else //TODO:Display error on fail? and go back to login screen
                 Toast.makeText(this, "Login error!!", Toast.LENGTH_SHORT).show();
+
+
+
         }
+
+        while(!preferences.getBoolean("done", true)){}
+
+        String auth_token = serverCalls.loginFacebook(
+                preferences.getString("uuid", "0"),
+                preferences.getString("userID", "0"),
+                getLocation()
+        );
+
+        editor.putString("auth_token", auth_token);
+        editor.apply();
 
 
         editor.putBoolean("newuser", false);
@@ -229,6 +255,10 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
 
     }
 
+    public String getLocation(){
+        return "32, 32";
+    }
+
     private class DrawerItemClickListener implements ListView.OnItemClickListener{
         @Override
         public void onItemClick(AdapterView parent, View view, int position, long id){
@@ -259,8 +289,15 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
                             setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
                     break;
                 case 4:
-                    new ServerCalls(getApplicationContext())
-                            .populateFeed("b30a48cafc3ae9e59b7234a9c582b851_12", "999999999", "", "", "32,32", "");
+                    new ServerCalls(getApplicationContext()).getFeedItems(
+                            preferences.getString("auth_token", "0"),
+                            "999999999",
+                            "",
+                            "",
+                            "32,32",
+                            "",
+                            preferences.getString("uuid", "0")
+                        );
                     //startActivity(new Intent(getApplicationContext(), FeedFilter.class));
                     break;
                 case 5:

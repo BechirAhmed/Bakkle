@@ -2,7 +2,9 @@ package com.bakkle.bakkle;
 
 
 import android.app.Fragment;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -13,7 +15,11 @@ import com.andtinder.model.CardModel;
 import com.andtinder.model.Orientations;
 import com.andtinder.view.CardContainer;
 import com.andtinder.view.SimpleCardStackAdapter;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +29,13 @@ public class FeedFragment extends Fragment implements View.OnTouchListener {
     private ViewGroup mRrootLayout;
     private int _xDelta;
     private int _yDelta;
+
+    ServerCalls serverCalls;
+
+    JsonObject Jsonresult;
+
+    SharedPreferences.Editor editor;
+    SharedPreferences preferences;
 
 
     public FeedFragment() {
@@ -34,34 +47,24 @@ public class FeedFragment extends Fragment implements View.OnTouchListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
+
+        preferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        editor = preferences.edit();
+
+        serverCalls = new ServerCalls(getActivity().getApplicationContext());
+        Jsonresult = serverCalls.getFeedItems(
+                preferences.getString("auth_token", "0"),
+                "99999999",
+                "",
+                "",
+                "32,32",
+                "",
+                preferences.getString("uuid", "0")
+        );
+
         CardContainer mCardContainer = (CardContainer) view.findViewById(R.id.cardView);
         mCardContainer.setOrientation(Orientations.Orientation.Ordered);
-        CardModel card = new CardModel("Title1", "Description goes here", getActivity().getResources().getDrawable(R.drawable.bakkle_icon));
-
-        card.setOnCardDimissedListener(new CardModel.OnCardDimissedListener() {
-            @Override
-            public void onLike() { //the Dislike and like is switched in the library
-
-                Log.d("Swipeable Card", "I did not like it");
-            }
-
-            @Override
-            public void onDislike() { //the Dislike and like is switched in the library
-                Log.d("Swipeable Card", "I liked it");
-            }
-        });
-
-        card.setOnClickListener(new CardModel.OnClickListener() {
-            @Override
-            public void OnClickListener() {
-                Log.d("Swipeable Cards", "I am pressing the card");
-            }
-        });
-
-        SimpleCardStackAdapter adapter = new SimpleCardStackAdapter(getActivity());
-        adapter.add(card);
-        mCardContainer.setAdapter(adapter);
-
+        populateFeed(Jsonresult, mCardContainer);
 
 //        mRrootLayout = (ViewGroup) view;
 //        addCard(view, nextItemImage());
@@ -119,5 +122,59 @@ public class FeedFragment extends Fragment implements View.OnTouchListener {
         }
         mRrootLayout.invalidate();*/
         return true;
+    }
+
+    public void populateFeed(JsonObject json, CardContainer mCardContainer)
+    {
+
+        JsonArray jsonArray = json.getAsJsonArray("feed");
+        SimpleCardStackAdapter adapter = new SimpleCardStackAdapter(getActivity());
+        JsonObject temp;
+        ArrayList<FeedItem> feedItems = new ArrayList<FeedItem>();
+        FeedItem feedItem = null;
+        CardModel card;
+        String status, description, price, postDate, title, buyerRating, sellerDisplayName, sellerLocation, sellerFacebookId, sellerPk, sellerRating, location, pk, method;
+        String[] tags, imageUrls;
+        JsonObject seller;
+
+
+        for(JsonElement element : jsonArray)
+        {
+            feedItem = new FeedItem();
+            temp = element.getAsJsonObject();
+            feedItem.setTitle(temp.get("title").getAsString());
+            feedItem.setDescription(temp.get("description").getAsString());
+            card = new CardModel(feedItem.getTitle(), feedItem.getDescription(), getActivity().getResources().getDrawable(R.drawable.bakkle_icon));
+
+            card.setOnCardDimissedListener(new CardModel.OnCardDimissedListener() {
+                @Override
+                public void onLike() { //the Dislike and like is switched in the library
+
+                    Log.d("Swipeable Card", "I did not like it");
+                }
+
+                @Override
+                public void onDislike() { //the Dislike and like is switched in the library
+                    Log.d("Swipeable Card", "I liked it");
+                }
+            });
+
+            card.setOnClickListener(new CardModel.OnClickListener() {
+                @Override
+                public void OnClickListener() {
+                    Log.d("Swipeable Cards", "I am pressing the card");
+                }
+            });
+            feedItem = null;
+
+
+            adapter.add(card);
+
+
+
+        }
+        mCardContainer.setAdapter(adapter);
+
+
     }
 }

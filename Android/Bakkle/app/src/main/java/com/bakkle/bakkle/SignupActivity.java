@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -19,6 +20,13 @@ public class SignupActivity extends Activity implements OnClickListener {
         getActionBar().hide();
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = preferences.edit();
+
+
+        editor.putString("uuid", Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID));
+        editor.apply();
+
+
 
         if(preferences.getBoolean("LoggedIn", false)) {
             Intent intent = new Intent(this, LoginActivity.class);

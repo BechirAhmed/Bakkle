@@ -2,13 +2,14 @@ package com.bakkle.bakkle;
 
 import android.content.Context;
 import android.media.Image;
-import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
+
+import java.util.ArrayList;
 
 /**
  * Created by vanshgandhi on 6/16/15.
@@ -35,20 +36,20 @@ public class ServerCalls{
     final String url_sellertransactions   = "items/get_seller_transactions/";
 
     Context mContext;
-    final String id;
     int response;
     String auth_token;
-
+    ArrayList items;
+    JsonObject JsonResponse;
 
     public ServerCalls(Context c)
     {
         mContext = c;
-        id = Settings.Secure.getString(mContext.getContentResolver(), Settings.Secure.ANDROID_ID);
+        JsonResponse = null;
     }
 
     public int registerFacebook(final String email, final String gender, final String username,
                                 final String name, final String userid, final String locale,
-                                final String first_name, final String last_name){
+                                final String first_name, final String last_name, String id){
 
         response = 0;
         String URL = url_base + url_facebook;
@@ -80,17 +81,16 @@ public class ServerCalls{
                 });
         Toast.makeText(mContext, "The value of response is: " + response, Toast.LENGTH_SHORT).show();
         return response;
-
     }
 
-    public void loginFacebook(String device_uuid, String userid, int location){
+    public String loginFacebook(String device_uuid, String userid, String location){
 
         Ion.with(mContext)
                 .load(url_base + url_login)
                 .setBodyParameter("device_uuid", device_uuid)
                 .setBodyParameter("user_id", userid)
                 .setBodyParameter("app_version", BuildConfig.VERSION_NAME)
-                .setBodyParameter("location", ""+location)
+                .setBodyParameter("location", location)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
@@ -99,20 +99,19 @@ public class ServerCalls{
                             Log.d("testing 2234", result.toString());
                             Toast.makeText(mContext, result.toString(), Toast.LENGTH_SHORT).show();
                             response = result.get("status").getAsInt();
+                            auth_token = result.get("auth_token").getAsString();
                             Toast.makeText(mContext, "The value of response is: " + response, Toast.LENGTH_SHORT).show();
                         } else {
                             Log.d("testing 2234", "did not work");
                             Toast.makeText(mContext, "did not work", Toast.LENGTH_SHORT).show();
                         }
-
                     }
                 });
-
-
+        return auth_token;
     }
 
-    public void populateFeed(String authToken, String filterPrice, String filterDistance,
-                             String search, String location, String filterNumber){
+    public JsonObject getFeedItems(String authToken, String filterPrice, String filterDistance,
+                             String search, String location, String filterNumber, String id){
 
         Ion.with(mContext)
                 .load(url_base + url_feed)
@@ -129,17 +128,20 @@ public class ServerCalls{
                     public void onCompleted(Exception e, JsonObject result) {
                         if (result != null) {
                             Log.d("testing 3234", result.toString());
-                            Log.d("testing 3324 id is ", id);
                             Toast.makeText(mContext, result.toString(), Toast.LENGTH_SHORT).show();
-                            //response = result.get
+                            response = result.get("status").getAsInt();
+                            JsonResponse = result;
                             Toast.makeText(mContext, "The value of response is: " + response, Toast.LENGTH_SHORT).show();
                         } else {
                             Log.d("testing 3234", "did not work");
                             Toast.makeText(mContext, "did not work", Toast.LENGTH_SHORT).show();
                         }
 
+
+
                     }
                 });
+        return JsonResponse;
     }
 
     public int logout(){
