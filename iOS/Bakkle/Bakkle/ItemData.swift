@@ -47,20 +47,26 @@ class ItemData: AnyObject {
         self.method = item.valueForKey("method") as! String
         
         self.sellerProfile = item.valueForKey("seller") as! NSDictionary
-        self.sellerName = sellerProfile.valueForKey("display_name") as! String
+        self.sellerName = "" //sellerProfile.valueForKey("display_name") as! String
         var localRating = item.valueForKey("seller_rating") as! String
         self.rating = localRating.isEmpty ? ItemData.DEFAULT_RATING : (localRating as NSString).floatValue
         self.facebookID = sellerProfile.valueForKey("facebook_id") as! String
         self.facebookProfileImgString = "http://graph.facebook.com/\(facebookID)/picture?width=142&height=142"
     }
     
-//    private init(item: NSObject, imgURLs: NSArray, title: String, price: String, distanceString: NSMutableAttributedString, method: String, sellerProfile: NSDictionary, sellerName: String, rating: Float32, facebookID: String, facebookProfileImgString: String) {
-//        self.item = item
-//        self.imgURLs = imgURLs
-//        self.price = price
-//        self.distanceString = distanceString
-//        //TODO finish putting these variables in
-//    }
+    private init(item: NSObject, imgURLs: NSArray, title: String, price: String, distanceString: NSMutableAttributedString, method: String, sellerProfile: NSDictionary, sellerName: String, rating: Float32, facebookID: String, facebookProfileImgString: String) {
+        self.item = item
+        self.imgURLs = imgURLs
+        self.title = title
+        self.price = price
+        self.distanceString = distanceString
+        self.method = method
+        self.sellerProfile = sellerProfile
+        self.sellerName = sellerName
+        self.rating = rating
+        self.facebookID = facebookID
+        self.facebookProfileImgString = facebookProfileImgString
+    }
     
     /**
      * I'm not quite sure what Ishank was doing when he wrote something like this
@@ -85,7 +91,8 @@ class ItemData: AnyObject {
     }
     
 //    func copy() -> ItemData {
-//        return init(/* TODO put the rest of the variables in here */)
+//        var copyClass: ItemData = init(item: self.item, imgURLs: self.imgURLs, title: self.title, price: self.price, distanceString: self.distanceString, method: self.method, sellerProfile: self.sellerProfile, sellerName: self.SellerName, rating: self.rating, facebookID: self.facebookID, facebookProfileImgString: self.facebookProfileImgString)
+//        return copyClass
 //    }
     
     /**

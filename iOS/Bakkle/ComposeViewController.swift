@@ -48,9 +48,9 @@ class ComposeViewController: UIViewController, UITableViewDataSource, UITextView
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(UserCell), forIndexPath: indexPath) as! UserCell
         let user = searchResults[indexPath.row]
-        cell.pictureImageView.image = UIImage(named: user.pictureName())
+        //cell.pictureImageView.image = UIImage(named: user.pictureName())
         cell.nameLabel.text = user.name
-        cell.usernameLabel.text = "$" + user.username
+        //cell.usernameLabel.text = "$" + user.username
         return cell
     }
 

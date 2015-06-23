@@ -32,13 +32,17 @@ class IconImage {
     }
     
     func close() -> UIImage {
-        setup(NAV_SIZE)
-        return factory.createImageForIcon(NIKFontAwesomeIcon.Close)
+        return UIImage(named: "x-image.png")!
     }
     
     func chevron() -> UIImage {
         setup(NAV_SIZE)
         return factory.createImageForIcon(NIKFontAwesomeIcon.ChevronLeft)
+    }
+    
+    func gallery() -> UIImage {
+        setup(NAV_SIZE)
+        return factory.createImageForIcon(NIKFontAwesomeIcon.Image)
     }
     
     /* SWIPE MENU ICONS */

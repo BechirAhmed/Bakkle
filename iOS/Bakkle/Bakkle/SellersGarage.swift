@@ -17,6 +17,11 @@ class SellersGarageView: UIViewController, UICollectionViewDelegate, UICollectio
     var photosAsset: PHFetchResult!
     var assetThumbnailSize: CGSize!
     
+    private static let CAPTURE_NOTIFICATION_TEXT = "_UIImagePickerControllerUserDidCaptureItem"
+    private static let REJECT_NOTIFICATION_TEXT = "_UIImagePickerControllerUserDidRejectItem"
+    private static let DEVICE_MODEL: String = UIDevice.currentDevice().modelName
+    
+    @IBOutlet weak var menuBtn: UIButton!
     var chosenImage: UIImage?
     let addItemSegue = "AddItemSegueFromGarage"
     
@@ -26,6 +31,9 @@ class SellersGarageView: UIViewController, UICollectionViewDelegate, UICollectio
         super.viewDidLoad()
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         self.collectionView.contentMode = UIViewContentMode.ScaleAspectFill
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleNotification:", name: SellersGarageView.CAPTURE_NOTIFICATION_TEXT, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleNotification:", name: SellersGarageView.REJECT_NOTIFICATION_TEXT, object: nil)
+        setupButtons()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -46,6 +54,11 @@ class SellersGarageView: UIViewController, UICollectionViewDelegate, UICollectio
     
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
+    func setupButtons() {
+        menuBtn.setImage(IconImage().menu(), forState: .Normal)
+        menuBtn.setTitle("", forState: .Normal)
     }
     
     /* New data arrived, update the garage on screen */
@@ -136,12 +149,6 @@ class SellersGarageView: UIViewController, UICollectionViewDelegate, UICollectio
             cell.numViews.text = (item.valueForKey("number_of_views") as! NSNumber).stringValue
 
         }
-        
-//        let asset: PHAsset = self.photosAsset[indexPath.item] as! PHAsset
-//
-//        PHImageManager.defaultManager().requestImageForAsset(asset, targetSize: self.assetThumbnailSize, contentMode: PHImageContentMode.AspectFill, options: nil, resultHandler: {(result, info) in
-//            cell.setThumbnailImage(result)
-//        })
         return cell
     }
     
@@ -158,6 +165,12 @@ class SellersGarageView: UIViewController, UICollectionViewDelegate, UICollectio
             }
         }
     }
+    
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        let chatsViewController = ChatsViewController()
+        chatsViewController.chatItemID = (Bakkle.sharedInstance.garageItems[indexPath.row].valueForKey("pk") as! NSNumber).stringValue
+        self.presentViewController(chatsViewController, animated: true, completion: {})
+    }
 
     /* Camera */
     let albumName = "Bakkle"
@@ -167,6 +180,8 @@ class SellersGarageView: UIViewController, UICollectionViewDelegate, UICollectio
         presentViewController(addItem, animated: true, completion: nil)
     }
     
+    var imagePicker = UIImagePickerController()
+    
     // Display camera as first step of add-item
     @IBAction func btnAddItem(sender: AnyObject) {
         let fetchOptions = PHFetchOptions()
@@ -174,11 +189,11 @@ class SellersGarageView: UIViewController, UICollectionViewDelegate, UICollectio
         
         if(UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera)){
             //load the camera interface
-            var picker : UIImagePickerController = UIImagePickerController()
-            picker.sourceType = UIImagePickerControllerSourceType.Camera
-            picker.delegate = self
-            picker.allowsEditing = false
-            self.presentViewController(picker, animated: false, completion: nil)
+            imagePicker.sourceType = UIImagePickerControllerSourceType.Camera
+            imagePicker.delegate = self
+            imagePicker.allowsEditing = false
+            drawCameraOverlay(false)
+            self.presentViewController(imagePicker, animated: false, completion: nil)
             
         } else{
             //no camera available
@@ -194,6 +209,65 @@ class SellersGarageView: UIViewController, UICollectionViewDelegate, UICollectio
                 
             }))
             self.presentViewController(alert, animated: false, completion: nil)
+        }
+    }
+    
+    /**
+    * This function either defaults as the initial camera overlay
+    */
+    func drawCameraOverlay(retakeView: Bool) {
+        // firstChange is value is the only value recorded while watching firstChange in AddItem during testing
+        let firstChange: CGFloat = 20.0
+        let screenSize = UIScreen.mainScreen().bounds
+        let imgWidth = screenSize.width < screenSize.height ? screenSize.width : screenSize.height
+        let newStatusBarHeight: CGFloat
+        let pickerFrame: CGRect
+        let squareFrame: CGRect
+        
+        var adjust = imagePicker.view.bounds.height - imagePicker.navigationBar.bounds.size.height - imagePicker.toolbar.bounds.size.height
+        if retakeView {
+            newStatusBarHeight = UIApplication.sharedApplication().statusBarFrame.size.height
+            pickerFrame = CGRectMake(0, 0, imagePicker.view.bounds.width, adjust + AddItem.frameHeightAdjust[SellersGarageView.DEVICE_MODEL]!)
+            squareFrame = CGRectMake(pickerFrame.width/2 - imgWidth/2, adjust/2 - imgWidth/2 + firstChange + AddItem.retakeFrameAdjust[SellersGarageView.DEVICE_MODEL]!, imgWidth, imgWidth)
+        } else {
+            // 20.0 is the default height for the tool bar near the origin
+            pickerFrame = CGRectMake(0, 20.0, imagePicker.view.bounds.width, adjust - AddItem.frameHeightAdjust[SellersGarageView.DEVICE_MODEL]!)
+            squareFrame = CGRectMake(pickerFrame.width/2 - imgWidth/2, adjust/2 - imgWidth/2 - AddItem.captureFrameAdjust[SellersGarageView.DEVICE_MODEL]!, imgWidth, imgWidth)
+        }
+        
+        UIGraphicsBeginImageContext(pickerFrame.size)
+        
+        let context = UIGraphicsGetCurrentContext()
+        
+        CGContextClearRect(context, screenSize)
+        
+        CGContextSaveGState(context)
+        CGContextAddRect(context, CGContextGetClipBoundingBox(context))
+        CGContextMoveToPoint(context, squareFrame.origin.x, squareFrame.origin.y)
+        CGContextAddLineToPoint(context, squareFrame.origin.x + squareFrame.width, squareFrame.origin.y)
+        CGContextAddLineToPoint(context, squareFrame.origin.x + squareFrame.width, squareFrame.origin.y + squareFrame.size.height)
+        CGContextAddLineToPoint(context, squareFrame.origin.x, squareFrame.origin.y + squareFrame.size.height)
+        CGContextAddLineToPoint(context, squareFrame.origin.x, squareFrame.origin.y)
+        CGContextEOClip(context)
+        CGContextMoveToPoint(context, pickerFrame.origin.x, pickerFrame.origin.y)
+        CGContextSetRGBFillColor(context, 0, 0, 0, 1)
+        CGContextFillRect(context, pickerFrame)
+        
+        CGContextRestoreGState(context)
+        let overlayImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext();
+        
+        let overlayView = UIImageView(frame: pickerFrame)
+        overlayView.image = overlayImage
+        self.imagePicker.sourceType = UIImagePickerControllerSourceType.Camera
+        self.imagePicker.cameraOverlayView = overlayView
+    }
+    
+    func handleNotification(message: NSNotification) {
+        if message.name == SellersGarageView.CAPTURE_NOTIFICATION_TEXT {
+            drawCameraOverlay(true)
+        } else if message.name == SellersGarageView.REJECT_NOTIFICATION_TEXT {
+            drawCameraOverlay(false)
         }
     }
     

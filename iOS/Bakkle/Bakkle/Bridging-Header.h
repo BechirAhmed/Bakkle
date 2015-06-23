@@ -11,4 +11,5 @@
 #import "SWRevealViewController.h"
 #import <FBSDKShareKit/FBSDKShareKit.h>
 #import "RateView.h"
+#import "WSManager.h"
 
