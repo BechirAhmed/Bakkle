@@ -7,6 +7,8 @@ from models import Message
 from items.models import Items
 from common.methods import totalUnreadMessagesForAccount
 
+import datetime
+
 
 class ChatWSHandler():
 
@@ -124,6 +126,8 @@ class ChatWSHandler():
         sentByBuyer = (sender == chat.buyer)
         newMessage = Message.objects.create(
             chat=chat, sent_by_buyer=sentByBuyer, message=message)
+        newMessage.date_sent = datetime.now()
+        newMessage.save()
 
         devices = Device.objects.filter(
             Q(account_id=chat.item.seller) | Q(account_id=chat.buyer))

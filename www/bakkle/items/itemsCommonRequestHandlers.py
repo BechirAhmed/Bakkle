@@ -279,8 +279,6 @@ def feed(buyer_id, device_uuid, user_location, search_text, filter_distance, fil
 
     item_list = None
     users_list = None
-
-    print(filter_distance == MAX_ITEM_DISTANCE);
         
     if(search_text != None and search_text != ""):
         search_text.strip()
@@ -296,20 +294,16 @@ def feed(buyer_id, device_uuid, user_location, search_text, filter_distance, fil
         #if filter price is 100+, ignore filter.
         if(filter_distance == MAX_ITEM_DISTANCE):
             if(filter_price == MAX_ITEM_PRICE):
-                print 1;
                 item_list = Items.objects.exclude(pk__in = [elem.item.pk for elem in items_viewed]).exclude(Q(seller__pk = buyer_id)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
                 users_list = Items.objects.filter(Q(seller__pk = buyer_id)).order_by('-post_date')[:1]
             else:
-                print 2;
                 item_list = Items.objects.exclude(pk__in = [elem.item.pk for elem in items_viewed]).exclude(Q(seller__pk = buyer_id)).filter(Q(price__lte = filter_price)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
                 users_list = Items.objects.filter(Q(seller__pk = buyer_id)).order_by('-post_date')[:1]
         else:
             if(filter_price == MAX_ITEM_PRICE):
-                print 3;
                 item_list = Items.objects.exclude(pk__in = [elem.item.pk for elem in items_viewed]).exclude(Q(seller__pk = buyer_id)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).filter(longitude__lte = lon + lonRange).filter(longitude__gte = lon - lonRange).filter(latitude__lte = lat + latRange).filter(latitude__gte = lat + latRange).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
                 users_list = Items.objects.filter(Q(seller__pk = buyer_id)).order_by('-post_date')[:1]
             else:
-                print 4;
                 item_list = Items.objects.exclude(pk__in = [elem.item.pk for elem in items_viewed]).exclude(Q(seller__pk = buyer_id)).filter(Q(price__lte = filter_price)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).filter(longitude__lte = lon + lonRange).filter(longitude__gte = lon - lonRange).filter(latitude__lte = lat + latRange).filter(latitude__gte = lat + latRange).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
                 users_list = Items.objects.filter(Q(seller__pk = buyer_id)).order_by('-post_date')[:1]
    
@@ -524,7 +518,6 @@ def get_buyer_transactions(buyer_id):
 #--------------------------------------------#
 # Helper for uploading image to S3
 def handle_file_s3(image_key, f):
-    print "HERE"
     image_string = ""
     
     image_string = f
@@ -562,7 +555,6 @@ def imgupload(images, seller_id):
     #import pdb; pdb.set_trace()
 
     for i in images:
-        print i;
         #i = request.FILES['image']
         uhash = hex(random.getrandbits(128))[2:-1]
         image_key = "{}_{}.jpg".format(seller_id, uhash)
@@ -590,7 +582,6 @@ def add_item_to_buyer_items(buyer_id, item_id, view_duration, status):
         return {"status":0, "error":"Item {} does not exist.".format(item_id)}
 
     #check if item already sold - if so, return an error:
-    print(item.status);
     if(item.status == Items.SOLD):
         item = None
         return {"status":0, "error":"Item has already been sold."}
