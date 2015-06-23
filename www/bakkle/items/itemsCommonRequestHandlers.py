@@ -13,10 +13,7 @@ from boto.s3.key import Key
 
 from decimal import *
 from django import forms
-from django.contrib.admin.views.decorators import staff_member_required
-from django.core import serializers
 from django.core.paginator import Paginator
-from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
@@ -37,15 +34,16 @@ from common.decorators import authenticate
 # from common.decorators import get_number_conversations_with_new_messages
 from common.decorators import time_method
 from django.conf import settings
+import math;
 
 MAX_ITEM_IMAGE = 5
 
 config = {}
 config['S3_BUCKET'] = 'com.bakkle.prod'
-config['AWS_ACCESS_KEY'] = 'AKIAJIE2FPJIQGNZAMVQ' # server to s3
+config['AWS_ACCESS_KEY'] = 'AKIAJIE2FPJIQGNZAMVQ'  # server to s3
 config['AWS_SECRET_KEY'] = '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'
 
-config['AWS_ACCESS_KEY'] = 'AKIAJUCSHZSTNFVMEP3Q' # pethessa
+config['AWS_ACCESS_KEY'] = 'AKIAJUCSHZSTNFVMEP3Q'  # pethessa
 config['AWS_SECRET_KEY'] = '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'
 
 config['S3_URL'] = 'https://s3-us-west-2.amazonaws.com/com.bakkle.prod/'
@@ -54,110 +52,98 @@ config['S3_URL'] = 'https://s3-us-west-2.amazonaws.com/com.bakkle.prod/'
 #--------------------------------------------#
 #               Web page requests            #
 #--------------------------------------------#
-@csrf_exempt
-@time_method
-def index(requestHandler):
-    # List all items (this is for web viewing of data only)
-    item_list = Items.objects.all()
-    context = {
-        'item_list': item_list,
-    }
-#    return requestHandler.render('templates/items/index.html', item_list = item_list) 
+# @time_method
+# def index(requestHandler):
+#     # List all items (this is for web viewing of data only)
+#     item_list = Items.objects.all()
+#     context = {
+#         'item_list': item_list,
+#     }
+#     return requestHandler.render('djangoTemplates/items/index.html',
+#         item_list = item_list)
 
-@csrf_exempt
-@time_method
-def public_detail(request, item_id):
-    # get the item with the item id (this is for web viewing of data only)
-    item = get_object_or_404(Items, pk=item_id)
-    urls = item.image_urls.split(',');
-    context = {
-        'item': item,
-        'urls': urls,
-    }
-#    return render(request, 'items/public_detail.html', context)
+# @time_method
+# def public_detail(request, item_id):
+#     # get the item with the item id (this is for web viewing of data only)
+#     item = get_object_or_404(Items, pk=item_id)
+#     urls = item.image_urls.split(',');
+#     context = {
+#         'item': item,
+#         'urls': urls,
+#     }
+#     return render(request, 'items/public_detail.html', context)
 
-@staff_member_required
-@csrf_exempt
-@time_method
-def detail(request, item_id):
-    # get the item with the item id (this is for web viewing of data only)
-    item = get_object_or_404(Items, pk=item_id)
-    urls = item.image_urls.split(',');
-    context = {
-        'item': item,
-        'urls': urls,
-    }
-#    return render(request, 'items/detail.html', context)
+# @staff_member_required
+# @csrf_exempt
+# @time_method
+# def detail(request, item_id):
+#     # get the item with the item id (this is for web viewing of data only)
+#     item = get_object_or_404(Items, pk=item_id)
+#     urls = item.image_urls.split(',');
+#     context = {
+#         'item': item,
+#         'urls': urls,
+#     }
+#     return render(request, 'items/detail.html', context)
 
-@staff_member_required
-@csrf_exempt
-@time_method
-def mark_as_spam(request, item_id):
-    # Get the item
-    item = Items.objects.get(pk=item_id)
-    item.status = Items.SPAM
-    item.save()
+# @staff_member_required
+# @csrf_exempt
+# @time_method
+# def mark_as_spam(request, item_id):
+#     # Get the item
+#     item = Items.objects.get(pk=item_id)
+#     item.status = Items.SPAM
+#     item.save()
 
-    item_list = Items.objects.all()
-    context = {
-        'item_list': item_list,
-    }
-#    return render(request, 'items/index.html', context)
+#     item_list = Items.objects.all()
+#     context = {
+#         'item_list': item_list,
+#     }
+#     return render(request, 'items/index.html', context)
 
-@staff_member_required
-@csrf_exempt
-@time_method
-def mark_as_deleted(request, item_id):
-    # Get the item id 
-    item = Items.objects.get(pk=item_id)
-    item.status = Items.DELETED
-    item.save()
+# @staff_member_required
+# @csrf_exempt
+# @time_method
+# def mark_as_deleted(request, item_id):
+#     # Get the item id
+#     item = Items.objects.get(pk=item_id)
+#     item.status = Items.DELETED
+#     item.save()
 
-    item_list = Items.objects.all()
-    context = {
-        'item_list': item_list,
-    }
-#    return render(request, 'items/index.html', context)
+#     item_list = Items.objects.all()
+#     context = {
+#         'item_list': item_list,
+#     }
+#     return render(request, 'items/index.html', context)
 
 #--------------------------------------------#
 #               Item Methods                 #
 #--------------------------------------------#
-@csrf_exempt
-@require_POST
-@authenticate
-@time_method
-def add_item(request):
-    # Get the authentication code
-    auth_token = request.GET.get('auth_token')
 
-    # TODO: Handle location
+@time_method
+def add_item(title, description, location, seller_id, price, tags, method, notifyFlag, item_id, images):
+    # Get the authentication code
+
     # Get the rest of the necessary params from the request
-    title = request.GET.get('title', "")
-    description = request.GET.get('description', "")
-    location = request.GET.get('location')
-    seller_id = auth_token.split('_')[1]
-    price = request.GET.get('price')
-    tags = request.GET.get('tags',"")
-    method = request.GET.get('method')
-    notifyFlag = request.GET.get('notify')
 
     # Get the item id if present (If it is present an item will be edited not added)
-    item_id = request.GET.get('item_id', "")
 
     # Ensure that required fields are present otherwise send back a failed status
     if (title == None or title == "") or (tags == None or tags == "") or (price == None or price == "") or (method == None or method == ""):
         response_data = { "status":0, "error": "A required parameter was not provided." }
-        return HttpResponse(json.dumps(response_data), content_type="application/json")
+        return response_data
 
     # Ensure that the price can be converted to a decimal otherwise send back a failed status
     try:
         price = Decimal(price)
     except ValueError:
         response_data = { "status":0, "error": "Price was not a valid decimal." }
-        return HttpResponse(json.dumps(response_data), content_type="application/json")
+        return response_data
 
     # Check for the image params. The max number is 5 and is defined in settings
-    image_urls = imgupload(request, seller_id)
+    image_urls = imgupload(images, seller_id)
+
+    TWOPLACES = Decimal(10) ** -6
 
     if (item_id == None or item_id == ""):
         # Create the item
@@ -165,7 +151,8 @@ def add_item(request):
             title = title,
             seller_id = seller_id,
             description = description,
-            location = location,
+            longitude = Decimal(location.split(",")[0]).quantize(TWOPLACES),
+            latitude = Decimal(location.split(",")[1]).quantize(TWOPLACES),
             price = price,
             tags = tags,
             method = method,
@@ -181,7 +168,7 @@ def add_item(request):
         except Item.DoesNotExist:
             item = None
             response_data = {"status":0, "error":"Item {} does not exist.".format(item_id)}
-            return HttpResponse(json.dumps(response_data), content_type="application/json")
+            return response_data
 
         # TODO: fix this
         # Remove all previous images
@@ -200,7 +187,7 @@ def add_item(request):
         item.save()
 
     response_data = { "status":1, "item_id":item.id }
-    return HttpResponse(json.dumps(response_data), content_type="application/json")
+    return response_data
 
 @time_method
 def notify_all_new_item(message):
@@ -208,7 +195,7 @@ def notify_all_new_item(message):
 
     if message == None or message == "":
         response_data = { "status": 0, "error": "No message supplied" }
-        return HttpResponse(json.dumps(response_data), content_type="application/json")
+        return response_data
 
     devices = Device.objects.filter() #todo: add active filter, add subscribed to notifications filter.
 
@@ -221,44 +208,26 @@ def notify_all_new_item(message):
             device.send_notification(message, 1, "")
 
     response_data = { "status": 1 }
-    return HttpResponse(json.dumps(response_data), content_type="application/json")
+    return response_data
 
-@csrf_exempt
-@require_POST
-@authenticate
 @time_method
-def delete_item(request):
-    return update_status(request, Items.DELETED)
+def delete_item(item_id):
+    return update_status(item_id, Items.DELETED)
 
 
 # This will only be called by the system if an Item has been reported X amount of times.
 # TODO: implement this in the report 
-def spam_item(request):
-    return update_status(request, Items.SPAM)
-
-@csrf_exempt
-@require_POST
-@authenticate
 @time_method
-def feed(request):
+def spam_item(item_id):
+    return update_status(item_id, Items.SPAM)
+
+@time_method
+def feed(buyer_id, device_uuid, user_location, search_text, filter_distance, filter_price):
 
     MAX_ITEM_PRICE = 100;
+    MAX_ITEM_DISTANCE = 100;
     RETURN_ITEM_ARRAY_SIZE = 20;
     
-    auth_token = request.POST.get('auth_token')
-    device_uuid = request.POST.get('device_uuid', "")
-    user_location = request.POST.get('user_location', "")
-
-    # TODO: Use these for filtering
-    search_text = request.POST.get('search_text')
-    filter_distance = request.POST.get('filter_distance')
-    filter_price = int(request.POST.get('filter_price'))
-
-    # Check that all require params are sent and are of the right format
-    if (auth_token == None or auth_token.strip() == "" or auth_token.find('_') == -1) or (user_location == None or user_location == ""):
-        response_data = { "status":0, "error": "A required parameter was not provided." }
-        return HttpResponse(json.dumps(response_data), content_type="application/json")
-
     # Check that location was in the correct format
     location = ""
     lat = 0;
@@ -267,20 +236,23 @@ def feed(request):
         positions = user_location.split(",")
         if len(positions) < 2:
             response_data = {"status":0, "error":"User location was not in the correct format."}
-            return HttpResponse(json.dumps(response_data), content_type="application/json")
+            return response_data
         else:
             TWOPLACES = Decimal(10) ** -2
-            lat = Decimal(positions[0]).quantize(TWOPLACES)
-            lon = Decimal(positions[1]).quantize(TWOPLACES)
+            lat = float(Decimal(positions[0]).quantize(TWOPLACES))
+            lon = float(Decimal(positions[1]).quantize(TWOPLACES))
             location = str(lat) + "," + str(lon)
     except ValueError:
         response_data = { "status":0, "error": "Latitude or Longitude was not a valid decimal." }
-        return HttpResponse(json.dumps(response_data), content_type="application/json")
+        return response_data
 
-    # get the account id 
-    buyer_id = auth_token.split('_')[1]
+    #horizontal range
+    lonRange = filter_distance / (math.cos(lat/180 * math.pi) * 69.172)
 
+    #vertical range
+    latRange = filter_distance / 69.172
 
+    #filter(longitude__lte = lon + lonRange).filter(longitude__gte = lon - lonRange).filter(latitude__lte = lat + latRange).filter(latitude__gte = lat + latRange)
 
     # get the account object and the device and update location
     try:
@@ -295,11 +267,11 @@ def feed(request):
     except Account.DoesNotExist:
         account = None
         response_data = {"status":0, "error":"Account {} does not exist.".format(buyer_id)}
-        return HttpResponse(json.dumps(response_data), content_type="application/json")
+        return response_data
     except Device.DoesNotExist:
         device = None
         response_data = {"status":0, "error":"Device {} does not exist.".format(device_uuid)}
-        return HttpResponse(json.dumps(response_data), content_type="application/json")
+        return response_data
 
 
     # get items
@@ -307,24 +279,39 @@ def feed(request):
 
     item_list = None
     users_list = None
+
+    print(filter_distance == MAX_ITEM_DISTANCE);
         
     if(search_text != None and search_text != ""):
         search_text.strip()
-        
+
+
         #if filter price is 100+, ignore filter.
         if(filter_price == MAX_ITEM_PRICE):
-            item_list = Items.objects.exclude(buyeritem = items_viewed).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).filter(Q(tags__contains=search_text) | Q(title__contains=search_text)).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
+            item_list = Items.objects.exclude(pk__in = [elem.item.pk for elem in items_viewed]).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).filter(Q(tags__contains=search_text) | Q(title__contains=search_text)).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
         else:
-            item_list = Items.objects.exclude(buyeritem = items_viewed).filter(Q(price__lte = filter_price)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).filter(Q(tags__contains=search_text) | Q(title__contains=search_text)).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
+            item_list = Items.objects.exclude(pk__in = [elem.item.pk for elem in items_viewed]).filter(Q(price__lte = filter_price)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).filter(Q(tags__contains=search_text) | Q(title__contains=search_text)).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
     else:
         
         #if filter price is 100+, ignore filter.
-        if(filter_price == MAX_ITEM_PRICE):
-            item_list = Items.objects.exclude(buyeritem = items_viewed).exclude(Q(seller__pk = buyer_id)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
-            users_list = Items.objects.filter(Q(seller__pk = buyer_id)).order_by('-post_date')[:1]
+        if(filter_distance == MAX_ITEM_DISTANCE):
+            if(filter_price == MAX_ITEM_PRICE):
+                print 1;
+                item_list = Items.objects.exclude(pk__in = [elem.item.pk for elem in items_viewed]).exclude(Q(seller__pk = buyer_id)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
+                users_list = Items.objects.filter(Q(seller__pk = buyer_id)).order_by('-post_date')[:1]
+            else:
+                print 2;
+                item_list = Items.objects.exclude(pk__in = [elem.item.pk for elem in items_viewed]).exclude(Q(seller__pk = buyer_id)).filter(Q(price__lte = filter_price)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
+                users_list = Items.objects.filter(Q(seller__pk = buyer_id)).order_by('-post_date')[:1]
         else:
-            item_list = Items.objects.exclude(buyeritem = items_viewed).exclude(Q(seller__pk = buyer_id)).filter(Q(price__lte = filter_price)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
-            users_list = Items.objects.filter(Q(seller__pk = buyer_id)).filter(Q(price__lte = filter_price)).order_by('-post_date')[:1]
+            if(filter_price == MAX_ITEM_PRICE):
+                print 3;
+                item_list = Items.objects.exclude(pk__in = [elem.item.pk for elem in items_viewed]).exclude(Q(seller__pk = buyer_id)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).filter(longitude__lte = lon + lonRange).filter(longitude__gte = lon - lonRange).filter(latitude__lte = lat + latRange).filter(latitude__gte = lat + latRange).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
+                users_list = Items.objects.filter(Q(seller__pk = buyer_id)).order_by('-post_date')[:1]
+            else:
+                print 4;
+                item_list = Items.objects.exclude(pk__in = [elem.item.pk for elem in items_viewed]).exclude(Q(seller__pk = buyer_id)).filter(Q(price__lte = filter_price)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).filter(longitude__lte = lon + lonRange).filter(longitude__gte = lon - lonRange).filter(latitude__lte = lat + latRange).filter(latitude__gte = lat + latRange).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
+                users_list = Items.objects.filter(Q(seller__pk = buyer_id)).order_by('-post_date')[:1]
    
     item_array = []
     paginatedItems = Paginator(item_list, 100);
@@ -333,7 +320,7 @@ def feed(request):
     # show user's items before other items - place at top of array.
     if(not users_list is None and len(users_list) != 0):
         for item in users_list:
-            if(len(BuyerItem.objects.filter(buyer = buyer_id).filter(item = item.pk)) == 0):
+            if(len(BuyerItem.objects.filter(buyer__pk = buyer_id).filter(item__pk = item.pk)) == 0):
                 item_dict = get_item_dictionary(item)
                 item_array.append(item_dict)
     
@@ -350,49 +337,28 @@ def feed(request):
 
     response_data = { 'status': 1, 'feed': item_array }
     print "returning feed list of size: " + str(len(item_array))
-    return HttpResponse(json.dumps(response_data), content_type="application/json")
+    return response_data
 
-@csrf_exempt
-@require_POST
-@authenticate
+
 @time_method
-def meh(request):
-    return add_item_to_buyer_items(request, BuyerItem.MEH)
+def meh(buyer_id, item_id, view_duration):
+    return add_item_to_buyer_items(buyer_id, item_id, view_duration, BuyerItem.MEH)
 
-@csrf_exempt
-@require_POST
-@authenticate
+
 @time_method
-def sold(request):
-    return add_item_to_buyer_items(request, BuyerItem.SOLD)
+def sold(buyer_id, item_id, view_duration):
+    return add_item_to_buyer_items(buyer_id, item_id, view_duration, BuyerItem.SOLD)
 
-@csrf_exempt
-@require_POST
-@authenticate
 @time_method
-def want(request):
-    item_id = request.POST.get('item_id')
-    auth_token = request.POST.get('auth_token', "")
-    buyer_id = auth_token.split('_')[1]
-
-    # Check that all require params are sent and are of the right format
-    if (item_id == None or item_id.strip() == ""):
-        response_data = { "status":0, "error": "A required parameter was not provided." }
-        return HttpResponse(json.dumps(response_data), content_type="application/json")
+def want(buyer_id, item_id, view_duration):
 
     try:
         buyer = Account.objects.get(pk=buyer_id)
-    except Account.DoesNotExist:
-        buyer = None
-        response_data = {"status":0, "error":"Buyer {} does not exist.".format(buyer_id)}
-        return HttpResponse(json.dumps(response_data), content_type="application/json")
-
-    try:
         item = Items.objects.get(pk=item_id)
+    except Account.DoesNotExist:
+        return {"status":0, "error":"Buyer {} does not exist.".format(buyer_id)}
     except Items.DoesNotExist:
-        item = None
-        response_data = {"status":0, "error":"Item {} does not exist.".format(item_id)}
-        return HttpResponse(json.dumps(response_data), content_type="application/json")
+        return {"status":0, "error":"Item {} does not exist.".format(item_id)}
 
     chat = Chat.objects.get_or_create(
         item = item,
@@ -400,69 +366,49 @@ def want(request):
     chat.start_time = datetime.datetime.now()
     chat.save()
 
-    return add_item_to_buyer_items(request, BuyerItem.WANT)
+    return add_item_to_buyer_items(buyer_id, item_id, view_duration, BuyerItem.WANT)
 
-@csrf_exempt
-@require_POST
-@authenticate
 @time_method
-def hold(request):
-    return add_item_to_buyer_items(request, BuyerItem.HOLD)
+def hold(buyer_id, item_id, view_duration):
+    return add_item_to_buyer_items(buyer_id, item_id, view_duration, BuyerItem.HOLD)
 
-@csrf_exempt
-@require_POST
-@authenticate
 @time_method
-def report(request):
-    item_id = request.POST.get('item_id')
-
-    # Check that all require params are sent and are of the right format
-    if (item_id == None or item_id.strip() == ""):
-        response_data = { "status":0, "error": "A required parameter was not provided." }
-        return HttpResponse(json.dumps(response_data), content_type="application/json")
+def report(buyer_id, item_id, view_duration):
 
     # Get item and update the times reported
     try:
         item = Items.objects.get(pk=item_id)
     except Item.DoesNotExist:
-        item = None
-        response_data = {"status":0, "error":"Item {} does not exist.".format(item_id)}
-        return HttpResponse(json.dumps(response_data), content_type="application/json")
+        return {"status":0, "error":"Item {} does not exist.".format(item_id)}
 
     item.times_reported = item.times_reported + 1
     item.save()
 
-    return add_item_to_buyer_items(request, BuyerItem.REPORT)
+    return add_item_to_buyer_items(buyer_id, item_id, view_duration, BuyerItem.REPORT)
 
 
 #--------------------------------------------#
 #            Buyer Item Methods              #
 #--------------------------------------------#
-@csrf_exempt
-@require_POST
-@authenticate
-@time_method
-def buyer_item_meh(request):
-    return add_item_to_buyer_items(request, BuyerItem.MEH)
+# @csrf_exempt
+# @require_POST
+# @authenticate
+# @time_method
+# def buyer_item_meh(request):
+#     return add_item_to_buyer_items(request, BuyerItem.MEH)
 
-@csrf_exempt
-@require_POST
-@authenticate
-@time_method
-def buyer_item_want(request):
-    return add_item_to_buyer_items(request, BuyerItem.WANT)
+# @csrf_exempt
+# @require_POST
+# @authenticate
+# @time_method
+# def buyer_item_want(request):
+#     return add_item_to_buyer_items(request, BuyerItem.WANT)
 
 #--------------------------------------------#
 #           Seller's Item Methods            #
 #--------------------------------------------#
-@csrf_exempt
-@require_POST
-@authenticate
 @time_method
-def get_seller_items(request):
-    # Get the authentication code
-    auth_token = request.POST.get('auth_token')
-    seller_id = auth_token.split('_')[1]
+def get_seller_items(seller_id):
 
     item_list = Items.objects.filter(Q(seller=seller_id, status=Items.ACTIVE) | Q(seller=seller_id, status=Items.PENDING))
 
@@ -510,16 +456,11 @@ def get_seller_items(request):
 
     # create json string
     response_data = {'status': 1, 'seller_garage': item_array}
-    return HttpResponse(json.dumps(response_data), content_type="application/json")
+    return response_data
 
-@csrf_exempt
-@require_POST
-@authenticate
+
 @time_method
-def get_seller_transactions(request):
-    # Get the authentication code
-    auth_token = request.POST.get('auth_token')
-    seller_id = auth_token.split('_')[1]
+def get_seller_transactions(seller_id):
 
     item_list = Items.objects.filter(seller=seller_id, status=Items.SOLD)
 
@@ -531,19 +472,13 @@ def get_seller_transactions(request):
 
     # create json string
     response_data = {'status': 1, 'seller_history': item_array}
-    return HttpResponse(json.dumps(response_data), content_type="application/json")
+    return response_data
 
 #--------------------------------------------#
 #           Buyer's Item Methods             #
 #--------------------------------------------#
-@csrf_exempt
-@require_POST
-@authenticate
 @time_method
-def get_buyers_trunk(request):
-    # Get the authentication code
-    auth_token = request.POST.get('auth_token')
-    buyer_id = auth_token.split('_')[1]
+def get_buyers_trunk(buyer_id):
 
     item_list = BuyerItem.objects.filter(Q(buyer=buyer_id, status=BuyerItem.WANT) | Q(buyer=buyer_id, status=BuyerItem.PENDING) | Q(buyer=buyer_id, status=BuyerItem.NEGOTIATING))
 
@@ -554,16 +489,10 @@ def get_buyers_trunk(request):
         item_array.append(item_dict)
 
     response_data = { 'status': 1, 'buyers_trunk': item_array }
-    return HttpResponse(json.dumps(response_data), content_type="application/json")
+    return response_data
 
-@csrf_exempt
-@require_POST
-@authenticate
 @time_method
-def get_holding_pattern(request):
-    # Get the authentication code
-    auth_token = request.POST.get('auth_token')
-    buyer_id = auth_token.split('_')[1]
+def get_holding_pattern(buyer_id):
 
     item_list = BuyerItem.objects.filter(buyer=buyer_id, status=BuyerItem.HOLD)
 
@@ -574,16 +503,10 @@ def get_holding_pattern(request):
         item_array.append(item_dict)
 
     response_data = { 'status': 1, 'holding_pattern': item_array}
-    return HttpResponse(json.dumps(response_data), content_type="application/json")
+    return response_data
 
-@csrf_exempt
-@require_POST
-@authenticate
 @time_method
-def get_buyer_transactions(request):
-    # Get the authentication code
-    auth_token = request.POST.get('auth_token')
-    buyer_id = auth_token.split('_')[1]
+def get_buyer_transactions(buyer_id):
 
     item_list = BuyerItem.objects.filter(buyer=buyer_id, status=BuyerItem.SOLD_TO)
 
@@ -594,7 +517,7 @@ def get_buyer_transactions(request):
         item_array.append(item_dict)
 
     response_data = { 'status': 1, 'buyer_history': item_array}
-    return HttpResponse(json.dumps(response_data), content_type="application/json")
+    return response_data
 
 #--------------------------------------------#
 #             Helper Functions               #
@@ -603,8 +526,8 @@ def get_buyer_transactions(request):
 def handle_file_s3(image_key, f):
     print "HERE"
     image_string = ""
-    for chunk in f.chunks():
-        image_string = image_string + chunk
+    
+    image_string = f
 
     conn = S3Connection(config['AWS_ACCESS_KEY'], config['AWS_SECRET_KEY'])
     #bucket = conn.create_bucket('com.bakkle.prod')
@@ -634,17 +557,16 @@ def handle_delete_file_s3(image_path):
     k.delete()
 
 # Helper to handle image uploading
-def imgupload(request, seller_id):
+def imgupload(images, seller_id):
     image_urls = ""
     #import pdb; pdb.set_trace()
-    
-    print(request)
 
-    for i in request.FILES.getlist('image'):
+    for i in images:
+        print i;
         #i = request.FILES['image']
         uhash = hex(random.getrandbits(128))[2:-1]
         image_key = "{}_{}.jpg".format(seller_id, uhash)
-        filename = handle_file_s3(image_key, i)
+        filename = handle_file_s3(image_key, i['body'])
         if image_urls == "":
             image_urls = filename
         else:
@@ -652,42 +574,26 @@ def imgupload(request, seller_id):
     return image_urls
 
 # Helper for creating buyer items
-def add_item_to_buyer_items(request, status):
-    auth_token = request.POST.get('auth_token', "")
-    item_id = request.POST.get('item_id', "")
-    view_duration = request.POST.get('view_duration',"")
-    buyer_item_id = request.POST.get('buyer_item_id', "")
+def add_item_to_buyer_items(buyer_id, item_id, view_duration, status):
 
-    # Check that all require params are sent and are of the right format
-    if (view_duration == None or view_duration.strip() == "") or (auth_token == None or auth_token.strip() == "" or auth_token.find('_') == -1) or (item_id == None or item_id.strip() == ""):
-        response_data = { "status":0, "error": "A required parameter was not provided." }
-        return HttpResponse(json.dumps(response_data), content_type="application/json")
     
     try:
         view_duration = Decimal(view_duration)
     except ValueError:
-        response_data = { "status":0, "error": "Price was not a valid decimal." }
-        return HttpResponse(json.dumps(response_data), content_type="application/json")
-
-    # get the account id 
-    buyer_id = auth_token.split('_')[1]
-
-
+        return { "status":0, "error": "View Duration was not a valid decimal." }
 
     # get the item
     try:
         item = Items.objects.get(pk=item_id)
     except Item.DoesNotExist:
         item = None
-        response_data = {"status":0, "error":"Item {} does not exist.".format(item_id)}
-        return HttpResponse(json.dumps(response_data), content_type="application/json")
+        return {"status":0, "error":"Item {} does not exist.".format(item_id)}
 
     #check if item already sold - if so, return an error:
     print(item.status);
     if(item.status == Items.SOLD):
         item = None
-        response_data = {"status":0, "error":"Item has already been sold."}
-        return HttpResponse(json.dumps(response_data), content_type="application/json")
+        return {"status":0, "error":"Item has already been sold."}
 
 
     try:
@@ -727,30 +633,28 @@ def add_item_to_buyer_items(request, status):
     except Account.DoesNotExist:
         account = None
         response_data = {"status":0, "error":"Account {} does not exist.".format(buyer_id)}
-        return HttpResponse(json.dumps(response_data), content_type="application/json")
+        return response_data
 
     
     
 
     response_data = { 'status':1 }
-    return HttpResponse(json.dumps(response_data), content_type="application/json")
+    return response_data
 
 # Helper for updating Item Statuses
-def update_status(request, status):
-    # Get the item id 
-    item_id = request.POST.get('item_id', "")
+def update_status(itemId, status):
 
     # Ensure that required fields are present otherwise send back a failed status
-    if (item_id == None or item_id == ""):
+    if (itemId == None or itemId == ""):
         response_data = { "status":0, "error": "A required parameter was not provided." }
-        return HttpResponse(json.dumps(response_data), content_type="application/json")
+        return response_data
 
     # Get the item
-    item = Items.objects.get(pk=item_id)
+    item = Items.objects.get(pk=itemId)
     item.status = status
     item.save()
     response_data = { "status":1 }
-    return HttpResponse(json.dumps(response_data), content_type="application/json")
+    return response_data
 
 # Helper for making an Item into a dictionary for JSON
 def get_item_dictionary(item):
@@ -774,7 +678,7 @@ def get_item_dictionary(item):
         'image_urls': images,
         'tags': hashtags,
         'title': item.title,
-        'location': item.location,
+        'location': str(item.latitude) + "," + str(item.longitude),
         'price': str(item.price),
         'method': item.method,
         'status': item.status,
@@ -808,34 +712,28 @@ def get_buyer_item_dictionary(buyer_item):
     return buyer_item_dict
 
 # Helper to return the delivery methods for items
-@csrf_exempt
-@require_POST
-@authenticate
-def get_delivery_methods(request):
+def get_delivery_methods():
     response_data = { 'status': 1, 'deliver_methods': (dict(Items.METHOD_CHOICES)).values()}
-    return HttpResponse(json.dumps(response_data), content_type="application/json")
+    return response_data
 
 #--------------------------------------------#
 #               Testing Items                #
 #--------------------------------------------#
 # TODO: Remove eventually. Testing data.
-@csrf_exempt
-def reset(request):
+@time_method
+def reset(buyer_id):
     #TODO: hardcoded values
     item_expire_time=7 #days
-    auth_token = request.POST.get('auth_token')
-    buyer_id = auth_token.split('_')[1]
     BuyerItem.objects.filter(buyer=buyer_id).delete()
     response_data = { "status":1 }
-    return HttpResponse(json.dumps(response_data), content_type="application/json")
+    return response_data
 
-@csrf_exempt
-def reset_items(request):
+def reset_items():
     BuyerItem.objects.all().delete()
     Items.objects.all().delete()
     # create dummy account
     try:
-        a = Account.objects.get(
+        a = Account.objects.get_or_create(
             facebook_id="1020420",
             display_name="Goodwill Industries",
             email="testseller@bakkle.com" )
@@ -857,7 +755,6 @@ def reset_items(request):
             notifications_enabled = True,
             auth_token = "asdfasdfasdfasdf_{}".format(a.id),
             app_version = "16" )[0]
-        d.save()
     except Account.DoesNotExist:
         d = Device(
             uuid = "E6264D84-C395-4132-8C63-3EF051480191",
@@ -873,7 +770,8 @@ def reset_items(request):
         image_urls = "https://app.bakkle.com/img/b83bdbd.png",
         title = "Orange Push Mower",
         description = "Year old orange push mower. Some wear and sun fadding. Was kept outside and not stored in shed.",
-        location = "39.417672,-87.330438",
+        latitude = 42.40,
+        longitude = 73.45,
         seller = a,
         price = 50.25,
         tags = "lawnmower, orange, somewear",
@@ -886,7 +784,8 @@ def reset_items(request):
         image_urls = "https://app.bakkle.com/img/WP_20150417_09_47_27_Pro.jpg",
         title = "Oil change",
         description = "will change your cars oil at your location, $ 19.95.",
-        location = "39.417672,-87.330438",
+        latitude = 35.05,
+        longitude = 106.39,
         seller = a,
         price = 19.95,
         tags = "service, oil change",
@@ -899,7 +798,8 @@ def reset_items(request):
         image_urls = "https://app.bakkle.com/img/00e0e_5WQCcunAcn_600x450.jpg",
         title = "Flat screen LED TV",
         description = "Flat screen LED LCD TV. Brand new in box, 4 HDMI ports and Netflix built in.",
-        location = "39.417672,-87.330438",
+        latitude = 35.11,
+        longitude = 101.50,
         seller = a,
         price = 107.00,
         tags = "tv, led, netflix",
@@ -912,7 +812,8 @@ def reset_items(request):
         image_urls = "https://app.bakkle.com/img/00n0n_eerJtWHsBKc_600x450.jpg",
         title = "15\" MacBook pro",
         description = "MacBook Pro 15\" Mid 2014 i7. 2.2 GHz, 16 GB RAM, 256 GB SSD. Very little use, needed a lighter model so switched to MacBook air. Includes original box, power cord, etc.",
-        location = "39.417672,-87.330438",
+        latitude = 61.13,
+        longitude = 149.54,
         seller = a,
         price = 999.00,
         tags = "mac, apple, macbook, macbook pro",
@@ -925,7 +826,8 @@ def reset_items(request):
         image_urls = "https://app.bakkle.com/img/00n0n_gonFpgUcRAe_600x450.jpg",
         title = "Paint ball gun",
         description = "Gun only, no CO2 tank. Needs new HPR piston",
-        location = "39.417672,-87.330438",
+        latitude = 33.45,
+        longitude = 84.23,
         seller = a,
         price = 40.99,
         tags = "paintball, gun, bump paintball",
@@ -938,7 +840,8 @@ def reset_items(request):
         image_urls = "https://app.bakkle.com/img/00O0O_kOqfijcw7FL_600x450.jpg",
         title = "Business law text book",
         description = "Business law text and cases, clarkson, miller, jentz, 11th edition. No marks or highlighting.",
-        location = "39.417672,-87.330438",
+        latitude = 30.16,
+        longitude = 97.44,
         seller = a,
         price = 40.99,
         tags = "textbook, business law",
@@ -951,7 +854,8 @@ def reset_items(request):
         image_urls = "https://app.bakkle.com/img/00P0P_dcFyXMBIkYE_600x450.jpg",
         title = "Baseball mitt",
         description = "Louisville slugger baseball mitt, mint condition.",
-        location = "39.417672,-87.330438",
+        latitude = 44.47,
+        longitude = 117.50,
         seller = a,
         price = 30.00,
         tags = "baseball mitt",
@@ -964,7 +868,8 @@ def reset_items(request):
         image_urls = "https://app.bakkle.com/img/00s0s_49F9D9EnAJ3_600x450.jpg",
         title = "Bicycle",
         description = "Pure fix fixie bicycle.",
-        location = "39.417672,-87.330438",
+        latitude = 39.18,
+        longitude = 76.38,
         seller = a,
         price = 300,
         tags = "bicycle",
@@ -977,7 +882,8 @@ def reset_items(request):
         image_urls = "https://app.bakkle.com/img/00T0T_f1xeeb2KYxA_600x450.jpg",
         title = "Canon 50D",
         description = "Canon 50D digital camera. Comes with f1.8 50mm lens.",
-        location = "39.417672,-87.330438",
+        latitude = 44.48,
+        longitude = 68.47,
         seller = a,
         price = 30.00,
         tags = "canon, 50d, digital camera",
@@ -990,7 +896,8 @@ def reset_items(request):
         image_urls = "https://app.bakkle.com/img/00u0u_hj2g60Tn2D7_600x450.jpg",
         title = "iPhone 5",
         description = "White Apple iphone 5. Unlocked",
-        location = "39.417672,-87.330438",
+        latitude = 33.30,
+        longitude = 86.50,
         seller = a,
         price = 200.00,
         tags = "apple, iphone, iphone 5",
@@ -1003,7 +910,8 @@ def reset_items(request):
         image_urls = "https://app.bakkle.com/img/00V0V_kQXPgLCzkEl_600x450.jpg",
         title = "weights",
         description = "Premium adjustable hand barbell weight set.",
-        location = "39.417672,-87.330438",
+        latitude = 46.48,
+        longitude = 100.47,
         seller = a,
         price = 300.00,
         tags = "weights, barbell",
@@ -1016,7 +924,8 @@ def reset_items(request):
         image_urls = "https://app.bakkle.com/img/00W0W_hCYzWAyYAvP_600x450.jpg",
         title = "Blender",
         description = "Blender, used. Runs great. 5 speeds with turbo",
-        location = "39.417672,-87.330438",
+        latitude = 43.36,
+        longitude = 116.13,
         seller = a,
         price = 12.00,
         tags = "blender",
@@ -1029,7 +938,8 @@ def reset_items(request):
         image_urls = "https://app.bakkle.com/img/00404_8sCApbm5Bvc_600x450.jpg",
         title = "Playstation 2",
         description = "Playstation 2 with controller. Broken, needs laser cleaning. Won't read discs.",
-        location = "39.417672,-87.330438",
+        latitude = 42.21,
+        longitude = 71.5,
         seller = a,
         price = 45.00,
         tags = "sony, playstation, controller",
@@ -1042,7 +952,8 @@ def reset_items(request):
         image_urls = "https://app.bakkle.com/img/00808_k0TscttMik5_600x450.jpg",
         title = "Baseball bat",
         description = "Basic home security system.",
-        location = "39.417672,-87.330438",
+        latitude = 42.55,
+        longitude = 78.50,
         seller = a,
         price = 10.00,
         tags = "baseball, security, bat",
@@ -1055,7 +966,8 @@ def reset_items(request):
         image_urls = "https://app.bakkle.com/img/00909_iVAvBfYmpNm_600x450.jpg",
         title = "Gas grille",
         description = "Propane barbeque grill with side burner. 2 years old worth $200 from Lowes. Full propane bottle included.",
-        location = "39.417672,-87.330438",
+        latitude = 51.1,
+        longitude = 114.1,
         seller = a,
         price = 10.00,
         tags = "propane, gas, grille, barbeque, bbq",
@@ -1068,7 +980,8 @@ def reset_items(request):
         image_urls = "https://app.bakkle.com/img/01313_fXdf3fNJDJC_600x450.jpg",
         title = "Marketing textbooks",
         description = "MKTG marketing text (instructor edition) by Lam, hair, mcdaniel and Essentials of Entrepreneurship and Small Business Management by Normal M. Scarborough (7th global edition).",
-        location = "39.417672,-87.330438",
+        latitude = 32.26,
+        longitude = 104.15,
         seller = a,
         price = 175.00,
         tags = "marketing, textbooks",
@@ -1081,7 +994,8 @@ def reset_items(request):
         image_urls = "https://app.bakkle.com/img/01313_gsH7Yan7PYA_600x450.jpg",
         title = "Nike shoes",
         description = "Nike women's air max shoes size 6 1/2. Never worn outside.",
-        location = "39.417672,-87.330438",
+        latitude = 32.47,
+        longitude = 79.56,
         seller = a,
         price = 90.00,
         tags = "shoes, nike, womens",
@@ -1094,7 +1008,8 @@ def reset_items(request):
         image_urls = "https://app.bakkle.com/img/b8348df.jpg",
         title = "Rabbit Push Mower",
         description = "Homemade lawn mower. Includes rabbit and water container.",
-        location = "39.417672,-87.330438",
+        latitude = 38.21,
+        longitude = 81.38,
         seller = a,
         price = 10.99,
         tags = "lawnmower, homemade, rabbit",
@@ -1107,7 +1022,8 @@ def reset_items(request):
         image_urls = "https://app.bakkle.com/img/b8349df.jpg",
         title = "iPhone 6 Cracked",
         description = "iPhone 6. Has a cracked screen. Besides screen phone is in good condition.",
-        location = "39.417672,-87.330438",
+        latitude = 35.14,
+        longitude = 80.50,
         seller = a,
         price = 65.99,
         tags = "iPhone6, cracked, damaged",

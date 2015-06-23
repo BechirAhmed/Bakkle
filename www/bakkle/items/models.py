@@ -64,7 +64,7 @@ class Items(models.Model):
             'image_urls': images,
             'tags': hashtags,
             'title': self.title,
-            'location': self.location,
+            'location': str(self.latitude) + "," + str(self.longitude),
             'price': str(self.price),
             'method': self.method,
             'status': self.status,

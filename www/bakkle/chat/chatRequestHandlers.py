@@ -1,91 +1,79 @@
 
-
-import json
-
+from django.db.models import Q
 from account.models import Account
 from account.models import Device
-from django.db.models import Q
-from items.models import Items
 from models import Chat
 from models import Message
-from tornado import websocket
+from items.models import Items
+from common.methods import totalUnreadMessagesForAccount
 
 
-class WSHandler:
+class ChatWSHandler():
 
-    clients = dict();
+    def __init__(self, baseWSHandler):
+        self.baseWSHandler = baseWSHandler
 
-    def __init__(self, baseHandler):
-        self.baseHandler = baseHandler
-
-    #on websocket open, send settings bundle
+    # on websocket open, send settings bundle
     def handleOpen(self):
         pass
 
-    #on receipt of message, respond accordingly.
-    # Example Request: 
+    # on receipt of message, respond accordingly.
+    # Example Request:
     # {"method": "registerChat", "auth_token": "asdfasdfasdfasdf_2", "uuid": "E6264D84-C395-4132-8C63-3EF051480191"}
     # {"method": "registerChat", "auth_token": "4c708bda45351147d32b5c3f541b76ba_3", "uuid": "81FEEEDD-C99C-4E50-B671-4302F146441B"}
+    #
+    # test server
+    # {"method": "registerChat", "auth_token": "df4727b2641a70cbda5f2d64c9a8d1a3_10", "uuid": "E7F742EB-67EE-4738-ABEC-F0A3B62B45EB"}
+    # {"method": "getChats", "auth_token": "d584ca08924596eb3e8809ed586a24db_10", "uuid": "E7F742EB-67EE-4738-ABEC-F0A3B62B45EB", "itemId": 12}
     #
     # {"method": "startChat", "auth_token": "4c708bda45351147d32b5c3f541b76ba_3", "uuid": "81FEEEDD-C99C-4E50-B671-4302F146441B", "itemId": 12}
     # {"method": "sendChatMessage", "chatId": _____, "auth_token": "asdfasdfasdfasdf_2", "uuid": "E6264D84-C395-4132-8C63-3EF051480191", "message": "test"}
     # {"method": "sendChatMessage", "chatId": _____, "auth_token": "4c708bda45351147d32b5c3f541b76ba_3", "uuid": "81FEEEDD-C99C-4E50-B671-4302F146441B", "message": "test2"}
     def handleRequest(self, request):
+
         # retreive method from json dictionary, throw error if not given.
         try:
             method = request['method'].split("_")[1]
         except KeyError as e:
-            return json.dumps({'success': 0, 'error': 'Missing parameter ' + str(e)})
+            return {'success': 0, 'error': 'Missing parameter ' + str(e)}
 
         # switch on method, send to appropriate handlers.
-        if method == 'register':
-            return self.register();
-        elif method == 'startChat':
-            return self.startChat(request);
-        elif method == 'getChats':
-            return self.getChats(request);
-        elif method == 'sendMessage':
-            return self.sendMessage(request);
-        else:
-            return {'success': 0, 'error': 'Invalid method provided'}
-        
+        try:
+            if method == 'startChat':
+                response = self.startChat(
+                    request['itemId'], self.baseWSHandler.clientId)
+            elif method == 'getChatIds':
+                response = self.getChatIds(
+                    request['itemId'], self.baseWSHandler.clientId)
+            elif method == 'sendChatMessage':
+                response = self.sendChatMessage(
+                    request['chatId'], self.baseWSHandler.clientId, request['message'])
+            elif method == 'getMessagesForChat':
+                response = self.getMessagesForChat(
+                    request['chatId'], self.baseWSHandler.clientId)
+            else:
+                response = {
+                    'success': 0, 'error': 'Invalid chat method provided'}
+        except KeyError as e:
+            return {'success': 0, 'error': 'Missing parameter: ' + str(e) + ' for method: ' + method}
+
+        return response
 
     def handleClose(self):
-        print("Deconstructing WSHandler")
-        self.deregisterChat();
+        pass
 
-    def register(self):
-        clients[self.clientId] = dict()
-        clients[self.clientId][self.uuid] = self
-        print("Registered new client for chat:");
-        print(clients);
-        return {'success': 1}
-
-    def deregister(self):
-        if self.clientId in clients:
-            if(len(clients[self.clientId]) == 1):
-                dictionary = clients;
-                del dictionary[self.clientId]
-            else:
-                dictionary = clients[self.clientId];
-                del dictionary[self.uuid]
-        print(clients);
-        return {'success': 1}
-
-    def startChat(self, request):
+    def startChat(self, itemId, buyerId):
         try:
-            item = Items.objects.get(pk=request['itemId'])
-            buyer = Account.objects.get(pk=self.clientId);
+            item = Items.objects.get(pk=itemId)
+            buyer = Account.objects.get(pk=buyerId)
 
-            if(item.seller.pk == buyer or item.seller.pk == self.clientId):
+            if(item.seller == buyer):
                 return {'success': 0, 'error': 'Cannot start chat session with yourself.'}
 
             chat = Chat.objects.get_or_create(
-                item = item,
-                buyer = buyer)[0]
+                item=item,
+                buyer=buyer)[0]
 
-        except KeyError as e:
-            return {'success': 0, 'error': 'Missing parameter ' + str(e)}
         except Items.DoesNotExist:
             return {'success': 0, 'error': 'Invalid itemId provided'}
         except Account.DoesNotExist:
@@ -93,49 +81,90 @@ class WSHandler:
 
         return {'success': 1, 'chatId': chat.pk}
 
-    def getChats(self, request):
+    def getChatIds(self, itemId, sellerId):
+
         try:
+            item = Items.objects.get(pk=itemId)
+            seller = Account.objects.get(pk=sellerId)
 
-            chats = Chat.objects.filter(Q(item__seller__pk = self.clientId) | Q(buyer__pk = self.clientId));
+        except Items.DoesNotExist:
+            return {'success': 0, 'error': 'Invalid itemId provided'}
+        except Account.DoesNotExist:
+            return {'success': 0, 'error': 'Invalid sellerId provided'}
 
-        except KeyError as e:
-            return {'success': 0, 'error': 'Missing parameter ' + str(e)}
+        try:
+            chats = Chat.objects.filter(item=item)
+
         except Chat.DoesNotExist:
-            chats = None;
+            chats = None
 
-        openChats = [];
+        openChats = []
 
         for chat in chats:
-            chatDict = dict(itemId = chat.item.pk, seller = chat.item.seller.pk, buyer = chat.buyer.pk);
-            openChats.append(chatDict)
+            openChats.append(chat.toDictionary())
 
         return {'success': 1, 'chats': openChats}
 
-
-    def sendMessage(self, request):
+    def sendChatMessage(self, chatId, senderId, message):
         try:
-            message = request['message']
-            chat = Chat.objects.get(pk=request['chatId'])
+            message = message
+            chat = Chat.objects.get(pk=chatId)
+            sender = Account.objects.get(pk=senderId)
 
         except KeyError as e:
             return {'success': 0, 'error': 'Missing parameter ' + str(e)}
         except Chat.DoesNotExist:
             return {'success': 0, 'error': 'Invalid chatId provided'}
+        except Account.DoesNotExist:
+            return {'success': 0, 'error': 'Invalid senderId provided'}
 
-
-        if(self.clientId != chat.item.seller.pk and self.clientId != chat.buyer.pk):
+        if(sender != chat.item.seller and sender != chat.buyer):
             return {'success': 0, 'error': 'Invalid chatId provided - user not involved in specified chat.'}
 
-        sentByBuyer = (self.clientId == chat.buyer.pk)
-        Message.objects.create(chat_id = chat, sent_by_buyer = sentByBuyer, message = message)
-        
-        if(chat.item.seller.pk in clients):
-            for uuid in clients[chat.item.seller.pk]:
-                clients[chat.item.seller.pk][uuid].write_message({'success': 1, 'messageOrigin': self.clientId, 'notificationType': 'newMessage', 'message': message});
+        sentByBuyer = (sender == chat.buyer)
+        newMessage = Message.objects.create(
+            chat=chat, sent_by_buyer=sentByBuyer, message=message)
 
-        if(chat.buyer.pk in clients):
+        devices = Device.objects.filter(
+            Q(account_id=chat.item.seller) | Q(account_id=chat.buyer))
+        for device in devices:
+            device.send_notification(
+                message, len(totalUnreadMessagesForAccount(device.account_id)), "")
+
+        if(chat.item.seller.pk in self.baseWSHandler.clients):
+            for uuid in clients[chat.item.seller.pk]:
+                self.baseWSHandler.clients[chat.item.seller.pk][uuid].write_message(
+                    {'success': 1, 'messageOrigin': senderId, 'notificationType': 'newMessage', 'message': newMessage.toDictionary()})
+
+        if(chat.buyer.pk in self.baseWSHandler.clients):
             for uuid in clients[chat.buyer.pk]:
-                clients[chat.buyer.pk][uuid].write_message({'success': 1, 'messageOrigin': self.clientId, 'notificationType': 'newMessage', 'message': message});
+                self.baseWSHandler.clients[chat.buyer.pk][uuid].write_message(
+                    {'success': 1, 'messageOrigin': senderId, 'notificationType': 'newMessage', 'message': newMessage.toDictionary()})
 
         return {'success': 1}
 
+    def getMessagesForChat(self, chatId, requesterId):
+        try:
+
+            chat = Chat.objects.get(pk=chatId)
+            requester = Account.objects.get(pk=requesterId)
+
+            if(requester != chat.item.seller and requester != chat.buyer):
+                return {'success': 0, 'error': 'Invalid chatId provided - user not involved in specified chat.'}
+
+            messages = Message.objects.filter(chat=chat).order_by('-date_sent')
+
+        except KeyError as e:
+            return {'success': 0, 'error': 'Missing parameter ' + str(e)}
+        except Chat.DoesNotExist:
+            return {'success': 0, 'error': 'Invalid chatId provided'}
+        except Account.DoesNotExist:
+            return {'success': 0, 'error': 'Invalid senderId provided'}
+
+        userMessages = []
+
+        for message in messages:
+            userMessages.append(message.toDictionary())
+
+        print(userMessages)
+        return {'success': 1, 'messages': userMessages}
