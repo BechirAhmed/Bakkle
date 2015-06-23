@@ -3,11 +3,16 @@ package com.bakkle.bakkle;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+
+import com.andtinder.model.CardModel;
+import com.andtinder.model.Orientations;
+import com.andtinder.view.CardContainer;
+import com.andtinder.view.SimpleCardStackAdapter;
 
 
 /**
@@ -29,32 +34,61 @@ public class FeedFragment extends Fragment implements View.OnTouchListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
-        mRrootLayout = (ViewGroup) view;
-        addCard(view, nextItemImage());
+        CardContainer mCardContainer = (CardContainer) view.findViewById(R.id.cardView);
+        mCardContainer.setOrientation(Orientations.Orientation.Ordered);
+        CardModel card = new CardModel("Title1", "Description goes here", getActivity().getResources().getDrawable(R.drawable.bakkle_icon));
+
+        card.setOnCardDimissedListener(new CardModel.OnCardDimissedListener() {
+            @Override
+            public void onLike() { //the Dislike and like is switched in the library
+
+                Log.d("Swipeable Card", "I did not like it");
+            }
+
+            @Override
+            public void onDislike() { //the Dislike and like is switched in the library
+                Log.d("Swipeable Card", "I liked it");
+            }
+        });
+
+        card.setOnClickListener(new CardModel.OnClickListener() {
+            @Override
+            public void OnClickListener() {
+                Log.d("Swipeable Cards", "I am pressing the card");
+            }
+        });
+
+        SimpleCardStackAdapter adapter = new SimpleCardStackAdapter(getActivity());
+        adapter.add(card);
+        mCardContainer.setAdapter(adapter);
+
+
+//        mRrootLayout = (ViewGroup) view;
+//        addCard(view, nextItemImage());
 //        StackImageView card;
 //        card = (StackImageView) view.findViewById(R.id.card);
 //        card.setOnTouchListener(this);
         return view;
     }
 
-    public void addCard(View view, int imageID) //where imageID is something like R.drawable.bakkle_icon
-    {
-        LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.feed);
-        StackImageView card = new StackImageView(this.getActivity());
-        card.setImageResource(imageID);
-        card.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT
-        ));
-
-        linearLayout.addView(card);
-
-    }
-
-    //In future, make code to check to see if there even is a next image.
-    public int nextItemImage(){
-        return R.drawable.bakkle_icon;
-    }
+//    public void addCard(View view, int imageID) //where imageID is something like R.drawable.bakkle_icon
+//    {
+//        LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.feed);
+//        StackImageView card = new StackImageView(this.getActivity());
+//        card.setImageResource(imageID);
+//        card.setLayoutParams(new LinearLayout.LayoutParams(
+//                LinearLayout.LayoutParams.MATCH_PARENT,
+//                LinearLayout.LayoutParams.MATCH_PARENT
+//        ));
+//
+//        linearLayout.addView(card);
+//
+//    }
+//
+//    //TODO: make code to check to see if there even is a next image.
+//    public int nextItemImage(){
+//        return R.drawable.bakkle_icon;
+//    }
 
 
     @Override

@@ -16,7 +16,7 @@ import com.koushikdutta.ion.Ion;
 public class ServerCalls{
 
     double apiVersion = 1.2;
-    final String url_base                 = "https://bakkle.rhventures.org:8000/";
+    final String url_base                 = "https://bakkle.rhventures.org/";
 //    final String url_base                 = "https://app.bakkle.com/";
     final String url_login                = "account/login_facebook/";
     final String url_logout               = "account/logout/";
@@ -36,7 +36,8 @@ public class ServerCalls{
 
     Context mContext;
     final String id;
-    String response;
+    int response;
+    String auth_token;
 
 
     public ServerCalls(Context c)
@@ -45,10 +46,11 @@ public class ServerCalls{
         id = Settings.Secure.getString(mContext.getContentResolver(), Settings.Secure.ANDROID_ID);
     }
 
-    public String loginFacebook(final String email, final String gender, final String username, final String name,
-                              final String userid, final String locale, final String first_name, final String last_name){
+    public int registerFacebook(final String email, final String gender, final String username,
+                                final String name, final String userid, final String locale,
+                                final String first_name, final String last_name){
 
-        response = "";
+        response = 0;
         String URL = url_base + url_facebook;
         Ion.with(mContext)
                 .load(URL)
@@ -68,17 +70,128 @@ public class ServerCalls{
                         if (result != null) {
                             Log.d("testing 1234", result.toString());
                             Toast.makeText(mContext, result.toString(), Toast.LENGTH_SHORT).show();
-                            response = result.toString();
+                            response = result.get("status").getAsInt();
+                            Toast.makeText(mContext, "The value of response is: " + response, Toast.LENGTH_SHORT).show();
                         } else {
                             Log.d("testing 1234", "did not work");
                             Toast.makeText(mContext, "did not work", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
-
+        Toast.makeText(mContext, "The value of response is: " + response, Toast.LENGTH_SHORT).show();
         return response;
 
     }
+
+    public void loginFacebook(String device_uuid, String userid, int location){
+
+        Ion.with(mContext)
+                .load(url_base + url_login)
+                .setBodyParameter("device_uuid", device_uuid)
+                .setBodyParameter("user_id", userid)
+                .setBodyParameter("app_version", BuildConfig.VERSION_NAME)
+                .setBodyParameter("location", ""+location)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        if (result != null) {
+                            Log.d("testing 2234", result.toString());
+                            Toast.makeText(mContext, result.toString(), Toast.LENGTH_SHORT).show();
+                            response = result.get("status").getAsInt();
+                            Toast.makeText(mContext, "The value of response is: " + response, Toast.LENGTH_SHORT).show();
+                        } else {
+                            Log.d("testing 2234", "did not work");
+                            Toast.makeText(mContext, "did not work", Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                });
+
+
+    }
+
+    public void populateFeed(String authToken, String filterPrice, String filterDistance,
+                             String search, String location, String filterNumber){
+
+        Ion.with(mContext)
+                .load(url_base + url_feed)
+                .setBodyParameter("auth_token", authToken)
+                .setBodyParameter("device_uuid", id)
+                .setBodyParameter("search_text", search)
+                .setBodyParameter("filter_distance", filterDistance)
+                .setBodyParameter("filter_price", filterPrice)
+                .setBodyParameter("filter_number", filterNumber)
+                .setBodyParameter("user_location", location)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        if (result != null) {
+                            Log.d("testing 3234", result.toString());
+                            Log.d("testing 3324 id is ", id);
+                            Toast.makeText(mContext, result.toString(), Toast.LENGTH_SHORT).show();
+                            //response = result.get
+                            Toast.makeText(mContext, "The value of response is: " + response, Toast.LENGTH_SHORT).show();
+                        } else {
+                            Log.d("testing 3234", "did not work");
+                            Toast.makeText(mContext, "did not work", Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                });
+    }
+
+    public int logout(){
+
+        return 0;
+    }
+
+    public void registerDeviceForPushNotifications(){
+
+    }
+
+    public void markItem(){
+
+    }
+
+    public void populateGarage(){
+
+    }
+
+    public void populateHolding(){
+
+    }
+
+    public void populateTrunk(){
+
+    }
+
+    public void sendChat(){
+
+    }
+
+    public void onNewChat(){
+
+    }
+
+    public void addItem(String name, String description, double price, double rating, String pickupMethod, String[] tags, Image[] pictures, boolean shareFB){
+
+    }
+
+    public void resetDemo(){
+
+    }
+
+    public void getFilter(){
+
+    }
+
+
+
+
+
+
 
     public String getTitle(){
         return null;
@@ -114,25 +227,5 @@ public class ServerCalls{
 
     public Image[] getPictures(){
         return null;
-    }
-
-    public void want(){
-
-    }
-
-    public void nope(){
-
-    }
-
-    public void holding(){
-
-    }
-
-    public void comment(){
-
-    }
-
-    public void addItem(String name, String description, double price, double rating, String pickupMethod, String[] tags, Image[] pictures, boolean shareFB){
-
     }
 }

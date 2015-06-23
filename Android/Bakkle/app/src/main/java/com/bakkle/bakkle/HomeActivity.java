@@ -106,6 +106,16 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
         mActionBar.setCustomView(mCustomView);
         mActionBar.setDisplayShowCustomEnabled(true);
 
+        /*protected synchronized void buildGoogleApiClient() {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }*/
+
+
+
         Fragment fragment = new FeedFragment();
 
         FragmentManager fragmentManager = getFragmentManager();
@@ -126,13 +136,13 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
                 public void onCompleted(JSONObject object, GraphResponse response) {
                     addUserInfoToPreferences(object);
                 }
-            });
+                    });
 
             Bundle parameters = new Bundle();
             parameters.putString("fields", "locale, email, gender");
             request.executeAsync();
 
-            String testresult = new ServerCalls(this).loginFacebook(
+            int result = new ServerCalls(this).registerFacebook(
                     preferences.getString("email", "null"),
                     preferences.getString("gender", "null"),
                     preferences.getString("username", "null"),
@@ -153,8 +163,10 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
             String last_name = preferences.getString("last_name", "null");
 
             */
-
-            Toast.makeText(this, testresult, Toast.LENGTH_SHORT).show();
+            if(result == 1)
+                Toast.makeText(this, "Logged in successfully!", Toast.LENGTH_SHORT).show();
+            else //TODO:Display error on fail? and go back to login screen
+                Toast.makeText(this, "Login error!!", Toast.LENGTH_SHORT).show();
         }
 
 
@@ -227,7 +239,6 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
 
             switch(position){
                 case 0:
-                    //if(){}
                     getFragmentManager().beginTransaction().replace(R.id.content_frame,
                             new FeedFragment()).addToBackStack(null).
                             setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
@@ -248,6 +259,8 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
                             setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
                     break;
                 case 4:
+                    new ServerCalls(getApplicationContext())
+                            .populateFeed("b30a48cafc3ae9e59b7234a9c582b851_12", "999999999", "", "", "32,32", "");
                     //startActivity(new Intent(getApplicationContext(), FeedFilter.class));
                     break;
                 case 5:
