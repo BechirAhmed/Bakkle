@@ -6,6 +6,7 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
     var tableView: UITableView!
     var textView: UITextView!
     var chatItemID: String!
+    var refreshControl: UIRefreshControl = UIRefreshControl()
     
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -56,6 +57,14 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
         view.backgroundColor = UIColor.whiteColor()
         view.addSubview(tableView)
         loadChats()
+        
+        refreshControl.addTarget(self, action: Selector("refreshChats"), forControlEvents: UIControlEvents.ValueChanged)
+        self.tableView.addSubview(refreshControl)
+    }
+    
+    func refreshChats() {
+        loadChats()
+        self.refreshControl.endRefreshing()
     }
     
     func loadChats(){
@@ -75,12 +84,14 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
                 var message: String = ""
                 var dateString: String = ""
                 var date: NSDate = NSDate()
+                let dateFormatter = NSDateFormatter()
+                dateFormatter.timeZone = NSTimeZone.localTimeZone()
                 var id: Int = 0
                 
                 if let lastMessage = chat.valueForKey("last_message") as? NSDictionary {
                     message = lastMessage.valueForKey("message") as! String
                     dateString = lastMessage.valueForKey("date") as! String
-                    date = NSDate().dateFromString(dateString, format:  "yyyy-MM-dd HH:mm:ss")
+                    date = NSDate().dateFromString(dateString, format: "yyyy-MM-dd HH:mm:ss")
                 }
                 id = chat.valueForKey("pk") as! Int
                 

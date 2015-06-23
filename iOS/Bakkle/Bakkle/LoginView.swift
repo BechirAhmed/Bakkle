@@ -81,12 +81,15 @@ class LoginView: UIViewController, FBLoginViewDelegate {
     
     // create the logo image, which is the same as the launch screen logo
     func setLogoImg(){
-        logo = UIImageView(image: UIImage(named: "logo-white-design-png-100.png"))
+        logo = UIImageView(image: UIImage(named: "logo-white-design-clear.png"))
         background.addSubview(logo)
         
         logo.setTranslatesAutoresizingMaskIntoConstraints(false)
+        logo.addConstraint(NSLayoutConstraint(item: logo, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: logo, attribute: NSLayoutAttribute.Width, multiplier: 25.0/62.0, constant: 0.0))
         background.addConstraint(NSLayoutConstraint(item: logo, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: background, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0.0))
-        background.addConstraint(NSLayoutConstraint(item: logo, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem: background, attribute: NSLayoutAttribute.Top, multiplier: 1.0, constant: 102.0))
+        background.addConstraint(NSLayoutConstraint(item: logo, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem: background, attribute: NSLayoutAttribute.Top, multiplier: 1.0, constant: 49.0))
+        background.addConstraint(NSLayoutConstraint(item: logo, attribute: NSLayoutAttribute.Left, relatedBy: NSLayoutRelation.Equal, toItem: background, attribute: NSLayoutAttribute.Left, multiplier: 1.0, constant: 36.0))
+        background.addConstraint(NSLayoutConstraint(item: logo, attribute: NSLayoutAttribute.Right, relatedBy: NSLayoutRelation.Equal, toItem: background, attribute: NSLayoutAttribute.Right, multiplier: 2.0, constant: 36.0))
     }
     
     func loginViewShowingLoggedInUser(loginView : FBLoginView!) {
