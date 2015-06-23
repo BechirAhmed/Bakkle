@@ -39,8 +39,9 @@ INSTALLED_APPS = (
     'items',
     'account',
     'system',
-    'conversation',
-    'timing'
+    'timing',
+    'chat',
+    'common'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -61,6 +62,8 @@ WSGI_APPLICATION = 'bakkle.wsgi.application'
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
 DATABASES = {
+    'default': {
+     },
     'dev': {
          'ENGINE': 'django.db.backends.sqlite3',
          'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),

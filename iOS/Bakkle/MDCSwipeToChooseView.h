@@ -40,8 +40,6 @@
 
 @property (nonatomic, strong) UIImageView *bottomBlurImg;
 
-@property (nonatomic, strong) UIImageView *transparentImage;
-
 /*!
  * The "liked" view, which fades in as the `MDCSwipeToChooseView` is panned to the right.
  */

@@ -16,8 +16,8 @@ from django.contrib.admin.views.decorators import staff_member_required
 
 from .models import Account, Device
 from items.models import Items, BuyerItem
-from common import authenticate
-from common import time_method
+from common.decorators import authenticate
+from common.decorators import time_method
 
 # Show a list of all accounts in the system.
 @staff_member_required
