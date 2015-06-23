@@ -20,6 +20,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     var chatID: String!
     var index: Int = 0
     var isBuyer: Bool = false
+    var refreshControl: UIRefreshControl = UIRefreshControl()
 
     override var inputAccessoryView: UIView! {
     get {
@@ -134,7 +135,6 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         loadMessages()
         
-        var refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: Selector("refreshChat"), forControlEvents: UIControlEvents.ValueChanged)
         self.tableView.addSubview(refreshControl)
         // tableViewScrollToBottomAnimated(false) // doesn't work
@@ -174,7 +174,8 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     func refreshChat() {
-        self.tableView.reloadData()
+        loadMessages()
+        self.refreshControl.endRefreshing()
     }
     
     func loadMessages() {
@@ -199,7 +200,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 loadedMessages.append(loadedMessage)
             }
             self.chat.loadedMessages = loadedMessages.reverse()
-            self.refreshChat()
+            self.tableView.reloadData()
         }
         WSManager.enqueueWorkPayload(chatPayload)
         
@@ -223,7 +224,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 print("[NewMessageHandler] NewMessageHandler received new message '\(messageText)' from userId \(messageOrigin)");
             }
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self.refreshChat()
+                self.tableView.reloadData()
             })
         }, forNotification: "newMessage")
     }
@@ -393,7 +394,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         var sendPayload: WSRequest = WSSendChatMessageRequest(chatId: String(chat.chatId), message: textView.text)
         sendPayload.successHandler = {
             (var success: NSDictionary) in
-            self.refreshChat()
+            self.tableView.reloadData()
         }
         WSManager.enqueueWorkPayload(sendPayload)
         

@@ -6,6 +6,7 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
     var tableView: UITableView!
     var textView: UITextView!
     var chatItemID: String!
+    var refreshControl: UIRefreshControl = UIRefreshControl()
     
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -56,6 +57,14 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
         view.backgroundColor = UIColor.whiteColor()
         view.addSubview(tableView)
         loadChats()
+        
+        refreshControl.addTarget(self, action: Selector("refreshChats"), forControlEvents: UIControlEvents.ValueChanged)
+        self.tableView.addSubview(refreshControl)
+    }
+    
+    func refreshChats() {
+        loadChats()
+        self.refreshControl.endRefreshing()
     }
     
     func loadChats(){

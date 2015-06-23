@@ -76,7 +76,11 @@ class FeedFilterView: UIViewController {
         } else {
             distanceLbl.text = "\(Int(distance.value)) mi"
         }
-        priceLbl.text = "$\(Int(price.value))"
+        if price.value >= 100 {
+            priceLbl.text = "$100+"
+        } else {
+            priceLbl.text = "$\(Int(price.value))"
+        }
         numberLbl.text = "\(Int(number.value))"
         if number.value >= 1000 {
             numberLbl.text = "∞"
@@ -90,7 +94,11 @@ class FeedFilterView: UIViewController {
         } else {
             distanceLbl.text = "\(Int(distance.value)) mi"
         }
-        priceLbl.text = "$\(Int(price.value))"
+        if price.value >= 100 {
+            priceLbl.text = "$100+"
+        } else {
+            priceLbl.text = "$\(Int(price.value))"
+        }
         numberLbl.text = "\(Int(number.value))"
         if number.value >= 1000 {
             numberLbl.text = "∞"
