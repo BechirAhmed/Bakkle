@@ -136,7 +136,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         loadMessages()
         refreshControl.addTarget(self, action: Selector("refreshChat"), forControlEvents: UIControlEvents.ValueChanged)
         self.tableView.addSubview(refreshControl)
-        // tableViewScrollToBottomAnimated(false) // doesn't work
+        tableViewScrollToBottomAnimated(true) // doesn't work
     }
 
     deinit {
@@ -200,6 +200,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             }
             self.chat.loadedMessages = loadedMessages.reverse()
             self.tableView.reloadData()
+            self.tableViewScrollToBottomAnimated(true)
         }
         WSManager.enqueueWorkPayload(chatPayload)
         
@@ -224,6 +225,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             }
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 self.tableView.reloadData()
+                self.tableViewScrollToBottomAnimated(true)
             })
         }, forNotification: "newMessage")
     }
@@ -391,7 +393,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     func tableViewScrollToBottomAnimated(animated: Bool) {
         let numberOfRows = tableView.numberOfRowsInSection(0)
         if numberOfRows > 0 {
-            tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: numberOfRows-1, inSection: 0), atScrollPosition: .Bottom, animated: animated)
+            tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: numberOfRows-2, inSection: 0), atScrollPosition: .Bottom, animated: animated)
         }
     }
 

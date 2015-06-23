@@ -26,7 +26,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ARj-JV-7MY">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                             </view>
-                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" image="logo-white-design-clear.png" translatesAutoresizingMaskIntoConstraints="NO" id="A3C-sg-V8F">
+                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" misplaced="YES" image="logo-white-design-clear.png" translatesAutoresizingMaskIntoConstraints="NO" id="A3C-sg-V8F">
                                 <rect key="frame" x="36" y="69" width="248" height="100"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="A3C-sg-V8F" secondAttribute="height" multiplier="62:25" id="7hl-Cc-pmE"/>
@@ -134,13 +134,13 @@
                                 <exclude reference="16W-zF-i6Y"/>
                                 <exclude reference="Nlk-Ed-xHH"/>
                                 <exclude reference="Q5K-fa-dXt"/>
+                                <exclude reference="7XN-gH-iYK"/>
+                                <exclude reference="8i6-sO-wsx"/>
                                 <exclude reference="If7-CR-kwN"/>
                                 <exclude reference="KaS-c6-O8M"/>
                                 <exclude reference="om7-rQ-YCI"/>
                                 <exclude reference="MAB-ks-BzS"/>
                                 <exclude reference="ek2-b7-5sw"/>
-                                <exclude reference="7XN-gH-iYK"/>
-                                <exclude reference="8i6-sO-wsx"/>
                                 <exclude reference="mEL-9I-Cd1"/>
                                 <exclude reference="Bgp-rf-pLY"/>
                                 <exclude reference="Uvz-Nl-Ilp"/>
@@ -155,6 +155,8 @@
                                 <include reference="16W-zF-i6Y"/>
                                 <include reference="Nlk-Ed-xHH"/>
                                 <include reference="Q5K-fa-dXt"/>
+                                <include reference="7XN-gH-iYK"/>
+                                <include reference="8i6-sO-wsx"/>
                                 <exclude reference="If7-CR-kwN"/>
                                 <exclude reference="KaS-c6-O8M"/>
                                 <exclude reference="d8U-sq-9Vx"/>
@@ -162,8 +164,6 @@
                                 <exclude reference="s6m-Dz-kiN"/>
                                 <include reference="MAB-ks-BzS"/>
                                 <include reference="ek2-b7-5sw"/>
-                                <include reference="7XN-gH-iYK"/>
-                                <include reference="8i6-sO-wsx"/>
                                 <include reference="mEL-9I-Cd1"/>
                                 <include reference="Bgp-rf-pLY"/>
                                 <include reference="Uvz-Nl-Ilp"/>
@@ -668,7 +668,7 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="375"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="FWd-VD-JTT">
@@ -838,7 +838,7 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                                    <rect key="frame" x="0.0" y="0.0" width="75" height="30"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 </view>
@@ -1661,7 +1661,7 @@
                                                         <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                                            <rect key="frame" x="0.0" y="0.0" width="250" height="250"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
                                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Fgn-P4-DBQ">
@@ -3622,7 +3622,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="245" height="245"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="LMY-wb-f5x">
