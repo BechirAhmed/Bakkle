@@ -38,9 +38,6 @@
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="btn-facebook40.png" translatesAutoresizingMaskIntoConstraints="NO" id="LeQ-jZ-CDJ">
-                                <rect key="frame" x="45" y="316" width="230" height="40"/>
-                            </imageView>
                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="btn-email40.png" translatesAutoresizingMaskIntoConstraints="NO" id="AKQ-6X-cVL">
                                 <rect key="frame" x="45" y="373" width="230" height="40"/>
                             </imageView>
@@ -83,7 +80,6 @@
                         <constraints>
                             <constraint firstItem="ARj-JV-7MY" firstAttribute="trailing" secondItem="qfH-YC-Z4o" secondAttribute="trailing" id="16W-zF-i6Y"/>
                             <constraint firstAttribute="trailingMargin" secondItem="vxf-aK-VXy" secondAttribute="trailing" constant="53" id="4lY-Ts-FmW"/>
-                            <constraint firstItem="LeQ-jZ-CDJ" firstAttribute="top" secondItem="vxf-aK-VXy" secondAttribute="bottom" constant="20" id="6aE-Uy-Qg1"/>
                             <constraint firstAttribute="trailingMargin" secondItem="qfH-YC-Z4o" secondAttribute="trailing" constant="-16" id="6l5-yV-OrZ">
                                 <variation key="heightClass=regular-widthClass=compact" constant="-16"/>
                             </constraint>
@@ -94,7 +90,6 @@
                             <constraint firstAttribute="trailingMargin" secondItem="qfH-YC-Z4o" secondAttribute="trailing" constant="-16" id="If7-CR-kwN"/>
                             <constraint firstAttribute="centerX" secondItem="AKQ-6X-cVL" secondAttribute="centerX" id="IzB-nd-tJ7"/>
                             <constraint firstItem="qfH-YC-Z4o" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="-16" id="KaS-c6-O8M"/>
-                            <constraint firstAttribute="centerX" secondItem="LeQ-jZ-CDJ" secondAttribute="centerX" id="KvB-fZ-fPr"/>
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="qfH-YC-Z4o" secondAttribute="bottom" id="MmF-6n-eju"/>
                             <constraint firstItem="ARj-JV-7MY" firstAttribute="leading" secondItem="qfH-YC-Z4o" secondAttribute="leading" id="Nlk-Ed-xHH"/>
                             <constraint firstItem="ARj-JV-7MY" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="topMargin" id="Q5K-fa-dXt"/>
@@ -113,7 +108,6 @@
                             <constraint firstItem="qfH-YC-Z4o" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="topMargin" id="om7-rQ-YCI"/>
                             <constraint firstAttribute="centerX" secondItem="A3C-sg-V8F" secondAttribute="centerX" id="rDu-Z7-GYv"/>
                             <constraint firstItem="qfH-YC-Z4o" firstAttribute="trailing" secondItem="kh9-bI-dsS" secondAttribute="trailingMargin" constant="16" id="s6m-Dz-kiN"/>
-                            <constraint firstItem="AKQ-6X-cVL" firstAttribute="top" secondItem="LeQ-jZ-CDJ" secondAttribute="bottom" constant="17" id="vWB-TL-2R4"/>
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="vxf-aK-VXy" secondAttribute="bottom" constant="272" id="yKm-Kx-zDO"/>
                         </constraints>
                         <variation key="default">
@@ -160,7 +154,6 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <outlet property="fbLoginView" destination="M2Y-Q2-c87" id="MfE-ah-HZo"/>
-                        <outlet property="fbLoginViewBtn" destination="LeQ-jZ-CDJ" id="uhy-1I-97g"/>
                         <segue destination="nJL-RM-6Db" kind="show" identifier="PushToFeedSegue" id="zhM-P9-5wu"/>
                     </connections>
                 </viewController>
@@ -5854,7 +5847,6 @@
         <image name="bkg-chat-text.png" width="1239" height="128"/>
         <image name="btn-addCam.png" width="163" height="125"/>
         <image name="btn-email40.png" width="230" height="40"/>
-        <image name="btn-facebook40.png" width="230" height="40"/>
         <image name="btn-sign-in40.png" width="230" height="40"/>
         <image name="icon-back.png" width="258" height="118"/>
         <image name="item-detail-overlay.png" width="320" height="209"/>
@@ -5863,7 +5855,7 @@
         <image name="mock-rating-stars.png" width="1600" height="373"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Rco-rv-njI"/>
+        <segue reference="lk1-fc-YGc"/>
         <segue reference="Ay4-Il-I0O"/>
     </inferredMetricsTieBreakers>
 </document>

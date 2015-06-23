@@ -17,7 +17,7 @@ import com.bakkle.bakkle.dummy.DummyContent;
  * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
  * interface.
  */
-public class BuyersTrunk extends ListFragment {
+public class HoldingPattern extends ListFragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -31,8 +31,8 @@ public class BuyersTrunk extends ListFragment {
     private OnFragmentInteractionListener mListener;
 
     // TODO: Rename and change types of parameters
-    public static BuyersTrunk newInstance(String param1, String param2) {
-        BuyersTrunk fragment = new BuyersTrunk();
+    public static HoldingPattern newInstance(String param1, String param2) {
+        HoldingPattern fragment = new HoldingPattern();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -44,7 +44,7 @@ public class BuyersTrunk extends ListFragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public BuyersTrunk() {
+    public HoldingPattern() {
     }
 
     @Override

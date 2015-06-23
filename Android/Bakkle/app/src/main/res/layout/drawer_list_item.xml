@@ -14,4 +14,6 @@
         android:layout_height="wrap_content"
         style="@style/textStyle"
         android:id="@+id/txtTitle" />
+
+
 </LinearLayout>

@@ -7,6 +7,7 @@
         <item>@string/title_activity_holding_pattern</item>
         <item>@string/title_activity_feed_filter</item>
         <item>@string/title_activity_settings</item>
+        <item>@string/title_activity_demo_options</item>
         <item>@string/logout</item>
     </string-array>
     <string-array name="drawer_icons">

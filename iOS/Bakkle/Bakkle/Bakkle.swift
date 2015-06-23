@@ -790,9 +790,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
         
         // reset instructional overlay
-        if let f = userDefaults.objectForKey("instruction") as? Bool{
-            
-        }else{
+        if userDefaults.objectForKey("instruction") == nil{
             userDefaults.setBool(true, forKey: "instruction")
         }
         // We force a version upgrade

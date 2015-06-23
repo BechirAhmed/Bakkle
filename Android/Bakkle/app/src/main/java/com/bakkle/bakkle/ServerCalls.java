@@ -1,14 +1,23 @@
 package com.bakkle.bakkle;
 
+import android.content.Context;
 import android.media.Image;
+import android.provider.Settings;
+import android.util.Log;
+import android.widget.Toast;
+
+import com.google.gson.JsonObject;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 
 /**
  * Created by vanshgandhi on 6/16/15.
  */
-public class ServerCalls {
+public class ServerCalls{
 
     double apiVersion = 1.2;
-    final String url_base                 = "https://bakkle.rhventures.org/"; //https://app.bakkle.com for production
+    final String url_base                 = "https://bakkle.rhventures.org:8000/";
+//    final String url_base                 = "https://app.bakkle.com/";
     final String url_login                = "account/login_facebook/";
     final String url_logout               = "account/logout/";
     final String url_facebook             = "account/facebook/";
@@ -24,6 +33,52 @@ public class ServerCalls {
     final String url_get_holding_pattern  = "items/get_holding_pattern/";
     final String url_buyertransactions    = "items/get_buyer_transactions/";
     final String url_sellertransactions   = "items/get_seller_transactions/";
+
+    Context mContext;
+    final String id;
+    String response;
+
+
+    public ServerCalls(Context c)
+    {
+        mContext = c;
+        id = Settings.Secure.getString(mContext.getContentResolver(), Settings.Secure.ANDROID_ID);
+    }
+
+    public String loginFacebook(final String email, final String gender, final String username, final String name,
+                              final String userid, final String locale, final String first_name, final String last_name){
+
+        response = "";
+        String URL = url_base + url_facebook;
+        Ion.with(mContext)
+                .load(URL)
+                .setBodyParameter("email", email)
+                .setBodyParameter("name", name)
+                .setBodyParameter("user_name", username)
+                .setBodyParameter("gender", gender)
+                .setBodyParameter("user_id", userid)
+                .setBodyParameter("locale", locale)
+                .setBodyParameter("first_name", first_name)
+                .setBodyParameter("last_name", last_name)
+                .setBodyParameter("device_uuid", id)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        if (result != null) {
+                            Log.d("testing 1234", result.toString());
+                            Toast.makeText(mContext, result.toString(), Toast.LENGTH_SHORT).show();
+                            response = result.toString();
+                        } else {
+                            Log.d("testing 1234", "did not work");
+                            Toast.makeText(mContext, "did not work", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+        return response;
+
+    }
 
     public String getTitle(){
         return null;
@@ -80,5 +135,4 @@ public class ServerCalls {
     public void addItem(String name, String description, double price, double rating, String pickupMethod, String[] tags, Image[] pictures, boolean shareFB){
 
     }
-
 }
