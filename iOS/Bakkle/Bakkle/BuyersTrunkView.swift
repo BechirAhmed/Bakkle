@@ -146,6 +146,7 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
             var buyerChat = Chat(user: buyer, lastMessageText: "", lastMessageSentDate: NSDate(), chatId: chatId)
             let chatViewController = ChatViewController(chat: buyerChat)
             chatViewController.index = indexPath.row
+            chatViewController.seller = chatItem.valueForKey("seller") as! NSDictionary
             chatViewController.isBuyer = true
             self.presentViewController(chatViewController, animated: true, completion: {})
             tableView.deselectRowAtIndexPath(indexPath, animated: true)
