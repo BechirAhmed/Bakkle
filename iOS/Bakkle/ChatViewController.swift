@@ -183,7 +183,6 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
     override func viewWillDisappear(animated: Bool)  {
         super.viewWillDisappear(animated)
-        self.toolBar.hidden = true
         chat.draft = textView.text
     }
 
@@ -260,8 +259,10 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
     func btnBack(sender:UIButton!)
     {
-        self.dismissViewControllerAnimated(true, completion: nil)
         self.dismissKeyboard()
+        self.toolBar.hidden = true
+        self.dismissViewControllerAnimated(true, completion: nil)
+        
     }
     
     /* info button action - leads to item detail view */
@@ -275,6 +276,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         } else {
             vc.item = Bakkle.sharedInstance.garageItems[index] as! NSDictionary
         }
+        self.dismissKeyboard()
         self.presentViewController(vc, animated: true, completion: nil)
     }
 
