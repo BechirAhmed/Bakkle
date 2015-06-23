@@ -31,11 +31,11 @@ from .models import BuyerItem
 from .models import Items
 from account.models import Account
 from account.models import Device
-from common import authenticate
-from common import get_number_conversations_with_new_messages
-from common import time_method
-from conversation.models import Conversation
-from conversation.models import Message
+from chat.models import Chat
+from chat.models import Message
+from common.decorators import authenticate
+# from common.decorators import get_number_conversations_with_new_messages
+from common.decorators import time_method
 from django.conf import settings
 
 MAX_ITEM_IMAGE = 5
@@ -54,16 +54,15 @@ config['S3_URL'] = 'https://s3-us-west-2.amazonaws.com/com.bakkle.prod/'
 #--------------------------------------------#
 #               Web page requests            #
 #--------------------------------------------#
-@staff_member_required
 @csrf_exempt
 @time_method
-def index(request):
+def index(requestHandler):
     # List all items (this is for web viewing of data only)
     item_list = Items.objects.all()
     context = {
         'item_list': item_list,
     }
-    return render(request, 'items/index.html', context) 
+#    return requestHandler.render('templates/items/index.html', item_list = item_list) 
 
 @csrf_exempt
 @time_method
@@ -75,7 +74,7 @@ def public_detail(request, item_id):
         'item': item,
         'urls': urls,
     }
-    return render(request, 'items/public_detail.html', context)
+#    return render(request, 'items/public_detail.html', context)
 
 @staff_member_required
 @csrf_exempt
@@ -88,7 +87,7 @@ def detail(request, item_id):
         'item': item,
         'urls': urls,
     }
-    return render(request, 'items/detail.html', context)
+#    return render(request, 'items/detail.html', context)
 
 @staff_member_required
 @csrf_exempt
@@ -103,7 +102,7 @@ def mark_as_spam(request, item_id):
     context = {
         'item_list': item_list,
     }
-    return render(request, 'items/index.html', context)
+#    return render(request, 'items/index.html', context)
 
 @staff_member_required
 @csrf_exempt
@@ -118,7 +117,7 @@ def mark_as_deleted(request, item_id):
     context = {
         'item_list': item_list,
     }
-    return render(request, 'items/index.html', context)
+#    return render(request, 'items/index.html', context)
 
 #--------------------------------------------#
 #               Item Methods                 #
@@ -218,8 +217,8 @@ def notify_all_new_item(message):
         if device.auth_token != "":
             account_id = device.auth_token.split('_')[1]
             # lookup number of unread messages
-            badge = get_number_conversations_with_new_messages(account_id)
-            device.send_notification(message, badge, "")
+            # badge = get_number_conversations_with_new_messages(account_id)
+            device.send_notification(message, 1, "")
 
     response_data = { "status": 1 }
     return HttpResponse(json.dumps(response_data), content_type="application/json")
@@ -395,13 +394,11 @@ def want(request):
         response_data = {"status":0, "error":"Item {} does not exist.".format(item_id)}
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 
-    conversation = Conversation.objects.get_or_create(
+    chat = Chat.objects.get_or_create(
         item = item,
         buyer = buyer)[0]
-    conversation.start_time = datetime.datetime.now()
-    conversation.save()
-
-
+    chat.start_time = datetime.datetime.now()
+    chat.save()
 
     return add_item_to_buyer_items(request, BuyerItem.WANT)
 
@@ -475,12 +472,12 @@ def get_seller_items(request):
     # get json representaion of item array
     for item in item_list:
         # get the conversations involving this item
-        conversations = Conversation.objects.filter(item=item)
+        chats = Chat.objects.filter(item=item)
         convos_with_new_message = 0
-        for convo in conversations:
-            messages = Message.objects.filter(viewed=None, buyer_seller_flag=True, conversation=convo).count()
-            if messages > 0:
-                convos_with_new_message = convos_with_new_message + 1
+        # for convo in chats:
+        #     messages = Message.objects.filter(viewed=None, buyer_seller_flag=True, chat=convo).count()
+        #     if messages > 0:
+        #         convos_with_new_message = convos_with_new_message + 1
 
         # get the buyer items for this item
         buyer_items = BuyerItem.objects.filter(item_id=item.id)

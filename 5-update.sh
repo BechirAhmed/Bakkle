@@ -2,6 +2,7 @@
 
 # WARNING THIS IS DESTRUCTIVE
 sudo service bakkle stop
+sudo service bakkle-ws stop
 #sudo rm -rf              /bakkle/www
 sudo mkdir /archives/
 export DTE=`date +'%Y-%m-%d_%H%M%S'`
@@ -51,3 +52,7 @@ popd
 sudo install -m 755      ./etc/init.d/bakkle /etc/init.d/bakkle
 sudo update-rc.d bakkle defaults
 sudo service bakkle start
+
+sudo install -m 755      ./etc/init.d/bakkle-ws /etc/init.d/bakkle-ws
+sudo update-rc.d bakkle-ws defaults
+sudo service bakkle-ws start
