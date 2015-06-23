@@ -7,6 +7,7 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
     var textView: UITextView!
     var chatItemID: String!
     var refreshControl: UIRefreshControl = UIRefreshControl()
+    var garageIndex: Int = 0
     
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -147,7 +148,7 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let chat = self.account!.chats[indexPath.row]
         let chatViewController = ChatViewController(chat: chat)
-        chatViewController.index = indexPath.row
+        chatViewController.itemIndex = self.garageIndex
         chatViewController.isBuyer = false
         self.presentViewController(chatViewController, animated: true, completion: {})
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
