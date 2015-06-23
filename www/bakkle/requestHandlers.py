@@ -1,6 +1,5 @@
 
 import chat.chatRequestHandlers
-import items.itemsRequestHandlers
 import json
 
 from account.models import Account
