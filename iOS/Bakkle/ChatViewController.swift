@@ -133,6 +133,10 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         notificationCenter.addObserver(self, selector: "menuControllerWillHide:", name: UIMenuControllerWillHideMenuNotification, object: nil) // #CopyMessage
         
         loadMessages()
+        
+        var refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: Selector("refreshChat"), forControlEvents: UIControlEvents.ValueChanged)
+        self.tableView.addSubview(refreshControl)
         // tableViewScrollToBottomAnimated(false) // doesn't work
     }
 
@@ -169,6 +173,10 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
     }
     
+    func refreshChat() {
+        self.tableView.reloadData()
+    }
+    
     func loadMessages() {
         var loadedMessages: [Message] = []
         
@@ -191,7 +199,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 loadedMessages.append(loadedMessage)
             }
             self.chat.loadedMessages = loadedMessages.reverse()
-            self.tableView.reloadData()
+            self.refreshChat()
         }
         WSManager.enqueueWorkPayload(chatPayload)
         
@@ -214,7 +222,9 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 
                 print("[NewMessageHandler] NewMessageHandler received new message '\(messageText)' from userId \(messageOrigin)");
             }
-            self.tableView.reloadData()
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.refreshChat()
+            })
         }, forNotification: "newMessage")
     }
 
@@ -230,7 +240,11 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let sb: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let vc: ItemDetails = sb.instantiateViewControllerWithIdentifier("ItemDetails") as! ItemDetails
         vc.modalTransitionStyle = UIModalTransitionStyle.FlipHorizontal
-        vc.item = Bakkle.sharedInstance.trunkItems[index].valueForKey("item") as! NSDictionary
+        if isBuyer {
+            vc.item = Bakkle.sharedInstance.trunkItems[index].valueForKey("item") as! NSDictionary
+        } else {
+            vc.item = Bakkle.sharedInstance.garageItems[index] as! NSDictionary
+        }
         self.presentViewController(vc, animated: true, completion: nil)
     }
 
@@ -379,7 +393,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         var sendPayload: WSRequest = WSSendChatMessageRequest(chatId: String(chat.chatId), message: textView.text)
         sendPayload.successHandler = {
             (var success: NSDictionary) in
-            self.tableView.reloadData()
+            self.refreshChat()
         }
         WSManager.enqueueWorkPayload(sendPayload)
         
