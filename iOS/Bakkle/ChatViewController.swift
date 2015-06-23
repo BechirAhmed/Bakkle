@@ -114,7 +114,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         header.addSubview(infoButton)
         view.addSubview(header)
         
-        tableView = UITableView(frame: CGRectMake(view.bounds.origin.x, view.bounds.origin.y+headerHeight+topHeight, view.bounds.size.width, view.bounds.size.height-headerHeight), style: .Plain)
+        tableView = UITableView(frame: CGRectMake(view.bounds.origin.x, view.bounds.origin.y+headerHeight+topHeight, view.bounds.size.width, view.bounds.size.height-headerHeight-self.inputAccessoryView.bounds.size.height), style: .Plain)
         tableView.autoresizingMask = .FlexibleWidth | .FlexibleHeight
         tableView.backgroundColor = UIColor.whiteColor()
         let edgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: toolBarMinHeight, right: 0)
@@ -134,7 +134,6 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         notificationCenter.addObserver(self, selector: "menuControllerWillHide:", name: UIMenuControllerWillHideMenuNotification, object: nil) // #CopyMessage
         
         loadMessages()
-        
         refreshControl.addTarget(self, action: Selector("refreshChat"), forControlEvents: UIControlEvents.ValueChanged)
         self.tableView.addSubview(refreshControl)
         // tableViewScrollToBottomAnimated(false) // doesn't work
@@ -217,9 +216,9 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 let messageText = message.valueForKey("message") as! String
                 let dateString = message.valueForKey("date_sent") as! String
                 let date = NSDate().dateFromString(dateString, format:  "yyyy-MM-dd HH:mm:ss")
-                let incoming = message.valueForKey("sent_by_buyer") as! Bool
+                let incoming = (message.valueForKey("sent_by_buyer") as! Bool) == !self.isBuyer
                 let loadedMessage = Message(incoming: incoming, text: messageText, sentDate: date)
-                loadedMessages.append(loadedMessage)
+                self.chat.loadedMessages.append(loadedMessage)
                 
                 print("[NewMessageHandler] NewMessageHandler received new message '\(messageText)' from userId \(messageOrigin)");
             }
@@ -259,8 +258,6 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
 //    // #iOS7.1
     override func willAnimateRotationToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
-//NOTE: We aren't using this, commented out to pacify warning
-        //super.willAnimateRotationToInterfaceOrientation(toInterfaceOrientation, duration: duration)
 
         if UIInterfaceOrientationIsLandscape(toInterfaceOrientation) {
             if toolBar.frame.height > textViewMaxHeight.landscape {
@@ -270,11 +267,6 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             updateTextViewHeight()
         }
     }
-    
-//    // #iOS8
-//    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator!) {
-//        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
-//    }
 
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
@@ -386,31 +378,13 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         // Autocomplete text before sending #hack
         textView.resignFirstResponder()
         textView.becomeFirstResponder()
-
-        chat.loadedMessages.append(Message(incoming: false, text: textView.text, sentDate: NSDate()))
-        //TODO: Trap response to show if message got transmitted or not.
-        //Bakkle.sharedInstance.sendChat(1, message: textView.text, success: {()->() in }, fail: {()->() in })
         
         var sendPayload: WSRequest = WSSendChatMessageRequest(chatId: String(chat.chatId), message: textView.text)
-        sendPayload.successHandler = {
-            (var success: NSDictionary) in
-            self.tableView.reloadData()
-        }
         WSManager.enqueueWorkPayload(sendPayload)
         
         textView.text = nil
         updateTextViewHeight()
         sendButton.enabled = false
-
-//        let lastSection = tableView.numberOfSections()
-//        tableView.beginUpdates()
-//        tableView.insertSections(NSIndexSet(index: lastSection), withRowAnimation: .Automatic)
-//        tableView.insertRowsAtIndexPaths([
-//            NSIndexPath(forRow: 0, inSection: lastSection),
-//            NSIndexPath(forRow: 1, inSection: lastSection)
-//            ], withRowAnimation: .Automatic)
-//        tableView.endUpdates()
-//        tableViewScrollToBottomAnimated(true)
         AudioServicesPlaySystemSound(messageSoundOutgoing)
     }
 

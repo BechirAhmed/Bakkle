@@ -2924,113 +2924,6 @@
             </objects>
             <point key="canvasLocation" x="558" y="3595.5"/>
         </scene>
-        <!--Chat-->
-        <scene sceneID="mad-J3-t2K">
-            <objects>
-                <viewController id="0bM-NR-eaM" userLabel="Chat" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="BGy-Mw-s6z"/>
-                        <viewControllerLayoutGuide type="bottom" id="w4S-yL-aXf"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="1mx-G8-fOz">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="USER" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sqr-YL-3oT">
-                                <rect key="frame" x="0.0" y="20" width="375" height="44"/>
-                                <color key="backgroundColor" red="0.20000000000000001" green="0.80392156859999997" blue="0.37254901959999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="8so-2b-MLa"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="21"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8AA-Fe-1Xf">
-                                <rect key="frame" x="10" y="27" width="87" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="2ee-oY-GTY"/>
-                                    <constraint firstAttribute="width" constant="87" id="aga-wK-yWO"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="22"/>
-                                <state key="normal" title="&lt; BACK">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                            </button>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zM0-y0-LRs">
-                                <rect key="frame" x="0.0" y="72" width="375" height="315"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <variation key="heightClass=regular-widthClass=compact" ambiguous="YES" misplaced="YES">
-                                    <rect key="frame" x="0.0" y="64" width="375" height="0.0"/>
-                                </variation>
-                            </scrollView>
-                            <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1QH-Oy-Msu">
-                                <rect key="frame" x="0.0" y="594" width="375" height="73"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <variation key="heightClass=regular-widthClass=compact" ambiguous="YES" misplaced="YES">
-                                    <rect key="frame" x="0.0" y="231" width="375" height="436"/>
-                                </variation>
-                            </view>
-                            <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8JN-bn-XkF">
-                                <rect key="frame" x="0.0" y="515" width="375" height="39"/>
-                                <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="bkg-chat-text.png" translatesAutoresizingMaskIntoConstraints="NO" id="Nbd-wu-q3t">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="39"/>
-                                    </imageView>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jMg-Id-ce7">
-                                        <rect key="frame" x="302" y="0.0" width="73" height="39"/>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="15"/>
-                                        <state key="normal" title="SEND">
-                                            <color key="titleColor" red="0.34901960784313724" green="0.34901960784313724" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                    </button>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Type message here..." minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9gL-v9-gUr">
-                                        <rect key="frame" x="11" y="4" width="283" height="30"/>
-                                        <color key="textColor" red="0.69411764705882351" green="0.69411764705882351" blue="0.69411764705882351" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits"/>
-                                    </textField>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="39" id="Rub-WA-2I9"/>
-                                </constraints>
-                                <variation key="heightClass=regular-widthClass=compact" ambiguous="YES" misplaced="YES">
-                                    <rect key="frame" x="0.0" y="192" width="375" height="39"/>
-                                </variation>
-                            </view>
-                        </subviews>
-                        <color key="backgroundColor" red="0.20000000000000001" green="0.80392156859999997" blue="0.37254901959999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstItem="1QH-Oy-Msu" firstAttribute="leading" secondItem="1mx-G8-fOz" secondAttribute="leadingMargin" constant="-16" id="59i-YO-tNB"/>
-                            <constraint firstItem="zM0-y0-LRs" firstAttribute="leading" secondItem="1mx-G8-fOz" secondAttribute="leadingMargin" constant="-16" id="8lc-RS-GcF"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="8JN-bn-XkF" secondAttribute="trailing" constant="-16" id="BUb-7Q-g0H"/>
-                            <constraint firstItem="w4S-yL-aXf" firstAttribute="top" secondItem="1QH-Oy-Msu" secondAttribute="bottom" id="Bb5-A5-OZR"/>
-                            <constraint firstItem="1QH-Oy-Msu" firstAttribute="top" secondItem="8JN-bn-XkF" secondAttribute="bottom" id="PDA-Ww-kM8"/>
-                            <constraint firstItem="zM0-y0-LRs" firstAttribute="top" secondItem="Sqr-YL-3oT" secondAttribute="bottom" constant="8" id="REf-IK-wVw"/>
-                            <constraint firstItem="zM0-y0-LRs" firstAttribute="leading" secondItem="1mx-G8-fOz" secondAttribute="leadingMargin" constant="-16" id="WGO-GH-yjo"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="1QH-Oy-Msu" secondAttribute="trailing" constant="-16" id="Wtk-Og-iHR"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="Sqr-YL-3oT" secondAttribute="trailing" constant="-16" id="X49-y0-udl"/>
-                            <constraint firstItem="Sqr-YL-3oT" firstAttribute="leading" secondItem="1mx-G8-fOz" secondAttribute="leadingMargin" constant="-16" id="Zdg-gZ-mbD"/>
-                            <constraint firstItem="Sqr-YL-3oT" firstAttribute="top" secondItem="BGy-Mw-s6z" secondAttribute="bottom" id="bNH-Q4-B68"/>
-                            <constraint firstItem="8JN-bn-XkF" firstAttribute="leading" secondItem="1mx-G8-fOz" secondAttribute="leadingMargin" constant="-16" id="bki-5v-q47"/>
-                            <constraint firstItem="zM0-y0-LRs" firstAttribute="top" secondItem="Sqr-YL-3oT" secondAttribute="bottom" id="lII-RR-fkM"/>
-                            <constraint firstItem="8JN-bn-XkF" firstAttribute="top" secondItem="zM0-y0-LRs" secondAttribute="bottom" constant="128" id="n9B-mD-ZpZ"/>
-                            <constraint firstItem="8JN-bn-XkF" firstAttribute="top" secondItem="zM0-y0-LRs" secondAttribute="bottom" constant="128" id="nSx-ht-bi0"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="zM0-y0-LRs" secondAttribute="trailing" constant="-16" id="qpe-QE-4ux"/>
-                            <constraint firstItem="8AA-Fe-1Xf" firstAttribute="top" secondItem="BGy-Mw-s6z" secondAttribute="bottom" constant="7" id="tdM-Od-dP9"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="zM0-y0-LRs" secondAttribute="trailing" constant="-16" id="xUc-en-bXS"/>
-                            <constraint firstItem="8AA-Fe-1Xf" firstAttribute="leading" secondItem="1mx-G8-fOz" secondAttribute="leadingMargin" constant="-6" id="zi5-Ts-W16"/>
-                        </constraints>
-                    </view>
-                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="0kP-W8-jsf" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="717.75" y="3048.375"/>
-        </scene>
         <!--Chats-->
         <scene sceneID="ZjX-WI-WIN">
             <objects>
@@ -5863,7 +5756,6 @@
     </scenes>
     <resources>
         <image name="LoginScreen-bkg.png" width="1242" height="2208"/>
-        <image name="bkg-chat-text.png" width="1239" height="128"/>
         <image name="btn-addCam.png" width="163" height="125"/>
         <image name="btn-email40.png" width="230" height="40"/>
         <image name="btn-sign-in40.png" width="230" height="40"/>
