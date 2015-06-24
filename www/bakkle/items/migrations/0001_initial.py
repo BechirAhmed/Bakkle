@@ -7,7 +7,7 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('account', '__first__'),
+        ('account', '0001_initial'),
     ]
 
     operations = [
@@ -30,8 +30,7 @@ class Migration(migrations.Migration):
                 ('image_urls', models.CharField(max_length=1000)),
                 ('title', models.CharField(max_length=200)),
                 ('description', models.CharField(max_length=4000)),
-                ('latitude', models.DecimalField(default=37.47, max_digits=5, decimal_places=2)),
-                ('longitude', models.DecimalField(default=122.25, max_digits=5, decimal_places=2)),
+                ('location', models.CharField(max_length=25)),
                 ('price', models.DecimalField(max_digits=11, decimal_places=2)),
                 ('tags', models.CharField(max_length=300)),
                 ('method', models.CharField(default=b'Pick-up', max_length=11, choices=[(b'Pick-up', b'Pick-up'), (b'Delivery', b'Delivery'), (b'Meet', b'Meet'), (b'Ship', b'Ship')])),

@@ -7,7 +7,8 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('account', '__first__'),
+        ('account', '0001_initial'),
+        ('items', '__first__'),
     ]
 
     operations = [
@@ -17,6 +18,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('start_date', models.DateTimeField(auto_now_add=True)),
                 ('buyer', models.ForeignKey(to='account.Account')),
+                ('item', models.ForeignKey(to='items.Items')),
             ],
         ),
         migrations.CreateModel(
@@ -32,5 +34,9 @@ class Migration(migrations.Migration):
                 ('proposed_price', models.DecimalField(null=True, max_digits=10, decimal_places=2)),
                 ('chat', models.ForeignKey(to='chat.Chat')),
             ],
+        ),
+        migrations.AlterUniqueTogether(
+            name='chat',
+            unique_together=set([('item', 'buyer')]),
         ),
     ]
