@@ -48,6 +48,7 @@ class Message(models.Model):
     def toDictionary(self):
         valuesDict = {
             'pk': self.pk,
+            'chat': self.chat.pk,
             'sent_by_buyer': self.sent_by_buyer,
             'date_sent': self.date_sent.strftime('%Y-%m-%d %H:%M:%S'),
             'message': self.message

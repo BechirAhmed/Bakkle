@@ -15,9 +15,14 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     var toolBar: UIToolbar!
     var textView: UITextView!
     var profileButton: UIButton!
+    var userName: UILabel!
     var sendButton: UIButton!
     var rotating = false
-    var index: Int = 0
+    var chatID: String!
+    var itemIndex: Int = 0
+    var seller: NSDictionary!
+    var isBuyer: Bool = false
+    var refreshControl: UIRefreshControl = UIRefreshControl()
 
     override var inputAccessoryView: UIView! {
     get {
@@ -77,18 +82,6 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        chat.loadedMessages = [
-            [
-                Message(incoming: true, text: "Does that lawn mower run OK?", sentDate: NSDate(timeIntervalSinceNow: -60*60*24*2-60*60)),
-                Message(incoming: false, text: "It runs well, I got a new zero-turn and need to sell this one ASAP :-)", sentDate: NSDate(timeIntervalSinceNow: -60*60*24*2))
-            ],
-            [
-                Message(incoming: true, text: "Perfect, would you take $50? I can pick it up any night this week after 5.", sentDate: NSDate(timeIntervalSinceNow: -33)),
-                Message(incoming: false, text: "Sure, How's 6 PM on Thursday?", sentDate: NSDate(timeIntervalSinceNow: -19)),
-                Message(incoming: true, text: "6 sounds good :-)", sentDate: NSDate())
-            ]
-        ]
-
         view.backgroundColor = UIColor.whiteColor() // smooths push animation
 
         let topHeight: CGFloat = 20
@@ -106,15 +99,19 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         let profileButtonWidth: CGFloat = 36
         let profileXpos:CGFloat = (header.bounds.size.width - header.bounds.origin.x
-            - profileButtonWidth) / 2.0
+            - profileButtonWidth) / 2.35
         profileButton = UIButton(frame: CGRectMake(profileXpos, header.bounds.origin.y+topHeight+4, profileButtonWidth, headerHeight-4))
         profileButton.backgroundColor = Theme.ColorGreen
         profileButton.setImage(UIImage(named: "loading.png"), forState: UIControlState.Normal)
         profileButton.imageView?.layer.cornerRadius = profileButton.imageView!.frame.size.width/2
-        
-
-        profileButton.addTarget(self, action: "btnProfile:", forControlEvents: UIControlEvents.TouchUpInside)
+        //profileButton.addTarget(self, action: "btnProfile:", forControlEvents: UIControlEvents.TouchUpInside)
         header.addSubview(profileButton)
+        
+        userName = UILabel()
+        userName.font = UIFont(name: "Avenir-Heavy", size: 18)
+        userName.textColor = UIColor.whiteColor()
+        userName.textAlignment = NSTextAlignment.Left
+        header.addSubview(userName)
         
         let infoButtonWidth:CGFloat = 50
         var infoButton = UIButton(frame: CGRectMake(header.bounds.origin.x+header.bounds.size.width-infoButtonWidth, header.bounds.origin.y+topHeight, infoButtonWidth, headerHeight))
@@ -123,7 +120,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         header.addSubview(infoButton)
         view.addSubview(header)
         
-        tableView = UITableView(frame: CGRectMake(view.bounds.origin.x, view.bounds.origin.y+headerHeight+topHeight, view.bounds.size.width, view.bounds.size.height-headerHeight), style: .Plain)
+        tableView = UITableView(frame: CGRectMake(view.bounds.origin.x, view.bounds.origin.y+headerHeight+topHeight, view.bounds.size.width, view.bounds.size.height-headerHeight-self.inputAccessoryView.bounds.size.height), style: .Plain)
         tableView.autoresizingMask = .FlexibleWidth | .FlexibleHeight
         tableView.backgroundColor = UIColor.whiteColor()
         let edgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: toolBarMinHeight, right: 0)
@@ -141,8 +138,13 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         notificationCenter.addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
         notificationCenter.addObserver(self, selector: "keyboardDidShow:", name: UIKeyboardDidShowNotification, object: nil)
         notificationCenter.addObserver(self, selector: "menuControllerWillHide:", name: UIMenuControllerWillHideMenuNotification, object: nil) // #CopyMessage
-
-        // tableViewScrollToBottomAnimated(false) // doesn't work
+        
+        loadMessages()
+        refreshControl.addTarget(self, action: Selector("refreshChat"), forControlEvents: UIControlEvents.ValueChanged)
+        self.tableView.addSubview(refreshControl)
+        tableViewScrollToBottomAnimated(true) // doesn't work
+        
+        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "dismissKeyboard"))
     }
 
     deinit {
@@ -155,10 +157,26 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     override func viewDidAppear(animated: Bool)  {
         super.viewDidAppear(animated)
         tableView.flashScrollIndicators()
-
-        var facebookProfileImageUrlString = "http://graph.facebook.com/\(Bakkle.sharedInstance.facebook_id_str)/picture?type=large"
-        let imgURL = NSURL(string: facebookProfileImageUrlString)
-        profileButton.hnk_setImageFromURL(imgURL!, state: UIControlState.Normal, placeholder: UIImage(named:"loading.png"), format: nil, failure: nil, success: nil)
+        
+        if isBuyer {
+            let seller_facebookid = seller.valueForKey("facebook_id") as! String
+            var facebookProfileImageUrlString = "http://graph.facebook.com/\(seller_facebookid)/picture?width=142&height=142"
+            let imgURL = NSURL(string: facebookProfileImageUrlString)
+            profileButton.hnk_setImageFromURL(imgURL!, state: UIControlState.Normal, placeholder: UIImage(named:"loading.png"), format: nil, failure: nil, success: nil)
+            let seller_displayName = seller.valueForKey("display_name") as! String
+            let fullNameArr = split(seller_displayName) {$0 == " "}
+            userName.frame = CGRectMake(profileButton.frame.origin.x + 45, header.bounds.origin.y+24, 100, 40)
+            userName.text = fullNameArr[0]
+        }
+        else {
+            let user = chat.user
+            var facebookProfileImageUrlString = "http://graph.facebook.com/\(user.facebookID)/picture?width=142&height=142"
+            let imgURL = NSURL(string: facebookProfileImageUrlString)
+            profileButton.hnk_setImageFromURL(imgURL!, state: UIControlState.Normal, placeholder: UIImage(named:"loading.png"), format: nil, failure: nil, success: nil)
+            userName.frame = CGRectMake(profileButton.frame.origin.x + 45, header.bounds.origin.y+24, 100, 40)
+            userName.text = user.firstName
+        }
+        
     }
 
     override func viewWillDisappear(animated: Bool)  {
@@ -177,11 +195,75 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             textView.becomeFirstResponder()
         }
     }
+    
+    func refreshChat() {
+        loadMessages()
+        self.refreshControl.endRefreshing()
+    }
+    
+    func loadMessages() {
+        var loadedMessages: [Message] = []
+        
+        // Load messages from server
+        var chatPayload: WSRequest = WSGetMessagesForChatRequest(chatId: String(chat.chatId))
+        chatPayload.successHandler = {
+            (var success: NSDictionary) in
+            var messages: [NSDictionary] = success.valueForKey("messages") as! [NSDictionary]
+            var loadedMessage: Message!
+            for message in messages {
+                let messageText = message.valueForKey("message") as! String
+                let dateString = message.valueForKey("date_sent") as! String
+                let date = NSDate().dateFromString(dateString, format:  "yyyy-MM-dd HH:mm:ss")
+                let incoming = message.valueForKey("sent_by_buyer") as! Bool
+                if !self.isBuyer {
+                    loadedMessage = Message(incoming: incoming, text: messageText, sentDate: date)
+                } else {
+                    loadedMessage = Message(incoming: !incoming, text: messageText, sentDate: date)
+                }
+                loadedMessages.append(loadedMessage)
+            }
+            self.chat.loadedMessages = loadedMessages.reverse()
+            self.tableView.reloadData()
+            self.tableViewScrollToBottomAnimated(true)
+        }
+        WSManager.enqueueWorkPayload(chatPayload)
+        
+        // Register for messages sent via websocket
+        WSManager.registerMessageHandler({ (data : [NSObject : AnyObject]!) -> Void in
+            var dict: NSDictionary = data as NSDictionary
+            
+            var message: NSDictionary = NSDictionary()
+            var messageOrigin: String = ""
+            
+            if(dict.objectForKey("message") != nil){
+                message = dict.objectForKey("message") as! NSDictionary
+                
+                let messageText = message.valueForKey("message") as! String
+                let dateString = message.valueForKey("date_sent") as! String
+                let date = NSDate().dateFromString(dateString, format:  "yyyy-MM-dd HH:mm:ss")
+                let incoming = (message.valueForKey("sent_by_buyer") as! Bool) == !self.isBuyer
+                let loadedMessage = Message(incoming: incoming, text: messageText, sentDate: date)
+                let incomingChatId = (message.valueForKey("chat") as! NSNumber).integerValue
+                if(incomingChatId == self.chat.chatId){
+                    self.chat.loadedMessages.append(loadedMessage)
+                }
+                
+                print("[NewMessageHandler] NewMessageHandler received new message '\(messageText)' from userId \(messageOrigin)");
+            }
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.tableView.reloadData()
+                self.tableViewScrollToBottomAnimated(true)
+            })
+        }, forNotification: "newMessage")
+    }
 
 
     func btnBack(sender:UIButton!)
     {
+        self.dismissKeyboard()
+        self.toolBar.hidden = true
         self.dismissViewControllerAnimated(true, completion: nil)
+        
     }
     
     /* info button action - leads to item detail view */
@@ -190,7 +272,12 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let sb: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let vc: ItemDetails = sb.instantiateViewControllerWithIdentifier("ItemDetails") as! ItemDetails
         vc.modalTransitionStyle = UIModalTransitionStyle.FlipHorizontal
-        vc.item = Bakkle.sharedInstance.trunkItems[index].valueForKey("item") as! NSDictionary
+        if isBuyer {
+            vc.item = Bakkle.sharedInstance.trunkItems[self.itemIndex].valueForKey("item") as! NSDictionary
+        } else {
+            vc.item = Bakkle.sharedInstance.garageItems[self.itemIndex] as! NSDictionary
+        }
+        self.dismissKeyboard()
         self.presentViewController(vc, animated: true, completion: nil)
     }
 
@@ -202,10 +289,13 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         self.presentViewController(vc, animated: true, completion: nil)
     }
 
+    func dismissKeyboard(){
+        //self.textView
+        self.textView.resignFirstResponder()
+    }
+    
 //    // #iOS7.1
     override func willAnimateRotationToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
-//NOTE: We aren't using this, commented out to pacify warning
-        //super.willAnimateRotationToInterfaceOrientation(toInterfaceOrientation, duration: duration)
 
         if UIInterfaceOrientationIsLandscape(toInterfaceOrientation) {
             if toolBar.frame.height > textViewMaxHeight.landscape {
@@ -215,24 +305,20 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             updateTextViewHeight()
         }
     }
-    
-//    // #iOS8
-//    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator!) {
-//        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
-//    }
 
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return chat.loadedMessages.count
+        return 1
     }
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return chat.loadedMessages[section].count + 1 // for sent-date cell
+        return chat.loadedMessages.count * 2 // for sent-date cell
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if indexPath.row == 0 {
+        if (indexPath.row % 2) == 0 {
             let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(MessageSentDateCell), forIndexPath: indexPath) as! MessageSentDateCell
-            let message = chat.loadedMessages[indexPath.section][0]
+            var indexFloor: Int = Int(floor(Double(indexPath.row) * 0.5))
+            let message = chat.loadedMessages[indexFloor]
             dateFormatter.dateStyle = .ShortStyle
             dateFormatter.timeStyle = .ShortStyle
             cell.sentDateLabel.text = dateFormatter.stringFromDate(message.sentDate)
@@ -250,7 +336,8 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 cell.bubbleImageView.addGestureRecognizer(doubleTapGestureRecognizer)
                 cell.bubbleImageView.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: action))
             }
-            let message = chat.loadedMessages[indexPath.section][indexPath.row-1]
+            var indexFloor: Int = Int(floor(Double(indexPath.row) * 0.5))
+            let message = chat.loadedMessages[indexFloor]
             cell.configureWithMessage(message)
             return cell
         }
@@ -329,30 +416,20 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         // Autocomplete text before sending #hack
         textView.resignFirstResponder()
         textView.becomeFirstResponder()
-
-        chat.loadedMessages.append([Message(incoming: false, text: textView.text, sentDate: NSDate())])
-        //TODO: Trap response to show if message got transmitted or not.
-        Bakkle.sharedInstance.sendChat(1, message: textView.text, success: {()->() in }, fail: {()->() in })
+        
+        var sendPayload: WSRequest = WSSendChatMessageRequest(chatId: String(chat.chatId), message: textView.text)
+        WSManager.enqueueWorkPayload(sendPayload)
+        
         textView.text = nil
         updateTextViewHeight()
         sendButton.enabled = false
-
-        let lastSection = tableView.numberOfSections()
-        tableView.beginUpdates()
-        tableView.insertSections(NSIndexSet(index: lastSection), withRowAnimation: .Automatic)
-        tableView.insertRowsAtIndexPaths([
-            NSIndexPath(forRow: 0, inSection: lastSection),
-            NSIndexPath(forRow: 1, inSection: lastSection)
-            ], withRowAnimation: .Automatic)
-        tableView.endUpdates()
-        tableViewScrollToBottomAnimated(true)
         AudioServicesPlaySystemSound(messageSoundOutgoing)
     }
 
     func tableViewScrollToBottomAnimated(animated: Bool) {
         let numberOfRows = tableView.numberOfRowsInSection(0)
         if numberOfRows > 0 {
-            tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: numberOfRows-1, inSection: 0), atScrollPosition: .Bottom, animated: animated)
+            tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: numberOfRows-2, inSection: 0), atScrollPosition: .Bottom, animated: animated)
         }
     }
 
@@ -376,7 +453,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     // 2. Copy text to pasteboard
     func messageCopyTextAction(menuController: UIMenuController) {
         let selectedIndexPath = tableView.indexPathForSelectedRow()
-        let selectedMessage = chat.loadedMessages[selectedIndexPath!.section][selectedIndexPath!.row-1]
+        let selectedMessage = chat.loadedMessages[selectedIndexPath!.row-1]
         UIPasteboard.generalPasteboard().string = selectedMessage.text
     }
     // 3. Deselect row

@@ -15,6 +15,7 @@ enum methodType: String{
     case registerChat = "registerChat"
     case startChat = "startChat"
     case getChats = "getChats"
+    case getMessagesForChat = "getMessagesForChat"
     case sendChatMessage = "sendChatMessage"
 }
 
@@ -68,8 +69,19 @@ class WSStartChatRequest: WSRequest{
 
 class WSGetChatsRequest: WSRequest{
     
-    init(){
+    init(itemId: NSString){
         super.init(method:methodType.getChats.rawValue);
+        
+        super.data["itemId"] = itemId
+    }
+}
+
+class WSGetMessagesForChatRequest: WSRequest{
+    
+    init(chatId: NSString){
+        super.init(method:methodType.getMessagesForChat.rawValue);
+        
+        super.data["chatId"] = chatId
     }
 }
 

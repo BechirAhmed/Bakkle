@@ -38,7 +38,7 @@ def getDATABASES():
     hostname = socket.gethostname()
 
 
-    if(hostname == 'ip-172-31.21.118' or hostname == 'ip-172-31-27-192'):
+    if(hostname == 'ip-172-31-21-18' or hostname == 'ip-172-31-27-192'):
         DATABASES['default'] = DATABASES['production']
         activeDB = 'production'
 

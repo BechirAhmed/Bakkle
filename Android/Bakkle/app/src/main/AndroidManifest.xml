@@ -5,6 +5,9 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <application
         android:allowBackup="true"
@@ -13,7 +16,13 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".SplashActivity"
-            android:label="@string/title_activity_splash" >
+            android:label="@string/app_name" >
+
+
+        </activity>
+        <activity
+            android:name=".SignupActivity"
+            android:label="@string/title_activity_login" >
             <intent-filter android:label="@string/app_name" >
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -21,19 +30,16 @@
         </activity>
         <activity
             android:name=".LoginActivity"
-            android:label="@string/title_activity_login" >
-        </activity>
-        <activity
-            android:name=".SignInActivity"
             android:label="@string/title_activity_sign_in"
-            android:parentActivityName=".LoginActivity" >
+            android:parentActivityName=".SignupActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".LoginActivity" />
+                android:value=".SignupActivity" />
         </activity>
         <activity
             android:name=".HomeActivity"
             android:label="@string/title_activity_home" >
+
         </activity>
         <activity
             android:name="com.facebook.FacebookActivity"
@@ -41,6 +47,7 @@
                 "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:label="@string/app_name" />
+
         <provider
             android:authorities="@string/facebook_authorities"
             android:name="com.facebook.FacebookContentProvider"
