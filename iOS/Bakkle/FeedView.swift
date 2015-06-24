@@ -134,7 +134,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         if userDefaults.boolForKey("instruction") {
             // disable user interaction and show instruction
             self.itemDetailTap.enabled = false
-            //self.constructInstructionView()
+            self.constructInstructionView()
         }
     }
     
