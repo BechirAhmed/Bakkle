@@ -106,8 +106,8 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
                 let buyerUser = User(facebookID: facebookID, firstName: firstName, lastName: lastName)
                 var buyerChat = Chat(user: buyerUser, lastMessageText: message, lastMessageSentDate: date, chatId: id)
                 self.account.chats.append(buyerChat)
-                self.tableView.reloadData()
             }
+            self.tableView.reloadData()
         }
         WSManager.enqueueWorkPayload(chatPayload)
     }

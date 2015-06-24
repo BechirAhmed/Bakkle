@@ -104,9 +104,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         profileButton.backgroundColor = Theme.ColorGreen
         profileButton.setImage(UIImage(named: "loading.png"), forState: UIControlState.Normal)
         profileButton.imageView?.layer.cornerRadius = profileButton.imageView!.frame.size.width/2
-        
-
-        profileButton.addTarget(self, action: "btnProfile:", forControlEvents: UIControlEvents.TouchUpInside)
+        //profileButton.addTarget(self, action: "btnProfile:", forControlEvents: UIControlEvents.TouchUpInside)
         header.addSubview(profileButton)
         
         userName = UILabel()
@@ -245,7 +243,10 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 let date = NSDate().dateFromString(dateString, format:  "yyyy-MM-dd HH:mm:ss")
                 let incoming = (message.valueForKey("sent_by_buyer") as! Bool) == !self.isBuyer
                 let loadedMessage = Message(incoming: incoming, text: messageText, sentDate: date)
-                self.chat.loadedMessages.append(loadedMessage)
+                let incomingChatId = (message.valueForKey("chat") as! NSNumber).integerValue
+                if(incomingChatId == self.chat.chatId){
+                    self.chat.loadedMessages.append(loadedMessage)
+                }
                 
                 print("[NewMessageHandler] NewMessageHandler received new message '\(messageText)' from userId \(messageOrigin)");
             }
