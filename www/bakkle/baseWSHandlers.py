@@ -12,7 +12,7 @@ from tornado import websocket
 
 from common.sysVars import getSysVars
 
-class baseWSRequestHandler(websocket.WebSocketHandler):
+class BaseWSHandler(websocket.WebSocketHandler):
 
     clients = dict();
 
@@ -28,6 +28,10 @@ class baseWSRequestHandler(websocket.WebSocketHandler):
     #TODO: on websocket open, send settings bundle
     def open(self):
         print("WebSocket opened");
+
+        self.chatWSHandler = None;
+        # self.itemsWSHandler = None;
+
         try:
             self.clientId = str(self.request.query_arguments['userId'][0])
             self.uuid = str(self.request.query_arguments['uuid'][0])
@@ -93,8 +97,9 @@ class baseWSRequestHandler(websocket.WebSocketHandler):
 
     def on_close(self):
         print("WebSocket closed")
-        self.chatWSHandler.handleClose()
-        self.deregister();
+        if (self.chatWSHandler is not None):
+            self.chatWSHandler.handleClose()
+        self.deregister()
 
 
     def authenticate(self, request):

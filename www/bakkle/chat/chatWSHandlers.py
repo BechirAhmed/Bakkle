@@ -7,6 +7,8 @@ from models import Message
 from items.models import Items
 from common.methods import totalUnreadMessagesForAccount
 
+# import baseWSHandlers
+
 import datetime
 
 
@@ -129,11 +131,11 @@ class ChatWSHandler():
         newMessage.date_sent = datetime.now()
         newMessage.save()
 
-        devices = Device.objects.filter(
-            Q(account_id=chat.item.seller) | Q(account_id=chat.buyer))
-        for device in devices:
-            device.send_notification(
-                message, len(totalUnreadMessagesForAccount(device.account_id)), "")
+        # devices = Device.objects.filter(
+        #     Q(account_id=chat.item.seller) | Q(account_id=chat.buyer))
+        # for device in devices:
+        #     device.send_notification(
+        #         message, len(totalUnreadMessagesForAccount(device.account_id)), "")
 
         if(chat.item.seller.pk in self.baseWSHandler.clients):
             for uuid in clients[chat.item.seller.pk]:

@@ -1,7 +1,7 @@
 from common.bakkleRequestHandler import bakkleRequestHandler
 from common.bakkleRequestHandler import QueryArgumentError
 
-import itemsCommonRequestHandlers
+import itemsCommonHandlers
 
 
 class addItemHandler(bakkleRequestHandler):
@@ -28,7 +28,7 @@ class addItemHandler(bakkleRequestHandler):
         except QueryArgumentError as error:
             return self.writeJSON({"status": 0, "message": error.message})
 
-        self.writeJSON(itemsCommonRequestHandlers.add_item(
+        self.writeJSON(itemsCommonHandlers.add_item(
             title, description, location, seller_id, price,
             tags, method, notifyFlag, item_id, images))
 
@@ -48,14 +48,14 @@ class feedHandler(bakkleRequestHandler):
         except QueryArgumentError as error:
             return self.writeJSON({"status": 0, "message": error.message})
 
-        # return itemsCommonRequestHandlers.feed(buyer_id, device_uuid,
+        # return itemsCommonHandlers.feed(buyer_id, device_uuid,
         # user_location, search_text, filter_distance, filter_price)
-        self.writeJSON(itemsCommonRequestHandlers.feed(buyer_id,
-                                                       device_uuid,
-                                                       user_location,
-                                                       search_text,
-                                                       filter_distance,
-                                                       filter_price))
+        self.writeJSON(itemsCommonHandlers.feed(buyer_id,
+                                                device_uuid,
+                                                user_location,
+                                                search_text,
+                                                filter_distance,
+                                                filter_price))
 
     def post(self):
         try:
@@ -70,14 +70,14 @@ class feedHandler(bakkleRequestHandler):
         except QueryArgumentError as error:
             return self.writeJSON({"status": 0, "message": error.message})
 
-        # return itemsCommonRequestHandlers.feed(buyer_id, device_uuid,
+        # return itemsCommonHandlers.feed(buyer_id, device_uuid,
         # user_location, search_text, filter_distance, filter_price)
-        self.writeJSON(itemsCommonRequestHandlers.feed(buyer_id,
-                                                       device_uuid,
-                                                       user_location,
-                                                       search_text,
-                                                       filter_distance,
-                                                       filter_price))
+        self.writeJSON(itemsCommonHandlers.feed(buyer_id,
+                                                device_uuid,
+                                                user_location,
+                                                search_text,
+                                                filter_distance,
+                                                filter_price))
 
 
 class mehHandler(bakkleRequestHandler):
@@ -90,11 +90,11 @@ class mehHandler(bakkleRequestHandler):
         except QueryArgumentError as error:
             return self.writeJSON({"status": 0, "message": error.message})
 
-        # return itemsCommonRequestHandlers.meh(buyer_id, item_id,
+        # return itemsCommonHandlers.meh(buyer_id, item_id,
         # view_duration)
-        self.writeJSON(itemsCommonRequestHandlers.meh(buyer_id,
-                                                      item_id,
-                                                      view_duration))
+        self.writeJSON(itemsCommonHandlers.meh(buyer_id,
+                                               item_id,
+                                               view_duration))
 
 
 class deleteItemHandler(bakkleRequestHandler):
@@ -105,7 +105,7 @@ class deleteItemHandler(bakkleRequestHandler):
         except QueryArgumentError as error:
             return self.writeJSON({"status": 0, "message": error.message})
 
-        self.writeJSON(itemsCommonRequestHandlers.delete_item(item_id))
+        self.writeJSON(itemsCommonHandlers.delete_item(item_id))
 
 
 class spamItemHandler(bakkleRequestHandler):
@@ -116,7 +116,7 @@ class spamItemHandler(bakkleRequestHandler):
         except QueryArgumentError as error:
             return self.writeJSON({"status": 0, "message": error.message})
 
-        self.writeJSON(itemsCommonRequestHandlers.spam_item(item_id))
+        self.writeJSON(itemsCommonHandlers.spam_item(item_id))
 
 
 class soldHandler(bakkleRequestHandler):
@@ -129,10 +129,10 @@ class soldHandler(bakkleRequestHandler):
         except QueryArgumentError as error:
             return self.writeJSON({"status": 0, "message": error.message})
 
-        # return itemsCommonRequestHandlers.sold(buyer_id, item_id,
+        # return itemsCommonHandlers.sold(buyer_id, item_id,
         # view_duration)
-        self.writeJSON(itemsCommonRequestHandlers.sold(buyer_id,
-                                                       item_id, view_duration))
+        self.writeJSON(itemsCommonHandlers.sold(buyer_id,
+                                                item_id, view_duration))
 
 
 class wantHandler(bakkleRequestHandler):
@@ -145,10 +145,10 @@ class wantHandler(bakkleRequestHandler):
         except QueryArgumentError as error:
             return self.writeJSON({"status": 0, "message": error.message})
 
-        # return itemsCommonRequestHandlers.want(buyer_id, item_id,
+        # return itemsCommonHandlers.want(buyer_id, item_id,
         # view_duration)
-        self.writeJSON(itemsCommonRequestHandlers.want(buyer_id,
-                                                       item_id, view_duration))
+        self.writeJSON(itemsCommonHandlers.want(buyer_id,
+                                                item_id, view_duration))
 
 
 class holdHandler(bakkleRequestHandler):
@@ -161,10 +161,10 @@ class holdHandler(bakkleRequestHandler):
         except QueryArgumentError as error:
             return self.writeJSON({"status": 0, "message": error.message})
 
-        # return itemsCommonRequestHandlers.hold(buyer_id, item_id,
+        # return itemsCommonHandlers.hold(buyer_id, item_id,
         # view_duration)
-        self.writeJSON(itemsCommonRequestHandlers.hold(buyer_id,
-                                                       item_id, view_duration))
+        self.writeJSON(itemsCommonHandlers.hold(buyer_id,
+                                                item_id, view_duration))
 
 
 class reportHandler(bakkleRequestHandler):
@@ -177,11 +177,11 @@ class reportHandler(bakkleRequestHandler):
         except QueryArgumentError as error:
             return self.writeJSON({"status": 0, "message": error.message})
 
-        # return itemsCommonRequestHandlers.report(buyer_id, item_id,
+        # return itemsCommonHandlers.report(buyer_id, item_id,
         # view_duration)
-        self.writeJSON(itemsCommonRequestHandlers.report(buyer_id,
-                                                         item_id,
-                                                         view_duration))
+        self.writeJSON(itemsCommonHandlers.report(buyer_id,
+                                                  item_id,
+                                                  view_duration))
 
 
 class getSellerItemsHandler(bakkleRequestHandler):
@@ -192,9 +192,9 @@ class getSellerItemsHandler(bakkleRequestHandler):
         except QueryArgumentError as error:
             return self.writeJSON({"status": 0, "message": error.message})
 
-        # return itemsCommonRequestHandlers.sold(buyer_id, item_id,
+        # return itemsCommonHandlers.sold(buyer_id, item_id,
         # view_duration)
-        self.writeJSON(itemsCommonRequestHandlers.get_seller_items(seller_id))
+        self.writeJSON(itemsCommonHandlers.get_seller_items(seller_id))
 
 
 class getSellerTransactionsHandler(bakkleRequestHandler):
@@ -205,10 +205,10 @@ class getSellerTransactionsHandler(bakkleRequestHandler):
         except QueryArgumentError as error:
             return self.writeJSON({"status": 0, "message": error.message})
 
-        # return itemsCommonRequestHandlers.sold(buyer_id, item_id,
+        # return itemsCommonHandlers.sold(buyer_id, item_id,
         # view_duration)
         self.writeJSON(
-            itemsCommonRequestHandlers.get_seller_transactions(seller_id))
+            itemsCommonHandlers.get_seller_transactions(seller_id))
 
 
 class getBuyersTrunkHandler(bakkleRequestHandler):
@@ -219,9 +219,9 @@ class getBuyersTrunkHandler(bakkleRequestHandler):
         except QueryArgumentError as error:
             return self.writeJSON({"status": 0, "message": error.message})
 
-        # return itemsCommonRequestHandlers.sold(buyer_id, item_id,
+        # return itemsCommonHandlers.sold(buyer_id, item_id,
         # view_duration)
-        self.writeJSON(itemsCommonRequestHandlers.get_buyers_trunk(buyer_id))
+        self.writeJSON(itemsCommonHandlers.get_buyers_trunk(buyer_id))
 
 
 class getHoldingPatternHandler(bakkleRequestHandler):
@@ -232,10 +232,10 @@ class getHoldingPatternHandler(bakkleRequestHandler):
         except QueryArgumentError as error:
             return self.writeJSON({"status": 0, "message": error.message})
 
-        # return itemsCommonRequestHandlers.sold(buyer_id, item_id,
+        # return itemsCommonHandlers.sold(buyer_id, item_id,
         # view_duration)
         self.writeJSON(
-            itemsCommonRequestHandlers.get_holding_pattern(buyer_id))
+            itemsCommonHandlers.get_holding_pattern(buyer_id))
 
 
 class getBuyerTransactionsHandler(bakkleRequestHandler):
@@ -246,17 +246,17 @@ class getBuyerTransactionsHandler(bakkleRequestHandler):
         except QueryArgumentError as error:
             return self.writeJSON({"status": 0, "message": error.message})
 
-        # return itemsCommonRequestHandlers.sold(buyer_id, item_id,
+        # return itemsCommonHandlers.sold(buyer_id, item_id,
         # view_duration)
         self.writeJSON(
-            itemsCommonRequestHandlers.get_buyer_transactions(buyer_id))
+            itemsCommonHandlers.get_buyer_transactions(buyer_id))
 
 
 class getDeliveryMethodsHandler(bakkleRequestHandler):
 
     def post(self):
 
-        self.writeJSON(itemsCommonRequestHandlers.get_delivery_methods())
+        self.writeJSON(itemsCommonHandlers.get_delivery_methods())
 
 
 class resetHandler(bakkleRequestHandler):
@@ -267,13 +267,13 @@ class resetHandler(bakkleRequestHandler):
         except QueryArgumentError as error:
             return self.writeJSON({"status": 0, "message": error.message})
 
-        # return itemsCommonRequestHandlers.sold(buyer_id, item_id,
+        # return itemsCommonHandlers.sold(buyer_id, item_id,
         # view_duration)
-        self.writeJSON(itemsCommonRequestHandlers.reset(buyer_id))
+        self.writeJSON(itemsCommonHandlers.reset(buyer_id))
 
 
 class resetItemsHandler(bakkleRequestHandler):
 
     def post(self):
 
-        self.writeJSON(itemsCommonRequestHandlers.reset_items())
+        self.writeJSON(itemsCommonHandlers.reset_items())
