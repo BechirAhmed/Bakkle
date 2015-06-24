@@ -42,19 +42,13 @@ static BOOL debug = true;
     _wsManagerInstance.successHandlers = [[NSMutableDictionary alloc] init];
     _wsManagerInstance.failHandlers = [[NSMutableDictionary alloc] init];
     _wsManagerInstance.onMessageHandlers = [[NSMutableDictionary alloc] init];
-    _wsManagerInstance.tagCounter = [NSNumber numberWithInt:0];
-    _wsManagerInstance.autoRegister = false;
-}
+    _wsManagerInstance.tagCounter = [NSNumber numberWithInt:0];}
 
 #pragma mark - public static methods for interfacing with websockets.
 
 +(void) setAuthenticationWithUUID: (NSString*) uuid withToken: (NSString*) token{
     _wsManagerInstance.uuid = uuid;
     _wsManagerInstance.auth_token = token;
-}
-
-+(void) setAutoRegister:(BOOL) autoRegister{
-    _wsManagerInstance.autoRegister = autoRegister;
 }
 
 +(void) registerMessageHandler: (void (^)(NSDictionary*)) handler forNotification: (NSString*) notificationType {
@@ -66,11 +60,14 @@ static BOOL debug = true;
         [NSException raise:@"Authentication token/uuid not initialized. Call setAuthenticationWithUUID:withToken: first." format:@"Invalid token/UUID value: nil"];
     }
     [_wsManagerInstance connectWebSocket];
-    if(_wsManagerInstance.autoRegister){[WSManager enqueueWorkPayload:[[WSRegisterChatRequest alloc] init]];}
     return true;
 }
 
 +(void) enqueueWorkPayload:(WSRequest*) payload {
+    if(!_wsManagerInstance.socketOpen){
+        [self connectWS];
+    }
+    
     if(_wsManagerInstance.uuid == nil || _wsManagerInstance.auth_token == nil){
         [NSException raise:@"Authentication token/uuid not initialized. Call setAuthenticationWithUUID:withToken: first." format:@"Invalid token/UUID value: nil"];
     }
@@ -88,9 +85,61 @@ static BOOL debug = true;
 
 - (void)connectWebSocket {
     
+    if(self.socketOpen){
+        return;
+    }
+    
     webSocket.delegate = nil;
     webSocket = nil;
-    NSString *urlString = @"ws://wongb.rhventures.org:8080/ws/";
+    
+    
+    //NSString *urlString = @"ws://wongb.rhventures.org:8080/ws/";
+    NSString *urlString;
+    
+    NSInteger serverNum = [[NSUserDefaults standardUserDefaults]integerForKey:@"server"];//NSUserDefaults.standardUserDefaults().integerForKey("server")
+    switch( serverNum )
+    {
+        case 0:
+            urlString = @"ws://app.bakkle.com:8080/ws/";
+            break;
+            //case 0: self.url_base = "https://PRODCLUSTER-16628191.us-west-2.elb.amazonaws.com/"
+        case 1:
+            urlString = @"ws://app-cluster.bakkle.com:8080/ws/";
+            break;
+
+        case 2:
+            urlString = @"ws://bakkle.rhventures.org:8000/ws/";
+            break;
+
+        case 3:
+            urlString = @"ws://wongb.rhventures.org:8000/ws/";
+            break;
+
+        case 4:
+            urlString = @"ws://10.0.0.118:8000/ws/";
+            break;
+
+            //case 4: self.url_base = "http://137.112.57.140:8000/"
+        case 5:
+            urlString = @""; //Patrick;
+            break;
+
+        case 6:
+            urlString = @""; //Xinyu;
+            break;
+
+        case 7:
+            urlString = @""; //Joe;
+            break;
+
+        default:
+            urlString = @"https://app.bakkle.com:8080/ws/";
+            break;
+
+    }
+    
+    urlString = [NSString stringWithFormat:@"%@?userId=%@&uuid=%@", urlString, [self.auth_token componentsSeparatedByString:@"_"][1], self.uuid];
+    
     SRWebSocket *newWebSocket = [[SRWebSocket alloc] initWithURL:[NSURL URLWithString:urlString]];
     
     newWebSocket.delegate = self;
@@ -144,6 +193,7 @@ static BOOL debug = true;
 #pragma mark - SRWebSocket delegate methods
 
 - (void)webSocketDidOpen:(SRWebSocket *)newWebSocket {
+    if(debug){NSLog(@"[SocketOpenedHandler] %@\n\n", @"Websocket opened");}
     webSocket = newWebSocket;
     
     self.socketOpen = true;

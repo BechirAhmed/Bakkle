@@ -12,10 +12,10 @@ import UIKit
 enum methodType: String{
     case null = "null"
     case echo = "echo"
-    case registerChat = "registerChat"
-    case startChat = "startChat"
-    case getChats = "getChats"
-    case sendChatMessage = "sendChatMessage"
+    case startChat = "chat_startChat"
+    case getChatIds = "chat_getChatIds"
+    case sendChatMessage = "chat_sendChatMessage"
+    case getMessagesForChat = "chat_getMessagesForChat"
 }
 
 //superclass for all requests, contains data shared across all instances
@@ -50,13 +50,6 @@ class WSEchoRequest: WSRequest{
     }
 }
 
-class WSRegisterChatRequest: WSRequest{
-    
-    init(){
-        super.init(method:methodType.registerChat.rawValue);
-    }
-}
-
 class WSStartChatRequest: WSRequest{
     
     init(itemId: NSString){
@@ -68,8 +61,19 @@ class WSStartChatRequest: WSRequest{
 
 class WSGetChatsRequest: WSRequest{
     
-    init(){
-        super.init(method:methodType.getChats.rawValue);
+    init(itemId: NSString){
+        super.init(method:methodType.getChatIds.rawValue);
+        
+        super.data["itemId"] = itemId
+    }
+}
+
+class WSGetMessagesForChatRequest: WSRequest{
+    
+    init(chatId: NSString){
+        super.init(method:methodType.getMessagesForChat.rawValue);
+        
+        super.data["chatId"] = chatId
     }
 }
 

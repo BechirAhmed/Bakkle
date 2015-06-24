@@ -48,6 +48,8 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     var email: String!
     var facebook_id: Int!
     var facebook_id_str: String!
+    var first_name: String!
+    var last_name: String!
     
     var feedItems: [NSObject]!
     var garageItems: [NSObject]!
@@ -230,6 +232,8 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                 if responseDict.valueForKey("status")?.integerValue == 1 {
                     self.display_name = username
                     self.email = email
+                    self.first_name = first_name
+                    self.last_name = last_name
                     success()
                 }
             } else {
@@ -277,9 +281,8 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                     self.auth_token = responseDict.valueForKey("auth_token") as! String
                     
                     // Connect to web socket
-//                    WSManager.setAuthenticationWithUUID(uuid: self.deviceUUID, withToken: self.auth_token)
-//                    WSManager.setAutoRegister(true)
-//                    WSManager.connectWS()
+                    WSManager.setAuthenticationWithUUID(self.deviceUUID, withToken: self.auth_token)
+                    WSManager.connectWS()
                     success()
                 } else {
                     Bakkle.sharedInstance.logout()
@@ -785,10 +788,17 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     func restoreData() {
         var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
         
+        // reset instructional overlay
+        if userDefaults.objectForKey("instruction") == nil{
+            userDefaults.setBool(true, forKey: "instruction")
+        }
         // We force a version upgrade
         if let version = userDefaults.objectForKey("version") as? NSString {
             info("Stored version: \(version)")
             info("Current version: \(self.appVersion().build)")
+            if version != self.appVersion().build {
+                userDefaults.setBool(true, forKey: "instruction")
+            }
             if version == self.appVersion().build {
             
                 // restore FEED

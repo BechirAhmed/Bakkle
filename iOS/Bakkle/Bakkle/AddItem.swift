@@ -10,6 +10,7 @@ import UIKit
 import Photos
 import Social
 
+
 //import FBSDKCoreKit
 //import FBSDKShareKit
 //import FBSDKLoginKit
@@ -22,6 +23,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     private static let CAPTURE_NOTIFICATION_TEXT = "_UIImagePickerControllerUserDidCaptureItem"
     private static let REJECT_NOTIFICATION_TEXT = "_UIImagePickerControllerUserDidRejectItem"
     private static let DEVICE_MODEL: String = UIDevice.currentDevice().modelName
+    
     let listItemCellIdentifier = "ListItemCell"
     var itemImages: [UIImage]? = [UIImage]()
     var scaledImages: [UIImage]? = [UIImage]()
@@ -52,7 +54,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         // sets placeholder text
         textViewDidEndEditing(tagsField)
         camButtonBackground.layer.cornerRadius = camButtonBackground.frame.size.width/2
-        camButtonBackground.layer.cornerRadius = camButtonBackground.frame.size.width/2
+        camButtonBackground.setNeedsDisplay()
         
         // -8.0 and -4.0 are y and x respectively, this is just to keep alignment of text
         // with the fields above it, because UITextView has different edges for scrolling
@@ -72,6 +74,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleNotification:", name: AddItem.CAPTURE_NOTIFICATION_TEXT, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleNotification:", name: AddItem.REJECT_NOTIFICATION_TEXT, object: nil)
+        
         
         setupButtons()
     }
@@ -218,7 +221,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     static let CONFIRM_BUTTON_RED = 51
     static let CONFIRM_BUTTON_GREEN = 205
     static let CONFIRM_BUTTON_BLUE = 95
-    static let CONFIRM_BUTTON_ENABLED_COLOR = UIColor(red: CGFloat(AddItem.CONFIRM_BUTTON_RED)/255.0, green: CGFloat(AddItem.CONFIRM_BUTTON_GREEN)/255.0, blue: CGFloat(AddItem.CONFIRM_BUTTON_BLUE)/255.0, alpha: CGFloat(1.0))
+    static let BAKKLE_GREEN_COLOR = UIColor(red: CGFloat(AddItem.CONFIRM_BUTTON_RED)/255.0, green: CGFloat(AddItem.CONFIRM_BUTTON_GREEN)/255.0, blue: CGFloat(AddItem.CONFIRM_BUTTON_BLUE)/255.0, alpha: CGFloat(1.0))
     static let CONFIRM_BUTTON_DISABLED_COLOR = UIColor.lightGrayColor()
     var confirmHit = false
     /**
@@ -243,7 +246,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
             confirmButton.backgroundColor = AddItem.CONFIRM_BUTTON_DISABLED_COLOR
         } else {
             confirmButton.enabled = true
-            confirmButton.backgroundColor = AddItem.CONFIRM_BUTTON_ENABLED_COLOR
+            confirmButton.backgroundColor = AddItem.BAKKLE_GREEN_COLOR
         }
         confirmButtonView.bringSubviewToFront(confirmButtonText)
         return confirmButton.enabled
@@ -397,7 +400,6 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
             self.imagePicker.delegate = self
             self.imagePicker.sourceType = UIImagePickerControllerSourceType.Camera
-            
             drawCameraOverlay()
             self.presentViewController(imagePicker, animated: true, completion: nil)
         } else{
@@ -405,7 +407,6 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
             var alert = UIAlertController(title: "Error", message: "There is no camera available.", preferredStyle: .Alert)
             alert.addAction(UIAlertAction(title: "Okay", style: .Default, handler: {(alertAction)in
                 alert.dismissViewControllerAnimated(true, completion: nil)
-                
             }))
             self.presentViewController(alert, animated: true, completion: nil)
         }
@@ -453,7 +454,15 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
             pickerFrame = CGRectMake(0, 20.0, imagePicker.view.bounds.width, adjust - AddItem.frameHeightAdjust[AddItem.DEVICE_MODEL]!)
             squareFrame = CGRectMake(pickerFrame.width/2 - imgWidth/2, adjust/2 - imgWidth/2 - AddItem.captureFrameAdjust[AddItem.DEVICE_MODEL]!, imgWidth, imgWidth)
         }
-
+        
+        var galleryButtonIcon = IconImage().gallery()
+        var galleryButton: UIButton = UIButton.buttonWithType(UIButtonType.System) as! UIButton
+        galleryButton.frame = CGRectMake(screenSize.width - (imagePicker.navigationBar.bounds.size.height/2 + galleryButtonIcon.size.width), screenSize.height - (imagePicker.navigationBar.bounds.size.height/2 + galleryButtonIcon.size.height), galleryButtonIcon.size.width, galleryButtonIcon.size.height)
+        galleryButton.setImage(galleryButtonIcon, forState: .Normal)
+        galleryButton.setTitle("", forState: .Normal)
+        galleryButton.addTarget(self, action: "changeImagePickerSourceType:", forControlEvents: UIControlEvents.TouchUpInside)
+        galleryButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        galleryButton.setTitleColor(UIColor.lightGrayColor(), forState: .Selected)
         UIGraphicsBeginImageContext(pickerFrame.size)
         
         let context = UIGraphicsGetCurrentContext()
@@ -476,9 +485,15 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         let overlayImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext();
         
-        let overlayView = UIImageView(frame: pickerFrame)
-        overlayView.image = overlayImage
-        imagePicker.cameraOverlayView = overlayView
+        let squareOverlayView = UIImageView(frame: pickerFrame)
+        squareOverlayView.image = overlayImage
+        
+        if !retakeView && UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.SavedPhotosAlbum) {
+            imagePicker.cameraOverlayView?.addSubview(squareOverlayView)
+            imagePicker.cameraOverlayView?.addSubview(galleryButton)
+        } else {
+            imagePicker.cameraOverlayView = squareOverlayView
+        }
     }
     
     func handleNotification(message: NSNotification) {
@@ -489,7 +504,23 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         }
     }
     
+    func changeImagePickerSourceType(sender: AnyObject) {
+        if imagePicker.sourceType == UIImagePickerControllerSourceType.Camera {
+            //imagePicker.sourceType = UIImagePickerControllerSourceType.SavedPhotosAlbum
+            imagePicker.dismissViewControllerAnimated(false, completion: {
+                self.imagePicker = UIImagePickerController()
+                self.imagePicker.delegate = self
+                self.imagePicker.sourceType = UIImagePickerControllerSourceType.SavedPhotosAlbum
+                self.presentViewController(self.imagePicker, animated: true, completion: nil)
+            })
+        } else {
+            imagePicker.sourceType = UIImagePickerControllerSourceType.Camera
+            drawCameraOverlay()
+        }
+    }
+    
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+        picker.sourceType = UIImagePickerControllerSourceType.Camera
         picker.dismissViewControllerAnimated(true, completion: nil)
     }
     
