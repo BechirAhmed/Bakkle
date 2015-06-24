@@ -42,7 +42,7 @@ class LoginView: UIViewController, FBLoginViewDelegate {
         if FBSession.activeSession().accessTokenData != nil {
             setBackgroundImg(true)
         }else{
-            if (Bakkle.sharedInstance.distanceTo(location) > 20 && NSUserDefaults.standardUserDefaults().boolForKey("enableGeoDefense")){
+            if (Bakkle.sharedInstance.distanceTo(location) > 20 && NSUserDefaults.standardUserDefaults().boolForKey("enableGeofencing")){
                 setBackgroundImg(false)
                 counter = 1
             }else{
