@@ -29,6 +29,8 @@ class BaseWSHandler(websocket.WebSocketHandler):
     def open(self):
         print("WebSocket opened");
 
+        self.clientId = None;
+        self.uuid = None;
         self.chatWSHandler = None;
         # self.itemsWSHandler = None;
 
@@ -126,13 +128,13 @@ class BaseWSHandler(websocket.WebSocketHandler):
         return {'success': 1}
 
     def deregister(self):
-        if self.clientId in BaseWSHandler.clients:
+        if ((self.clientId is not None) and (self.clientId in BaseWSHandler.clients)):
             # if empty, or will be empty, delete the nested dictionary
             if(len(BaseWSHandler.clients[self.clientId]) <= 1):
                 dictionary = BaseWSHandler.clients;
                 del dictionary[self.clientId]
             # otherwise, just delete the respective entry.
-            else:
+            elif(self.uuid is not None):
                 dictionary = BaseWSHandler.clients[self.clientId];
                 del dictionary[self.uuid]
         print("Deregistered client from notifications: " + self.clientId);
