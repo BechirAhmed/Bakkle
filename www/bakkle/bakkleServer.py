@@ -17,7 +17,6 @@ from django.db import models
 
 # import handlers
 import requestHandlers as rootRequestHandlers 
-import items.requestHandlers as itemsRequestHandlers 
 import chat.requestHandlers as chatRequestHandlers 
 
 class Message(models.Model):

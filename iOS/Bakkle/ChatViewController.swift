@@ -19,7 +19,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     var sendButton: UIButton!
     var rotating = false
     var chatID: String!
-    var index: Int = 0
+    var itemIndex: Int = 0
     var seller: NSDictionary!
     var isBuyer: Bool = false
     var refreshControl: UIRefreshControl = UIRefreshControl()
@@ -273,9 +273,9 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let vc: ItemDetails = sb.instantiateViewControllerWithIdentifier("ItemDetails") as! ItemDetails
         vc.modalTransitionStyle = UIModalTransitionStyle.FlipHorizontal
         if isBuyer {
-            vc.item = Bakkle.sharedInstance.trunkItems[index].valueForKey("item") as! NSDictionary
+            vc.item = Bakkle.sharedInstance.trunkItems[self.itemIndex].valueForKey("item") as! NSDictionary
         } else {
-            vc.item = Bakkle.sharedInstance.garageItems[index] as! NSDictionary
+            vc.item = Bakkle.sharedInstance.garageItems[self.itemIndex] as! NSDictionary
         }
         self.dismissKeyboard()
         self.presentViewController(vc, animated: true, completion: nil)
