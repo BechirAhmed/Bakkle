@@ -169,6 +169,7 @@ class SellersGarageView: UIViewController, UICollectionViewDelegate, UICollectio
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         let chatsViewController = ChatsViewController()
         chatsViewController.chatItemID = (Bakkle.sharedInstance.garageItems[indexPath.row].valueForKey("pk") as! NSNumber).stringValue
+        chatsViewController.garageIndex = indexPath.row
         self.presentViewController(chatsViewController, animated: true, completion: {})
     }
 

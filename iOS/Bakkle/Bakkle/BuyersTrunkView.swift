@@ -145,7 +145,7 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
             chatId = success.valueForKey("chatId") as! Int
             var buyerChat = Chat(user: buyer, lastMessageText: "", lastMessageSentDate: NSDate(), chatId: chatId)
             let chatViewController = ChatViewController(chat: buyerChat)
-            chatViewController.index = indexPath.row
+            chatViewController.itemIndex = indexPath.row
             chatViewController.seller = chatItem.valueForKey("seller") as! NSDictionary
             chatViewController.isBuyer = true
             self.presentViewController(chatViewController, animated: true, completion: {})

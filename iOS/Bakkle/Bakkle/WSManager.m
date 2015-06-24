@@ -107,23 +107,23 @@ static BOOL debug = true;
     switch( serverNum )
     {
         case 0:
-            urlString = @"https://app.bakkle.com:8080/ws/";
+            urlString = @"ws://app.bakkle.com:8080/ws/";
             break;
             //case 0: self.url_base = "https://PRODCLUSTER-16628191.us-west-2.elb.amazonaws.com/"
         case 1:
-            urlString = @"https://app-cluster.bakkle.com:8080/ws/";
+            urlString = @"ws://app-cluster.bakkle.com:8080/ws/";
             break;
 
         case 2:
-            urlString = @"http://bakkle.rhventures.org:8080/ws/";
+            urlString = @"ws://bakkle.rhventures.org:8080/ws/";
             break;
 
         case 3:
-            urlString = @"http://wongb.rhventures.org:8080/ws/";
+            urlString = @"ws://wongb.rhventures.org:8000/ws/";
             break;
 
         case 4:
-            urlString = @"http://10.0.0.118:8000/ws/";
+            urlString = @"ws://10.0.0.118:8000/ws/";
             break;
 
             //case 4: self.url_base = "http://137.112.57.140:8000/"
