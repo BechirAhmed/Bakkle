@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -668,7 +668,7 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="375"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="FWd-VD-JTT">
@@ -838,7 +838,7 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="75" height="30"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 </view>
@@ -1661,7 +1661,7 @@
                                                         <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="250" height="250"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
                                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Fgn-P4-DBQ">
@@ -2958,21 +2958,21 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                             </button>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zM0-y0-LRs">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zM0-y0-LRs">
                                 <rect key="frame" x="0.0" y="72" width="375" height="315"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                <variation key="heightClass=regular-widthClass=compact" ambiguous="YES" misplaced="YES">
                                     <rect key="frame" x="0.0" y="64" width="375" height="0.0"/>
                                 </variation>
                             </scrollView>
-                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1QH-Oy-Msu">
+                            <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1QH-Oy-Msu">
                                 <rect key="frame" x="0.0" y="594" width="375" height="73"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                <variation key="heightClass=regular-widthClass=compact" ambiguous="YES" misplaced="YES">
                                     <rect key="frame" x="0.0" y="231" width="375" height="436"/>
                                 </variation>
                             </view>
-                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8JN-bn-XkF">
+                            <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8JN-bn-XkF">
                                 <rect key="frame" x="0.0" y="515" width="375" height="39"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="bkg-chat-text.png" translatesAutoresizingMaskIntoConstraints="NO" id="Nbd-wu-q3t">
@@ -2996,7 +2996,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="39" id="Rub-WA-2I9"/>
                                 </constraints>
-                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                <variation key="heightClass=regular-widthClass=compact" ambiguous="YES" misplaced="YES">
                                     <rect key="frame" x="0.0" y="192" width="375" height="39"/>
                                 </variation>
                             </view>
@@ -3308,7 +3308,7 @@
                                             </variation>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="6Ze-gR-D6u" kind="custom" customClass="SWRevealViewControllerSeguePushController" id="ScF-VI-Qlh"/>
+                                            <segue destination="1ta-Ib-8n5" kind="custom" customClass="SWRevealViewControllerSeguePushController" id="ScF-VI-Qlh"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="Ela-tw-PTz" userLabel="BUYER'S TRUNK">
@@ -3697,7 +3697,8 @@
                                         <exclude reference="cvc-wk-EdT"/>
                                     </mask>
                                 </variation>
-                                <variation key="heightClass=regular-widthClass=compact">
+                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                    <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                                     <mask key="subviews">
                                         <include reference="9J2-jl-t4F"/>
                                         <include reference="e7V-yc-Rjq"/>
@@ -3729,7 +3730,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="245" height="245"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="LMY-wb-f5x">
@@ -3993,6 +3994,9 @@
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
+                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                    <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                </variation>
                                 <connections>
                                     <outlet property="dataSource" destination="6Ze-gR-D6u" id="t7L-XP-GQg"/>
                                     <outlet property="delegate" destination="6Ze-gR-D6u" id="OKi-hP-vVk"/>
@@ -4045,6 +4049,7 @@
                             </mask>
                         </variation>
                     </view>
+                    <navigationItem key="navigationItem" id="G2z-O0-bpu"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
                         <outlet property="collectionView" destination="nGS-By-p3o" id="lBh-SV-Zfy"/>
@@ -4054,7 +4059,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eyy-Yl-vYF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1377.75" y="2452.875"/>
+            <point key="canvasLocation" x="-459.75" y="2452.875"/>
         </scene>
         <!--SETTINGS-->
         <scene sceneID="qcI-mn-GRn">
@@ -4290,7 +4295,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hIF-xi-Yri" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1506.75" y="2452.875"/>
+            <point key="canvasLocation" x="2424.75" y="2452.875"/>
         </scene>
         <!--FEED FILTER-->
         <scene sceneID="wra-M0-xY0">
@@ -4802,7 +4807,7 @@
                     </state>
                 </button>
             </objects>
-            <point key="canvasLocation" x="858.75" y="2452.875"/>
+            <point key="canvasLocation" x="1776.75" y="2452.875"/>
         </scene>
         <!--Buyers Trunk View-->
         <scene sceneID="0Z3-tk-HUR">
@@ -5012,7 +5017,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kVT-zl-wiH" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="194.25" y="2452.875"/>
+            <point key="canvasLocation" x="1112.25" y="2452.875"/>
         </scene>
         <!--Holding Pattern View-->
         <scene sceneID="6LW-gW-oy7">
@@ -5245,7 +5250,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DvR-ds-mev" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-693.75" y="2452.875"/>
+            <point key="canvasLocation" x="224.25" y="2452.875"/>
         </scene>
         <!--RATE USER-->
         <scene sceneID="wJ8-WW-CKD">
@@ -5860,9 +5865,29 @@
             </objects>
             <point key="canvasLocation" x="1159.5" y="3596.25"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="QDx-4s-i2R">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="1ta-Ib-8n5" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="b5S-MA-ppQ">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="6Ze-gR-D6u" kind="relationship" relationship="rootViewController" id="vOP-ru-XAJ"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="t2G-BA-Mos" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1133.25" y="2452.875"/>
+        </scene>
     </scenes>
     <resources>
         <image name="LoginScreen-bkg.png" width="1242" height="2208"/>
+        <image name="bkg-chat-text.png" width="1239" height="128"/>
         <image name="btn-addCam.png" width="163" height="125"/>
         <image name="btn-email40.png" width="230" height="40"/>
         <image name="btn-sign-in40.png" width="230" height="40"/>

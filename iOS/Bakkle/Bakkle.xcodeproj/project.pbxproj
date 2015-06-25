@@ -52,6 +52,15 @@
 		602C38971B389A1F005CB493 /* InstructionScreen.png in Resources */ = {isa = PBXBuildFile; fileRef = 602C38961B389A1F005CB493 /* InstructionScreen.png */; };
 		602C38991B389A2E005CB493 /* WrongLocationForPhone.png in Resources */ = {isa = PBXBuildFile; fileRef = 602C38981B389A2E005CB493 /* WrongLocationForPhone.png */; };
 		602C389B1B38AF1E005CB493 /* x-image.png in Resources */ = {isa = PBXBuildFile; fileRef = 602C389A1B38AF1E005CB493 /* x-image.png */; };
+		602C38A81B3C291F005CB493 /* AnalyticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602C38A71B3C291F005CB493 /* AnalyticsView.swift */; };
+		602C38F61B3C9105005CB493 /* PNChartLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 602C38DD1B3C9105005CB493 /* PNChartLabel.m */; };
+		602C38F81B3C9105005CB493 /* PNColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 602C38E11B3C9105005CB493 /* PNColor.m */; };
+		602C38F91B3C9105005CB493 /* PNGenericChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 602C38E31B3C9105005CB493 /* PNGenericChart.m */; };
+		602C38FB1B3C9105005CB493 /* PNLineChartData.m in Sources */ = {isa = PBXBuildFile; fileRef = 602C38E71B3C9105005CB493 /* PNLineChartData.m */; };
+		602C38FC1B3C9105005CB493 /* PNLineChartDataItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 602C38E91B3C9105005CB493 /* PNLineChartDataItem.m */; };
+		602C38FD1B3C9105005CB493 /* PNPieChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 602C38EB1B3C9105005CB493 /* PNPieChart.m */; };
+		602C38FE1B3C9105005CB493 /* PNPieChartDataItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 602C38ED1B3C9105005CB493 /* PNPieChartDataItem.m */; };
+		602C39031B3C91D4005CB493 /* PNLineChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 602C39021B3C91D4005CB493 /* PNLineChart.m */; };
 		720510341B1F839B00D059AB /* ListItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720510331B1F839B00D059AB /* ListItemCell.swift */; };
 		723D532C1B25F42B0067A80A /* IconImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 723D532B1B25F42B0067A80A /* IconImage.swift */; };
 		723D532E1B2718590067A80A /* OffsetTextAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 723D532D1B2718590067A80A /* OffsetTextAttachment.swift */; };
@@ -381,6 +390,25 @@
 		602C38961B389A1F005CB493 /* InstructionScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = InstructionScreen.png; sourceTree = "<group>"; };
 		602C38981B389A2E005CB493 /* WrongLocationForPhone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = WrongLocationForPhone.png; sourceTree = "<group>"; };
 		602C389A1B38AF1E005CB493 /* x-image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "x-image.png"; sourceTree = "<group>"; };
+		602C38A71B3C291F005CB493 /* AnalyticsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalyticsView.swift; sourceTree = "<group>"; };
+		602C38DA1B3C9105005CB493 /* PNChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNChart.h; sourceTree = "<group>"; };
+		602C38DB1B3C9105005CB493 /* PNChartDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNChartDelegate.h; sourceTree = "<group>"; };
+		602C38DC1B3C9105005CB493 /* PNChartLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNChartLabel.h; sourceTree = "<group>"; };
+		602C38DD1B3C9105005CB493 /* PNChartLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNChartLabel.m; sourceTree = "<group>"; };
+		602C38E01B3C9105005CB493 /* PNColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNColor.h; sourceTree = "<group>"; };
+		602C38E11B3C9105005CB493 /* PNColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNColor.m; sourceTree = "<group>"; };
+		602C38E21B3C9105005CB493 /* PNGenericChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNGenericChart.h; sourceTree = "<group>"; };
+		602C38E31B3C9105005CB493 /* PNGenericChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNGenericChart.m; sourceTree = "<group>"; };
+		602C38E41B3C9105005CB493 /* PNLineChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNLineChart.h; sourceTree = "<group>"; };
+		602C38E61B3C9105005CB493 /* PNLineChartData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNLineChartData.h; sourceTree = "<group>"; };
+		602C38E71B3C9105005CB493 /* PNLineChartData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNLineChartData.m; sourceTree = "<group>"; };
+		602C38E81B3C9105005CB493 /* PNLineChartDataItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNLineChartDataItem.h; sourceTree = "<group>"; };
+		602C38E91B3C9105005CB493 /* PNLineChartDataItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNLineChartDataItem.m; sourceTree = "<group>"; };
+		602C38EA1B3C9105005CB493 /* PNPieChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNPieChart.h; sourceTree = "<group>"; };
+		602C38EB1B3C9105005CB493 /* PNPieChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNPieChart.m; sourceTree = "<group>"; };
+		602C38EC1B3C9105005CB493 /* PNPieChartDataItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNPieChartDataItem.h; sourceTree = "<group>"; };
+		602C38ED1B3C9105005CB493 /* PNPieChartDataItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNPieChartDataItem.m; sourceTree = "<group>"; };
+		602C39021B3C91D4005CB493 /* PNLineChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNLineChart.m; sourceTree = "<group>"; };
 		698270E0C83AB2371F464BB2 /* Pods-Bakkle.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bakkle.release.xcconfig"; path = "Pods/Target Support Files/Pods-Bakkle/Pods-Bakkle.release.xcconfig"; sourceTree = "<group>"; };
 		720510331B1F839B00D059AB /* ListItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemCell.swift; sourceTree = "<group>"; };
 		723D532B1B25F42B0067A80A /* IconImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IconImage.swift; sourceTree = "<group>"; };
@@ -552,6 +580,7 @@
 		5EBDD6821AB211E600C7FBE7 = {
 			isa = PBXGroup;
 			children = (
+				602C38D51B3C90E7005CB493 /* PNChart */,
 				DB6726BB1B1747210014A896 /* StarRating */,
 				A003EB111ACF3BBC00EE51A1 /* SWRevealViewController */,
 				5EE2C9BC1AB9F1080031D8CD /* MDCSwipe Library */,
@@ -684,6 +713,31 @@
 			name = "MDCSwipe Library";
 			sourceTree = "<group>";
 		};
+		602C38D51B3C90E7005CB493 /* PNChart */ = {
+			isa = PBXGroup;
+			children = (
+				602C38DA1B3C9105005CB493 /* PNChart.h */,
+				602C38DB1B3C9105005CB493 /* PNChartDelegate.h */,
+				602C38DC1B3C9105005CB493 /* PNChartLabel.h */,
+				602C38DD1B3C9105005CB493 /* PNChartLabel.m */,
+				602C38E01B3C9105005CB493 /* PNColor.h */,
+				602C38E11B3C9105005CB493 /* PNColor.m */,
+				602C38E21B3C9105005CB493 /* PNGenericChart.h */,
+				602C38E31B3C9105005CB493 /* PNGenericChart.m */,
+				602C38E41B3C9105005CB493 /* PNLineChart.h */,
+				602C39021B3C91D4005CB493 /* PNLineChart.m */,
+				602C38E61B3C9105005CB493 /* PNLineChartData.h */,
+				602C38E71B3C9105005CB493 /* PNLineChartData.m */,
+				602C38E81B3C9105005CB493 /* PNLineChartDataItem.h */,
+				602C38E91B3C9105005CB493 /* PNLineChartDataItem.m */,
+				602C38EA1B3C9105005CB493 /* PNPieChart.h */,
+				602C38EB1B3C9105005CB493 /* PNPieChart.m */,
+				602C38EC1B3C9105005CB493 /* PNPieChartDataItem.h */,
+				602C38ED1B3C9105005CB493 /* PNPieChartDataItem.m */,
+			);
+			name = PNChart;
+			sourceTree = "<group>";
+		};
 		A003EB111ACF3BBC00EE51A1 /* SWRevealViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -713,6 +767,7 @@
 				5EE2C98A1AB9D1730031D8CD /* FeedView.swift */,
 				1B00CB1A1B22231B00710C01 /* ItemData.swift */,
 				A0D96F851AD771900046DA13 /* SellersGarage.swift */,
+				602C38A71B3C291F005CB493 /* AnalyticsView.swift */,
 				A0D96F811AD76D8E0046DA13 /* BuyersTrunkView.swift */,
 				A0D96F871AD772DA0046DA13 /* HoldingPatternView.swift */,
 				A0D96F891AD773DB0046DA13 /* FeedFilter.swift */,
@@ -1372,9 +1427,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				5EE2C9B71AB9F0FB0031D8CD /* MDCPanState.m in Sources */,
+				602C38FC1B3C9105005CB493 /* PNLineChartDataItem.m in Sources */,
 				A058A2AB1AFD8EAD005E7432 /* UIImage+Resize.swift in Sources */,
 				A08D53CB1B0815CB000C406C /* ChatCell.swift in Sources */,
 				A08D53CD1B0815CB000C406C /* ChatViewController.swift in Sources */,
+				602C38F81B3C9105005CB493 /* PNColor.m in Sources */,
 				5EBDD6931AB211E600C7FBE7 /* LoginView.swift in Sources */,
 				5EE2C98B1AB9D1730031D8CD /* FeedView.swift in Sources */,
 				A0D96F801AD767BD0046DA13 /* MenuTableView.swift in Sources */,
@@ -1395,6 +1452,7 @@
 				720510341B1F839B00D059AB /* ListItemCell.swift in Sources */,
 				A08D53C91B0815CB000C406C /* Account.swift in Sources */,
 				A08D53D51B0815CB000C406C /* User.swift in Sources */,
+				602C39031B3C91D4005CB493 /* PNLineChart.m in Sources */,
 				5EE2C9B81AB9F0FB0031D8CD /* MDCGeometry.m in Sources */,
 				728647EB1B2F0E3F009A24C9 /* ChatsViewController.swift in Sources */,
 				DB6726DF1B1765810014A896 /* RateView.m in Sources */,
@@ -1402,6 +1460,9 @@
 				5EE2C9BB1AB9F0FB0031D8CD /* MDCViewState.m in Sources */,
 				5E78D7E11AF121BA0014ED8F /* GarageCell.swift in Sources */,
 				A0D96F861AD771900046DA13 /* SellersGarage.swift in Sources */,
+				602C38FD1B3C9105005CB493 /* PNPieChart.m in Sources */,
+				602C38F91B3C9105005CB493 /* PNGenericChart.m in Sources */,
+				602C38FE1B3C9105005CB493 /* PNPieChartDataItem.m in Sources */,
 				723D532C1B25F42B0067A80A /* IconImage.swift in Sources */,
 				A06AA9EE1AD609530075D7F7 /* Bakkle.swift in Sources */,
 				5EE2C9B41AB9F0FB0031D8CD /* MDCSwipeOptions.m in Sources */,
@@ -1409,6 +1470,7 @@
 				A08D53D31B0815CB000C406C /* MessageSentDateCell.swift in Sources */,
 				6001F3411B21D004009C1A04 /* ItemDetailsCell.swift in Sources */,
 				A058A2BD1AFEF665005E7432 /* CLLocation+String.swift in Sources */,
+				602C38A81B3C291F005CB493 /* AnalyticsView.swift in Sources */,
 				F0E7C50B1B2F2B4B006B013A /* WSRequest.swift in Sources */,
 				5E1DCCA51AD486D2002D41FD /* AddItem.swift in Sources */,
 				A08D53CE1B0815CB000C406C /* ComposeViewController.swift in Sources */,
@@ -1417,11 +1479,13 @@
 				A08D53D01B0815CB000C406C /* MessageBubbleCell.swift in Sources */,
 				A058A2A11AFC28BE005E7432 /* DemoView.swift in Sources */,
 				5E1FEE7C1AD8641900C08131 /* MDCSwipeToChooseView.m in Sources */,
+				602C38F61B3C9105005CB493 /* PNChartLabel.m in Sources */,
 				5EE2C9B21AB9F0FB0031D8CD /* UIView+MDCSwipeToChoose.m in Sources */,
 				A08D53B91B07DE26000C406C /* Theme.swift in Sources */,
 				A08D53AF1B06D850000C406C /* Common.swift in Sources */,
 				5EE2C9B51AB9F0FB0031D8CD /* MDCSwipeToChooseViewOptions.m in Sources */,
 				A014B46C1B09215800E01FEF /* ProfileView.swift in Sources */,
+				602C38FB1B3C9105005CB493 /* PNLineChartData.m in Sources */,
 				A08D53D41B0815CB000C406C /* PlaceholderTextView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

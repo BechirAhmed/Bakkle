@@ -29,6 +29,7 @@ class SellersGarageView: UIViewController, UICollectionViewDelegate, UICollectio
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController?.navigationBar.hidden = true
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         self.collectionView.contentMode = UIViewContentMode.ScaleAspectFill
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleNotification:", name: SellersGarageView.CAPTURE_NOTIFICATION_TEXT, object: nil)
@@ -170,7 +171,7 @@ class SellersGarageView: UIViewController, UICollectionViewDelegate, UICollectio
         let chatsViewController = ChatsViewController()
         chatsViewController.chatItemID = (Bakkle.sharedInstance.garageItems[indexPath.row].valueForKey("pk") as! NSNumber).stringValue
         chatsViewController.garageIndex = indexPath.row
-        self.presentViewController(chatsViewController, animated: true, completion: {})
+        self.navigationController?.pushViewController(chatsViewController, animated: true)
     }
 
     /* Camera */
