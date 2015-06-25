@@ -18,6 +18,13 @@ enum methodType: String{
     case getMessagesForChat = "chat_getMessagesForChat"
 }
 
+enum deliveryMethod: String{
+    case pickUp = "Pick-up"
+    case delivery = "Delivery"
+    case meet = "Meet"
+    case ship = "Ship"
+}
+
 //superclass for all requests, contains data shared across all instances
 class WSRequest: NSObject {
     
@@ -84,5 +91,19 @@ class WSSendChatMessageRequest: WSRequest{
         
         super.data["chatId"] = chatId
         super.data["message"] = message
+        super.data["offerPrice"] = ""
+        super.data["offerMethod"] = ""
+    }
+}
+
+class WSSendOfferRequest: WSRequest{
+    
+    init(chatId: NSString, offerPrice: NSNumber, offerMethod: deliveryMethod){
+        super.init(method:methodType.sendChatMessage.rawValue);
+        
+        super.data["chatId"] = chatId
+        super.data["message"] = ""
+        super.data["offerPrice"] = offerPrice
+        super.data["offerMethod"] = offerMethod.rawValue
     }
 }
