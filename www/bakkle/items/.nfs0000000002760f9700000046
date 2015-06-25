@@ -37,6 +37,7 @@ from common.decorators import authenticate
 # from common.decorators import get_number_conversations_with_new_messages
 from common.decorators import time_method
 from django.conf import settings
+import math;
 
 MAX_ITEM_IMAGE = 5
 
@@ -62,7 +63,7 @@ def index(requestHandler):
     context = {
         'item_list': item_list,
     }
-#    return requestHandler.render('templates/items/index.html', item_list = item_list) 
+    return requestHandler.render('djangoTemplates/items/index.html', item_list = item_list) 
 
 @csrf_exempt
 @time_method
@@ -74,7 +75,7 @@ def public_detail(request, item_id):
         'item': item,
         'urls': urls,
     }
-#    return render(request, 'items/public_detail.html', context)
+    return render(request, 'items/public_detail.html', context)
 
 @staff_member_required
 @csrf_exempt
@@ -87,7 +88,7 @@ def detail(request, item_id):
         'item': item,
         'urls': urls,
     }
-#    return render(request, 'items/detail.html', context)
+    return render(request, 'items/detail.html', context)
 
 @staff_member_required
 @csrf_exempt
@@ -102,7 +103,7 @@ def mark_as_spam(request, item_id):
     context = {
         'item_list': item_list,
     }
-#    return render(request, 'items/index.html', context)
+    return render(request, 'items/index.html', context)
 
 @staff_member_required
 @csrf_exempt
@@ -117,7 +118,7 @@ def mark_as_deleted(request, item_id):
     context = {
         'item_list': item_list,
     }
-#    return render(request, 'items/index.html', context)
+    return render(request, 'items/index.html', context)
 
 #--------------------------------------------#
 #               Item Methods                 #
@@ -159,13 +160,16 @@ def add_item(request):
     # Check for the image params. The max number is 5 and is defined in settings
     image_urls = imgupload(request, seller_id)
 
+    TWOPLACES = Decimal(10) ** -6
+
     if (item_id == None or item_id == ""):
         # Create the item
         item = Items.objects.create(
             title = title,
             seller_id = seller_id,
             description = description,
-            location = location,
+            longitude = Decimal(location.split(",")[0]).quantize(TWOPLACES),
+            latitude = Decimal(location.split(",")[1]).quantize(TWOPLACES),
             price = price,
             tags = tags,
             method = method,
@@ -243,6 +247,7 @@ def spam_item(request):
 def feed(request):
 
     MAX_ITEM_PRICE = 100;
+    MAX_ITEM_DISTANCE = 100;
     RETURN_ITEM_ARRAY_SIZE = 20;
     
     auth_token = request.POST.get('auth_token')
@@ -251,7 +256,7 @@ def feed(request):
 
     # TODO: Use these for filtering
     search_text = request.POST.get('search_text')
-    filter_distance = request.POST.get('filter_distance')
+    filter_distance = int(request.POST.get('filter_distance'))
     filter_price = int(request.POST.get('filter_price'))
 
     # Check that all require params are sent and are of the right format
@@ -270,8 +275,8 @@ def feed(request):
             return HttpResponse(json.dumps(response_data), content_type="application/json")
         else:
             TWOPLACES = Decimal(10) ** -2
-            lat = Decimal(positions[0]).quantize(TWOPLACES)
-            lon = Decimal(positions[1]).quantize(TWOPLACES)
+            lat = float(Decimal(positions[0]).quantize(TWOPLACES))
+            lon = float(Decimal(positions[1]).quantize(TWOPLACES))
             location = str(lat) + "," + str(lon)
     except ValueError:
         response_data = { "status":0, "error": "Latitude or Longitude was not a valid decimal." }
@@ -280,7 +285,13 @@ def feed(request):
     # get the account id 
     buyer_id = auth_token.split('_')[1]
 
+    #horizontal range
+    lonRange = filter_distance / (math.cos(lat/180 * math.pi) * 69.172)
 
+    #vertical range
+    latRange = filter_distance / 69.172
+
+    #filter(longitude__lte = lon + lonRange).filter(longitude__gte = lon - lonRange).filter(latitude__lte = lat + latRange).filter(latitude__gte = lat + latRange)
 
     # get the account object and the device and update location
     try:
@@ -307,10 +318,14 @@ def feed(request):
 
     item_list = None
     users_list = None
+
+    print(filter_price);
+    print(filter_distance == MAX_ITEM_DISTANCE);
         
     if(search_text != None and search_text != ""):
         search_text.strip()
-        
+
+
         #if filter price is 100+, ignore filter.
         if(filter_price == MAX_ITEM_PRICE):
             item_list = Items.objects.exclude(buyeritem = items_viewed).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).filter(Q(tags__contains=search_text) | Q(title__contains=search_text)).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
@@ -319,12 +334,24 @@ def feed(request):
     else:
         
         #if filter price is 100+, ignore filter.
-        if(filter_price == MAX_ITEM_PRICE):
-            item_list = Items.objects.exclude(buyeritem = items_viewed).exclude(Q(seller__pk = buyer_id)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
-            users_list = Items.objects.filter(Q(seller__pk = buyer_id)).order_by('-post_date')[:1]
+        if(filter_distance == MAX_ITEM_DISTANCE):
+            if(filter_price == MAX_ITEM_PRICE):
+                print 1;
+                item_list = Items.objects.exclude(buyeritem = items_viewed).exclude(Q(seller__pk = buyer_id)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
+                users_list = Items.objects.filter(Q(seller__pk = buyer_id)).order_by('-post_date')[:1]
+            else:
+                print 2;
+                item_list = Items.objects.exclude(buyeritem = items_viewed).exclude(Q(seller__pk = buyer_id)).filter(Q(price__lte = filter_price)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
+                users_list = Items.objects.filter(Q(seller__pk = buyer_id)).order_by('-post_date')[:1]
         else:
-            item_list = Items.objects.exclude(buyeritem = items_viewed).exclude(Q(seller__pk = buyer_id)).filter(Q(price__lte = filter_price)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
-            users_list = Items.objects.filter(Q(seller__pk = buyer_id)).filter(Q(price__lte = filter_price)).order_by('-post_date')[:1]
+            if(filter_price == MAX_ITEM_PRICE):
+                print 3;
+                item_list = Items.objects.exclude(buyeritem = items_viewed).exclude(Q(seller__pk = buyer_id)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).filter(longitude__lte = lon + lonRange).filter(longitude__gte = lon - lonRange).filter(latitude__lte = lat + latRange).filter(latitude__gte = lat + latRange).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
+                users_list = Items.objects.filter(Q(seller__pk = buyer_id)).order_by('-post_date')[:1]
+            else:
+                print 4;
+                item_list = Items.objects.exclude(buyeritem = items_viewed).exclude(Q(seller__pk = buyer_id)).filter(Q(price__lte = filter_price)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).filter(longitude__lte = lon + lonRange).filter(longitude__gte = lon - lonRange).filter(latitude__lte = lat + latRange).filter(latitude__gte = lat + latRange).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
+                users_list = Items.objects.filter(Q(seller__pk = buyer_id)).order_by('-post_date')[:1]
    
     item_array = []
     paginatedItems = Paginator(item_list, 100);
@@ -333,7 +360,7 @@ def feed(request):
     # show user's items before other items - place at top of array.
     if(not users_list is None and len(users_list) != 0):
         for item in users_list:
-            if(len(BuyerItem.objects.filter(buyer = buyer_id).filter(item = item.pk)) == 0):
+            if(len(BuyerItem.objects.filter(buyer__pk = buyer_id).filter(item__pk = item.pk)) == 0):
                 item_dict = get_item_dictionary(item)
                 item_array.append(item_dict)
     
@@ -774,7 +801,7 @@ def get_item_dictionary(item):
         'image_urls': images,
         'tags': hashtags,
         'title': item.title,
-        'location': item.location,
+        'location': str(item.latitude) + "," + str(item.longitude),
         'price': str(item.price),
         'method': item.method,
         'status': item.status,
@@ -873,247 +900,266 @@ def reset_items(request):
         image_urls = "https://app.bakkle.com/img/b83bdbd.png",
         title = "Orange Push Mower",
         description = "Year old orange push mower. Some wear and sun fadding. Was kept outside and not stored in shed.",
-        location = "39.417672,-87.330438",
+        latitude = 42.40,
+        longitude = 73.45,
         seller = a,
         price = 50.25,
         tags = "lawnmower, orange, somewear",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now()
+        post_date = datetime.datetime.now,
         times_reported = 0 )
     i.save()
     i = Items(
         image_urls = "https://app.bakkle.com/img/WP_20150417_09_47_27_Pro.jpg",
         title = "Oil change",
         description = "will change your cars oil at your location, $ 19.95.",
-        location = "39.417672,-87.330438",
+        latitude = 35.05,
+        longitude = 106.39,
         seller = a,
         price = 19.95,
         tags = "service, oil change",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now()
+        post_date = datetime.datetime.now,
         times_reported = 0 )
     i.save()
     i = Items(
         image_urls = "https://app.bakkle.com/img/00e0e_5WQCcunAcn_600x450.jpg",
         title = "Flat screen LED TV",
         description = "Flat screen LED LCD TV. Brand new in box, 4 HDMI ports and Netflix built in.",
-        location = "39.417672,-87.330438",
+        latitude = 35.11,
+        longitude = 101.50,
         seller = a,
         price = 107.00,
         tags = "tv, led, netflix",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now()
+        post_date = datetime.datetime.now,
         times_reported = 0 )
     i.save()
     i = Items(
         image_urls = "https://app.bakkle.com/img/00n0n_eerJtWHsBKc_600x450.jpg",
         title = "15\" MacBook pro",
         description = "MacBook Pro 15\" Mid 2014 i7. 2.2 GHz, 16 GB RAM, 256 GB SSD. Very little use, needed a lighter model so switched to MacBook air. Includes original box, power cord, etc.",
-        location = "39.417672,-87.330438",
+        latitude = 61.13,
+        longitude = 149.54,
         seller = a,
         price = 999.00,
         tags = "mac, apple, macbook, macbook pro",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now()
+        post_date = datetime.datetime.now,
         times_reported = 0 )
     i.save()
     i = Items(
         image_urls = "https://app.bakkle.com/img/00n0n_gonFpgUcRAe_600x450.jpg",
         title = "Paint ball gun",
         description = "Gun only, no CO2 tank. Needs new HPR piston",
-        location = "39.417672,-87.330438",
+        latitude = 33.45,
+        longitude = 84.23,
         seller = a,
         price = 40.99,
         tags = "paintball, gun, bump paintball",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now()
+        post_date = datetime.datetime.now,
         times_reported = 0 )
     i.save()
     i = Items(
         image_urls = "https://app.bakkle.com/img/00O0O_kOqfijcw7FL_600x450.jpg",
         title = "Business law text book",
         description = "Business law text and cases, clarkson, miller, jentz, 11th edition. No marks or highlighting.",
-        location = "39.417672,-87.330438",
+        latitude = 30.16,
+        longitude = 97.44,
         seller = a,
         price = 40.99,
         tags = "textbook, business law",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now()
+        post_date = datetime.datetime.now,
         times_reported = 0 )
     i.save()
     i = Items(
         image_urls = "https://app.bakkle.com/img/00P0P_dcFyXMBIkYE_600x450.jpg",
         title = "Baseball mitt",
         description = "Louisville slugger baseball mitt, mint condition.",
-        location = "39.417672,-87.330438",
+        latitude = 44.47,
+        longitude = 117.50,
         seller = a,
         price = 30.00,
         tags = "baseball mitt",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now()
+        post_date = datetime.datetime.now,
         times_reported = 0 )
     i.save()
     i = Items(
         image_urls = "https://app.bakkle.com/img/00s0s_49F9D9EnAJ3_600x450.jpg",
         title = "Bicycle",
         description = "Pure fix fixie bicycle.",
-        location = "39.417672,-87.330438",
+        latitude = 39.18,
+        longitude = 76.38,
         seller = a,
         price = 300,
         tags = "bicycle",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now()
+        post_date = datetime.datetime.now,
         times_reported = 0 )
     i.save()
     i = Items(
         image_urls = "https://app.bakkle.com/img/00T0T_f1xeeb2KYxA_600x450.jpg",
         title = "Canon 50D",
         description = "Canon 50D digital camera. Comes with f1.8 50mm lens.",
-        location = "39.417672,-87.330438",
+        latitude = 44.48,
+        longitude = 68.47,
         seller = a,
         price = 30.00,
         tags = "canon, 50d, digital camera",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now()
+        post_date = datetime.datetime.now,
         times_reported = 0 )
     i.save()
     i = Items(
         image_urls = "https://app.bakkle.com/img/00u0u_hj2g60Tn2D7_600x450.jpg",
         title = "iPhone 5",
         description = "White Apple iphone 5. Unlocked",
-        location = "39.417672,-87.330438",
+        latitude = 33.30,
+        longitude = 86.50,
         seller = a,
         price = 200.00,
         tags = "apple, iphone, iphone 5",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now()
+        post_date = datetime.datetime.now,
         times_reported = 0 )
     i.save()
     i = Items(
         image_urls = "https://app.bakkle.com/img/00V0V_kQXPgLCzkEl_600x450.jpg",
         title = "weights",
         description = "Premium adjustable hand barbell weight set.",
-        location = "39.417672,-87.330438",
+        latitude = 46.48,
+        longitude = 100.47,
         seller = a,
         price = 300.00,
         tags = "weights, barbell",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now()
+        post_date = datetime.datetime.now,
         times_reported = 0 )
     i.save()
     i = Items(
         image_urls = "https://app.bakkle.com/img/00W0W_hCYzWAyYAvP_600x450.jpg",
         title = "Blender",
         description = "Blender, used. Runs great. 5 speeds with turbo",
-        location = "39.417672,-87.330438",
+        latitude = 43.36,
+        longitude = 116.13,
         seller = a,
         price = 12.00,
         tags = "blender",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now()
+        post_date = datetime.datetime.now,
         times_reported = 0 )
     i.save()
     i = Items(
         image_urls = "https://app.bakkle.com/img/00404_8sCApbm5Bvc_600x450.jpg",
         title = "Playstation 2",
         description = "Playstation 2 with controller. Broken, needs laser cleaning. Won't read discs.",
-        location = "39.417672,-87.330438",
+        latitude = 42.21,
+        longitude = 71.5,
         seller = a,
         price = 45.00,
         tags = "sony, playstation, controller",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now()
+        post_date = datetime.datetime.now,
         times_reported = 0 )
     i.save()
     i = Items(
         image_urls = "https://app.bakkle.com/img/00808_k0TscttMik5_600x450.jpg",
         title = "Baseball bat",
         description = "Basic home security system.",
-        location = "39.417672,-87.330438",
+        latitude = 42.55,
+        longitude = 78.50,
         seller = a,
         price = 10.00,
         tags = "baseball, security, bat",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now()
+        post_date = datetime.datetime.now,
         times_reported = 0 )
     i.save()
     i = Items(
         image_urls = "https://app.bakkle.com/img/00909_iVAvBfYmpNm_600x450.jpg",
         title = "Gas grille",
         description = "Propane barbeque grill with side burner. 2 years old worth $200 from Lowes. Full propane bottle included.",
-        location = "39.417672,-87.330438",
+        latitude = 51.1,
+        longitude = 114.1,
         seller = a,
         price = 10.00,
         tags = "propane, gas, grille, barbeque, bbq",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now(),
+        post_date = datetime.datetime.now,
         times_reported = 0 )
     i.save()
     i = Items(
         image_urls = "https://app.bakkle.com/img/01313_fXdf3fNJDJC_600x450.jpg",
         title = "Marketing textbooks",
         description = "MKTG marketing text (instructor edition) by Lam, hair, mcdaniel and Essentials of Entrepreneurship and Small Business Management by Normal M. Scarborough (7th global edition).",
-        location = "39.417672,-87.330438",
+        latitude = 32.26,
+        longitude = 104.15,
         seller = a,
         price = 175.00,
         tags = "marketing, textbooks",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now()
+        post_date = datetime.datetime.now,
         times_reported = 0 )
     i.save()
     i = Items(
         image_urls = "https://app.bakkle.com/img/01313_gsH7Yan7PYA_600x450.jpg",
         title = "Nike shoes",
         description = "Nike women's air max shoes size 6 1/2. Never worn outside.",
-        location = "39.417672,-87.330438",
+        latitude = 32.47,
+        longitude = 79.56,
         seller = a,
         price = 90.00,
         tags = "shoes, nike, womens",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now()
+        post_date = datetime.datetime.now,
         times_reported = 0 )
     i.save()
     i = Items(
         image_urls = "https://app.bakkle.com/img/b8348df.jpg",
         title = "Rabbit Push Mower",
         description = "Homemade lawn mower. Includes rabbit and water container.",
-        location = "39.417672,-87.330438",
+        latitude = 38.21,
+        longitude = 81.38,
         seller = a,
         price = 10.99,
         tags = "lawnmower, homemade, rabbit",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now()
+        post_date = datetime.datetime.now,
         times_reported = 0 )
     i.save()
     i = Items(
         image_urls = "https://app.bakkle.com/img/b8349df.jpg",
         title = "iPhone 6 Cracked",
         description = "iPhone 6. Has a cracked screen. Besides screen phone is in good condition.",
-        location = "39.417672,-87.330438",
+        latitude = 35.14,
+        longitude = 80.50,
         seller = a,
         price = 65.99,
         tags = "iPhone6, cracked, damaged",
         method = Items.DELIVERY,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now()
+        post_date = datetime.datetime.now,
         times_reported = 0 )
     i.save()
 

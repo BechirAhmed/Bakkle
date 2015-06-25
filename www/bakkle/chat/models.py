@@ -7,6 +7,7 @@ class Chat(models.Model):
     item = models.ForeignKey(Items)
     buyer = models.ForeignKey(Account)
     start_date = models.DateTimeField(auto_now_add=True)
+    closed = models.BooleanField(default = False)
 
     class Meta:
         unique_together = ("item", "buyer")
@@ -17,6 +18,7 @@ class Chat(models.Model):
             'item': self.item.toDictionary(), 
             'buyer': self.buyer.toDictionary(),
             'seller': self.item.seller.toDictionary(),
+            'closed': self.closed,
             # 'last_message' : self.last_message.toDictionary(),
             'start_date': self.start_date.strftime('%Y-%m-%d %H:%M:%S') }
 
@@ -37,7 +39,6 @@ class Chat(models.Model):
 class Message(models.Model):
     chat = models.ForeignKey(Chat)
     sent_by_buyer = models.BooleanField(default = True)
-    closed = models.BooleanField(default = False)
     date_sent = models.DateTimeField(auto_now_add=True)
     viewed_by_buyer_time = models.DateTimeField(null = True, auto_now = False)
     viewed_by_seller_time = models.DateTimeField(null = True, auto_now = False)
@@ -49,7 +50,6 @@ class Message(models.Model):
             'pk': self.pk,
             'chat': self.chat.pk,
             'sent_by_buyer': self.sent_by_buyer,
-            'closed': self.closed,
             'date_sent': self.date_sent.strftime('%Y-%m-%d %H:%M:%S'),
             'message': self.message
         }
