@@ -16,53 +16,24 @@ public class SignupActivity extends Activity implements OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signup);
         getActionBar().hide();
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = preferences.edit();
-
-
-        editor.putString("uuid", Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID));
-        editor.apply();
-
-
 
         if(preferences.getBoolean("LoggedIn", false)) {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
 
         }
-//        else {
-//            Intent intent = new Intent(this, SignupActivity.class);
-//            startActivity(intent);
-//        }
+
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("uuid", Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID));
+        editor.apply();
+
+        setContentView(R.layout.activity_signup);
 
         ((Button)findViewById(R.id.btnSignIn)).setOnClickListener(this);
         ((Button)findViewById(R.id.btnSignUpEmail)).setOnClickListener(this);
-
-        /*FacebookSdk.sdkInitialize(this.getApplicationContext());
-        CallbackManager callbackManager = CallbackManager.Factory.create();
-        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-
-            }
-
-            @Override
-            public void onCancel() {
-
-            }
-
-            @Override
-            public void onError(FacebookException e) {
-
-            }
-        });*/
-
-
-
-
     }
 
     @Override

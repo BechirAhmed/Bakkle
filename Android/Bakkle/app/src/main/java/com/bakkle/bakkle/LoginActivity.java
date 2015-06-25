@@ -15,6 +15,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
@@ -38,6 +39,9 @@ public class LoginActivity extends Activity implements OnClickListener {
     private boolean isResumed = false;
     private AccessTokenTracker accessTokenTracker;
 
+    SharedPreferences preferences;
+    SharedPreferences.Editor editor;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +49,8 @@ public class LoginActivity extends Activity implements OnClickListener {
         callbackManager = CallbackManager.Factory.create();
         final Context mContext = this;
         FacebookSdk.sdkInitialize(getApplicationContext());
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        SharedPreferences.Editor editor = preferences.edit();
+        preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        editor = preferences.edit();
 
         if(preferences.getBoolean("LoggedIn", false)) {
 
@@ -65,12 +69,9 @@ public class LoginActivity extends Activity implements OnClickListener {
             private ProfileTracker mProfileTracker;
 
             @Override
-            public void onSuccess(LoginResult loginResult) {
-
-
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                SharedPreferences.Editor editor = preferences.edit();
-                //AccessToken token = AccessToken.getCurrentAccessToken();
+            public void onSuccess(LoginResult loginResult)
+            {
+                Toast.makeText(getApplicationContext(), "2", Toast.LENGTH_SHORT).show();
                 AccessToken token = loginResult.getAccessToken();
                 mProfileTracker = new ProfileTracker() {
                     @Override
@@ -154,8 +155,6 @@ public class LoginActivity extends Activity implements OnClickListener {
                 finish();
                 break;
             case R.id.btnSignInFacebook:
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                SharedPreferences.Editor editor = preferences.edit();
                 if(preferences.getBoolean("LoggedIn", false)){
                     LoginManager.getInstance().logOut();
                     editor.putBoolean("LoggedIn", false);

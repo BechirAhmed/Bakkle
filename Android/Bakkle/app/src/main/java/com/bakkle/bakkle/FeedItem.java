@@ -2,17 +2,35 @@ package com.bakkle.bakkle;
 
 import com.google.gson.JsonObject;
 
+import java.util.ArrayList;
+
 /**
  * Created by vanshgandhi on 6/23/15.
  */
 public class FeedItem {
 
     String status, description, price, postDate, title, buyerRating, sellerDisplayName, sellerLocation, sellerFacebookId, sellerPk, sellerRating, location, pk, method;
-    String[] tags, imageUrls;
+    ArrayList<String> tags, imageUrls;
     JsonObject seller;
 
     public FeedItem(){
 
+    }
+
+    public ArrayList<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(ArrayList<String> tags) {
+        this.tags = tags;
+    }
+
+    public ArrayList<String> getImageUrls() {
+        return imageUrls;
+    }
+
+    public void setImageUrls(ArrayList<String> imageUrls) {
+        this.imageUrls = imageUrls;
     }
 
     public String getStatus() {
@@ -127,28 +145,17 @@ public class FeedItem {
         this.method = method;
     }
 
-    public String[] getTags() {
-        return tags;
-    }
-
-    public void setTags(String[] tags) {
-        this.tags = tags;
-    }
-
-    public String[] getImageUrls() {
-        return imageUrls;
-    }
-
-    public void setImageUrls(String[] imageUrls) {
-        this.imageUrls = imageUrls;
-    }
-
     public JsonObject getSeller() {
         return seller;
     }
 
     public void setSeller(JsonObject seller) {
         this.seller = seller;
+    }
+
+    public String getDistance(){
+        //TODO: Use location services to figure out how far away item actually is
+        return "100 mi";
     }
 
 }

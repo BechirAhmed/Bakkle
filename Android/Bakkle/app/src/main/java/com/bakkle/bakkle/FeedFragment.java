@@ -1,8 +1,8 @@
 package com.bakkle.bakkle;
 
-
 import android.app.Fragment;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -18,6 +18,7 @@ import com.andtinder.view.SimpleCardStackAdapter;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.koushikdutta.ion.Ion;
 
 import java.util.ArrayList;
 
@@ -32,7 +33,9 @@ public class FeedFragment extends Fragment implements View.OnTouchListener {
 
     ServerCalls serverCalls;
 
-    JsonObject Jsonresult;
+    Bitmap bitmap;
+
+    JsonObject jsonResult;
 
     SharedPreferences.Editor editor;
     SharedPreferences preferences;
@@ -52,10 +55,12 @@ public class FeedFragment extends Fragment implements View.OnTouchListener {
         editor = preferences.edit();
 
         serverCalls = new ServerCalls(getActivity().getApplicationContext());
-        Jsonresult = serverCalls.getFeedItems(
+        editor.putBoolean("stillWorking", true);
+        editor.apply();
+        jsonResult = serverCalls.getFeedItems(
                 preferences.getString("auth_token", "0"),
                 "99999999",
-                "",
+                "100",
                 "",
                 "32,32",
                 "",
@@ -64,34 +69,14 @@ public class FeedFragment extends Fragment implements View.OnTouchListener {
 
         CardContainer mCardContainer = (CardContainer) view.findViewById(R.id.cardView);
         mCardContainer.setOrientation(Orientations.Orientation.Ordered);
-        populateFeed(Jsonresult, mCardContainer);
 
-//        mRrootLayout = (ViewGroup) view;
-//        addCard(view, nextItemImage());
-//        StackImageView card;
-//        card = (StackImageView) view.findViewById(R.id.card);
-//        card.setOnTouchListener(this);
+        if(jsonResult != null)
+            populateFeed(jsonResult, mCardContainer);
+        else
+            Log.d("umm", "what");
+
         return view;
     }
-
-//    public void addCard(View view, int imageID) //where imageID is something like R.drawable.bakkle_icon
-//    {
-//        LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.feed);
-//        StackImageView card = new StackImageView(this.getActivity());
-//        card.setImageResource(imageID);
-//        card.setLayoutParams(new LinearLayout.LayoutParams(
-//                LinearLayout.LayoutParams.MATCH_PARENT,
-//                LinearLayout.LayoutParams.MATCH_PARENT
-//        ));
-//
-//        linearLayout.addView(card);
-//
-//    }
-//
-//    //TODO: make code to check to see if there even is a next image.
-//    public int nextItemImage(){
-//        return R.drawable.bakkle_icon;
-//    }
 
 
     @Override
@@ -134,47 +119,121 @@ public class FeedFragment extends Fragment implements View.OnTouchListener {
         FeedItem feedItem = null;
         CardModel card;
         String status, description, price, postDate, title, buyerRating, sellerDisplayName, sellerLocation, sellerFacebookId, sellerPk, sellerRating, location, pk, method;
-        String[] tags, imageUrls;
+        ArrayList<String> tags, imageUrls;
         JsonObject seller;
+        JsonArray imageUrlArray;
+
 
 
         for(JsonElement element : jsonArray)
         {
             feedItem = new FeedItem();
             temp = element.getAsJsonObject();
+
             feedItem.setTitle(temp.get("title").getAsString());
             feedItem.setDescription(temp.get("description").getAsString());
-            card = new CardModel(feedItem.getTitle(), feedItem.getDescription(), getActivity().getResources().getDrawable(R.drawable.bakkle_icon));
+            feedItem.setSellerDisplayName(temp.get("seller").getAsJsonObject().get("display_name").getAsString());
+            feedItem.setPrice(temp.get("price").getAsString());
+            feedItem.setLocation(temp.get("location").getAsString()); //TODO: difference between location and sellerlocation??
+            feedItem.setMethod(temp.get("method").getAsString());
+            sellerFacebookId = temp.get("seller").getAsJsonObject().get("facebook_id").getAsString();
 
-            card.setOnCardDimissedListener(new CardModel.OnCardDimissedListener() {
+
+            imageUrlArray = temp.get("image_urls").getAsJsonArray();
+            imageUrls = new ArrayList<String>();
+            for(JsonElement urlElement : imageUrlArray)
+            {
+                imageUrls.add(urlElement.getAsString());
+            }
+            feedItem.setImageUrls(imageUrls);
+
+            card = new CardModel(feedItem.getTitle(), feedItem.getSellerDisplayName(), "$" + feedItem.getPrice(),
+                    feedItem.getDistance(), feedItem.getMethod(), getCardImage(feedItem), getSellerImage(sellerFacebookId));
+
+            card.setOnCardDismissedListener(new CardModel.OnCardDismissedListener() {
                 @Override
-                public void onLike() { //the Dislike and like is switched in the library
+                public void onLike() {
 
-                    Log.d("Swipeable Card", "I did not like it");
                 }
 
                 @Override
-                public void onDislike() { //the Dislike and like is switched in the library
-                    Log.d("Swipeable Card", "I liked it");
+                public void onDislike() {
                 }
             });
 
             card.setOnClickListener(new CardModel.OnClickListener() {
                 @Override
                 public void OnClickListener() {
-                    Log.d("Swipeable Cards", "I am pressing the card");
                 }
             });
-            feedItem = null;
-
 
             adapter.add(card);
-
-
-
+            feedItem = null;
+            temp = null;
+            imageUrlArray = null;
+            imageUrls = null;
+            card = null;
         }
         mCardContainer.setAdapter(adapter);
 
 
+    }
+
+    public Bitmap getCardImage(FeedItem item)
+    {
+        //final Bitmap[] bitmap = new Bitmap[1];
+        /*Ion.with(this)
+                .load(item.getImageUrls().get(0))
+                .withBitmap()
+                .asBitmap()
+                .setCallback(new FutureCallback<Bitmap>() {
+                    @Override
+                    public void onCompleted(Exception e, Bitmap result) {
+                        //bitmap[0] = result;
+                        bitmap = result;
+                    }
+                });*/
+        try{
+            bitmap = Ion.with(this)
+                    .load(item.getImageUrls().get(0))
+                    .withBitmap()
+                    .asBitmap()
+                    .get();
+        }
+        catch (Exception e)
+        {
+            Log.d("testing error 11", e.getMessage());
+        }
+        //return bitmap[0];
+        return bitmap;
+    }
+
+    public Bitmap getSellerImage(String id)
+    {
+        //final Bitmap[] bitmap = new Bitmap[1];
+        /*Ion.with(this)
+                .load(item.getImageUrls().get(0))
+                .withBitmap()
+                .asBitmap()
+                .setCallback(new FutureCallback<Bitmap>() {
+                    @Override
+                    public void onCompleted(Exception e, Bitmap result) {
+                        //bitmap[0] = result;
+                        bitmap = result;
+                    }
+                });*/
+        try{
+            bitmap = Ion.with(this)
+                    .load("http://graph.facebook.com/" + id + "/picture?type=square")
+                    .withBitmap()
+                    .asBitmap()
+                    .get();
+        }
+        catch (Exception e)
+        {
+            Log.d("testing error 11", e.getMessage());
+        }
+        //return bitmap[0];
+        return bitmap;
     }
 }

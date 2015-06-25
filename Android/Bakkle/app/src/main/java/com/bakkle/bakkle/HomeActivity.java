@@ -48,8 +48,8 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
     private ActionBarDrawerToggle mDrawerToggle;
     private ActionBar mActionBar;
 
-    SharedPreferences.Editor editor;
     SharedPreferences preferences;
+    SharedPreferences.Editor editor;
 
     ServerCalls serverCalls;
 
@@ -59,12 +59,6 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        editor = preferences.edit();
-        if(preferences.getBoolean("newuser", true)){
-            editor.putBoolean("done", false);
-            editor.apply();
-        }
 
         // Setup drawer
         mDrawerItems = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.drawer_items)));
@@ -101,7 +95,6 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
         // Set the drawer toggle as the DrawerListener
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-
         // Custom Action bar
         mActionBar = getActionBar();
         mActionBar.setDisplayShowHomeEnabled(false);
@@ -121,13 +114,9 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
                     .build();
         }*/
 
-
+        preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        editor = preferences.edit();
         serverCalls = new ServerCalls(this);
-
-        Fragment fragment = new FeedFragment();
-
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 
     }
 
@@ -156,6 +145,7 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
                             preferences.getString("uuid", "0"));
                     editor.putBoolean("done", true);
                     editor.apply();
+                    Toast.makeText(getApplicationContext(), "Did the server register for facebook call", Toast.LENGTH_SHORT).show();
                 }
                     });
 
@@ -180,12 +170,12 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
             else //TODO:Display error on fail? and go back to login screen
                 Toast.makeText(this, "Login error!!", Toast.LENGTH_SHORT).show();
 
-
-
         }
 
-        while(!preferences.getBoolean("done", true)){}
+        //while(preferences.getBoolean("done", true)){}
 
+        Log.d("testing", preferences.getString("uuid", "0"));
+        Log.d("testing", preferences.getString("userID", "0"));
         String auth_token = serverCalls.loginFacebook(
                 preferences.getString("uuid", "0"),
                 preferences.getString("userID", "0"),
@@ -193,11 +183,14 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
         );
 
         editor.putString("auth_token", auth_token);
-        editor.apply();
-
-
         editor.putBoolean("newuser", false);
         editor.apply();
+
+        Fragment fragment = new FeedFragment();
+
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+
     }
 
     public void addUserInfoToPreferences(JSONObject object){
@@ -292,7 +285,7 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
                     new ServerCalls(getApplicationContext()).getFeedItems(
                             preferences.getString("auth_token", "0"),
                             "999999999",
-                            "",
+                            "100",
                             "",
                             "32,32",
                             "",

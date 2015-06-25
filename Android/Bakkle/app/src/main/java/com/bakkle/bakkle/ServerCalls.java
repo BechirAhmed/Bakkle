@@ -1,12 +1,13 @@
 package com.bakkle.bakkle;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.media.Image;
+import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.gson.JsonObject;
-import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
 import java.util.ArrayList;
@@ -39,12 +40,19 @@ public class ServerCalls{
     int response;
     String auth_token;
     ArrayList items;
-    JsonObject JsonResponse;
+    JsonObject jsonResponse;
+    SharedPreferences preferences;
+    SharedPreferences.Editor editor;
+
+    //TODO: make this entire class non-instantiable. aka, make the class final, make the constructor private, and pass the context to each method individually
 
     public ServerCalls(Context c)
     {
         mContext = c;
-        JsonResponse = null;
+        jsonResponse = null;
+        preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        editor = preferences.edit();
+
     }
 
     public int registerFacebook(final String email, final String gender, final String username,
@@ -52,8 +60,7 @@ public class ServerCalls{
                                 final String first_name, final String last_name, String id){
 
         response = 0;
-        String URL = url_base + url_facebook;
-        Ion.with(mContext)
+        /*Ion.with(mContext)
                 .load(URL)
                 .setBodyParameter("email", email)
                 .setBodyParameter("name", name)
@@ -78,19 +85,40 @@ public class ServerCalls{
                             Toast.makeText(mContext, "did not work", Toast.LENGTH_SHORT).show();
                         }
                     }
-                });
-        Toast.makeText(mContext, "The value of response is: " + response, Toast.LENGTH_SHORT).show();
+                });*/
+        try {
+            response = Ion.with(mContext)
+                    .load(url_base + url_facebook)
+                    .setBodyParameter("email", email)
+                    .setBodyParameter("name", name)
+                    .setBodyParameter("user_name", username)
+                    .setBodyParameter("gender", gender)
+                    .setBodyParameter("user_id", userid)
+                    .setBodyParameter("locale", locale)
+                    .setBodyParameter("first_name", first_name)
+                    .setBodyParameter("last_name", last_name)
+                    .setBodyParameter("device_uuid", id)
+                    .asJsonObject()
+                    .get()
+                    .get("status")
+                    .getAsInt();
+        }
+        catch (Exception e) {
+            Log.d("testing error 1", e.getMessage());
+        }
+        //Toast.makeText(mContext, "The value of response is: " + response, Toast.LENGTH_SHORT).show();
         return response;
     }
 
     public String loginFacebook(String device_uuid, String userid, String location){
 
-        Ion.with(mContext)
+        /*Ion.with(mContext)
                 .load(url_base + url_login)
                 .setBodyParameter("device_uuid", device_uuid)
                 .setBodyParameter("user_id", userid)
                 .setBodyParameter("app_version", BuildConfig.VERSION_NAME)
-                .setBodyParameter("location", location)
+                .setBodyParameter("user_location", location)
+                .setBodyParameter("is_ios", "false")
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
@@ -106,17 +134,34 @@ public class ServerCalls{
                             Toast.makeText(mContext, "did not work", Toast.LENGTH_SHORT).show();
                         }
                     }
-                });
-        return auth_token;
+                });*/
+        try {
+            auth_token = Ion.with(mContext)
+                    .load(url_base + url_login)
+                    .setBodyParameter("device_uuid", device_uuid)
+                    .setBodyParameter("user_id", userid)
+                    .setBodyParameter("app_version", BuildConfig.VERSION_NAME)
+                    .setBodyParameter("user_location", location)
+                    .setBodyParameter("is_ios", "false")
+                    .asJsonObject()
+                    .get()
+                    .get("auth_token")
+                    .getAsString();
+        }
+        catch (Exception e){
+            Log.d("testing error", e.getMessage());
+        }
+        return "71b8789fb02532f64d01601a812b0140_12";
+        //return auth_token;
     }
 
     public JsonObject getFeedItems(String authToken, String filterPrice, String filterDistance,
-                             String search, String location, String filterNumber, String id){
+                             String search, String location, String filterNumber, String uuid){
 
-        Ion.with(mContext)
+        /*Ion.with(mContext)
                 .load(url_base + url_feed)
                 .setBodyParameter("auth_token", authToken)
-                .setBodyParameter("device_uuid", id)
+                .setBodyParameter("device_uuid", uuid)
                 .setBodyParameter("search_text", search)
                 .setBodyParameter("filter_distance", filterDistance)
                 .setBodyParameter("filter_price", filterPrice)
@@ -130,7 +175,7 @@ public class ServerCalls{
                             Log.d("testing 3234", result.toString());
                             Toast.makeText(mContext, result.toString(), Toast.LENGTH_SHORT).show();
                             response = result.get("status").getAsInt();
-                            JsonResponse = result;
+                            jsonResponse = result;
                             Toast.makeText(mContext, "The value of response is: " + response, Toast.LENGTH_SHORT).show();
                         } else {
                             Log.d("testing 3234", "did not work");
@@ -140,8 +185,27 @@ public class ServerCalls{
 
 
                     }
-                });
-        return JsonResponse;
+                });*/
+        try {
+            jsonResponse = Ion.with(mContext)
+                    .load(url_base + url_feed)
+                    .setBodyParameter("auth_token", authToken)
+                    .setBodyParameter("device_uuid", uuid)
+                    .setBodyParameter("search_text", search)
+                    .setBodyParameter("filter_distance", filterDistance)
+                    .setBodyParameter("filter_price", filterPrice)
+                    .setBodyParameter("filter_number", filterNumber)
+                    .setBodyParameter("user_location", location)
+                    .asJsonObject()
+                    .get();
+        }
+        catch (Exception e){
+            Log.d("testing error 00", e.getMessage());
+        }
+
+        //Toast.makeText(mContext, jsonResponse.toString(), Toast.LENGTH_SHORT).show();
+
+        return jsonResponse;
     }
 
     public int logout(){
@@ -154,6 +218,8 @@ public class ServerCalls{
     }
 
     public void markItem(){
+
+
 
     }
 
@@ -189,45 +255,21 @@ public class ServerCalls{
 
     }
 
+    private class backgroundTask extends AsyncTask<String, String, String>{
+
+        @Override
+        protected String doInBackground(String... urls) {
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result)
+        {
+
+        }
 
 
-
-
-
-
-    public String getTitle(){
-        return null;
     }
 
-    public double getPrice(){
-        return 0;
-    }
-
-    public String getDescription(){
-        return null;
-    }
-
-    public String[] getTags(){
-        return null;
-    }
-
-    public String getPickupMethod(){
-        return null;
-    }
-
-    public double getDistance(){
-        return 0;
-    }
-
-    public double getRating(){
-        return 0;
-    }
-
-    public String getSellerName(){
-        return null;
-    }
-
-    public Image[] getPictures(){
-        return null;
-    }
 }
