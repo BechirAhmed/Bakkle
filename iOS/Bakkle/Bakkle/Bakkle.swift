@@ -282,7 +282,6 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                     
                     // Connect to web socket
                     WSManager.setAuthenticationWithUUID(self.deviceUUID, withToken: self.auth_token)
-                    WSManager.setAutoRegister(true)
                     WSManager.connectWS()
                     success()
                 } else {

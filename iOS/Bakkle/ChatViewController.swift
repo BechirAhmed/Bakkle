@@ -2,7 +2,7 @@ import AudioToolbox
 import UIKit
 
 let messageFontSize: CGFloat = 17
-let toolBarMinHeight: CGFloat = 44
+let toolBarMinHeight: CGFloat = 88
 let messageFont = "Avenir-Book"
 let textViewMaxHeight: (portrait: CGFloat, landscape: CGFloat) = (portrait: 272, landscape: 90)
 let messageSoundOutgoing: SystemSoundID = createMessageSoundOutgoing()
@@ -14,6 +14,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     var tableView: UITableView!
     var toolBar: UIToolbar!
     var textView: UITextView!
+    var messageType: UISegmentedControl!
     var profileButton: UIButton!
     var userName: UILabel!
     var sendButton: UIButton!
@@ -29,6 +30,12 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         if toolBar == nil {
             toolBar = UIToolbar(frame: CGRectMake(0, 0, 0, toolBarMinHeight-0.5))
 
+            messageType = UISegmentedControl (items: ["message","offer"])
+            messageType.selectedSegmentIndex = 1
+            messageType.tintColor = Theme.ColorGreen
+            toolBar.addSubview(messageType)
+            
+            
             textView = InputTextView(frame: CGRectZero)
             textView.backgroundColor = UIColor.whiteColor()
             textView.delegate = self
@@ -54,8 +61,11 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             // Auto Layout allows `sendButton` to change width, e.g., for localization.
             textView.setTranslatesAutoresizingMaskIntoConstraints(false)
             sendButton.setTranslatesAutoresizingMaskIntoConstraints(false)
+            toolBar.addConstraint(NSLayoutConstraint(item: messageType, attribute: .Left, relatedBy: .Equal, toItem: toolBar, attribute: .Left, multiplier: 1, constant: 0))
+            toolBar.addConstraint(NSLayoutConstraint(item: messageType, attribute: .Left, relatedBy: .Equal, toItem: toolBar, attribute: .Top, multiplier: 1, constant: 0))
+            toolBar.addConstraint(NSLayoutConstraint(item: messageType, attribute: .Left, relatedBy: .Equal, toItem: toolBar, attribute: .Right, multiplier: 1, constant: 0))
             toolBar.addConstraint(NSLayoutConstraint(item: textView, attribute: .Left, relatedBy: .Equal, toItem: toolBar, attribute: .Left, multiplier: 1, constant: 8))
-            toolBar.addConstraint(NSLayoutConstraint(item: textView, attribute: .Top, relatedBy: .Equal, toItem: toolBar, attribute: .Top, multiplier: 1, constant: 7.5))
+            toolBar.addConstraint(NSLayoutConstraint(item: textView, attribute: .Top, relatedBy: .Equal, toItem: messageType, attribute: .Top, multiplier: 1, constant: 0))
             toolBar.addConstraint(NSLayoutConstraint(item: textView, attribute: .Right, relatedBy: .Equal, toItem: sendButton, attribute: .Left, multiplier: 1, constant: -2))
             toolBar.addConstraint(NSLayoutConstraint(item: textView, attribute: .Bottom, relatedBy: .Equal, toItem: toolBar, attribute: .Bottom, multiplier: 1, constant: -8))
             toolBar.addConstraint(NSLayoutConstraint(item: sendButton, attribute: .Right, relatedBy: .Equal, toItem: toolBar, attribute: .Right, multiplier: 1, constant: 0))

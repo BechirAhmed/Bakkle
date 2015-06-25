@@ -14,7 +14,6 @@
 @interface WSManager : NSObject <SRWebSocketDelegate>
 
 +(void) setAuthenticationWithUUID: (NSString*) uuid withToken: (NSString*) token;
-+(void) setAutoRegister:(BOOL) autoRegister;
 +(void) registerMessageHandler: (void (^)(NSDictionary*)) handler forNotification: (NSString*) notificationType;
 
 +(BOOL) connectWS;

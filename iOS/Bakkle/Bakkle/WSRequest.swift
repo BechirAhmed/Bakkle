@@ -12,11 +12,19 @@ import UIKit
 enum methodType: String{
     case null = "null"
     case echo = "echo"
-    case registerChat = "registerChat"
-    case startChat = "startChat"
-    case getChats = "getChats"
-    case getMessagesForChat = "getMessagesForChat"
-    case sendChatMessage = "sendChatMessage"
+    case startChat = "chat_startChat"
+    case getChatIds = "chat_getChatIds"
+    case sendChatMessage = "chat_sendChatMessage"
+    case getMessagesForChat = "chat_getMessagesForChat"
+    case acceptOffer = "purchase_acceptOffer"
+    case retractOffer = "purchase_retractOffer"
+}
+
+enum deliveryMethod: String{
+    case pickUp = "Pick-up"
+    case delivery = "Delivery"
+    case meet = "Meet"
+    case ship = "Ship"
 }
 
 //superclass for all requests, contains data shared across all instances
@@ -51,13 +59,6 @@ class WSEchoRequest: WSRequest{
     }
 }
 
-class WSRegisterChatRequest: WSRequest{
-    
-    init(){
-        super.init(method:methodType.registerChat.rawValue);
-    }
-}
-
 class WSStartChatRequest: WSRequest{
     
     init(itemId: NSString){
@@ -70,7 +71,7 @@ class WSStartChatRequest: WSRequest{
 class WSGetChatsRequest: WSRequest{
     
     init(itemId: NSString){
-        super.init(method:methodType.getChats.rawValue);
+        super.init(method:methodType.getChatIds.rawValue);
         
         super.data["itemId"] = itemId
     }
@@ -92,5 +93,37 @@ class WSSendChatMessageRequest: WSRequest{
         
         super.data["chatId"] = chatId
         super.data["message"] = message
+        super.data["offerPrice"] = ""
+        super.data["offerMethod"] = ""
+    }
+}
+
+class WSSendOfferRequest: WSRequest{
+    
+    init(chatId: NSString, offerPrice: NSNumber, offerMethod: deliveryMethod){
+        super.init(method:methodType.sendChatMessage.rawValue);
+        
+        super.data["chatId"] = chatId
+        super.data["message"] = ""
+        super.data["offerPrice"] = offerPrice
+        super.data["offerMethod"] = offerMethod.rawValue
+    }
+}
+
+class WSAcceptOfferRequest: WSRequest{
+    
+    init(offerId: NSString){
+        super.init(method:methodType.acceptOffer.rawValue);
+        
+        super.data["offerId"] = offerId
+    }
+}
+
+class WSRetractOfferRequest: WSRequest{
+    
+    init(offerId: NSString){
+        super.init(method:methodType.retractOffer.rawValue);
+        
+        super.data["offerId"] = offerId
     }
 }

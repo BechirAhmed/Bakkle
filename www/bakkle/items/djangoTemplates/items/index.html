@@ -7,7 +7,7 @@
 {% if item_list %}
   <ul>
     {% for item in item_list %}
-      <li><a href="/items/detail/{{ item.id }}">{{ item.id }}:</a> {{ item.title }} ({{ item.status }}) <a href="/items/delete/{{ item.id }}">Delete</a> | <a href="/items/spam/{{ item.id }}">Mark as Spam</a></li>
+      <li><a href="{{ reverse_url('detail') }}">{{ item.id }}:</a> {{ item.title }} ({{ item.status }}) <a href="{{ reverse_url('mark_as_deleted') }}">Delete</a> | <a href="{{ reverse_url('mark_as_spam') }}">Mark as Spam</a></li>
     {% end %}
   </ul>
 {% else %}
