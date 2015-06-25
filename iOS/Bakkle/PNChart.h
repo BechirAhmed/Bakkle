@@ -10,9 +10,6 @@
 #import <UIKit/UIKit.h>
 #import "PNChart.h"
 #import "PNColor.h"
-#import "PNLineChart.h"
-#import "PNLineChartData.h"
-#import "PNLineChartDataItem.h"
 #import "PNChartDelegate.h"
 #import "PNPieChart.h"
 

@@ -8,7 +8,7 @@
 
 #import "PNPieChart.h"
 //needed for the expected label size
-#import "PNLineChart.h"
+//#import "PNLineChart.h"
 
 @interface PNPieChart()
 
@@ -346,7 +346,7 @@
     
     /* this is used when labels wrap text and the line
      * should be in the middle of the first row */
-    CGFloat singleRowHeight = [PNLineChart sizeOfString:@"Test"
+    CGFloat singleRowHeight = [PNPieChart sizeOfString:@"Test"
                                               withWidth:MAXFLOAT
                                                    font:self.legendFont ? self.legendFont : [UIFont systemFontOfSize:12.0f]].height;
     
@@ -356,7 +356,7 @@
     
     for (PNPieChartDataItem *pdata in self.items) {
         /* Expected label size*/
-        CGSize labelsize = [PNLineChart sizeOfString:pdata.textDescription
+        CGSize labelsize = [PNPieChart sizeOfString:pdata.textDescription
                                            withWidth:maxLabelWidth
                                                 font:self.legendFont ? self.legendFont : [UIFont systemFontOfSize:12.0f]];
         
@@ -431,5 +431,28 @@
     UIImageView *squareImageView = [[UIImageView alloc]initWithImage:squareImage];
     [squareImageView setFrame:CGRectMake(originX, originY, size, size)];
     return squareImageView;
+}
+
+#pragma mark - tools
++ (CGSize)sizeOfString:(NSString *)text withWidth:(float)width font:(UIFont *)font
+{
+    NSInteger ch;
+    CGSize size = CGSizeMake(width, MAXFLOAT);
+    
+    if ([text respondsToSelector:@selector(boundingRectWithSize:options:attributes:context:)]) {
+        NSDictionary *tdic = [NSDictionary dictionaryWithObjectsAndKeys:font, NSFontAttributeName, nil];
+        size = [text boundingRectWithSize:size
+                                  options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading
+                               attributes:tdic
+                                  context:nil].size;
+    } else {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+        size = [text sizeWithFont:font constrainedToSize:size lineBreakMode:NSLineBreakByCharWrapping];
+#pragma clang diagnostic pop
+    }
+    ch = size.height;
+    
+    return size;
 }
 @end

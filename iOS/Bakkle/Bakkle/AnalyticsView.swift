@@ -24,7 +24,7 @@ class AnalyticsView: UIViewController, PNChartDelegate{
         self.item = Bakkle.sharedInstance.garageItems[self.garageIndex] as? NSDictionary
         
         self.headerSetup()
-        
+        self.tabsSetup()
         self.contentSetup()
     }
     
@@ -57,6 +57,12 @@ class AnalyticsView: UIViewController, PNChartDelegate{
         header.addSubview(title)
         view.addSubview(header)
         
+        
+    }
+    
+    func tabsSetup() {
+        let topHeight: CGFloat = 20
+        let headerHeight: CGFloat = 44
         tabView = UIView(frame: CGRectMake(view.bounds.origin.x, view.bounds.origin.y+headerHeight+topHeight, view.bounds.size.width, headerHeight))
         tabView.backgroundColor = UIColor.whiteColor()
         
@@ -81,7 +87,6 @@ class AnalyticsView: UIViewController, PNChartDelegate{
         alyButton.addTarget(self, action: "alyPressed", forControlEvents: UIControlEvents.TouchUpInside)
         tabView.addSubview(alyButton)
         view.addSubview(tabView)
-
     }
     
     func contentSetup() {
@@ -96,11 +101,25 @@ class AnalyticsView: UIViewController, PNChartDelegate{
         userLabel.font = UIFont(name: "Avenir-Black", size: 20)
         contentView.addSubview(userLabel)
         
+        self.pieChartSetup()
+        
+        var viewLabel: UILabel = UILabel(frame: CGRectMake(view.bounds.origin.x, 260, view.bounds.size.width, 20))
+        viewLabel.textAlignment = NSTextAlignment.Center
+        viewLabel.text = "Views Per Day".uppercaseString
+        viewLabel.textColor = Theme.ColorGreen
+        viewLabel.font = UIFont(name: "Avenir-Black", size: 20)
+        contentView.addSubview(viewLabel)
+        
+        self.lineChartSetup()
+        
+    }
+    
+    func pieChartSetup() {
         let holdNum = item.valueForKey("number_of_holding") as? CGFloat
         let wantNum = item.valueForKey("number_of_want") as? CGFloat
         let nopeNum = item.valueForKey("number_of_meh") as? CGFloat
         let reportNum = item.valueForKey("number_of_report") as? CGFloat
-
+        
         var items: NSMutableArray = NSMutableArray()
         if holdNum != 0 {
             items.addObject(PNPieChartDataItem(value: holdNum!, color: Theme.ColorBlue, description: "HOLD"))
@@ -122,31 +141,51 @@ class AnalyticsView: UIViewController, PNChartDelegate{
         contentView.addSubview(pieChart)
         
         self.viewNumSetup()
-        
-        var viewLabel: UILabel = UILabel(frame: CGRectMake(view.bounds.origin.x, 260, view.bounds.size.width, 20))
-        viewLabel.textAlignment = NSTextAlignment.Center
-        viewLabel.text = "Views Per Day".uppercaseString
-        viewLabel.textColor = Theme.ColorGreen
-        viewLabel.font = UIFont(name: "Avenir-Black", size: 20)
-        contentView.addSubview(viewLabel)
     }
     
     func viewNumSetup(){
-        var viewsLabel: UILabel = UILabel(frame: CGRectMake(view.bounds.origin.x, 30+view.bounds.size.width/10*3, view.bounds.size.width, 20))
+        var viewsLabel: UILabel = UILabel(frame: CGRectMake(view.bounds.origin.x, 28+view.bounds.size.width/10*3, view.bounds.size.width, 20))
         viewsLabel.textAlignment = NSTextAlignment.Center
         viewsLabel.text = "VIEWS"
         viewsLabel.textColor = Theme.ColorGreen
-        viewsLabel.font = UIFont(name: "Avenir-Heavy", size: 15)
+        viewsLabel.font = UIFont(name: "Avenir-Heavy", size: 18)
         contentView.addSubview(viewsLabel)
         
         let viewNum = item.valueForKey("number_of_views") as? NSNumber
-        var numLabel: UILabel = UILabel(frame: CGRectMake(view.bounds.origin.x, 40+view.bounds.size.width/10*3, view.bounds.size.width, 20))
+        var numLabel: UILabel = UILabel(frame: CGRectMake(view.bounds.origin.x, 43+view.bounds.size.width/10*3, view.bounds.size.width, 20))
         numLabel.textAlignment = NSTextAlignment.Center
         numLabel.text = viewNum?.stringValue
         numLabel.textColor = Theme.ColorGreen
-        numLabel.font = UIFont(name: "Avenir-Heavy", size: 15)
+        numLabel.font = UIFont(name: "Avenir-Heavy", size: 18)
         contentView.addSubview(numLabel)
     }
+    
+    func lineChartSetup() {
+        var lineChart:PNLineChart = PNLineChart(frame: CGRectMake(view.bounds.origin.x, 300, view.bounds.size.width, 150))
+        lineChart.yLabelFormat = "%1.1f"
+        lineChart.showLabel = true
+        lineChart.backgroundColor = UIColor.clearColor()
+        lineChart.xLabels = ["SEP 1","SEP 2","SEP 3","SEP 4","SEP 5","SEP 6","SEP 7"]
+        lineChart.showCoordinateAxis = true
+        lineChart.delegate = self
+        
+        var data01Array: [CGFloat] = [60.1, 160.1, 126.4, 186.2, 127.2, 176.2]
+        var data01:PNLineChartData = PNLineChartData()
+        data01.color = Theme.ColorGreen
+        data01.itemCount = data01Array.count
+        //data01.inflexionPointStyle = PNLineChartData
+        data01.getData = ({(index: Int) -> PNLineChartDataItem in
+            var yValue:CGFloat = data01Array[index]
+            var item = PNLineChartDataItem()
+            item.y = yValue
+            return item
+        })
+        
+        lineChart.chartData = [data01]
+        lineChart.strokeChart()
+        contentView.addSubview(lineChart)
+    }
+
     
     func btnBack(sender:UIButton!)
     {
