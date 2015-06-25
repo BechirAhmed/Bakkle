@@ -16,6 +16,8 @@ enum methodType: String{
     case getChatIds = "chat_getChatIds"
     case sendChatMessage = "chat_sendChatMessage"
     case getMessagesForChat = "chat_getMessagesForChat"
+    case acceptOffer = "purchase_acceptOffer"
+    case retractOffer = "purchase_retractOffer"
 }
 
 enum deliveryMethod: String{
@@ -105,5 +107,23 @@ class WSSendOfferRequest: WSRequest{
         super.data["message"] = ""
         super.data["offerPrice"] = offerPrice
         super.data["offerMethod"] = offerMethod.rawValue
+    }
+}
+
+class WSAcceptOfferRequest: WSRequest{
+    
+    init(offerId: NSString){
+        super.init(method:methodType.acceptOffer.rawValue);
+        
+        super.data["offerId"] = offerId
+    }
+}
+
+class WSRetractOfferRequest: WSRequest{
+    
+    init(offerId: NSString){
+        super.init(method:methodType.retractOffer.rawValue);
+        
+        super.data["offerId"] = offerId
     }
 }
