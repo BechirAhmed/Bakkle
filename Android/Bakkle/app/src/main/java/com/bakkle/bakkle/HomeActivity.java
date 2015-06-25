@@ -48,16 +48,17 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
     private ActionBarDrawerToggle mDrawerToggle;
     private ActionBar mActionBar;
 
-    SharedPreferences.Editor editor;
     SharedPreferences preferences;
+    SharedPreferences.Editor editor;
 
+    ServerCalls serverCalls;
+
+    int result = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        editor = preferences.edit();
 
         // Setup drawer
         mDrawerItems = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.drawer_items)));
@@ -94,7 +95,6 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
         // Set the drawer toggle as the DrawerListener
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-
         // Custom Action bar
         mActionBar = getActionBar();
         mActionBar.setDisplayShowHomeEnabled(false);
@@ -106,15 +106,23 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
         mActionBar.setCustomView(mCustomView);
         mActionBar.setDisplayShowCustomEnabled(true);
 
-        Fragment fragment = new FeedFragment();
+        /*protected synchronized void buildGoogleApiClient() {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }*/
 
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+        preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        editor = preferences.edit();
+        serverCalls = new ServerCalls(this);
 
     }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
+
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
         mDrawerToggle.syncState();
@@ -125,22 +133,26 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
                 @Override
                 public void onCompleted(JSONObject object, GraphResponse response) {
                     addUserInfoToPreferences(object);
+                    result = serverCalls.registerFacebook(
+                            preferences.getString("email", "null"),
+                            preferences.getString("gender", "null"),
+                            preferences.getString("username", "null"),
+                            preferences.getString("name", "null"),
+                            preferences.getString("userID", "null"),
+                            preferences.getString("locale", "null"),
+                            preferences.getString("first_name", "null"),
+                            preferences.getString("last_name", "null"),
+                            preferences.getString("uuid", "0"));
+                    editor.putBoolean("done", true);
+                    editor.apply();
+                    Toast.makeText(getApplicationContext(), "Did the server register for facebook call", Toast.LENGTH_SHORT).show();
                 }
-            });
+                    });
 
             Bundle parameters = new Bundle();
             parameters.putString("fields", "locale, email, gender");
             request.executeAsync();
 
-            String testresult = new ServerCalls(this).loginFacebook(
-                    preferences.getString("email", "null"),
-                    preferences.getString("gender", "null"),
-                    preferences.getString("username", "null"),
-                    preferences.getString("name", "null"),
-                    preferences.getString("userID", "null"),
-                    preferences.getString("locale", "null"),
-                    preferences.getString("first_name", "null"),
-                    preferences.getString("last_name", "null"));
             /*
 
             String email = preferences.getString("email", "null");
@@ -153,13 +165,32 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
             String last_name = preferences.getString("last_name", "null");
 
             */
+            if(result == 1)
+                Toast.makeText(this, "Logged in successfully!", Toast.LENGTH_SHORT).show();
+            else //TODO:Display error on fail? and go back to login screen
+                Toast.makeText(this, "Login error!!", Toast.LENGTH_SHORT).show();
 
-            Toast.makeText(this, testresult, Toast.LENGTH_SHORT).show();
         }
 
+        //while(preferences.getBoolean("done", true)){}
 
+        Log.d("testing", preferences.getString("uuid", "0"));
+        Log.d("testing", preferences.getString("userID", "0"));
+        String auth_token = serverCalls.loginFacebook(
+                preferences.getString("uuid", "0"),
+                preferences.getString("userID", "0"),
+                getLocation()
+        );
+
+        editor.putString("auth_token", auth_token);
         editor.putBoolean("newuser", false);
         editor.apply();
+
+        Fragment fragment = new FeedFragment();
+
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+
     }
 
     public void addUserInfoToPreferences(JSONObject object){
@@ -217,6 +248,10 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
 
     }
 
+    public String getLocation(){
+        return "32, 32";
+    }
+
     private class DrawerItemClickListener implements ListView.OnItemClickListener{
         @Override
         public void onItemClick(AdapterView parent, View view, int position, long id){
@@ -227,7 +262,6 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
 
             switch(position){
                 case 0:
-                    //if(){}
                     getFragmentManager().beginTransaction().replace(R.id.content_frame,
                             new FeedFragment()).addToBackStack(null).
                             setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
@@ -248,6 +282,15 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
                             setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
                     break;
                 case 4:
+                    new ServerCalls(getApplicationContext()).getFeedItems(
+                            preferences.getString("auth_token", "0"),
+                            "999999999",
+                            "100",
+                            "",
+                            "32,32",
+                            "",
+                            preferences.getString("uuid", "0")
+                        );
                     //startActivity(new Intent(getApplicationContext(), FeedFilter.class));
                     break;
                 case 5:
