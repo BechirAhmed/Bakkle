@@ -52,7 +52,7 @@ class MessageBubbleCell: UITableViewCell {
                 tag = incomingTag
                 bubbleImageView.image = bubbleImage.incoming
                 bubbleImageView.highlightedImage = bubbleImage.incomingHighlighed
-                messageLabel.textColor = UIColor.blackColor()
+                messageLabel.textColor = UIColor.whiteColor()
                 layoutAttribute = .Left
                 layoutConstant = 10
             } else { // outgoing
@@ -92,8 +92,8 @@ func bubbleImageMake() -> (incoming: UIImage, incomingHighlighed: UIImage, outgo
     let capInsetsIncoming = UIEdgeInsets(top: 17, left: 26.5, bottom: 17.5, right: 21)
     let capInsetsOutgoing = UIEdgeInsets(top: 17, left: 21, bottom: 17.5, right: 26.5)
 
-    let incoming = coloredImage(maskIncoming, 229/255.0, 229/255.0, 234/255.0, 1).resizableImageWithCapInsets(capInsetsIncoming)
-    let incomingHighlighted = coloredImage(maskIncoming, 206/255.0, 206/255.0, 210/255.0, 1).resizableImageWithCapInsets(capInsetsIncoming)
+    let incoming = coloredImage(maskIncoming, 50/255.0, 50/255.0, 50/255.0, 1).resizableImageWithCapInsets(capInsetsIncoming)
+    let incomingHighlighted = coloredImage(maskIncoming, 50/255.0, 50/255.0, 50/255.0, 1).resizableImageWithCapInsets(capInsetsIncoming)
     let outgoing = coloredImage(maskOutgoing, 51/255.0, 205/255.0, 95/255.0, 1).resizableImageWithCapInsets(capInsetsOutgoing)
     let outgoingHighlighted = coloredImage(maskOutgoing, 51/255.0, 205/255.0, 95/255.0, 1).resizableImageWithCapInsets(capInsetsOutgoing)
 
