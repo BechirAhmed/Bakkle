@@ -50,7 +50,8 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
         title.textAlignment = NSTextAlignment.Center
         title.font = UIFont(name: "Avenir-Black", size: 20)
         title.textColor = UIColor.whiteColor()
-        title.text = (Bakkle.sharedInstance.garageItems[self.garageIndex].valueForKey("title") as? String)?.uppercaseString
+        //title.text = (Bakkle.sharedInstance.garageItems[self.garageIndex].valueForKey("title") as? String)?.uppercaseString
+        title.text = "MESSAGES"
         title.adjustsFontSizeToFitWidth = true
         header.addSubview(title)
         view.addSubview(header)
@@ -197,8 +198,9 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
     func editItem(sender:UIButton!)
     {
         let sb: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        let vc: ItemDetails = sb.instantiateViewControllerWithIdentifier("ItemDetails") as! ItemDetails
+        let vc: AddItem = sb.instantiateViewControllerWithIdentifier("AddItem") as! AddItem
         vc.modalTransitionStyle = UIModalTransitionStyle.FlipHorizontal
+        vc.isEditting = true
         vc.item = Bakkle.sharedInstance.garageItems[self.garageIndex] as? NSDictionary
         self.presentViewController(vc, animated: true, completion: nil)
 

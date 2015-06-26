@@ -177,11 +177,6 @@ class SellersGarageView: UIViewController, UICollectionViewDelegate, UICollectio
     /* Camera */
     let albumName = "Bakkle"
     
-    func showAddItem(){
-        var addItem: UIViewController = AddItem()
-        presentViewController(addItem, animated: true, completion: nil)
-    }
-    
     var imagePicker = UIImagePickerController()
     
     // Display camera as first step of add-item

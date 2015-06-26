@@ -27,7 +27,10 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     let listItemCellIdentifier = "ListItemCell"
     var itemImages: [UIImage]? = [UIImage]()
     var scaledImages: [UIImage]? = [UIImage]()
+    var item: NSDictionary!
+    var isEditting: Bool = false
     
+    @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var closeBtn: UIButton!
     @IBOutlet weak var titleField: UITextField!
     @IBOutlet weak var priceField: UITextField!
@@ -40,7 +43,6 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     @IBOutlet weak var camButtonBackground: UIView!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var loadingView: UIView!
-    @IBOutlet var overlayView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -200,6 +202,38 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         
         // Set default
         methodControl.selectedSegmentIndex = 0;
+
+        // set content if it's in edit mode
+        if isEditting {
+            if let edittingItem = item {
+                titleLabel.text = "EDIT ITEM"
+                let method = item.valueForKey("method") as! String
+                switch method {
+                    case "Pick up":methodControl.selectedSegmentIndex = 0;break;
+                    case "Meet": methodControl.selectedSegmentIndex = 1;break;
+                    case "Ship": methodControl.selectedSegmentIndex = 2;break;
+                    default: methodControl.selectedSegmentIndex = 0;break;
+                }
+                titleField.text = item.valueForKey("title") as! String
+                priceField.text = item.valueForKey("price") as! String
+                formatPrice()
+                let tags = item.valueForKey("tags") as! Array<String>
+                tagsField.text = ", ".join(tags)
+                tagsField.textColor = UIColor.blackColor()
+                confirmButtonText.text = "SAVE"
+                //confirmButtonText.bringSubviewToFront(confirmButton)
+                confirmButtonText.textColor = UIColor.whiteColor()
+                let imageUrls = item.valueForKey("image_urls") as! Array<String>
+                for index in 0...imageUrls.count-1 {
+                    var imageURL: NSURL = NSURL(string: imageUrls[index])!
+                    var imageData: NSData = NSData(contentsOfURL: imageURL)!
+                    itemImages?.append(UIImage(data: imageData)!)
+                    scaledImages?.append(UIImage(data:imageData)!)
+                }
+                disableConfirmButtonHandler()
+            }
+        }
+
     }
     
     @IBAction func beginEditingPrice(sender: AnyObject) {
@@ -248,7 +282,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
             confirmButton.enabled = true
             confirmButton.backgroundColor = AddItem.BAKKLE_GREEN_COLOR
         }
-        confirmButtonView.bringSubviewToFront(confirmButtonText)
+        //confirmButtonView.bringSubviewToFront(confirmButtonText)
         return confirmButton.enabled
     }
     
@@ -659,7 +693,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         cell.imgView.clipsToBounds  = true
         if let images = self.itemImages {
             /* This allows us to test adding image using simulator */
-            if UIDevice.currentDevice().model == "iPhone Simulator" {
+            if UIDevice.currentDevice().model == "iPhone Simulator" && !isEditting{
                 cell.imgView.image = UIImage(named: "tiger.jpg")
             } else {
                 cell.imgView.image = images[indexPath.row]

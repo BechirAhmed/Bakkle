@@ -55,7 +55,8 @@ class AnalyticsView: UIViewController, PNChartDelegate{
         title.textAlignment = NSTextAlignment.Center
         title.font = UIFont(name: "Avenir-Black", size: 20)
         title.textColor = UIColor.whiteColor()
-        title.text = (item.valueForKey("title") as? String)?.uppercaseString
+//        title.text = (item.valueForKey("title") as? String)?.uppercaseString
+        title.text = "ANALYTICS"
         header.addSubview(title)
         view.addSubview(header)
         
@@ -139,6 +140,9 @@ class AnalyticsView: UIViewController, PNChartDelegate{
         if reportNum != 0 {
             items.addObject(PNPieChartDataItem(value: reportNum!, color: Theme.ColorOrange, description: "REPORT"))
         }
+        if items.count == 0 {
+            items.addObject(PNPieChartDataItem(value: 0, color: Theme.ColorGreen, description: "NO VIEWS"))
+        }
         var itemArray = items as AnyObject as! [PNPieChartDataItem]
         var pieChart: PNPieChart = PNPieChart(frame: CGRectMake((view.bounds.size.width - (pieChartHeight - 35))/2, 35, pieChartHeight - 35, pieChartHeight - 35), items: itemArray)
         pieChart.descriptionTextColor = UIColor.whiteColor()
@@ -198,9 +202,11 @@ class AnalyticsView: UIViewController, PNChartDelegate{
     func editItem(sender:UIButton!)
     {
         let sb: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        let vc: ItemDetails = sb.instantiateViewControllerWithIdentifier("ItemDetails") as! ItemDetails
+        let vc: AddItem = sb.instantiateViewControllerWithIdentifier("AddItem") as! AddItem
         vc.modalTransitionStyle = UIModalTransitionStyle.FlipHorizontal
-        vc.item = Bakkle.sharedInstance.garageItems[self.garageIndex] as? NSDictionary
+        vc.isEditting = true
+        vc.item = self.item as? NSDictionary
+        //vc.item = Bakkle.sharedInstance.garageItems[self.garageIndex] as? NSDictionary
         self.presentViewController(vc, animated: true, completion: nil)
     }
     
