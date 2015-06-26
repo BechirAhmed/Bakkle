@@ -654,8 +654,14 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             escPrice = price.stringByReplacingOccurrencesOfString("$ ", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
         }
         
-        let postString = "device_uuid=\(self.deviceUUID)&title=\(escTitle)&description=\(escDescription)&location=\(escLocation)&auth_token=\(self.auth_token)&price=\(escPrice)&tags=\(escTags)&method=\(escMethod)"
-        let url: NSURL? = NSURL(string: url_base + url_add_item + "?\(postString)")
+        var postString : NSString;
+        if(item_id != nil){
+            postString = "device_uuid=\(self.deviceUUID)&title=\(escTitle)&description=\(escDescription)&location=\(escLocation)&auth_token=\(self.auth_token)&price=\(escPrice)&tags=\(escTags)&method=\(escMethod)&item_id=\(item_id)"
+        }
+        else{
+            postString = "device_uuid=\(self.deviceUUID)&title=\(escTitle)&description=\(escDescription)&location=\(escLocation)&auth_token=\(self.auth_token)&price=\(escPrice)&tags=\(escTags)&method=\(escMethod)"
+        }
+        let url: NSURL? = NSURL(string: url_base +  url_add_item + "?\(postString)")
         
         let request = NSMutableURLRequest(URL: url!)
         request.HTTPMethod = "POST"
