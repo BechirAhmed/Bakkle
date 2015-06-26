@@ -17,6 +17,8 @@ class AnalyticsView: UIViewController, PNChartDelegate{
     var contentView: UIView!
     var garageIndex: Int = 0
     var item: NSDictionary!
+    var pieChartHeight: CGFloat = 0
+    var lineChartHeight: CGFloat = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -94,7 +96,10 @@ class AnalyticsView: UIViewController, PNChartDelegate{
         contentView.backgroundColor = UIColor.whiteColor()
         view.addSubview(contentView)
         
-        var userLabel: UILabel = UILabel(frame: CGRectMake(view.bounds.origin.x, 10, view.bounds.size.width, 20))
+        pieChartHeight = contentView.frame.height / 7 * 4
+        lineChartHeight = contentView.frame.height / 7 * 3
+        
+        var userLabel: UILabel = UILabel(frame: CGRectMake(view.bounds.origin.x, 5, view.bounds.size.width, 20))
         userLabel.textAlignment = NSTextAlignment.Center
         userLabel.text = "user interaction".uppercaseString
         userLabel.textColor = Theme.ColorGreen
@@ -103,7 +108,7 @@ class AnalyticsView: UIViewController, PNChartDelegate{
         
         self.pieChartSetup()
         
-        var viewLabel: UILabel = UILabel(frame: CGRectMake(view.bounds.origin.x, 260, view.bounds.size.width, 20))
+        var viewLabel: UILabel = UILabel(frame: CGRectMake(view.bounds.origin.x, 20+pieChartHeight, view.bounds.size.width, 20))
         viewLabel.textAlignment = NSTextAlignment.Center
         viewLabel.text = "Views Per Day".uppercaseString
         viewLabel.textColor = Theme.ColorGreen
@@ -115,6 +120,7 @@ class AnalyticsView: UIViewController, PNChartDelegate{
     }
     
     func pieChartSetup() {
+        
         let holdNum = item.valueForKey("number_of_holding") as? CGFloat
         let wantNum = item.valueForKey("number_of_want") as? CGFloat
         let nopeNum = item.valueForKey("number_of_meh") as? CGFloat
@@ -134,17 +140,13 @@ class AnalyticsView: UIViewController, PNChartDelegate{
             items.addObject(PNPieChartDataItem(value: reportNum!, color: Theme.ColorOrange, description: "REPORT"))
         }
         var itemArray = items as AnyObject as! [PNPieChartDataItem]
-        var pieChart: PNPieChart = PNPieChart(frame: CGRectMake(view.bounds.size.width/5, 40, view.bounds.size.width/5*3, view.bounds.size.width/5*3), items: itemArray)
+        var pieChart: PNPieChart = PNPieChart(frame: CGRectMake((view.bounds.size.width - (pieChartHeight - 35))/2, 35, pieChartHeight - 35, pieChartHeight - 35), items: itemArray)
         pieChart.descriptionTextColor = UIColor.whiteColor()
         pieChart.descriptionTextFont = UIFont(name: "Avenir-Heavy", size: 17)
         pieChart.strokeChart()
         contentView.addSubview(pieChart)
         
-        self.viewNumSetup()
-    }
-    
-    func viewNumSetup(){
-        var viewsLabel: UILabel = UILabel(frame: CGRectMake(view.bounds.origin.x, 28+view.bounds.size.width/10*3, view.bounds.size.width, 20))
+        var viewsLabel: UILabel = UILabel(frame: CGRectMake(view.bounds.origin.x, 27+(pieChartHeight - 35)/2, view.bounds.size.width, 20))
         viewsLabel.textAlignment = NSTextAlignment.Center
         viewsLabel.text = "VIEWS"
         viewsLabel.textColor = Theme.ColorGreen
@@ -152,7 +154,7 @@ class AnalyticsView: UIViewController, PNChartDelegate{
         contentView.addSubview(viewsLabel)
         
         let viewNum = item.valueForKey("number_of_views") as? NSNumber
-        var numLabel: UILabel = UILabel(frame: CGRectMake(view.bounds.origin.x, 43+view.bounds.size.width/10*3, view.bounds.size.width, 20))
+        var numLabel: UILabel = UILabel(frame: CGRectMake(view.bounds.origin.x, 44+(pieChartHeight - 35)/2, view.bounds.size.width, 20))
         numLabel.textAlignment = NSTextAlignment.Center
         numLabel.text = viewNum?.stringValue
         numLabel.textColor = Theme.ColorGreen
@@ -161,7 +163,8 @@ class AnalyticsView: UIViewController, PNChartDelegate{
     }
     
     func lineChartSetup() {
-        var lineChart:PNLineChart = PNLineChart(frame: CGRectMake(view.bounds.origin.x, 300, view.bounds.size.width, 150))
+        
+        var lineChart:PNLineChart = PNLineChart(frame: CGRectMake(view.bounds.origin.x, 50+pieChartHeight, view.bounds.size.width, lineChartHeight-50))
         lineChart.yLabelFormat = "%1.1f"
         lineChart.showLabel = true
         lineChart.backgroundColor = UIColor.clearColor()
@@ -169,7 +172,7 @@ class AnalyticsView: UIViewController, PNChartDelegate{
         lineChart.showCoordinateAxis = true
         lineChart.delegate = self
         
-        var data01Array: [CGFloat] = [60.1, 160.1, 126.4, 186.2, 127.2, 176.2]
+        var data01Array: [CGFloat] = [60.1, 160.1, 126.4, 262.3, 186.2, 127.2, 176.2]
         var data01:PNLineChartData = PNLineChartData()
         data01.color = Theme.ColorGreen
         data01.itemCount = data01Array.count
