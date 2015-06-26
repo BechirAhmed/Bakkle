@@ -452,7 +452,7 @@ public class CardContainer extends AdapterView<ListAdapter> {
                     mTopCard.setLayerType(LAYER_TYPE_HARDWARE, null);
 
                 if (cardModel.getOnCardDismissedListener() != null) {
-                    if ( targetX > 0 ) {
+                    if ( targetX > 0 ) { //TODO: this is where i add the callback for the holding pattern
                         cardModel.getOnCardDismissedListener().onLike();
                     } else {
                         cardModel.getOnCardDismissedListener().onDislike();

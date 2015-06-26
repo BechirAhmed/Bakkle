@@ -33,6 +33,11 @@ public class FeedFragment extends Fragment implements View.OnTouchListener {
 
     ServerCalls serverCalls;
 
+    FeedItem feedItem = null;
+
+    String status, description, price, postDate, title, buyerRating, sellerDisplayName, sellerLocation, sellerFacebookId, sellerPk, sellerRating, location, pk, method;
+
+
     Bitmap bitmap;
 
     JsonObject jsonResult;
@@ -116,9 +121,7 @@ public class FeedFragment extends Fragment implements View.OnTouchListener {
         SimpleCardStackAdapter adapter = new SimpleCardStackAdapter(getActivity());
         JsonObject temp;
         ArrayList<FeedItem> feedItems = new ArrayList<FeedItem>();
-        FeedItem feedItem = null;
         CardModel card;
-        String status, description, price, postDate, title, buyerRating, sellerDisplayName, sellerLocation, sellerFacebookId, sellerPk, sellerRating, location, pk, method;
         ArrayList<String> tags, imageUrls;
         JsonObject seller;
         JsonArray imageUrlArray;
@@ -127,7 +130,7 @@ public class FeedFragment extends Fragment implements View.OnTouchListener {
 
         for(JsonElement element : jsonArray)
         {
-            feedItem = new FeedItem();
+            feedItem = new FeedItem(this.getActivity().getApplicationContext());
             temp = element.getAsJsonObject();
 
             feedItem.setTitle(temp.get("title").getAsString());
@@ -137,6 +140,8 @@ public class FeedFragment extends Fragment implements View.OnTouchListener {
             feedItem.setLocation(temp.get("location").getAsString()); //TODO: difference between location and sellerlocation??
             feedItem.setMethod(temp.get("method").getAsString());
             sellerFacebookId = temp.get("seller").getAsJsonObject().get("facebook_id").getAsString();
+            pk = temp.get("pk").getAsString();
+            feedItem.setPk(pk);
 
 
             imageUrlArray = temp.get("image_urls").getAsJsonArray();
@@ -153,17 +158,28 @@ public class FeedFragment extends Fragment implements View.OnTouchListener {
             card.setOnCardDismissedListener(new CardModel.OnCardDismissedListener() {
                 @Override
                 public void onLike() {
-
+                    serverCalls.markItem("want",
+                            preferences.getString("auth_token", "0"),
+                            preferences.getString("uuid", "0"),
+                            pk,
+                            "42");
                 }
-
                 @Override
                 public void onDislike() {
+
+                    serverCalls.markItem("meh",
+                            preferences.getString("auth_token", "0"),
+                            preferences.getString("uuid", "0"),
+                            pk,
+                            "42");
                 }
             });
 
             card.setOnClickListener(new CardModel.OnClickListener() {
                 @Override
                 public void OnClickListener() {
+
+                    //TODO: bring up description page, with all pictures, description, etc
                 }
             });
 
@@ -172,7 +188,7 @@ public class FeedFragment extends Fragment implements View.OnTouchListener {
             temp = null;
             imageUrlArray = null;
             imageUrls = null;
-            card = null;
+            //card = null;
         }
         mCardContainer.setAdapter(adapter);
 

@@ -1,10 +1,8 @@
 package com.bakkle.bakkle;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.media.Image;
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.google.gson.JsonObject;
@@ -41,8 +39,6 @@ public class ServerCalls{
     String auth_token;
     ArrayList items;
     JsonObject jsonResponse;
-    SharedPreferences preferences;
-    SharedPreferences.Editor editor;
 
     //TODO: make this entire class non-instantiable. aka, make the class final, make the constructor private, and pass the context to each method individually
 
@@ -50,8 +46,6 @@ public class ServerCalls{
     {
         mContext = c;
         jsonResponse = null;
-        preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-        editor = preferences.edit();
 
     }
 
@@ -217,9 +211,21 @@ public class ServerCalls{
 
     }
 
-    public void markItem(){
-
-
+    public void markItem(String status, String authToken, String uuid, String item_id, String viewDuration){
+//TODO: defintely make these Async as soon as possible
+        try {
+            jsonResponse = Ion.with(mContext)
+                    .load(url_base + url_mark + status + "/")
+                    .setBodyParameter("auth_token", authToken)
+                    .setBodyParameter("device_uuid", uuid)
+                    .setBodyParameter("item_id", item_id)
+                    .setBodyParameter("view_duration", viewDuration)
+                    .asJsonObject()
+                    .get();
+        }
+        catch (Exception e){
+            Log.d("testing error 00", e.getMessage());
+        }
 
     }
 
@@ -231,7 +237,23 @@ public class ServerCalls{
 
     }
 
-    public void populateTrunk(){
+    public JsonObject populateTrunk(String authToken, String uuid){
+
+
+        try {
+            jsonResponse = Ion.with(mContext)
+                    .load(url_base + url_buyers_trunk)
+                    .setBodyParameter("auth_token", authToken)
+                    .setBodyParameter("device_uuid", uuid)
+                    .asJsonObject()
+                    .get();
+        }
+        catch (Exception e) {
+            Log.d("testing error 007", e.getMessage());
+
+        }
+
+        return jsonResponse;
 
     }
 

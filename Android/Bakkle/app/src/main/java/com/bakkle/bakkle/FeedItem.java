@@ -1,6 +1,11 @@
 package com.bakkle.bakkle;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.util.Log;
+
 import com.google.gson.JsonObject;
+import com.koushikdutta.ion.Ion;
 
 import java.util.ArrayList;
 
@@ -12,13 +17,25 @@ public class FeedItem {
     String status, description, price, postDate, title, buyerRating, sellerDisplayName, sellerLocation, sellerFacebookId, sellerPk, sellerRating, location, pk, method;
     ArrayList<String> tags, imageUrls;
     JsonObject seller;
+    Context c;
 
-    public FeedItem(){
-
+    public FeedItem(Context c){
+        this.c =c;
     }
 
     public ArrayList<String> getTags() {
         return tags;
+    }
+
+    public String getTagsString(){
+        String s = "";
+        if(tags.size() > 0) {
+            for (String tag : tags) {
+                s += tag + ", ";
+            }
+            return s.substring(0, s.length() - 2);
+        }
+        return s;
     }
 
     public void setTags(ArrayList<String> tags) {
@@ -156,6 +173,36 @@ public class FeedItem {
     public String getDistance(){
         //TODO: Use location services to figure out how far away item actually is
         return "100 mi";
+    }
+
+    public Bitmap getFirstImage()
+    {
+        Bitmap bitmap = null;
+        //final Bitmap[] bitmap = new Bitmap[1];
+        /*Ion.with(this)
+                .load(item.getImageUrls().get(0))
+                .withBitmap()
+                .asBitmap()
+                .setCallback(new FutureCallback<Bitmap>() {
+                    @Override
+                    public void onCompleted(Exception e, Bitmap result) {
+                        //bitmap[0] = result;
+                        bitmap = result;
+                    }
+                });*/
+        try{
+            bitmap = Ion.with(c)
+                    .load(getImageUrls().get(0))
+                    .withBitmap()
+                    .asBitmap()
+                    .get();
+        }
+        catch (Exception e)
+        {
+            Log.d("testing error 11", e.getMessage());
+        }
+        //return bitmap[0];
+        return bitmap;
     }
 
 }
