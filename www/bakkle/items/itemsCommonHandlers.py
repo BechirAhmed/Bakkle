@@ -36,6 +36,8 @@ from common.decorators import time_method
 from django.conf import settings
 import math;
 
+from common.decorators import run_async
+
 MAX_ITEM_IMAGE = 5
 
 config = {}
@@ -165,7 +167,8 @@ def add_item(title, description, location, seller_id, price, tags, method, notif
         # Else get the item
         try:
             item = Items.objects.get(pk=item_id)
-        except Item.DoesNotExist:
+            print("[EditItem] editing item: " + str(item_id))
+        except Items.DoesNotExist:
             item = None
             response_data = {"status":0, "error":"Item {} does not exist.".format(item_id)}
             return response_data
@@ -189,7 +192,75 @@ def add_item(title, description, location, seller_id, price, tags, method, notif
     response_data = { "status":1, "item_id":item.id }
     return response_data
 
+
 @time_method
+def add_item_no_image(title, description, location, seller_id, price, tags, method, notifyFlag, item_id, images):
+    # Get the authentication code
+
+    # Get the rest of the necessary params from the request
+
+    # Get the item id if present (If it is present an item will be edited not added)
+
+    # Ensure that required fields are present otherwise send back a failed status
+    if (title == None or title == "") or (tags == None or tags == "") or (price == None or price == "") or (method == None or method == ""):
+        response_data = { "status":0, "error": "A required parameter was not provided." }
+        return response_data
+
+    # Ensure that the price can be converted to a decimal otherwise send back a failed status
+    try:
+        price = Decimal(price)
+    except ValueError:
+        response_data = { "status":0, "error": "Price was not a valid decimal." }
+        return response_data
+
+    TWOPLACES = Decimal(10) ** -6
+
+    if (item_id == None or item_id == ""):
+        # Create the item
+        item = Items.objects.create(
+            title = title,
+            seller_id = seller_id,
+            description = description,
+            longitude = Decimal(location.split(",")[0]).quantize(TWOPLACES),
+            latitude = Decimal(location.split(",")[1]).quantize(TWOPLACES),
+            price = price,
+            tags = tags,
+            method = method,
+            image_urls = " ",
+            status = Items.ACTIVE)
+        item.save()
+        if(notifyFlag == None or notifyFlag == "" or int(notifyFlag) != 0):
+            notify_all_new_item("New: ${} - {}".format(item.price, item.title))
+    else:
+        # Else get the item
+        try:
+            item = Items.objects.get(pk=item_id)
+            print("[EditItem] editing item: " + str(item_id))
+        except Items.DoesNotExist:
+            item = None
+            response_data = {"status":0, "error":"Item {} does not exist.".format(item_id)}
+            return response_data
+
+        # TODO: fix this
+        # Remove all previous images
+        # old_urls = item.image_urls.split(",")
+        # for url in old_urls:
+        #     # remove image from S3
+        #     handle_delete_file_s3(url)
+
+        # Update item fields
+        item.title = title
+        item.description = description
+        item.tags = tags
+        item.price = price
+        item.method = method
+        item.image_urls = image_urls
+        item.save()
+
+    response_data = { "status":1, "item_id":item.id }
+    return response_data
+
+@run_async
 def notify_all_new_item(message):
     # Get all devices
 
@@ -533,7 +604,6 @@ def handle_file_s3(image_key, f):
     k.set_acl('public-read')
     print config['S3_URL'] + image_key
     return config['S3_URL'] + image_key
-    # TODO: Setup connection pool and queue for uploading at volume
 
 #TODO: Fix this
 def handle_delete_file_s3(image_path):

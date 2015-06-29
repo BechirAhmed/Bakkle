@@ -8,7 +8,6 @@ class bakkleRequestHandler(web.RequestHandler):
 
         try:
             queryArgument = self.get_argument(key)
-            print(key + ": " + queryArgument)
         except web.MissingArgumentError:
             if default is not None:
                 return default

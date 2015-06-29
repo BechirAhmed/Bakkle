@@ -1,6 +1,7 @@
 from django.db import models
 from account.models import Account
 from items.models import Items
+from purchase.models import Offer
 
 # Create your models here.
 class Chat(models.Model):
@@ -38,21 +39,27 @@ class Chat(models.Model):
 
 class Message(models.Model):
     chat = models.ForeignKey(Chat)
+    offer = models.ForeignKey(Offer, blank=True, null=True)
     sent_by_buyer = models.BooleanField(default = True)
     date_sent = models.DateTimeField(auto_now_add=True)
     viewed_by_buyer_time = models.DateTimeField(null = True, auto_now = False)
     viewed_by_seller_time = models.DateTimeField(null = True, auto_now = False)
     message = models.CharField(max_length=500)
-    proposed_price = models.DecimalField(max_digits = 10, decimal_places=2, null = True)
 
     def toDictionary(self):
         valuesDict = {
             'pk': self.pk,
             'chat': self.chat.pk,
             'sent_by_buyer': self.sent_by_buyer,
-            'date_sent': self.date_sent.strftime('%Y-%m-%d %H:%M:%S'),
-            'message': self.message
+            'date_sent': self.date_sent.strftime('%Y-%m-%d %H:%M:%S')
         }
+
+        if(self.message is not None):
+            valuesDict['message'] = self.message
+        
+        if(self.offer is not None):
+            valuesDict['offer'] = self.offer.toDictionary()
+        
 
         if(self.viewed_by_buyer_time is not None):
             valuesDict['viewed_by_buyer_time'] = self.viewed_by_buyer_time.strftime('%Y-%m-%d %H:%M:%S')

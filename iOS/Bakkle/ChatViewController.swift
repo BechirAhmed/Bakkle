@@ -24,6 +24,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     var seller: NSDictionary!
     var isBuyer: Bool = false
     var refreshControl: UIRefreshControl = UIRefreshControl()
+    var offerTF: UITextField!
 
     override var inputAccessoryView: UIView! {
     get {
@@ -119,6 +120,12 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         infoButton.setImage(UIImage(named: "icon-i.png"), forState: UIControlState.Normal)
         infoButton.addTarget(self, action: "btnI:", forControlEvents: UIControlEvents.TouchUpInside)
         header.addSubview(infoButton)
+        
+        let offerButtonWidth:CGFloat = 50
+        var offerButton = UIButton(frame: CGRectMake(header.bounds.origin.x+header.bounds.size.width-infoButtonWidth-offerButtonWidth, header.bounds.origin.y+topHeight, offerButtonWidth, headerHeight))
+        offerButton.setImage(IconImage().check(), forState: UIControlState.Normal)
+        offerButton.addTarget(self, action: "btnOffer:", forControlEvents: UIControlEvents.TouchUpInside)
+        header.addSubview(offerButton)
         view.addSubview(header)
         
         tableView = UITableView(frame: CGRectMake(view.bounds.origin.x, view.bounds.origin.y+headerHeight+topHeight, view.bounds.size.width, view.bounds.size.height-headerHeight-self.inputAccessoryView.bounds.size.height), style: .Plain)
@@ -280,6 +287,26 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         self.dismissKeyboard()
         self.presentViewController(vc, animated: true, completion: nil)
+    }
+    
+    func btnOffer(sender:UIButton!){
+        self.dismissKeyboard()
+        self.view.endEditing(true)
+        self.toolBar.hidden = true
+        let alert: UIAlertController = UIAlertController(title: "Offer Proposal", message: "Enter a dollar amount to propose an offer.", preferredStyle: .Alert)
+        alert.addTextFieldWithConfigurationHandler({(txtField: UITextField!) in
+            txtField.placeholder = "Offer amount"
+            txtField.keyboardType = UIKeyboardType.DecimalPad
+            self.offerTF = txtField
+        })
+        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Default, handler: { (UIAlertAction)in
+            self.toolBar.hidden = false
+        }))
+        alert.addAction(UIAlertAction(title: "Propose", style: UIAlertActionStyle.Default, handler:{ (UIAlertAction)in
+            self.toolBar.hidden = false
+            println("Proposed Offer: $" + self.offerTF.text)
+        }))
+        self.presentViewController(alert, animated: false, completion: nil)
     }
 
     func btnProfile(sender:UIButton!)
