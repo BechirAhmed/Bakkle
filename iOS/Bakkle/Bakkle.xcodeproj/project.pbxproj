@@ -63,6 +63,7 @@
 		602C390D1B3C9933005CB493 /* PNLineChartData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602C390A1B3C9933005CB493 /* PNLineChartData.swift */; };
 		602C39121B3C9995005CB493 /* PNValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602C39101B3C9995005CB493 /* PNValue.swift */; };
 		602C39151B3C9B12005CB493 /* PNChartConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602C39141B3C9B12005CB493 /* PNChartConfig.swift */; };
+		6034E6951B41B93900DEA291 /* AcceptOfferCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6034E6941B41B93900DEA291 /* AcceptOfferCell.swift */; };
 		720510341B1F839B00D059AB /* ListItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720510331B1F839B00D059AB /* ListItemCell.swift */; };
 		723D532C1B25F42B0067A80A /* IconImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 723D532B1B25F42B0067A80A /* IconImage.swift */; };
 		723D532E1B2718590067A80A /* OffsetTextAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 723D532D1B2718590067A80A /* OffsetTextAttachment.swift */; };
@@ -411,6 +412,7 @@
 		602C39101B3C9995005CB493 /* PNValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PNValue.swift; sourceTree = "<group>"; };
 		602C39131B3C9A2A005CB493 /* PNChartDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNChartDelegate.h; sourceTree = "<group>"; };
 		602C39141B3C9B12005CB493 /* PNChartConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PNChartConfig.swift; sourceTree = "<group>"; };
+		6034E6941B41B93900DEA291 /* AcceptOfferCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AcceptOfferCell.swift; sourceTree = "<group>"; };
 		698270E0C83AB2371F464BB2 /* Pods-Bakkle.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bakkle.release.xcconfig"; path = "Pods/Target Support Files/Pods-Bakkle/Pods-Bakkle.release.xcconfig"; sourceTree = "<group>"; };
 		720510331B1F839B00D059AB /* ListItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemCell.swift; sourceTree = "<group>"; };
 		723D532B1B25F42B0067A80A /* IconImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IconImage.swift; sourceTree = "<group>"; };
@@ -834,6 +836,7 @@
 				A08D53C01B0815CB000C406C /* ComposeViewController.swift */,
 				A08D53C11B0815CB000C406C /* Message.swift */,
 				A08D53C21B0815CB000C406C /* MessageBubbleCell.swift */,
+				6034E6941B41B93900DEA291 /* AcceptOfferCell.swift */,
 				A08D53C31B0815CB000C406C /* MessageIncoming.aiff */,
 				A08D53C41B0815CB000C406C /* MessageOutgoing.aiff */,
 				A08D53C51B0815CB000C406C /* MessageSentDateCell.swift */,
@@ -1478,6 +1481,7 @@
 				602C390B1B3C9933005CB493 /* PNChartLabel.swift in Sources */,
 				5E1DCCA51AD486D2002D41FD /* AddItem.swift in Sources */,
 				A08D53CE1B0815CB000C406C /* ComposeViewController.swift in Sources */,
+				6034E6951B41B93900DEA291 /* AcceptOfferCell.swift in Sources */,
 				A08D53CF1B0815CB000C406C /* Message.swift in Sources */,
 				5EBDD6911AB211E600C7FBE7 /* AppDelegate.swift in Sources */,
 				602C39151B3C9B12005CB493 /* PNChartConfig.swift in Sources */,

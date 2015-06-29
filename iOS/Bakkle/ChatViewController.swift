@@ -312,10 +312,20 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return chat.loadedMessages.count * 2 // for sent-date cell
+        return chat.loadedMessages.count * 2 + 1 // for sent-date cell
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        if (indexPath.row == chat.loadedMessages.count * 2) {
+            let cellIdentifier = NSStringFromClass(AcceptOfferCell)
+            var cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier) as! AcceptOfferCell!
+            if  cell == nil {
+                cell = AcceptOfferCell(style: UITableViewCellStyle.Default, reuseIdentifier: cellIdentifier)
+            }
+            var offer: CGFloat = 10.0
+            cell.makeOfferLabel.text = "AN OFFER OF $\(offer) HAS BEEN MADE."
+            return cell
+        }
         if (indexPath.row % 2) == 0 {
             let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(MessageSentDateCell), forIndexPath: indexPath) as! MessageSentDateCell
             var indexFloor: Int = Int(floor(Double(indexPath.row) * 0.5))

@@ -205,8 +205,7 @@ class AnalyticsView: UIViewController, PNChartDelegate{
         let vc: AddItem = sb.instantiateViewControllerWithIdentifier("AddItem") as! AddItem
         vc.modalTransitionStyle = UIModalTransitionStyle.FlipHorizontal
         vc.isEditting = true
-        vc.item = self.item as? NSDictionary
-        //vc.item = Bakkle.sharedInstance.garageItems[self.garageIndex] as? NSDictionary
+        vc.item = self.item as NSDictionary
         self.presentViewController(vc, animated: true, completion: nil)
     }
     
