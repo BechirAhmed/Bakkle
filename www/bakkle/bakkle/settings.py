@@ -41,7 +41,8 @@ INSTALLED_APPS = (
     'system',
     'timing',
     'chat',
-    'common'
+    'common',
+    'purchase'
 )
 
 MIDDLEWARE_CLASSES = (

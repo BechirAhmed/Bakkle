@@ -5,12 +5,16 @@ from account.models import Device
 from models import Chat
 from models import Message
 from items.models import Items
+from purchase.models import Offer
 from common.methods import totalUnreadMessagesForAccount
+
+import chatCommonHandlers;
+
+from decimal import *
 
 # import baseWSHandlers
 
 import datetime
-
 
 class ChatWSHandler():
 
@@ -44,16 +48,21 @@ class ChatWSHandler():
         # switch on method, send to appropriate handlers.
         try:
             if method == 'startChat':
-                response = self.startChat(
+                response = chatCommonHandlers.startChat(
                     request['itemId'], self.baseWSHandler.clientId)
             elif method == 'getChatIds':
-                response = self.getChatIds(
+                response = chatCommonHandlers.getChatIds(
                     request['itemId'], self.baseWSHandler.clientId)
             elif method == 'sendChatMessage':
-                response = self.sendChatMessage(
-                    request['chatId'], self.baseWSHandler.clientId, request['message'])
+                response = chatCommonHandlers.sendChatMessage(
+                    self.baseWSHandler.clients,
+                    request['chatId'],
+                    self.baseWSHandler.clientId,
+                    request['message'],
+                    request['offerPrice'],
+                    request['offerMethod'])
             elif method == 'getMessagesForChat':
-                response = self.getMessagesForChat(
+                response = chatCommonHandlers.getMessagesForChat(
                     request['chatId'], self.baseWSHandler.clientId)
             else:
                 response = {
@@ -109,11 +118,30 @@ class ChatWSHandler():
 
         return {'success': 1, 'chats': openChats}
 
-    def sendChatMessage(self, chatId, senderId, message):
+    def sendChatMessage(self, chatId, senderId, message, offerPrice, offerMethod):
+
         try:
-            message = message
+            message = message.strip()
             chat = Chat.objects.get(pk=chatId)
             sender = Account.objects.get(pk=senderId)
+            sentByBuyer = (sender == chat.buyer)
+
+            offer = None
+            if (offerPrice is not None and offerPrice != "") and (offerMethod is not None and offerMethod != ""):
+                try:
+                    offerPrice = Decimal(offerPrice)
+                except ValueError:
+                    return {"status": 0, "error": "Price was not a valid decimal."}
+
+                Offer.objects.filter(item = chat.item).filter(status = 'Active').filter(sent_by_buyer = sentByBuyer).update(status='Retracted')
+
+                offer = Offer.objects.create(
+                    item=chat.item,
+                    buyer=chat.buyer,
+                    sent_by_buyer=sentByBuyer,
+                    proposed_price=offerPrice,
+                    proposed_method=offerMethod
+                )
 
         except KeyError as e:
             return {'success': 0, 'error': 'Missing parameter ' + str(e)}
@@ -125,27 +153,39 @@ class ChatWSHandler():
         if(sender != chat.item.seller and sender != chat.buyer):
             return {'success': 0, 'error': 'Invalid chatId provided - user not involved in specified chat.'}
 
-        sentByBuyer = (sender == chat.buyer)
         newMessage = Message.objects.create(
             chat=chat, sent_by_buyer=sentByBuyer, message=message)
-        newMessage.date_sent = datetime.now()
+        newMessage.date_sent = datetime.datetime.now()
+        if (offer is not None):
+            newMessage.offer = offer
         newMessage.save()
 
         # devices = Device.objects.filter(
         #     Q(account_id=chat.item.seller) | Q(account_id=chat.buyer))
         # for device in devices:
         #     device.send_notification(
-        #         message, len(totalUnreadMessagesForAccount(device.account_id)), "")
+        # message, len(totalUnreadMessagesForAccount(device.account_id)), "")
+        if(message is not None and message != ""):
+            if(chat.item.seller.pk in self.baseWSHandler.clients):
+                for uuid in self.baseWSHandler.clients[chat.item.seller.pk]:
+                    self.baseWSHandler.clients[chat.item.seller.pk][uuid].write_message(
+                        {'success': 1, 'messageOrigin': senderId, 'notificationType': 'newMessage', 'message': newMessage.toDictionary()})
 
-        if(chat.item.seller.pk in self.baseWSHandler.clients):
-            for uuid in clients[chat.item.seller.pk]:
-                self.baseWSHandler.clients[chat.item.seller.pk][uuid].write_message(
-                    {'success': 1, 'messageOrigin': senderId, 'notificationType': 'newMessage', 'message': newMessage.toDictionary()})
+            if(chat.buyer.pk in self.baseWSHandler.clients):
+                for uuid in self.baseWSHandler.clients[chat.buyer.pk]:
+                    self.baseWSHandler.clients[chat.buyer.pk][uuid].write_message(
+                        {'success': 1, 'messageOrigin': senderId, 'notificationType': 'newMessage', 'message': newMessage.toDictionary()})
 
-        if(chat.buyer.pk in self.baseWSHandler.clients):
-            for uuid in clients[chat.buyer.pk]:
-                self.baseWSHandler.clients[chat.buyer.pk][uuid].write_message(
-                    {'success': 1, 'messageOrigin': senderId, 'notificationType': 'newMessage', 'message': newMessage.toDictionary()})
+        elif (offerPrice is not None and offerPrice != "") and (offerMethod is not None and offerMethod != ""):
+            if(chat.item.seller.pk in self.baseWSHandler.clients):
+                for uuid in self.baseWSHandler.clients[chat.item.seller.pk]:
+                    self.baseWSHandler.clients[chat.item.seller.pk][uuid].write_message(
+                        {'success': 1, 'messageOrigin': senderId, 'notificationType': 'newOffer', 'offer': newMessage.offer.toDictionary()})
+
+            if(chat.buyer.pk in self.baseWSHandler.clients):
+                for uuid in self.baseWSHandler.clients[chat.buyer.pk]:
+                    self.baseWSHandler.clients[chat.buyer.pk][uuid].write_message(
+                        {'success': 1, 'messageOrigin': senderId, 'notificationType': 'newOffer', 'offer': newMessage.offer.toDictionary()})
 
         return {'success': 1}
 
@@ -172,5 +212,4 @@ class ChatWSHandler():
         for message in messages:
             userMessages.append(message.toDictionary())
 
-        print(userMessages)
         return {'success': 1, 'messages': userMessages}

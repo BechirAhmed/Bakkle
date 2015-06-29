@@ -1,5 +1,6 @@
 
-from chat.chatRequestHandlers import ChatWSHandler
+from chat.chatWSHandlers import ChatWSHandler
+from purchase.purchaseWSHandlers import PurchaseWSHandler
 import json
 
 from account.models import Account
@@ -32,19 +33,26 @@ class BaseWSHandler(websocket.WebSocketHandler):
         self.clientId = None;
         self.uuid = None;
         self.chatWSHandler = None;
+        self.purchaseWSHandler = None;
         # self.itemsWSHandler = None;
 
         try:
-            self.clientId = str(self.request.query_arguments['userId'][0])
+            self.clientId = int(self.request.query_arguments['userId'][0])
             self.uuid = str(self.request.query_arguments['uuid'][0])
         except KeyError as e:
             self.write_message(json.dumps({'success': 0, 'error': 'Missing parameter ' + str(e)}))
+            return self.close();
+        except ValueError:
+            self.write_message(json.dumps({'success': 0, 'error': 'Invalid parameter userId'}))
             return self.close();
 
         self.register();
 
         self.chatWSHandler = ChatWSHandler(self);
         self.chatWSHandler.handleOpen();
+
+        self.purchaseWSHandler = PurchaseWSHandler(self);
+        self.purchaseWSHandler.handleOpen();
         return self.write_message(json.dumps({'success': 1, 'message': 'Welcome'}))  
 
     #on receipt of message, respond accordingly.
@@ -86,6 +94,9 @@ class BaseWSHandler(websocket.WebSocketHandler):
         elif method.split("_")[0] == "chat":
             response = self.chatWSHandler.handleRequest(request)
 
+        elif method.split("_")[0] == "purchase":
+            response = self.purchaseWSHandler.handleRequest(request)
+
         # if tag given, put it back in response.
         try:
             tag = request['tag']
@@ -93,7 +104,7 @@ class BaseWSHandler(websocket.WebSocketHandler):
         except KeyError as e:
             pass
 
-        print("Sending message: " + json.dumps(response))
+        # print("Sending message: " + json.dumps(response))
         return self.write_message(json.dumps(response))
         
 
@@ -101,13 +112,15 @@ class BaseWSHandler(websocket.WebSocketHandler):
         print("WebSocket closed")
         if (self.chatWSHandler is not None):
             self.chatWSHandler.handleClose()
+        if (self.purchaseWSHandler is not None):
+            self.purchaseWSHandler.handleClose()
         self.deregister()
 
 
     def authenticate(self, request):
         # get device object from DB. if 
         try:
-            if(self.uuid != request['uuid'] or self.clientId != request['auth_token'].split("_")[1]):
+            if(self.uuid != request['uuid'] or str(self.clientId) != request['auth_token'].split("_")[1]):
                 print("UUID or clientId changed. Invalid credentials.")
                 return False;
 
@@ -124,7 +137,7 @@ class BaseWSHandler(websocket.WebSocketHandler):
     def register(self):
         BaseWSHandler.clients[self.clientId] = dict()
         BaseWSHandler.clients[self.clientId][self.uuid] = self
-        print("Registered new client for notifications: " + self.clientId);
+        print("Registered new client for notifications: " + str(self.clientId));
         return {'success': 1}
 
     def deregister(self):
@@ -137,7 +150,7 @@ class BaseWSHandler(websocket.WebSocketHandler):
             elif(self.uuid is not None):
                 dictionary = BaseWSHandler.clients[self.clientId];
                 del dictionary[self.uuid]
-        print("Deregistered client from notifications: " + self.clientId);
+        print("Deregistered client from notifications: " + str(self.clientId))
         return {'success': 1}   
 
     def echo(self, request):

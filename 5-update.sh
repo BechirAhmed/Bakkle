@@ -8,6 +8,7 @@ sudo mkdir /archives/
 export DTE=`date +'%Y-%m-%d_%H%M%S'`
 sudo mkdir /archives/$DTE
 sudo cp -r /bakkle /archives/$DTE
+rm -rf /bakkle/www/bakkle/*/migrations
 
 sudo mkdir -m 755        /bakkle
 sudo mkdir -m 755        /bakkle/run
@@ -42,7 +43,6 @@ if [ `hostname` == 'rhv-bakkle-bld' ]; then
 fi
 
 echo Updating database: $DATABASE
-# rm -rf /bakkle/www/bakkle/*/migrations
 pushd /bakkle/www/bakkle
 sudo python manage.py makemigrations
 sudo python manage.py migrate --database=$DATABASE
