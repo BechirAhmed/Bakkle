@@ -282,15 +282,15 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
                             setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
                     break;
                 case 4:
-                    new ServerCalls(getApplicationContext()).getFeedItems(
-                            preferences.getString("auth_token", "0"),
-                            "999999999",
-                            "100",
-                            "",
-                            "32,32",
-                            "",
-                            preferences.getString("uuid", "0")
-                        );
+//                    new ServerCalls(getApplicationContext()).getFeedItems(
+//                            preferences.getString("auth_token", "0"),
+//                            "999999999",
+//                            "100",
+//                            "",
+//                            "32,32",
+//                            "",
+//                            preferences.getString("uuid", "0")
+//                        );
                     //startActivity(new Intent(getApplicationContext(), FeedFilter.class));
                     break;
                 case 5:

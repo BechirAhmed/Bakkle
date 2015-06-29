@@ -229,11 +229,40 @@ public class ServerCalls{
 
     }
 
-    public void populateGarage(){
+    public JsonObject populateGarage(String authToken, String uuid){
+
+        try {
+            jsonResponse = Ion.with(mContext)
+                    .load(url_base + url_garage)
+                    .setBodyParameter("auth_token", authToken)
+                    .setBodyParameter("device_uuid", uuid)
+                    .asJsonObject()
+                    .get();
+        }
+        catch (Exception e) {
+            Log.d("testing error 005", e.getMessage());
+
+        }
+
+        return jsonResponse;
 
     }
 
-    public void populateHolding(){
+    public JsonObject populateHolding(String authToken, String uuid){
+        try {
+            jsonResponse = Ion.with(mContext)
+                    .load(url_base + url_get_holding_pattern)
+                    .setBodyParameter("auth_token", authToken)
+                    .setBodyParameter("device_uuid", uuid)
+                    .asJsonObject()
+                    .get();
+        }
+        catch (Exception e) {
+            Log.d("testing error 006", e.getMessage());
+
+        }
+
+        return jsonResponse;
 
     }
 
