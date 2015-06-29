@@ -7,6 +7,7 @@ from models import Message
 from items.models import Items
 from purchase.models import Offer
 from common.methods import totalUnreadMessagesForAccount
+from common.decorators import run_async
 
 from decimal import *
 
@@ -60,6 +61,7 @@ def getChatIds(itemId, sellerId):
 
 def sendChatMessage(clients, chatId, senderId, message, offerPrice, offerMethod):
 
+
     try:
         message = message.strip()
         chat = Chat.objects.get(pk=chatId)
@@ -101,12 +103,17 @@ def sendChatMessage(clients, chatId, senderId, message, offerPrice, offerMethod)
         newMessage.offer = offer
     newMessage.save()
 
-    devices = Device.objects.filter(
-        Q(account_id=chat.item.seller) | Q(account_id=chat.buyer))
+    devices = Device.objects.filter(account_id=chat.item.seller)
     for device in devices:
         device.send_notification(
             message,
-            len(totalUnreadMessagesForAccount(device.account_id)), "")
+            1, "")
+
+    devices = Device.objects.filter(account_id=chat.buyer)
+    for device in devices:
+        device.send_notification(
+            message,
+            1, "")
 
 
     if(message is not None and message != ""):
@@ -157,5 +164,4 @@ def getMessagesForChat(chatId, requesterId):
     for message in messages:
         userMessages.append(message.toDictionary())
 
-    print(userMessages)
     return {'success': 1, 'messages': userMessages}

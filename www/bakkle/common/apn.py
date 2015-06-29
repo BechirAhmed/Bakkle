@@ -19,7 +19,7 @@ if use_sandbox:
     cert_file = 'account/apn-push-dev-2015-03-30.p12.pem'
     key_file = 'account/apn-push-dev-2015-03-30.p12.pem'
 
-
+@run_async
 def sendPushMessage(token, message, badge, sound):
     apns = APNs(
         use_sandbox=use_sandbox, cert_file=cert_file, key_file=key_file)
