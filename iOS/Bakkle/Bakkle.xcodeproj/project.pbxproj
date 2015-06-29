@@ -71,6 +71,7 @@
 		728647EB1B2F0E3F009A24C9 /* ChatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53BE1B0815CB000C406C /* ChatsViewController.swift */; };
 		728647EC1B2F0E46009A24C9 /* ChatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53BE1B0815CB000C406C /* ChatsViewController.swift */; };
 		728647EE1B309F6F009A24C9 /* NSDate+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 728647ED1B309F6F009A24C9 /* NSDate+String.swift */; };
+		72B5D8051B41E12D00E4B6EA /* BuyItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72B5D8041B41E12D00E4B6EA /* BuyItemView.swift */; };
 		A003EB141AD4CCA600EE51A1 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A003EB131AD4CCA600EE51A1 /* SWRevealViewController.m */; };
 		A003EB1A1AD4DB8800EE51A1 /* item-lawnmower.png in Resources */ = {isa = PBXBuildFile; fileRef = A003EB191AD4DB8800EE51A1 /* item-lawnmower.png */; };
 		A014B46C1B09215800E01FEF /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A014B46B1B09215800E01FEF /* ProfileView.swift */; };
@@ -419,6 +420,7 @@
 		723D532D1B2718590067A80A /* OffsetTextAttachment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OffsetTextAttachment.swift; sourceTree = "<group>"; };
 		726A38E21B39BE1E00CF5553 /* logo-white-design-clear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-white-design-clear.png"; sourceTree = "<group>"; };
 		728647ED1B309F6F009A24C9 /* NSDate+String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSDate+String.swift"; sourceTree = "<group>"; };
+		72B5D8041B41E12D00E4B6EA /* BuyItemView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuyItemView.swift; sourceTree = "<group>"; };
 		A003EB121AD4CCA600EE51A1 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
 		A003EB131AD4CCA600EE51A1 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
 		A003EB191AD4DB8800EE51A1 /* item-lawnmower.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "item-lawnmower.png"; sourceTree = "<group>"; };
@@ -781,6 +783,7 @@
 				5E8055411AE541460035521C /* ItemDetails.swift */,
 				A058A2A01AFC28BE005E7432 /* DemoView.swift */,
 				A014B46B1B09215800E01FEF /* ProfileView.swift */,
+				72B5D8041B41E12D00E4B6EA /* BuyItemView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1487,6 +1490,7 @@
 				602C39151B3C9B12005CB493 /* PNChartConfig.swift in Sources */,
 				A08D53D01B0815CB000C406C /* MessageBubbleCell.swift in Sources */,
 				A058A2A11AFC28BE005E7432 /* DemoView.swift in Sources */,
+				72B5D8051B41E12D00E4B6EA /* BuyItemView.swift in Sources */,
 				5E1FEE7C1AD8641900C08131 /* MDCSwipeToChooseView.m in Sources */,
 				602C38F61B3C9105005CB493 /* PNChartLabel.m in Sources */,
 				5EE2C9B21AB9F0FB0031D8CD /* UIView+MDCSwipeToChoose.m in Sources */,

@@ -38,6 +38,8 @@ class AcceptOfferCell: UITableViewCell {
         acceptBtn.titleLabel?.font = UIFont(name: "Avenir-Black", size: 14)
         acceptBtn.tintColor = UIColor.whiteColor()
         acceptBtn.backgroundColor = Theme.ColorGreen
+        acceptBtn.addTarget(self, action: "acceptBtn:", forControlEvents: UIControlEvents.TouchUpInside)
+
         
         contentView.addSubview(mainView)
         mainView.addSubview(makeOfferLabel)
@@ -49,4 +51,10 @@ class AcceptOfferCell: UITableViewCell {
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    func acceptBtn(sender:UIButton!)
+    {
+        println("Button tapped")
+    }
+    
 }

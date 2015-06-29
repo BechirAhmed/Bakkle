@@ -1286,10 +1286,10 @@
             </objects>
             <point key="canvasLocation" x="-218.25" y="3048.375"/>
         </scene>
-        <!--Add Item-->
+        <!--AddItem-->
         <scene sceneID="zQ9-Wy-bBw">
             <objects>
-                <viewController id="6AS-g2-sDb" customClass="AddItem" customModule="Bakkle" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="AddItem" title="AddItem" useStoryboardIdentifierAsRestorationIdentifier="YES" id="6AS-g2-sDb" customClass="AddItem" customModule="Bakkle" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Clk-ET-NiA"/>
                         <viewControllerLayoutGuide type="bottom" id="GVN-ys-266"/>
@@ -2396,7 +2396,7 @@
         <!--BUY ITEM-->
         <scene sceneID="9E6-Il-nEU">
             <objects>
-                <viewController title="BUY ITEM" id="6Y1-cF-3nl" sceneMemberID="viewController">
+                <viewController title="BUY ITEM" id="6Y1-cF-3nl" customClass="BuyItemView" customModule="Bakkle" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="bki-qF-Gn6"/>
                         <viewControllerLayoutGuide type="bottom" id="RVS-DW-1Vv"/>
@@ -2437,6 +2437,9 @@
                                                 <include reference="vlu-AZ-jkb"/>
                                             </mask>
                                         </variation>
+                                        <connections>
+                                            <action selector="btnBack:" destination="6Y1-cF-3nl" eventType="touchUpInside" id="S7Y-eq-ULg"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.20000000000000001" green="0.80392156859999997" blue="0.37254901959999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -2536,6 +2539,12 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nXE-UB-P8O" userLabel="Buyer Image">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                         <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="JOHN DOE" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NAy-Ck-nZI">
+                                                <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
+                                                <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="17"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="aHr-8j-kx9">
                                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                                 <constraints>
@@ -2552,12 +2561,6 @@
                                                     </mask>
                                                 </variation>
                                             </imageView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="JOHN DOE" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NAy-Ck-nZI">
-                                                <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
-                                                <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="17"/>
-                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
                                         </subviews>
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="NAy-Ck-nZI" secondAttribute="trailing" id="Ahw-zw-fXf"/>
@@ -2576,8 +2579,8 @@
                                         </constraints>
                                         <variation key="default">
                                             <mask key="subviews">
-                                                <exclude reference="aHr-8j-kx9"/>
                                                 <exclude reference="NAy-Ck-nZI"/>
+                                                <exclude reference="aHr-8j-kx9"/>
                                             </mask>
                                             <mask key="constraints">
                                                 <exclude reference="gzx-nw-zwu"/>
@@ -2591,8 +2594,8 @@
                                         </variation>
                                         <variation key="heightClass=regular-widthClass=compact">
                                             <mask key="subviews">
-                                                <include reference="aHr-8j-kx9"/>
                                                 <include reference="NAy-Ck-nZI"/>
+                                                <include reference="aHr-8j-kx9"/>
                                             </mask>
                                             <mask key="constraints">
                                                 <include reference="gzx-nw-zwu"/>
@@ -2921,10 +2924,13 @@
                         </variation>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+                    <connections>
+                        <outlet property="sellerImage" destination="aHr-8j-kx9" id="WLc-Fo-6Eu"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZTu-3o-uK3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="558" y="3595.5"/>
+            <point key="canvasLocation" x="551.25" y="3599.625"/>
         </scene>
         <!--Reveal View Controller-->
         <scene sceneID="XqN-3r-9Pv">
@@ -3094,7 +3100,7 @@
                                             </variation>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="6Ze-gR-D6u" kind="custom" customClass="SWRevealViewControllerSeguePushController" id="ScF-VI-Qlh"/>
+                                            <segue destination="ImB-N3-n1Y" kind="custom" customClass="SWRevealViewControllerSeguePushController" id="ScF-VI-Qlh"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="Ela-tw-PTz" userLabel="BUYER'S TRUNK">
@@ -3483,7 +3489,8 @@
                                         <exclude reference="cvc-wk-EdT"/>
                                     </mask>
                                 </variation>
-                                <variation key="heightClass=regular-widthClass=compact">
+                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                    <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                                     <mask key="subviews">
                                         <include reference="9J2-jl-t4F"/>
                                         <include reference="e7V-yc-Rjq"/>
@@ -3779,6 +3786,9 @@
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
+                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                    <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                </variation>
                                 <connections>
                                     <outlet property="dataSource" destination="6Ze-gR-D6u" id="t7L-XP-GQg"/>
                                     <outlet property="delegate" destination="6Ze-gR-D6u" id="OKi-hP-vVk"/>
@@ -3831,6 +3841,7 @@
                             </mask>
                         </variation>
                     </view>
+                    <navigationItem key="navigationItem" id="YZe-OU-XuX"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
                         <outlet property="collectionView" destination="nGS-By-p3o" id="lBh-SV-Zfy"/>
@@ -3840,7 +3851,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eyy-Yl-vYF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1377.75" y="2452.875"/>
+            <point key="canvasLocation" x="-459.75" y="2452.875"/>
         </scene>
         <!--SETTINGS-->
         <scene sceneID="qcI-mn-GRn">
@@ -4076,7 +4087,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hIF-xi-Yri" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1506.75" y="2452.875"/>
+            <point key="canvasLocation" x="2424.75" y="2452.875"/>
         </scene>
         <!--FEED FILTER-->
         <scene sceneID="wra-M0-xY0">
@@ -4588,7 +4599,7 @@
                     </state>
                 </button>
             </objects>
-            <point key="canvasLocation" x="858.75" y="2452.875"/>
+            <point key="canvasLocation" x="1776.75" y="2452.875"/>
         </scene>
         <!--Buyers Trunk View-->
         <scene sceneID="0Z3-tk-HUR">
@@ -4798,7 +4809,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kVT-zl-wiH" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="194.25" y="2452.875"/>
+            <point key="canvasLocation" x="1112.25" y="2452.875"/>
         </scene>
         <!--Holding Pattern View-->
         <scene sceneID="6LW-gW-oy7">
@@ -5031,7 +5042,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DvR-ds-mev" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-693.75" y="2452.875"/>
+            <point key="canvasLocation" x="224.25" y="2452.875"/>
         </scene>
         <!--RATE USER-->
         <scene sceneID="wJ8-WW-CKD">
@@ -5645,6 +5656,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PdT-Pi-XvY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1159.5" y="3596.25"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="Ydy-WD-vus">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="ImB-N3-n1Y" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="MtB-z4-Ugz">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="6Ze-gR-D6u" kind="relationship" relationship="rootViewController" id="Vun-jp-V8R"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="khk-i1-FsF" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1378.5" y="2452.5"/>
         </scene>
     </scenes>
     <resources>

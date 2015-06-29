@@ -219,7 +219,10 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             var messages: [NSDictionary] = success.valueForKey("messages") as! [NSDictionary]
             var loadedMessage: Message!
             for message in messages {
+                
+                // if message is null, we have an offer
                 let messageText = message.valueForKey("message") as! String
+                //let offerPrice = message.valueForKey("offer") as! String
                 let dateString = message.valueForKey("date_sent") as! String
                 let date = NSDate().dateFromString(dateString, format:  "yyyy-MM-dd HH:mm:ss")
                 let incoming = message.valueForKey("sent_by_buyer") as! Bool
@@ -263,6 +266,35 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 self.tableViewScrollToBottomAnimated(true)
             })
         }, forNotification: "newMessage")
+        
+        // Register for offers sent via websocket
+//        WSManager.registerMessageHandler({ (data : [NSObject : AnyObject]!) -> Void in
+//            var dict: NSDictionary = data as NSDictionary
+//            
+//            var offer: NSDictionary = NSDictionary()
+//            var messageOrigin: String = ""
+//            
+//            if(dict.objectForKey("offer") != nil){
+//                offer = dict.objectForKey("offer") as! NSDictionary
+//                
+//                let offerPrice = offer.valueForKey("proposed_price") as! String
+//                let offerMethod = offer.valueForKey("proposed_method") as! String
+//                let dateString = offer.valueForKey("date_sent") as! String
+//                let date = NSDate().dateFromString(dateString, format:  "yyyy-MM-dd HH:mm:ss")
+//                let incoming = (offer.valueForKey("sent_by_buyer") as! Bool) == !self.isBuyer
+//                let loadedOffer = Message(incoming: incoming, text: "",  sentDate: date)
+//                let incomingChatId = (offer.valueForKey("chat") as! NSNumber).integerValue
+//                if(incomingChatId == self.chat.chatId){
+//                    self.chat.loadedMessages.append(loadedOffer)
+//                }
+//                
+//                print("[NewOfferHandler] NewOfferHandler received new offer '\(offerPrice)' from userId \(messageOrigin)");
+//            }
+//            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+//                self.tableView.reloadData()
+//                self.tableViewScrollToBottomAnimated(true)
+//            })
+//            }, forNotification: "newOffer")
     }
 
 
@@ -304,6 +336,13 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }))
         alert.addAction(UIAlertAction(title: "Propose", style: UIAlertActionStyle.Default, handler:{ (UIAlertAction)in
             self.toolBar.hidden = false
+            // need to format offer text
+//            let offerPriceString = self.offerTF.text
+//            var formatter = NSNumberFormatter()
+//            formatter.numberStyle = .DecimalStyle
+//            var offerPrice: NSNumber = formatter.numberFromString(offerPriceString)!
+//            var sendPayload: WSRequest = WSSendOfferRequest(chatId: String(self.chat.chatId), offerPrice: offerPrice, offerMethod: deliveryMethod.ship)
+//            WSManager.enqueueWorkPayload(sendPayload)
             println("Proposed Offer: $" + self.offerTF.text)
         }))
         self.presentViewController(alert, animated: false, completion: nil)
@@ -340,6 +379,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return chat.loadedMessages.count * 2 + 1 // for sent-date cell
+        //return chat.loadedMessages.count * 2 // for sent-date cell
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -467,7 +507,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     func tableViewScrollToBottomAnimated(animated: Bool) {
         let numberOfRows = tableView.numberOfRowsInSection(0)
         if numberOfRows > 0 {
-            tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: numberOfRows-2, inSection: 0), atScrollPosition: .Bottom, animated: animated)
+            //tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: numberOfRows-2, inSection: 0), atScrollPosition: .Bottom, animated: animated)
         }
     }
 
