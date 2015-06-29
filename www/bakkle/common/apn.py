@@ -24,7 +24,7 @@ def sendPushMessage(token, message, badge, sound):
     apns = APNs(
         use_sandbox=use_sandbox, cert_file=cert_file, key_file=key_file)
     payload = Payload(alert=message, sound=soundname, badge=badge)
-    print apns.gateway_server.send_notification(token_hex, payload)
+    print apns.gateway_server.send_notification(token, payload)
 
 # Send multiple notifications in a single transmission
 #frame = Frame()
