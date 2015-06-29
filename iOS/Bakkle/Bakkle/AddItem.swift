@@ -27,20 +27,21 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     let listItemCellIdentifier = "ListItemCell"
     var itemImages: [UIImage]? = [UIImage]()
     var scaledImages: [UIImage]? = [UIImage]()
+    var item: NSDictionary!
+    var isEditting: Bool = false
     
+    @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var closeBtn: UIButton!
     @IBOutlet weak var titleField: UITextField!
     @IBOutlet weak var priceField: UITextField!
     @IBOutlet weak var tagsField: UITextView!
     @IBOutlet weak var methodControl: UISegmentedControl!
     @IBOutlet weak var confirmButton: UIButton!
-    @IBOutlet weak var confirmButtonText: UILabel!
     @IBOutlet weak var confirmButtonView: UIView!
     @IBOutlet weak var shareToFacebookBtn: UISwitch!
     @IBOutlet weak var camButtonBackground: UIView!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var loadingView: UIView!
-    @IBOutlet var overlayView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,6 +56,9 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         textViewDidEndEditing(tagsField)
         camButtonBackground.layer.cornerRadius = camButtonBackground.frame.size.width/2
         camButtonBackground.setNeedsDisplay()
+        
+        // Set default
+        methodControl.selectedSegmentIndex = 0;
         
         // -8.0 and -4.0 are y and x respectively, this is just to keep alignment of text
         // with the fields above it, because UITextView has different edges for scrolling
@@ -196,10 +200,36 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(true)
-        confirmButton.enabled = false
-        
-        // Set default
-        methodControl.selectedSegmentIndex = 0;
+
+        // set content if it's in edit mode
+        if isEditting {
+            titleLabel.text = "EDIT ITEM"
+            let method = item.valueForKey("method") as! String
+            switch method {
+                case "Pick up":methodControl.selectedSegmentIndex = 0;break;
+                case "Meet": methodControl.selectedSegmentIndex = 1;break;
+                case "Ship": methodControl.selectedSegmentIndex = 2;break;
+                default: methodControl.selectedSegmentIndex = 0;break;
+            }
+            titleField.text = item.valueForKey("title") as! String
+            priceField.text = item.valueForKey("price") as! String
+            formatPrice()
+            let tags = item.valueForKey("tags") as! Array<String>
+            tagsField.text = ", ".join(tags)
+            tagsField.textColor = UIColor.blackColor()
+                
+            confirmButton.setTitle("SAVE", forState: UIControlState.Normal)
+            let imageUrls = item.valueForKey("image_urls") as! Array<String>
+            for index in 0...imageUrls.count-1 {
+                var imageURL: NSURL = NSURL(string: imageUrls[index])!
+                var imageData: NSData = NSData(contentsOfURL: imageURL)!
+                itemImages?.append(UIImage(data: imageData)!)
+                scaledImages?.append(UIImage(data:imageData)!)
+            }
+            isEditting = false
+        }
+        disableConfirmButtonHandler()
+
     }
     
     @IBAction func beginEditingPrice(sender: AnyObject) {
@@ -248,7 +278,6 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
             confirmButton.enabled = true
             confirmButton.backgroundColor = AddItem.BAKKLE_GREEN_COLOR
         }
-        confirmButtonView.bringSubviewToFront(confirmButtonText)
         return confirmButton.enabled
     }
     
@@ -279,7 +308,6 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         
         confirmButton.enabled = false
         confirmButton.backgroundColor = AddItem.CONFIRM_BUTTON_DISABLED_COLOR
-        confirmButtonView.bringSubviewToFront(confirmButtonText)
         
         self.loadingView.hidden = false
         
@@ -287,9 +315,10 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         var factor: CGFloat = 1.0 //imageView.image!.size.height/imageView.image!.size.width
         
         if scaledImages?.count == itemImages?.count {
+            let item_id = self.item.valueForKey("pk") as? NSInteger
             Bakkle.sharedInstance.addItem(self.titleField.text, description: "", location: Bakkle.sharedInstance.user_location,
                 price: self.priceField.text, tags: self.tagsField.text, method: self.methodControl.titleForSegmentAtIndex(self.methodControl.selectedSegmentIndex)!,
-                images:self.scaledImages!, success: {
+                images:self.scaledImages!, item_id: item_id, success: {
                     (item_id:Int?, item_url: String?) -> () in
                         if self.shareToFacebookBtn.on {
                             let topImg = UIImage(named: "pendant-tag660.png")
@@ -654,18 +683,16 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell : ListItemCell = collectionView.dequeueReusableCellWithReuseIdentifier(listItemCellIdentifier, forIndexPath: indexPath) as! ListItemCell
-        //cell.backgroundColor = UIColor.redColor()
         cell.imgView.contentMode = UIViewContentMode.ScaleAspectFill
         cell.imgView.clipsToBounds  = true
         if let images = self.itemImages {
             /* This allows us to test adding image using simulator */
-            if UIDevice.currentDevice().model == "iPhone Simulator" {
+            if UIDevice.currentDevice().model == "iPhone Simulator" && !isEditting{
                 cell.imgView.image = UIImage(named: "tiger.jpg")
             } else {
                 cell.imgView.image = images[indexPath.row]
             }
         }
-    
         return cell
     }
 

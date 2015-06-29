@@ -639,7 +639,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         
     }
     
-    func addItem(title: String, description: String, location: String, price: String, tags: String, method: String, images: [UIImage], success: (item_id: Int?, item_url: String?)->(), fail: ()->() ) {
+    func addItem(title: String, description: String, location: String, price: String, tags: String, method: String, images: [UIImage], item_id: NSInteger? = nil, success: (item_id: Int?, item_url: String?)->(), fail: ()->() ) {
         
         // URL encode some vars.
         let escTitle = title.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
@@ -656,7 +656,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         
         var postString : NSString;
         if(item_id != nil){
-            postString = "device_uuid=\(self.deviceUUID)&title=\(escTitle)&description=\(escDescription)&location=\(escLocation)&auth_token=\(self.auth_token)&price=\(escPrice)&tags=\(escTags)&method=\(escMethod)&item_id=\(item_id)"
+            postString = "device_uuid=\(self.deviceUUID)&title=\(escTitle)&description=\(escDescription)&location=\(escLocation)&auth_token=\(self.auth_token)&price=\(escPrice)&tags=\(escTags)&method=\(escMethod)&item_id=\(item_id!)"
         }
         else{
             postString = "device_uuid=\(self.deviceUUID)&title=\(escTitle)&description=\(escDescription)&location=\(escLocation)&auth_token=\(self.auth_token)&price=\(escPrice)&tags=\(escTags)&method=\(escMethod)"
