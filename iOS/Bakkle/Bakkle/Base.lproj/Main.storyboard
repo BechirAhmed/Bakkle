@@ -580,9 +580,11 @@
                                         <rect key="frame" x="-23" y="-15" width="46" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="rHb-57-fRi" secondAttribute="height" multiplier="595:207" id="1OE-QL-l4u"/>
-                                            <constraint firstAttribute="height" constant="25" id="1jh-RU-Pc4"/>
+                                            <constraint firstAttribute="height" constant="25" id="1jh-RU-Pc4">
+                                                <variation key="heightClass=regular-widthClass=compact" constant="44"/>
+                                            </constraint>
                                             <constraint firstAttribute="width" constant="55" id="3Ki-pX-cm0">
-                                                <variation key="heightClass=regular-widthClass=compact" constant="25"/>
+                                                <variation key="heightClass=regular-widthClass=compact" constant="44"/>
                                             </constraint>
                                             <constraint firstAttribute="width" secondItem="rHb-57-fRi" secondAttribute="height" multiplier="31:11" id="66m-mi-sC7"/>
                                             <constraint firstAttribute="width" constant="50" id="N8I-hN-h8y">
@@ -1310,7 +1312,7 @@
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="0sn-gT-lxF" secondAttribute="height" multiplier="1:1" id="urj-yR-vUy"/>
                                             <constraint firstAttribute="width" constant="25" id="wyK-2B-Wnh">
-                                                <variation key="heightClass=regular-widthClass=compact" constant="25"/>
+                                                <variation key="heightClass=regular-widthClass=compact" constant="44"/>
                                             </constraint>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
@@ -2958,21 +2960,21 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                             </button>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zM0-y0-LRs">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zM0-y0-LRs">
                                 <rect key="frame" x="0.0" y="72" width="375" height="315"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <variation key="heightClass=regular-widthClass=compact" ambiguous="YES" misplaced="YES">
+                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
                                     <rect key="frame" x="0.0" y="64" width="375" height="0.0"/>
                                 </variation>
                             </scrollView>
-                            <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1QH-Oy-Msu">
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1QH-Oy-Msu">
                                 <rect key="frame" x="0.0" y="594" width="375" height="73"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <variation key="heightClass=regular-widthClass=compact" ambiguous="YES" misplaced="YES">
+                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
                                     <rect key="frame" x="0.0" y="231" width="375" height="436"/>
                                 </variation>
                             </view>
-                            <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8JN-bn-XkF">
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8JN-bn-XkF">
                                 <rect key="frame" x="0.0" y="515" width="375" height="39"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="bkg-chat-text.png" translatesAutoresizingMaskIntoConstraints="NO" id="Nbd-wu-q3t">
@@ -2996,7 +2998,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="39" id="Rub-WA-2I9"/>
                                 </constraints>
-                                <variation key="heightClass=regular-widthClass=compact" ambiguous="YES" misplaced="YES">
+                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
                                     <rect key="frame" x="0.0" y="192" width="375" height="39"/>
                                 </variation>
                             </view>
@@ -3208,9 +3210,12 @@
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="ACCOUNT" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vhV-jx-ovL">
                                                     <rect key="frame" x="14" y="11" width="263" height="24"/>
-                                                    <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="25"/>
+                                                    <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="24"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
+                                                    <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                                        <rect key="frame" x="0.0" y="8" width="127" height="29"/>
+                                                    </variation>
                                                 </label>
                                             </subviews>
                                             <color key="backgroundColor" red="0.1960784314" green="0.1960784314" blue="0.1960784314" alpha="1" colorSpace="calibratedRGB"/>
@@ -5874,7 +5879,7 @@
         <image name="mock-rating-stars.png" width="1600" height="373"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="lk1-fc-YGc"/>
+        <segue reference="Rco-rv-njI"/>
         <segue reference="Ay4-Il-I0O"/>
     </inferredMetricsTieBreakers>
 </document>
