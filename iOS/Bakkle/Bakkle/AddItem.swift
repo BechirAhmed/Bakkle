@@ -319,7 +319,12 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         
         if scaledImages?.count == itemImages?.count {
             var time = NSDate.timeIntervalSinceReferenceDate()
-            let item_id = self.item.valueForKey("pk") as? NSInteger
+            let item_id: NSInteger?
+            if self.item != nil {
+                item_id = self.item.valueForKey("pk") as? NSInteger
+            } else {
+                item_id = nil
+            }
             Bakkle.sharedInstance.addItem(self.titleField.text, description: "", location: Bakkle.sharedInstance.user_location,
                 price: self.priceField.text, tags: self.tagsField.text, method: self.methodControl.titleForSegmentAtIndex(self.methodControl.selectedSegmentIndex)!,
                 images:self.scaledImages!, item_id: item_id, success: {
