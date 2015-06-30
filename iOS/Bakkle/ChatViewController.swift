@@ -419,8 +419,15 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 cell = AcceptOfferCell(style: UITableViewCellStyle.Default, reuseIdentifier: cellIdentifier)
                 //cell.acceptBtn.addTarget(self, action: "acceptButton", forControlEvents: UIControlEvents.TouchUpInside)
             }
-            var offer: CGFloat = 10.00
-            cell.makeOfferLabel.text = "AN OFFER OF $\(offer) HAS BEEN MADE."
+            var price = ""
+            if isBuyer {
+                let item = Bakkle.sharedInstance.trunkItems[self.itemIndex].valueForKey("item") as! NSDictionary
+                price = item.valueForKey("price") as! String
+            } else {
+                let item = Bakkle.sharedInstance.garageItems[self.itemIndex] as! NSDictionary
+                price = item.valueForKey("price") as! String
+            }
+            cell.makeOfferLabel.text = "AN OFFER OF $\(price) HAS BEEN MADE."
             //if !isBuyer {
                 var acceptBtn: UIButton = UIButton()
                 var counterBtn: UIButton = UIButton()
