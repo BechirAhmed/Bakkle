@@ -265,6 +265,13 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }, forNotification: "newMessage")
     }
 
+    func btnAcceptOffer(sender: UIButton!) {
+        println("accept offer")
+    }
+    
+    func btnCounterOffer(sender: UIButton!) {
+        println("counter offer")
+    }
 
     func btnBack(sender:UIButton!)
     {
@@ -341,6 +348,14 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return chat.loadedMessages.count * 2 + 1 // for sent-date cell
     }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        if (indexPath.row == chat.loadedMessages.count * 2 && !isBuyer) {
+            return 80;
+        }else {
+            return 44;
+        }
+    }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if (indexPath.row == chat.loadedMessages.count * 2) {
@@ -351,6 +366,16 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             }
             var offer: CGFloat = 10.0
             cell.makeOfferLabel.text = "AN OFFER OF $\(offer) HAS BEEN MADE."
+            if !isBuyer {
+                var acceptBtn: UIButton = UIButton()
+                var counterBtn: UIButton = UIButton()
+                acceptBtn.addTarget(self, action: "btnAcceptOffer:", forControlEvents: UIControlEvents.TouchUpInside)
+                cell.contentView.addSubview(acceptBtn)
+                cell.configureAcceptBtn(acceptBtn)
+                counterBtn.addTarget(self, action: "btnCounterOffer:", forControlEvents: UIControlEvents.TouchUpInside)
+                cell.contentView.addSubview(counterBtn)
+                cell.configureCounterBtn(counterBtn)
+            }
             return cell
         }
         if (indexPath.row % 2) == 0 {

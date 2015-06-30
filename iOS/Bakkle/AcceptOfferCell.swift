@@ -9,41 +9,49 @@
 import Foundation
 
 class AcceptOfferCell: UITableViewCell {
-    let mainView: UIView = UIView()
     let makeOfferLabel: UILabel = UILabel()
-    let counterBtn: UIButton = UIButton()
-    let acceptBtn: UIButton = UIButton()
+    
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectionStyle = .None
         
-        mainView.frame = CGRectMake(0, 0, self.frame.width, 80)
-        //mainView.backgroundColor = UIColor.redColor()
-        
-        makeOfferLabel.frame = CGRectMake(0,15,mainView.frame.width,25)
         makeOfferLabel.backgroundColor = UIColor.clearColor()
         makeOfferLabel.font = UIFont(name: "Avenir-Black", size: 14)
         makeOfferLabel.textAlignment = .Center
         makeOfferLabel.textColor = UIColor.darkGrayColor()
+    
+        contentView.addSubview(makeOfferLabel)
         
-        counterBtn.frame = CGRectMake(20,45,mainView.frame.width/2-25,30)
+        makeOfferLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
+        contentView.addConstraint(NSLayoutConstraint(item: makeOfferLabel, attribute: .CenterX, relatedBy: .Equal, toItem: contentView, attribute: .CenterX, multiplier: 1, constant: 0))
+        contentView.addConstraint(NSLayoutConstraint(item: makeOfferLabel, attribute: .Top, relatedBy: .Equal, toItem: contentView, attribute: .Top, multiplier: 1, constant: 15))
+    }
+    
+    func configureAcceptBtn(acceptBtn: UIButton){
+        acceptBtn.setTitle("ACCEPT", forState: UIControlState.Normal)
+        acceptBtn.titleLabel?.font = UIFont(name: "Avenir-Black", size: 14)
+        acceptBtn.tintColor = UIColor.whiteColor()
+        acceptBtn.backgroundColor = Theme.ColorGreen
+        acceptBtn.userInteractionEnabled = true
+        
+        acceptBtn.setTranslatesAutoresizingMaskIntoConstraints(false)
+        contentView.addConstraint(NSLayoutConstraint(item: acceptBtn, attribute: .Right, relatedBy: .Equal, toItem: contentView, attribute: .Right, multiplier: 1, constant: -20))
+        contentView.addConstraint(NSLayoutConstraint(item: acceptBtn, attribute: .Left, relatedBy: .Equal, toItem: contentView, attribute: .CenterX, multiplier: 1, constant: 10))
+        contentView.addConstraint(NSLayoutConstraint(item: makeOfferLabel, attribute: .Bottom, relatedBy: .Equal, toItem: acceptBtn, attribute: .Top, multiplier: 1, constant: -5))
+    }
+    
+    func configureCounterBtn(counterBtn: UIButton){
         counterBtn.setTitle("COUNTER", forState: UIControlState.Normal)
         counterBtn.titleLabel?.font = UIFont(name: "Avenir-Black", size: 14)
         counterBtn.tintColor = UIColor.whiteColor()
         counterBtn.backgroundColor = UIColor.redColor()
         
-        acceptBtn.frame = CGRectMake(5+mainView.frame.width/2,45,mainView.frame.width/2-25,30)
-        acceptBtn.setTitle("ACCEPT", forState: UIControlState.Normal)
-        acceptBtn.titleLabel?.font = UIFont(name: "Avenir-Black", size: 14)
-        acceptBtn.tintColor = UIColor.whiteColor()
-        acceptBtn.backgroundColor = Theme.ColorGreen
+        counterBtn.setTranslatesAutoresizingMaskIntoConstraints(false)
+        contentView.addConstraint(NSLayoutConstraint(item: counterBtn, attribute: .Left, relatedBy: .Equal, toItem: contentView, attribute: .Left, multiplier: 1, constant: 20))
+        contentView.addConstraint(NSLayoutConstraint(item: counterBtn, attribute: .Right, relatedBy: .Equal, toItem: contentView, attribute: .CenterX, multiplier: 1, constant: -10))
+        contentView.addConstraint(NSLayoutConstraint(item: makeOfferLabel, attribute: .Bottom, relatedBy: .Equal, toItem: counterBtn, attribute: .Top, multiplier: 1, constant: -5))
         
-        contentView.addSubview(mainView)
-        mainView.addSubview(makeOfferLabel)
-        mainView.addSubview(counterBtn)
-        mainView.addSubview(acceptBtn)
-        // Flexible width autoresizing causes text to jump because center text alignment doesn't animate
     }
     
     required init(coder aDecoder: NSCoder) {
