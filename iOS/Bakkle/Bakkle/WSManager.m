@@ -100,11 +100,11 @@ static BOOL debug = true;
     switch( serverNum )
     {
         case 0:
-            urlString = @"ws://app.bakkle.com:8080/ws/";
+            urlString = @"ws://app.bakkle.com:8000/ws/";
             break;
             //case 0: self.url_base = "https://PRODCLUSTER-16628191.us-west-2.elb.amazonaws.com/"
         case 1:
-            urlString = @"ws://app-cluster.bakkle.com:8080/ws/";
+            urlString = @"ws://app-cluster.bakkle.com:8000/ws/";
             break;
 
         case 2:
