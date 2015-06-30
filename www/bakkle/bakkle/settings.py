@@ -41,7 +41,8 @@ INSTALLED_APPS = (
     'system',
     'timing',
     'chat',
-    'common'
+    'common',
+    'purchase'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -63,20 +64,28 @@ WSGI_APPLICATION = 'bakkle.wsgi.application'
 
 DATABASES = {
     'default': {
-     },
+    },
     'dev': {
-         'ENGINE': 'django.db.backends.sqlite3',
-         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-     },
-     'testdb': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    },
+    'wongb': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'wongb',
+        'USER': 'root',
+        'PASSWORD': 'Bakkle123',
+        'HOST': 'bakkle.cw8vja43bda8.us-west-2.rds.amazonaws.com',
+        'PORT': '5432',
+    },
+    'testdb': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'testdb',
         'USER': 'root',
         'PASSWORD': 'Bakkle123',
         'HOST': 'bakkle.cw8vja43bda8.us-west-2.rds.amazonaws.com',
         'PORT': '5432',
-     },
-     'production': {
+    },
+    'production': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'bakkle',
         'USER': 'root',
@@ -111,37 +120,37 @@ STATIC_URL = '/static/'
 
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': False, #True,
+    'disable_existing_loggers': False,  # True,
     'formatters': {
         'standard': {
-            'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
-            'datefmt' : "%d/%b/%Y %H:%M:%S"
+            'format': "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+            'datefmt': "%d/%b/%Y %H:%M:%S"
         },
     },
     'handlers': {
         'null': {
-            'level':'DEBUG',
-            'class':'django.utils.log.NullHandler',
+            'level': 'DEBUG',
+            'class': 'django.utils.log.NullHandler',
         },
         'logfile': {
-            'level':'DEBUG',
-            'class':'logging.handlers.RotatingFileHandler',
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
             'filename': "/var/log/bakkle.log",
             'maxBytes': 50000,
             'backupCount': 2,
             'formatter': 'standard',
         },
-        'console':{
-            'level':'INFO',
-            'class':'logging.StreamHandler',
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
             'formatter': 'standard'
         },
     },
     'loggers': {
         'django': {
-            'handlers':['console', 'logfile'],
+            'handlers': ['console', 'logfile'],
             'propagate': True,
-            'level':'WARN',
+            'level': 'WARN',
         },
         'django.db.backends': {
             'handlers': ['console', 'logfile'],

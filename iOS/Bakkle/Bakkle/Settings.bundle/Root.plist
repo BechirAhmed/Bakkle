@@ -8,9 +8,9 @@
 			<key>Type</key>
 			<string>PSToggleSwitchSpecifier</string>
 			<key>Title</key>
-			<string>Enable Geodefense</string>
+			<string>Enable Geofencing</string>
 			<key>Key</key>
-			<string>enableGeoDefense</string>
+			<string>enableGeofencing</string>
 			<key>DefaultValue</key>
 			<false/>
 		</dict>

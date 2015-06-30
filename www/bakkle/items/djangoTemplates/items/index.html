@@ -1,0 +1,17 @@
+{% extends "../base.html" %}
+
+{% block title %}Bakkle Items{% end %}
+
+{% block content %}
+
+{% if item_list %}
+  <ul>
+    {% for item in item_list %}
+      <li><a href="{{ reverse_url('detail') }}">{{ item.id }}:</a> {{ item.title }} ({{ item.status }}) <a href="{{ reverse_url('mark_as_deleted') }}">Delete</a> | <a href="{{ reverse_url('mark_as_spam') }}">Mark as Spam</a></li>
+    {% end %}
+  </ul>
+{% else %}
+  <p> no items present </p>
+{% end %}
+
+{% end %}

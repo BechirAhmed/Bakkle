@@ -879,7 +879,7 @@ def reset_items(request):
         tags = "lawnmower, orange, somewear",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now,
+        post_date = datetime.datetime.now()
         times_reported = 0 )
     i.save()
     i = Items(
@@ -892,7 +892,7 @@ def reset_items(request):
         tags = "service, oil change",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now,
+        post_date = datetime.datetime.now()
         times_reported = 0 )
     i.save()
     i = Items(
@@ -905,7 +905,7 @@ def reset_items(request):
         tags = "tv, led, netflix",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now,
+        post_date = datetime.datetime.now()
         times_reported = 0 )
     i.save()
     i = Items(
@@ -918,7 +918,7 @@ def reset_items(request):
         tags = "mac, apple, macbook, macbook pro",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now,
+        post_date = datetime.datetime.now()
         times_reported = 0 )
     i.save()
     i = Items(
@@ -931,7 +931,7 @@ def reset_items(request):
         tags = "paintball, gun, bump paintball",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now,
+        post_date = datetime.datetime.now()
         times_reported = 0 )
     i.save()
     i = Items(
@@ -944,7 +944,7 @@ def reset_items(request):
         tags = "textbook, business law",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now,
+        post_date = datetime.datetime.now()
         times_reported = 0 )
     i.save()
     i = Items(
@@ -957,7 +957,7 @@ def reset_items(request):
         tags = "baseball mitt",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now,
+        post_date = datetime.datetime.now()
         times_reported = 0 )
     i.save()
     i = Items(
@@ -970,7 +970,7 @@ def reset_items(request):
         tags = "bicycle",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now,
+        post_date = datetime.datetime.now()
         times_reported = 0 )
     i.save()
     i = Items(
@@ -983,7 +983,7 @@ def reset_items(request):
         tags = "canon, 50d, digital camera",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now,
+        post_date = datetime.datetime.now()
         times_reported = 0 )
     i.save()
     i = Items(
@@ -996,7 +996,7 @@ def reset_items(request):
         tags = "apple, iphone, iphone 5",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now,
+        post_date = datetime.datetime.now()
         times_reported = 0 )
     i.save()
     i = Items(
@@ -1009,7 +1009,7 @@ def reset_items(request):
         tags = "weights, barbell",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now,
+        post_date = datetime.datetime.now()
         times_reported = 0 )
     i.save()
     i = Items(
@@ -1022,7 +1022,7 @@ def reset_items(request):
         tags = "blender",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now,
+        post_date = datetime.datetime.now()
         times_reported = 0 )
     i.save()
     i = Items(
@@ -1035,7 +1035,7 @@ def reset_items(request):
         tags = "sony, playstation, controller",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now,
+        post_date = datetime.datetime.now()
         times_reported = 0 )
     i.save()
     i = Items(
@@ -1048,7 +1048,7 @@ def reset_items(request):
         tags = "baseball, security, bat",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now,
+        post_date = datetime.datetime.now()
         times_reported = 0 )
     i.save()
     i = Items(
@@ -1061,7 +1061,7 @@ def reset_items(request):
         tags = "propane, gas, grille, barbeque, bbq",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now,
+        post_date = datetime.datetime.now(),
         times_reported = 0 )
     i.save()
     i = Items(
@@ -1074,7 +1074,7 @@ def reset_items(request):
         tags = "marketing, textbooks",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now,
+        post_date = datetime.datetime.now()
         times_reported = 0 )
     i.save()
     i = Items(
@@ -1087,7 +1087,7 @@ def reset_items(request):
         tags = "shoes, nike, womens",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now,
+        post_date = datetime.datetime.now()
         times_reported = 0 )
     i.save()
     i = Items(
@@ -1100,7 +1100,7 @@ def reset_items(request):
         tags = "lawnmower, homemade, rabbit",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now,
+        post_date = datetime.datetime.now()
         times_reported = 0 )
     i.save()
     i = Items(
@@ -1113,7 +1113,7 @@ def reset_items(request):
         tags = "iPhone6, cracked, damaged",
         method = Items.DELIVERY,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now,
+        post_date = datetime.datetime.now()
         times_reported = 0 )
     i.save()
 

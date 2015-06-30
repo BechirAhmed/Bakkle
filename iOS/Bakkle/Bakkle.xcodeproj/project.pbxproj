@@ -52,6 +52,18 @@
 		602C38971B389A1F005CB493 /* InstructionScreen.png in Resources */ = {isa = PBXBuildFile; fileRef = 602C38961B389A1F005CB493 /* InstructionScreen.png */; };
 		602C38991B389A2E005CB493 /* WrongLocationForPhone.png in Resources */ = {isa = PBXBuildFile; fileRef = 602C38981B389A2E005CB493 /* WrongLocationForPhone.png */; };
 		602C389B1B38AF1E005CB493 /* x-image.png in Resources */ = {isa = PBXBuildFile; fileRef = 602C389A1B38AF1E005CB493 /* x-image.png */; };
+		602C38A81B3C291F005CB493 /* AnalyticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602C38A71B3C291F005CB493 /* AnalyticsView.swift */; };
+		602C38F61B3C9105005CB493 /* PNChartLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 602C38DD1B3C9105005CB493 /* PNChartLabel.m */; };
+		602C38F81B3C9105005CB493 /* PNColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 602C38E11B3C9105005CB493 /* PNColor.m */; };
+		602C38F91B3C9105005CB493 /* PNGenericChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 602C38E31B3C9105005CB493 /* PNGenericChart.m */; };
+		602C38FD1B3C9105005CB493 /* PNPieChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 602C38EB1B3C9105005CB493 /* PNPieChart.m */; };
+		602C38FE1B3C9105005CB493 /* PNPieChartDataItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 602C38ED1B3C9105005CB493 /* PNPieChartDataItem.m */; };
+		602C390B1B3C9933005CB493 /* PNChartLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602C39081B3C9933005CB493 /* PNChartLabel.swift */; };
+		602C390C1B3C9933005CB493 /* PNLineChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602C39091B3C9933005CB493 /* PNLineChart.swift */; };
+		602C390D1B3C9933005CB493 /* PNLineChartData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602C390A1B3C9933005CB493 /* PNLineChartData.swift */; };
+		602C39121B3C9995005CB493 /* PNValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602C39101B3C9995005CB493 /* PNValue.swift */; };
+		602C39151B3C9B12005CB493 /* PNChartConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602C39141B3C9B12005CB493 /* PNChartConfig.swift */; };
+		6034E6951B41B93900DEA291 /* AcceptOfferCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6034E6941B41B93900DEA291 /* AcceptOfferCell.swift */; };
 		720510341B1F839B00D059AB /* ListItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720510331B1F839B00D059AB /* ListItemCell.swift */; };
 		723D532C1B25F42B0067A80A /* IconImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 723D532B1B25F42B0067A80A /* IconImage.swift */; };
 		723D532E1B2718590067A80A /* OffsetTextAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 723D532D1B2718590067A80A /* OffsetTextAttachment.swift */; };
@@ -59,6 +71,9 @@
 		728647EB1B2F0E3F009A24C9 /* ChatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53BE1B0815CB000C406C /* ChatsViewController.swift */; };
 		728647EC1B2F0E46009A24C9 /* ChatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53BE1B0815CB000C406C /* ChatsViewController.swift */; };
 		728647EE1B309F6F009A24C9 /* NSDate+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 728647ED1B309F6F009A24C9 /* NSDate+String.swift */; };
+		72B5D8051B41E12D00E4B6EA /* BuyItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72B5D8041B41E12D00E4B6EA /* BuyItemView.swift */; };
+		72B5D8071B41E52300E4B6EA /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72B5D8061B41E52300E4B6EA /* ChatViewController.swift */; };
+		72B5D8091B42DF7300E4B6EA /* RateUserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72B5D8081B42DF7300E4B6EA /* RateUserView.swift */; };
 		A003EB141AD4CCA600EE51A1 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A003EB131AD4CCA600EE51A1 /* SWRevealViewController.m */; };
 		A003EB1A1AD4DB8800EE51A1 /* item-lawnmower.png in Resources */ = {isa = PBXBuildFile; fileRef = A003EB191AD4DB8800EE51A1 /* item-lawnmower.png */; };
 		A014B46C1B09215800E01FEF /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A014B46B1B09215800E01FEF /* ProfileView.swift */; };
@@ -96,7 +111,6 @@
 		A08D53C91B0815CB000C406C /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53BB1B0815CB000C406C /* Account.swift */; };
 		A08D53CA1B0815CB000C406C /* Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53BC1B0815CB000C406C /* Chat.swift */; };
 		A08D53CB1B0815CB000C406C /* ChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53BD1B0815CB000C406C /* ChatCell.swift */; };
-		A08D53CD1B0815CB000C406C /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53BF1B0815CB000C406C /* ChatViewController.swift */; };
 		A08D53CE1B0815CB000C406C /* ComposeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53C01B0815CB000C406C /* ComposeViewController.swift */; };
 		A08D53CF1B0815CB000C406C /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53C11B0815CB000C406C /* Message.swift */; };
 		A08D53D01B0815CB000C406C /* MessageBubbleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53C21B0815CB000C406C /* MessageBubbleCell.swift */; };
@@ -137,7 +151,6 @@
 		A0E1EB4B1B2B5B2200662C08 /* MDCPanState.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C9A81AB9F0FA0031D8CD /* MDCPanState.m */; };
 		A0E1EB4C1B2B5B2200662C08 /* UIImage+Resize.swift in Sources */ = {isa = PBXBuildFile; fileRef = A058A2AA1AFD8EAD005E7432 /* UIImage+Resize.swift */; };
 		A0E1EB4D1B2B5B2200662C08 /* ChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53BD1B0815CB000C406C /* ChatCell.swift */; };
-		A0E1EB4E1B2B5B2200662C08 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53BF1B0815CB000C406C /* ChatViewController.swift */; };
 		A0E1EB4F1B2B5B2200662C08 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EBDD6921AB211E600C7FBE7 /* LoginView.swift */; };
 		A0E1EB501B2B5B2200662C08 /* FeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C98A1AB9D1730031D8CD /* FeedView.swift */; };
 		A0E1EB511B2B5B2200662C08 /* MenuTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D96F7F1AD767BD0046DA13 /* MenuTableView.swift */; };
@@ -381,12 +394,35 @@
 		602C38961B389A1F005CB493 /* InstructionScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = InstructionScreen.png; sourceTree = "<group>"; };
 		602C38981B389A2E005CB493 /* WrongLocationForPhone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = WrongLocationForPhone.png; sourceTree = "<group>"; };
 		602C389A1B38AF1E005CB493 /* x-image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "x-image.png"; sourceTree = "<group>"; };
+		602C38A71B3C291F005CB493 /* AnalyticsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalyticsView.swift; sourceTree = "<group>"; };
+		602C38DA1B3C9105005CB493 /* PNChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNChart.h; sourceTree = "<group>"; };
+		602C38DC1B3C9105005CB493 /* PNChartLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNChartLabel.h; sourceTree = "<group>"; };
+		602C38DD1B3C9105005CB493 /* PNChartLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNChartLabel.m; sourceTree = "<group>"; };
+		602C38E01B3C9105005CB493 /* PNColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNColor.h; sourceTree = "<group>"; };
+		602C38E11B3C9105005CB493 /* PNColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNColor.m; sourceTree = "<group>"; };
+		602C38E21B3C9105005CB493 /* PNGenericChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNGenericChart.h; sourceTree = "<group>"; };
+		602C38E31B3C9105005CB493 /* PNGenericChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNGenericChart.m; sourceTree = "<group>"; };
+		602C38EA1B3C9105005CB493 /* PNPieChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNPieChart.h; sourceTree = "<group>"; };
+		602C38EB1B3C9105005CB493 /* PNPieChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNPieChart.m; sourceTree = "<group>"; };
+		602C38EC1B3C9105005CB493 /* PNPieChartDataItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNPieChartDataItem.h; sourceTree = "<group>"; };
+		602C38ED1B3C9105005CB493 /* PNPieChartDataItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNPieChartDataItem.m; sourceTree = "<group>"; };
+		602C39081B3C9933005CB493 /* PNChartLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PNChartLabel.swift; sourceTree = "<group>"; };
+		602C39091B3C9933005CB493 /* PNLineChart.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PNLineChart.swift; sourceTree = "<group>"; };
+		602C390A1B3C9933005CB493 /* PNLineChartData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PNLineChartData.swift; sourceTree = "<group>"; };
+		602C390F1B3C9995005CB493 /* PNChartSwift.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNChartSwift.h; sourceTree = "<group>"; };
+		602C39101B3C9995005CB493 /* PNValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PNValue.swift; sourceTree = "<group>"; };
+		602C39131B3C9A2A005CB493 /* PNChartDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNChartDelegate.h; sourceTree = "<group>"; };
+		602C39141B3C9B12005CB493 /* PNChartConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PNChartConfig.swift; sourceTree = "<group>"; };
+		6034E6941B41B93900DEA291 /* AcceptOfferCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AcceptOfferCell.swift; sourceTree = "<group>"; };
 		698270E0C83AB2371F464BB2 /* Pods-Bakkle.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bakkle.release.xcconfig"; path = "Pods/Target Support Files/Pods-Bakkle/Pods-Bakkle.release.xcconfig"; sourceTree = "<group>"; };
 		720510331B1F839B00D059AB /* ListItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemCell.swift; sourceTree = "<group>"; };
 		723D532B1B25F42B0067A80A /* IconImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IconImage.swift; sourceTree = "<group>"; };
 		723D532D1B2718590067A80A /* OffsetTextAttachment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OffsetTextAttachment.swift; sourceTree = "<group>"; };
 		726A38E21B39BE1E00CF5553 /* logo-white-design-clear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-white-design-clear.png"; sourceTree = "<group>"; };
 		728647ED1B309F6F009A24C9 /* NSDate+String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSDate+String.swift"; sourceTree = "<group>"; };
+		72B5D8041B41E12D00E4B6EA /* BuyItemView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuyItemView.swift; sourceTree = "<group>"; };
+		72B5D8061B41E52300E4B6EA /* ChatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
+		72B5D8081B42DF7300E4B6EA /* RateUserView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RateUserView.swift; sourceTree = "<group>"; };
 		A003EB121AD4CCA600EE51A1 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
 		A003EB131AD4CCA600EE51A1 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
 		A003EB191AD4DB8800EE51A1 /* item-lawnmower.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "item-lawnmower.png"; sourceTree = "<group>"; };
@@ -426,7 +462,6 @@
 		A08D53BC1B0815CB000C406C /* Chat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Chat.swift; sourceTree = "<group>"; };
 		A08D53BD1B0815CB000C406C /* ChatCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatCell.swift; sourceTree = "<group>"; };
 		A08D53BE1B0815CB000C406C /* ChatsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatsViewController.swift; sourceTree = "<group>"; };
-		A08D53BF1B0815CB000C406C /* ChatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		A08D53C01B0815CB000C406C /* ComposeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComposeViewController.swift; sourceTree = "<group>"; };
 		A08D53C11B0815CB000C406C /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		A08D53C21B0815CB000C406C /* MessageBubbleCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageBubbleCell.swift; sourceTree = "<group>"; };
@@ -552,6 +587,7 @@
 		5EBDD6821AB211E600C7FBE7 = {
 			isa = PBXGroup;
 			children = (
+				602C38D51B3C90E7005CB493 /* PNChart */,
 				DB6726BB1B1747210014A896 /* StarRating */,
 				A003EB111ACF3BBC00EE51A1 /* SWRevealViewController */,
 				5EE2C9BC1AB9F1080031D8CD /* MDCSwipe Library */,
@@ -684,6 +720,31 @@
 			name = "MDCSwipe Library";
 			sourceTree = "<group>";
 		};
+		602C38D51B3C90E7005CB493 /* PNChart */ = {
+			isa = PBXGroup;
+			children = (
+				602C39141B3C9B12005CB493 /* PNChartConfig.swift */,
+				602C390F1B3C9995005CB493 /* PNChartSwift.h */,
+				602C39101B3C9995005CB493 /* PNValue.swift */,
+				602C39081B3C9933005CB493 /* PNChartLabel.swift */,
+				602C39091B3C9933005CB493 /* PNLineChart.swift */,
+				602C390A1B3C9933005CB493 /* PNLineChartData.swift */,
+				602C38DA1B3C9105005CB493 /* PNChart.h */,
+				602C38DC1B3C9105005CB493 /* PNChartLabel.h */,
+				602C38DD1B3C9105005CB493 /* PNChartLabel.m */,
+				602C39131B3C9A2A005CB493 /* PNChartDelegate.h */,
+				602C38E01B3C9105005CB493 /* PNColor.h */,
+				602C38E11B3C9105005CB493 /* PNColor.m */,
+				602C38E21B3C9105005CB493 /* PNGenericChart.h */,
+				602C38E31B3C9105005CB493 /* PNGenericChart.m */,
+				602C38EA1B3C9105005CB493 /* PNPieChart.h */,
+				602C38EB1B3C9105005CB493 /* PNPieChart.m */,
+				602C38EC1B3C9105005CB493 /* PNPieChartDataItem.h */,
+				602C38ED1B3C9105005CB493 /* PNPieChartDataItem.m */,
+			);
+			name = PNChart;
+			sourceTree = "<group>";
+		};
 		A003EB111ACF3BBC00EE51A1 /* SWRevealViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -713,6 +774,7 @@
 				5EE2C98A1AB9D1730031D8CD /* FeedView.swift */,
 				1B00CB1A1B22231B00710C01 /* ItemData.swift */,
 				A0D96F851AD771900046DA13 /* SellersGarage.swift */,
+				602C38A71B3C291F005CB493 /* AnalyticsView.swift */,
 				A0D96F811AD76D8E0046DA13 /* BuyersTrunkView.swift */,
 				A0D96F871AD772DA0046DA13 /* HoldingPatternView.swift */,
 				A0D96F891AD773DB0046DA13 /* FeedFilter.swift */,
@@ -722,6 +784,8 @@
 				5E8055411AE541460035521C /* ItemDetails.swift */,
 				A058A2A01AFC28BE005E7432 /* DemoView.swift */,
 				A014B46B1B09215800E01FEF /* ProfileView.swift */,
+				72B5D8041B41E12D00E4B6EA /* BuyItemView.swift */,
+				72B5D8081B42DF7300E4B6EA /* RateUserView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -771,12 +835,13 @@
 			children = (
 				A08D53BB1B0815CB000C406C /* Account.swift */,
 				A08D53BC1B0815CB000C406C /* Chat.swift */,
-				A08D53BD1B0815CB000C406C /* ChatCell.swift */,
 				A08D53BE1B0815CB000C406C /* ChatsViewController.swift */,
-				A08D53BF1B0815CB000C406C /* ChatViewController.swift */,
+				A08D53BD1B0815CB000C406C /* ChatCell.swift */,
+				72B5D8061B41E52300E4B6EA /* ChatViewController.swift */,
 				A08D53C01B0815CB000C406C /* ComposeViewController.swift */,
 				A08D53C11B0815CB000C406C /* Message.swift */,
 				A08D53C21B0815CB000C406C /* MessageBubbleCell.swift */,
+				6034E6941B41B93900DEA291 /* AcceptOfferCell.swift */,
 				A08D53C31B0815CB000C406C /* MessageIncoming.aiff */,
 				A08D53C41B0815CB000C406C /* MessageOutgoing.aiff */,
 				A08D53C51B0815CB000C406C /* MessageSentDateCell.swift */,
@@ -1374,7 +1439,7 @@
 				5EE2C9B71AB9F0FB0031D8CD /* MDCPanState.m in Sources */,
 				A058A2AB1AFD8EAD005E7432 /* UIImage+Resize.swift in Sources */,
 				A08D53CB1B0815CB000C406C /* ChatCell.swift in Sources */,
-				A08D53CD1B0815CB000C406C /* ChatViewController.swift in Sources */,
+				602C38F81B3C9105005CB493 /* PNColor.m in Sources */,
 				5EBDD6931AB211E600C7FBE7 /* LoginView.swift in Sources */,
 				5EE2C98B1AB9D1730031D8CD /* FeedView.swift in Sources */,
 				A0D96F801AD767BD0046DA13 /* MenuTableView.swift in Sources */,
@@ -1382,10 +1447,12 @@
 				A0D96F8A1AD773DB0046DA13 /* FeedFilter.swift in Sources */,
 				1B00CB1B1B22231B00710C01 /* ItemData.swift in Sources */,
 				728647EE1B309F6F009A24C9 /* NSDate+String.swift in Sources */,
+				602C390C1B3C9933005CB493 /* PNLineChart.swift in Sources */,
 				5EE2C9B91AB9F0FB0031D8CD /* UIColor+MDCRGB8Bit.m in Sources */,
 				F0E7C5081B2F2B3E006B013A /* WSManager.m in Sources */,
 				A0D96F881AD772DA0046DA13 /* HoldingPatternView.swift in Sources */,
 				1B56D5D41B30709F009D81C6 /* UIDevice+ModelName.swift in Sources */,
+				602C390D1B3C9933005CB493 /* PNLineChartData.swift in Sources */,
 				723D532E1B2718590067A80A /* OffsetTextAttachment.swift in Sources */,
 				A003EB141AD4CCA600EE51A1 /* SWRevealViewController.m in Sources */,
 				A0D96F841AD76F1F0046DA13 /* SettingsView.swift in Sources */,
@@ -1393,6 +1460,7 @@
 				5EE2C9BA1AB9F0FB0031D8CD /* UIView+MDCBorderedLabel.m in Sources */,
 				A0D96F821AD76D8E0046DA13 /* BuyersTrunkView.swift in Sources */,
 				720510341B1F839B00D059AB /* ListItemCell.swift in Sources */,
+				602C39121B3C9995005CB493 /* PNValue.swift in Sources */,
 				A08D53C91B0815CB000C406C /* Account.swift in Sources */,
 				A08D53D51B0815CB000C406C /* User.swift in Sources */,
 				5EE2C9B81AB9F0FB0031D8CD /* MDCGeometry.m in Sources */,
@@ -1402,6 +1470,9 @@
 				5EE2C9BB1AB9F0FB0031D8CD /* MDCViewState.m in Sources */,
 				5E78D7E11AF121BA0014ED8F /* GarageCell.swift in Sources */,
 				A0D96F861AD771900046DA13 /* SellersGarage.swift in Sources */,
+				602C38FD1B3C9105005CB493 /* PNPieChart.m in Sources */,
+				602C38F91B3C9105005CB493 /* PNGenericChart.m in Sources */,
+				602C38FE1B3C9105005CB493 /* PNPieChartDataItem.m in Sources */,
 				723D532C1B25F42B0067A80A /* IconImage.swift in Sources */,
 				A06AA9EE1AD609530075D7F7 /* Bakkle.swift in Sources */,
 				5EE2C9B41AB9F0FB0031D8CD /* MDCSwipeOptions.m in Sources */,
@@ -1409,14 +1480,22 @@
 				A08D53D31B0815CB000C406C /* MessageSentDateCell.swift in Sources */,
 				6001F3411B21D004009C1A04 /* ItemDetailsCell.swift in Sources */,
 				A058A2BD1AFEF665005E7432 /* CLLocation+String.swift in Sources */,
+				602C38A81B3C291F005CB493 /* AnalyticsView.swift in Sources */,
 				F0E7C50B1B2F2B4B006B013A /* WSRequest.swift in Sources */,
+				602C390B1B3C9933005CB493 /* PNChartLabel.swift in Sources */,
 				5E1DCCA51AD486D2002D41FD /* AddItem.swift in Sources */,
+				72B5D8071B41E52300E4B6EA /* ChatViewController.swift in Sources */,
 				A08D53CE1B0815CB000C406C /* ComposeViewController.swift in Sources */,
+				6034E6951B41B93900DEA291 /* AcceptOfferCell.swift in Sources */,
+				72B5D8091B42DF7300E4B6EA /* RateUserView.swift in Sources */,
 				A08D53CF1B0815CB000C406C /* Message.swift in Sources */,
 				5EBDD6911AB211E600C7FBE7 /* AppDelegate.swift in Sources */,
+				602C39151B3C9B12005CB493 /* PNChartConfig.swift in Sources */,
 				A08D53D01B0815CB000C406C /* MessageBubbleCell.swift in Sources */,
 				A058A2A11AFC28BE005E7432 /* DemoView.swift in Sources */,
+				72B5D8051B41E12D00E4B6EA /* BuyItemView.swift in Sources */,
 				5E1FEE7C1AD8641900C08131 /* MDCSwipeToChooseView.m in Sources */,
+				602C38F61B3C9105005CB493 /* PNChartLabel.m in Sources */,
 				5EE2C9B21AB9F0FB0031D8CD /* UIView+MDCSwipeToChoose.m in Sources */,
 				A08D53B91B07DE26000C406C /* Theme.swift in Sources */,
 				A08D53AF1B06D850000C406C /* Common.swift in Sources */,
@@ -1441,7 +1520,6 @@
 				A0E1EB4B1B2B5B2200662C08 /* MDCPanState.m in Sources */,
 				A0E1EB4C1B2B5B2200662C08 /* UIImage+Resize.swift in Sources */,
 				A0E1EB4D1B2B5B2200662C08 /* ChatCell.swift in Sources */,
-				A0E1EB4E1B2B5B2200662C08 /* ChatViewController.swift in Sources */,
 				A0E1EB4F1B2B5B2200662C08 /* LoginView.swift in Sources */,
 				A0E1EB501B2B5B2200662C08 /* FeedView.swift in Sources */,
 				A0E1EB511B2B5B2200662C08 /* MenuTableView.swift in Sources */,
