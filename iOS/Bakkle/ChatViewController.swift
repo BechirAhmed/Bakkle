@@ -297,7 +297,23 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         //            }, forNotification: "newOffer")
     }
     
+
+    func btnAcceptOffer(sender: UIButton!) {
+        self.toolBar.hidden = true
+        acceptButton()
+        println("accept offer")
+    }
     
+    func btnCounterOffer(sender: UIButton!) {
+        self.toolBar.hidden = true
+        let alert: UIAlertController = UIAlertController(title: "Counter Offer", message: "This doesn't do anything yet, but it will soon!", preferredStyle: .Alert)
+        alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: { (UIAlertAction)in
+            self.toolBar.hidden = false
+        }))
+        self.presentViewController(alert, animated: false, completion: nil)
+        println("counter offer")
+    }
+
     func btnBack(sender:UIButton!)
     {
         self.dismissKeyboard()
@@ -325,28 +341,27 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         self.dismissKeyboard()
         self.view.endEditing(true)
         self.toolBar.hidden = true
-        acceptButton()
-//        let alert: UIAlertController = UIAlertController(title: "Offer Proposal", message: "Enter a dollar amount to propose an offer.", preferredStyle: .Alert)
-//        alert.addTextFieldWithConfigurationHandler({(txtField: UITextField!) in
-//            txtField.placeholder = "Offer amount"
-//            txtField.keyboardType = UIKeyboardType.DecimalPad
-//            self.offerTF = txtField
-//        })
-//        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Default, handler: { (UIAlertAction)in
-//            self.toolBar.hidden = false
-//        }))
-//        alert.addAction(UIAlertAction(title: "Propose", style: UIAlertActionStyle.Default, handler:{ (UIAlertAction)in
-//            self.toolBar.hidden = false
-//            // need to format offer text
-//            //            let offerPriceString = self.offerTF.text
-//            //            var formatter = NSNumberFormatter()
-//            //            formatter.numberStyle = .DecimalStyle
-//            //            var offerPrice: NSNumber = formatter.numberFromString(offerPriceString)!
-//            //            var sendPayload: WSRequest = WSSendOfferRequest(chatId: String(self.chat.chatId), offerPrice: offerPrice, offerMethod: deliveryMethod.ship)
-//            //            WSManager.enqueueWorkPayload(sendPayload)
-//            println("Proposed Offer: $" + self.offerTF.text)
-//        }))
-//        self.presentViewController(alert, animated: false, completion: nil)
+        let alert: UIAlertController = UIAlertController(title: "Offer Proposal", message: "Enter a dollar amount to propose an offer.", preferredStyle: .Alert)
+        alert.addTextFieldWithConfigurationHandler({(txtField: UITextField!) in
+            txtField.placeholder = "Offer amount"
+            txtField.keyboardType = UIKeyboardType.DecimalPad
+            self.offerTF = txtField
+        })
+        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Default, handler: { (UIAlertAction)in
+            self.toolBar.hidden = false
+        }))
+        alert.addAction(UIAlertAction(title: "Propose", style: UIAlertActionStyle.Default, handler:{ (UIAlertAction)in
+            self.toolBar.hidden = false
+            // need to format offer text
+            //            let offerPriceString = self.offerTF.text
+            //            var formatter = NSNumberFormatter()
+            //            formatter.numberStyle = .DecimalStyle
+            //            var offerPrice: NSNumber = formatter.numberFromString(offerPriceString)!
+            //            var sendPayload: WSRequest = WSSendOfferRequest(chatId: String(self.chat.chatId), offerPrice: offerPrice, offerMethod: deliveryMethod.ship)
+            //            WSManager.enqueueWorkPayload(sendPayload)
+            println("Proposed Offer: $" + self.offerTF.text)
+        }))
+        self.presentViewController(alert, animated: false, completion: nil)
     }
     
     func btnProfile(sender:UIButton!)
@@ -374,14 +389,6 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
     }
     
-//    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-//        if (indexPath.row == chat.loadedMessages.count * 2) {
-//            return 80;
-//        }else {
-//            return 44;
-//        }
-//    }
-    
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
@@ -403,7 +410,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         self.presentViewController(vc, animated: true, completion: nil)
     }
-    
+
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if (indexPath.row == chat.loadedMessages.count * 2) {
             let cellIdentifier = NSStringFromClass(AcceptOfferCell)
@@ -414,6 +421,16 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             }
             var offer: CGFloat = 10.00
             cell.makeOfferLabel.text = "AN OFFER OF $\(offer) HAS BEEN MADE."
+            //if !isBuyer {
+                var acceptBtn: UIButton = UIButton()
+                var counterBtn: UIButton = UIButton()
+                acceptBtn.addTarget(self, action: "btnAcceptOffer:", forControlEvents: UIControlEvents.TouchUpInside)
+                cell.contentView.addSubview(acceptBtn)
+                cell.configureAcceptBtn(acceptBtn)
+                counterBtn.addTarget(self, action: "btnCounterOffer:", forControlEvents: UIControlEvents.TouchUpInside)
+                cell.contentView.addSubview(counterBtn)
+                cell.configureCounterBtn(counterBtn)
+            //}
             return cell
         }
         if (indexPath.row % 2) == 0 {

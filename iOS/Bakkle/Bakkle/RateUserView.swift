@@ -22,6 +22,9 @@ class RateUserView: UIViewController {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     @IBAction func btnSubmit(sender: AnyObject) {
+        let alert: UIAlertController = UIAlertController(title: "Bought Item", message: "Accept offer flow is complete; however, this is just a mock for now.", preferredStyle: .Alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
+        self.presentViewController(alert, animated: true, completion: nil)
     }
     
     override func viewDidLoad() {
