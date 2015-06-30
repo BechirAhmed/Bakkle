@@ -283,7 +283,6 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                     
                     // Connect to web socket
                     WSManager.setAuthenticationWithUUID(self.deviceUUID, withToken: self.auth_token)
-                    WSManager.setAutoRegister(true)
                     WSManager.connectWS()
                     success()
                 } else {
@@ -640,9 +639,8 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     func onNewChat(conversation_id: Int, message: String, timestamp: time_t) {
         
     }
-    
-    func addItem(title: String, description: String, location: String, price: String, tags: String, method: String, images: [NSData], success: (item_id: Int?, item_url: String?)->(), fail: ()->() ) {
 
+    func addItem(title: String, description: String, location: String, price: String, tags: String, method: String, images: [NSData],item_id: NSInteger?, success: (item_id: Int?, item_url: String?)->(), fail: ()->() ) {
         // URL encode some vars.
         let escTitle = title.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         let escDescription = description.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
@@ -656,8 +654,14 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             escPrice = price.stringByReplacingOccurrencesOfString("$ ", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
         }
         
-        let postString = "device_uuid=\(self.deviceUUID)&title=\(escTitle)&description=\(escDescription)&location=\(escLocation)&auth_token=\(self.auth_token)&price=\(escPrice)&tags=\(escTags)&method=\(escMethod)"
-        let url: NSURL? = NSURL(string: url_base + url_add_item + "?\(postString)")
+        var postString : NSString;
+        if(item_id != nil){
+            postString = "device_uuid=\(self.deviceUUID)&title=\(escTitle)&description=\(escDescription)&location=\(escLocation)&auth_token=\(self.auth_token)&price=\(escPrice)&tags=\(escTags)&method=\(escMethod)&item_id=\(item_id!)"
+        }
+        else{
+            postString = "device_uuid=\(self.deviceUUID)&title=\(escTitle)&description=\(escDescription)&location=\(escLocation)&auth_token=\(self.auth_token)&price=\(escPrice)&tags=\(escTags)&method=\(escMethod)"
+        }
+        let url: NSURL? = NSURL(string: url_base +  url_add_item + "?\(postString)")
         
         let request = NSMutableURLRequest(URL: url!)
         request.HTTPMethod = "POST"

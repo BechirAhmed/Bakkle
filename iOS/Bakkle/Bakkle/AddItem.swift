@@ -30,20 +30,21 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     var itemImages: [UIImage]? = [UIImage]()
     var scaledImages: [NSData]? = [NSData]()
     var fileSizes: UInt64 = 0
+    var item: NSDictionary!
+    var isEditting: Bool = false
     
+    @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var closeBtn: UIButton!
     @IBOutlet weak var titleField: UITextField!
     @IBOutlet weak var priceField: UITextField!
     @IBOutlet weak var tagsField: UITextView!
     @IBOutlet weak var methodControl: UISegmentedControl!
     @IBOutlet weak var confirmButton: UIButton!
-    @IBOutlet weak var confirmButtonText: UILabel!
     @IBOutlet weak var confirmButtonView: UIView!
     @IBOutlet weak var shareToFacebookBtn: UISwitch!
     @IBOutlet weak var camButtonBackground: UIView!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var loadingView: UIView!
-    @IBOutlet var overlayView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,6 +59,9 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         textViewDidEndEditing(tagsField)
         camButtonBackground.layer.cornerRadius = camButtonBackground.frame.size.width/2
         camButtonBackground.setNeedsDisplay()
+        
+        // Set default
+        methodControl.selectedSegmentIndex = 0;
         
         // -8.0 and -4.0 are y and x respectively, this is just to keep alignment of text
         // with the fields above it, because UITextView has different edges for scrolling
@@ -199,10 +203,36 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(true)
-        confirmButton.enabled = false
-        
-        // Set default
-        methodControl.selectedSegmentIndex = 0;
+
+        // set content if it's in edit mode
+        if isEditting {
+            titleLabel.text = "EDIT ITEM"
+            let method = item.valueForKey("method") as! String
+            switch method {
+                case "Pick up":methodControl.selectedSegmentIndex = 0;break;
+                case "Meet": methodControl.selectedSegmentIndex = 1;break;
+                case "Ship": methodControl.selectedSegmentIndex = 2;break;
+                default: methodControl.selectedSegmentIndex = 0;break;
+            }
+            titleField.text = item.valueForKey("title") as! String
+            priceField.text = item.valueForKey("price") as! String
+            formatPrice()
+            let tags = item.valueForKey("tags") as! Array<String>
+            tagsField.text = ", ".join(tags)
+            tagsField.textColor = UIColor.blackColor()
+                
+            confirmButton.setTitle("SAVE", forState: UIControlState.Normal)
+            let imageUrls = item.valueForKey("image_urls") as! Array<String>
+            for index in 0...imageUrls.count-1 {
+                var imageURL: NSURL = NSURL(string: imageUrls[index])!
+                var imageData: NSData = NSData(contentsOfURL: imageURL)!
+                itemImages?.append(UIImage(data: imageData)!)
+                scaledImages?.append(imageData)
+            }
+            isEditting = false
+        }
+        disableConfirmButtonHandler()
+
     }
     
     @IBAction func beginEditingPrice(sender: AnyObject) {
@@ -251,7 +281,6 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
             confirmButton.enabled = true
             confirmButton.backgroundColor = AddItem.BAKKLE_GREEN_COLOR
         }
-        confirmButtonView.bringSubviewToFront(confirmButtonText)
         return confirmButton.enabled
     }
     
@@ -282,7 +311,6 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         
         confirmButton.enabled = false
         confirmButton.backgroundColor = AddItem.CONFIRM_BUTTON_DISABLED_COLOR
-        confirmButtonView.bringSubviewToFront(confirmButtonText)
         
         self.loadingView.hidden = false
         
@@ -291,9 +319,10 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         
         if scaledImages?.count == itemImages?.count {
             var time = NSDate.timeIntervalSinceReferenceDate()
+            let item_id = self.item.valueForKey("pk") as? NSInteger
             Bakkle.sharedInstance.addItem(self.titleField.text, description: "", location: Bakkle.sharedInstance.user_location,
                 price: self.priceField.text, tags: self.tagsField.text, method: self.methodControl.titleForSegmentAtIndex(self.methodControl.selectedSegmentIndex)!,
-                images:self.scaledImages!, success: {
+                images:self.scaledImages!, item_id: item_id, success: {
                     (item_id:Int?, item_url: String?) -> () in
                         time = NSDate.timeIntervalSinceReferenceDate() - time
                         println("Time taken to upload in sec: \(time)")
@@ -532,7 +561,14 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
         var chosen = info[UIImagePickerControllerOriginalImage] as! UIImage
-        let itemIndex = self.itemImages!.count - 1 <= 0 ? 0 : self.itemImages!.count - 1
+        self.itemImages?.append(chosen)
+        var itemIndex: Int?
+        for i in 0...(itemImages!.count - 1) {
+            if itemImages![i] == chosen {
+                itemIndex = i;
+                break;
+            }
+        }
         
         // Scaled image size
         let scaledImageWidth: CGFloat = 660.0;
@@ -541,15 +577,15 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
             Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
                 chosen.cropAndResize(size, completionHandler: { (resizedImage:UIImage, data:NSData) -> () in
                     var compressedImage = UIImageJPEGRepresentation(resizedImage, AddItem.JPEG_COMPRESSION_CONSTANT)
-                    self.itemImages?.append(UIImage(data: compressedImage)!)
-                    var index: NSIndexPath = NSIndexPath(forRow: self.itemImages!.count-1, inSection: 0)
+                    self.itemImages?[itemIndex!] = UIImage(data: compressedImage)!
+                    var index: NSIndexPath = NSIndexPath(forRow: itemIndex!, inSection: 0)
                     self.collectionView.insertItemsAtIndexPaths([index])
-                    self.scaledImages?.insert(compressedImage, atIndex: itemIndex)
+                    self.scaledImages?.insert(compressedImage, atIndex: itemIndex!)
                     self.fileSizes = 0
                     for i in self.scaledImages! {
                         self.fileSizes += UInt64(i.length)
                     }
-                    println("Image \(itemIndex + 1) bit count: \(compressedImage.length) b")
+                    println("Image \(itemIndex! + 1) bit count: \(compressedImage.length) b")
                     println("Total image size bit count: \(self.fileSizes) b")
                 })
                 
@@ -667,18 +703,16 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell : ListItemCell = collectionView.dequeueReusableCellWithReuseIdentifier(listItemCellIdentifier, forIndexPath: indexPath) as! ListItemCell
-        //cell.backgroundColor = UIColor.redColor()
         cell.imgView.contentMode = UIViewContentMode.ScaleAspectFill
         cell.imgView.clipsToBounds  = true
         if let images = self.itemImages {
             /* This allows us to test adding image using simulator */
-            if UIDevice.currentDevice().model == "iPhone Simulator" {
+            if UIDevice.currentDevice().model == "iPhone Simulator" && !isEditting{
                 cell.imgView.image = UIImage(named: "tiger.jpg")
             } else {
                 cell.imgView.image = images[indexPath.row]
             }
         }
-    
         return cell
     }
 

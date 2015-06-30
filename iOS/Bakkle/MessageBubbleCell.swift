@@ -44,36 +44,34 @@ class MessageBubbleCell: UITableViewCell {
     func configureWithMessage(message: Message) {
         messageLabel.text = message.text
 
-        if message.incoming != (tag == incomingTag) {
-            var layoutAttribute: NSLayoutAttribute
-            var layoutConstant: CGFloat
+        var layoutAttribute: NSLayoutAttribute
+        var layoutConstant: CGFloat
 
-            if message.incoming {
-                tag = incomingTag
-                bubbleImageView.image = bubbleImage.incoming
-                bubbleImageView.highlightedImage = bubbleImage.incomingHighlighed
-                messageLabel.textColor = UIColor.blackColor()
-                layoutAttribute = .Left
-                layoutConstant = 10
-            } else { // outgoing
-                tag = outgoingTag
-                bubbleImageView.image = bubbleImage.outgoing
-                bubbleImageView.highlightedImage = bubbleImage.outgoingHighlighed
-                messageLabel.textColor = UIColor.whiteColor()
-                layoutAttribute = .Right
-                layoutConstant = -10
-            }
-
-            let layoutConstraint: NSLayoutConstraint = bubbleImageView.constraints()[1] as! NSLayoutConstraint // `messageLabel` CenterX
-            layoutConstraint.constant = -layoutConstraint.constant
-
-            let constraints: NSArray = contentView.constraints()
-            let indexOfConstraint = constraints.indexOfObjectPassingTest { (var constraint, idx, stop) in
-                return (constraint.firstItem as! UIView).tag == bubbleTag && (constraint.firstAttribute == NSLayoutAttribute.Left || constraint.firstAttribute == NSLayoutAttribute.Right)
-            }
-            contentView.removeConstraint(constraints[indexOfConstraint] as! NSLayoutConstraint)
-            contentView.addConstraint(NSLayoutConstraint(item: bubbleImageView, attribute: layoutAttribute, relatedBy: .Equal, toItem: contentView, attribute: layoutAttribute, multiplier: 1, constant: layoutConstant))
+        if message.incoming {
+            tag = incomingTag
+            bubbleImageView.image = bubbleImage.incoming
+            bubbleImageView.highlightedImage = bubbleImage.incomingHighlighed
+            messageLabel.textColor = UIColor.whiteColor()
+            layoutAttribute = .Left
+            layoutConstant = 10
+        } else { // outgoing
+            tag = outgoingTag
+            bubbleImageView.image = bubbleImage.outgoing
+            bubbleImageView.highlightedImage = bubbleImage.outgoingHighlighed
+            messageLabel.textColor = UIColor.whiteColor()
+            layoutAttribute = .Right
+            layoutConstant = -10
         }
+
+        let layoutConstraint: NSLayoutConstraint = bubbleImageView.constraints()[1] as! NSLayoutConstraint // `messageLabel` CenterX
+        layoutConstraint.constant = -layoutConstraint.constant
+
+        let constraints: NSArray = contentView.constraints()
+        let indexOfConstraint = constraints.indexOfObjectPassingTest { (var constraint, idx, stop) in
+            return (constraint.firstItem as! UIView).tag == bubbleTag && (constraint.firstAttribute == NSLayoutAttribute.Left || constraint.firstAttribute == NSLayoutAttribute.Right)
+        }
+        contentView.removeConstraint(constraints[indexOfConstraint] as! NSLayoutConstraint)
+        contentView.addConstraint(NSLayoutConstraint(item: bubbleImageView, attribute: layoutAttribute, relatedBy: .Equal, toItem: contentView, attribute: layoutAttribute, multiplier: 1, constant: layoutConstant))
     }
 
     // Highlight cell #CopyMessage
@@ -92,8 +90,8 @@ func bubbleImageMake() -> (incoming: UIImage, incomingHighlighed: UIImage, outgo
     let capInsetsIncoming = UIEdgeInsets(top: 17, left: 26.5, bottom: 17.5, right: 21)
     let capInsetsOutgoing = UIEdgeInsets(top: 17, left: 21, bottom: 17.5, right: 26.5)
 
-    let incoming = coloredImage(maskIncoming, 229/255.0, 229/255.0, 234/255.0, 1).resizableImageWithCapInsets(capInsetsIncoming)
-    let incomingHighlighted = coloredImage(maskIncoming, 206/255.0, 206/255.0, 210/255.0, 1).resizableImageWithCapInsets(capInsetsIncoming)
+    let incoming = coloredImage(maskIncoming, 50/255.0, 50/255.0, 50/255.0, 1).resizableImageWithCapInsets(capInsetsIncoming)
+    let incomingHighlighted = coloredImage(maskIncoming, 50/255.0, 50/255.0, 50/255.0, 1).resizableImageWithCapInsets(capInsetsIncoming)
     let outgoing = coloredImage(maskOutgoing, 51/255.0, 205/255.0, 95/255.0, 1).resizableImageWithCapInsets(capInsetsOutgoing)
     let outgoingHighlighted = coloredImage(maskOutgoing, 51/255.0, 205/255.0, 95/255.0, 1).resizableImageWithCapInsets(capInsetsOutgoing)
 

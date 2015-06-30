@@ -137,7 +137,6 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
 
-    @IBOutlet weak var imgDet: UIImageView!
     @IBOutlet weak var activityInd: UIActivityIndicatorView!
     
     

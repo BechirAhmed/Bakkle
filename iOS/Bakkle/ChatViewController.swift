@@ -14,6 +14,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     var tableView: UITableView!
     var toolBar: UIToolbar!
     var textView: UITextView!
+    var messageType: UISegmentedControl!
     var profileButton: UIButton!
     var userName: UILabel!
     var sendButton: UIButton!
@@ -23,12 +24,13 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     var seller: NSDictionary!
     var isBuyer: Bool = false
     var refreshControl: UIRefreshControl = UIRefreshControl()
+    var offerTF: UITextField!
 
     override var inputAccessoryView: UIView! {
     get {
         if toolBar == nil {
             toolBar = UIToolbar(frame: CGRectMake(0, 0, 0, toolBarMinHeight-0.5))
-
+            
             textView = InputTextView(frame: CGRectZero)
             textView.backgroundColor = UIColor.whiteColor()
             textView.delegate = self
@@ -36,7 +38,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             textView.layer.borderColor = UIColor(red: 200/255, green: 200/255, blue: 205/255, alpha:1).CGColor
             textView.layer.borderWidth = 0.5
             textView.layer.cornerRadius = 5
-//        textView.placeholder = "Message"
+            // maybe placeholder text?
             textView.scrollsToTop = false
             textView.textContainerInset = UIEdgeInsetsMake(4, 3, 3, 3)
             toolBar.addSubview(textView)
@@ -118,6 +120,12 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         infoButton.setImage(UIImage(named: "icon-i.png"), forState: UIControlState.Normal)
         infoButton.addTarget(self, action: "btnI:", forControlEvents: UIControlEvents.TouchUpInside)
         header.addSubview(infoButton)
+        
+        let offerButtonWidth:CGFloat = 50
+        var offerButton = UIButton(frame: CGRectMake(header.bounds.origin.x+header.bounds.size.width-infoButtonWidth-offerButtonWidth, header.bounds.origin.y+topHeight, offerButtonWidth, headerHeight))
+        offerButton.setImage(IconImage().check(), forState: UIControlState.Normal)
+        offerButton.addTarget(self, action: "btnOffer:", forControlEvents: UIControlEvents.TouchUpInside)
+        header.addSubview(offerButton)
         view.addSubview(header)
         
         tableView = UITableView(frame: CGRectMake(view.bounds.origin.x, view.bounds.origin.y+headerHeight+topHeight, view.bounds.size.width, view.bounds.size.height-headerHeight-self.inputAccessoryView.bounds.size.height), style: .Plain)
@@ -257,6 +265,13 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }, forNotification: "newMessage")
     }
 
+    func btnAcceptOffer(sender: UIButton!) {
+        println("accept offer")
+    }
+    
+    func btnCounterOffer(sender: UIButton!) {
+        println("counter offer")
+    }
 
     func btnBack(sender:UIButton!)
     {
@@ -279,6 +294,26 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         self.dismissKeyboard()
         self.presentViewController(vc, animated: true, completion: nil)
+    }
+    
+    func btnOffer(sender:UIButton!){
+        self.dismissKeyboard()
+        self.view.endEditing(true)
+        self.toolBar.hidden = true
+        let alert: UIAlertController = UIAlertController(title: "Offer Proposal", message: "Enter a dollar amount to propose an offer.", preferredStyle: .Alert)
+        alert.addTextFieldWithConfigurationHandler({(txtField: UITextField!) in
+            txtField.placeholder = "Offer amount"
+            txtField.keyboardType = UIKeyboardType.DecimalPad
+            self.offerTF = txtField
+        })
+        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Default, handler: { (UIAlertAction)in
+            self.toolBar.hidden = false
+        }))
+        alert.addAction(UIAlertAction(title: "Propose", style: UIAlertActionStyle.Default, handler:{ (UIAlertAction)in
+            self.toolBar.hidden = false
+            println("Proposed Offer: $" + self.offerTF.text)
+        }))
+        self.presentViewController(alert, animated: false, completion: nil)
     }
 
     func btnProfile(sender:UIButton!)
@@ -311,10 +346,38 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return chat.loadedMessages.count * 2 // for sent-date cell
+        return chat.loadedMessages.count * 2 + 1 // for sent-date cell
+    }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        if (indexPath.row == chat.loadedMessages.count * 2 && !isBuyer) {
+            return 80;
+        }else {
+            return 44;
+        }
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        if (indexPath.row == chat.loadedMessages.count * 2) {
+            let cellIdentifier = NSStringFromClass(AcceptOfferCell)
+            var cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier) as! AcceptOfferCell!
+            if  cell == nil {
+                cell = AcceptOfferCell(style: UITableViewCellStyle.Default, reuseIdentifier: cellIdentifier)
+            }
+            var offer: CGFloat = 10.0
+            cell.makeOfferLabel.text = "AN OFFER OF $\(offer) HAS BEEN MADE."
+            if !isBuyer {
+                var acceptBtn: UIButton = UIButton()
+                var counterBtn: UIButton = UIButton()
+                acceptBtn.addTarget(self, action: "btnAcceptOffer:", forControlEvents: UIControlEvents.TouchUpInside)
+                cell.contentView.addSubview(acceptBtn)
+                cell.configureAcceptBtn(acceptBtn)
+                counterBtn.addTarget(self, action: "btnCounterOffer:", forControlEvents: UIControlEvents.TouchUpInside)
+                cell.contentView.addSubview(counterBtn)
+                cell.configureCounterBtn(counterBtn)
+            }
+            return cell
+        }
         if (indexPath.row % 2) == 0 {
             let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(MessageSentDateCell), forIndexPath: indexPath) as! MessageSentDateCell
             var indexFloor: Int = Int(floor(Double(indexPath.row) * 0.5))

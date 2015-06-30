@@ -15,6 +15,7 @@ class IconImage {
     let NAV_SIZE: CGFloat = 30.0
     let MENU_SIZE: CGFloat = 24.0
     let FEED_SIZE: CGFloat = 20.0
+    let CHAT_SIZE: CGFloat = 17.0
     
     
     func setup(size: CGFloat){
@@ -45,11 +46,21 @@ class IconImage {
         return factory.createImageForIcon(NIKFontAwesomeIcon.Image)
     }
     
+    func check() -> UIImage {
+        setup(NAV_SIZE)
+        return factory.createImageForIcon(NIKFontAwesomeIcon.Check)
+    }
+    
     /* SWIPE MENU ICONS */
     
     func home() -> UIImage {
         setup(MENU_SIZE)
         return factory.createImageForIcon(NIKFontAwesomeIcon.Home)
+    }
+    
+    func edit(size: CGFloat) -> UIImage {
+        setup(size)
+        return factory.createImageForIcon(NIKFontAwesomeIcon.Edit)
     }
     
     func edit() -> UIImage {
@@ -92,5 +103,15 @@ class IconImage {
     func car() -> UIImage {
         setup(FEED_SIZE)
         return factory.createImageForIcon(NIKFontAwesomeIcon.Automobile)
+    }
+    
+    /* CHAT ICONS */
+    
+    func camera() -> UIImage {
+        setup(CHAT_SIZE)
+        factory.colors = [UIColor.redColor()]
+        factory.strokeColor = UIColor.redColor()
+        factory.strokeWidth = 0.0
+        return factory.createImageForIcon(NIKFontAwesomeIcon.Camera)
     }
 }

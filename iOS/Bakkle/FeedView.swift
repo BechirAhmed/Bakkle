@@ -678,11 +678,12 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             let scaledImageWidth: CGFloat = 660.0;
             var size = CGSize(width: scaledImageWidth, height: scaledImageWidth)
             let destinationVC = segue.destinationViewController as! AddItem
+            destinationVC.itemImages?.insert(self.chosenImage!, atIndex:0)
             dispatch_async(dispatch_get_global_queue(
                 Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
                     self.chosenImage!.cropAndResize(size, completionHandler: { (resizedImage:UIImage, data:NSData) -> () in
                         let compressedImage = UIImageJPEGRepresentation(resizedImage, AddItem.JPEG_COMPRESSION_CONSTANT)
-                        destinationVC.itemImages?.insert(UIImage(data:compressedImage)!, atIndex: 0)
+                        destinationVC.itemImages?[0] = UIImage(data:compressedImage)!
                         destinationVC.scaledImages?.insert(compressedImage, atIndex: 0)
                     })
             }
