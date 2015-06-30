@@ -1,13 +1,14 @@
 package com.bakkle.bakkle;
 
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -26,15 +27,12 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FeedFragment extends Fragment implements View.OnTouchListener {
-
-    private ViewGroup mRrootLayout;
-    private int _xDelta;
-    private int _yDelta;
+public class FeedFragment extends Fragment {
 
     ServerCalls serverCalls;
 
     FeedItem feedItem = null;
+    CardContainer mCardContainer;
 
     String status, description, price, postDate, title, buyerRating, sellerDisplayName, sellerLocation, sellerFacebookId, sellerPk, sellerRating, location, pk, method;
 
@@ -47,15 +45,14 @@ public class FeedFragment extends Fragment implements View.OnTouchListener {
     SharedPreferences preferences;
 
 
-    public FeedFragment() {
-        // Required empty public constructor
-    }
+    public FeedFragment() {}
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
+
 
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
         editor = preferences.edit();
@@ -63,70 +60,29 @@ public class FeedFragment extends Fragment implements View.OnTouchListener {
         serverCalls = new ServerCalls(getActivity().getApplicationContext());
         editor.putBoolean("stillWorking", true);
         editor.apply();
-        jsonResult = serverCalls.getFeedItems(
-                preferences.getString("auth_token", "0"),
-                "99999999",
-                "100",
-                "",
-                "32,32",
-                "",
-                preferences.getString("uuid", "0")
-        );
 
-        CardContainer mCardContainer = (CardContainer) view.findViewById(R.id.cardView);
+        try{
+            new bgTask().execute();
+        }
+        catch (Exception e){Log.d("testing", e.getMessage());}
+
+
+        mCardContainer = (CardContainer) view.findViewById(R.id.cardView);
         mCardContainer.setOrientation(Orientations.Orientation.Ordered);
-
-        if(jsonResult != null)
-            populateFeed(jsonResult, mCardContainer);
-        else
-            Log.d("umm", "what");
 
         return view;
     }
 
-
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        /*final int X = (int) event.getRawX();
-        final int Y = (int) event.getRawY();
-        switch (event.getAction() & MotionEvent.ACTION_MASK) {
-            case MotionEvent.ACTION_DOWN:
-                RelativeLayout.LayoutParams lParams = (RelativeLayout.LayoutParams) v.getLayoutParams();
-                _xDelta = X - lParams.leftMargin;
-                _yDelta = Y - lParams.topMargin;
-                break;
-            case MotionEvent.ACTION_UP:
-                break;
-            case MotionEvent.ACTION_POINTER_DOWN:
-                break;
-            case MotionEvent.ACTION_POINTER_UP:
-                break;
-            case MotionEvent.ACTION_MOVE:
-                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) v
-                        .getLayoutParams();
-                layoutParams.leftMargin = X - _xDelta;
-                layoutParams.topMargin = Y - _yDelta;
-//                layoutParams.rightMargin = -250;
-//                layoutParams.bottomMargin = -250;
-                v.setLayoutParams(layoutParams);
-                break;
-        }
-        mRrootLayout.invalidate();*/
-        return true;
-    }
-
-    public void populateFeed(JsonObject json, final CardContainer mCardContainer)
+    public void populateFeed(JsonObject json, CardContainer mCardContainer)
     {
-
         JsonArray jsonArray = json.getAsJsonArray("feed");
         SimpleCardStackAdapter adapter = new SimpleCardStackAdapter(getActivity());
         JsonObject temp;
-        ArrayList<FeedItem> feedItems = new ArrayList<FeedItem>();
-        final CardModel card;
+        ArrayList<FeedItem> feedItems = new ArrayList<>();
+        CardModel card;
         ArrayList<String> tags, imageUrls;
         JsonObject seller;
         JsonArray imageUrlArray;
-
 
 
         for(JsonElement element : jsonArray)
@@ -146,7 +102,7 @@ public class FeedFragment extends Fragment implements View.OnTouchListener {
 
 
             imageUrlArray = temp.get("image_urls").getAsJsonArray();
-            imageUrls = new ArrayList<String>();
+            imageUrls = new ArrayList<>();
             for(JsonElement urlElement : imageUrlArray)
             {
                 imageUrls.add(urlElement.getAsString());
@@ -160,32 +116,42 @@ public class FeedFragment extends Fragment implements View.OnTouchListener {
                 @Override
                 public void onLike() {
                     Toast.makeText(getActivity(), "Like", Toast.LENGTH_SHORT).show();
-//                    serverCalls.markItem("want",
-//                            preferences.getString("auth_token", "0"),
-//                            preferences.getString("uuid", "0"),
-//                            pk,
-//                            "42");
+                    serverCalls.markItem("want",
+                            preferences.getString("auth_token", "0"),
+                            preferences.getString("uuid", "0"),
+                            pk,
+                            "42");
                 }
                 @Override
                 public void onDislike() {
                     Toast.makeText(getActivity(), "Dislike", Toast.LENGTH_SHORT).show();
 
-//                    serverCalls.markItem("meh",
-//                            preferences.getString("auth_token", "0"),
-//                            preferences.getString("uuid", "0"),
-//                            pk,
-//                            "42");
+                    serverCalls.markItem("meh",
+                            preferences.getString("auth_token", "0"),
+                            preferences.getString("uuid", "0"),
+                            pk,
+                            "42");
                 }
 
                 @Override
                 public void onUp(){
                     Toast.makeText(getActivity(), "Up", Toast.LENGTH_SHORT).show();
+                    serverCalls.markItem("hold",
+                            preferences.getString("auth_token", "0"),
+                            preferences.getString("uuid", "0"),
+                            pk,
+                            "42");
 
                 }
 
                 @Override
                 public void onDown(){
                     Toast.makeText(getActivity(), "Down", Toast.LENGTH_SHORT).show();
+                    serverCalls.markItem("report",
+                            preferences.getString("auth_token", "0"),
+                            preferences.getString("uuid", "0"),
+                            pk,
+                            "42");
 
                 }
             });
@@ -200,9 +166,9 @@ public class FeedFragment extends Fragment implements View.OnTouchListener {
 
             adapter.add(card);
             feedItem = null;
-            temp = null;
-            imageUrlArray = null;
-            imageUrls = null;
+//            temp = null;
+//            imageUrlArray = null;
+//            imageUrls = null;
             //card = null;
         }
         mCardContainer.setAdapter(adapter);
@@ -266,5 +232,42 @@ public class FeedFragment extends Fragment implements View.OnTouchListener {
         }
         //return bitmap[0];
         return bitmap;
+    }
+
+    private class bgTask extends AsyncTask<Void, Void, JsonObject>
+    {
+        ProgressDialog dialog = new ProgressDialog(getActivity()); //TODO: Change from progress dialog to spinner
+
+        @Override
+        protected void onPreExecute(){
+            this.dialog.setMessage("Please wait");
+            this.dialog.show();
+        }
+        @Override
+        protected JsonObject doInBackground(Void... voids) {
+
+            return serverCalls.getFeedItems(
+                    preferences.getString("auth_token", "0"),
+                    "99999999",
+                    "100",
+                    "",
+                    "32,32",
+                    "",
+                    preferences.getString("uuid", "0")
+            );
+        }
+
+        @Override
+        protected void onPostExecute(JsonObject jsonObject) {
+            jsonResult = jsonObject;
+            if (dialog.isShowing()) {
+                dialog.dismiss();
+            }
+
+            if(jsonResult != null)
+                populateFeed(jsonResult, mCardContainer);
+            else
+                Log.d("umm", "what");
+        }
     }
 }

@@ -1,51 +1,8 @@
-<!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" tools:context="com.bakkle.bakkle.FeedFragment">
-
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/green"
-        android:id="@+id/linearLayout">
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/round_corner"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp">
-
-            <SearchView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/itemSearch"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true" />
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/card"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/linearLayout"
-        android:background="@drawable/login_screen" />
-
-</RelativeLayout>
--->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:id="@+id/feed"
-    >
+    android:id="@+id/feed" >
 
     <com.andtinder.view.CardContainer
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -53,31 +10,10 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
 
-    <!--<FrameLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_gravity="center"
-        android:padding="0dp">
-
-        <com.bakkle.bakkle.StackImageView
-            android:id="@+id/card"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:src="@drawable/bakkle_icon" />
-
-        <com.bakkle.bakkle.StackImageView
-            android:id="@+id/card2"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:src="@drawable/bakkle_icon" />
-
-        <com.bakkle.bakkle.StackImageView
-            android:id="@+id/card3"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:src="@drawable/bakkle_icon"
-            android:layout_gravity="center" />
-
-
-    </FrameLayout> -->
-</LinearLayout>
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progress_bar"
+        android:visibility="invisible"
+        android:layout_gravity="center"/>
+</FrameLayout>

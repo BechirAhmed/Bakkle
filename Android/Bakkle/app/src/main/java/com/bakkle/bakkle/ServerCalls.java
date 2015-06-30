@@ -298,7 +298,18 @@ public class ServerCalls{
 
     }
 
-    public void resetDemo(){
+    public void resetDemo(String authToken, String uuid){
+        try {
+            jsonResponse = Ion.with(mContext)
+                    .load(url_base + url_reset)
+                    .setBodyParameter("auth_token", authToken)
+                    .setBodyParameter("device_uuid", uuid)
+                    .asJsonObject()
+                    .get();
+        }
+        catch (Exception e) {
+            Log.d("testing error 00", e.getMessage());
+        }
 
     }
 

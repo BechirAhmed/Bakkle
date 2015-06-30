@@ -332,6 +332,9 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
                     break;
                 case 6:
                     //startActivity(new Intent(getApplicationContext(), DemoOptions.class));
+                    getFragmentManager().beginTransaction().replace(R.id.content_frame,
+                            new DemoOptions()).addToBackStack(null)
+                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
                     break;
                 case 7:
                     //startActivity(new Intent(getApplicationContext(), Logout.class));
@@ -361,6 +364,9 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         }
+    }
+    public void reset(View view){
+        serverCalls.resetDemo(preferences.getString("auth_token", "0"), preferences.getString("uuid", "0"));
     }
 
 }
