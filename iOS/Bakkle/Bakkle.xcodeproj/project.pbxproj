@@ -71,6 +71,9 @@
 		728647EB1B2F0E3F009A24C9 /* ChatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53BE1B0815CB000C406C /* ChatsViewController.swift */; };
 		728647EC1B2F0E46009A24C9 /* ChatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53BE1B0815CB000C406C /* ChatsViewController.swift */; };
 		728647EE1B309F6F009A24C9 /* NSDate+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 728647ED1B309F6F009A24C9 /* NSDate+String.swift */; };
+		72B5D8051B41E12D00E4B6EA /* BuyItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72B5D8041B41E12D00E4B6EA /* BuyItemView.swift */; };
+		72B5D8071B41E52300E4B6EA /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72B5D8061B41E52300E4B6EA /* ChatViewController.swift */; };
+		72B5D8091B42DF7300E4B6EA /* RateUserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72B5D8081B42DF7300E4B6EA /* RateUserView.swift */; };
 		A003EB141AD4CCA600EE51A1 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A003EB131AD4CCA600EE51A1 /* SWRevealViewController.m */; };
 		A003EB1A1AD4DB8800EE51A1 /* item-lawnmower.png in Resources */ = {isa = PBXBuildFile; fileRef = A003EB191AD4DB8800EE51A1 /* item-lawnmower.png */; };
 		A014B46C1B09215800E01FEF /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A014B46B1B09215800E01FEF /* ProfileView.swift */; };
@@ -108,7 +111,6 @@
 		A08D53C91B0815CB000C406C /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53BB1B0815CB000C406C /* Account.swift */; };
 		A08D53CA1B0815CB000C406C /* Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53BC1B0815CB000C406C /* Chat.swift */; };
 		A08D53CB1B0815CB000C406C /* ChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53BD1B0815CB000C406C /* ChatCell.swift */; };
-		A08D53CD1B0815CB000C406C /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53BF1B0815CB000C406C /* ChatViewController.swift */; };
 		A08D53CE1B0815CB000C406C /* ComposeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53C01B0815CB000C406C /* ComposeViewController.swift */; };
 		A08D53CF1B0815CB000C406C /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53C11B0815CB000C406C /* Message.swift */; };
 		A08D53D01B0815CB000C406C /* MessageBubbleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53C21B0815CB000C406C /* MessageBubbleCell.swift */; };
@@ -149,7 +151,6 @@
 		A0E1EB4B1B2B5B2200662C08 /* MDCPanState.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C9A81AB9F0FA0031D8CD /* MDCPanState.m */; };
 		A0E1EB4C1B2B5B2200662C08 /* UIImage+Resize.swift in Sources */ = {isa = PBXBuildFile; fileRef = A058A2AA1AFD8EAD005E7432 /* UIImage+Resize.swift */; };
 		A0E1EB4D1B2B5B2200662C08 /* ChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53BD1B0815CB000C406C /* ChatCell.swift */; };
-		A0E1EB4E1B2B5B2200662C08 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53BF1B0815CB000C406C /* ChatViewController.swift */; };
 		A0E1EB4F1B2B5B2200662C08 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EBDD6921AB211E600C7FBE7 /* LoginView.swift */; };
 		A0E1EB501B2B5B2200662C08 /* FeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C98A1AB9D1730031D8CD /* FeedView.swift */; };
 		A0E1EB511B2B5B2200662C08 /* MenuTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D96F7F1AD767BD0046DA13 /* MenuTableView.swift */; };
@@ -419,6 +420,9 @@
 		723D532D1B2718590067A80A /* OffsetTextAttachment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OffsetTextAttachment.swift; sourceTree = "<group>"; };
 		726A38E21B39BE1E00CF5553 /* logo-white-design-clear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-white-design-clear.png"; sourceTree = "<group>"; };
 		728647ED1B309F6F009A24C9 /* NSDate+String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSDate+String.swift"; sourceTree = "<group>"; };
+		72B5D8041B41E12D00E4B6EA /* BuyItemView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuyItemView.swift; sourceTree = "<group>"; };
+		72B5D8061B41E52300E4B6EA /* ChatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
+		72B5D8081B42DF7300E4B6EA /* RateUserView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RateUserView.swift; sourceTree = "<group>"; };
 		A003EB121AD4CCA600EE51A1 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
 		A003EB131AD4CCA600EE51A1 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
 		A003EB191AD4DB8800EE51A1 /* item-lawnmower.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "item-lawnmower.png"; sourceTree = "<group>"; };
@@ -458,7 +462,6 @@
 		A08D53BC1B0815CB000C406C /* Chat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Chat.swift; sourceTree = "<group>"; };
 		A08D53BD1B0815CB000C406C /* ChatCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatCell.swift; sourceTree = "<group>"; };
 		A08D53BE1B0815CB000C406C /* ChatsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatsViewController.swift; sourceTree = "<group>"; };
-		A08D53BF1B0815CB000C406C /* ChatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		A08D53C01B0815CB000C406C /* ComposeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComposeViewController.swift; sourceTree = "<group>"; };
 		A08D53C11B0815CB000C406C /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		A08D53C21B0815CB000C406C /* MessageBubbleCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageBubbleCell.swift; sourceTree = "<group>"; };
@@ -781,6 +784,8 @@
 				5E8055411AE541460035521C /* ItemDetails.swift */,
 				A058A2A01AFC28BE005E7432 /* DemoView.swift */,
 				A014B46B1B09215800E01FEF /* ProfileView.swift */,
+				72B5D8041B41E12D00E4B6EA /* BuyItemView.swift */,
+				72B5D8081B42DF7300E4B6EA /* RateUserView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -830,9 +835,9 @@
 			children = (
 				A08D53BB1B0815CB000C406C /* Account.swift */,
 				A08D53BC1B0815CB000C406C /* Chat.swift */,
-				A08D53BD1B0815CB000C406C /* ChatCell.swift */,
 				A08D53BE1B0815CB000C406C /* ChatsViewController.swift */,
-				A08D53BF1B0815CB000C406C /* ChatViewController.swift */,
+				A08D53BD1B0815CB000C406C /* ChatCell.swift */,
+				72B5D8061B41E52300E4B6EA /* ChatViewController.swift */,
 				A08D53C01B0815CB000C406C /* ComposeViewController.swift */,
 				A08D53C11B0815CB000C406C /* Message.swift */,
 				A08D53C21B0815CB000C406C /* MessageBubbleCell.swift */,
@@ -1434,7 +1439,6 @@
 				5EE2C9B71AB9F0FB0031D8CD /* MDCPanState.m in Sources */,
 				A058A2AB1AFD8EAD005E7432 /* UIImage+Resize.swift in Sources */,
 				A08D53CB1B0815CB000C406C /* ChatCell.swift in Sources */,
-				A08D53CD1B0815CB000C406C /* ChatViewController.swift in Sources */,
 				602C38F81B3C9105005CB493 /* PNColor.m in Sources */,
 				5EBDD6931AB211E600C7FBE7 /* LoginView.swift in Sources */,
 				5EE2C98B1AB9D1730031D8CD /* FeedView.swift in Sources */,
@@ -1480,13 +1484,16 @@
 				F0E7C50B1B2F2B4B006B013A /* WSRequest.swift in Sources */,
 				602C390B1B3C9933005CB493 /* PNChartLabel.swift in Sources */,
 				5E1DCCA51AD486D2002D41FD /* AddItem.swift in Sources */,
+				72B5D8071B41E52300E4B6EA /* ChatViewController.swift in Sources */,
 				A08D53CE1B0815CB000C406C /* ComposeViewController.swift in Sources */,
 				6034E6951B41B93900DEA291 /* AcceptOfferCell.swift in Sources */,
+				72B5D8091B42DF7300E4B6EA /* RateUserView.swift in Sources */,
 				A08D53CF1B0815CB000C406C /* Message.swift in Sources */,
 				5EBDD6911AB211E600C7FBE7 /* AppDelegate.swift in Sources */,
 				602C39151B3C9B12005CB493 /* PNChartConfig.swift in Sources */,
 				A08D53D01B0815CB000C406C /* MessageBubbleCell.swift in Sources */,
 				A058A2A11AFC28BE005E7432 /* DemoView.swift in Sources */,
+				72B5D8051B41E12D00E4B6EA /* BuyItemView.swift in Sources */,
 				5E1FEE7C1AD8641900C08131 /* MDCSwipeToChooseView.m in Sources */,
 				602C38F61B3C9105005CB493 /* PNChartLabel.m in Sources */,
 				5EE2C9B21AB9F0FB0031D8CD /* UIView+MDCSwipeToChoose.m in Sources */,
@@ -1513,7 +1520,6 @@
 				A0E1EB4B1B2B5B2200662C08 /* MDCPanState.m in Sources */,
 				A0E1EB4C1B2B5B2200662C08 /* UIImage+Resize.swift in Sources */,
 				A0E1EB4D1B2B5B2200662C08 /* ChatCell.swift in Sources */,
-				A0E1EB4E1B2B5B2200662C08 /* ChatViewController.swift in Sources */,
 				A0E1EB4F1B2B5B2200662C08 /* LoginView.swift in Sources */,
 				A0E1EB501B2B5B2200662C08 /* FeedView.swift in Sources */,
 				A0E1EB511B2B5B2200662C08 /* MenuTableView.swift in Sources */,

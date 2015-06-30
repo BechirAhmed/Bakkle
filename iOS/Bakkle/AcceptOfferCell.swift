@@ -39,6 +39,7 @@ class AcceptOfferCell: UITableViewCell {
         contentView.addConstraint(NSLayoutConstraint(item: acceptBtn, attribute: .Right, relatedBy: .Equal, toItem: contentView, attribute: .Right, multiplier: 1, constant: -20))
         contentView.addConstraint(NSLayoutConstraint(item: acceptBtn, attribute: .Left, relatedBy: .Equal, toItem: contentView, attribute: .CenterX, multiplier: 1, constant: 10))
         contentView.addConstraint(NSLayoutConstraint(item: makeOfferLabel, attribute: .Bottom, relatedBy: .Equal, toItem: acceptBtn, attribute: .Top, multiplier: 1, constant: -5))
+        contentView.addConstraint(NSLayoutConstraint(item: contentView, attribute: .Bottom, relatedBy: .Equal, toItem: acceptBtn, attribute: .Bottom, multiplier: 1, constant: 0))
     }
     
     func configureCounterBtn(counterBtn: UIButton){
@@ -51,10 +52,16 @@ class AcceptOfferCell: UITableViewCell {
         contentView.addConstraint(NSLayoutConstraint(item: counterBtn, attribute: .Left, relatedBy: .Equal, toItem: contentView, attribute: .Left, multiplier: 1, constant: 20))
         contentView.addConstraint(NSLayoutConstraint(item: counterBtn, attribute: .Right, relatedBy: .Equal, toItem: contentView, attribute: .CenterX, multiplier: 1, constant: -10))
         contentView.addConstraint(NSLayoutConstraint(item: makeOfferLabel, attribute: .Bottom, relatedBy: .Equal, toItem: counterBtn, attribute: .Top, multiplier: 1, constant: -5))
-        
+        contentView.addConstraint(NSLayoutConstraint(item: contentView, attribute: .Bottom, relatedBy: .Equal, toItem: counterBtn, attribute: .Bottom, multiplier: 1, constant: 0))
     }
     
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    func acceptBtn(sender:UIButton!)
+    {
+        println("Button tapped")
+    }
+    
 }
