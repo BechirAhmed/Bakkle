@@ -64,7 +64,7 @@ static BOOL debug = true;
 }
 
 +(void) enqueueWorkPayload:(WSRequest*) payload {
-    if(!_wsManagerInstance.socketOpen){
+    if(!_wsManagerInstance.socketOpen || ![_wsManagerInstance isOpen]){
         [self connectWS];
     }
     
@@ -77,6 +77,9 @@ static BOOL debug = true;
 
 #pragma mark - WSManagerInstance private helper methods
 
+- (bool) isOpen{
+    return webSocket.readyState == SR_OPEN;
+}
 
 - (void) send: (NSString*) message{
     if(debug){NSLog(@"[SendMessage] %@%@\n\n", @"Sending message: ", message);}
@@ -203,6 +206,7 @@ static BOOL debug = true;
 - (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error {
     //    [self connectWebSocket];
     if(debug){NSLog(@"[SocketFailureHandler] %@%@\n\n", @"Websocket error: ",error);}
+    self.socketOpen = false;
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean {
