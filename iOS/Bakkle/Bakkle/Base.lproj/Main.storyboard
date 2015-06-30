@@ -581,10 +581,10 @@
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="rHb-57-fRi" secondAttribute="height" multiplier="595:207" id="1OE-QL-l4u"/>
                                             <constraint firstAttribute="height" constant="25" id="1jh-RU-Pc4">
-                                                <variation key="heightClass=regular-widthClass=compact" constant="44"/>
+                                                <variation key="heightClass=regular-widthClass=compact" constant="25"/>
                                             </constraint>
                                             <constraint firstAttribute="width" constant="55" id="3Ki-pX-cm0">
-                                                <variation key="heightClass=regular-widthClass=compact" constant="44"/>
+                                                <variation key="heightClass=regular-widthClass=compact" constant="25"/>
                                             </constraint>
                                             <constraint firstAttribute="width" secondItem="rHb-57-fRi" secondAttribute="height" multiplier="31:11" id="66m-mi-sC7"/>
                                             <constraint firstAttribute="width" constant="50" id="N8I-hN-h8y">
@@ -1312,7 +1312,7 @@
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="0sn-gT-lxF" secondAttribute="height" multiplier="1:1" id="urj-yR-vUy"/>
                                             <constraint firstAttribute="width" constant="25" id="wyK-2B-Wnh">
-                                                <variation key="heightClass=regular-widthClass=compact" constant="44"/>
+                                                <variation key="heightClass=regular-widthClass=compact" constant="25"/>
                                             </constraint>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
@@ -1814,16 +1814,11 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UfO-2D-e7b">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="CONFIRM" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LFT-vm-nbB">
-                                                <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
-                                                <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="21"/>
-                                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="y69-Ed-aMP" userLabel="Confirm Button">
                                                 <rect key="frame" x="-23" y="-15" width="46" height="30"/>
-                                                <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="15"/>
-                                                <state key="normal">
+                                                <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="21"/>
+                                                <state key="normal" title="CONFIRM">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
                                                 <connections>
@@ -1836,20 +1831,15 @@
                                             <constraint firstItem="y69-Ed-aMP" firstAttribute="leading" secondItem="UfO-2D-e7b" secondAttribute="leading" id="Jnx-PR-jLL"/>
                                             <constraint firstAttribute="trailing" secondItem="y69-Ed-aMP" secondAttribute="trailing" id="OQ3-fd-E7t"/>
                                             <constraint firstItem="y69-Ed-aMP" firstAttribute="top" secondItem="UfO-2D-e7b" secondAttribute="top" id="ZLh-Jw-Nkh"/>
-                                            <constraint firstAttribute="centerY" secondItem="LFT-vm-nbB" secondAttribute="centerY" id="coa-PC-ucl"/>
                                             <constraint firstAttribute="height" constant="66" id="gHb-5u-vYR"/>
-                                            <constraint firstAttribute="centerX" secondItem="LFT-vm-nbB" secondAttribute="centerX" id="h1u-XT-Qy5"/>
                                             <constraint firstAttribute="bottom" secondItem="y69-Ed-aMP" secondAttribute="bottom" id="j3Y-WE-Cd2"/>
                                         </constraints>
                                         <variation key="default">
                                             <mask key="subviews">
-                                                <exclude reference="LFT-vm-nbB"/>
                                                 <exclude reference="y69-Ed-aMP"/>
                                             </mask>
                                             <mask key="constraints">
                                                 <exclude reference="gHb-5u-vYR"/>
-                                                <exclude reference="coa-PC-ucl"/>
-                                                <exclude reference="h1u-XT-Qy5"/>
                                                 <exclude reference="Jnx-PR-jLL"/>
                                                 <exclude reference="OQ3-fd-E7t"/>
                                                 <exclude reference="ZLh-Jw-Nkh"/>
@@ -1858,13 +1848,10 @@
                                         </variation>
                                         <variation key="heightClass=regular-widthClass=compact">
                                             <mask key="subviews">
-                                                <include reference="LFT-vm-nbB"/>
                                                 <include reference="y69-Ed-aMP"/>
                                             </mask>
                                             <mask key="constraints">
                                                 <include reference="gHb-5u-vYR"/>
-                                                <include reference="coa-PC-ucl"/>
-                                                <include reference="h1u-XT-Qy5"/>
                                                 <include reference="Jnx-PR-jLL"/>
                                                 <include reference="OQ3-fd-E7t"/>
                                                 <include reference="ZLh-Jw-Nkh"/>
@@ -2018,7 +2005,6 @@
                         <outlet property="closeBtn" destination="0sn-gT-lxF" id="wxK-JJ-AI5"/>
                         <outlet property="collectionView" destination="Gi9-cM-2n7" id="l0l-4c-j63"/>
                         <outlet property="confirmButton" destination="y69-Ed-aMP" id="kvq-5M-9ea"/>
-                        <outlet property="confirmButtonText" destination="LFT-vm-nbB" id="RpX-In-SVX"/>
                         <outlet property="confirmButtonView" destination="UfO-2D-e7b" id="6wy-nt-KPh"/>
                         <outlet property="loadingView" destination="1du-xW-Lzx" id="dDP-k9-vCo"/>
                         <outlet property="methodControl" destination="2pJ-HO-Uo9" id="KgA-aA-926"/>
@@ -2026,6 +2012,7 @@
                         <outlet property="shareToFacebookBtn" destination="2NS-yE-zno" id="9rN-hp-eYz"/>
                         <outlet property="tagsField" destination="GwR-v4-UkB" id="wt1-so-5Av"/>
                         <outlet property="titleField" destination="TXe-oK-ydu" id="bkE-oT-xiC"/>
+                        <outlet property="titleLabel" destination="Tku-z4-i0a" id="SEg-QD-xZw"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="X9C-TW-brL" userLabel="First Responder" sceneMemberID="firstResponder"/>
