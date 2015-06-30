@@ -25,72 +25,72 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     var isBuyer: Bool = false
     var refreshControl: UIRefreshControl = UIRefreshControl()
     var offerTF: UITextField!
-
+    
     override var inputAccessoryView: UIView! {
-    get {
-        if toolBar == nil {
-            toolBar = UIToolbar(frame: CGRectMake(0, 0, 0, toolBarMinHeight-0.5))
-            
-            textView = InputTextView(frame: CGRectZero)
-            textView.backgroundColor = UIColor.whiteColor()
-            textView.delegate = self
-            textView.font = UIFont(name: messageFont, size: messageFontSize)
-            textView.layer.borderColor = UIColor(red: 200/255, green: 200/255, blue: 205/255, alpha:1).CGColor
-            textView.layer.borderWidth = 0.5
-            textView.layer.cornerRadius = 5
-            // maybe placeholder text?
-            textView.scrollsToTop = false
-            textView.textContainerInset = UIEdgeInsetsMake(4, 3, 3, 3)
-            toolBar.addSubview(textView)
-
-            sendButton = UIButton.buttonWithType(.System) as! UIButton
-            sendButton.enabled = false
-            sendButton.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 17)
-            sendButton.setTitle("Send", forState: .Normal)
-            sendButton.setTitleColor(UIColor(red: 142/255, green: 142/255, blue: 147/255, alpha: 1), forState: .Disabled)
-            sendButton.setTitleColor(UIColor(red: 1/255, green: 122/255, blue: 255/255, alpha: 1), forState: .Normal)
-            sendButton.contentEdgeInsets = UIEdgeInsets(top: 6, left: 6, bottom: 6, right: 6)
-            sendButton.addTarget(self, action: "sendAction", forControlEvents: UIControlEvents.TouchUpInside)
-            toolBar.addSubview(sendButton)
-
-            // Auto Layout allows `sendButton` to change width, e.g., for localization.
-            textView.setTranslatesAutoresizingMaskIntoConstraints(false)
-            sendButton.setTranslatesAutoresizingMaskIntoConstraints(false)
-            toolBar.addConstraint(NSLayoutConstraint(item: textView, attribute: .Left, relatedBy: .Equal, toItem: toolBar, attribute: .Left, multiplier: 1, constant: 8))
-            toolBar.addConstraint(NSLayoutConstraint(item: textView, attribute: .Top, relatedBy: .Equal, toItem: toolBar, attribute: .Top, multiplier: 1, constant: 7.5))
-            toolBar.addConstraint(NSLayoutConstraint(item: textView, attribute: .Right, relatedBy: .Equal, toItem: sendButton, attribute: .Left, multiplier: 1, constant: -2))
-            toolBar.addConstraint(NSLayoutConstraint(item: textView, attribute: .Bottom, relatedBy: .Equal, toItem: toolBar, attribute: .Bottom, multiplier: 1, constant: -8))
-            toolBar.addConstraint(NSLayoutConstraint(item: sendButton, attribute: .Right, relatedBy: .Equal, toItem: toolBar, attribute: .Right, multiplier: 1, constant: 0))
-            toolBar.addConstraint(NSLayoutConstraint(item: sendButton, attribute: .Bottom, relatedBy: .Equal, toItem: toolBar, attribute: .Bottom, multiplier: 1, constant: -4.5))
+        get {
+            if toolBar == nil {
+                toolBar = UIToolbar(frame: CGRectMake(0, 0, 0, toolBarMinHeight-0.5))
+                
+                textView = InputTextView(frame: CGRectZero)
+                textView.backgroundColor = UIColor.whiteColor()
+                textView.delegate = self
+                textView.font = UIFont(name: messageFont, size: messageFontSize)
+                textView.layer.borderColor = UIColor(red: 200/255, green: 200/255, blue: 205/255, alpha:1).CGColor
+                textView.layer.borderWidth = 0.5
+                textView.layer.cornerRadius = 5
+                // maybe placeholder text?
+                textView.scrollsToTop = false
+                textView.textContainerInset = UIEdgeInsetsMake(4, 3, 3, 3)
+                toolBar.addSubview(textView)
+                
+                sendButton = UIButton.buttonWithType(.System) as! UIButton
+                sendButton.enabled = false
+                sendButton.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 17)
+                sendButton.setTitle("Send", forState: .Normal)
+                sendButton.setTitleColor(UIColor(red: 142/255, green: 142/255, blue: 147/255, alpha: 1), forState: .Disabled)
+                sendButton.setTitleColor(UIColor(red: 1/255, green: 122/255, blue: 255/255, alpha: 1), forState: .Normal)
+                sendButton.contentEdgeInsets = UIEdgeInsets(top: 6, left: 6, bottom: 6, right: 6)
+                sendButton.addTarget(self, action: "sendAction", forControlEvents: UIControlEvents.TouchUpInside)
+                toolBar.addSubview(sendButton)
+                
+                // Auto Layout allows `sendButton` to change width, e.g., for localization.
+                textView.setTranslatesAutoresizingMaskIntoConstraints(false)
+                sendButton.setTranslatesAutoresizingMaskIntoConstraints(false)
+                toolBar.addConstraint(NSLayoutConstraint(item: textView, attribute: .Left, relatedBy: .Equal, toItem: toolBar, attribute: .Left, multiplier: 1, constant: 8))
+                toolBar.addConstraint(NSLayoutConstraint(item: textView, attribute: .Top, relatedBy: .Equal, toItem: toolBar, attribute: .Top, multiplier: 1, constant: 7.5))
+                toolBar.addConstraint(NSLayoutConstraint(item: textView, attribute: .Right, relatedBy: .Equal, toItem: sendButton, attribute: .Left, multiplier: 1, constant: -2))
+                toolBar.addConstraint(NSLayoutConstraint(item: textView, attribute: .Bottom, relatedBy: .Equal, toItem: toolBar, attribute: .Bottom, multiplier: 1, constant: -8))
+                toolBar.addConstraint(NSLayoutConstraint(item: sendButton, attribute: .Right, relatedBy: .Equal, toItem: toolBar, attribute: .Right, multiplier: 1, constant: 0))
+                toolBar.addConstraint(NSLayoutConstraint(item: sendButton, attribute: .Bottom, relatedBy: .Equal, toItem: toolBar, attribute: .Bottom, multiplier: 1, constant: -4.5))
+            }
+            return toolBar
         }
-        return toolBar
     }
-    }
-
+    
     init(chat: Chat) {
         self.chat = chat
         super.init(nibName: nil, bundle: nil)
         title = chat.user.name
     }
-
+    
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     override func canBecomeFirstResponder() -> Bool {
         return true
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         view.backgroundColor = UIColor.whiteColor() // smooths push animation
-
+        
         let topHeight: CGFloat = 20
         let headerHeight: CGFloat = 44
         header = UIView(frame: CGRectMake(view.bounds.origin.x, view.bounds.origin.y, view.bounds.size.width, headerHeight+topHeight))
         header.backgroundColor = Theme.ColorGreen
-
+        
         
         let buttonWidth: CGFloat = 96.0
         var backButton = UIButton(frame: CGRectMake(header.bounds.origin.x, header.bounds.origin.y+20, buttonWidth, headerHeight))
@@ -141,7 +141,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         tableView.registerClass(MessageSentDateCell.self, forCellReuseIdentifier: NSStringFromClass(MessageSentDateCell))
         view.backgroundColor = UIColor.whiteColor()
         view.addSubview(tableView)
-
+        
         let notificationCenter = NSNotificationCenter.defaultCenter()
         notificationCenter.addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
         notificationCenter.addObserver(self, selector: "keyboardDidShow:", name: UIKeyboardDidShowNotification, object: nil)
@@ -154,11 +154,11 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "dismissKeyboard"))
     }
-
+    
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
-
+    
     override func viewWillAppear(animated: Bool) {
     }
     
@@ -186,16 +186,16 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         
     }
-
+    
     override func viewWillDisappear(animated: Bool)  {
         super.viewWillDisappear(animated)
         chat.draft = textView.text
     }
-
+    
     // This gets called a lot. Perhaps there's a better way to know when `view.window` has been set?
     override func viewDidLayoutSubviews()  {
         super.viewDidLayoutSubviews()
-
+        
         if !chat.draft.isEmpty {
             textView.text = chat.draft
             chat.draft = ""
@@ -219,7 +219,10 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             var messages: [NSDictionary] = success.valueForKey("messages") as! [NSDictionary]
             var loadedMessage: Message!
             for message in messages {
+                
+                // if message is null, we have an offer
                 let messageText = message.valueForKey("message") as! String
+                //let offerPrice = message.valueForKey("offer") as! String
                 let dateString = message.valueForKey("date_sent") as! String
                 let date = NSDate().dateFromString(dateString, format:  "yyyy-MM-dd HH:mm:ss")
                 let incoming = message.valueForKey("sent_by_buyer") as! Bool
@@ -262,9 +265,54 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 self.tableView.reloadData()
                 self.tableViewScrollToBottomAnimated(true)
             })
-        }, forNotification: "newMessage")
+            }, forNotification: "newMessage")
+        
+        // Register for offers sent via websocket
+        //        WSManager.registerMessageHandler({ (data : [NSObject : AnyObject]!) -> Void in
+        //            var dict: NSDictionary = data as NSDictionary
+        //
+        //            var offer: NSDictionary = NSDictionary()
+        //            var messageOrigin: String = ""
+        //
+        //            if(dict.objectForKey("offer") != nil){
+        //                offer = dict.objectForKey("offer") as! NSDictionary
+        //
+        //                let offerPrice = offer.valueForKey("proposed_price") as! String
+        //                let offerMethod = offer.valueForKey("proposed_method") as! String
+        //                let dateString = offer.valueForKey("date_sent") as! String
+        //                let date = NSDate().dateFromString(dateString, format:  "yyyy-MM-dd HH:mm:ss")
+        //                let incoming = (offer.valueForKey("sent_by_buyer") as! Bool) == !self.isBuyer
+        //                let loadedOffer = Message(incoming: incoming, text: "",  sentDate: date)
+        //                let incomingChatId = (offer.valueForKey("chat") as! NSNumber).integerValue
+        //                if(incomingChatId == self.chat.chatId){
+        //                    self.chat.loadedMessages.append(loadedOffer)
+        //                }
+        //
+        //                print("[NewOfferHandler] NewOfferHandler received new offer '\(offerPrice)' from userId \(messageOrigin)");
+        //            }
+        //            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+        //                self.tableView.reloadData()
+        //                self.tableViewScrollToBottomAnimated(true)
+        //            })
+        //            }, forNotification: "newOffer")
     }
+    
 
+    func btnAcceptOffer(sender: UIButton!) {
+        self.toolBar.hidden = true
+        acceptButton()
+        println("accept offer")
+    }
+    
+    func btnCounterOffer(sender: UIButton!) {
+        self.toolBar.hidden = true
+        let alert: UIAlertController = UIAlertController(title: "Counter Offer", message: "This doesn't do anything yet, but it will soon!", preferredStyle: .Alert)
+        alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: { (UIAlertAction)in
+            self.toolBar.hidden = false
+        }))
+        self.presentViewController(alert, animated: false, completion: nil)
+        println("counter offer")
+    }
 
     func btnBack(sender:UIButton!)
     {
@@ -304,11 +352,18 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }))
         alert.addAction(UIAlertAction(title: "Propose", style: UIAlertActionStyle.Default, handler:{ (UIAlertAction)in
             self.toolBar.hidden = false
+            // need to format offer text
+            //            let offerPriceString = self.offerTF.text
+            //            var formatter = NSNumberFormatter()
+            //            formatter.numberStyle = .DecimalStyle
+            //            var offerPrice: NSNumber = formatter.numberFromString(offerPriceString)!
+            //            var sendPayload: WSRequest = WSSendOfferRequest(chatId: String(self.chat.chatId), offerPrice: offerPrice, offerMethod: deliveryMethod.ship)
+            //            WSManager.enqueueWorkPayload(sendPayload)
             println("Proposed Offer: $" + self.offerTF.text)
         }))
         self.presentViewController(alert, animated: false, completion: nil)
     }
-
+    
     func btnProfile(sender:UIButton!)
     {
         let sb: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
@@ -316,15 +371,15 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         vc.modalTransitionStyle = UIModalTransitionStyle.FlipHorizontal
         self.presentViewController(vc, animated: true, completion: nil)
     }
-
+    
     func dismissKeyboard(){
         //self.textView
         self.textView.resignFirstResponder()
     }
     
-//    // #iOS7.1
+    //    // #iOS7.1
     override func willAnimateRotationToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
-
+        
         if UIInterfaceOrientationIsLandscape(toInterfaceOrientation) {
             if toolBar.frame.height > textViewMaxHeight.landscape {
                 toolBar.frame.size.height = textViewMaxHeight.landscape+8*2-0.5
@@ -333,16 +388,58 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             updateTextViewHeight()
         }
     }
-
+    
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
-
+    
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return chat.loadedMessages.count * 2 // for sent-date cell
+        return chat.loadedMessages.count * 2 + 1 // for sent-date cell
+        //return chat.loadedMessages.count * 2 // for sent-date cell
+    }
+    
+    func acceptButton(){
+        let sb: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc: BuyItemView = sb.instantiateViewControllerWithIdentifier("BuyItemView") as! BuyItemView
+        vc.modalTransitionStyle = UIModalTransitionStyle.CoverVertical
+        self.dismissKeyboard()
+        if isBuyer {
+            vc.item = Bakkle.sharedInstance.trunkItems[self.itemIndex].valueForKey("item") as! NSDictionary
+        } else {
+            vc.item = Bakkle.sharedInstance.garageItems[self.itemIndex] as! NSDictionary
+        }
+        self.presentViewController(vc, animated: true, completion: nil)
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        if (indexPath.row == chat.loadedMessages.count * 2) {
+            let cellIdentifier = NSStringFromClass(AcceptOfferCell)
+            var cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier) as! AcceptOfferCell!
+            if  cell == nil {
+                cell = AcceptOfferCell(style: UITableViewCellStyle.Default, reuseIdentifier: cellIdentifier)
+                //cell.acceptBtn.addTarget(self, action: "acceptButton", forControlEvents: UIControlEvents.TouchUpInside)
+            }
+            var price = ""
+            if isBuyer {
+                let item = Bakkle.sharedInstance.trunkItems[self.itemIndex].valueForKey("item") as! NSDictionary
+                price = item.valueForKey("price") as! String
+            } else {
+                let item = Bakkle.sharedInstance.garageItems[self.itemIndex] as! NSDictionary
+                price = item.valueForKey("price") as! String
+            }
+            cell.makeOfferLabel.text = "AN OFFER OF $\(price) HAS BEEN MADE."
+            //if !isBuyer {
+                var acceptBtn: UIButton = UIButton()
+                var counterBtn: UIButton = UIButton()
+                acceptBtn.addTarget(self, action: "btnAcceptOffer:", forControlEvents: UIControlEvents.TouchUpInside)
+                cell.contentView.addSubview(acceptBtn)
+                cell.configureAcceptBtn(acceptBtn)
+                counterBtn.addTarget(self, action: "btnCounterOffer:", forControlEvents: UIControlEvents.TouchUpInside)
+                cell.contentView.addSubview(counterBtn)
+                cell.configureCounterBtn(counterBtn)
+            //}
+            return cell
+        }
         if (indexPath.row % 2) == 0 {
             let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(MessageSentDateCell), forIndexPath: indexPath) as! MessageSentDateCell
             var indexFloor: Int = Int(floor(Double(indexPath.row) * 0.5))
@@ -356,7 +453,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             var cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier) as! MessageBubbleCell!
             if cell == nil {
                 cell = MessageBubbleCell(style: .Default, reuseIdentifier: cellIdentifier)
-
+                
                 // Add gesture recognizers #CopyMessage
                 let action: Selector = "messageShowMenuAction:"
                 let doubleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: action)
@@ -370,17 +467,17 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             return cell
         }
     }
-
+    
     // Reserve row selection #CopyMessage
     func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
         return nil
     }
-
+    
     func textViewDidChange(textView: UITextView) {
         updateTextViewHeight()
         sendButton.enabled = textView.hasText()
     }
-
+    
     func keyboardWillShow(notification: NSNotification) {
         let userInfo = notification.userInfo as NSDictionary!
         let frameNew = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
@@ -388,7 +485,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let insetOld = tableView.contentInset
         let insetChange = insetNewBottom - insetOld.bottom
         let overflow = tableView.contentSize.height - (tableView.frame.height-insetOld.top-insetOld.bottom)
-
+        
         let duration = (userInfo[UIKeyboardAnimationDurationUserInfoKey] as! NSNumber).doubleValue
         let animations: (() -> Void) = {
             if !(self.tableView.tracking || self.tableView.decelerating) {
@@ -410,12 +507,12 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             animations()
         }
     }
-
+    
     func keyboardDidShow(notification: NSNotification) {
         let userInfo = notification.userInfo as NSDictionary!
         let frameNew = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
         let insetNewBottom = tableView.convertRect(frameNew, fromView: nil).height
-
+        
         // Inset `tableView` with keyboard
         let contentOffsetY = tableView.contentOffset.y
         tableView.contentInset.bottom = insetNewBottom
@@ -425,21 +522,21 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             tableView.contentOffset.y = contentOffsetY
         }
     }
-
+    
     func updateTextViewHeight() {
         let oldHeight = textView.frame.height
         let maxHeight = UIDevice.currentDevice().orientation==UIDeviceOrientation.Portrait ? textViewMaxHeight.portrait : textViewMaxHeight.landscape
         var newHeight = min(textView.sizeThatFits(CGSize(width: textView.frame.width, height: CGFloat.max)).height, maxHeight)
         #if arch(x86_64) || arch(arm64)
             newHeight = ceil(newHeight)
-        #else
+            #else
             newHeight = CGFloat(ceilf(newHeight.native))
         #endif
         if newHeight != oldHeight {
             toolBar.frame.size.height = newHeight+8*2-0.5
         }
     }
-
+    
     func sendAction() {
         // Autocomplete text before sending #hack
         textView.resignFirstResponder()
@@ -453,14 +550,14 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         sendButton.enabled = false
         AudioServicesPlaySystemSound(messageSoundOutgoing)
     }
-
+    
     func tableViewScrollToBottomAnimated(animated: Bool) {
         let numberOfRows = tableView.numberOfRowsInSection(0)
         if numberOfRows > 0 {
-            tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: numberOfRows-2, inSection: 0), atScrollPosition: .Bottom, animated: animated)
+            //tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: numberOfRows-2, inSection: 0), atScrollPosition: .Bottom, animated: animated)
         }
     }
-
+    
     // Handle actions #CopyMessage
     // 1. Select row and show "Copy" menu
     func messageShowMenuAction(gestureRecognizer: UITapGestureRecognizer) {
@@ -470,7 +567,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         if doubleTap || longPress {
             let pressedIndexPath = tableView.indexPathForRowAtPoint(gestureRecognizer.locationInView(tableView))!
             tableView.selectRowAtIndexPath(pressedIndexPath, animated: false, scrollPosition: .None)
-
+            
             let menuController = UIMenuController.sharedMenuController()
             let bubbleImageView = gestureRecognizer.view!
             menuController.setTargetRect(bubbleImageView.frame, inView: bubbleImageView.superview!)
@@ -509,7 +606,7 @@ class InputTextView: UITextView {
             return super.canPerformAction(action, withSender: sender)
         }
     }
-
+    
     // More specific than implementing `nextResponder` to return `delegate`, which might cause side effects?
     func messageCopyTextAction(menuController: UIMenuController) {
         (delegate as! ChatViewController).messageCopyTextAction(menuController)

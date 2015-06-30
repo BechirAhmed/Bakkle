@@ -13,3 +13,4 @@
 #import "RateView.h"
 #import "WSManager.h"
 
+#import "PNChart.h"

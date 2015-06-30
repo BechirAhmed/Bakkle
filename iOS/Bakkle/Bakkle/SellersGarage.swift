@@ -29,6 +29,7 @@ class SellersGarageView: UIViewController, UICollectionViewDelegate, UICollectio
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController?.navigationBar.hidden = true
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         self.collectionView.contentMode = UIViewContentMode.ScaleAspectFill
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleNotification:", name: SellersGarageView.CAPTURE_NOTIFICATION_TEXT, object: nil)
@@ -170,16 +171,11 @@ class SellersGarageView: UIViewController, UICollectionViewDelegate, UICollectio
         let chatsViewController = ChatsViewController()
         chatsViewController.chatItemID = (Bakkle.sharedInstance.garageItems[indexPath.row].valueForKey("pk") as! NSNumber).stringValue
         chatsViewController.garageIndex = indexPath.row
-        self.presentViewController(chatsViewController, animated: true, completion: {})
+        self.navigationController?.pushViewController(chatsViewController, animated: true)
     }
 
     /* Camera */
     let albumName = "Bakkle"
-    
-    func showAddItem(){
-        var addItem: UIViewController = AddItem()
-        presentViewController(addItem, animated: true, completion: nil)
-    }
     
     var imagePicker = UIImagePickerController()
     
@@ -295,7 +291,9 @@ class SellersGarageView: UIViewController, UICollectionViewDelegate, UICollectio
             dispatch_async(dispatch_get_global_queue(
                 Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
                     self.chosenImage!.cropAndResize(size, completionHandler: { (resizedImage:UIImage, data:NSData) -> () in
-                        destinationVC.scaledImages?.insert(resizedImage, atIndex: 0)
+                        let compressedImage = UIImageJPEGRepresentation(resizedImage, AddItem.JPEG_COMPRESSION_CONSTANT)
+                        destinationVC.itemImages?[0] = UIImage(data:compressedImage)!
+                        destinationVC.scaledImages?.insert(compressedImage, atIndex: 0)
                     })
             }
         }

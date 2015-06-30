@@ -58,6 +58,11 @@ class IconImage {
         return factory.createImageForIcon(NIKFontAwesomeIcon.Home)
     }
     
+    func edit(size: CGFloat) -> UIImage {
+        setup(size)
+        return factory.createImageForIcon(NIKFontAwesomeIcon.Edit)
+    }
+    
     func edit() -> UIImage {
         setup(MENU_SIZE)
         return factory.createImageForIcon(NIKFontAwesomeIcon.Edit)

@@ -146,7 +146,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     let topTitle: String = topItem.valueForKey("title") as! String
                     let topPrice: String = topItem.valueForKey("price") as! String
                     let topImage: String = filename!
-                    let topItempk = topItem.valueForKey("pk")
+                    let topItempk = topItem.valueForKey("pk") as? Int
                     let item_id: String = "\(topItempk!)"
                     reply(["success":"yes","item_title":topTitle,"item_price":topPrice,"item_id":item_id, "item_image":topImage])
                 } else {
@@ -172,7 +172,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         let topTitle: String = topItem.valueForKey("title") as! String
                         let topPrice: String = topItem.valueForKey("price") as! String
                         let topImage: String = filename!
-                        let topItempk = topItem.valueForKey("pk")
+                        let topItempk = topItem.valueForKey("pk") as? Int
                         let item_id: String = "\(topItempk!)"
                         reply(["success":"yes","item_title":topTitle,"item_price":topPrice,"item_id":item_id, "item_image":topImage])
                     } else {
@@ -201,7 +201,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         let topTitle: String = topItem.valueForKey("title") as! String
                         let topPrice: String = topItem.valueForKey("price") as! String
                         let topImage: String = filename!
-                        let topItempk = topItem.valueForKey("pk")
+                        let topItempk = topItem.valueForKey("pk") as? Int
                         let item_id: String = "\(topItempk!)"
                         reply(["success":"yes","item_title":topTitle,"item_price":topPrice,"item_id":item_id, "item_image":topImage])
                     } else {

@@ -674,16 +674,17 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     }
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         if segue.identifier == self.addItemSegue {
-            let destinationVC = segue.destinationViewController as! AddItem
-            destinationVC.itemImages?.insert(self.chosenImage!, atIndex: 0)
-            
             // Scaled image size
             let scaledImageWidth: CGFloat = 660.0;
             var size = CGSize(width: scaledImageWidth, height: scaledImageWidth)
+            let destinationVC = segue.destinationViewController as! AddItem
+            destinationVC.itemImages?.insert(self.chosenImage!, atIndex:0)
             dispatch_async(dispatch_get_global_queue(
                 Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
                     self.chosenImage!.cropAndResize(size, completionHandler: { (resizedImage:UIImage, data:NSData) -> () in
-                        destinationVC.scaledImages?.insert(resizedImage, atIndex: 0)
+                        let compressedImage = UIImageJPEGRepresentation(resizedImage, AddItem.JPEG_COMPRESSION_CONSTANT)
+                        destinationVC.itemImages?[0] = UIImage(data:compressedImage)!
+                        destinationVC.scaledImages?.insert(compressedImage, atIndex: 0)
                     })
             }
         }
