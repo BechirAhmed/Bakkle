@@ -434,6 +434,15 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     
     
     @IBAction func cameraBtn(sender: AnyObject) {
+        if itemImages!.count >= AddItem.MAX_IMAGE_COUNT {
+            var alert = UIAlertController(title: "Image Limit Reached", message: "You cannot add more than \(AddItem.MAX_IMAGE_COUNT) images.", preferredStyle: .Alert)
+            alert.addAction(UIAlertAction(title: "Okay", style: .Default, handler: {(alertAction)in
+                alert.dismissViewControllerAnimated(true, completion: nil)
+            }))
+            self.presentViewController(alert, animated: true, completion: nil)
+            return
+        }
+        
         let fetchOptions = PHFetchOptions()
         fetchOptions.predicate = NSPredicate(format: "title = %@", albumName)
         
