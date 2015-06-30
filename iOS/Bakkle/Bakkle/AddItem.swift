@@ -19,14 +19,17 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     
     let albumName = "Bakkle"
     
+    static let JPEG_COMPRESSION_CONSTANT: CGFloat = 0.1
     static let MAX_IMAGE_COUNT = 5
+    static let SCALED_IMAGES_READY_NOTIFICATION = "SCALED_IMAGES_READY"
     private static let CAPTURE_NOTIFICATION_TEXT = "_UIImagePickerControllerUserDidCaptureItem"
     private static let REJECT_NOTIFICATION_TEXT = "_UIImagePickerControllerUserDidRejectItem"
     private static let DEVICE_MODEL: String = UIDevice.currentDevice().modelName
     
     let listItemCellIdentifier = "ListItemCell"
     var itemImages: [UIImage]? = [UIImage]()
-    var scaledImages: [UIImage]? = [UIImage]()
+    var scaledImages: [NSData]? = [NSData]()
+    var fileSizes: UInt64 = 0
     
     @IBOutlet weak var closeBtn: UIButton!
     @IBOutlet weak var titleField: UITextField!
@@ -287,14 +290,17 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         var factor: CGFloat = 1.0 //imageView.image!.size.height/imageView.image!.size.width
         
         if scaledImages?.count == itemImages?.count {
+            var time = NSDate.timeIntervalSinceReferenceDate()
             Bakkle.sharedInstance.addItem(self.titleField.text, description: "", location: Bakkle.sharedInstance.user_location,
                 price: self.priceField.text, tags: self.tagsField.text, method: self.methodControl.titleForSegmentAtIndex(self.methodControl.selectedSegmentIndex)!,
                 images:self.scaledImages!, success: {
                     (item_id:Int?, item_url: String?) -> () in
+                        time = NSDate.timeIntervalSinceReferenceDate() - time
+                        println("Time taken to upload in sec: \(time)")
                         if self.shareToFacebookBtn.on {
                             let topImg = UIImage(named: "pendant-tag660.png")
-                            let bottomImg = self.scaledImages![0]
-                            let size = self.scaledImages![0].size
+                            let bottomImg = UIImage(data:self.scaledImages![0])!
+                            let size = bottomImg.size
                             UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
                             bottomImg.drawInRect(CGRect(origin: CGPointZero, size: size))
                             topImg!.drawInRect(CGRect(origin: CGPointZero, size: size))
@@ -311,7 +317,8 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
 
                             var dialog: FBSDKShareDialog = FBSDKShareDialog.showFromViewController(self, withContent: cont, delegate: nil)
                         }
-
+                    
+                    
                         // We just added one so schedule an update.
                         // TODO: Could just add this to the feed
                         // and hope we are fairly current.
@@ -327,8 +334,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
                             }
                             alertController.addAction(dismissAction)
                             self.presentViewController(alertController, animated: true, completion: nil)
-                        }
-                    }, fail: {() -> () in
+                        }                    }, fail: {() -> () in
                     //TODO: Show error popup and close.
                 })
         } else {
@@ -525,8 +531,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     }
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
-        let chosen = info[UIImagePickerControllerOriginalImage] as! UIImage
-        itemImages?.append(chosen)
+        var chosen = info[UIImagePickerControllerOriginalImage] as! UIImage
         let itemIndex = self.itemImages!.count - 1 <= 0 ? 0 : self.itemImages!.count - 1
         
         // Scaled image size
@@ -535,12 +540,20 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         dispatch_async(dispatch_get_global_queue(
             Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
                 chosen.cropAndResize(size, completionHandler: { (resizedImage:UIImage, data:NSData) -> () in
-                    self.scaledImages?.insert(resizedImage, atIndex: itemIndex)
+                    var compressedImage = UIImageJPEGRepresentation(resizedImage, AddItem.JPEG_COMPRESSION_CONSTANT)
+                    self.itemImages?.append(UIImage(data: compressedImage)!)
+                    var index: NSIndexPath = NSIndexPath(forRow: self.itemImages!.count-1, inSection: 0)
+                    self.collectionView.insertItemsAtIndexPaths([index])
+                    self.scaledImages?.insert(compressedImage, atIndex: itemIndex)
+                    self.fileSizes = 0
+                    for i in self.scaledImages! {
+                        self.fileSizes += UInt64(i.length)
+                    }
+                    println("Image \(itemIndex + 1) bit count: \(compressedImage.length) b")
+                    println("Total image size bit count: \(self.fileSizes) b")
                 })
+                
         }
-        
-        var index: NSIndexPath = NSIndexPath(forRow: itemImages!.count-1, inSection: 0)
-        collectionView.insertItemsAtIndexPaths([index])
         dismissViewControllerAnimated(true, completion: nil)
     }
  

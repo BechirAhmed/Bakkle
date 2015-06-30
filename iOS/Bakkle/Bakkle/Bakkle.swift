@@ -21,6 +21,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     let url_feed: String          = "items/feed/"
     let url_garage: String        = "items/get_seller_items/"
     let url_add_item: String      = "items/add_item/"
+    let url_add_item_no_image: String      = "items/add_item_no_image/"
     let url_send_chat: String     = "conversation/send_message/"
     let url_view_item: String     = "items/"
     let url_buyers_trunk: String        = "items/get_buyers_trunk/"
@@ -640,8 +641,8 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         
     }
     
-    func addItem(title: String, description: String, location: String, price: String, tags: String, method: String, images: [UIImage], success: (item_id: Int?, item_url: String?)->(), fail: ()->() ) {
-        
+    func addItem(title: String, description: String, location: String, price: String, tags: String, method: String, images: [NSData], success: (item_id: Int?, item_url: String?)->(), fail: ()->() ) {
+
         // URL encode some vars.
         let escTitle = title.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         let escDescription = description.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
@@ -661,14 +662,8 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         let request = NSMutableURLRequest(URL: url!)
         request.HTTPMethod = "POST"
         
-        var imageData: [NSData] = [NSData]();
-        
-        for i in images{
-            imageData.append(UIImageJPEGRepresentation(i, 0.5))
-        }
-        
         var imageDataLength = 0;
-        for i in imageData{
+        for i in images {
             imageDataLength += i.length;
         }
         
@@ -682,7 +677,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         var body:NSMutableData = NSMutableData()
                 
         //add all images as neccessary.
-        for i in imageData{
+        for i in images{
             body.appendData("\r\n--\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
             body.appendData("Content-Disposition: form-data; name=\"image\"; filename=\"image.jpg\"\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
             body.appendData("Content-Type: application/octet-stream\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
@@ -693,6 +688,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         
         info("[Bakkle] addItem")
         info("URL: \(url) METHOD: \(request.HTTPMethod) BODY: --binary blob-- LENGTH: \(imageDataLength)")
+        
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
             data, response, error in
             
