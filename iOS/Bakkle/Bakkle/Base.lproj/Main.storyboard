@@ -2396,7 +2396,7 @@
         <!--BUY ITEM-->
         <scene sceneID="9E6-Il-nEU">
             <objects>
-                <viewController title="BUY ITEM" id="6Y1-cF-3nl" customClass="BuyItemView" customModule="Bakkle" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="BuyItemView" title="BUY ITEM" useStoryboardIdentifierAsRestorationIdentifier="YES" id="6Y1-cF-3nl" customClass="BuyItemView" customModule="Bakkle" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="bki-qF-Gn6"/>
                         <viewControllerLayoutGuide type="bottom" id="RVS-DW-1Vv"/>
@@ -2438,7 +2438,7 @@
                                             </mask>
                                         </variation>
                                         <connections>
-                                            <action selector="btnBack:" destination="6Y1-cF-3nl" eventType="touchUpInside" id="S7Y-eq-ULg"/>
+                                            <action selector="btnBackAction:" destination="6Y1-cF-3nl" eventType="touchUpInside" id="joz-Ik-fRg"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -2508,19 +2508,38 @@
                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mnX-dm-ytw">
+                                                <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                                <state key="normal">
+                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="btnPay:" destination="6Y1-cF-3nl" eventType="touchUpInside" id="JMr-aF-fEW"/>
+                                                    <segue destination="KdC-Vc-3jN" kind="show" identifier="presentRate" id="TZJ-r7-8Ss"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" red="0.20000000000000001" green="0.80392156859999997" blue="0.37254901959999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
+                                            <constraint firstAttribute="bottom" secondItem="mnX-dm-ytw" secondAttribute="bottom" id="0e7-KU-75w"/>
+                                            <constraint firstAttribute="trailing" secondItem="mnX-dm-ytw" secondAttribute="trailing" id="1nR-iF-NWE"/>
+                                            <constraint firstItem="mnX-dm-ytw" firstAttribute="top" secondItem="cjL-W5-Kfh" secondAttribute="top" id="1ya-U3-R5f"/>
                                             <constraint firstAttribute="height" constant="66" id="MnY-ht-kq0"/>
                                             <constraint firstAttribute="centerX" secondItem="KaV-cK-ZV5" secondAttribute="centerX" id="SRI-My-qWY"/>
+                                            <constraint firstItem="mnX-dm-ytw" firstAttribute="leading" secondItem="cjL-W5-Kfh" secondAttribute="leading" id="rjp-LP-1y6"/>
                                             <constraint firstAttribute="centerY" secondItem="KaV-cK-ZV5" secondAttribute="centerY" id="vkA-JY-NOs"/>
                                         </constraints>
                                         <variation key="default">
                                             <mask key="subviews">
                                                 <exclude reference="KaV-cK-ZV5"/>
+                                                <exclude reference="mnX-dm-ytw"/>
                                             </mask>
                                             <mask key="constraints">
                                                 <exclude reference="MnY-ht-kq0"/>
+                                                <exclude reference="0e7-KU-75w"/>
+                                                <exclude reference="1nR-iF-NWE"/>
+                                                <exclude reference="1ya-U3-R5f"/>
+                                                <exclude reference="rjp-LP-1y6"/>
                                                 <exclude reference="SRI-My-qWY"/>
                                                 <exclude reference="vkA-JY-NOs"/>
                                             </mask>
@@ -2528,9 +2547,14 @@
                                         <variation key="heightClass=regular-widthClass=compact">
                                             <mask key="subviews">
                                                 <include reference="KaV-cK-ZV5"/>
+                                                <include reference="mnX-dm-ytw"/>
                                             </mask>
                                             <mask key="constraints">
                                                 <include reference="MnY-ht-kq0"/>
+                                                <include reference="0e7-KU-75w"/>
+                                                <include reference="1nR-iF-NWE"/>
+                                                <include reference="1ya-U3-R5f"/>
+                                                <include reference="rjp-LP-1y6"/>
                                                 <include reference="SRI-My-qWY"/>
                                                 <include reference="vkA-JY-NOs"/>
                                             </mask>
@@ -2925,7 +2949,12 @@
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
+                        <outlet property="btnBack" destination="OPP-on-gOv" id="eg1-0E-DUA"/>
+                        <outlet property="itemImage" destination="tuJ-vk-sIx" id="EEs-Lp-m0y"/>
+                        <outlet property="itemLabel" destination="6dg-Ap-qug" id="kBt-eL-CSY"/>
+                        <outlet property="itemPrice" destination="Xmc-jw-uxd" id="xNF-zv-sw3"/>
                         <outlet property="sellerImage" destination="aHr-8j-kx9" id="WLc-Fo-6Eu"/>
+                        <outlet property="sellerLabel" destination="NAy-Ck-nZI" id="SyR-el-NWI"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZTu-3o-uK3" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -3489,8 +3518,7 @@
                                         <exclude reference="cvc-wk-EdT"/>
                                     </mask>
                                 </variation>
-                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
-                                    <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                                <variation key="heightClass=regular-widthClass=compact">
                                     <mask key="subviews">
                                         <include reference="9J2-jl-t4F"/>
                                         <include reference="e7V-yc-Rjq"/>
@@ -3786,9 +3814,6 @@
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
-                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
-                                    <rect key="frame" x="0.0" y="64" width="375" height="603"/>
-                                </variation>
                                 <connections>
                                     <outlet property="dataSource" destination="6Ze-gR-D6u" id="t7L-XP-GQg"/>
                                     <outlet property="delegate" destination="6Ze-gR-D6u" id="OKi-hP-vVk"/>
@@ -5047,7 +5072,7 @@
         <!--RATE USER-->
         <scene sceneID="wJ8-WW-CKD">
             <objects>
-                <viewController title="RATE USER" id="KdC-Vc-3jN" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="RateUserView" title="RATE USER" useStoryboardIdentifierAsRestorationIdentifier="YES" id="KdC-Vc-3jN" customClass="RateUserView" customModule="Bakkle" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="NDn-a8-JXi"/>
                         <viewControllerLayoutGuide type="bottom" id="hHR-7A-cqf"/>
@@ -5088,6 +5113,9 @@
                                                 <include reference="YLr-tT-ceo"/>
                                             </mask>
                                         </variation>
+                                        <connections>
+                                            <action selector="btnBackAction:" destination="KdC-Vc-3jN" eventType="touchUpInside" id="1Q7-ff-pvb"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.20000000000000001" green="0.80392156859999997" blue="0.37254901959999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -5156,19 +5184,39 @@
                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2pp-J2-Oh8">
+                                                <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                                <state key="normal">
+                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="btnSubmit:" destination="KdC-Vc-3jN" eventType="touchUpInside" id="YsL-TL-3AE"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" red="0.20000000000000001" green="0.80392156859999997" blue="0.37254901959999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
+                                            <constraint firstItem="2pp-J2-Oh8" firstAttribute="leading" secondItem="Dsf-fW-Nyc" secondAttribute="leading" id="0Uz-WJ-teT"/>
                                             <constraint firstAttribute="centerX" secondItem="cxq-vH-Qkw" secondAttribute="centerX" id="24O-2M-qXz"/>
                                             <constraint firstAttribute="height" constant="66" id="4WU-AT-D5I"/>
+                                            <constraint firstAttribute="bottom" secondItem="2pp-J2-Oh8" secondAttribute="bottom" id="QEt-wl-McD"/>
                                             <constraint firstAttribute="centerY" secondItem="cxq-vH-Qkw" secondAttribute="centerY" id="dfM-V2-kRx"/>
+                                            <constraint firstAttribute="trailing" secondItem="2pp-J2-Oh8" secondAttribute="trailing" constant="-9" id="l7D-1r-Y9D">
+                                                <variation key="heightClass=regular-widthClass=compact" constant="0.0"/>
+                                            </constraint>
+                                            <constraint firstItem="2pp-J2-Oh8" firstAttribute="top" secondItem="Dsf-fW-Nyc" secondAttribute="top" id="nOL-Ya-M0W"/>
                                         </constraints>
                                         <variation key="default">
                                             <mask key="subviews">
                                                 <exclude reference="cxq-vH-Qkw"/>
+                                                <exclude reference="2pp-J2-Oh8"/>
                                             </mask>
                                             <mask key="constraints">
                                                 <exclude reference="4WU-AT-D5I"/>
+                                                <exclude reference="0Uz-WJ-teT"/>
+                                                <exclude reference="QEt-wl-McD"/>
+                                                <exclude reference="l7D-1r-Y9D"/>
+                                                <exclude reference="nOL-Ya-M0W"/>
                                                 <exclude reference="24O-2M-qXz"/>
                                                 <exclude reference="dfM-V2-kRx"/>
                                             </mask>
@@ -5176,9 +5224,14 @@
                                         <variation key="heightClass=regular-widthClass=compact">
                                             <mask key="subviews">
                                                 <include reference="cxq-vH-Qkw"/>
+                                                <include reference="2pp-J2-Oh8"/>
                                             </mask>
                                             <mask key="constraints">
                                                 <include reference="4WU-AT-D5I"/>
+                                                <include reference="0Uz-WJ-teT"/>
+                                                <include reference="QEt-wl-McD"/>
+                                                <include reference="l7D-1r-Y9D"/>
+                                                <include reference="nOL-Ya-M0W"/>
                                                 <include reference="24O-2M-qXz"/>
                                                 <include reference="dfM-V2-kRx"/>
                                             </mask>
@@ -5652,10 +5705,18 @@
                         </variation>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+                    <connections>
+                        <outlet property="btnBack" destination="egU-84-Zv7" id="Uvy-p1-UUj"/>
+                        <outlet property="itemImage" destination="crE-KH-D50" id="yzE-yZ-ASI"/>
+                        <outlet property="itemLabel" destination="7gm-DF-oxs" id="CYw-6e-cgm"/>
+                        <outlet property="itemPrice" destination="Tlm-kh-hzc" id="zct-uN-NHa"/>
+                        <outlet property="sellerImage" destination="9bz-8U-DN6" id="rKG-YI-N5q"/>
+                        <outlet property="sellerLabel" destination="43Q-g4-uPc" id="SnK-mw-r8i"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PdT-Pi-XvY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1159.5" y="3596.25"/>
+            <point key="canvasLocation" x="1446.75" y="3599.625"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="Ydy-WD-vus">

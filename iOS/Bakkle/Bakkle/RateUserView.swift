@@ -8,10 +8,10 @@
 
 import UIKit
 
-class BuyItemView: UIViewController {
+class RateUserView: UIViewController {
     
     var item: NSDictionary!
-
+    
     @IBOutlet weak var btnBack: UIButton!
     @IBOutlet weak var sellerImage: UIImageView!
     @IBOutlet weak var sellerLabel: UILabel!
@@ -21,7 +21,7 @@ class BuyItemView: UIViewController {
     @IBAction func btnBackAction(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
-    @IBAction func btnPay(sender: AnyObject) {
+    @IBAction func btnSubmit(sender: AnyObject) {
     }
     
     override func viewDidLoad() {
@@ -39,15 +39,15 @@ class BuyItemView: UIViewController {
         let profileImgURL = NSURL(string: facebookProfileImgString)
         let sellerFacebookImage = UIImage(data: NSData(contentsOfURL: profileImgURL!)!)
         sellerImage.image = sellerFacebookImage
-    
-    
+        
+        
         let imgURLs = item.valueForKey("image_urls") as! NSArray
         let topTitle: String = item!.valueForKey("title") as! String
         let topPrice: String = item!.valueForKey("price") as! String
-    
+        
         itemLabel.text = topTitle.uppercaseString
         itemPrice.text = "$" + topPrice
-    
+        
         let firstURL = imgURLs[0] as! String
         let imgURL = NSURL(string: firstURL)
         if let imgData = NSData(contentsOfURL: imgURL!) {
@@ -70,17 +70,5 @@ class BuyItemView: UIViewController {
     func setupButtons() {
         btnBack.setImage(IconImage().close(), forState: .Normal)
         btnBack.setTitle("", forState: .Normal)
-    }
-    
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "presentRate" {
-            let destinationVC = segue.destinationViewController as! RateUserView
-            destinationVC.item = self.item
-            destinationVC.itemPrice = self.itemPrice
-            destinationVC.itemLabel = self.itemLabel
-            destinationVC.itemImage = self.itemImage
-            destinationVC.sellerImage = self.sellerImage
-            destinationVC.sellerLabel = self.sellerLabel
-        }
     }
 }
