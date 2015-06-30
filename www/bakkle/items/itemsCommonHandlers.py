@@ -5,6 +5,7 @@ import datetime
 import json
 import md5
 import os
+import time
 
 import random
 
@@ -162,7 +163,7 @@ def add_item(title, description, location, seller_id, price, tags, method, notif
             status = Items.ACTIVE)
         item.save()
         if(notifyFlag == None or notifyFlag == "" or int(notifyFlag) != 0):
-            notify_all_new_item("New: ${} - {}".format(item.price, item.title))
+            notify_all_new_item(u"New: ${} - {}".format(item.price, item.title))
     else:
         # Else get the item
         try:
@@ -194,7 +195,7 @@ def add_item(title, description, location, seller_id, price, tags, method, notif
 
 
 @time_method
-def add_item_no_image(title, description, location, seller_id, price, tags, method, notifyFlag, item_id, images):
+def add_item_no_image(title, description, location, seller_id, price, tags, method, notifyFlag, item_id):
     # Get the authentication code
 
     # Get the rest of the necessary params from the request
@@ -215,49 +216,9 @@ def add_item_no_image(title, description, location, seller_id, price, tags, meth
 
     TWOPLACES = Decimal(10) ** -6
 
-    if (item_id == None or item_id == ""):
-        # Create the item
-        item = Items.objects.create(
-            title = title,
-            seller_id = seller_id,
-            description = description,
-            longitude = Decimal(location.split(",")[0]).quantize(TWOPLACES),
-            latitude = Decimal(location.split(",")[1]).quantize(TWOPLACES),
-            price = price,
-            tags = tags,
-            method = method,
-            image_urls = " ",
-            status = Items.ACTIVE)
-        item.save()
-        if(notifyFlag == None or notifyFlag == "" or int(notifyFlag) != 0):
-            notify_all_new_item("New: ${} - {}".format(item.price, item.title))
-    else:
-        # Else get the item
-        try:
-            item = Items.objects.get(pk=item_id)
-            print("[EditItem] editing item: " + str(item_id))
-        except Items.DoesNotExist:
-            item = None
-            response_data = {"status":0, "error":"Item {} does not exist.".format(item_id)}
-            return response_data
+    
 
-        # TODO: fix this
-        # Remove all previous images
-        # old_urls = item.image_urls.split(",")
-        # for url in old_urls:
-        #     # remove image from S3
-        #     handle_delete_file_s3(url)
-
-        # Update item fields
-        item.title = title
-        item.description = description
-        item.tags = tags
-        item.price = price
-        item.method = method
-        item.image_urls = image_urls
-        item.save()
-
-    response_data = { "status":1, "item_id":item.id }
+    response_data = { "status":1, "item_id": -1 }
     return response_data
 
 @run_async
@@ -295,10 +256,13 @@ def spam_item(item_id):
 @time_method
 def feed(buyer_id, device_uuid, user_location, search_text, filter_distance, filter_price):
 
+    startTime = time.time()
+
     MAX_ITEM_PRICE = 100;
     MAX_ITEM_DISTANCE = 100;
     RETURN_ITEM_ARRAY_SIZE = 20;
     
+
     # Check that location was in the correct format
     location = ""
     lat = 0;
@@ -317,11 +281,21 @@ def feed(buyer_id, device_uuid, user_location, search_text, filter_distance, fil
         response_data = { "status":0, "error": "Latitude or Longitude was not a valid decimal." }
         return response_data
 
+    print('Time after %s: %0.2f ms' % ("parsing locations", (time.time()-startTime)*1000.0))
+    startTime = time.time();
+
     #horizontal range
     lonRange = filter_distance / (math.cos(lat/180 * math.pi) * 69.172)
+    lonMin = lon - lonRange
+    lonMax = lon + lonRange
 
     #vertical range
     latRange = filter_distance / 69.172
+    latMin = lat - latRange
+    latMax = lat + latRange
+
+    print('Time after %s: %0.2f ms' % ("getting item range", (time.time()-startTime)*1000.0))
+    startTime = time.time();
 
     #filter(longitude__lte = lon + lonRange).filter(longitude__gte = lon - lonRange).filter(latitude__lte = lat + latRange).filter(latitude__gte = lat + latRange)
 
@@ -345,6 +319,9 @@ def feed(buyer_id, device_uuid, user_location, search_text, filter_distance, fil
         return response_data
 
 
+    print('Time after %s: %0.2f ms' % ("updating locations", (time.time()-startTime)*1000.0))
+    startTime = time.time();
+
     # get items
     items_viewed = BuyerItem.objects.filter(buyer = buyer_id)
 
@@ -362,25 +339,32 @@ def feed(buyer_id, device_uuid, user_location, search_text, filter_distance, fil
             item_list = Items.objects.exclude(pk__in = [elem.item.pk for elem in items_viewed]).filter(Q(price__lte = filter_price)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).filter(Q(tags__contains=search_text) | Q(title__contains=search_text)).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
     else:
         
-        #if filter price is 100+, ignore filter.
+        # if filter price is 100+, ignore filter.
         if(filter_distance == MAX_ITEM_DISTANCE):
             if(filter_price == MAX_ITEM_PRICE):
-                item_list = Items.objects.exclude(pk__in = [elem.item.pk for elem in items_viewed]).exclude(Q(seller__pk = buyer_id)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
+                item_list = Items.objects.exclude(pk__in = [elem.item.pk for elem in items_viewed], seller__pk = buyer_id).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
                 users_list = Items.objects.filter(Q(seller__pk = buyer_id)).order_by('-post_date')[:1]
             else:
-                item_list = Items.objects.exclude(pk__in = [elem.item.pk for elem in items_viewed]).exclude(Q(seller__pk = buyer_id)).filter(Q(price__lte = filter_price)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
+                item_list = Items.objects.exclude(pk__in = [elem.item.pk for elem in items_viewed], seller__pk = buyer_id).filter(Q(price__lte = filter_price)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
                 users_list = Items.objects.filter(Q(seller__pk = buyer_id)).order_by('-post_date')[:1]
         else:
             if(filter_price == MAX_ITEM_PRICE):
-                item_list = Items.objects.exclude(pk__in = [elem.item.pk for elem in items_viewed]).exclude(Q(seller__pk = buyer_id)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).filter(longitude__lte = lon + lonRange).filter(longitude__gte = lon - lonRange).filter(latitude__lte = lat + latRange).filter(latitude__gte = lat + latRange).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
+                item_list = Items.objects.exclude(pk__in = [elem.item.pk for elem in items_viewed], seller__pk = buyer_id).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).filter(longitude__lte = lonMax, longitude__gte = lonMin, latitude__lte = latMax, latitude__gte = latMin).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
                 users_list = Items.objects.filter(Q(seller__pk = buyer_id)).order_by('-post_date')[:1]
             else:
-                item_list = Items.objects.exclude(pk__in = [elem.item.pk for elem in items_viewed]).exclude(Q(seller__pk = buyer_id)).filter(Q(price__lte = filter_price)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).filter(longitude__lte = lon + lonRange).filter(longitude__gte = lon - lonRange).filter(latitude__lte = lat + latRange).filter(latitude__gte = lat + latRange).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
+                item_list = Items.objects.exclude(pk__in = [elem.item.pk for elem in items_viewed], seller__pk = buyer_id).filter(Q(price__lte = filter_price)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).filter(longitude__lte = lonMax, longitude__gte = lonMin, latitude__lte = latMax, latitude__gte = latMin).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
                 users_list = Items.objects.filter(Q(seller__pk = buyer_id)).order_by('-post_date')[:1]
+
+
+                # item_list = Items.objects.raw("SELECT * FROM items_items as items WHERE items.id NOT IN (SELECT id FROM items_buyeritem WHERE buyer_id = buyer_id) AND items.seller_id != buyer_id AND items.status = 'Active' ORDER BY post_date desc LIMIT RETURN_ITEM_ARRAY_SIZE");
+                # users_list = Items.objects.filter(Q(seller__pk = buyer_id)).order_by('-post_date')[:1]
    
     item_array = []
     paginatedItems = Paginator(item_list, 100);
     numUserItems = 0;
+
+    print('Time after %s: %0.2f ms' % ("getting feed items", (time.time()-startTime)*1000.0))
+    startTime = time.time();
     
     # show user's items before other items - place at top of array.
     if(not users_list is None and len(users_list) != 0):
@@ -399,6 +383,10 @@ def feed(buyer_id, device_uuid, user_location, search_text, filter_distance, fil
                 item_array.append(item_dict)
         
         page += 1;
+
+
+    print('Time after %s: %0.2f ms' % ("adding feed items to return array", (time.time()-startTime)*1000.0))
+    startTime = time.time();
 
     response_data = { 'status': 1, 'feed': item_array }
     print "returning feed list of size: " + str(len(item_array))
@@ -545,7 +533,7 @@ def get_seller_transactions(seller_id):
 @time_method
 def get_buyers_trunk(buyer_id):
 
-    item_list = BuyerItem.objects.filter(Q(buyer=buyer_id, status=BuyerItem.WANT) | Q(buyer=buyer_id, status=BuyerItem.PENDING) | Q(buyer=buyer_id, status=BuyerItem.NEGOTIATING))
+    item_list = BuyerItem.objects.filter(Q(buyer=buyer_id, status=BuyerItem.WANT) | Q(buyer=buyer_id, status=BuyerItem.PENDING) | Q(buyer=buyer_id, status=BuyerItem.NEGOTIATING)).exclude(item__seller__pk = buyer_id)
 
     item_array = []
     # get json representaion of item array
@@ -559,7 +547,7 @@ def get_buyers_trunk(buyer_id):
 @time_method
 def get_holding_pattern(buyer_id):
 
-    item_list = BuyerItem.objects.filter(buyer=buyer_id, status=BuyerItem.HOLD)
+    item_list = BuyerItem.objects.filter(buyer=buyer_id, status=BuyerItem.HOLD).exclude(item__seller__pk = buyer_id)
 
     item_array = []
     # get json representaion of item array

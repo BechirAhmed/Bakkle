@@ -1,6 +1,8 @@
 from common.bakkleRequestHandler import bakkleRequestHandler
 from common.bakkleRequestHandler import QueryArgumentError
 
+from common.decorators import run_async
+
 import itemsCommonHandlers
 
 
@@ -32,9 +34,37 @@ class addItemHandler(bakkleRequestHandler):
             title, description, location, seller_id, price,
             tags, method, notifyFlag, item_id, images))
 
+class addItemNoImageHandler(bakkleRequestHandler):
+
+    def post(self):
+        try:
+
+            # TODO: Handle location
+            # Get the rest of the necessary params from the request
+            title = self.getArgument('title')
+            description = self.getArgument('description')
+            location = self.getArgument('location')
+            seller_id = self.getUser()
+            price = self.getArgument('price')
+            tags = self.getArgument('tags')
+            method = self.getArgument('method')
+            notifyFlag = self.getArgument('notify', "")
+
+            # Get the item id if present (If it is present an item will be edited
+            # not added)
+            item_id = self.getArgument('item_id', "")
+
+        except QueryArgumentError as error:
+            return self.writeJSON({"status": 0, "message": error.message})
+
+        self.writeJSON(itemsCommonHandlers.add_item_no_image(
+            title, description, location, seller_id, price,
+            tags, method, notifyFlag, item_id))
+
 
 class feedHandler(bakkleRequestHandler):
 
+    @run_async
     def get(self):
         try:
             buyer_id = self.getUser()

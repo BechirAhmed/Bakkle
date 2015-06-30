@@ -20,6 +20,8 @@ from common.decorators import authenticate
 from common.decorators import time_method
 
 # Show a list of all accounts in the system.
+
+
 @staff_member_required
 @csrf_exempt
 @time_method
@@ -31,10 +33,13 @@ def index(request):
     return render(request, 'account/index.html', context)
 
 # Show detail on an account
+
+
 @csrf_exempt
 @time_method
 def settings(request):
-    response_data = {"status":1, "settings_dict":{"image_width": 660, "image_height":660, "image_quality":0.7, "feed_items_to_load":10, "image_precache":5}}
+    response_data = {"status": 1, "settings_dict": {"image_width": 660, "image_height":
+                                                    660, "image_quality": 0.7, "feed_items_to_load": 10, "image_precache": 5}}
     return response_data
 
 # Show detail on an account
@@ -61,11 +66,12 @@ def settings(request):
 #     return render(request, 'account/detail.html', context)
 
 # Method for reseting account feed (only for detail page)
-@csrf_exempt
+
+
 @time_method
 def reset(request, account_id):
     BuyerItem.objects.filter(buyer=account_id).delete()
-    return { "status":1 }
+    return {"status": 1}
 
 # Show detail on a device
 # @csrf_exempt
@@ -89,7 +95,7 @@ def reset(request, account_id):
 #     total_spam = Items.objects.filter(status = Items.SPAM).count()
 #     total_deleted = Items.objects.filter(status = Items.DELETED).count()
 #     total_pending = Items.objects.filter(status = Items.PENDING).count()
-    
+
 #     context = {
 #         'register_users': registered_users,
 #         'active_users': active_users,
@@ -104,15 +110,18 @@ def reset(request, account_id):
 #     return render(request, 'account/dashboard.html', context)
 
 # Login to account using Facebook
+
+
 #@require_POST
 @time_method
 def login_facebook(facebook_id, device_uuid, user_location, app_version, is_ios, client_ip):
 
     location = ""
-    try: 
+    try:
         positions = user_location.split(",")
         if len(positions) < 2:
-            response_data = {"status":0, "error":"User location was not in the correct format."}
+            response_data = {
+                "status": 0, "error": "User location was not in the correct format."}
             return response_data
         else:
             TWOPLACES = Decimal(10) ** -2
@@ -120,7 +129,8 @@ def login_facebook(facebook_id, device_uuid, user_location, app_version, is_ios,
             lon = Decimal(positions[1]).quantize(TWOPLACES)
             location = str(lat) + "," + str(lon)
     except ValueError:
-        response_data = { "status":0, "error": "Latitude or Longitude was not a valid decimal." }
+        response_data = {
+            "status": 0, "error": "Latitude or Longitude was not a valid decimal."}
         return response_data
 
     # Get the account for that facebook ID and it's associated device
@@ -128,7 +138,8 @@ def login_facebook(facebook_id, device_uuid, user_location, app_version, is_ios,
         account = Account.objects.get(facebook_id=facebook_id)
     except Account.DoesNotExist:
         account = None
-        response_data = {"status":0, "error":"Account {} does not exist.".format(facebook_id)}
+        response_data = {
+            "status": 0, "error": "Account {} does not exist.".format(facebook_id)}
         return response_data
 
     # Update account location
@@ -136,7 +147,8 @@ def login_facebook(facebook_id, device_uuid, user_location, app_version, is_ios,
     account.save()
 
     # register the device
-    device = device_register(client_ip, device_uuid, account, location, app_version)
+    device = device_register(
+        client_ip, device_uuid, account, location, app_version)
 
     # Create authentication token
     login_date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -145,19 +157,22 @@ def login_facebook(facebook_id, device_uuid, user_location, app_version, is_ios,
     device.auth_token = md5.new(login_date).hexdigest() + "_" + str(account.id)
     if(is_ios.lower() == "true"):
         device.is_ios = True
-    else: 
+    else:
         device.is_ios = False
     device.save()
 
-    return {"status":1, "auth_token": device.auth_token }
+    return {"status": 1, "auth_token": device.auth_token}
 
 # Logout of account
+
+
 @time_method
 def logout(auth_token, device_uuid, client_ip):
 
     # Check that all require params are sent and are of the right format
     if (auth_token == None or auth_token.strip() == "" or auth_token.find('_') == -1) or (device_uuid == None or device_uuid.strip() == ""):
-        response_data = { "status":0, "error": "A required parameter was not provided." }
+        response_data = {
+            "status": 0, "error": "A required parameter was not provided."}
         return response_data
 
     # get the account id and the device the user is logging in from
@@ -166,54 +181,61 @@ def logout(auth_token, device_uuid, client_ip):
         account = Account.objects.get(pk=account_id)
     except Account.DoesNotExist:
         account = None
-        response_data = {"status":0, "error":"Account {} does not exist.".format(account_id)}
+        response_data = {
+            "status": 0, "error": "Account {} does not exist.".format(account_id)}
         return response_data
-
 
     # Get the device and update its fields. Also empty the auth_token
     try:
-        device = Device.objects.get(uuid = device_uuid, account_id = account)
+        device = Device.objects.get(uuid=device_uuid, account_id=account)
     except Device.DoesNotExist:
         device = None
-        response_data = {"status":0, "error":"Device {} does not exist for account {}.".format(device_uuid, account_id)}
+        response_data = {"status": 0, "error": "Device {} does not exist for account {}.".format(
+            device_uuid, account_id)}
         return response_data
-    
+
     device.last_seen_date = datetime.datetime.now()
     device.ip_address = client_ip
     device.auth_token = ""
     device.save()
 
-    return {"status":1}
+    return {"status": 1}
 
 # Register with Facebook
+
+
 @time_method
 def facebook(facebook_id, display_name, email, device_uuid):
 
     # Update or create the account
     account = Account.objects.get_or_create(
         facebook_id=facebook_id,
-        defaults= {'display_name': display_name,'email': email,})[0]
+        defaults={'display_name': display_name, 'email': email, })[0]
     account.display_name = display_name
     account.email = email
     account.save()
-    return {"status":1}
+    return {"status": 1}
 
-## DEVICE STUFF
+# DEVICE STUFF
 
 # Register a new device
+
+
 def device_register(ip, uuid, user, location, app_version):
     device = Device.objects.get_or_create(
-        uuid = uuid,
-        account_id= user,
+        uuid=uuid,
+        account_id=user,
         defaults={'notifications_enabled': True, })[0]
     device.last_seen_date = datetime.datetime.now()
     device.ip_address = ip
     device.user_location = location
-    device.app_version = app_version
+    device.app_version = int(float(app_version))
     device.save()
     return device
 
 # Register a new device for notifications
+
+
 @time_method
 def device_register_push(account_id, device_uuid, device_token, client_ip):
 
@@ -221,38 +243,40 @@ def device_register_push(account_id, device_uuid, device_token, client_ip):
         account = Account.objects.get(pk=account_id)
     except Account.DoesNotExist:
         account = None
-        response_data = {"status":0, "error":"Account {} does not exist.".format(account_id)}
+        response_data = {
+            "status": 0, "error": "Account {} does not exist.".format(account_id)}
         return response_data
 
-    # Either get the device or create it if it is a new one 
+    # Either get the device or create it if it is a new one
     device = Device.objects.get_or_create(
-        uuid = device_uuid,
-        account_id = account,
+        uuid=device_uuid,
+        account_id=account,
         defaults={'notifications_enabled': True, })[0]
     device.last_seen_date = datetime.datetime.now()
     device.ip_address = client_ip
     device.apns_token = device_token
     device.save()
 
-    response_data = { "status":1 }
+    response_data = {"status": 1}
     return response_data
 
 # """ Notify all devices of a new item """
 # @csrf_exempt
 # @time_method
 # def device_notify_all_new_item(request):
-#     # Get all devices
+# Get all devices
 #     message = request.POST.get('message', request.GET.get('message', ""))
 #     if message == None or message == "":
 #         response_data = { "status": 0, "error": "No message supplied" }
 #         return response_data
 
-#     devices = Device.objects.filter(is_ios=True) #todo: add active filter, add subscribed to notifications filter.
+# devices = Device.objects.filter(is_ios=True) #todo: add active filter,
+# add subscribed to notifications filter.
 
-#     # notify each device
+# notify each device
 #     for device in devices:
-#         # lookup number of unread messages
-#         badge = "0" #TODO: count number of unread messages
+# lookup number of unread messages
+# badge = "0" #TODO: count number of unread messages
 #         device.send_notification(message, badge, "")
 
 #     response_data = { "status": 1 }
@@ -299,17 +323,17 @@ def device_register_push(account_id, device_uuid, device_token, client_ip):
 # @csrf_exempt
 # @time_method
 # def device_notify_all(request, account_id):
-#     # Get all devices for the account
+# Get all devices for the account
 #     devices = Device.objects.filter(account_id=account_id,is_ios=True)
 
-#     # notify each device
+# notify each device
 #     for device in devices:
 #         device_notify(request, device.id)
 
 #     response_data = { "status":1 }
 #     return response_data
 
-# # Get's the client IP from a request
+# Get's the client IP from a request
 # @time_method
 # def get_client_ip(request):
 #     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -318,5 +342,3 @@ def device_register_push(account_id, device_uuid, device_token, client_ip):
 #     else:
 #         ip = request.META.get('REMOTE_ADDR')
 #     return ip
-
-

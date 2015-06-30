@@ -44,7 +44,7 @@ class bakkleRequestHandler(web.RequestHandler):
     def writeJSON(self, response):
         # print(json.dumps(response))
         self.write(response)
-        self.finish()
+        # self.finish()
 
     def getIP(self):
         x_real_ip = self.request.headers.get("X-Real-IP")

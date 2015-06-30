@@ -34,6 +34,7 @@ app = web.Application([
     web.url(r'^/items/sold/$', itemsRESTHandlers.soldHandler, name='hold'),
     web.url(r'^/items/report/$', itemsRESTHandlers.reportHandler, name='report'),
     web.url(r'^/items/add_item/$', itemsRESTHandlers.addItemHandler, name='add_item'),
+    web.url(r'^/items/add_item_no_image/$', itemsRESTHandlers.addItemNoImageHandler, name='add_item_no_image'),
     web.url(r'^/items/delete_item/$', itemsRESTHandlers.deleteItemHandler, name='delete_item'),
     #url(r'^sell_item/$', views.sell_item, name='sell_item'),
     # TODO: Remove the spam entry so that can no longer be reached once
