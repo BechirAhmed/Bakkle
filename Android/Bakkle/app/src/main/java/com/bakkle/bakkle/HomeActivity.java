@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
@@ -29,6 +30,9 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 
 import org.json.JSONObject;
 
@@ -37,7 +41,8 @@ import java.util.Arrays;
 
 
 public class HomeActivity extends Activity implements SellersGarage.OnFragmentInteractionListener,
-        BuyersTrunk.OnFragmentInteractionListener, HoldingPattern.OnFragmentInteractionListener {
+        BuyersTrunk.OnFragmentInteractionListener, HoldingPattern.OnFragmentInteractionListener,
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
 
     private DrawerLayout mDrawerLayout;
@@ -52,6 +57,9 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
     SharedPreferences.Editor editor;
 
     ServerCalls serverCalls;
+
+    GoogleApiClient mGoogleApiClient;
+    Location mLastLocation;
 
     int result = 0;
 
@@ -106,17 +114,11 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
         mActionBar.setCustomView(mCustomView);
         mActionBar.setDisplayShowCustomEnabled(true);
 
-        /*protected synchronized void buildGoogleApiClient() {
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(LocationServices.API)
-                    .build();
-        }*/
-
         preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         editor = preferences.edit();
         serverCalls = new ServerCalls(this);
+
+        buildGoogleApiClient();
 
     }
 
@@ -153,18 +155,6 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
             parameters.putString("fields", "locale, email, gender");
             request.executeAsync();
 
-            /*
-
-            String email = preferences.getString("email", "null");
-            String gender = preferences.getString("gender", "null");
-            String username = preferences.getString("username", "null");
-            String name = preferences.getString("name", "null");
-            String userid = preferences.getString("userID", "null");
-            String locale = preferences.getString("locale", "null");
-            String first_name = preferences.getString("first_name", "null");
-            String last_name = preferences.getString("last_name", "null");
-
-            */
             if(result == 1)
                 Toast.makeText(this, "Logged in successfully!", Toast.LENGTH_SHORT).show();
             else //TODO:Display error on fail? and go back to login screen
@@ -192,6 +182,53 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
         fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 
     }
+
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
+        }
+    }
+
+    public String getLocation(){
+        if(mLastLocation != null)
+            return mLastLocation.getLatitude() + ", " + mLastLocation.getLongitude();
+        else
+            return "32, 32";
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
+    }
+
 
     public void addUserInfoToPreferences(JSONObject object){
         try{
@@ -248,10 +285,6 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
 
     }
 
-    public String getLocation(){
-        return "32, 32";
-    }
-
     private class DrawerItemClickListener implements ListView.OnItemClickListener{
         @Override
         public void onItemClick(AdapterView parent, View view, int position, long id){
@@ -275,6 +308,7 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
                     getFragmentManager().beginTransaction().replace(R.id.content_frame,
                             new BuyersTrunk()).addToBackStack(null).
                             setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
+                    invalidateOptionsMenu();
                     break;
                 case 3:
                     getFragmentManager().beginTransaction().replace(R.id.content_frame,
@@ -319,10 +353,14 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_HOME);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+        if(getFragmentManager().getBackStackEntryCount() > 0)
+            getFragmentManager().popBackStackImmediate();
+        else {
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
     }
 
 }

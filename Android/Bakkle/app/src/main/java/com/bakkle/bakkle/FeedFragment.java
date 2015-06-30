@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.andtinder.model.CardModel;
 import com.andtinder.model.Orientations;
@@ -114,14 +115,14 @@ public class FeedFragment extends Fragment implements View.OnTouchListener {
         return true;
     }
 
-    public void populateFeed(JsonObject json, CardContainer mCardContainer)
+    public void populateFeed(JsonObject json, final CardContainer mCardContainer)
     {
 
         JsonArray jsonArray = json.getAsJsonArray("feed");
         SimpleCardStackAdapter adapter = new SimpleCardStackAdapter(getActivity());
         JsonObject temp;
         ArrayList<FeedItem> feedItems = new ArrayList<FeedItem>();
-        CardModel card;
+        final CardModel card;
         ArrayList<String> tags, imageUrls;
         JsonObject seller;
         JsonArray imageUrlArray;
@@ -158,20 +159,34 @@ public class FeedFragment extends Fragment implements View.OnTouchListener {
             card.setOnCardDismissedListener(new CardModel.OnCardDismissedListener() {
                 @Override
                 public void onLike() {
-                    serverCalls.markItem("want",
-                            preferences.getString("auth_token", "0"),
-                            preferences.getString("uuid", "0"),
-                            pk,
-                            "42");
+                    Toast.makeText(getActivity(), "Like", Toast.LENGTH_SHORT).show();
+//                    serverCalls.markItem("want",
+//                            preferences.getString("auth_token", "0"),
+//                            preferences.getString("uuid", "0"),
+//                            pk,
+//                            "42");
                 }
                 @Override
                 public void onDislike() {
+                    Toast.makeText(getActivity(), "Dislike", Toast.LENGTH_SHORT).show();
 
-                    serverCalls.markItem("meh",
-                            preferences.getString("auth_token", "0"),
-                            preferences.getString("uuid", "0"),
-                            pk,
-                            "42");
+//                    serverCalls.markItem("meh",
+//                            preferences.getString("auth_token", "0"),
+//                            preferences.getString("uuid", "0"),
+//                            pk,
+//                            "42");
+                }
+
+                @Override
+                public void onUp(){
+                    Toast.makeText(getActivity(), "Up", Toast.LENGTH_SHORT).show();
+
+                }
+
+                @Override
+                public void onDown(){
+                    Toast.makeText(getActivity(), "Down", Toast.LENGTH_SHORT).show();
+
                 }
             });
 

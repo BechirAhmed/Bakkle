@@ -1,10 +1,14 @@
 package com.bakkle.bakkle;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ListFragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -24,7 +28,7 @@ import java.util.ArrayList;
  * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
  * interface.
  */
-public class BuyersTrunk extends ListFragment {
+public class BuyersTrunk extends ListFragment{
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -45,6 +49,8 @@ public class BuyersTrunk extends ListFragment {
     ArrayList<FeedItem> items;
 
     JsonObject json;
+
+    private ActionBar mActionBar;
 
 
     // TODO: Rename and change types of parameters
@@ -68,6 +74,8 @@ public class BuyersTrunk extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setHasOptionsMenu(true);
+
         serverCalls = new ServerCalls(getActivity().getApplicationContext());
 
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -83,6 +91,25 @@ public class BuyersTrunk extends ListFragment {
         }*/
 
         setListAdapter(new TrunkAdapter(getActivity(), items));
+
+
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
+
+        //super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
+
+        mActionBar = getActivity().getActionBar();
+        mActionBar.setDisplayShowHomeEnabled(false);
+        mActionBar.setDisplayShowTitleEnabled(false);
+        LayoutInflater mInflater = LayoutInflater.from(getActivity());
+
+        View mCustomView = mInflater.inflate(R.layout.action_bar_trunk, null);
+
+        mActionBar.setCustomView(mCustomView);
+        mActionBar.setDisplayShowCustomEnabled(true);
     }
 
 
@@ -190,5 +217,7 @@ public class BuyersTrunk extends ListFragment {
         return feedItems;
 
     }
+
+
 
 }

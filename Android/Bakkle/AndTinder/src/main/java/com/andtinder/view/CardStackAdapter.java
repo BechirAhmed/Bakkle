@@ -39,10 +39,12 @@ public abstract class CardStackAdapter extends BaseCardStackAdapter {
 		View convertedCardView;
 		if (wrapper == null) {
 			wrapper = new FrameLayout(mContext);
-			wrapper.setBackgroundResource(R.drawable.card_bg);
+			wrapper.setBackgroundColor(mContext.getResources().getColor(R.color.black));
+			//wrapper.setBackgroundResource(R.drawable.card_bg);
 			if (shouldFillCardBackground()) {
 				innerWrapper = new FrameLayout(mContext);
-				innerWrapper.setBackgroundColor(mContext.getResources().getColor(R.color.card_bg));
+				innerWrapper.setBackgroundColor(mContext.getResources().getColor(R.color.black));
+				//innerWrapper.setBackgroundColor(mContext.getResources().getColor(R.color.card_bg));
 				wrapper.addView(innerWrapper);
 			} else {
 				innerWrapper = wrapper;

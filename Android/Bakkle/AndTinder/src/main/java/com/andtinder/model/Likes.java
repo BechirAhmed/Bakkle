@@ -19,7 +19,7 @@ package com.andtinder.model;
 
 public class Likes {
 	 public enum Like {
-	        None(0), Disliked(1), Liked(2);
+	        None(0), Disliked(1), Liked(2), Up(3), Down(4);
 
 	        public final int value;
 

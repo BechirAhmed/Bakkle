@@ -24,6 +24,7 @@ import android.view.animation.LinearInterpolator;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 
+import com.andtinder.OverlayView;
 import com.andtinder.R;
 import com.andtinder.model.CardModel;
 import com.andtinder.model.Orientations.Orientation;
@@ -294,10 +295,14 @@ public class CardContainer extends AdapterView<ListAdapter> {
                 mTopCard.setTranslationX(mTopCard.getTranslationX() + dx);
                 mTopCard.setTranslationY(mTopCard.getTranslationY() + dy);
 
-                mTopCard.setRotation(20 * mTopCard.getTranslationX() / (getWidth() / 2.f)); //used to be **40** * mtopcard.gettranslationx
+                mTopCard.setRotation(5 * mTopCard.getTranslationX() / (getWidth() / 2.f)); //used to be **40** * mtopcard.gettranslationx
 
                 mLastTouchX = x;
                 mLastTouchY = y;
+
+                OverlayView likeOverlay = (OverlayView) findViewById(R.id.like_overlay);
+                if(x > 0)
+                    likeOverlay.show();
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
@@ -309,7 +314,7 @@ public class CardContainer extends AdapterView<ListAdapter> {
                 ValueAnimator animator = ObjectAnimator.ofPropertyValuesHolder(mTopCard,
                         PropertyValuesHolder.ofFloat("translationX", 0),
                         PropertyValuesHolder.ofFloat("translationY", 0),
-                        PropertyValuesHolder.ofFloat("rotation", (float) Math.toDegrees(mRandom.nextGaussian() * DISORDERED_MAX_ROTATION_RADIANS)),
+                        PropertyValuesHolder.ofFloat("rotation", 0), //0 was originally (float) Math.toDegrees(mRandom.nextGaussian() * DISORDERED_MAX_ROTATION_RADIANS)
                         PropertyValuesHolder.ofFloat("pivotX", mTopCard.getWidth() / 2.f),
                         PropertyValuesHolder.ofFloat("pivotY", mTopCard.getHeight() / 2.f)
                 ).setDuration(250);
@@ -428,9 +433,9 @@ public class CardContainer extends AdapterView<ListAdapter> {
             Log.d("Fling", "Fling with " + velocityX + ", " + velocityY);
             final View topCard = mTopCard;
             float dx = e2.getX() - e1.getX();
-            if (Math.abs(dx) > mTouchSlop &&
-                    Math.abs(velocityX) > Math.abs(velocityY) &&
-                    Math.abs(velocityX) > mFlingSlop * 3) {
+            if (Math.abs(dx) > mTouchSlop && Math.abs(velocityX) > Math.abs(velocityY) && //Maybe change the value mTouchSlop so that it doesnt fling as easily
+                    Math.abs(velocityX) > mFlingSlop * 3)
+            {
                 float targetX = topCard.getX();
                 float targetY = topCard.getY();
                 long duration = 0;
@@ -452,11 +457,20 @@ public class CardContainer extends AdapterView<ListAdapter> {
                     mTopCard.setLayerType(LAYER_TYPE_HARDWARE, null);
 
                 if (cardModel.getOnCardDismissedListener() != null) {
-                    if ( targetX > 0 ) { //TODO: this is where i add the callback for the holding pattern
+                    if ( targetX > 0 && (targetY < 1200 && targetY > -1200)) { //TODO: this is where i add the callback for the holding pattern
                         cardModel.getOnCardDismissedListener().onLike();
-                    } else {
+                    }
+                    else if(targetX < 0 && (targetY < 1200 && targetY > -1200)){
                         cardModel.getOnCardDismissedListener().onDislike();
                     }
+                    else if(targetY > 0 && (targetX < 1200 && targetX > -1200)){
+                        cardModel.getOnCardDismissedListener().onUp();
+                    }
+                    else{
+                        cardModel.getOnCardDismissedListener().onDown();
+                    }
+                    Log.d("testing", "targetX is: " + targetX + " and targetY is: " + targetY);
+
                 }
 
                 topCard.animate()
@@ -465,7 +479,7 @@ public class CardContainer extends AdapterView<ListAdapter> {
                         .setInterpolator(new LinearInterpolator())
                         .x(targetX)
                         .y(targetY)
-                        .rotation(Math.copySign(35, velocityX)) //used to be 45, not 35
+                        .rotation(Math.copySign(25, velocityX)) //used to be 45, not 35
                         .setListener(new AnimatorListenerAdapter() {
                             @Override
                             public void onAnimationEnd(Animator animation) {
