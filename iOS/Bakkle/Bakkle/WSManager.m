@@ -65,7 +65,7 @@ static BOOL debug = true;
 }
 
 +(void) enqueueWorkPayload:(WSRequest*) payload {
-    if(!_wsManagerInstance.socketOpen || [_wsManagerInstance isOpen]){
+    if(!_wsManagerInstance.socketOpen || ![_wsManagerInstance isOpen]){
         [self connectWS];
     }
     
