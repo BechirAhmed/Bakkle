@@ -7,11 +7,11 @@
 //
 
 #import "WSManager.h"
-#if defined(TARGET_BAKKLE)
+//#if defined(TARGET_BAKKLE)
 #import "Bakkle-Swift.h"
-#else
-#import "Goodwill-Swift.h"
-#endif
+//#else
+//#import "Goodwill-Swift.h"
+//#endif
 
 
 static WSManager *_wsManagerInstance;

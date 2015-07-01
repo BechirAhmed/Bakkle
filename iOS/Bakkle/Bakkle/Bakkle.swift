@@ -42,6 +42,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     var debug: Int = 2 // 0=off
     var serverNum: Int = 0
     var deviceUUID : String = UIDevice.currentDevice().identifierForVendor.UUIDString
+    var flavor: Int = 0
     
 //    var account_id: Int! = 0
     var auth_token: String!
@@ -83,11 +84,21 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         setServer()
         info("Using server: \(self.serverNum) \(self.url_base)")
 
+        self.setFlavor()
         self.getFilter()
         self.restoreData()
         self.initLocation()
     }
     
+    /* Set version of app for branding 1=Bakkle, 2=Goodwill */
+    func setFlavor() {
+//#if defined(TARGET_BAKKLE)
+    self.flavor = 1
+//#else
+//    self.flavor = 2
+//#endif
+    }
+        
     /* Return a public URL to the item on the web */
     /* In future we hope to have a URL shortener */
     func getImageURL( item_id: Int ) -> ( String ) {
@@ -207,7 +218,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         self.facebook_id = userid.toInt()
             
         request.HTTPMethod = "POST"
-        let postString = "email=\(email)&name=\(name)&user_name=\(username)&gender=\(gender)&user_id=\(userid)&locale=\(locale)&first_name=\(first_name)&last_name=\(last_name)&device_uuid=\(self.deviceUUID)"
+        let postString = "email=\(email)&name=\(name)&user_name=\(username)&gender=\(gender)&user_id=\(userid)&locale=\(locale)&first_name=\(first_name)&last_name=\(last_name)&device_uuid=\(self.deviceUUID)&flavor=\(self.flavor)"
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
         
         info("facebook")
@@ -258,7 +269,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             let encLocation = user_location.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
             request.HTTPMethod = "POST"
-            let postString = "device_uuid=\(self.deviceUUID)&user_id=\(self.facebook_id_str)&screen_width=\(screen_width)&screen_height=\(screen_height)&app_version=\(a)&app_build=\(b)&user_location=\(encLocation)&is_ios=true"
+            let postString = "device_uuid=\(self.deviceUUID)&user_id=\(self.facebook_id_str)&screen_width=\(screen_width)&screen_height=\(screen_height)&app_version=\(a)&app_build=\(b)&user_location=\(encLocation)&is_ios=true&flavor=\(self.flavor)"
             request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
             
             println("[Bakkle] login (facebook)")
