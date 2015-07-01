@@ -390,47 +390,50 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     }
     
     var imagePicker = UIImagePickerController()
-    internal static let frameHeightAdjust = ["iPhone 4S" : CGFloat(20.0),
-                                            "iPhone 5" : CGFloat(20.0), // Confirmed
-                                            "iPhone 5S" : CGFloat(20.0),
-                                            "iPhone 5C" : CGFloat(20.0),
-                                            "iPhone 6" : CGFloat(20.0), // Confirmed
-                                            "iPhone 6 Plus" : CGFloat(22.0), // Confirmed
-                                            "iPad 2" : CGFloat(20.0),
-                                            "iPad 3" : CGFloat(20.0),
-                                            "iPad 4" : CGFloat(0.0), // testing -> needs a lot of work
-                                            "iPad Air" : CGFloat(20.0),
-                                            "iPad Mini" : CGFloat(20.0),
-                                            "iPad Mini 2" : CGFloat(20.0),
-                                            "iPod 5" : CGFloat(20.0)]
+    internal static let frameHeightAdjust  = ["iPhone 4S"    : CGFloat(20.0),
+                                             "iPhone 5"      : CGFloat(20.0), // Confirmed
+                                             "iPhone 5S"     : CGFloat(20.0),
+                                             "iPhone 5C"     : CGFloat(20.0),
+                                             "iPhone 6"      : CGFloat(20.0), // Confirmed
+                                             "iPhone 6 Plus" : CGFloat(22.0), // Confirmed
+                                             "iPad 2"        : CGFloat(20.0),
+                                             "iPad 3"        : CGFloat(20.0),
+                                             "iPad 4"        : CGFloat( 0.0), // testing -> needs a lot of work
+                                             "iPad Air"      : CGFloat(20.0),
+                                             "iPad Air 2"    : CGFloat(20.0),
+                                             "iPad Mini"     : CGFloat(20.0),
+                                             "iPad Mini 2"   : CGFloat(20.0),
+                                             "iPod Touch 5"  : CGFloat(20.0)]
     
-    internal static let retakeFrameAdjust = ["iPhone 4S" : CGFloat(20.0),
-                                             "iPhone 5" : CGFloat(22.0), // Confirmed
-                                             "iPhone 5S" : CGFloat(0.0),
-                                             "iPhone 5C" : CGFloat(0.0),
-                                             "iPhone 6" : CGFloat(20.0), // Confirmed
+    internal static let retakeFrameAdjust = ["iPhone 4S"     : CGFloat(20.0),
+                                             "iPhone 5"      : CGFloat(22.0), // Confirmed
+                                             "iPhone 5S"     : CGFloat( 0.0),
+                                             "iPhone 5C"     : CGFloat( 0.0),
+                                             "iPhone 6"      : CGFloat(20.0), // Confirmed
                                              "iPhone 6 Plus" : CGFloat(20.0), // Confirmed
-                                             "iPad 2" : CGFloat(20.0),
-                                             "iPad 3" : CGFloat(20.0),
-                                             "iPad 4" : CGFloat(0.0), // testing -> needs a lot of work
-                                             "iPad Air" : CGFloat(20.0),
-                                             "iPad Mini" : CGFloat(20.0),
-                                             "iPad Mini 2" : CGFloat(20.0),
-                                             "iPod 5" : CGFloat(20.0)]
+                                             "iPad 2"        : CGFloat(20.0),
+                                             "iPad 3"        : CGFloat(20.0),
+                                             "iPad 4"        : CGFloat( 0.0), // testing -> needs a lot of work
+                                             "iPad Air"      : CGFloat(20.0),
+                                             "iPad Air 2"    : CGFloat(20.0),
+                                             "iPad Mini"     : CGFloat(20.0),
+                                             "iPad Mini 2"   : CGFloat(20.0),
+                                             "iPod Touch 5"  : CGFloat(20.0)]
     
-    internal static let captureFrameAdjust = ["iPhone 4S" : CGFloat(20.0),
-                                             "iPhone 5" : CGFloat(4.0), // Confirmed
-                                             "iPhone 5S" : CGFloat(0.0),
-                                             "iPhone 5C" : CGFloat(0.0),
-                                             "iPhone 6" : CGFloat(0.0), // Confirmed
+    internal static let captureFrameAdjust = ["iPhone 4S"    : CGFloat(20.0),
+                                             "iPhone 5"      : CGFloat( 4.0), // Confirmed
+                                             "iPhone 5S"     : CGFloat( 0.0),
+                                             "iPhone 5C"     : CGFloat( 0.0),
+                                             "iPhone 6"      : CGFloat( 0.0), // Confirmed
                                              "iPhone 6 Plus" : CGFloat(26.0), // Confirmed
-                                             "iPad 2" : CGFloat(20.0),
-                                             "iPad 3" : CGFloat(20.0),
-                                             "iPad 4" : CGFloat(0.0), // testing -> needs a lot of work
-                                             "iPad Air" : CGFloat(20.0),
-                                             "iPad Mini" : CGFloat(20.0),
-                                             "iPad Mini 2" : CGFloat(20.0),
-                                             "iPod 5" : CGFloat(20.0)]
+                                             "iPad 2"        : CGFloat(20.0),
+                                             "iPad 3"        : CGFloat(20.0),
+                                             "iPad 4"        : CGFloat( 0.0), // testing -> needs a lot of work
+                                             "iPad Air"      : CGFloat(20.0),
+                                             "iPad Air 2"    : CGFloat(20.0),
+                                             "iPad Mini"     : CGFloat(20.0),
+                                             "iPad Mini 2"   : CGFloat(20.0),
+                                             "iPod Touch 5"  : CGFloat(20.0)]
     
     
     @IBAction func cameraBtn(sender: AnyObject) {
