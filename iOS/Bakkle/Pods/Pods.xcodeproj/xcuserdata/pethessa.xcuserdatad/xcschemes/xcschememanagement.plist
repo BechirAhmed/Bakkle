@@ -16,6 +16,11 @@
 			<key>orderHint</key>
 			<integer>2</integer>
 		</dict>
+		<key>Pods-Bakkle-SocketRocket.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>9</integer>
+		</dict>
 		<key>Pods-Bakkle.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -26,6 +31,16 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>2455BDE0545DE95A33A803A6</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>29FB2611503795D646DB8A2E</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>41E6DCE304EAA6A32365AC64</key>
 		<dict>
 			<key>primary</key>
@@ -42,6 +57,11 @@
 			<true/>
 		</dict>
 		<key>6E547CD5EBAAA9E6360C35EE</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>83480A8CD93E9AA14065CD54</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -72,6 +92,11 @@
 			<true/>
 		</dict>
 		<key>E5B253756764700D04FBA786</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>EB4F305CAC216ACA15A03417</key>
 		<dict>
 			<key>primary</key>
 			<true/>

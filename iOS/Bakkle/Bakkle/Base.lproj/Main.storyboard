@@ -670,7 +670,7 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="375"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="FWd-VD-JTT">
@@ -840,7 +840,7 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                                    <rect key="frame" x="0.0" y="0.0" width="75" height="30"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 </view>
@@ -1663,7 +1663,7 @@
                                                         <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                                            <rect key="frame" x="0.0" y="0.0" width="250" height="250"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
                                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Fgn-P4-DBQ">
@@ -2523,12 +2523,12 @@
                                             </mask>
                                             <mask key="constraints">
                                                 <exclude reference="MnY-ht-kq0"/>
+                                                <exclude reference="SRI-My-qWY"/>
+                                                <exclude reference="vkA-JY-NOs"/>
                                                 <exclude reference="0e7-KU-75w"/>
                                                 <exclude reference="1nR-iF-NWE"/>
                                                 <exclude reference="1ya-U3-R5f"/>
                                                 <exclude reference="rjp-LP-1y6"/>
-                                                <exclude reference="SRI-My-qWY"/>
-                                                <exclude reference="vkA-JY-NOs"/>
                                             </mask>
                                         </variation>
                                         <variation key="heightClass=regular-widthClass=compact">
@@ -2538,12 +2538,12 @@
                                             </mask>
                                             <mask key="constraints">
                                                 <include reference="MnY-ht-kq0"/>
+                                                <include reference="SRI-My-qWY"/>
+                                                <include reference="vkA-JY-NOs"/>
                                                 <include reference="0e7-KU-75w"/>
                                                 <include reference="1nR-iF-NWE"/>
                                                 <include reference="1ya-U3-R5f"/>
                                                 <include reference="rjp-LP-1y6"/>
-                                                <include reference="SRI-My-qWY"/>
-                                                <include reference="vkA-JY-NOs"/>
                                             </mask>
                                         </variation>
                                     </view>
@@ -3537,7 +3537,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="245" height="245"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="LMY-wb-f5x">
@@ -5200,12 +5200,12 @@
                                             </mask>
                                             <mask key="constraints">
                                                 <exclude reference="4WU-AT-D5I"/>
+                                                <exclude reference="24O-2M-qXz"/>
+                                                <exclude reference="dfM-V2-kRx"/>
                                                 <exclude reference="0Uz-WJ-teT"/>
                                                 <exclude reference="QEt-wl-McD"/>
                                                 <exclude reference="l7D-1r-Y9D"/>
                                                 <exclude reference="nOL-Ya-M0W"/>
-                                                <exclude reference="24O-2M-qXz"/>
-                                                <exclude reference="dfM-V2-kRx"/>
                                             </mask>
                                         </variation>
                                         <variation key="heightClass=regular-widthClass=compact">
@@ -5215,12 +5215,12 @@
                                             </mask>
                                             <mask key="constraints">
                                                 <include reference="4WU-AT-D5I"/>
+                                                <include reference="24O-2M-qXz"/>
+                                                <include reference="dfM-V2-kRx"/>
                                                 <include reference="0Uz-WJ-teT"/>
                                                 <include reference="QEt-wl-McD"/>
                                                 <include reference="l7D-1r-Y9D"/>
                                                 <include reference="nOL-Ya-M0W"/>
-                                                <include reference="24O-2M-qXz"/>
-                                                <include reference="dfM-V2-kRx"/>
                                             </mask>
                                         </variation>
                                     </view>
