@@ -63,7 +63,6 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     
     var filter_distance: Float = 100
     var filter_price: Float = 50
-    var filter_number: Float = 80
     
     var search_text: String = ""
     var user_location: String = ""
@@ -536,7 +535,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         let encLocation = user_location.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
         request.HTTPMethod = "POST"
-        let postString = "auth_token=\(self.auth_token)&device_uuid=\(self.deviceUUID)&search_text=\(self.search_text)&filter_distance=\(Int(self.filter_distance))&filter_price=\(Int(self.filter_price))&filter_number=\(Int(self.filter_number))&user_location=\(encLocation)"
+        let postString = "auth_token=\(self.auth_token)&device_uuid=\(self.deviceUUID)&search_text=\(self.search_text)&filter_distance=\(Int(self.filter_distance))&filter_price=\(Int(self.filter_price))&user_location=\(encLocation)"
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
         
         info("[Bakkle] populateFeed")
@@ -775,23 +774,15 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         } else {
             self.filter_price = 50
         }
-        if let z = userDefaults.objectForKey("filter_number")   as? Float {
-            self.filter_number = z
-            println("Restored filter_number = \(z)")
-        }else{
-            self.filter_number = 100
-        }
         NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkFilterChanged, object: self)
     }
-    func setFilter(ffilter_distance: Float, ffilter_price: Float, ffilter_number:Float) {
+    func setFilter(ffilter_distance: Float, ffilter_price: Float) {
         self.filter_distance = ffilter_distance
         self.filter_price = ffilter_price
-        self.filter_number = ffilter_number
         
         var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
         userDefaults.setFloat(self.filter_distance, forKey: "filter_distance")
         userDefaults.setFloat(self.filter_price,    forKey: "filter_price")
-        userDefaults.setFloat(self.filter_number,   forKey: "filter_number")
         userDefaults.synchronize()
         
         NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkFilterChanged, object: self)

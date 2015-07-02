@@ -168,7 +168,7 @@
 		A0D96F841AD76F1F0046DA13 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D96F831AD76F1F0046DA13 /* SettingsView.swift */; };
 		A0D96F861AD771900046DA13 /* SellersGarage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D96F851AD771900046DA13 /* SellersGarage.swift */; };
 		A0D96F881AD772DA0046DA13 /* HoldingPatternView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D96F871AD772DA0046DA13 /* HoldingPatternView.swift */; };
-		A0D96F8A1AD773DB0046DA13 /* FeedFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D96F891AD773DB0046DA13 /* FeedFilter.swift */; };
+		A0D96F8A1AD773DB0046DA13 /* RefineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D96F891AD773DB0046DA13 /* RefineView.swift */; };
 		A0D96F901AD7751E0046DA13 /* mock-settings.png in Resources */ = {isa = PBXBuildFile; fileRef = A0D96F8F1AD7751E0046DA13 /* mock-settings.png */; };
 		A0E1EB4B1B2B5B2200662C08 /* MDCPanState.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C9A81AB9F0FA0031D8CD /* MDCPanState.m */; };
 		A0E1EB4C1B2B5B2200662C08 /* UIImage+Resize.swift in Sources */ = {isa = PBXBuildFile; fileRef = A058A2AA1AFD8EAD005E7432 /* UIImage+Resize.swift */; };
@@ -177,7 +177,7 @@
 		A0E1EB501B2B5B2200662C08 /* FeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C98A1AB9D1730031D8CD /* FeedView.swift */; };
 		A0E1EB511B2B5B2200662C08 /* MenuTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D96F7F1AD767BD0046DA13 /* MenuTableView.swift */; };
 		A0E1EB521B2B5B2200662C08 /* Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53BC1B0815CB000C406C /* Chat.swift */; };
-		A0E1EB531B2B5B2200662C08 /* FeedFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D96F891AD773DB0046DA13 /* FeedFilter.swift */; };
+		A0E1EB531B2B5B2200662C08 /* RefineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D96F891AD773DB0046DA13 /* RefineView.swift */; };
 		A0E1EB541B2B5B2200662C08 /* ItemData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B00CB1A1B22231B00710C01 /* ItemData.swift */; };
 		A0E1EB551B2B5B2200662C08 /* UIColor+MDCRGB8Bit.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C9AC1AB9F0FB0031D8CD /* UIColor+MDCRGB8Bit.m */; };
 		A0E1EB561B2B5B2200662C08 /* HoldingPatternView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D96F871AD772DA0046DA13 /* HoldingPatternView.swift */; };
@@ -524,7 +524,7 @@
 		A0D96F831AD76F1F0046DA13 /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		A0D96F851AD771900046DA13 /* SellersGarage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SellersGarage.swift; sourceTree = "<group>"; };
 		A0D96F871AD772DA0046DA13 /* HoldingPatternView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HoldingPatternView.swift; sourceTree = "<group>"; };
-		A0D96F891AD773DB0046DA13 /* FeedFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedFilter.swift; sourceTree = "<group>"; };
+		A0D96F891AD773DB0046DA13 /* RefineView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RefineView.swift; sourceTree = "<group>"; };
 		A0D96F8F1AD7751E0046DA13 /* mock-settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mock-settings.png"; sourceTree = "<group>"; };
 		A0E1EBD01B2B5B2200662C08 /* Goodwill.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Goodwill.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A0E1EBD11B2B5B2200662C08 /* Goodwill-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Goodwill-Info.plist"; path = "/working/bakkle/iOS/Bakkle/Goodwill-Info.plist"; sourceTree = "<absolute>"; };
@@ -805,7 +805,7 @@
 				602C38A71B3C291F005CB493 /* AnalyticsView.swift */,
 				A0D96F811AD76D8E0046DA13 /* BuyersTrunkView.swift */,
 				A0D96F871AD772DA0046DA13 /* HoldingPatternView.swift */,
-				A0D96F891AD773DB0046DA13 /* FeedFilter.swift */,
+				A0D96F891AD773DB0046DA13 /* RefineView.swift */,
 				A0D96F831AD76F1F0046DA13 /* SettingsView.swift */,
 				A0D96F7F1AD767BD0046DA13 /* MenuTableView.swift */,
 				5E1DCCA41AD486D2002D41FD /* AddItem.swift */,
@@ -1475,7 +1475,7 @@
 				5EE2C98B1AB9D1730031D8CD /* FeedView.swift in Sources */,
 				A0D96F801AD767BD0046DA13 /* MenuTableView.swift in Sources */,
 				A08D53CA1B0815CB000C406C /* Chat.swift in Sources */,
-				A0D96F8A1AD773DB0046DA13 /* FeedFilter.swift in Sources */,
+				A0D96F8A1AD773DB0046DA13 /* RefineView.swift in Sources */,
 				1B00CB1B1B22231B00710C01 /* ItemData.swift in Sources */,
 				728647EE1B309F6F009A24C9 /* NSDate+String.swift in Sources */,
 				602C390C1B3C9933005CB493 /* PNLineChart.swift in Sources */,
@@ -1556,7 +1556,7 @@
 				A0E1EB511B2B5B2200662C08 /* MenuTableView.swift in Sources */,
 				A03E93B91B4338DE00F12733 /* NSDate+String.swift in Sources */,
 				A0E1EB521B2B5B2200662C08 /* Chat.swift in Sources */,
-				A0E1EB531B2B5B2200662C08 /* FeedFilter.swift in Sources */,
+				A0E1EB531B2B5B2200662C08 /* RefineView.swift in Sources */,
 				A0E1EB541B2B5B2200662C08 /* ItemData.swift in Sources */,
 				A0E1EB551B2B5B2200662C08 /* UIColor+MDCRGB8Bit.m in Sources */,
 				A0E1EB561B2B5B2200662C08 /* HoldingPatternView.swift in Sources */,

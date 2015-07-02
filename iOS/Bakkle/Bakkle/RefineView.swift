@@ -8,22 +8,25 @@
 
 import UIKit
 
-class FeedFilterView: UIViewController {
+class RefineView: UIViewController {
     
     @IBOutlet weak var menuBtn: UIButton!
     
     @IBOutlet weak var distance: UISlider!
     @IBOutlet weak var price: UISlider!
-    @IBOutlet weak var number: UISlider!
     
+    @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var distanceLbl: UILabel!
     @IBOutlet weak var priceLbl: UILabel!
-    @IBOutlet weak var numberLbl: UILabel!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
+    
+        self.view.backgroundColor = UIColor.clearColor()
+        setupBackground()
+        
         setupButtons()
+        
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -43,29 +46,26 @@ class FeedFilterView: UIViewController {
         price.setThumbImage(UIImage(named: "dot.png"), forState: UIControlState.Normal)
         price.setThumbImage(UIImage(named: "dot.png"), forState: UIControlState.Highlighted)
 
-        number.maximumValue = 1000
-        number.maximumTrackTintColor = UIColor.blackColor()
-        number.thumbTintColor = UIColor.blackColor()
-        number.minimumTrackTintColor = UIColor.blackColor()
-        number.setThumbImage(UIImage(named: "dot.png"), forState: UIControlState.Normal)
-        number.setThumbImage(UIImage(named: "dot.png"), forState: UIControlState.Highlighted)
-        number.enabled = true
-
         distance.setValue(Bakkle.sharedInstance.filter_distance, animated: true)
         price.setValue(Bakkle.sharedInstance.filter_price, animated: true)
-        number.setValue(Bakkle.sharedInstance.filter_number, animated: true)
         
         self.filterRealtime(0) // force labels to update
     }
     
     func setupButtons() {
-        menuBtn.setImage(IconImage().menu(), forState: .Normal)
+        menuBtn.setImage(IconImage().close(), forState: .Normal)
         menuBtn.setTitle("", forState: .Normal)
+    }
+    
+    func setupBackground() {
+        var visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .Dark)) as UIVisualEffectView
+        visualEffectView.frame = self.view.bounds
+        self.view.addSubview(visualEffectView)
     }
     
     /* MENUBAR ITEMS */
     @IBAction func btnMenu(sender: AnyObject) {
-        self.revealViewController().revealToggleAnimated(true)
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
     
     /* FILTER CONTROLS */
@@ -81,14 +81,9 @@ class FeedFilterView: UIViewController {
         } else {
             priceLbl.text = "$\(Int(price.value))"
         }
-        numberLbl.text = "\(Int(number.value))"
-        if number.value >= 1000 {
-            numberLbl.text = "∞"
-        } else {
-        }
     }
     @IBAction func filterChanged(sender: AnyObject) {
-        println("SET d:\(Int(distance.value)) p:\(price.value) n: \(number.value)")
+        println("SET d:\(Int(distance.value)) p:\(price.value)")
         if distance.value >= 100 {
             distanceLbl.text = "100+ mi"
         } else {
@@ -99,13 +94,7 @@ class FeedFilterView: UIViewController {
         } else {
             priceLbl.text = "$\(Int(price.value))"
         }
-        numberLbl.text = "\(Int(number.value))"
-        if number.value >= 1000 {
-            numberLbl.text = "∞"
-            Bakkle.sharedInstance.setFilter(distance.value, ffilter_price:price.value, ffilter_number:9999)
-        } else {
-            Bakkle.sharedInstance.setFilter(distance.value, ffilter_price:price.value, ffilter_number:number.value)
-        }
+        Bakkle.sharedInstance.setFilter(distance.value, ffilter_price:price.value)
     }
 
 }
