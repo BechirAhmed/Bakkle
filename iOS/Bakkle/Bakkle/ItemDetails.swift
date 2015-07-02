@@ -14,15 +14,17 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
     let itemDetailsCellIdentifier = "ItemDetailsCell"
     var wanted: Bool = false
     var itemImages: [NSData]? = [NSData]()
-
+    
+    @IBOutlet weak var sellerName: UILabel!
+    @IBOutlet weak var sellerAvatar: UIImageView!
     
     @IBOutlet weak var itemTitleLabel: UILabel!
-    @IBOutlet weak var itemTagsLabel: UILabel!
+    @IBOutlet weak var itemTagsTextView: UITextView!
+    @IBOutlet weak var itemPriceLabel: UILabel!
+    
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var pageControl: UIPageControl!
     
-    @IBOutlet weak var itemMethodLabel: UILabel!
-    @IBOutlet weak var itemPriceLabel: UILabel!
     @IBOutlet weak var wantLabel: UILabel!
     @IBOutlet weak var closeBtn: UIButton!
     
@@ -36,6 +38,21 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
         self.view.addGestureRecognizer(swipeDown)
         
         setupButtons()
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        let sellerProfile: NSDictionary = item!.valueForKey("seller") as! NSDictionary
+        let sellerFBID: String = sellerProfile.valueForKey("facebook_id") as! String
+        let sellerFacebookProfileImgString = "http://graph.facebook.com/\(sellerFBID)/picture?width=142&height=142"
+        let profileImageURL = NSURL(string: sellerFacebookProfileImgString)
+        println("FACEBOOK PROFILE LINK IS: \(sellerFacebookProfileImgString)")
+        sellerAvatar.image = UIImage(data: NSData(contentsOfURL: profileImageURL!)!)
+        sellerAvatar.layer.borderWidth = 2.0
+        sellerAvatar.layer.borderColor = UIColor.whiteColor().CGColor
+        sellerAvatar.layer.cornerRadius = sellerAvatar.layer.frame.size.width / 2
+        sellerAvatar.layer.masksToBounds = true
     }
     
     func setupButtons() {
@@ -84,6 +101,11 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
         
         //TOOD: Load all images into an array and UIScrollView.
         
+        let sellerProfile: NSDictionary = item!.valueForKey("seller") as! NSDictionary
+        // get the first name of the seller (split seller name by " " and get first element)
+        let sellersName: String = (split(sellerProfile.valueForKey("display_name") as! String) {$0 == " "})[0]
+        let sellerFBID: String = sellerProfile.valueForKey("facebook_id") as! String
+        let sellerFacebookProfileImgString = "http://graph.facebook.com/\(sellerFBID)/picture?width=142&height=142"
         let topTitle: String = item!.valueForKey("title") as! String
         let topPrice: String = item!.valueForKey("price") as! String
         let topMethod: String = item!.valueForKey("method") as! String
@@ -92,8 +114,10 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
         
         itemTitleLabel.text = topTitle.uppercaseString
         itemPriceLabel.text = "$" + topPrice
-        itemMethodLabel.text = topMethod
-        itemTagsLabel.text = tagString
+        itemTagsTextView.text = tagString
+        sellerName.text = sellersName
+        
+        
         
         
         for index in 0...imgURLs.count-1{
