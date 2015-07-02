@@ -78,6 +78,11 @@ class IconImage {
         return factory.createImageForIcon(NIKFontAwesomeIcon.ArrowDown)
     }
     
+    func contact() -> UIImage {
+        setup(MENU_SIZE)
+        return factory.createImageForIcon(NIKFontAwesomeIcon.Envelope)
+    }
+
     func filter() -> UIImage {
         setup(MENU_SIZE)
         return factory.createImageForIcon(NIKFontAwesomeIcon.Filter)
