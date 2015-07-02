@@ -205,4 +205,33 @@ public class FeedItem {
         return bitmap;
     }
 
+    public Bitmap getSellerImage(){
+        //final Bitmap[] bitmap = new Bitmap[1];
+        /*Ion.with(this)
+                .load(item.getImageUrls().get(0))
+                .withBitmap()
+                .asBitmap()
+                .setCallback(new FutureCallback<Bitmap>() {
+                    @Override
+                    public void onCompleted(Exception e, Bitmap result) {
+                        //bitmap[0] = result;
+                        bitmap = result;
+                    }
+                });*/
+        Bitmap bitmap = null;
+        try{
+            bitmap = Ion.with(c)
+                    .load("http://graph.facebook.com/" + getSellerFacebookId() + "/picture?type=square")
+                    .withBitmap()
+                    .asBitmap()
+                    .get();
+        }
+        catch (Exception e)
+        {
+            Log.d("testing error 11", e.getMessage());
+        }
+        //return bitmap[0];
+        return bitmap;
+    }
+
 }

@@ -3,6 +3,15 @@ package com.bakkle.bakkle;
 import android.app.Activity;
 import android.app.ListFragment;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.ColorFilter;
+import android.graphics.LightingColorFilter;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
@@ -11,6 +20,7 @@ import android.widget.Toast;
 
 import com.andtinder.view.SimpleCardStackAdapter;
 import com.bakkle.bakkle.dummy.DummyContent;
+import com.daimajia.swipe.SwipeLayout;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -42,7 +52,7 @@ public class SellersGarage extends ListFragment {
 
     ServerCalls serverCalls;
 
-    ArrayList<FeedItem> items;
+    ArrayList<FeedItem> items = null;
 
     JsonObject json;
 
@@ -71,18 +81,53 @@ public class SellersGarage extends ListFragment {
         serverCalls = new ServerCalls(getActivity().getApplicationContext());
 
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        editor = preferences.edit();
 
-        json = serverCalls.populateGarage(preferences.getString("auth_token", "0"), preferences.getString("uuid", "0"));
+        //json = serverCalls.populateGarage(preferences.getString("auth_token", "0"), preferences.getString("uuid", "0"));
 
-        items = getItems(json);
+        //items = getItems(json);
+
+        SwipeLayout swipeLayout =  (SwipeLayout) getActivity().findViewById(R.id.swipe);
+        swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
+        swipeLayout.addDrag(SwipeLayout.DragEdge.Right, getActivity().findViewById(R.id.bottom_wrapper));
+
+        swipeLayout.addSwipeListener(new SwipeLayout.SwipeListener() {
+            @Override
+            public void onClose(SwipeLayout layout) {
+                //when the SurfaceView totally cover the BottomView.
+            }
+
+            @Override
+            public void onUpdate(SwipeLayout layout, int leftOffset, int topOffset) {
+                //you are swiping.
+            }
+
+            @Override
+            public void onStartOpen(SwipeLayout layout) {
+
+            }
+
+            @Override
+            public void onOpen(SwipeLayout layout) {
+                deleteItem();
+            }
+
+            @Override
+            public void onStartClose(SwipeLayout layout) {
+
+            }
+
+            @Override
+            public void onHandRelease(SwipeLayout layout, float xvel, float yvel) {
+                //when user's hand released.
+            }
+        });
 
         /*if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }*/
 
-        //setListAdapter(new GarageAdapter(getActivity(), items));
+        setListAdapter(new GarageAdapter(getActivity(), items));
     }
 
 
@@ -149,17 +194,11 @@ public class SellersGarage extends ListFragment {
         {
             item = element.getAsJsonObject().getAsJsonObject("item");
             feedItem = new FeedItem(this.getActivity().getApplicationContext());
-            temp = element.getAsJsonObject();
+            //temp = element.getAsJsonObject();
 
             feedItem.setTitle(item.get("title").getAsString());
-            feedItem.setDescription(item.get("description").getAsString());
-            feedItem.setSellerDisplayName(item.get("seller").getAsJsonObject().get("display_name").getAsString());
             feedItem.setPrice(item.get("price").getAsString());
-            feedItem.setLocation(item.get("location").getAsString()); //TODO: difference between location and sellerlocation??
-            feedItem.setMethod(item.get("method").getAsString());
-            sellerFacebookId = item.get("seller").getAsJsonObject().get("facebook_id").getAsString();
-            pk = item.get("pk").getAsString();
-            feedItem.setPk(pk);
+            feedItem.setPk(item.get("pk").getAsString());
 
 
             imageUrlArray = item.get("image_urls").getAsJsonArray();
@@ -170,18 +209,11 @@ public class SellersGarage extends ListFragment {
             }
             feedItem.setImageUrls(imageUrls);
 
-            tagArray = item.get("tags").getAsJsonArray();
-            tags = new ArrayList<String>();
-            for(JsonElement tagElement : tagArray)
-            {
-                tags.add(tagElement.getAsString());
-            }
-            feedItem.setTags(tags);
+
             feedItems.add(feedItem);
 
 
             feedItem = null;
-            temp = null;
             imageUrlArray = null;
             imageUrls = null;
             item = null;
@@ -189,6 +221,36 @@ public class SellersGarage extends ListFragment {
 
         return feedItems;
 
+    }
+
+    public void deleteItem(){
+        Toast.makeText(getActivity(), "You are in the delete Item page", Toast.LENGTH_SHORT).show();
+
+    }
+
+
+    public static Bitmap getRoundedCornerAndDarkenedBitmap(Bitmap bitmap) {
+        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
+                bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+
+        final int color = 0xff424242;
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+        final RectF rectF = new RectF(rect);
+        final float roundPx = 12;
+        final ColorFilter filter = new LightingColorFilter(0xFF222222, 0x00000000);
+
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(color);
+        paint.setColorFilter(filter);
+        canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, rect, rect, paint);
+
+        return output;
     }
 
 }

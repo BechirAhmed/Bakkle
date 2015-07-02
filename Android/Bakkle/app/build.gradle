@@ -24,12 +24,14 @@ repositories {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:22.0.0'
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.android.support:appcompat-v7:22.1.1'
     compile 'com.google.android.gms:play-services:7.5.0'
     compile 'com.facebook.android:facebook-android-sdk:4.1.0'
-    //compile 'com.github.kikoso:SwipeableCards:1.1-RELEASE@aar'
     compile project(':AndTinder')
-
     compile 'com.koushikdutta.ion:ion:2.+'
+    compile project(':CardStack')
+    compile 'com.android.support:recyclerview-v7:21.0.0'
+    compile 'com.android.support:support-v4:22.+'
+    compile "com.daimajia.swipelayout:library:1.2.0@aar"
 }

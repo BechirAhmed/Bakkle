@@ -32,7 +32,6 @@ public class CardModel {
 	private Drawable cardImageDrawable;
 
 
-
 	public void setSellerImageDrawable(Drawable sellerImageDrawable) {
 		this.sellerImageDrawable = sellerImageDrawable;
 	}
@@ -164,4 +163,5 @@ public class CardModel {
     public OnClickListener getOnClickListener() {
         return this.mOnClickListener;
     }
+
 }

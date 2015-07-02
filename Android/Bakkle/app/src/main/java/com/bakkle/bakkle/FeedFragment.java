@@ -1,5 +1,6 @@
 package com.bakkle.bakkle;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
@@ -11,16 +12,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.andtinder.model.CardModel;
-import com.andtinder.model.Orientations;
 import com.andtinder.view.CardContainer;
 import com.andtinder.view.SimpleCardStackAdapter;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.koushikdutta.ion.Ion;
+import com.wenchao.cardstack.CardStack;
 
 import java.util.ArrayList;
 
@@ -34,6 +34,8 @@ public class FeedFragment extends Fragment {
     FeedItem feedItem = null;
     CardContainer mCardContainer;
 
+    CardStack mCardStack;
+
     String status, description, price, postDate, title, buyerRating, sellerDisplayName, sellerLocation, sellerFacebookId, sellerPk, sellerRating, location, pk, method;
 
 
@@ -44,8 +46,25 @@ public class FeedFragment extends Fragment {
     SharedPreferences.Editor editor;
     SharedPreferences preferences;
 
+    public interface OnCardSelected {
+        public void OnCardSelected(FeedItem item);
+    }
+
+    OnCardSelected onCardSelected;
+
 
     public FeedFragment() {}
+
+    @Override
+    public void onAttach(Activity activity)
+    {
+        super.onAttach(activity);
+        try {
+            onCardSelected = (OnCardSelected) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement OnCardSelected");
+        }
+    }
 
 
     @Override
@@ -53,13 +72,9 @@ public class FeedFragment extends Fragment {
     {
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
 
-
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-        editor = preferences.edit();
 
         serverCalls = new ServerCalls(getActivity().getApplicationContext());
-        editor.putBoolean("stillWorking", true);
-        editor.apply();
 
         try{
             new bgTask().execute();
@@ -67,16 +82,21 @@ public class FeedFragment extends Fragment {
         catch (Exception e){Log.d("testing", e.getMessage());}
 
 
-        mCardContainer = (CardContainer) view.findViewById(R.id.cardView);
-        mCardContainer.setOrientation(Orientations.Orientation.Ordered);
+//        mCardContainer = (CardContainer) view.findViewById(R.id.cardView);
+//        mCardContainer.setOrientation(Orientations.Orientation.Ordered);
+
+        mCardStack = (CardStack) view.findViewById(R.id.container);
+        mCardStack.setContentResource(R.layout.card_layout);
+        mCardStack.setStackMargin(0);
 
         return view;
     }
 
-    public void populateFeed(JsonObject json, CardContainer mCardContainer)
+    public void populateFeed(JsonObject json)
     {
         JsonArray jsonArray = json.getAsJsonArray("feed");
         SimpleCardStackAdapter adapter = new SimpleCardStackAdapter(getActivity());
+        CardAdapter mCardAdapter = new CardAdapter(getActivity().getApplicationContext());
         JsonObject temp;
         ArrayList<FeedItem> feedItems = new ArrayList<>();
         CardModel card;
@@ -109,7 +129,10 @@ public class FeedFragment extends Fragment {
             }
             feedItem.setImageUrls(imageUrls);
 
-            card = new CardModel(feedItem.getTitle(), feedItem.getSellerDisplayName(), "$" + feedItem.getPrice(),
+            mCardAdapter.add(feedItem);
+            mCardStack.setAdapter(mCardAdapter);
+
+            /*card = new CardModel(feedItem.getTitle(), feedItem.getSellerDisplayName(), "$" + feedItem.getPrice(),
                     feedItem.getDistance(), feedItem.getMethod(), getCardImage(feedItem), getSellerImage(sellerFacebookId));
 
             card.setOnCardDismissedListener(new CardModel.OnCardDismissedListener() {
@@ -122,6 +145,7 @@ public class FeedFragment extends Fragment {
                             pk,
                             "42");
                 }
+
                 @Override
                 public void onDislike() {
                     Toast.makeText(getActivity(), "Dislike", Toast.LENGTH_SHORT).show();
@@ -134,7 +158,7 @@ public class FeedFragment extends Fragment {
                 }
 
                 @Override
-                public void onUp(){
+                public void onUp() {
                     Toast.makeText(getActivity(), "Up", Toast.LENGTH_SHORT).show();
                     serverCalls.markItem("hold",
                             preferences.getString("auth_token", "0"),
@@ -145,7 +169,7 @@ public class FeedFragment extends Fragment {
                 }
 
                 @Override
-                public void onDown(){
+                public void onDown() {
                     Toast.makeText(getActivity(), "Down", Toast.LENGTH_SHORT).show();
                     serverCalls.markItem("report",
                             preferences.getString("auth_token", "0"),
@@ -155,23 +179,26 @@ public class FeedFragment extends Fragment {
 
                 }
             });
-
+            final CardModel tempCard = card;
             card.setOnClickListener(new CardModel.OnClickListener() {
                 @Override
                 public void OnClickListener() {
+                    //onCardSelected.OnCardSelected(feedItem);
+//title, tags, img, method, price
+
 
                     //TODO: bring up description page, with all pictures, description, etc
                 }
             });
 
             adapter.add(card);
+            mCardContainer.setAdapter(adapter);*/
             feedItem = null;
 //            temp = null;
 //            imageUrlArray = null;
 //            imageUrls = null;
             //card = null;
         }
-        mCardContainer.setAdapter(adapter);
 
 
     }
@@ -265,7 +292,7 @@ public class FeedFragment extends Fragment {
             }
 
             if(jsonResult != null)
-                populateFeed(jsonResult, mCardContainer);
+                populateFeed(jsonResult);
             else
                 Log.d("umm", "what");
         }

@@ -42,8 +42,8 @@ import java.util.Arrays;
 
 public class HomeActivity extends Activity implements SellersGarage.OnFragmentInteractionListener,
         BuyersTrunk.OnFragmentInteractionListener, HoldingPattern.OnFragmentInteractionListener,
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
-
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
+        FeedFragment.OnCardSelected{
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -52,6 +52,8 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
     private TypedArray mDrawerIcons;
     private ActionBarDrawerToggle mDrawerToggle;
     private ActionBar mActionBar;
+
+    FeedItem item;
 
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
@@ -282,6 +284,17 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
 
     @Override
     public void onFragmentInteraction(String id) {
+
+    }
+
+    @Override
+    public void OnCardSelected(FeedItem item) {
+        this.item = item;
+//        getFragmentManager().beginTransaction().replace(R.id.content_frame,
+//                new ItemPage(), "frag").addToBackStack(null)
+//                .setTransition(R.anim.abc_slide_in_bottom).commit();
+        //ItemPage itempage = (ItemPage) getFragmentManager().findFragmentByTag("frag");
+        //itempage.setItem(item);
 
     }
 
