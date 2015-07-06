@@ -22,6 +22,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     let url_garage: String        = "items/get_seller_items/"
     let url_add_item: String      = "items/add_item/"
     let url_add_item_no_image: String      = "items/add_item_no_image/"
+    let url_delete_item: String = "items/delete_item/"
     let url_send_chat: String     = "conversation/send_message/"
     let url_view_item: String     = "items/"
     let url_buyers_trunk: String        = "items/get_buyers_trunk/"
@@ -702,6 +703,46 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         
         info("[Bakkle] addItem")
         info("URL: \(url) METHOD: \(request.HTTPMethod) BODY: --binary blob-- LENGTH: \(imageDataLength)")
+        
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
+            data, response, error in
+            
+            if error != nil {
+                self.err("error= \(error)")
+                return
+            }
+            
+            let responseString: String = NSString(data: data, encoding: NSUTF8StringEncoding)! as String
+            self.debg("Response: \(responseString)")
+            println("Response: \(responseString)")
+            
+            var parseError: NSError?
+            self.responseDict = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! NSDictionary!
+            self.debg("RESPONSE DICT IS: \(self.responseDict)")
+            
+            if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
+                let item_id: Int = self.responseDict.valueForKey("item_id") as! Int
+                let item_url: String = self.getImageURL(item_id)
+                success(item_id: item_id, item_url: item_url)
+            } else {
+                fail()
+            }
+        }
+        task.resume()
+    }
+    
+    func removeItem(item_id: NSInteger, success: (item_id: Int?, item_url: String?)->(), fail: ()->() ) {
+        // URL encode some vars.
+                var postString : NSString;
+            postString = "device_uuid=\(self.deviceUUID)&auth_token=\(self.auth_token)&item_id=\(item_id)"
+
+        let url: NSURL? = NSURL(string: url_base +  url_delete_item + "?\(postString)")
+        
+        let request = NSMutableURLRequest(URL: url!)
+        request.HTTPMethod = "POST"
+        
+        info("[Bakkle] deleteItem")
+        info("URL: \(url) METHOD: \(request.HTTPMethod)")
         
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
             data, response, error in
