@@ -233,8 +233,8 @@ public class ServerCalls{
 
         try {
             jsonResponse = Ion.with(mContext)
-                    .load(url_base + url_garage)
-                    .setBodyParameter("auth_token", authToken)
+                    .load("https://app.bakkle.com/" + url_garage)
+                    .setBodyParameter("auth_token", "b30a48cafc3ae9e59b7234a9c582b851_12")
                     .setBodyParameter("device_uuid", uuid)
                     .asJsonObject()
                     .get();

@@ -79,7 +79,6 @@ public class BuyersTrunk extends ListFragment{
         serverCalls = new ServerCalls(getActivity().getApplicationContext());
 
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        editor = preferences.edit();
 
         json = serverCalls.populateTrunk(preferences.getString("auth_token", "0"), preferences.getString("uuid", "0"));
 

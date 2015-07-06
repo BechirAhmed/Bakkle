@@ -21,7 +21,7 @@ public class GarageAdapter extends ArraySwipeAdapter<FeedItem> {
 
     @Override
     public int getSwipeLayoutResourceId(int i) {
-        return R.layout.fragment_sellersgarage;
+        return R.layout.garage_list_item;
     }
 
     private static class ViewHolder{
@@ -36,7 +36,7 @@ public class GarageAdapter extends ArraySwipeAdapter<FeedItem> {
     }
 
     public GarageAdapter(Context context, ArrayList<FeedItem> items){
-        super(context, R.layout.buyers_trunk_list_item, items);
+        super(context, R.layout.garage_list_item, items);
         this.c = context;
         this.items = items;
     }
@@ -47,7 +47,7 @@ public class GarageAdapter extends ArraySwipeAdapter<FeedItem> {
         ViewHolder viewHolder;
         if(convertView == null){
             viewHolder = new ViewHolder();
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.buyers_trunk_list_item, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.garage_list_item, parent, false);
             viewHolder.icon = (ImageView) convertView.findViewById(R.id.icon);
             viewHolder.title = (TextView) convertView.findViewById(R.id.title);
             viewHolder.want = (TextView) convertView.findViewById(R.id.want_count);
@@ -62,19 +62,19 @@ public class GarageAdapter extends ArraySwipeAdapter<FeedItem> {
         }
 
 
-//        viewHolder.icon.setImageBitmap(item.getFirstImage());
-//        viewHolder.title.setText(item.getTitle());
-//        viewHolder.want.setText(item.getMethod());
-//        viewHolder.hold.setText("Tags: " + item.getTagsString());
-//        viewHolder.nope.setText(item.getDistance());
-//        viewHolder.price.setText("$" + item.getPrice());
+        viewHolder.icon.setImageBitmap(item.getFirstImage());
+        viewHolder.title.setText(item.getTitle());
+        viewHolder.price.setText("$" + item.getPrice());
+        viewHolder.want.setText(item.getNumWant());
+        viewHolder.hold.setText(item.getNumWant());
+        viewHolder.nope.setText(item.getNumWant());
 
-        viewHolder.icon.setImageDrawable(c.getDrawable(R.drawable.bakkle_icon));
-        viewHolder.title.setText("Title");
-        viewHolder.want.setText("3");
-        viewHolder.hold.setText("3");
-        viewHolder.nope.setText("3");
-        viewHolder.price.setText("$5");
+//        viewHolder.icon.setImageDrawable(c.getDrawable(R.drawable.bakkle_icon));
+//        viewHolder.title.setText("Title");
+//        viewHolder.want.setText("3");
+//        viewHolder.hold.setText("3");
+//        viewHolder.nope.setText("3");
+//        viewHolder.price.setText("$5");
 
         return convertView;
     }

@@ -18,9 +18,7 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.andtinder.view.SimpleCardStackAdapter;
 import com.bakkle.bakkle.dummy.DummyContent;
-import com.daimajia.swipe.SwipeLayout;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -82,12 +80,13 @@ public class SellersGarage extends ListFragment {
 
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
-        //json = serverCalls.populateGarage(preferences.getString("auth_token", "0"), preferences.getString("uuid", "0"));
+        json = serverCalls.populateGarage(preferences.getString("auth_token", "0"), preferences.getString("uuid", "0"));
 
-        //items = getItems(json);
+        items = getItems(json);
+        setListAdapter(new GarageAdapter(getActivity(), items));
 
-        SwipeLayout swipeLayout =  (SwipeLayout) getActivity().findViewById(R.id.swipe);
-        swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
+        /*SwipeLayout swipeLayout =  (SwipeLayout) getListView().findViewById(R.id.swipe);
+        swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut); //null pointer exception? need to set content layout first aka move this code somehwere else?
         swipeLayout.addDrag(SwipeLayout.DragEdge.Right, getActivity().findViewById(R.id.bottom_wrapper));
 
         swipeLayout.addSwipeListener(new SwipeLayout.SwipeListener() {
@@ -120,15 +119,10 @@ public class SellersGarage extends ListFragment {
             public void onHandRelease(SwipeLayout layout, float xvel, float yvel) {
                 //when user's hand released.
             }
-        });
+        }); */
 
-        /*if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }*/
-
-        setListAdapter(new GarageAdapter(getActivity(), items));
     }
+
 
 
     @Override
@@ -180,9 +174,8 @@ public class SellersGarage extends ListFragment {
     {
 
         JsonArray jsonArray = json.getAsJsonArray("seller_garage");
-        SimpleCardStackAdapter adapter = new SimpleCardStackAdapter(getActivity());
         JsonObject temp, item;
-        ArrayList<FeedItem> feedItems = new ArrayList<FeedItem>();
+        ArrayList<FeedItem> feedItems = new ArrayList<>();
         ArrayList<String> tags, imageUrls;
         JsonObject seller;
         JsonArray imageUrlArray, tagArray;
@@ -198,8 +191,10 @@ public class SellersGarage extends ListFragment {
 
             feedItem.setTitle(item.get("title").getAsString());
             feedItem.setPrice(item.get("price").getAsString());
-            feedItem.setPk(item.get("pk").getAsString());
-
+            feedItem.setNumView(item.get("number_of_views").getAsString());
+            feedItem.setNumMeh(item.get("number_of_meh").getAsString());
+            feedItem.setNumWant(item.get("number_of_want").getAsString());
+            feedItem.setNumHold(item.get("number_of_holding").getAsString());
 
             imageUrlArray = item.get("image_urls").getAsJsonArray();
             imageUrls = new ArrayList<String>();

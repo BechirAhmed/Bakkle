@@ -18,6 +18,7 @@ public class FeedItem {
     ArrayList<String> tags, imageUrls;
     JsonObject seller;
     Context c;
+    String numWant, numHold, numMeh, numView;
 
     public FeedItem(Context c){
         this.c =c;
@@ -168,6 +169,38 @@ public class FeedItem {
 
     public void setSeller(JsonObject seller) {
         this.seller = seller;
+    }
+
+    public String getNumWant() {
+        return numWant;
+    }
+
+    public void setNumWant(String numWant) {
+        this.numWant = numWant;
+    }
+
+    public String getNumHold() {
+        return numHold;
+    }
+
+    public void setNumHold(String numHold) {
+        this.numHold = numHold;
+    }
+
+    public String getNumMeh() {
+        return numMeh;
+    }
+
+    public void setNumMeh(String numMeh) {
+        this.numMeh = numMeh;
+    }
+
+    public String getNumView() {
+        return numView;
+    }
+
+    public void setNumView(String numView) {
+        this.numView = numView;
     }
 
     public String getDistance(){

@@ -42,6 +42,7 @@ public class CircleImageView extends ImageView {
         if (getWidth() == 0 || getHeight() == 0) {
             return;
         }
+        //Bitmap b = BitmapFactory.decodeResource(getResources(), R.drawable.camera);
         Bitmap b =  ((BitmapDrawable)drawable).getBitmap() ;
         Bitmap bitmap = b.copy(Bitmap.Config.ARGB_8888, true);
 
