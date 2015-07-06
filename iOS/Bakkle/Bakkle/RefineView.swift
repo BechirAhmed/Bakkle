@@ -18,6 +18,8 @@ class RefineView: UIViewController, UISearchBarDelegate {
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var distanceLbl: UILabel!
     @IBOutlet weak var priceLbl: UILabel!
+    var parentView: FeedView!
+    var search_text: String! = nil
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,31 +32,20 @@ class RefineView: UIViewController, UISearchBarDelegate {
         var tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
         self.view.addGestureRecognizer(tapGestureRecognizer)
         
+        if search_text != nil {
+            searchBar.text = search_text
+        }
     }
 
     override func viewWillAppear(animated: Bool) {
-        
-        /* Custom skin for UISlideView */
-        distance.maximumValue = 100
-        distance.maximumTrackTintColor = UIColor.blackColor()
-        distance.thumbTintColor = UIColor.blackColor()
-        distance.minimumTrackTintColor = UIColor.blackColor()
-        distance.setThumbImage(UIImage(named: "dot.png"), forState: UIControlState.Normal)
-        distance.setThumbImage(UIImage(named: "dot.png"), forState: UIControlState.Highlighted)
-
-        price.maximumValue = 100
-        price.maximumTrackTintColor = UIColor.blackColor()
-        price.thumbTintColor = UIColor.blackColor()
-        price.minimumTrackTintColor = UIColor.blackColor()
-        price.setThumbImage(UIImage(named: "dot.png"), forState: UIControlState.Normal)
-        price.setThumbImage(UIImage(named: "dot.png"), forState: UIControlState.Highlighted)
-
+    
         distance.setValue(Bakkle.sharedInstance.filter_distance, animated: true)
         price.setValue(Bakkle.sharedInstance.filter_price, animated: true)
         
         self.filterRealtime(0) // force labels to update
         
-        // Removed border around search bar.
+        self.searchBar.barTintColor = UIColor.clearColor()
+        self.searchBar.backgroundImage = UIImage()
     }
     
     func dismissKeyboard() {
@@ -64,6 +55,8 @@ class RefineView: UIViewController, UISearchBarDelegate {
     /* UISearch Bar delegate */
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
         Bakkle.sharedInstance.search_text = searchText
+        self.parentView.searchBar.text = searchText
+        self.parentView.searchBar(self.parentView.searchBar, textDidChange: searchText)
     }
     
     func searchBarTextDidBeginEditing(searchBar: UISearchBar){
@@ -127,6 +120,7 @@ class RefineView: UIViewController, UISearchBarDelegate {
             priceLbl.text = "$\(Int(price.value))"
         }
         Bakkle.sharedInstance.setFilter(distance.value, ffilter_price:price.value)
+        self.parentView.requestUpdates()
     }
 
 }

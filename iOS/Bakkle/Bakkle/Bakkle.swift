@@ -766,13 +766,13 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             self.filter_distance = x
             self.debg("Restored filter_distance = \(x)")
         } else {
-            self.filter_distance = 50
+            self.filter_distance = 100
         }
         if let y = userDefaults.objectForKey("filter_price")    as? Float {
             self.filter_price = y
             println("Restored filter_price = \(y)")
         } else {
-            self.filter_price = 50
+            self.filter_price = 100
         }
         NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkFilterChanged, object: self)
     }

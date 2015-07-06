@@ -195,7 +195,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vny-1N-xvJ">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <subviews>
-                                    <searchBar contentMode="redraw" placeholder="Search here..." translatesAutoresizingMaskIntoConstraints="NO" id="XAD-Uh-z5L">
+                                    <searchBar contentMode="redraw" placeholder="Search" translatesAutoresizingMaskIntoConstraints="NO" id="XAD-Uh-z5L">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                         <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         <textInputTraits key="textInputTraits"/>
@@ -4358,7 +4358,7 @@
                         <viewControllerLayoutGuide type="top" id="G0N-sT-i0z"/>
                         <viewControllerLayoutGuide type="bottom" id="Dy7-4e-kc6"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="i7W-q9-rtk" userLabel="Container">
+                    <view key="view" opaque="NO" contentMode="scaleToFill" id="i7W-q9-rtk" userLabel="Container">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -4438,6 +4438,15 @@
                                     </mask>
                                 </variation>
                             </view>
+                            <searchBar contentMode="redraw" placeholder="Search" translatesAutoresizingMaskIntoConstraints="NO" id="w8F-0z-26V">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="barTintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <textInputTraits key="textInputTraits" keyboardAppearance="light" secureTextEntry="YES"/>
+                                <connections>
+                                    <outlet property="delegate" destination="Ly4-7t-E63" id="akZ-fO-4Hp"/>
+                                </connections>
+                            </searchBar>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="18T-OW-vOL" userLabel="Slider Container">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <subviews>
@@ -4458,6 +4467,9 @@
                                             </label>
                                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="50" minValue="0.0" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="YEI-ei-kBo" userLabel="distance">
                                                 <rect key="frame" x="36" y="343" width="300" height="31"/>
+                                                <color key="minimumTrackTintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <color key="maximumTrackTintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <color key="thumbTintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <connections>
                                                     <action selector="filterChanged:" destination="Ly4-7t-E63" eventType="touchUpInside" id="Hjy-ai-wep"/>
                                                     <action selector="filterChanged:" destination="Ly4-7t-E63" eventType="touchUpOutside" id="tHZ-aE-umB"/>
@@ -4567,6 +4579,9 @@
                                             </label>
                                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="50" minValue="0.0" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="2cB-lu-DS9" userLabel="price">
                                                 <rect key="frame" x="36" y="251" width="300" height="31"/>
+                                                <color key="minimumTrackTintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <color key="maximumTrackTintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <color key="thumbTintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <connections>
                                                     <action selector="filterChanged:" destination="Ly4-7t-E63" eventType="touchUpInside" id="2Fs-r1-NbU"/>
                                                     <action selector="filterChanged:" destination="Ly4-7t-E63" eventType="touchUpOutside" id="OgE-LL-GQZ"/>
@@ -4683,15 +4698,6 @@
                                     </mask>
                                 </variation>
                             </view>
-                            <searchBar contentMode="redraw" searchBarStyle="minimal" placeholder="Search" translatesAutoresizingMaskIntoConstraints="NO" id="w8F-0z-26V">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                                <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <color key="barTintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <textInputTraits key="textInputTraits"/>
-                                <connections>
-                                    <outlet property="delegate" destination="Ly4-7t-E63" id="akZ-fO-4Hp"/>
-                                </connections>
-                            </searchBar>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -4720,8 +4726,8 @@
                         <variation key="default">
                             <mask key="subviews">
                                 <exclude reference="ixB-lS-jeR"/>
-                                <exclude reference="18T-OW-vOL"/>
                                 <exclude reference="w8F-0z-26V"/>
+                                <exclude reference="18T-OW-vOL"/>
                             </mask>
                             <mask key="constraints">
                                 <exclude reference="ec7-vP-5uT"/>
@@ -4740,8 +4746,8 @@
                         <variation key="heightClass=regular-widthClass=compact">
                             <mask key="subviews">
                                 <include reference="ixB-lS-jeR"/>
-                                <include reference="18T-OW-vOL"/>
                                 <include reference="w8F-0z-26V"/>
+                                <include reference="18T-OW-vOL"/>
                             </mask>
                             <mask key="constraints">
                                 <include reference="ec7-vP-5uT"/>
@@ -5911,5 +5917,4 @@
         <segue reference="OWh-wK-JU0"/>
         <segue reference="Chj-xB-zO6"/>
     </inferredMetricsTieBreakers>
-    <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
 </document>

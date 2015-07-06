@@ -16,6 +16,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     let menuSegue = "presentNav"
     let addItemSegue = "AddItemSegue"
     let itemDetailSegue = "ItemDetailSegue"
+    let refineSegue = "RefineSegue"
     var searching = false
     
     let options = MDCSwipeToChooseViewOptions()
@@ -587,6 +588,13 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             let destinationVC = segue.destinationViewController as! ItemDetails
             
             destinationVC.item = Bakkle.sharedInstance.feedItems[0] as! NSDictionary
+        }
+        if segue.identifier == self.refineSegue {
+            let destinationVC = segue.destinationViewController as! RefineView
+            destinationVC.parentView = self
+            if searchBar.text != nil {
+                destinationVC.search_text = searchBar.text
+            }
         }
     }
 }
