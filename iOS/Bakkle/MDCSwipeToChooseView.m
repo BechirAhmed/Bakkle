@@ -50,7 +50,7 @@ static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
 
 - (instancetype)initWithFrame:(CGRect)frame options:(MDCSwipeToChooseViewOptions *)options {
     
-    self = [super initWithFrame: CGRectMake(0, 0, frame.size.width, frame.size.height)];
+    self = [super initWithFrame: frame];
     if (self) {
         _options = options ? options : [MDCSwipeToChooseViewOptions new];
         [self setupView];
@@ -95,10 +95,10 @@ static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
     [self addSubview:_imageView];
     
     
-    _transparentImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height-140)];
+    _transparentImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, _imageView.frame.size.width, _imageView.frame.size.height)];
     _transparentImage.backgroundColor = [UIColor blackColor];
     _transparentImage.alpha = 0.f;
-    [self.imageView addSubview:_transparentImage];
+    [_imageView addSubview:_transparentImage];
     
 }
 
@@ -177,14 +177,13 @@ static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
 
 - (void)constructNameLabel {
     CGFloat topPadding = 10.f;
-    CGRect frame = CGRectMake(5,
+    CGRect frame = CGRectMake(10,
                               topPadding,
-                              self.frame.size.width/4*3,
+                              self.frame.size.width/4*3-5,
                               CGRectGetHeight(_informationView.frame)/2);
     _nameLabel = [[UILabel alloc] initWithFrame:frame];
-    
     _nameLabel.text = [NSString stringWithFormat:@"%s", ""];
-    _nameLabel.font = [UIFont fontWithName:@"Avenir-Black" size:26];
+    _nameLabel.font = [UIFont fontWithName:@"Avenir-Black" size:24];
     _nameLabel.numberOfLines = 1;
     _nameLabel.adjustsFontSizeToFitWidth = YES;
     _nameLabel.textColor = [UIColor whiteColor];
@@ -193,16 +192,14 @@ static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
 }
 
 - (void)constructPriceLabel {
-    CGFloat leftPadding = 60.f;
-    CGRect frame = CGRectMake(self.frame.size.width - leftPadding, 10, floorf((CGRectGetWidth(_informationView.frame)- 2*leftPadding)/3), CGRectGetHeight(_informationView.frame)/2);
+    CGRect frame = CGRectMake(self.frame.size.width/4*3+5, 10, self.frame.size.width/4-10, CGRectGetHeight(_informationView.frame)/2);
     _priceLabel = [[UILabel alloc] initWithFrame:frame];
-    
-    
-    _priceLabel.font = [UIFont fontWithName:@"Avenir-Heavy" size:24];
-    [_priceLabel setContentCompressionResistancePriority:800 forAxis:UILayoutConstraintAxisHorizontal];
+    _priceLabel.font = [UIFont fontWithName:@"Avenir-Heavy" size:22];
+    _priceLabel.numberOfLines = 1;
+    _priceLabel.adjustsFontSizeToFitWidth = YES;
     _priceLabel.text = [NSString stringWithFormat:@"%s", ""];
     _priceLabel.textColor = [UIColor whiteColor];
-    _priceLabel.textAlignment = NSTextAlignmentLeft;
+    _priceLabel.textAlignment = NSTextAlignmentCenter;
     [_informationView addSubview:_priceLabel];
 }
 
@@ -283,25 +280,25 @@ static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
             holdImageView.alpha = 0.f;
             reportImageView.alpha = 0.f;
         } else if (state.direction == MDCSwipeDirectionLeft) {
-            transparentImageView.alpha = state.thresholdRatio / 2;
+            transparentImageView.alpha = state.thresholdRatio / 3 * 2;
             likedImageView.alpha = 0.f;
             reportImageView.alpha = 0.f;
             holdImageView.alpha = 0.f;
             nopeImageView.alpha = state.thresholdRatio;
         } else if (state.direction == MDCSwipeDirectionRight) {
-            transparentImageView.alpha = state.thresholdRatio / 2;
+            transparentImageView.alpha = state.thresholdRatio / 3 * 2;
             likedImageView.alpha = state.thresholdRatio;
             nopeImageView.alpha = 0.f;
             holdImageView.alpha = 0.f;
             reportImageView.alpha = 0.f;
         } else if (state.direction == MDCSwipeDirectionUp) {
-            transparentImageView.alpha = state.thresholdRatio / 2;
+            transparentImageView.alpha = state.thresholdRatio / 3 * 2;
             reportImageView.alpha = state.thresholdRatio;
             nopeImageView.alpha = 0.f;
             likedImageView.alpha = 0.f;
             holdImageView.alpha = 0.f;
         } else if (state.direction == MDCSwipeDirectionDown) {
-            transparentImageView.alpha = state.thresholdRatio / 2;
+            transparentImageView.alpha = state.thresholdRatio / 3 * 2;
             holdImageView.alpha = state.thresholdRatio;
             reportImageView.alpha = 0.f;
             nopeImageView.alpha = 0.f;

@@ -46,7 +46,6 @@ class MenuTableController: UITableViewController {
             self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
             
             backView = UIView(frame: self.revealViewController().frontViewController.view.frame)
-            //backView.backgroundColor = UIColor(red: CGFloat(1.0), green: CGFloat(0.0), blue: CGFloat(0.0), alpha: CGFloat(1.0))
             self.revealViewController().frontViewController.view.addSubview(backView)
             self.revealViewController().frontViewController.view.addGestureRecognizer(self.revealViewController().tapGestureRecognizer())
         }

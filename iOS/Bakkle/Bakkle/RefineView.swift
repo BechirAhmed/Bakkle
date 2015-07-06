@@ -8,7 +8,7 @@
 
 import UIKit
 
-class RefineView: UIViewController {
+class RefineView: UIViewController, UISearchBarDelegate {
     
     @IBOutlet weak var menuBtn: UIButton!
     
@@ -26,6 +26,9 @@ class RefineView: UIViewController {
         setupBackground()
         
         setupButtons()
+        
+        var tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
+        self.view.addGestureRecognizer(tapGestureRecognizer)
         
     }
 
@@ -50,6 +53,32 @@ class RefineView: UIViewController {
         price.setValue(Bakkle.sharedInstance.filter_price, animated: true)
         
         self.filterRealtime(0) // force labels to update
+        
+        // Removed border around search bar.
+    }
+    
+    func dismissKeyboard() {
+        searchBar.resignFirstResponder()
+    }
+    
+    /* UISearch Bar delegate */
+    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+        Bakkle.sharedInstance.search_text = searchText
+    }
+    
+    func searchBarTextDidBeginEditing(searchBar: UISearchBar){
+
+    }
+    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
+    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
+    /* End search bar delegate */
+    
+    @IBAction func closePressed(sender: AnyObject) {
+        self.dismissKeyboard()
     }
     
     func setupButtons() {
@@ -71,6 +100,7 @@ class RefineView: UIViewController {
     /* FILTER CONTROLS */
     @IBAction func filterRealtime(sender: AnyObject) {
         //println("d:\(Int(distance.value)) p:\(price.value) n: \(number.value)")
+        self.dismissKeyboard()
         if distance.value >= 100 {
             distanceLbl.text = "100+ mi"
         } else {
@@ -82,8 +112,10 @@ class RefineView: UIViewController {
             priceLbl.text = "$\(Int(price.value))"
         }
     }
+    
     @IBAction func filterChanged(sender: AnyObject) {
         println("SET d:\(Int(distance.value)) p:\(price.value)")
+        self.dismissKeyboard()
         if distance.value >= 100 {
             distanceLbl.text = "100+ mi"
         } else {
