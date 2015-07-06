@@ -19,7 +19,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     
     let albumName = "Bakkle"
     
-    static let JPEG_COMPRESSION_CONSTANT: CGFloat = 0.1
+    static let JPEG_COMPRESSION_CONSTANT: CGFloat = 0.3
     static let MAX_IMAGE_COUNT = 5
     static let SCALED_IMAGES_READY_NOTIFICATION = "SCALED_IMAGES_READY"
     private static let CAPTURE_NOTIFICATION_TEXT = "_UIImagePickerControllerUserDidCaptureItem"
