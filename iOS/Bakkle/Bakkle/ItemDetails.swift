@@ -21,6 +21,7 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var itemTitleLabel: UILabel!
     @IBOutlet weak var itemTagsTextView: UITextView!
     @IBOutlet weak var itemPriceLabel: UILabel!
+    @IBOutlet weak var itemDistanceLabel: UILabel!
     
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var pageControl: UIPageControl!
@@ -112,7 +113,7 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
         let tags : [String] = item!.valueForKey("tags") as! [String]
         let tagString = ", ".join(tags)
         
-        itemTitleLabel.text = topTitle.uppercaseString
+        itemTitleLabel.text = topTitle
         itemPriceLabel.text = "$" + topPrice
         itemTagsTextView.text = tagString
         sellerName.text = sellersName
