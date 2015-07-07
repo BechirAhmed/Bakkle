@@ -11,6 +11,8 @@
     <string name="password_hint">PASSWORD</string>
     <string name="or"> OR </string>
 
+    <string name="open_location_settings">Open location settings</string>
+
     <string name="title_activity_sign_in">@string/sign_in</string>
     <string name="title_activity_login">@string/app_name</string>
     <string name="title_activity_home">FEED</string>
@@ -37,4 +39,5 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="reset_demo_feed">Reset Demo Feed</string>
+    <string name="title_activity_add_item">AddItem</string>
 </resources>

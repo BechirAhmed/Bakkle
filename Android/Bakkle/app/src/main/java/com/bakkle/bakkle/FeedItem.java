@@ -232,7 +232,7 @@ public class FeedItem {
         }
         catch (Exception e)
         {
-            Log.d("testing error 11", e.getMessage());
+            Log.d("testing error 22", e.getMessage());
         }
         //return bitmap[0];
         return bitmap;
@@ -265,6 +265,32 @@ public class FeedItem {
         }
         //return bitmap[0];
         return bitmap;
+
+        /*Bitmap bitmap=null;
+        final String nomimg = "https://graph.facebook.com/"+ getSellerFacebookId() +"/picture?type=large";
+        URL imageURL = null;
+
+        try {
+            imageURL = new URL(nomimg);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            HttpURLConnection connection = (HttpURLConnection) imageURL.openConnection();
+            connection.setDoInput(true);
+            connection.setInstanceFollowRedirects(true);
+            connection.connect();
+            InputStream inputStream = connection.getInputStream();
+            //img_value.openConnection().setInstanceFollowRedirects(true).getInputStream()
+            bitmap = BitmapFactory.decodeStream(inputStream);
+
+        } catch (IOException e) {
+
+            e.printStackTrace();
+        }
+        return bitmap;*/
+
     }
 
 }

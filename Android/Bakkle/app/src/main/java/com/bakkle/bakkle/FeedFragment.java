@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 
 import com.andtinder.model.CardModel;
 import com.andtinder.view.CardContainer;
-import com.andtinder.view.SimpleCardStackAdapter;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -95,7 +94,7 @@ public class FeedFragment extends Fragment {
     public void populateFeed(JsonObject json)
     {
         JsonArray jsonArray = json.getAsJsonArray("feed");
-        SimpleCardStackAdapter adapter = new SimpleCardStackAdapter(getActivity());
+        //SimpleCardStackAdapter adapter = new SimpleCardStackAdapter(getActivity());
         CardAdapter mCardAdapter = new CardAdapter(getActivity().getApplicationContext());
         JsonObject temp;
         ArrayList<FeedItem> feedItems = new ArrayList<>();
@@ -116,7 +115,7 @@ public class FeedFragment extends Fragment {
             feedItem.setPrice(temp.get("price").getAsString());
             feedItem.setLocation(temp.get("location").getAsString()); //TODO: difference between location and sellerlocation??
             feedItem.setMethod(temp.get("method").getAsString());
-            sellerFacebookId = temp.get("seller").getAsJsonObject().get("facebook_id").getAsString();
+            feedItem.setSellerFacebookId(temp.get("seller").getAsJsonObject().get("facebook_id").getAsString());
             pk = temp.get("pk").getAsString();
             feedItem.setPk(pk);
 
@@ -226,7 +225,7 @@ public class FeedFragment extends Fragment {
         }
         catch (Exception e)
         {
-            Log.d("testing error 11", e.getMessage());
+            Log.d("testing error 1122", e.getMessage());
         }
         //return bitmap[0];
         return bitmap;

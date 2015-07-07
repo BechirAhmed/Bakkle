@@ -13,10 +13,10 @@ public class CardUtils {
 
     public static void scale(View v, int pixel){
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)v.getLayoutParams();
-        params.leftMargin -= pixel;
-        params.rightMargin -= pixel;
-        params.topMargin -= pixel;
-        params.bottomMargin -= pixel;
+//        params.leftMargin -= pixel;
+//        params.rightMargin -= pixel;
+//        params.topMargin -= pixel;
+//        params.bottomMargin -= pixel;
         v.setLayoutParams(params);
     }
 

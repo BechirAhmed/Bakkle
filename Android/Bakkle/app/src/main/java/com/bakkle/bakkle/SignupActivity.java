@@ -1,17 +1,22 @@
 package com.bakkle.bakkle;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.Toast;
 
 
 public class SignupActivity extends Activity implements OnClickListener {
+
+    boolean locationEnabled = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +24,13 @@ public class SignupActivity extends Activity implements OnClickListener {
         getActionBar().hide();
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && !locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+
+            Toast.makeText(this, "Test", Toast.LENGTH_SHORT).show();
+
+        }
 
         if(preferences.getBoolean("LoggedIn", false)) {
             Intent intent = new Intent(this, LoginActivity.class);

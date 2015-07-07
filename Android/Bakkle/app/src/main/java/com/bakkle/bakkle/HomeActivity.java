@@ -365,6 +365,12 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
         }
     }
 
+    public void addItem(View view)
+    {
+        Intent intent = new Intent(this, AddItem.class);
+        startActivity(intent);
+    }
+
 
 
     @Override
