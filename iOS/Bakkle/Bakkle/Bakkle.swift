@@ -731,7 +731,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         task.resume()
     }
     
-    func removeItem(item_id: NSInteger, success: (item_id: Int?, item_url: String?)->(), fail: ()->() ) {
+    func removeItem(item_id: NSInteger, success: ()->(), fail: ()->() ) {
         // URL encode some vars.
                 var postString : NSString;
             postString = "device_uuid=\(self.deviceUUID)&auth_token=\(self.auth_token)&item_id=\(item_id)"
@@ -761,9 +761,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             self.debg("RESPONSE DICT IS: \(self.responseDict)")
             
             if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
-                let item_id: Int = self.responseDict.valueForKey("item_id") as! Int
-                let item_url: String = self.getImageURL(item_id)
-                success(item_id: item_id, item_url: item_url)
+                success()
             } else {
                 fail()
             }
