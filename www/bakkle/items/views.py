@@ -1,32 +1,41 @@
 from django.shortcuts import render
 
-import json
+import base64
 import datetime
+import json
 import md5
 import os
-import base64
 
 import random
+
 from boto.s3.connection import S3Connection
 from boto.s3.key import Key
 
-from django.http import HttpResponse, HttpResponseRedirect
-from django.core.urlresolvers import reverse
-from django.template import RequestContext, loader
-from django.utils import timezone
-from django.shortcuts import get_object_or_404
-from django.core import serializers
-from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_POST
-from django.db.models import Q
 from decimal import *
 from django import forms
 from django.contrib.admin.views.decorators import staff_member_required
+from django.core import serializers
+from django.core.paginator import Paginator
+from django.core.urlresolvers import reverse
+from django.db.models import Q
+from django.http import HttpResponse
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
+from django.template import RequestContext
+from django.template import loader
+from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 
-from .models import Items, BuyerItem
-from conversation.models import Conversation, Message
-from account.models import Account, Device
-from common import authenticate,get_number_conversations_with_new_messages
+from .models import BuyerItem
+from .models import Items
+from account.models import Account
+from account.models import Device
+from chat.models import Chat
+from chat.models import Message
+from common.decorators import authenticate
+# from common.decorators import get_number_conversations_with_new_messages
+from common.decorators import time_method
 from django.conf import settings
 
 MAX_ITEM_IMAGE = 5
@@ -45,17 +54,18 @@ config['S3_URL'] = 'https://s3-us-west-2.amazonaws.com/com.bakkle.prod/'
 #--------------------------------------------#
 #               Web page requests            #
 #--------------------------------------------#
-@staff_member_required
 @csrf_exempt
-def index(request):
+@time_method
+def index(requestHandler):
     # List all items (this is for web viewing of data only)
     item_list = Items.objects.all()
     context = {
         'item_list': item_list,
     }
-    return render(request, 'items/index.html', context) 
+#    return requestHandler.render('templates/items/index.html', item_list = item_list) 
 
 @csrf_exempt
+@time_method
 def public_detail(request, item_id):
     # get the item with the item id (this is for web viewing of data only)
     item = get_object_or_404(Items, pk=item_id)
@@ -64,10 +74,11 @@ def public_detail(request, item_id):
         'item': item,
         'urls': urls,
     }
-    return render(request, 'items/public_detail.html', context)
+#    return render(request, 'items/public_detail.html', context)
 
 @staff_member_required
 @csrf_exempt
+@time_method
 def detail(request, item_id):
     # get the item with the item id (this is for web viewing of data only)
     item = get_object_or_404(Items, pk=item_id)
@@ -76,10 +87,11 @@ def detail(request, item_id):
         'item': item,
         'urls': urls,
     }
-    return render(request, 'items/detail.html', context)
+#    return render(request, 'items/detail.html', context)
 
 @staff_member_required
 @csrf_exempt
+@time_method
 def mark_as_spam(request, item_id):
     # Get the item
     item = Items.objects.get(pk=item_id)
@@ -90,10 +102,11 @@ def mark_as_spam(request, item_id):
     context = {
         'item_list': item_list,
     }
-    return render(request, 'items/index.html', context)
+#    return render(request, 'items/index.html', context)
 
 @staff_member_required
 @csrf_exempt
+@time_method
 def mark_as_deleted(request, item_id):
     # Get the item id 
     item = Items.objects.get(pk=item_id)
@@ -104,7 +117,7 @@ def mark_as_deleted(request, item_id):
     context = {
         'item_list': item_list,
     }
-    return render(request, 'items/index.html', context)
+#    return render(request, 'items/index.html', context)
 
 #--------------------------------------------#
 #               Item Methods                 #
@@ -112,6 +125,7 @@ def mark_as_deleted(request, item_id):
 @csrf_exempt
 @require_POST
 @authenticate
+@time_method
 def add_item(request):
     # Get the authentication code
     auth_token = request.GET.get('auth_token')
@@ -125,6 +139,7 @@ def add_item(request):
     price = request.GET.get('price')
     tags = request.GET.get('tags',"")
     method = request.GET.get('method')
+    notifyFlag = request.GET.get('notify')
 
     # Get the item id if present (If it is present an item will be edited not added)
     item_id = request.GET.get('item_id', "")
@@ -157,7 +172,8 @@ def add_item(request):
             image_urls = image_urls,
             status = Items.ACTIVE)
         item.save()
-        notify_all_new_item("New: ${} - {}".format(item.price, item.title))
+        if(notifyFlag == None or notifyFlag == "" or int(notifyFlag) != 0):
+            notify_all_new_item("New: ${} - {}".format(item.price, item.title))
     else:
         # Else get the item
         try:
@@ -186,6 +202,7 @@ def add_item(request):
     response_data = { "status":1, "item_id":item.id }
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
+@time_method
 def notify_all_new_item(message):
     # Get all devices
 
@@ -200,8 +217,8 @@ def notify_all_new_item(message):
         if device.auth_token != "":
             account_id = device.auth_token.split('_')[1]
             # lookup number of unread messages
-            badge = get_number_conversations_with_new_messages(account_id)
-            device.send_notification(message, badge, "")
+            # badge = get_number_conversations_with_new_messages(account_id)
+            device.send_notification(message, 1, "")
 
     response_data = { "status": 1 }
     return HttpResponse(json.dumps(response_data), content_type="application/json")
@@ -209,14 +226,10 @@ def notify_all_new_item(message):
 @csrf_exempt
 @require_POST
 @authenticate
+@time_method
 def delete_item(request):
     return update_status(request, Items.DELETED)
 
-@csrf_exempt
-@require_POST
-@authenticate
-def sell_item(request):
-    return update_status(request, Items.SOLD)
 
 # This will only be called by the system if an Item has been reported X amount of times.
 # TODO: implement this in the report 
@@ -226,7 +239,12 @@ def spam_item(request):
 @csrf_exempt
 @require_POST
 @authenticate
+@time_method
 def feed(request):
+
+    MAX_ITEM_PRICE = 100;
+    RETURN_ITEM_ARRAY_SIZE = 20;
+    
     auth_token = request.POST.get('auth_token')
     device_uuid = request.POST.get('device_uuid', "")
     user_location = request.POST.get('user_location', "")
@@ -234,8 +252,7 @@ def feed(request):
     # TODO: Use these for filtering
     search_text = request.POST.get('search_text')
     filter_distance = request.POST.get('filter_distance')
-    filter_price = request.POST.get('filter_price')
-    filter_number = request.POST.get('filter_number')
+    filter_price = int(request.POST.get('filter_price'))
 
     # Check that all require params are sent and are of the right format
     if (auth_token == None or auth_token.strip() == "" or auth_token.find('_') == -1) or (user_location == None or user_location == ""):
@@ -244,6 +261,8 @@ def feed(request):
 
     # Check that location was in the correct format
     location = ""
+    lat = 0;
+    lon = 0;
     try: 
         positions = user_location.split(",")
         if len(positions) < 2:
@@ -260,6 +279,8 @@ def feed(request):
 
     # get the account id 
     buyer_id = auth_token.split('_')[1]
+
+
 
     # get the account object and the device and update location
     try:
@@ -285,32 +306,71 @@ def feed(request):
     items_viewed = BuyerItem.objects.filter(buyer = buyer_id)
 
     item_list = None
+    users_list = None
+        
     if(search_text != None and search_text != ""):
         search_text.strip()
-        item_list = Items.objects.exclude(buyeritem = items_viewed).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).filter(Q(tags__contains=search_text) | Q(title__contains=search_text)).order_by('-post_date')
+        
+        #if filter price is 100+, ignore filter.
+        if(filter_price == MAX_ITEM_PRICE):
+            item_list = Items.objects.exclude(buyeritem = items_viewed).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).filter(Q(tags__contains=search_text) | Q(title__contains=search_text)).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
+        else:
+            item_list = Items.objects.exclude(buyeritem = items_viewed).filter(Q(price__lte = filter_price)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).filter(Q(tags__contains=search_text) | Q(title__contains=search_text)).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
     else:
-        item_list = Items.objects.exclude(buyeritem = items_viewed).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')
-
+        
+        #if filter price is 100+, ignore filter.
+        if(filter_price == MAX_ITEM_PRICE):
+            item_list = Items.objects.exclude(buyeritem = items_viewed).exclude(Q(seller__pk = buyer_id)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
+            users_list = Items.objects.filter(Q(seller__pk = buyer_id)).order_by('-post_date')[:1]
+        else:
+            item_list = Items.objects.exclude(buyeritem = items_viewed).exclude(Q(seller__pk = buyer_id)).filter(Q(price__lte = filter_price)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
+            users_list = Items.objects.filter(Q(seller__pk = buyer_id)).filter(Q(price__lte = filter_price)).order_by('-post_date')[:1]
+   
     item_array = []
-    # get json representaion of item array
-    for item in item_list:
-        item_dict = get_item_dictionary(item)
-        item_array.append(item_dict)
+    paginatedItems = Paginator(item_list, 100);
+    numUserItems = 0;
+    
+    # show user's items before other items - place at top of array.
+    if(not users_list is None and len(users_list) != 0):
+        for item in users_list:
+            if(len(BuyerItem.objects.filter(buyer = buyer_id).filter(item = item.pk)) == 0):
+                item_dict = get_item_dictionary(item)
+                item_array.append(item_dict)
+    
+    # add all other items - show after top user item
+    page = 1;
+    while len(item_array) < RETURN_ITEM_ARRAY_SIZE and page <= paginatedItems.num_pages:
+        itemPage = paginatedItems.page(page);
+        for item in itemPage.object_list:
+            if (len(item_array) < RETURN_ITEM_ARRAY_SIZE):
+                item_dict = get_item_dictionary(item)
+                item_array.append(item_dict)
+        
+        page += 1;
 
     response_data = { 'status': 1, 'feed': item_array }
+    print "returning feed list of size: " + str(len(item_array))
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 @csrf_exempt
 @require_POST
 @authenticate
+@time_method
 def meh(request):
     return add_item_to_buyer_items(request, BuyerItem.MEH)
 
 @csrf_exempt
 @require_POST
 @authenticate
+@time_method
+def sold(request):
+    return add_item_to_buyer_items(request, BuyerItem.SOLD)
+
+@csrf_exempt
+@require_POST
+@authenticate
+@time_method
 def want(request):
-    print("Got to want request")
     item_id = request.POST.get('item_id')
     auth_token = request.POST.get('auth_token', "")
     buyer_id = auth_token.split('_')[1]
@@ -334,27 +394,25 @@ def want(request):
         response_data = {"status":0, "error":"Item {} does not exist.".format(item_id)}
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 
-    print("before conversation")
-    conversation = Conversation.objects.get_or_create(
+    chat = Chat.objects.get_or_create(
         item = item,
         buyer = buyer)[0]
-    conversation.start_time = datetime.datetime.now()
-    conversation.save()
-    print("after conversation")
-
-
+    chat.start_time = datetime.datetime.now()
+    chat.save()
 
     return add_item_to_buyer_items(request, BuyerItem.WANT)
 
 @csrf_exempt
 @require_POST
 @authenticate
+@time_method
 def hold(request):
     return add_item_to_buyer_items(request, BuyerItem.HOLD)
 
 @csrf_exempt
 @require_POST
 @authenticate
+@time_method
 def report(request):
     item_id = request.POST.get('item_id')
 
@@ -383,12 +441,14 @@ def report(request):
 @csrf_exempt
 @require_POST
 @authenticate
+@time_method
 def buyer_item_meh(request):
     return add_item_to_buyer_items(request, BuyerItem.MEH)
 
 @csrf_exempt
 @require_POST
 @authenticate
+@time_method
 def buyer_item_want(request):
     return add_item_to_buyer_items(request, BuyerItem.WANT)
 
@@ -398,6 +458,7 @@ def buyer_item_want(request):
 @csrf_exempt
 @require_POST
 @authenticate
+@time_method
 def get_seller_items(request):
     # Get the authentication code
     auth_token = request.POST.get('auth_token')
@@ -411,15 +472,15 @@ def get_seller_items(request):
     # get json representaion of item array
     for item in item_list:
         # get the conversations involving this item
-        conversations = Conversation.objects.filter(item=item)
+        chats = Chat.objects.filter(item=item)
         convos_with_new_message = 0
-        for convo in conversations:
-            messages = Message.objects.filter(viewed=None, buyer_seller_flag=True, conversation=convo).count()
-            if messages > 0:
-                convos_with_new_message = convos_with_new_message + 1
+        # for convo in chats:
+        #     messages = Message.objects.filter(viewed=None, buyer_seller_flag=True, chat=convo).count()
+        #     if messages > 0:
+        #         convos_with_new_message = convos_with_new_message + 1
 
         # get the buyer items for this item
-        buyer_items = BuyerItem.objects.filter(item=item)
+        buyer_items = BuyerItem.objects.filter(item_id=item.id)
         number_of_views = 0
         number_of_meh = 0
         number_of_want = 0
@@ -431,9 +492,9 @@ def get_seller_items(request):
                 number_of_meh = number_of_meh + 1
             elif buyer_item.status == BuyerItem.REPORT:
                 number_of_report = number_of_report + 1
-            elif buyer_item.status == BuyerItem.HOLDING:
+            elif buyer_item.status == BuyerItem.HOLD:
                 number_of_holding = number_of_holding + 1
-            elif buyer_item.status == BuyerItem.WANT or buyer_item.status == BuyerItem.NEGOCIATING or buyer_item.status == BuyerItem.PENDING:
+            elif buyer_item.status == BuyerItem.WANT or buyer_item.status == BuyerItem.NEGOTIATING or buyer_item.status == BuyerItem.PENDING:
                 number_of_want = number_of_want + 1
 
 
@@ -454,6 +515,7 @@ def get_seller_items(request):
 @csrf_exempt
 @require_POST
 @authenticate
+@time_method
 def get_seller_transactions(request):
     # Get the authentication code
     auth_token = request.POST.get('auth_token')
@@ -477,12 +539,13 @@ def get_seller_transactions(request):
 @csrf_exempt
 @require_POST
 @authenticate
+@time_method
 def get_buyers_trunk(request):
     # Get the authentication code
     auth_token = request.POST.get('auth_token')
     buyer_id = auth_token.split('_')[1]
 
-    item_list = BuyerItem.objects.filter(Q(buyer=buyer_id, status=BuyerItem.WANT) | Q(buyer=buyer_id, status=BuyerItem.PENDING) | Q(buyer=buyer_id, status=BuyerItem.NEGOCIATING))
+    item_list = BuyerItem.objects.filter(Q(buyer=buyer_id, status=BuyerItem.WANT) | Q(buyer=buyer_id, status=BuyerItem.PENDING) | Q(buyer=buyer_id, status=BuyerItem.NEGOTIATING))
 
     item_array = []
     # get json representaion of item array
@@ -496,6 +559,7 @@ def get_buyers_trunk(request):
 @csrf_exempt
 @require_POST
 @authenticate
+@time_method
 def get_holding_pattern(request):
     # Get the authentication code
     auth_token = request.POST.get('auth_token')
@@ -515,6 +579,7 @@ def get_holding_pattern(request):
 @csrf_exempt
 @require_POST
 @authenticate
+@time_method
 def get_buyer_transactions(request):
     # Get the authentication code
     auth_token = request.POST.get('auth_token')
@@ -572,6 +637,9 @@ def handle_delete_file_s3(image_path):
 def imgupload(request, seller_id):
     image_urls = ""
     #import pdb; pdb.set_trace()
+    
+    print(request)
+
     for i in request.FILES.getlist('image'):
         #i = request.FILES['image']
         uhash = hex(random.getrandbits(128))[2:-1]
@@ -604,6 +672,8 @@ def add_item_to_buyer_items(request, status):
     # get the account id 
     buyer_id = auth_token.split('_')[1]
 
+
+
     # get the item
     try:
         item = Items.objects.get(pk=item_id)
@@ -612,54 +682,55 @@ def add_item_to_buyer_items(request, status):
         response_data = {"status":0, "error":"Item {} does not exist.".format(item_id)}
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 
-    if (buyer_item_id == None or buyer_item_id == ""):
+    #check if item already sold - if so, return an error:
+    print(item.status);
+    if(item.status == Items.SOLD):
+        item = None
+        response_data = {"status":0, "error":"Item has already been sold."}
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
 
-        try:
-            account = Account.objects.get(pk=buyer_id)
-        except Account.DoesNotExist:
-            account = None
-            response_data = {"status":0, "error":"Account {} does not exist.".format(buyer_id)}
-            return HttpResponse(json.dumps(response_data), content_type="application/json")
 
+    try:
+        account = Account.objects.get(pk=buyer_id)
         # Create or update the buyer item
-        buyer_item = BuyerItem.objects.create(
-            buyer = account,
-            item = item,
-            status = status, 
-            confirmed_price = item.price,
-            view_duration = 0)
-
-        # If the item seller is the same as the buyer mark it as their item instead of the status
-        # TODO: Eventually put this back in to prevent errors from user trying to buy their own item
-        # if(str(item.seller.id) == str(buyer_id)):
-        #     print("Are same")
-        #     buyer_item.status = BuyerItem.MY_ITEM
-        # else:
-        #     buyer_item.status = status
-        buyer_item.status = status
-        buyer_item.confirmed_price = item.price
-        buyer_item.view_duration = view_duration
-        buyer_item.save()
-    else:
         try:
-            buyer_item = BuyerItem.objects.get(pk=buyer_item_id)
+            buyer_item = BuyerItem.objects.get(item = item.pk, buyer = buyer_id)
         except BuyerItem.DoesNotExist:
-            buyer_item = None
-            response_data = {"status":0, "error":"BuyerItem {} does not exist.".format(buyer_item_id)}
-            return HttpResponse(json.dumps(response_data), content_type="application/json")
 
-        # Update fields
-        # If the item seller is the same as the buyer mark it as their item instead of the status
-        # TODO: Eventually put this back in to prevent errors from user trying to buy their own item
-        # if(str(item.seller.id) == str(buyer_id)):
-        #     print("Are same")
-        #     buyer_item.status = BuyerItem.MY_ITEM
-        # else:
-        #     buyer_item.status = status
+            buyer_item = BuyerItem.objects.create(
+                buyer = account,
+                item = item,
+                status = status, 
+                confirmed_price = item.price,
+                view_duration = 0)
+
+            # If the item seller is the same as the buyer mark it as their item instead of the status
+            # TODO: Eventually put this back in to prevent errors from user trying to buy their own item
+            # if(str(item.seller.id) == str(buyer_id)):
+            #     print("Are same")
+            #     buyer_item.status = BuyerItem.MY_ITEM
+            # else:
+            #     buyer_item.status = status
+
+
+        if (status == BuyerItem.SOLD):
+            buyer_item.accepted_sale_price = buyer_item.confirmed_price
+            item.status = Items.SOLD
+            item.save()
+        else:
+            buyer_item.confirmed_price = item.price
+
         buyer_item.status = status
-        buyer_item.confirmed_price = item.price
         buyer_item.view_duration = view_duration
         buyer_item.save()
+
+    except Account.DoesNotExist:
+        account = None
+        response_data = {"status":0, "error":"Account {} does not exist.".format(buyer_id)}
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+    
+    
 
     response_data = { 'status':1 }
     return HttpResponse(json.dumps(response_data), content_type="application/json")
@@ -766,12 +837,12 @@ def reset_items(request):
     try:
         a = Account.objects.get(
             facebook_id="1020420",
-            display_name="Test Seller",
+            display_name="Goodwill Industries",
             email="testseller@bakkle.com" )
     except Account.DoesNotExist:
         a = Account(
             facebook_id="1020420",
-            display_name="Test Seller",
+            display_name="Goodwill Industries",
             email="testseller@bakkle.com",
             user_location="39.417672,-87.330438", )
         a.save()

@@ -68,7 +68,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
         } else {
             // Register for Push Notifications before iOS 8
-            application.registerForRemoteNotificationTypes(.Alert | .Badge | .Sound)
+            //NOTE: pacify warning application.registerForRemoteNotificationTypes(.Alert | .Badge | .Sound)
         }
     }
     

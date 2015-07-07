@@ -39,6 +39,16 @@ class Account(models.Model):
     def __str__(self):
         return "ID={} email={} displayname={}".format(self.id, self.email, self.display_name)
 
+    def toDictionary(self):
+        valuesDict = {
+            'pk': self.pk, 
+            'display_name': self.display_name, 
+            'seller_rating': self.seller_rating,
+            'buyer_rating': self.buyer_rating,
+            'user_location': self.user_location,
+            'facebook_id': self.facebook_id }
+        return valuesDict
+
 class Device(models.Model):
     account_id = models.ForeignKey(Account)
     date_added = models.DateTimeField(auto_now_add = True)

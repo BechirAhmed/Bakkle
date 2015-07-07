@@ -16,11 +16,13 @@ from django.contrib.admin.views.decorators import staff_member_required
 
 from .models import Account, Device
 from items.models import Items, BuyerItem
-from common import authenticate
+from common.decorators import authenticate
+from common.decorators import time_method
 
 # Show a list of all accounts in the system.
 @staff_member_required
 @csrf_exempt
+@time_method
 def index(request):
     account_list = Account.objects.all()
     context = {
@@ -30,6 +32,14 @@ def index(request):
 
 # Show detail on an account
 @csrf_exempt
+@time_method
+def settings(request):
+    response_data = {"status":1, "settings_dict":{"image_width": 660, "image_height":660, "image_quality":0.7, "feed_items_to_load":10, "image_precache":5}}
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+# Show detail on an account
+@csrf_exempt
+@time_method
 def detail(request, account_id):
     account = get_object_or_404(Account, pk=account_id)
     devices = Device.objects.filter(account_id=account_id)
@@ -52,6 +62,7 @@ def detail(request, account_id):
 
 # Method for reseting account feed (only for detail page)
 @csrf_exempt
+@time_method
 def reset(request, account_id):
     BuyerItem.objects.filter(buyer=account_id).delete()
     response_data = { "status":1 }
@@ -59,6 +70,7 @@ def reset(request, account_id):
 
 # Show detail on a device
 @csrf_exempt
+@time_method
 def device_detail(request, device_id):
     device = get_object_or_404(Device, pk=device_id)
     context = {
@@ -68,6 +80,7 @@ def device_detail(request, device_id):
 
 # Show detail on an account
 @csrf_exempt
+@time_method
 def dashboard(request):
     registered_users = Account.objects.count()
     active_users = Account.objects.filter(disabled = False).count()
@@ -93,6 +106,7 @@ def dashboard(request):
 
 # Login to account using Facebook
 @csrf_exempt
+@time_method
 #@require_POST
 def login_facebook(request):
     facebook_id = request.POST.get('user_id', "")
@@ -103,7 +117,7 @@ def login_facebook(request):
 
     # Check that all required params are sent
     if (facebook_id == None or facebook_id.strip() == "") or (device_uuid == None or device_uuid.strip() == "") or (user_location == None or user_location == "") or (app_version == None or app_version == ""): 
-        response_data = {"status":0, "error":"A required parameter was not provided. User_id: {}, device_uuid: {}, user_location: {}, app_version: {}".format(facebook_id, device_uuid, user_location,app_version)}
+        response_data = {"status":0, "error":"A required parameter was not provided. User_id(facebook): {}, device_uuid: {}, user_location: {}, app_version: {}".format(facebook_id, device_uuid, user_location,app_version)}
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 
     location = ""
@@ -153,6 +167,7 @@ def login_facebook(request):
 # Logout of account
 @csrf_exempt
 @require_POST
+@time_method
 def logout(request):
     auth_token = request.POST.get('auth_token', "")
     device_uuid = request.POST.get('device_uuid', "")
@@ -191,6 +206,7 @@ def logout(request):
 # Register with Facebook
 @csrf_exempt
 @require_POST
+@time_method
 def facebook(request):
     facebook_id = request.POST.get('user_id', "")
     display_name = request.POST.get('name',"")
@@ -241,6 +257,7 @@ def device_register(ip, uuid, user, location, app_version):
 @csrf_exempt
 @require_POST
 @authenticate
+@time_method
 def device_register_push(request):
     device_token = request.POST.get('device_token', "")
     auth_token = request.POST.get('auth_token', "")
@@ -275,6 +292,7 @@ def device_register_push(request):
 
 """ Notify all devices of a new item """
 @csrf_exempt
+@time_method
 def device_notify_all_new_item(request):
     # Get all devices
     message = request.POST.get('message', request.GET.get('message', ""))
@@ -295,6 +313,7 @@ def device_notify_all_new_item(request):
 
 # Dispatch a notification to device
 @csrf_exempt
+@time_method
 def device_notify(request, device_id):
     """
     Example new-item:
@@ -331,6 +350,7 @@ def device_notify(request, device_id):
 
 # Dispatch a notification to all devices for that user
 @csrf_exempt
+@time_method
 def device_notify_all(request, account_id):
     # Get all devices for the account
     devices = Device.objects.filter(account_id=account_id,is_ios=True)
@@ -343,6 +363,7 @@ def device_notify_all(request, account_id):
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 # Get's the client IP from a request
+@time_method
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
     if x_forwarded_for:

@@ -10,6 +10,8 @@ import UIKit
 
 class FeedFilterView: UIViewController {
     
+    @IBOutlet weak var menuBtn: UIButton!
+    
     @IBOutlet weak var distance: UISlider!
     @IBOutlet weak var price: UISlider!
     @IBOutlet weak var number: UISlider!
@@ -20,8 +22,8 @@ class FeedFilterView: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
+        setupButtons()
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -56,6 +58,11 @@ class FeedFilterView: UIViewController {
         self.filterRealtime(0) // force labels to update
     }
     
+    func setupButtons() {
+        menuBtn.setImage(IconImage().menu(), forState: .Normal)
+        menuBtn.setTitle("", forState: .Normal)
+    }
+    
     /* MENUBAR ITEMS */
     @IBAction func btnMenu(sender: AnyObject) {
         self.revealViewController().revealToggleAnimated(true)
@@ -64,12 +71,16 @@ class FeedFilterView: UIViewController {
     /* FILTER CONTROLS */
     @IBAction func filterRealtime(sender: AnyObject) {
         //println("d:\(Int(distance.value)) p:\(price.value) n: \(number.value)")
-        if number.value >= 100 {
+        if distance.value >= 100 {
             distanceLbl.text = "100+ mi"
         } else {
             distanceLbl.text = "\(Int(distance.value)) mi"
         }
-        priceLbl.text = "$\(Int(price.value))"
+        if price.value >= 100 {
+            priceLbl.text = "$100+"
+        } else {
+            priceLbl.text = "$\(Int(price.value))"
+        }
         numberLbl.text = "\(Int(number.value))"
         if number.value >= 1000 {
             numberLbl.text = "∞"
@@ -78,12 +89,16 @@ class FeedFilterView: UIViewController {
     }
     @IBAction func filterChanged(sender: AnyObject) {
         println("SET d:\(Int(distance.value)) p:\(price.value) n: \(number.value)")
-        if number.value >= 100 {
+        if distance.value >= 100 {
             distanceLbl.text = "100+ mi"
         } else {
             distanceLbl.text = "\(Int(distance.value)) mi"
         }
-        priceLbl.text = "$\(Int(price.value))"
+        if price.value >= 100 {
+            priceLbl.text = "$100+"
+        } else {
+            priceLbl.text = "$\(Int(price.value))"
+        }
         numberLbl.text = "\(Int(number.value))"
         if number.value >= 1000 {
             numberLbl.text = "∞"

@@ -1,8 +1,7 @@
 import Foundation
 
 class User {
-    let ID: Int
-    var username: String
+    let facebookID: String
     var firstName: String?
     var lastName: String?
     var name: String? {
@@ -27,14 +26,9 @@ class User {
         return initials
     }
 
-    init(ID: Int, username: String, firstName: String?, lastName: String?) {
-        self.ID = ID
-        self.username = username
+    init(facebookID: String, firstName: String?, lastName: String?) {
+        self.facebookID = facebookID
         self.firstName = firstName
         self.lastName = lastName
-    }
-
-    func pictureName() -> String {
-        return "User\(ID).jpg"
     }
 }

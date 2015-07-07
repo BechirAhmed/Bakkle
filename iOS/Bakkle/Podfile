@@ -2,4 +2,6 @@ platform :ios, '8.0'
 use_frameworks!
 target 'Bakkle' do
   pod 'HanekeSwift'
+  pod 'FontAwesomeIconFactory'
+  pod 'SocketRocket'
 end

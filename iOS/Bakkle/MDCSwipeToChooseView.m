@@ -33,8 +33,6 @@ static CGFloat const MDCSwipeToChooseViewHorizontalPadding = 10.f;
 static CGFloat const MDCSwipeToChooseViewTopPadding = 20.f;
 static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
 
-static CGFloat const ChooseItemViewImageLabelWidth = 42.f;
-
 
 @interface MDCSwipeToChooseView ()
 @property (nonatomic, strong) MDCSwipeToChooseViewOptions *options;
@@ -185,7 +183,7 @@ static CGFloat const ChooseItemViewImageLabelWidth = 42.f;
 }
 
 - (void)constructNameLabel {
-    CGFloat leftPadding = 10.f;
+    CGFloat leftPadding = 3.f;
     CGFloat topPadding = 0.f;
     CGRect frame = CGRectMake(leftPadding,
                               topPadding,
@@ -195,6 +193,8 @@ static CGFloat const ChooseItemViewImageLabelWidth = 42.f;
     
     _nameLabel.text = [NSString stringWithFormat:@"%s", ""];
     _nameLabel.font = [UIFont fontWithName:@"Avenir-Heavy" size:25];
+    _nameLabel.numberOfLines = 1;
+    _nameLabel.adjustsFontSizeToFitWidth = YES;
     _nameLabel.textColor = [UIColor whiteColor];
     _nameLabel.textAlignment = NSTextAlignmentCenter;
     [_informationView addSubview:_nameLabel];

@@ -9,6 +9,7 @@ sudo install -m 644 etc/ssl/com.bakkle/com.bakkle.pem        /etc/ssl/com.bakkle
 sudo install -m 644 etc/nginx/sites-available/com.bakkle.app /etc/nginx/sites-available/
 sudo install -m 644 etc/nginx/sites-available/org.rhventures.bakkle /etc/nginx/sites-available/
 sudo install -m 644 etc/nginx/sites-available/org.rhventures.bakkle-bld /etc/nginx/sites-available/
+sudo install -m 644 etc/nginx/sites-available/org.rhventures.wongb /etc/nginx/sites-available/
 
 sudo apt-get install nginx -y
 
@@ -24,6 +25,9 @@ if [ `hostname` == 'bakkle' ]; then
 fi
 if [ `hostname` == 'rhv-bakkle-bld' ]; then
    sudo ./bin/nginx_ensite org.rhventures.bakkle-bld
+fi
+if [ `hostname` == 'RHV-291SCS-Linux' ]; then
+   sudo ./bin/nginx_ensite org.rhventures.wongb
 fi
 
 sudo service nginx restart

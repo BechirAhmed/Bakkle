@@ -6,9 +6,21 @@
 // project.
 
 
+// FontAwesomeIconFactory
+#define COCOAPODS_POD_AVAILABLE_FontAwesomeIconFactory
+#define COCOAPODS_VERSION_MAJOR_FontAwesomeIconFactory 2
+#define COCOAPODS_VERSION_MINOR_FontAwesomeIconFactory 0
+#define COCOAPODS_VERSION_PATCH_FontAwesomeIconFactory 0
+
 // HanekeSwift
 #define COCOAPODS_POD_AVAILABLE_HanekeSwift
 #define COCOAPODS_VERSION_MAJOR_HanekeSwift 0
 #define COCOAPODS_VERSION_MINOR_HanekeSwift 9
 #define COCOAPODS_VERSION_PATCH_HanekeSwift 1
+
+// SocketRocket
+#define COCOAPODS_POD_AVAILABLE_SocketRocket
+#define COCOAPODS_VERSION_MAJOR_SocketRocket 0
+#define COCOAPODS_VERSION_MINOR_SocketRocket 2
+#define COCOAPODS_VERSION_PATCH_SocketRocket 0
 

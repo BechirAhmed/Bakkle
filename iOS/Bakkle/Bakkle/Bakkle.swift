@@ -48,6 +48,8 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     var email: String!
     var facebook_id: Int!
     var facebook_id_str: String!
+    var first_name: String!
+    var last_name: String!
     
     var feedItems: [NSObject]!
     var garageItems: [NSObject]!
@@ -166,13 +168,16 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         serverNum = NSUserDefaults.standardUserDefaults().integerForKey("server")
         switch( serverNum )
         {
-            case 0: self.url_base = "https://app-cluster.bakkle.com/"
+            case 0: self.url_base = "https://app.bakkle.com/"
             //case 0: self.url_base = "https://PRODCLUSTER-16628191.us-west-2.elb.amazonaws.com/"
-            case 1: self.url_base = "https://app.bakkle.com/"
+            case 1: self.url_base = "https://app-cluster.bakkle.com/"
             case 2: self.url_base = "http://bakkle.rhventures.org:8000/"
-            case 3: self.url_base = "http://137.112.63.186:8000/"
+            case 3: self.url_base = "http://wongb.rhventures.org:8000/"
             case 4: self.url_base = "http://10.0.0.118:8000/"
             //case 4: self.url_base = "http://137.112.57.140:8000/"
+            case 5: self.url_base = "" //Patrick
+            case 6: self.url_base = "" //Xinyu
+            case 7: self.url_base = "" //Joe
             default: self.url_base = "https://app.bakkle.com/"
         }
     }
@@ -227,6 +232,8 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                 if responseDict.valueForKey("status")?.integerValue == 1 {
                     self.display_name = username
                     self.email = email
+                    self.first_name = first_name
+                    self.last_name = last_name
                     success()
                 }
             } else {
@@ -272,6 +279,11 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                 
                 if responseDict.valueForKey("status")?.integerValue == 1 {
                     self.auth_token = responseDict.valueForKey("auth_token") as! String
+                    
+                    // Connect to web socket
+                    WSManager.setAuthenticationWithUUID(self.deviceUUID, withToken: self.auth_token)
+                    WSManager.setAutoRegister(true)
+                    WSManager.connectWS()
                     success()
                 } else {
                     Bakkle.sharedInstance.logout()
@@ -566,7 +578,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     }
     
     func prepareTopFeedItemsForWatch(){
-        for item in Bakkle.sharedInstance.feedItems{
+        /*for item in Bakkle.sharedInstance.feedItems{
             let imgURLs = item.valueForKey("image_urls") as! NSArray
             let imgURL = imgURLs[0] as! String
             let fancyImgURL = NSURL(string: imgURL)
@@ -581,7 +593,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             scaledImage.resize(size, completionHandler: { (resizedImage, data) -> () in
                 UIImagePNGRepresentation(resizedImage).writeToURL(shareURL, atomically: true)
             })
-        }
+        }*/
     }
     
     //http://localhost:8000/conversation/send_message/?auth_token=asdfasdfasdfasdf_1&message=I'd like 50 for it.&device_uuid=E6264D84-C395-4132-8C63-3EF051480191&conversation_id=7
@@ -628,7 +640,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         
     }
     
-    func addItem(title: String, description: String, location: String, price: String, tags: String, method: String, image: UIImage, success: (item_id: Int?, item_url: String?)->(), fail: ()->() ) {
+    func addItem(title: String, description: String, location: String, price: String, tags: String, method: String, images: [UIImage], success: (item_id: Int?, item_url: String?)->(), fail: ()->() ) {
         
         // URL encode some vars.
         let escTitle = title.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
@@ -642,15 +654,25 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         } else {
             escPrice = price.stringByReplacingOccurrencesOfString("$ ", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
         }
-
+        
         let postString = "device_uuid=\(self.deviceUUID)&title=\(escTitle)&description=\(escDescription)&location=\(escLocation)&auth_token=\(self.auth_token)&price=\(escPrice)&tags=\(escTags)&method=\(escMethod)"
         let url: NSURL? = NSURL(string: url_base + url_add_item + "?\(postString)")
         
         let request = NSMutableURLRequest(URL: url!)
         request.HTTPMethod = "POST"
-
-        let imageData: NSData = UIImageJPEGRepresentation(image, 0.5)
-        let postLength: String = "\(imageData.length)"
+        
+        var imageData: [NSData] = [NSData]();
+        
+        for i in images{
+            imageData.append(UIImageJPEGRepresentation(i, 0.5))
+        }
+        
+        var imageDataLength = 0;
+        for i in imageData{
+            imageDataLength += i.length;
+        }
+        
+        let postLength: String = "\(imageDataLength)"
         
         
         var boundary:String = "---------------------------14737809831466499882746641449"
@@ -658,22 +680,19 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         request.addValue(contentType, forHTTPHeaderField: "Content-Type")
         
         var body:NSMutableData = NSMutableData()
-        
-        // auth_token
-//        body.appendData("\r\n\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
-//        body.appendData("Content-Disposition: form-data; name=\"auth_token\"; \r\n\(auth_token)".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
-
-        
-        body.appendData("\r\n--\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
-        
-        body.appendData("Content-Disposition: form-data; name=\"image\"; filename=\"image.jpg\"\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
-        body.appendData("Content-Type: application/octet-stream\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
-        body.appendData(imageData)
-        body.appendData("\r\n--\(boundary)--\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
+                
+        //add all images as neccessary.
+        for i in imageData{
+            body.appendData("\r\n--\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
+            body.appendData("Content-Disposition: form-data; name=\"image\"; filename=\"image.jpg\"\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
+            body.appendData("Content-Type: application/octet-stream\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
+            body.appendData(i)
+            body.appendData("\r\n--\(boundary)--\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
+        }
         request.HTTPBody = body
         
         info("[Bakkle] addItem")
-        info("URL: \(url) METHOD: \(request.HTTPMethod) BODY: --binary blob-- LENGTH: \(imageData.length)")
+        info("URL: \(url) METHOD: \(request.HTTPMethod) BODY: --binary blob-- LENGTH: \(imageDataLength)")
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
             data, response, error in
             
@@ -770,10 +789,17 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     func restoreData() {
         var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
         
+        // reset instructional overlay
+        if userDefaults.objectForKey("instruction") == nil{
+            userDefaults.setBool(true, forKey: "instruction")
+        }
         // We force a version upgrade
         if let version = userDefaults.objectForKey("version") as? NSString {
             info("Stored version: \(version)")
             info("Current version: \(self.appVersion().build)")
+            if version != self.appVersion().build {
+                userDefaults.setBool(true, forKey: "instruction")
+            }
             if version == self.appVersion().build {
             
                 // restore FEED
@@ -856,6 +882,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             println("[ERRR] \(file.lastPathComponent.stringByDeletingPathExtension):(\(line)): \(logMessage)")
         }
     }
+    
     func info(logMessage: String, functionName: String = __FUNCTION__, line: Int = __LINE__, file: String = __FILE__) {
         var prettyFunc = functionName
 //        var range = functionName.rangeOfString("(")
@@ -872,6 +899,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             println("[INFO] \(file.lastPathComponent.stringByDeletingPathExtension):\(prettyFunc)(\(line)): \(logMessage)")
         }
     }
+    
     func debg(logMessage: String, functionName: String = __FUNCTION__, line: Int = __LINE__, file: String = __FILE__) {
         if self.debug>=3 {
             println("[DEBG] \(file.lastPathComponent.stringByDeletingPathExtension):(\(line)): \(logMessage)")

@@ -17,7 +17,7 @@ extension UIImage {
             self.drawInRect(rect)
             let newImage = UIGraphicsGetImageFromCurrentImageContext()
             UIGraphicsEndImageContext()
-            let imageData = UIImageJPEGRepresentation(newImage, 0.7)
+            let imageData = UIImageJPEGRepresentation(newImage, 0.6)
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 completionHandler(resizedImage: newImage, data:imageData)
             })
@@ -63,4 +63,17 @@ extension UIImage {
             })
         })
     }
+    
+    public func cropAndResize(size:CGSize, completionHandler:(resizedImage:UIImage, data:NSData)->()) {
+        dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), { () -> Void in
+            self.cropToSquare({(croppedImg:UIImage,cropBob:NSData) -> () in
+                croppedImg.resize(size, completionHandler: {(scaledImg:UIImage,scaleBob:NSData) -> () in
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        completionHandler(resizedImage: scaledImg, data:scaleBob)
+                    })
+                })
+            })
+        })
+    }
+    
 }

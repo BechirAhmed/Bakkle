@@ -62,11 +62,12 @@ class BuyersTrunkCell : UITableViewCell {
 class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var menuBtn: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
         var nib = UINib(nibName: "BuyersTrunkCell", bundle: nil)
         self.tableView.registerNib(nib, forCellReuseIdentifier: "GarageCell")
-        
+        setupButtons()
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
     }
     
@@ -81,8 +82,14 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
         
         Bakkle.sharedInstance.populateTrunk({});
     }
+    
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
+    func setupButtons() {
+        menuBtn.setImage(IconImage().menu(), forState: .Normal)
+        menuBtn.setTitle("", forState: .Normal)
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -126,9 +133,38 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let chat = Chat(user: User(ID: 2, username: "big-haus", firstName: "Big", lastName: "Haus"), lastMessageText: "6 sounds good :-)", lastMessageSentDate: NSDate())
-        let chatViewController = ChatViewController(chat: chat)
-        self.presentViewController(chatViewController, animated: true, completion: {})
+        let buyer = User(facebookID: Bakkle.sharedInstance.facebook_id_str,
+            firstName: Bakkle.sharedInstance.first_name, lastName: Bakkle.sharedInstance.last_name)
+        let account = Account(user: buyer)
+        let chatItem = Bakkle.sharedInstance.trunkItems[indexPath.row].valueForKey("item") as! NSDictionary
+        let chatItemId = (chatItem.valueForKey("pk") as! NSNumber).stringValue
+        var chatId: Int = 0
+        var chatPayload: WSRequest = WSStartChatRequest(itemId: chatItemId)
+        chatPayload.successHandler = {
+            (var success: NSDictionary) in
+            chatId = success.valueForKey("chatId") as! Int
+            var buyerChat = Chat(user: buyer, lastMessageText: "", lastMessageSentDate: NSDate(), chatId: chatId)
+            let chatViewController = ChatViewController(chat: buyerChat)
+            chatViewController.itemIndex = indexPath.row
+            chatViewController.seller = chatItem.valueForKey("seller") as! NSDictionary
+            chatViewController.isBuyer = true
+            self.presentViewController(chatViewController, animated: true, completion: {})
+            tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        }
+        WSManager.enqueueWorkPayload(chatPayload)  
+    }
+    
+    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if editingStyle == UITableViewCellEditingStyle.Delete {
+            let item = Bakkle.sharedInstance.trunkItems[indexPath.row].valueForKey("item") as! NSDictionary
+            Bakkle.sharedInstance.markItem("meh", item_id: item.valueForKey("pk")!.integerValue, success: {}, fail: {})
+            Bakkle.sharedInstance.trunkItems.removeAtIndex(indexPath.row)
+            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+        }
     }
     
     /* MENUBAR ITEMS */
