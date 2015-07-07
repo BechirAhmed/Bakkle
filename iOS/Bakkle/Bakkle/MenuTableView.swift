@@ -12,13 +12,16 @@ class MenuTableController: UITableViewController {
     
     var backView: UIView!
     
-    @IBOutlet weak var feedLbl: UILabel!
-    @IBOutlet weak var garageLbl: UILabel!
-    @IBOutlet weak var trunkLbl: UILabel!
-    @IBOutlet weak var holdingLbl: UILabel!
-    @IBOutlet weak var filterLbl: UILabel!
-    @IBOutlet weak var settingsLbl: UILabel!
+    @IBOutlet weak var profileImg: UIImageView!
+    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var feedImg: UIImageView!
+    @IBOutlet weak var sellerImg: UIImageView!
+    @IBOutlet weak var buyerImg: UIImageView!
+    @IBOutlet weak var holdImg: UIImageView!
+    @IBOutlet weak var contactImg: UIImageView!
+    @IBOutlet weak var settingButton: UIButton!
     
+    var imgURL: NSURL!
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -26,7 +29,13 @@ class MenuTableController: UITableViewController {
         if self.revealViewController() != nil {
             self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         }
+        var facebookProfileImageUrlString = "http://graph.facebook.com/\(Bakkle.sharedInstance.facebook_id_str)/picture?width=250&height=250"
+        imgURL = NSURL(string: facebookProfileImageUrlString)
+    
         setupImages()
+        setupBackground()
+        setupProfileLabel()
+        settingButton.setImage(IconImage().settings(), forState: UIControlState.Normal)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -37,10 +46,12 @@ class MenuTableController: UITableViewController {
             self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
             
             backView = UIView(frame: self.revealViewController().frontViewController.view.frame)
-            //backView.backgroundColor = UIColor(red: CGFloat(1.0), green: CGFloat(0.0), blue: CGFloat(0.0), alpha: CGFloat(1.0))
             self.revealViewController().frontViewController.view.addSubview(backView)
             self.revealViewController().frontViewController.view.addGestureRecognizer(self.revealViewController().tapGestureRecognizer())
         }
+    }
+    override func viewDidAppear(animated: Bool) {
+        setupProfileImg()
     }
     
     override func viewDidDisappear(animated: Bool) {
@@ -58,49 +69,43 @@ class MenuTableController: UITableViewController {
     }
     
     func setupImages() {
-        self.feedLbl.attributedText = stringWithIcon("FEED", image: IconImage().home())
-        self.garageLbl.attributedText = stringWithIcon("SELLER'S GARAGE", image: IconImage().edit())
-        self.trunkLbl.attributedText = stringWithIcon("BUYER'S TRUNK", image: IconImage().cart())
-        self.holdingLbl.attributedText = stringWithIcon("HOLDING PATTERN", image: IconImage().down())
-        self.filterLbl.attributedText = stringWithIcon("FEED FILTER", image: IconImage().filter())
-        self.settingsLbl.attributedText = stringWithIcon("SETTINGS", image: IconImage().settings())
+        self.feedImg.image = IconImage().home()
+        self.sellerImg.image = IconImage().edit()
+        self.buyerImg.image = IconImage().cart()
+        self.holdImg.image = IconImage().down()
+        self.contactImg.image = IconImage().contact()
     }
     
-    func stringWithIcon(label: String, image: UIImage) -> NSAttributedString {
-        var attachment: OffsetTextAttachment = OffsetTextAttachment()
-        let font: UIFont = self.feedLbl.font
-        attachment.fontDescender = font.descender
-        attachment.image = image
-        
-        var attachmentString : NSAttributedString = NSAttributedString(attachment: attachment)
-        var stringFinal : NSMutableAttributedString = NSMutableAttributedString(string: " " + label)
-        stringFinal.insertAttributedString(attachmentString, atIndex: 0)
-        
-        return stringFinal
+    func setupBackground() {
+        var visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .Dark)) as UIVisualEffectView
+        visualEffectView.frame = tableView.bounds
+        var backgroundImageView = UIImageView(frame: tableView.bounds)
+        backgroundImageView.hnk_setImageFromURL(imgURL!)
+        backgroundImageView.clipsToBounds = true
+        backgroundImageView.addSubview(visualEffectView)
+        tableView.backgroundView = backgroundImageView
     }
     
-    @IBAction func btnReset(sender: AnyObject) {
-        Bakkle.sharedInstance.resetDemo({
-            
-            let alertController = UIAlertController(title: "Bakkle Server", message:
-                "Items in the feed have been reset for DEMO.", preferredStyle: UIAlertControllerStyle.Alert)
-            alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default,handler: nil))
-            self.presentViewController(alertController, animated: true, completion: nil)
-            
-        })
+    func setupProfileImg() {
+        self.profileImg.hnk_setImageFromURL(imgURL!)
+        self.profileImg.layer.cornerRadius = self.profileImg.frame.size.width/2
+        self.profileImg.layer.borderWidth = 3.0
+        self.profileImg.clipsToBounds = true
+        let borderColor = UIColor.whiteColor()
+        self.profileImg.layer.borderColor = borderColor.CGColor
     }
     
-    @IBAction func btnLogout(sender: AnyObject) {
-        Bakkle.sharedInstance.logout()
-        FBSession.activeSession().closeAndClearTokenInformation()
-        self.revealViewController().dismissViewControllerAnimated(true, completion: { () -> Void in
-            //
-        })
+    func setupProfileLabel() {
+        self.nameLabel.text = Bakkle.sharedInstance.first_name + " " + Bakkle.sharedInstance.last_name
+    }
+    
+    @IBAction func btnContact(sender: AnyObject) {
+        UIApplication.sharedApplication().openURL(NSURL(string: "http://www.bakkle.com/")!)
     }
     
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         /* This fixes the small lines on the left hand side of the cell dividers */
-        cell.backgroundColor = UIColor(red: 153/255, green: 153/255, blue: 153/255, alpha: 1.0)
+        cell.backgroundColor = UIColor.clearColor()
     }
 }
 

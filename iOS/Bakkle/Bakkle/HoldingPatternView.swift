@@ -13,9 +13,6 @@ class HoldingPatternCell : UITableViewCell {
     @IBOutlet var itemImage: UIImageView?
     @IBOutlet var titleLabel: UILabel?
     @IBOutlet var priceLabel: UILabel?
-    @IBOutlet var deliveryLabel: UILabel?
-    @IBOutlet var tagLabel: UILabel?
-    @IBOutlet var distanceLabel: UILabel?
     @IBOutlet var timeRemainingLabel: UILabel?
     
     func loadCell(imgURLs: [String], title: String, price: String, delivery: String, tags: [String], location: String, indexPath: NSIndexPath) {
@@ -30,24 +27,13 @@ class HoldingPatternCell : UITableViewCell {
                         println("[HoldingPattern] displaying cell image")
                         self.itemImage!.hnk_setImageFromURL(imgURL!)
                         self.itemImage?.contentMode = UIViewContentMode.ScaleAspectFill
-                        self.itemImage?.layer.cornerRadius = 4.0
+                        self.itemImage?.layer.cornerRadius = 10.0
                         self.itemImage?.clipsToBounds = true
                     }
                 }
         }
         titleLabel!.text = title.uppercaseString
         priceLabel!.text = "$" + price
-        deliveryLabel!.text = "Method of Delivery: " + delivery
-        let tagString = ", ".join(tags)
-        tagLabel!.text = "Tags: " + tagString
-        distanceLabel!.text = ""
-        if location.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
-            let start: CLLocation = CLLocation(locationString: location)
-            if let distance = Bakkle.sharedInstance.distanceTo(start) {
-                var distanceString = distance.rangeString()
-                distanceLabel!.text = "\(distanceString) miles away"
-            }
-        }
         timeRemainingLabel!.text = "55:55" //TODO: Set this to count down
     }
     
@@ -108,6 +94,7 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
         self.timer = NSTimer(timeInterval: 1.0, target: self, selector: Selector("updateTimeRemaining"), userInfo: nil, repeats: true)
         NSRunLoop.currentRunLoop().addTimer(self.timer, forMode: NSRunLoopCommonModes)
         setupButtons()
+        self.tableView.tableFooterView = UIView()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -153,7 +140,7 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
         let cell = self.tableView.dequeueReusableCellWithIdentifier("HoldingPatternCell") as! HoldingPatternCell
         cell.itemImage?.image = UIImage(named: "blank.png")
         cell.itemImage?.contentMode = UIViewContentMode.ScaleAspectFill
-        cell.itemImage?.layer.cornerRadius = 4.0
+        cell.itemImage?.layer.cornerRadius = 10.0
         cell.itemImage?.clipsToBounds = true
         if Bakkle.sharedInstance.holdingItems.count > 0 {
             let entry : NSDictionary = Bakkle.sharedInstance.holdingItems[indexPath.row] as! NSDictionary

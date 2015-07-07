@@ -10,6 +10,14 @@ def getDATABASES():
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
          },
+         'wongb': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'wongb',
+            'USER': 'root',
+            'PASSWORD': 'Bakkle123',
+            'HOST': 'bakkle.cw8vja43bda8.us-west-2.rds.amazonaws.com',
+            'PORT': '5432',
+         },
          'testdb': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'NAME': 'testdb',
@@ -47,3 +55,8 @@ def getDATABASES():
 def getActiveDB():
     return activeDB
 
+def getSysVars():
+    valuesDict = {
+        'activeDB': activeDB,
+    }
+    return valuesDict

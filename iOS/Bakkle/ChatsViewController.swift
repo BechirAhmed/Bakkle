@@ -3,6 +3,7 @@ import UIKit
 class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextViewDelegate  {
     var account: Account!
     var header: UIView!
+    var tabView: UIView!
     var tableView: UITableView!
     var textView: UITextView!
     var chatItemID: String!
@@ -37,17 +38,50 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
         self.view.addSubview(backButton)
         header.addSubview(backButton)
         
-        var title = UILabel(frame: CGRectMake(view.bounds.origin.x, view.bounds.origin.y + topHeight, view.bounds.size.width, headerHeight))
-        title.center = CGPointMake((view.bounds.size.width/2), topHeight + (headerHeight/2))
-        title.textAlignment = NSTextAlignment.Center
-        title.text = "CHATS"
-        title.font = UIFont(name: "Avenir-Black", size: 21)
-        title.textColor = UIColor.whiteColor()
+        let editButtonWidth:CGFloat = 50
+        var editButton = UIButton(frame: CGRectMake(header.bounds.origin.x+header.bounds.size.width-55
+            ,header.bounds.origin.y + 25,editButtonWidth,headerHeight-10))
+        editButton.setImage(IconImage().edit(headerHeight-10), forState: UIControlState.Normal)
+        editButton.addTarget(self, action: "editItem:", forControlEvents: UIControlEvents.TouchUpInside)
+        header.addSubview(editButton)
         
+        var title = UILabel(frame: CGRectMake(view.bounds.origin.x, view.bounds.origin.y + topHeight, view.bounds.size.width, headerHeight))
+        title.center = CGPointMake((editButton.frame.origin.x - backButton.frame.size.width - backButton.frame.origin.x)/2+backButton.frame.size.width+backButton.frame.origin.x, topHeight + (headerHeight/2))
+        title.textAlignment = NSTextAlignment.Center
+        title.font = UIFont(name: "Avenir-Black", size: 20)
+        title.textColor = UIColor.whiteColor()
+        //title.text = (Bakkle.sharedInstance.garageItems[self.garageIndex].valueForKey("title") as? String)?.uppercaseString
+        title.text = "MESSAGES"
+        title.adjustsFontSizeToFitWidth = true
         header.addSubview(title)
         view.addSubview(header)
         
-        tableView = UITableView(frame: CGRectMake(view.bounds.origin.x, view.bounds.origin.y+headerHeight+topHeight, view.bounds.size.width, view.bounds.size.height-headerHeight-topHeight), style: .Plain)
+        tabView = UIView(frame: CGRectMake(view.bounds.origin.x, view.bounds.origin.y+headerHeight+topHeight, view.bounds.size.width, headerHeight))
+        tabView.backgroundColor = UIColor.whiteColor()
+        
+        let edge: CGFloat = 10
+        var msgButton: UIButton = UIButton(frame: CGRectMake(edge, 5, (view.bounds.size.width-20)/2, headerHeight-15))
+        msgButton.setTitle("MESSAGES", forState: UIControlState.Normal)
+        msgButton.titleLabel!.font = UIFont(name: "Avenir-Black", size: 15)
+        msgButton.layer.borderWidth = 2.0
+        msgButton.layer.borderColor = Theme.ColorGreen.CGColor
+        msgButton.backgroundColor = Theme.ColorGreen
+        msgButton.addTarget(self, action: "msgPressed", forControlEvents: UIControlEvents.TouchUpInside)
+        tabView.addSubview(msgButton)
+        
+        var alyButton: UIButton = UIButton(frame: CGRectMake(edge+msgButton.frame.size.width, 5, (view.bounds.size.width-20)/2, headerHeight-15))
+        alyButton.setTitle("ANALYTICS", forState: UIControlState.Normal)
+        alyButton.titleLabel!.font = UIFont(name: "Avenir-Black", size: 15)
+        alyButton.setTitleColor(Theme.ColorGreen, forState: UIControlState.Normal)
+        alyButton.layer.borderWidth = 2.0
+        alyButton.layer.borderColor = Theme.ColorGreen.CGColor
+        alyButton.backgroundColor = UIColor.whiteColor()
+        alyButton.addTarget(self, action: "alyPressed", forControlEvents: UIControlEvents.TouchUpInside)
+        tabView.addSubview(alyButton)
+        
+        view.addSubview(tabView)
+
+        tableView = UITableView(frame:CGRectMake(view.bounds.origin.x,view.bounds.origin.y+headerHeight*2+topHeight,view.bounds.size.width,view.bounds.size.height-headerHeight*2-topHeight))
         tableView.autoresizingMask = .FlexibleWidth | .FlexibleHeight
         tableView.backgroundColor = UIColor.whiteColor()
         tableView.dataSource = self
@@ -116,10 +150,7 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
-    
-    override func viewWillAppear(animated: Bool) {
-    }
-    
+
     override func viewDidAppear(animated: Bool)  {
         super.viewDidAppear(animated)
         tableView.flashScrollIndicators()
@@ -161,6 +192,28 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     func btnBack(sender:UIButton!)
     {
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.navigationController?.popToRootViewControllerAnimated(true)
     }
+    
+    func editItem(sender:UIButton!)
+    {
+        let sb: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc: AddItem = sb.instantiateViewControllerWithIdentifier("AddItem") as! AddItem
+        vc.modalTransitionStyle = UIModalTransitionStyle.FlipHorizontal
+        vc.isEditting = true
+        vc.item = Bakkle.sharedInstance.garageItems[self.garageIndex] as? NSDictionary
+        self.presentViewController(vc, animated: true, completion: nil)
+
+    }
+    
+    func msgPressed(){
+        // do nothing
+    }
+    
+    func alyPressed(){
+        let alyController: AnalyticsView = AnalyticsView()
+        alyController.garageIndex = self.garageIndex
+        self.navigationController?.pushViewController(alyController, animated: false)
+    }
+    
 }

@@ -2,6 +2,7 @@ from django.shortcuts import render
 
 import json
 import time
+import threading
 
 from django.http import HttpResponse, HttpResponseRedirect, Http404, HttpResponseForbidden
 from django.core.urlresolvers import reverse
@@ -12,12 +13,14 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.db.models import Q
 
-from account.models import Account, Device
-from items.models import Items
+# from items.models import Items
 from timing.models import Timing
 
 # Decorator for login authentication
 def authenticate(function):
+
+    from account.models import Account, Device
+
     def wrap(request, *args, **kwargs):
         auth_token = request.POST.get('auth_token', request.GET.get('auth_token', ""))
         device_uuid = request.POST.get('device_uuid', request.GET.get('device_uuid', ""))        
@@ -54,9 +57,9 @@ def authenticate(function):
 
 # Decorator for login authentication
 def time_method(function):
-    def wrap(request, *args, **kwargs):
+    def wrap(*args, **kwargs):
         time1 = time.time()
-        ret = function(request, *args, **kwargs)
+        ret = function(*args, **kwargs)
         time2 = time.time()
 
         user = 0
@@ -69,6 +72,17 @@ def time_method(function):
         print '%s function took %0.3f ms' % (function.func_name, (time2-time1)*1000.0)
         return ret
     return wrap
+
+# Decorator for login authentication
+def run_async(function):
+    def wrap(*args, **kwargs):
+
+        print("Running function " + str(function.func_name) + " in separate thread");
+        function_t = threading.Thread(target=time_method(function), args=args, kwargs = kwargs);
+        function_t.start()
+
+    return wrap
+
 
 # def get_number_conversations_with_new_messages(account_id):
 

@@ -21,6 +21,8 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     let url_feed: String          = "items/feed/"
     let url_garage: String        = "items/get_seller_items/"
     let url_add_item: String      = "items/add_item/"
+    let url_add_item_no_image: String      = "items/add_item_no_image/"
+    let url_delete_item: String = "items/delete_item/"
     let url_send_chat: String     = "conversation/send_message/"
     let url_view_item: String     = "items/"
     let url_buyers_trunk: String        = "items/get_buyers_trunk/"
@@ -41,6 +43,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     var debug: Int = 2 // 0=off
     var serverNum: Int = 0
     var deviceUUID : String = UIDevice.currentDevice().identifierForVendor.UUIDString
+    var flavor: Int = 0
     
 //    var account_id: Int! = 0
     var auth_token: String!
@@ -61,7 +64,6 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     
     var filter_distance: Float = 100
     var filter_price: Float = 50
-    var filter_number: Float = 80
     
     var search_text: String = ""
     var user_location: String = ""
@@ -82,11 +84,21 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         setServer()
         info("Using server: \(self.serverNum) \(self.url_base)")
 
+        self.setFlavor()
         self.getFilter()
         self.restoreData()
         self.initLocation()
     }
     
+    /* Set version of app for branding 1=Bakkle, 2=Goodwill */
+    func setFlavor() {
+//#if defined(TARGET_BAKKLE)
+    self.flavor = 1
+//#else
+//    self.flavor = 2
+//#endif
+    }
+        
     /* Return a public URL to the item on the web */
     /* In future we hope to have a URL shortener */
     func getImageURL( item_id: Int ) -> ( String ) {
@@ -206,7 +218,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         self.facebook_id = userid.toInt()
             
         request.HTTPMethod = "POST"
-        let postString = "email=\(email)&name=\(name)&user_name=\(username)&gender=\(gender)&user_id=\(userid)&locale=\(locale)&first_name=\(first_name)&last_name=\(last_name)&device_uuid=\(self.deviceUUID)"
+        let postString = "email=\(email)&name=\(name)&user_name=\(username)&gender=\(gender)&user_id=\(userid)&locale=\(locale)&first_name=\(first_name)&last_name=\(last_name)&device_uuid=\(self.deviceUUID)&flavor=\(self.flavor)"
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
         
         info("facebook")
@@ -257,7 +269,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             let encLocation = user_location.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
             request.HTTPMethod = "POST"
-            let postString = "device_uuid=\(self.deviceUUID)&user_id=\(self.facebook_id_str)&screen_width=\(screen_width)&screen_height=\(screen_height)&app_version=\(a)&app_build=\(b)&user_location=\(encLocation)&is_ios=true"
+            let postString = "device_uuid=\(self.deviceUUID)&user_id=\(self.facebook_id_str)&screen_width=\(screen_width)&screen_height=\(screen_height)&app_version=\(a)&app_build=\(b)&user_location=\(encLocation)&is_ios=true&flavor=\(self.flavor)"
             request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
             
             println("[Bakkle] login (facebook)")
@@ -282,7 +294,6 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                     
                     // Connect to web socket
                     WSManager.setAuthenticationWithUUID(self.deviceUUID, withToken: self.auth_token)
-                    WSManager.setAutoRegister(true)
                     WSManager.connectWS()
                     success()
                 } else {
@@ -525,7 +536,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         let encLocation = user_location.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
         request.HTTPMethod = "POST"
-        let postString = "auth_token=\(self.auth_token)&device_uuid=\(self.deviceUUID)&search_text=\(self.search_text)&filter_distance=\(Int(self.filter_distance))&filter_price=\(Int(self.filter_price))&filter_number=\(Int(self.filter_number))&user_location=\(encLocation)"
+        let postString = "auth_token=\(self.auth_token)&device_uuid=\(self.deviceUUID)&search_text=\(self.search_text)&filter_distance=\(Int(self.filter_distance))&filter_price=\(Int(self.filter_price))&user_location=\(encLocation)"
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
         
         info("[Bakkle] populateFeed")
@@ -639,9 +650,8 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     func onNewChat(conversation_id: Int, message: String, timestamp: time_t) {
         
     }
-    
-    func addItem(title: String, description: String, location: String, price: String, tags: String, method: String, images: [UIImage], success: (item_id: Int?, item_url: String?)->(), fail: ()->() ) {
-        
+
+    func addItem(title: String, description: String, location: String, price: String, tags: String, method: String, images: [NSData],item_id: NSInteger?, success: (item_id: Int?, item_url: String?)->(), fail: ()->() ) {
         // URL encode some vars.
         let escTitle = title.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         let escDescription = description.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
@@ -655,20 +665,20 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             escPrice = price.stringByReplacingOccurrencesOfString("$ ", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
         }
         
-        let postString = "device_uuid=\(self.deviceUUID)&title=\(escTitle)&description=\(escDescription)&location=\(escLocation)&auth_token=\(self.auth_token)&price=\(escPrice)&tags=\(escTags)&method=\(escMethod)"
-        let url: NSURL? = NSURL(string: url_base + url_add_item + "?\(postString)")
+        var postString : NSString;
+        if(item_id != nil){
+            postString = "device_uuid=\(self.deviceUUID)&title=\(escTitle)&description=\(escDescription)&location=\(escLocation)&auth_token=\(self.auth_token)&price=\(escPrice)&tags=\(escTags)&method=\(escMethod)&item_id=\(item_id!)"
+        }
+        else{
+            postString = "device_uuid=\(self.deviceUUID)&title=\(escTitle)&description=\(escDescription)&location=\(escLocation)&auth_token=\(self.auth_token)&price=\(escPrice)&tags=\(escTags)&method=\(escMethod)"
+        }
+        let url: NSURL? = NSURL(string: url_base +  url_add_item + "?\(postString)")
         
         let request = NSMutableURLRequest(URL: url!)
         request.HTTPMethod = "POST"
         
-        var imageData: [NSData] = [NSData]();
-        
-        for i in images{
-            imageData.append(UIImageJPEGRepresentation(i, 0.5))
-        }
-        
         var imageDataLength = 0;
-        for i in imageData{
+        for i in images {
             imageDataLength += i.length;
         }
         
@@ -682,7 +692,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         var body:NSMutableData = NSMutableData()
                 
         //add all images as neccessary.
-        for i in imageData{
+        for i in images{
             body.appendData("\r\n--\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
             body.appendData("Content-Disposition: form-data; name=\"image\"; filename=\"image.jpg\"\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
             body.appendData("Content-Type: application/octet-stream\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
@@ -693,6 +703,47 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         
         info("[Bakkle] addItem")
         info("URL: \(url) METHOD: \(request.HTTPMethod) BODY: --binary blob-- LENGTH: \(imageDataLength)")
+        
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
+            data, response, error in
+            
+            if error != nil {
+                self.err("error= \(error)")
+                return
+            }
+            
+            let responseString: String = NSString(data: data, encoding: NSUTF8StringEncoding)! as String
+            self.debg("Response: \(responseString)")
+            println("Response: \(responseString)")
+            
+            var parseError: NSError?
+            self.responseDict = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! NSDictionary!
+            self.debg("RESPONSE DICT IS: \(self.responseDict)")
+            
+            if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
+                let item_id: Int = self.responseDict.valueForKey("item_id") as! Int
+                let item_url: String = self.getImageURL(item_id)
+                success(item_id: item_id, item_url: item_url)
+            } else {
+                fail()
+            }
+        }
+        task.resume()
+    }
+    
+    func removeItem(item_id: NSInteger, success: (item_id: Int?, item_url: String?)->(), fail: ()->() ) {
+        // URL encode some vars.
+                var postString : NSString;
+            postString = "device_uuid=\(self.deviceUUID)&auth_token=\(self.auth_token)&item_id=\(item_id)"
+
+        let url: NSURL? = NSURL(string: url_base +  url_delete_item + "?\(postString)")
+        
+        let request = NSMutableURLRequest(URL: url!)
+        request.HTTPMethod = "POST"
+        
+        info("[Bakkle] deleteItem")
+        info("URL: \(url) METHOD: \(request.HTTPMethod)")
+        
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
             data, response, error in
             
@@ -756,31 +807,23 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             self.filter_distance = x
             self.debg("Restored filter_distance = \(x)")
         } else {
-            self.filter_distance = 50
+            self.filter_distance = 100
         }
         if let y = userDefaults.objectForKey("filter_price")    as? Float {
             self.filter_price = y
             println("Restored filter_price = \(y)")
         } else {
-            self.filter_price = 50
-        }
-        if let z = userDefaults.objectForKey("filter_number")   as? Float {
-            self.filter_number = z
-            println("Restored filter_number = \(z)")
-        }else{
-            self.filter_number = 100
+            self.filter_price = 100
         }
         NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkFilterChanged, object: self)
     }
-    func setFilter(ffilter_distance: Float, ffilter_price: Float, ffilter_number:Float) {
+    func setFilter(ffilter_distance: Float, ffilter_price: Float) {
         self.filter_distance = ffilter_distance
         self.filter_price = ffilter_price
-        self.filter_number = ffilter_number
         
         var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
         userDefaults.setFloat(self.filter_distance, forKey: "filter_distance")
         userDefaults.setFloat(self.filter_price,    forKey: "filter_price")
-        userDefaults.setFloat(self.filter_number,   forKey: "filter_number")
         userDefaults.synchronize()
         
         NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkFilterChanged, object: self)

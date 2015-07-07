@@ -33,12 +33,22 @@
  */
 @interface MDCSwipeToChooseView : UIView
 
+/*
+ * extra view beside swipe view
+ */
+@property (nonatomic, strong) UIView *informationView;
+
+@property (nonatomic, strong) UIView *topUserInfoView;
+
 /*!
  * The main image to be displayed and then "liked" or "disliked".
  */
 @property (nonatomic, strong) UIImageView *imageView;
 
 @property (nonatomic, strong) UIImageView *bottomBlurImg;
+
+@property (nonatomic, strong) UIImageView *transparentImage;
+
 
 /*!
  * The "liked" view, which fades in as the `MDCSwipeToChooseView` is panned to the right.

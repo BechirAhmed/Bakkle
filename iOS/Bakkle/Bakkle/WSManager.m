@@ -7,7 +7,12 @@
 //
 
 #import "WSManager.h"
+//#if defined(TARGET_BAKKLE)
 #import "Bakkle-Swift.h"
+//#else
+//#import "Goodwill-Swift.h"
+//#endif
+
 
 static WSManager *_wsManagerInstance;
 static NSString *_wsUrl;
@@ -42,19 +47,13 @@ static BOOL debug = true;
     _wsManagerInstance.successHandlers = [[NSMutableDictionary alloc] init];
     _wsManagerInstance.failHandlers = [[NSMutableDictionary alloc] init];
     _wsManagerInstance.onMessageHandlers = [[NSMutableDictionary alloc] init];
-    _wsManagerInstance.tagCounter = [NSNumber numberWithInt:0];
-    _wsManagerInstance.autoRegister = false;
-}
+    _wsManagerInstance.tagCounter = [NSNumber numberWithInt:0];}
 
 #pragma mark - public static methods for interfacing with websockets.
 
 +(void) setAuthenticationWithUUID: (NSString*) uuid withToken: (NSString*) token{
     _wsManagerInstance.uuid = uuid;
     _wsManagerInstance.auth_token = token;
-}
-
-+(void) setAutoRegister:(BOOL) autoRegister{
-    _wsManagerInstance.autoRegister = autoRegister;
 }
 
 +(void) registerMessageHandler: (void (^)(NSDictionary*)) handler forNotification: (NSString*) notificationType {
@@ -66,12 +65,11 @@ static BOOL debug = true;
         [NSException raise:@"Authentication token/uuid not initialized. Call setAuthenticationWithUUID:withToken: first." format:@"Invalid token/UUID value: nil"];
     }
     [_wsManagerInstance connectWebSocket];
-    if(_wsManagerInstance.autoRegister){[WSManager enqueueWorkPayload:[[WSRegisterChatRequest alloc] init]];}
     return true;
 }
 
 +(void) enqueueWorkPayload:(WSRequest*) payload {
-    if(!_wsManagerInstance.socketOpen && ![payload isKindOfClass:[WSRegisterChatRequest class] ]){
+    if(!_wsManagerInstance.socketOpen || ![_wsManagerInstance isOpen]){
         [self connectWS];
     }
     
@@ -84,6 +82,9 @@ static BOOL debug = true;
 
 #pragma mark - WSManagerInstance private helper methods
 
+- (bool) isOpen{
+    return webSocket.readyState == SR_OPEN;
+}
 
 - (void) send: (NSString*) message{
     if(debug){NSLog(@"[SendMessage] %@%@\n\n", @"Sending message: ", message);}
@@ -107,15 +108,15 @@ static BOOL debug = true;
     switch( serverNum )
     {
         case 0:
-            urlString = @"ws://app.bakkle.com:8080/ws/";
+            urlString = @"ws://app.bakkle.com:8000/ws/";
             break;
             //case 0: self.url_base = "https://PRODCLUSTER-16628191.us-west-2.elb.amazonaws.com/"
         case 1:
-            urlString = @"ws://app-cluster.bakkle.com:8080/ws/";
+            urlString = @"ws://app-cluster.bakkle.com:8000/ws/";
             break;
 
         case 2:
-            urlString = @"ws://bakkle.rhventures.org:8080/ws/";
+            urlString = @"ws://bakkle.rhventures.org:8000/ws/";
             break;
 
         case 3:
@@ -144,6 +145,8 @@ static BOOL debug = true;
             break;
 
     }
+    
+    urlString = [NSString stringWithFormat:@"%@?userId=%@&uuid=%@", urlString, [self.auth_token componentsSeparatedByString:@"_"][1], self.uuid];
     
     SRWebSocket *newWebSocket = [[SRWebSocket alloc] initWithURL:[NSURL URLWithString:urlString]];
     
@@ -208,6 +211,7 @@ static BOOL debug = true;
 - (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error {
     //    [self connectWebSocket];
     if(debug){NSLog(@"[SocketFailureHandler] %@%@\n\n", @"Websocket error: ",error);}
+    self.socketOpen = false;
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean {

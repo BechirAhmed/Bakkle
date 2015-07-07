@@ -28,7 +28,7 @@ class LoginView: UIViewController, FBLoginViewDelegate {
         
         // add the image, making the login view looks like the launch screen when user already logged in
         setBackgroundImg()
-        setWrongLocationImg()
+        //setWrongLocationImg()
         setLogoImg()
     }
     
@@ -39,15 +39,11 @@ class LoginView: UIViewController, FBLoginViewDelegate {
         counter = 0
         
         // check if the user already logged in, if not, set the background image to transparent
+        
         if FBSession.activeSession().accessTokenData != nil {
-            setBackgroundImg(true)
+            background.hidden = false
         }else{
-            if (Bakkle.sharedInstance.distanceTo(location) > 20 && NSUserDefaults.standardUserDefaults().boolForKey("enableGeofencing")){
-                setBackgroundImg(false)
-                counter = 1
-            }else{
-                background.hidden = true
-            }
+            background.hidden = true
         }
     }
     
@@ -89,7 +85,6 @@ class LoginView: UIViewController, FBLoginViewDelegate {
         background.addConstraint(NSLayoutConstraint(item: logo, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: background, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0.0))
         background.addConstraint(NSLayoutConstraint(item: logo, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem: background, attribute: NSLayoutAttribute.Top, multiplier: 1.0, constant: 49.0))
         background.addConstraint(NSLayoutConstraint(item: logo, attribute: NSLayoutAttribute.Left, relatedBy: NSLayoutRelation.Equal, toItem: background, attribute: NSLayoutAttribute.Left, multiplier: 1.0, constant: 36.0))
-        background.addConstraint(NSLayoutConstraint(item: logo, attribute: NSLayoutAttribute.Right, relatedBy: NSLayoutRelation.Equal, toItem: background, attribute: NSLayoutAttribute.Right, multiplier: 2.0, constant: 36.0))
     }
     
     func loginViewShowingLoggedInUser(loginView : FBLoginView!) {

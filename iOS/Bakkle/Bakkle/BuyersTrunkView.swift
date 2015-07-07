@@ -13,9 +13,6 @@ class BuyersTrunkCell : UITableViewCell {
     @IBOutlet var itemImage: UIImageView?
     @IBOutlet var titleLabel: UILabel?
     @IBOutlet var priceLabel: UILabel?
-    @IBOutlet var deliveryLabel: UILabel?
-    @IBOutlet var tagLabel: UILabel?
-    @IBOutlet var distanceLabel: UILabel?
     
     func loadCell(imgURLs: [String], title: String, price: String, delivery: String, tags: [String], location: String, indexPath: NSIndexPath) {
         println("[BuyersTrunk] Attempting to load image in cell")
@@ -29,33 +26,13 @@ class BuyersTrunkCell : UITableViewCell {
                         println("[BuyersTrunk] displaying cell image")
                         self.itemImage!.hnk_setImageFromURL(imgURL!)
                         self.itemImage?.contentMode = UIViewContentMode.ScaleAspectFill
-                        self.itemImage?.layer.cornerRadius = 4.0
+                        self.itemImage?.layer.cornerRadius = 10.0
                         self.itemImage?.clipsToBounds = true
                     }
                 }
         }
         titleLabel!.text = title.uppercaseString
         priceLabel!.text = "$" + price
-        deliveryLabel!.text = "Method of Delivery: " + delivery
-        let tagString = ", ".join(tags)
-        tagLabel!.text = "Tags: " + tagString
-        distanceLabel!.text = ""
-        if location.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
-            let start: CLLocation = CLLocation(locationString: location)
-            if let distance = Bakkle.sharedInstance.distanceTo(start) {
-                
-                var distanceString = distance.rangeString()
-                distanceLabel!.text = "\(distanceString) miles away"
-//                if distance >= 10 {
-//                    var formatter:NSNumberFormatter = NSNumberFormatter()
-//                    formatter.numberStyle = NSNumberFormatterStyle.DecimalStyle
-//                    var formattedOutput = formatter.stringFromNumber(Int(distance))
-//                    distanceLabel!.text = "\(formattedOutput!) miles away"
-//                } else {
-//                    distanceLabel!.text = String(format: "%.1f", distance) + " miles away"
-//                }
-            }
-        }
     }
 }
 
@@ -81,6 +58,7 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
         }
         
         Bakkle.sharedInstance.populateTrunk({});
+        self.tableView.tableFooterView = UIView()
     }
     
     deinit {
@@ -110,7 +88,7 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
         let cell = self.tableView.dequeueReusableCellWithIdentifier("BuyersTrunkCell") as! BuyersTrunkCell
         cell.itemImage?.image = UIImage(named: "blank.png")
         cell.itemImage?.contentMode = UIViewContentMode.ScaleAspectFill
-        cell.itemImage?.layer.cornerRadius = 4.0
+        cell.itemImage?.layer.cornerRadius = 10.0
         cell.itemImage?.clipsToBounds = true
         if Bakkle.sharedInstance.trunkItems.count > 0 {
             let trunkEntry : NSDictionary = Bakkle.sharedInstance.trunkItems[indexPath.row] as! NSDictionary
