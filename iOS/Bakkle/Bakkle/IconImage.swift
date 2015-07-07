@@ -33,7 +33,7 @@ class IconImage {
     }
     
     func close() -> UIImage {
-        return UIImage(named: "x-image.png")!
+        return UIImage(named: "new-x.png")!
     }
     
     func chevron() -> UIImage {

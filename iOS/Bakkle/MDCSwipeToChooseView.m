@@ -144,9 +144,9 @@ static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
     _profileImg = [[UIImageView alloc] initWithFrame:frame];
     _profileImg.layer.cornerRadius = _profileImg.frame.size.width/2;
     _profileImg.layer.masksToBounds = YES;
-    _profileImg.layer.borderWidth = 3;
+    _profileImg.layer.borderWidth = 2.0;
     _profileImg.contentMode = UIViewContentModeScaleAspectFill;
-    UIColor *borderColor = [UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:1.0];
+    UIColor *borderColor = [UIColor whiteColor];
     _profileImg.layer.borderColor = borderColor.CGColor;
     [_topUserInfoView addSubview:_profileImg];
 }
@@ -187,19 +187,19 @@ static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
     _nameLabel.numberOfLines = 1;
     _nameLabel.adjustsFontSizeToFitWidth = YES;
     _nameLabel.textColor = [UIColor whiteColor];
-    _nameLabel.textAlignment = NSTextAlignmentCenter;
+    _nameLabel.textAlignment = NSTextAlignmentLeft;
     [_informationView addSubview:_nameLabel];
 }
 
 - (void)constructPriceLabel {
     CGRect frame = CGRectMake(self.frame.size.width/4*3+5, 10, self.frame.size.width/4-10, CGRectGetHeight(_informationView.frame)/2);
     _priceLabel = [[UILabel alloc] initWithFrame:frame];
-    _priceLabel.font = [UIFont fontWithName:@"Avenir-Heavy" size:22];
+    _priceLabel.font = [UIFont fontWithName:@"Avenir-Medium" size:22];
     _priceLabel.numberOfLines = 1;
     _priceLabel.adjustsFontSizeToFitWidth = YES;
     _priceLabel.text = [NSString stringWithFormat:@"%s", ""];
     _priceLabel.textColor = [UIColor whiteColor];
-    _priceLabel.textAlignment = NSTextAlignmentCenter;
+    _priceLabel.textAlignment = NSTextAlignmentRight;
     [_informationView addSubview:_priceLabel];
 }
 

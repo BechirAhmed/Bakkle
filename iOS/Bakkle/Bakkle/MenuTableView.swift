@@ -89,9 +89,9 @@ class MenuTableController: UITableViewController {
     func setupProfileImg() {
         self.profileImg.hnk_setImageFromURL(imgURL!)
         self.profileImg.layer.cornerRadius = self.profileImg.frame.size.width/2
-        self.profileImg.layer.borderWidth = 6
+        self.profileImg.layer.borderWidth = 3.0
         self.profileImg.clipsToBounds = true
-        let borderColor = UIColor(red: 0.7, green: 0.7, blue: 0.7, alpha: 1.0)
+        let borderColor = UIColor.whiteColor()
         self.profileImg.layer.borderColor = borderColor.CGColor
     }
     

@@ -68,6 +68,8 @@
 		723D532C1B25F42B0067A80A /* IconImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 723D532B1B25F42B0067A80A /* IconImage.swift */; };
 		723D532E1B2718590067A80A /* OffsetTextAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 723D532D1B2718590067A80A /* OffsetTextAttachment.swift */; };
 		726A38E31B39BE1E00CF5553 /* logo-white-design-clear.png in Resources */ = {isa = PBXBuildFile; fileRef = 726A38E21B39BE1E00CF5553 /* logo-white-design-clear.png */; };
+		727FA76D1B4C15750023C126 /* new-x.png in Resources */ = {isa = PBXBuildFile; fileRef = 727FA76C1B4C15750023C126 /* new-x.png */; };
+		727FA76E1B4C15790023C126 /* new-x.png in Resources */ = {isa = PBXBuildFile; fileRef = 727FA76C1B4C15750023C126 /* new-x.png */; };
 		728647EB1B2F0E3F009A24C9 /* ChatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53BE1B0815CB000C406C /* ChatsViewController.swift */; };
 		728647EC1B2F0E46009A24C9 /* ChatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53BE1B0815CB000C406C /* ChatsViewController.swift */; };
 		728647EE1B309F6F009A24C9 /* NSDate+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 728647ED1B309F6F009A24C9 /* NSDate+String.swift */; };
@@ -441,6 +443,7 @@
 		723D532B1B25F42B0067A80A /* IconImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IconImage.swift; sourceTree = "<group>"; };
 		723D532D1B2718590067A80A /* OffsetTextAttachment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OffsetTextAttachment.swift; sourceTree = "<group>"; };
 		726A38E21B39BE1E00CF5553 /* logo-white-design-clear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-white-design-clear.png"; sourceTree = "<group>"; };
+		727FA76C1B4C15750023C126 /* new-x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "new-x.png"; sourceTree = "<group>"; };
 		728647ED1B309F6F009A24C9 /* NSDate+String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSDate+String.swift"; sourceTree = "<group>"; };
 		72B5D8041B41E12D00E4B6EA /* BuyItemView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuyItemView.swift; sourceTree = "<group>"; };
 		72B5D8061B41E52300E4B6EA /* ChatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
@@ -821,6 +824,7 @@
 		A08D53B71B07DC8E000C406C /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				727FA76C1B4C15750023C126 /* new-x.png */,
 				602C389A1B38AF1E005CB493 /* x-image.png */,
 				602C38981B389A2E005CB493 /* WrongLocationForPhone.png */,
 				602C38961B389A1F005CB493 /* InstructionScreen.png */,
@@ -1227,6 +1231,7 @@
 				A05DB7541AF3F22B0076D97D /* dot@2x.png in Resources */,
 				A0A709CE1ACAC9D700E772B9 /* Main.storyboard in Resources */,
 				A058A2B71AFDADA2005E7432 /* mask-buyer-white.png in Resources */,
+				727FA76D1B4C15750023C126 /* new-x.png in Resources */,
 				5EBDD6B11AB2139700C7FBE7 /* bakkleLogo.png in Resources */,
 				A018DF881ADE07E700AF5550 /* btn-add.png in Resources */,
 				A08D53D11B0815CB000C406C /* MessageIncoming.aiff in Resources */,
@@ -1326,6 +1331,7 @@
 				A0E1EBAA1B2B5B2200662C08 /* MessageOutgoing.aiff in Resources */,
 				A0E1EBAB1B2B5B2200662C08 /* btn-facebook40.png in Resources */,
 				A0E1EBAC1B2B5B2200662C08 /* btn-x.png in Resources */,
+				727FA76E1B4C15790023C126 /* new-x.png in Resources */,
 				A0E1EBAD1B2B5B2200662C08 /* pendant-tag660.png in Resources */,
 				A0E1EBAE1B2B5B2200662C08 /* btn-menu@2x.png in Resources */,
 				A0E1EBAF1B2B5B2200662C08 /* mock-rating-stars.png in Resources */,
