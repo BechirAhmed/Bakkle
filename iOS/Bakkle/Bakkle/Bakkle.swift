@@ -88,6 +88,9 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         self.getFilter()
         self.restoreData()
         self.initLocation()
+        
+        let appName = NSBundle.mainBundle().infoDictionary!["CFBundleName"] as! String;
+        self.flavor = appName == "Bakkle" ? 1 : 2;
     }
     
     /* Set version of app for branding 1=Bakkle, 2=Goodwill */
