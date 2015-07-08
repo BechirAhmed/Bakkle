@@ -11,12 +11,15 @@ import Haneke
 
 class SettingsView: UIViewController {
     
+    @IBOutlet weak var blur: UIView!
+    @IBOutlet weak var backgroundAvatar: UIImageView!
     @IBOutlet weak var avatar: UIImageView!
     @IBOutlet weak var menuBtn: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupButtons()
+        self.backgroundAvatar.contentMode = UIViewContentMode.ScaleAspectFill
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
     }
     
@@ -34,6 +37,10 @@ class SettingsView: UIViewController {
                 let imgURL = NSURL(string: facebookProfileImageUrlString)
                 dispatch_async(dispatch_get_main_queue()) {
                     println("[SettingsView] displaying image \(facebookProfileImageUrlString)")
+                    self.backgroundAvatar.hnk_setImageFromURL(imgURL!)
+                    var visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .Dark)) as UIVisualEffectView
+                    visualEffectView.frame = self.blur.frame
+                    //self.blur.addSubview(visualEffectView)
                     self.avatar.hnk_setImageFromURL(imgURL!)
                     self.avatar.layer.cornerRadius = self.avatar.frame.size.width/2
                 }
