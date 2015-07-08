@@ -651,13 +651,13 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         
     }
 
-    func addItem(title: String, description: String, location: String, price: String, tags: String, method: String, images: [NSData],item_id: NSInteger?, success: (item_id: Int?, item_url: String?)->(), fail: ()->() ) {
+    // take out tags right now, but if needed, will add later
+    func addItem(title: String, description: String, location: String, price: String, images: [NSData],item_id: NSInteger?, success: (item_id: Int?, item_url: String?)->(), fail: ()->() ) {
         // URL encode some vars.
         let escTitle = title.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         let escDescription = description.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         let escLocation = location.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-        let escTags = tags.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-        let escMethod = method.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
+//        let escTags = tags.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         var escPrice: String!
         if price == "take it!" {
             escPrice = "0.00"
@@ -667,10 +667,10 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         
         var postString : NSString;
         if(item_id != nil){
-            postString = "device_uuid=\(self.deviceUUID)&title=\(escTitle)&description=\(escDescription)&location=\(escLocation)&auth_token=\(self.auth_token)&price=\(escPrice)&tags=\(escTags)&method=\(escMethod)&item_id=\(item_id!)"
+            postString = "device_uuid=\(self.deviceUUID)&title=\(escTitle)&description=\(escDescription)&location=\(escLocation)&auth_token=\(self.auth_token)&price=\(escPrice)&item_id=\(item_id!)"
         }
         else{
-            postString = "device_uuid=\(self.deviceUUID)&title=\(escTitle)&description=\(escDescription)&location=\(escLocation)&auth_token=\(self.auth_token)&price=\(escPrice)&tags=\(escTags)&method=\(escMethod)"
+            postString = "device_uuid=\(self.deviceUUID)&title=\(escTitle)&description=\(escDescription)&location=\(escLocation)&auth_token=\(self.auth_token)&price=\(escPrice)"
         }
         let url: NSURL? = NSURL(string: url_base +  url_add_item + "?\(postString)")
         
