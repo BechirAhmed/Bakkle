@@ -28,7 +28,7 @@ class LoginView: UIViewController, FBLoginViewDelegate {
         
         // add the image, making the login view looks like the launch screen when user already logged in
         setBackgroundImg()
-        setWrongLocationImg()
+        //setWrongLocationImg()
         setLogoImg()
     }
     
@@ -39,15 +39,11 @@ class LoginView: UIViewController, FBLoginViewDelegate {
         counter = 0
         
         // check if the user already logged in, if not, set the background image to transparent
+        
         if FBSession.activeSession().accessTokenData != nil {
-            setBackgroundImg(true)
+            background.hidden = false
         }else{
-            if (Bakkle.sharedInstance.distanceTo(location) > 20 && NSUserDefaults.standardUserDefaults().boolForKey("enableGeofencing")){
-                setBackgroundImg(false)
-                counter = 1
-            }else{
-                background.hidden = true
-            }
+            background.hidden = true
         }
     }
     

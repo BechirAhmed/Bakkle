@@ -3,14 +3,17 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingLeft="10dp"
-    android:paddingRight="10dp">
+    android:paddingRight="10dp"
+    android:focusable="false">
+
 
     <ImageView
         android:layout_width="0dip"
         android:layout_height="100dp"
-        android:id="@+id/imageView2"
+        android:id="@+id/icon"
         android:src="@drawable/bakkle_icon"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:focusable="false"/>
 
     <LinearLayout
         android:orientation="vertical"
@@ -19,64 +22,70 @@
         android:layout_weight="2"
         android:layout_gravity="top"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp">
+        android:layout_marginRight="10dp"
+        android:focusable="false">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Title of item"
-            android:id="@+id/txtItemTitle"
+            android:id="@+id/title"
             android:textColor="@android:color/black"
             android:textStyle="bold"
-            android:textSize="24sp"
+            android:textSize="18sp"
             android:singleLine="false"
             android:phoneNumber="true"
             android:lines="1"
-            android:ellipsize="end" />
+            android:ellipsize="end"
+            android:focusable="false"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Method of Delivery"
-            android:id="@+id/txtItemMethod"
+            android:id="@+id/method"
             android:textColor="@android:color/black"
-            android:textStyle="bold"
-            android:textSize="15sp"
+            android:textSize="12sp"
             android:lines="1"
-            android:ellipsize="end" />
+            android:ellipsize="end"
+            android:focusable="false"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Tags"
-            android:id="@+id/txtItemTags"
+            android:id="@+id/tags"
             android:textColor="@android:color/black"
-            android:textStyle="bold"
-            android:textSize="15sp"
+            android:textSize="12sp"
             android:lines="1"
-            android:ellipsize="end" />
+            android:ellipsize="end"
+            android:focusable="false"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="distance"
-            android:id="@+id/txtItemDistance"
+            android:text="Distance"
+            android:id="@+id/distance"
             android:textColor="@android:color/black"
-            android:textStyle="bold"
-            android:textSize="15sp"
+            android:textSize="12sp"
             android:lines="1"
-            android:ellipsize="end" />
+            android:ellipsize="end"
+            android:focusable="false"/>
     </LinearLayout>
 
     <TextView
-        android:layout_width="0dip"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:text="$00000.00"
-        android:id="@+id/textView3"
-        android:layout_weight="1"
+        android:text="$15"
+        android:id="@+id/price"
         android:layout_gravity="center_horizontal|top"
         android:textColor="@android:color/darker_gray"
         android:textSize="24sp"
         android:lines="1"
-        android:ellipsize="end" />
+        android:ellipsize="end"
+        android:layout_weight="0.24"
+        android:focusable="false"/>
+
+
+
 </LinearLayout>

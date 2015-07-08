@@ -106,6 +106,8 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         profileButton.backgroundColor = Theme.ColorGreen
         profileButton.setImage(UIImage(named: "loading.png"), forState: UIControlState.Normal)
         profileButton.imageView?.layer.cornerRadius = profileButton.imageView!.frame.size.width/2
+        profileButton.imageView?.layer.borderWidth = 1.5
+        profileButton.imageView?.layer.borderColor = UIColor.whiteColor().CGColor
         //profileButton.addTarget(self, action: "btnProfile:", forControlEvents: UIControlEvents.TouchUpInside)
         header.addSubview(profileButton)
         

@@ -1,60 +1,51 @@
 package com.bakkle.bakkle;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.Toast;
 
 
 public class SignupActivity extends Activity implements OnClickListener {
 
+    boolean locationEnabled = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signup);
         getActionBar().hide();
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && !locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+
+            Toast.makeText(this, "Test", Toast.LENGTH_SHORT).show();
+
+        }
 
         if(preferences.getBoolean("LoggedIn", false)) {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
 
         }
-//        else {
-//            Intent intent = new Intent(this, SignupActivity.class);
-//            startActivity(intent);
-//        }
+
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("uuid", Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID));
+        editor.apply();
+
+        setContentView(R.layout.activity_signup);
 
         ((Button)findViewById(R.id.btnSignIn)).setOnClickListener(this);
         ((Button)findViewById(R.id.btnSignUpEmail)).setOnClickListener(this);
-
-        /*FacebookSdk.sdkInitialize(this.getApplicationContext());
-        CallbackManager callbackManager = CallbackManager.Factory.create();
-        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-
-            }
-
-            @Override
-            public void onCancel() {
-
-            }
-
-            @Override
-            public void onError(FacebookException e) {
-
-            }
-        });*/
-
-
-
-
     }
 
     @Override

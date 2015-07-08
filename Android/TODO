@@ -1,0 +1,20 @@
+Make server calls asynchronously
+Get location
+Require location services to be enabled when first using the app
+Don't allow use of app unless location is enabled
+Modify AndTinder library to support upward and downward swipes
+Make flicking cards easier
+Make the Seller's garage
+Make the chat window when you click on an item in the buyers trunk
+Make action bar change dynamically
+Fix broken navigation drawer button
+Bring the app to Material design guidelines (or at least make it a little better)
+Redesign the cards
+Delete DummyContent
+Add Item page
+Item description page
+Chatting functionality
+Check status codes when making server calls
+Make ServerCalls class non-instantiable
+Sign up via email
+Make Rating bar better (smaller, yellow)

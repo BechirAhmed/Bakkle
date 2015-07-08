@@ -343,7 +343,7 @@ def feed(buyer_id, device_uuid, user_location, search_text, filter_distance, fil
             item_list = Items.objects.exclude(pk__in = items_viewed).filter(seller__app_flavor = appFlavor).filter(Q(price__lte = filter_price)).filter(Q(status = Items.ACTIVE) | Q(status = Items.PENDING)).filter(Q(tags__contains=search_text) | Q(title__contains=search_text)).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
     else:
         
-        # if filter price is 100+, ignore filter.
+        #if filter price is 100+, ignore filter.
         if(filter_distance == MAX_ITEM_DISTANCE):
             if(filter_price == MAX_ITEM_PRICE):
                 item_list = Items.objects.exclude(pk__in = items_viewed).exclude(seller__pk = buyer_id).filter(seller__app_flavor = appFlavor).filter(Q(status = Items.ACTIVE) | Q(status = Items.PENDING)).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
@@ -358,13 +358,11 @@ def feed(buyer_id, device_uuid, user_location, search_text, filter_distance, fil
             else:
                 item_list = Items.objects.exclude(pk__in = items_viewed).exclude(seller__pk = buyer_id).filter(seller__app_flavor = appFlavor).filter(Q(price__lte = filter_price)).filter(Q(status = Items.ACTIVE) | Q(status = Items.PENDING)).filter(longitude__lte = lonMax, longitude__gte = lonMin, latitude__lte = latMax, latitude__gte = latMin).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
                 users_list = Items.objects.filter(Q(seller__pk = buyer_id)).filter(Q(status = Items.ACTIVE) | Q(status = Items.PENDING)).order_by('-post_date')[:1]
+
    
     item_array = []
     paginatedItems = Paginator(item_list, 100);
     numUserItems = 0;
-
-    print('Time after %s: %0.2f ms' % ("getting feed items", (time.time()-startTime)*1000.0))
-    startTime = time.time();
     
     # show user's items before other items - place at top of array.
     if(not users_list is None and len(users_list) != 0):

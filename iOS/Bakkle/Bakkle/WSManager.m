@@ -7,8 +7,12 @@
 //
 
 #import "WSManager.h"
+//#if defined(TARGET_BAKKLE)
 #import "Bakkle-Swift.h"
-#import <SocketRocket/SRWebSocket.h>
+//#else
+//#import "Goodwill-Swift.h"
+//#endif
+
 
 static WSManager *_wsManagerInstance;
 static NSString *_wsUrl;

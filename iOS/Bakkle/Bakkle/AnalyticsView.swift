@@ -148,6 +148,7 @@ class AnalyticsView: UIViewController, PNChartDelegate{
         pieChart.descriptionTextColor = UIColor.whiteColor()
         pieChart.descriptionTextFont = UIFont(name: "Avenir-Heavy", size: 17)
         pieChart.strokeChart()
+        pieChart.userInteractionEnabled = false 
         contentView.addSubview(pieChart)
         
         var viewsLabel: UILabel = UILabel(frame: CGRectMake(view.bounds.origin.x, 27+(pieChartHeight - 35)/2, view.bounds.size.width, 20))
@@ -190,6 +191,7 @@ class AnalyticsView: UIViewController, PNChartDelegate{
         
         lineChart.chartData = [data01]
         lineChart.strokeChart()
+        lineChart.userInteractionEnabled = false
         contentView.addSubview(lineChart)
     }
 

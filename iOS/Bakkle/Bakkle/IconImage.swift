@@ -33,7 +33,7 @@ class IconImage {
     }
     
     func close() -> UIImage {
-        return UIImage(named: "x-image.png")!
+        return UIImage(named: "new-x.png")!
     }
     
     func chevron() -> UIImage {
@@ -78,6 +78,11 @@ class IconImage {
         return factory.createImageForIcon(NIKFontAwesomeIcon.ArrowDown)
     }
     
+    func contact() -> UIImage {
+        setup(MENU_SIZE)
+        return factory.createImageForIcon(NIKFontAwesomeIcon.Envelope)
+    }
+
     func filter() -> UIImage {
         setup(MENU_SIZE)
         return factory.createImageForIcon(NIKFontAwesomeIcon.Filter)

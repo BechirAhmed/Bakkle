@@ -33,6 +33,7 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="8dp"
         android:background="@null"
+        android:onClick="addItem"
         android:src="@drawable/ic_action_camera"
         android:longClickable="true" />
 
