@@ -267,6 +267,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                         self.bottomView = nil
                     }
                     self.bottomView = MDCSwipeToChooseView(frame: self.swipeView.frame, options: nil)
+                    self.view.insertSubview(self.bottomView, belowSubview: self.swipeView)
                 }
         }
         
@@ -363,6 +364,9 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                 self.swipeView.userInteractionEnabled = true
             }
         }
+        if view == self.bottomView {
+            self.bottomView.userInteractionEnabled = false
+        }
     }
     
     func updateView() {
@@ -388,7 +392,6 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                                 
                         var bottomItem = Bakkle.sharedInstance.feedItems[1] as! NSDictionary
                         setupView(self.bottomView, item: bottomItem)
-                        self.view.insertSubview(self.bottomView, belowSubview: self.swipeView)
                     }
                 }
                 else {

@@ -70,6 +70,10 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
         menuBtn.setTitle("", forState: .Normal)
     }
     
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return CGFloat(100.0)
+    }
+    
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
@@ -139,9 +143,12 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == UITableViewCellEditingStyle.Delete {
             let item = Bakkle.sharedInstance.trunkItems[indexPath.row].valueForKey("item") as! NSDictionary
-            Bakkle.sharedInstance.markItem("meh", item_id: item.valueForKey("pk")!.integerValue, success: {}, fail: {})
-            Bakkle.sharedInstance.trunkItems.removeAtIndex(indexPath.row)
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+            Bakkle.sharedInstance.markItem("meh", item_id: item.valueForKey("pk")!.integerValue, success: {
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    Bakkle.sharedInstance.trunkItems.removeAtIndex(indexPath.row)
+                    tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)                })
+            }, fail: {})
+            
         }
     }
     

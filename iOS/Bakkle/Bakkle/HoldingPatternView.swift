@@ -122,6 +122,10 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
         menuBtn.setTitle("", forState: .Normal)
     }
     
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return CGFloat(100.0)
+    }
+    
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
@@ -179,9 +183,13 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == UITableViewCellEditingStyle.Delete {
             let item = Bakkle.sharedInstance.holdingItems[indexPath.row].valueForKey("item") as! NSDictionary
-            Bakkle.sharedInstance.markItem("meh", item_id: item.valueForKey("pk")!.integerValue, success: {}, fail: {})
-            Bakkle.sharedInstance.holdingItems.removeAtIndex(indexPath.row)
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+            Bakkle.sharedInstance.markItem("meh", item_id: item.valueForKey("pk")!.integerValue, success: {
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    Bakkle.sharedInstance.holdingItems.removeAtIndex(indexPath.row)
+                    tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+                })
+            }, fail: {})
+            
         }
     }
     

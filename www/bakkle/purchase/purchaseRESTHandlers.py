@@ -4,7 +4,7 @@ from common.bakkleRequestHandler import QueryArgumentError
 import itemsCommonHandlers
 
 
-class addItemHandler(bakkleRequestHandler):
+class inputSellerRatingRequestHandler(bakkleRequestHandler):
 
     def post(self):
         try:
@@ -33,13 +33,11 @@ class addItemHandler(bakkleRequestHandler):
             tags, method, notifyFlag, item_id, images))
 
 
-class feedHandler(bakkleRequestHandler):
+class inputBuyerRatingRequestHandler(bakkleRequestHandler):
 
     def get(self):
         try:
             buyer_id = self.getUser()
-            device_uuid = self.getArgument('device_uuid')
-            user_location = self.getArgument('user_location')
 
             # TODO: Use these for filtering
             search_text = self.getArgument('search_text', "")
