@@ -1,0 +1,14 @@
+<resources>
+
+
+
+    <!--
+    TODO: Make the rating bar look better, maybe using this guide: http://kozyr.zydako.net/2010/05/23/pretty-ratingbar/
+    <style name="betterRatingBar" parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/food_ratingbar_full</item>
+        <item name="android:minHeight">48dip</item>
+        <item name="android:maxHeight">48dip</item>
+    </style> -->
+
+ 
+</resources>

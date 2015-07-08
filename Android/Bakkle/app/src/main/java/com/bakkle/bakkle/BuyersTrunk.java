@@ -1,14 +1,25 @@
 package com.bakkle.bakkle;
 
+import android.app.ActionBar;
 import android.app.Activity;
-import android.os.Bundle;
 import android.app.ListFragment;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
-
+import com.andtinder.view.SimpleCardStackAdapter;
 import com.bakkle.bakkle.dummy.DummyContent;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
+import java.util.ArrayList;
 
 /**
  * A fragment representing a list of Items.
@@ -17,7 +28,7 @@ import com.bakkle.bakkle.dummy.DummyContent;
  * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
  * interface.
  */
-public class BuyersTrunk extends ListFragment {
+public class BuyersTrunk extends ListFragment{
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -28,7 +39,19 @@ public class BuyersTrunk extends ListFragment {
     private String mParam1;
     private String mParam2;
 
+    SharedPreferences preferences;
+    SharedPreferences.Editor editor;
+
     private OnFragmentInteractionListener mListener;
+
+    ServerCalls serverCalls;
+
+    ArrayList<FeedItem> items;
+
+    JsonObject json;
+
+    private ActionBar mActionBar;
+
 
     // TODO: Rename and change types of parameters
     public static BuyersTrunk newInstance(String param1, String param2) {
@@ -51,14 +74,41 @@ public class BuyersTrunk extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments() != null) {
+        setHasOptionsMenu(true);
+
+        serverCalls = new ServerCalls(getActivity().getApplicationContext());
+
+        preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+        json = serverCalls.populateTrunk(preferences.getString("auth_token", "0"), preferences.getString("uuid", "0"));
+
+        items = getItems(json);
+
+        /*if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        }*/
 
-        // TODO: Change Adapter to display your content
-        setListAdapter(new ArrayAdapter<DummyContent.DummyItem>(getActivity(),
-                android.R.layout.simple_list_item_1, android.R.id.text1, DummyContent.ITEMS));
+        setListAdapter(new TrunkAdapter(getActivity(), items));
+
+
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
+
+        //super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
+
+        mActionBar = getActivity().getActionBar();
+        mActionBar.setDisplayShowHomeEnabled(false);
+        mActionBar.setDisplayShowTitleEnabled(false);
+        LayoutInflater mInflater = LayoutInflater.from(getActivity());
+
+        View mCustomView = mInflater.inflate(R.layout.action_bar_trunk, null);
+
+        mActionBar.setCustomView(mCustomView);
+        mActionBar.setDisplayShowCustomEnabled(true);
     }
 
 
@@ -83,7 +133,9 @@ public class BuyersTrunk extends ListFragment {
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
 
-        if (null != mListener) {
+        Toast.makeText(getActivity(), "Test", Toast.LENGTH_SHORT).show();
+
+        if (mListener != null) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
             mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
@@ -104,5 +156,67 @@ public class BuyersTrunk extends ListFragment {
         // TODO: Update argument type and name
         public void onFragmentInteraction(String id);
     }
+
+    public ArrayList<FeedItem> getItems(JsonObject json)
+    {
+
+        JsonArray jsonArray = json.getAsJsonArray("buyers_trunk");
+        SimpleCardStackAdapter adapter = new SimpleCardStackAdapter(getActivity());
+        JsonObject temp, item;
+        ArrayList<FeedItem> feedItems = new ArrayList<FeedItem>();
+        ArrayList<String> tags, imageUrls;
+        JsonObject seller;
+        JsonArray imageUrlArray, tagArray;
+        FeedItem feedItem;
+        String pk, sellerFacebookId;
+
+
+        for(JsonElement element : jsonArray)
+        {
+            item = element.getAsJsonObject().getAsJsonObject("item");
+            feedItem = new FeedItem(this.getActivity().getApplicationContext());
+            temp = element.getAsJsonObject();
+
+            feedItem.setTitle(item.get("title").getAsString());
+            feedItem.setDescription(item.get("description").getAsString());
+            feedItem.setSellerDisplayName(item.get("seller").getAsJsonObject().get("display_name").getAsString());
+            feedItem.setPrice(item.get("price").getAsString());
+            feedItem.setLocation(item.get("location").getAsString()); //TODO: difference between location and sellerlocation??
+            feedItem.setMethod(item.get("method").getAsString());
+            sellerFacebookId = item.get("seller").getAsJsonObject().get("facebook_id").getAsString();
+            pk = item.get("pk").getAsString();
+            feedItem.setPk(pk);
+
+
+            imageUrlArray = item.get("image_urls").getAsJsonArray();
+            imageUrls = new ArrayList<String>();
+            for(JsonElement urlElement : imageUrlArray)
+            {
+                imageUrls.add(urlElement.getAsString());
+            }
+            feedItem.setImageUrls(imageUrls);
+
+            tagArray = item.get("tags").getAsJsonArray();
+            tags = new ArrayList<String>();
+            for(JsonElement tagElement : tagArray)
+            {
+                tags.add(tagElement.getAsString());
+            }
+            feedItem.setTags(tags);
+            feedItems.add(feedItem);
+
+
+            feedItem = null;
+            temp = null;
+            imageUrlArray = null;
+            imageUrls = null;
+            item = null;
+        }
+
+        return feedItems;
+
+    }
+
+
 
 }

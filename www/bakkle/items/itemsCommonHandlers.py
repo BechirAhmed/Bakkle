@@ -32,6 +32,8 @@ from account.models import Device
 from chat.models import Chat
 from chat.models import Message
 from common.decorators import authenticate
+from django.db.models import Avg, Max, Min, Sum
+
 # from common.decorators import get_number_conversations_with_new_messages
 from common.decorators import time_method
 from django.conf import settings
@@ -124,7 +126,7 @@ config['S3_URL'] = 'https://s3-us-west-2.amazonaws.com/com.bakkle.prod/'
 #--------------------------------------------#
 
 @time_method
-def add_item(title, description, location, seller_id, price, tags, method, notifyFlag, item_id, images):
+def add_item(title, description, location, seller_id, price, tags, notifyFlag, item_id, images):
     # Get the authentication code
 
     # Get the rest of the necessary params from the request
@@ -158,7 +160,6 @@ def add_item(title, description, location, seller_id, price, tags, method, notif
             latitude = Decimal(location.split(",")[1]).quantize(TWOPLACES),
             price = price,
             tags = tags,
-            method = method,
             image_urls = image_urls,
             status = Items.ACTIVE)
         item.save()
@@ -323,7 +324,10 @@ def feed(buyer_id, device_uuid, user_location, search_text, filter_distance, fil
     startTime = time.time();
 
     # get items
-    items_viewed = BuyerItem.objects.filter(buyer = buyer_id)
+    items_viewed = BuyerItem.objects.filter(buyer = buyer_id).values('item')
+    appFlavor = account.app_flavor
+
+    print("\n\n" + str(buyer_id) + "\n\n")
 
     item_list = None
     users_list = None
@@ -334,26 +338,27 @@ def feed(buyer_id, device_uuid, user_location, search_text, filter_distance, fil
 
         #if filter price is 100+, ignore filter.
         if(filter_price == MAX_ITEM_PRICE):
-            item_list = Items.objects.exclude(pk__in = [elem.item.pk for elem in items_viewed]).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).filter(Q(tags__contains=search_text) | Q(title__contains=search_text)).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
+            item_list = Items.objects.exclude(pk__in = items_viewed).filter(seller__app_flavor = appFlavor).filter(Q(status = Items.ACTIVE) | Q(status = Items.PENDING)).filter(Q(tags__contains=search_text) | Q(title__contains=search_text)).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
         else:
-            item_list = Items.objects.exclude(pk__in = [elem.item.pk for elem in items_viewed]).filter(Q(price__lte = filter_price)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).filter(Q(tags__contains=search_text) | Q(title__contains=search_text)).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
+            item_list = Items.objects.exclude(pk__in = items_viewed).filter(seller__app_flavor = appFlavor).filter(Q(price__lte = filter_price)).filter(Q(status = Items.ACTIVE) | Q(status = Items.PENDING)).filter(Q(tags__contains=search_text) | Q(title__contains=search_text)).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
     else:
         
         #if filter price is 100+, ignore filter.
         if(filter_distance == MAX_ITEM_DISTANCE):
             if(filter_price == MAX_ITEM_PRICE):
-                item_list = Items.objects.exclude(pk__in = [elem.item.pk for elem in items_viewed]).exclude(Q(seller__pk = buyer_id)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
-                users_list = Items.objects.filter(Q(seller__pk = buyer_id)).order_by('-post_date')[:1]
+                item_list = Items.objects.exclude(pk__in = items_viewed).exclude(seller__pk = buyer_id).filter(seller__app_flavor = appFlavor).filter(Q(status = Items.ACTIVE) | Q(status = Items.PENDING)).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
+                users_list = Items.objects.filter(Q(seller__pk = buyer_id)).filter(Q(status = Items.ACTIVE) | Q(status = Items.PENDING)).order_by('-post_date')[:1]
             else:
-                item_list = Items.objects.exclude(pk__in = [elem.item.pk for elem in items_viewed]).exclude(Q(seller__pk = buyer_id)).filter(Q(price__lte = filter_price)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
-                users_list = Items.objects.filter(Q(seller__pk = buyer_id)).order_by('-post_date')[:1]
+                item_list = Items.objects.exclude(pk__in = items_viewed).exclude(seller__pk = buyer_id).filter(seller__app_flavor = appFlavor).filter(Q(price__lte = filter_price)).filter(Q(status = Items.ACTIVE) | Q(status = Items.PENDING)).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
+                users_list = Items.objects.filter(Q(seller__pk = buyer_id)).filter(Q(status = Items.ACTIVE) | Q(status = Items.PENDING)).order_by('-post_date')[:1]
         else:
             if(filter_price == MAX_ITEM_PRICE):
-                item_list = Items.objects.exclude(pk__in = [elem.item.pk for elem in items_viewed]).exclude(Q(seller__pk = buyer_id)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).filter(longitude__lte = lon + lonRange).filter(longitude__gte = lon - lonRange).filter(latitude__lte = lat + latRange).filter(latitude__gte = lat + latRange).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
-                users_list = Items.objects.filter(Q(seller__pk = buyer_id)).order_by('-post_date')[:1]
+                item_list = Items.objects.exclude(pk__in = items_viewed).exclude(seller__pk = buyer_id).filter(seller__app_flavor = appFlavor).filter(Q(status = Items.ACTIVE) | Q(status = Items.PENDING)).filter(longitude__lte = lonMax, longitude__gte = lonMin, latitude__lte = latMax, latitude__gte = latMin).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
+                users_list = Items.objects.filter(Q(seller__pk = buyer_id)).filter(Q(status = Items.ACTIVE) | Q(status = Items.PENDING)).order_by('-post_date')[:1]
             else:
-                item_list = Items.objects.exclude(pk__in = [elem.item.pk for elem in items_viewed]).exclude(Q(seller__pk = buyer_id)).filter(Q(price__lte = filter_price)).filter(Q(status = BuyerItem.ACTIVE) | Q(status = BuyerItem.PENDING)).filter(longitude__lte = lon + lonRange).filter(longitude__gte = lon - lonRange).filter(latitude__lte = lat + latRange).filter(latitude__gte = lat + latRange).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
-                users_list = Items.objects.filter(Q(seller__pk = buyer_id)).order_by('-post_date')[:1]
+                item_list = Items.objects.exclude(pk__in = items_viewed).exclude(seller__pk = buyer_id).filter(seller__app_flavor = appFlavor).filter(Q(price__lte = filter_price)).filter(Q(status = Items.ACTIVE) | Q(status = Items.PENDING)).filter(longitude__lte = lonMax, longitude__gte = lonMin, latitude__lte = latMax, latitude__gte = latMin).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
+                users_list = Items.objects.filter(Q(seller__pk = buyer_id)).filter(Q(status = Items.ACTIVE) | Q(status = Items.PENDING)).order_by('-post_date')[:1]
+
    
     item_array = []
     paginatedItems = Paginator(item_list, 100);
@@ -456,7 +461,15 @@ def report(buyer_id, item_id, view_duration):
 @time_method
 def get_seller_items(seller_id):
 
-    item_list = Items.objects.filter(Q(seller=seller_id, status=Items.ACTIVE) | Q(seller=seller_id, status=Items.PENDING))
+    item_list = Items.objects.filter(seller=seller_id).filter(Q(status=Items.ACTIVE) | Q(status=Items.PENDING)).prefetch_related('buyeritem_set')
+    #item_list_2 = Items.objects.filter(Q(seller=seller_id, status=Items.ACTIVE) | Q(seller=seller_id, status=Items.PENDING)).filter(buyeritem__pk__isnull=False)#.aggregate(Sum("buyeritem__number_of_views"))
+
+    print(item_list.query);
+
+    # for item in item_list:
+    #     inneritems = item.buyeritem_set.all()
+    #     for inneritem in inneritems:
+    #         print inneritem.toDictionary()
 
 
 
@@ -464,7 +477,7 @@ def get_seller_items(seller_id):
     # get json representaion of item array
     for item in item_list:
         # get the conversations involving this item
-        chats = Chat.objects.filter(item=item)
+        # chats = Chat.objects.filter(item__seller__pk=seller_id)
         convos_with_new_message = 0
         # for convo in chats:
         #     messages = Message.objects.filter(viewed=None, buyer_seller_flag=True, chat=convo).count()
@@ -472,13 +485,12 @@ def get_seller_items(seller_id):
         #         convos_with_new_message = convos_with_new_message + 1
 
         # get the buyer items for this item
-        buyer_items = BuyerItem.objects.filter(item_id=item.id)
         number_of_views = 0
         number_of_meh = 0
         number_of_want = 0
         number_of_report = 0
         number_of_holding = 0
-        for buyer_item in buyer_items:
+        for buyer_item in item.buyeritem_set.all():
             number_of_views = number_of_views + 1
             if buyer_item.status == BuyerItem.MEH:
                 number_of_meh = number_of_meh + 1
@@ -605,8 +617,11 @@ def imgupload(images, seller_id):
     image_urls = ""
     #import pdb; pdb.set_trace()
 
+    threads = []
+
     for i in images:
         #i = request.FILES['image']
+        
         uhash = hex(random.getrandbits(128))[2:-1]
         image_key = "{}_{}.jpg".format(seller_id, uhash)
         filename = handle_file_s3(image_key, i['body'])

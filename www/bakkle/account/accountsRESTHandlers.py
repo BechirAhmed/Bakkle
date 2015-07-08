@@ -19,6 +19,7 @@ class loginFacebookHandler(bakkleRequestHandler):
             app_version = self.getArgument('app_version')
             is_ios = self.getArgument('is_ios', True)
             client_ip = self.getIP()
+            app_flavor = self.getArgument("flavor", 0)
         except QueryArgumentError as error:
             return self.writeJSON({"status": 0, "message": error.message})
 
@@ -27,7 +28,8 @@ class loginFacebookHandler(bakkleRequestHandler):
                                                         user_location,
                                                         app_version,
                                                         is_ios,
-                                                        client_ip)
+                                                        client_ip,
+                                                        app_flavor)
 
         self.writeJSON(respObj)
 
@@ -62,13 +64,15 @@ class facebookHandler(bakkleRequestHandler):
             display_name = self.getArgument('name')
             email = self.getArgument('email')
             device_uuid = self.getArgument('device_uuid')
+            app_flavor = self.getArgument('flavor', 0)
         except QueryArgumentError as error:
             return self.writeJSON({"status": 0, "message": error.message})
 
         respObj = accountsCommonHandlers.facebook(facebook_id,
                                                   display_name,
                                                   email,
-                                                  device_uuid)
+                                                  device_uuid,
+                                                  app_flavor)
 
         self.writeJSON(respObj)
 

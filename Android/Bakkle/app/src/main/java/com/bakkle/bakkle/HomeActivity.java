@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
@@ -29,6 +30,9 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 
 import org.json.JSONObject;
 
@@ -37,8 +41,9 @@ import java.util.Arrays;
 
 
 public class HomeActivity extends Activity implements SellersGarage.OnFragmentInteractionListener,
-        BuyersTrunk.OnFragmentInteractionListener, HoldingPattern.OnFragmentInteractionListener {
-
+        BuyersTrunk.OnFragmentInteractionListener, HoldingPattern.OnFragmentInteractionListener,
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
+        FeedFragment.OnCardSelected{
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -48,16 +53,22 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
     private ActionBarDrawerToggle mDrawerToggle;
     private ActionBar mActionBar;
 
-    SharedPreferences.Editor editor;
-    SharedPreferences preferences;
+    FeedItem item;
 
+    SharedPreferences preferences;
+    SharedPreferences.Editor editor;
+
+    ServerCalls serverCalls;
+
+    GoogleApiClient mGoogleApiClient;
+    Location mLastLocation;
+
+    int result = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        editor = preferences.edit();
 
         // Setup drawer
         mDrawerItems = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.drawer_items)));
@@ -94,7 +105,6 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
         // Set the drawer toggle as the DrawerListener
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-
         // Custom Action bar
         mActionBar = getActionBar();
         mActionBar.setDisplayShowHomeEnabled(false);
@@ -106,15 +116,17 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
         mActionBar.setCustomView(mCustomView);
         mActionBar.setDisplayShowCustomEnabled(true);
 
-        Fragment fragment = new FeedFragment();
+        preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        editor = preferences.edit();
+        serverCalls = new ServerCalls(this);
 
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+        buildGoogleApiClient();
 
     }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
+
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
         mDrawerToggle.syncState();
@@ -125,42 +137,100 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
                 @Override
                 public void onCompleted(JSONObject object, GraphResponse response) {
                     addUserInfoToPreferences(object);
+                    result = serverCalls.registerFacebook(
+                            preferences.getString("email", "null"),
+                            preferences.getString("gender", "null"),
+                            preferences.getString("username", "null"),
+                            preferences.getString("name", "null"),
+                            preferences.getString("userID", "null"),
+                            preferences.getString("locale", "null"),
+                            preferences.getString("first_name", "null"),
+                            preferences.getString("last_name", "null"),
+                            preferences.getString("uuid", "0"));
+                    editor.putBoolean("done", true);
+                    editor.apply();
+                    Toast.makeText(getApplicationContext(), "Did the server register for facebook call", Toast.LENGTH_SHORT).show();
                 }
-            });
+                    });
 
             Bundle parameters = new Bundle();
             parameters.putString("fields", "locale, email, gender");
             request.executeAsync();
 
-            String testresult = new ServerCalls(this).loginFacebook(
-                    preferences.getString("email", "null"),
-                    preferences.getString("gender", "null"),
-                    preferences.getString("username", "null"),
-                    preferences.getString("name", "null"),
-                    preferences.getString("userID", "null"),
-                    preferences.getString("locale", "null"),
-                    preferences.getString("first_name", "null"),
-                    preferences.getString("last_name", "null"));
-            /*
+            if(result == 1)
+                Toast.makeText(this, "Logged in successfully!", Toast.LENGTH_SHORT).show();
+            else //TODO:Display error on fail? and go back to login screen
+                Toast.makeText(this, "Login error!!", Toast.LENGTH_SHORT).show();
 
-            String email = preferences.getString("email", "null");
-            String gender = preferences.getString("gender", "null");
-            String username = preferences.getString("username", "null");
-            String name = preferences.getString("name", "null");
-            String userid = preferences.getString("userID", "null");
-            String locale = preferences.getString("locale", "null");
-            String first_name = preferences.getString("first_name", "null");
-            String last_name = preferences.getString("last_name", "null");
-
-            */
-
-            Toast.makeText(this, testresult, Toast.LENGTH_SHORT).show();
         }
 
+        //while(preferences.getBoolean("done", true)){}
 
+        Log.d("testing", preferences.getString("uuid", "0"));
+        Log.d("testing", preferences.getString("userID", "0"));
+        String auth_token = serverCalls.loginFacebook(
+                preferences.getString("uuid", "0"),
+                preferences.getString("userID", "0"),
+                getLocation()
+        );
+
+        editor.putString("auth_token", auth_token);
         editor.putBoolean("newuser", false);
         editor.apply();
+
+        Fragment fragment = new FeedFragment();
+
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+
     }
+
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
+        }
+    }
+
+    public String getLocation(){
+        if(mLastLocation != null)
+            return mLastLocation.getLatitude() + ", " + mLastLocation.getLongitude();
+        else
+            return "32, 32";
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
+    }
+
 
     public void addUserInfoToPreferences(JSONObject object){
         try{
@@ -217,6 +287,17 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
 
     }
 
+    @Override
+    public void OnCardSelected(FeedItem item) {
+        this.item = item;
+//        getFragmentManager().beginTransaction().replace(R.id.content_frame,
+//                new ItemPage(), "frag").addToBackStack(null)
+//                .setTransition(R.anim.abc_slide_in_bottom).commit();
+        //ItemPage itempage = (ItemPage) getFragmentManager().findFragmentByTag("frag");
+        //itempage.setItem(item);
+
+    }
+
     private class DrawerItemClickListener implements ListView.OnItemClickListener{
         @Override
         public void onItemClick(AdapterView parent, View view, int position, long id){
@@ -227,7 +308,6 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
 
             switch(position){
                 case 0:
-                    //if(){}
                     getFragmentManager().beginTransaction().replace(R.id.content_frame,
                             new FeedFragment()).addToBackStack(null).
                             setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
@@ -241,6 +321,7 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
                     getFragmentManager().beginTransaction().replace(R.id.content_frame,
                             new BuyersTrunk()).addToBackStack(null).
                             setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
+                    invalidateOptionsMenu();
                     break;
                 case 3:
                     getFragmentManager().beginTransaction().replace(R.id.content_frame,
@@ -248,6 +329,15 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
                             setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
                     break;
                 case 4:
+//                    new ServerCalls(getApplicationContext()).getFeedItems(
+//                            preferences.getString("auth_token", "0"),
+//                            "999999999",
+//                            "100",
+//                            "",
+//                            "32,32",
+//                            "",
+//                            preferences.getString("uuid", "0")
+//                        );
                     //startActivity(new Intent(getApplicationContext(), FeedFilter.class));
                     break;
                 case 5:
@@ -255,6 +345,9 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
                     break;
                 case 6:
                     //startActivity(new Intent(getApplicationContext(), DemoOptions.class));
+                    getFragmentManager().beginTransaction().replace(R.id.content_frame,
+                            new DemoOptions()).addToBackStack(null)
+                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
                     break;
                 case 7:
                     //startActivity(new Intent(getApplicationContext(), Logout.class));
@@ -272,14 +365,27 @@ public class HomeActivity extends Activity implements SellersGarage.OnFragmentIn
         }
     }
 
+    public void addItem(View view)
+    {
+        Intent intent = new Intent(this, AddItem.class);
+        startActivity(intent);
+    }
+
 
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_HOME);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+        if(getFragmentManager().getBackStackEntryCount() > 0)
+            getFragmentManager().popBackStackImmediate();
+        else {
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
+    }
+    public void reset(View view){
+        serverCalls.resetDemo(preferences.getString("auth_token", "0"), preferences.getString("uuid", "0"));
     }
 
 }

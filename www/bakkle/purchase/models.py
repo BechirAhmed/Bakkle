@@ -54,11 +54,27 @@ class Offer(models.Model):
 class Sale(models.Model):
     item = models.OneToOneField(Items)
     acceptedOffer = models.ForeignKey(Offer)
-
+    # Rating that the buyer gives the seller
+    seller_rating = models.IntegerField(null=True)
+    seller_rating_description = models.CharField(max_length=200, null=True)
+    # Rating that the seller gives the buyer
+    buyer_rating = models.IntegerField(null=True)
+    buyer_rating_description = models.CharField(max_length=200, null=True)
 
     def toDictionary(self):
         valuesDict = {
             'item': self.item.toDictionary(),
             'acceptedOffer': self.acceptedOffer.toDictionary()
         }
+
+        if(self.seller_rating is not None):
+            valuesDict['seller_rating'] = self.seller_rating
+            valuesDict[
+                'seller_rating_description'] = self.seller_rating_description
+
+        if(self.buyer_rating is not None):
+            valuesDict['buyer_rating'] = self.buyer_rating
+            valuesDict[
+                'buyer_rating_description'] = self.buyer_rating_description
+
         return valuesDict

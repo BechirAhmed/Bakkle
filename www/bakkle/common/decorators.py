@@ -83,6 +83,16 @@ def run_async(function):
 
     return wrap
 
+# Decorator for login authentication
+def run_future(function):
+    def wrap(*args, **kwargs):
+
+        print("Running function " + str(function.func_name) + " in separate thread");
+        function_t = threading.Thread(target=time_method(function), args=args, kwargs = kwargs);
+        function_t.start()
+
+    return wrap
+
 
 # def get_number_conversations_with_new_messages(account_id):
 
