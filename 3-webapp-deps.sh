@@ -8,6 +8,7 @@ sudo pip install uwsgi
 sudo pip install apns
 sudo pip install boto
 sudo pip install tornado
+sudo pip install redis
 
 #probably needed on ubuntus udo apt-get install libffi-dev libssl-dev
 sudo pip install requests[security]

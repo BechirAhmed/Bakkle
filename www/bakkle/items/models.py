@@ -53,16 +53,11 @@ class Items(models.Model):
             if url != "" and url != " ":
                 images.append(url)
 
-        tags = self.tags.split(",")
-        for tag in tags:
-            if tag != "" and tag != " ":
-                hashtags.append(tag)
-
         valuesDict = {'pk':self.pk, 
             'description': self.description, 
             'seller': self.seller.toDictionary(),
             'image_urls': images,
-            'tags': hashtags,
+            'tags': self.tags,
             'title': self.title,
             'location': str(self.latitude) + "," + str(self.longitude),
             'price': str(self.price),

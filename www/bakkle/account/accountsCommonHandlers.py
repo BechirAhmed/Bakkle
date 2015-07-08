@@ -114,7 +114,7 @@ def reset(request, account_id):
 
 #@require_POST
 @time_method
-def login_facebook(facebook_id, device_uuid, user_location, app_version, is_ios, client_ip):
+def login_facebook(facebook_id, device_uuid, user_location, app_version, is_ios, client_ip, app_flavor):
 
     location = ""
     try:
@@ -205,11 +205,12 @@ def logout(auth_token, device_uuid, client_ip):
 
 
 @time_method
-def facebook(facebook_id, display_name, email, device_uuid):
+def facebook(facebook_id, display_name, email, device_uuid, app_flavor):
 
     # Update or create the account
     account = Account.objects.get_or_create(
         facebook_id=facebook_id,
+        app_flavor=app_flavor,
         defaults={'display_name': display_name, 'email': email, })[0]
     account.display_name = display_name
     account.email = email

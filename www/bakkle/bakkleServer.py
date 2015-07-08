@@ -31,7 +31,7 @@ app = web.Application([
     web.url(r'^/items/meh/$', itemsRESTHandlers.mehHandler, name='meh'),
     web.url(r'^/items/want/$', itemsRESTHandlers.wantHandler, name='want'),
     web.url(r'^/items/hold/$', itemsRESTHandlers.holdHandler, name='hold'),
-    web.url(r'^/items/sold/$', itemsRESTHandlers.soldHandler, name='hold'),
+    web.url(r'^/items/sold/$', itemsRESTHandlers.soldHandler, name='sold'),
     web.url(r'^/items/report/$', itemsRESTHandlers.reportHandler, name='report'),
     web.url(r'^/items/add_item/$', itemsRESTHandlers.addItemHandler, name='add_item'),
     web.url(r'^/items/add_item_no_image/$', itemsRESTHandlers.addItemNoImageHandler, name='add_item_no_image'),
@@ -68,8 +68,9 @@ app = web.Application([
 
 # Start the server
 if __name__ == "__main__":
-    enable_pretty_logging()
-
+    # enable_pretty_logging()
+    tornado.options.log_file_prefix = "./logs/bakkleServerLogs.log"
+    tornado.options.parse_command_line()
     # os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'bakkle.settings')
     django.setup()
 
