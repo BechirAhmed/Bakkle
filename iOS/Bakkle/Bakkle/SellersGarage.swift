@@ -10,37 +10,33 @@ import UIKit
 import Photos
 import Haneke
 
-class SellersGarageView: UIViewController, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class SellersGarageView: UIViewController, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     let garageCellIdentifier = "GarageCell"
-    var assetCollection: PHAssetCollection!
-    var photosAsset: PHFetchResult!
-    var assetThumbnailSize: CGSize!
     
     private static let CAPTURE_NOTIFICATION_TEXT = "_UIImagePickerControllerUserDidCaptureItem"
     private static let REJECT_NOTIFICATION_TEXT = "_UIImagePickerControllerUserDidRejectItem"
     private static let DEVICE_MODEL: String = UIDevice.currentDevice().modelName
     
     @IBOutlet weak var menuBtn: UIButton!
+    @IBOutlet weak var tableView: UITableView!
+    
     var chosenImage: UIImage?
     let addItemSegue = "AddItemSegueFromGarage"
-    
-    @IBOutlet weak var collectionView: UICollectionView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBar.hidden = true
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
-        self.collectionView.contentMode = UIViewContentMode.ScaleAspectFill
+        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleNotification:", name: SellersGarageView.CAPTURE_NOTIFICATION_TEXT, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleNotification:", name: SellersGarageView.REJECT_NOTIFICATION_TEXT, object: nil)
+        
         setupButtons()
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(true)
-        let scale: CGFloat = UIScreen.mainScreen().scale
-        let cellSize = (self.collectionView.collectionViewLayout as! UICollectionViewFlowLayout).itemSize
         
         // Register for garage updates
         let notificationCenter = NSNotificationCenter.defaultCenter()
@@ -66,7 +62,7 @@ class SellersGarageView: UIViewController, UICollectionViewDelegate, UICollectio
     func refreshData() {
         Bakkle.sharedInstance.info("Refreshing sellers garage items")
         dispatch_async(dispatch_get_main_queue()) {
-            self.collectionView.reloadData()
+            self.tableView.reloadData()
         }
     }
     
@@ -78,102 +74,91 @@ class SellersGarageView: UIViewController, UICollectionViewDelegate, UICollectio
         }
     }
     
-    func updateView(collectionView: UICollectionView) {
-        println("[Sellers Garage] Updating View")
-        if Bakkle.sharedInstance.garageItems.count > 0 {
-        }
-    }
-    
     /* MENUBAR ITEMS */
     @IBAction func btnMenu(sender: AnyObject) {
         NSNotificationCenter.defaultCenter().removeObserver(self)
         self.revealViewController().revealToggleAnimated(true)
     }
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection: Int) -> Int {
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 1
+    }
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return Bakkle.sharedInstance.garageItems != nil ? Bakkle.sharedInstance.garageItems.count : 0
     }
-    
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        
-        var screenWidth = CGRectGetWidth(collectionView.bounds)
-        var cellWidth = screenWidth
-        
-        return CGSize(width: cellWidth, height: cellWidth)
-    }
-    
-    func collectionView(collectionView: UICollectionView,
-        layout collectionViewLayout: UICollectionViewLayout,
-        minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
-            return 2
-    }
-    
-    func collectionView(collectionView: UICollectionView,
-        layout collectionViewLayout: UICollectionViewLayout,
-        minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
-            return 2
-    }
 
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell : GarageCell = collectionView.dequeueReusableCellWithReuseIdentifier(garageCellIdentifier, forIndexPath: indexPath) as! GarageCell
-        cell.contentMode = UIViewContentMode.ScaleAspectFill
-        cell.setThumbnailImage(UIImage(named: "blank.png")!)
-        //        populateCells(cell)
-//        collectionView.reloadData()
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return CGFloat(100.0)
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell : GarageCell = tableView.dequeueReusableCellWithIdentifier(self.garageCellIdentifier, forIndexPath: indexPath) as! GarageCell
         
         // Load image
         if Bakkle.sharedInstance.garageItems != nil {
+            cell.setCornerRadius()
+            
             let item = Bakkle.sharedInstance.garageItems[indexPath.row]
             let imgURLs = item.valueForKey("image_urls") as! NSArray
             
             let firstURL = imgURLs[0] as! String
             let imgURL = NSURL(string: firstURL)
-            cell.contentMode = UIViewContentMode.ScaleAspectFill
             cell.imgView.hnk_setImageFromURL(imgURL!)
-
+            cell.imgView.layer.cornerRadius = 10.0
+            cell.imageView?.clipsToBounds = true
+            cell.background.layer.cornerRadius = 10.0
+            
+            cell.nameLabel.text = item.valueForKey("title") as? String
+            
+            let topPrice: String = item.valueForKey("price") as! String
+            var myString : String = ""
+            if suffix(topPrice, 2) == "00" {
+                let withoutZeroes = "$\((topPrice as NSString).integerValue)"
+                myString = withoutZeroes
+            } else {
+                myString = "$" + topPrice
+            }
+            cell.priceLabel.text = myString
+            
             cell.numHold.text = (item.valueForKey("number_of_holding") as! NSNumber).stringValue
-            cell.numHold.layer.masksToBounds = true;
-            cell.numHold.layer.cornerRadius = cell.numHold.frame.height/2
+            cell.holdView.layer.cornerRadius = 15.0
             
             cell.numLike.text = (item.valueForKey("number_of_want") as! NSNumber).stringValue
-            cell.numLike.layer.masksToBounds = true;
-            cell.numLike.layer.cornerRadius = cell.numLike.frame.height/2
+            cell.likeView.layer.cornerRadius = 15.0
             
             cell.numNope.text = (item.valueForKey("number_of_meh") as! NSNumber).stringValue
-            cell.numNope.layer.masksToBounds = true;
-            cell.numNope.layer.cornerRadius = cell.numNope.frame.height/2
-
-            cell.numComment.text = (item.valueForKey("number_of_report") as! NSNumber).stringValue
-            cell.numComment.layer.masksToBounds = true;
-            cell.numComment.layer.cornerRadius = cell.numComment.frame.height/2
+            cell.nopeView.layer.cornerRadius = 15.0
             
             cell.numViews.text = (item.valueForKey("number_of_views") as! NSNumber).stringValue
-
         }
         return cell
     }
     
-    func populateCells(cell: GarageCell) {
-        if Bakkle.sharedInstance.garageItems.count > 0 {
-            let topItem = Bakkle.sharedInstance.garageItems[0]
-            let imgURLs = topItem.valueForKey("image_urls") as! NSArray
-            
-            let firstURL = imgURLs[0] as! String
-            let imgURL = NSURL(string: firstURL)
-            if let imgData = NSData(contentsOfURL: imgURL!) {
-                cell.imgView.contentMode = UIViewContentMode.ScaleAspectFill
-                cell.setThumbnailImage(UIImage(data: imgData)!)
-            }
-        }
-    }
-    
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let chatsViewController = ChatsViewController()
         chatsViewController.chatItemID = (Bakkle.sharedInstance.garageItems[indexPath.row].valueForKey("pk") as! NSNumber).stringValue
         chatsViewController.garageIndex = indexPath.row
         self.navigationController?.pushViewController(chatsViewController, animated: true)
     }
+    
+    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return true
+    }
 
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if editingStyle == UITableViewCellEditingStyle.Delete {
+            let item = Bakkle.sharedInstance.garageItems[indexPath.row] as! NSDictionary
+            Bakkle.sharedInstance.removeItem(item.valueForKey("pk")!.integerValue, success: {
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    Bakkle.sharedInstance.garageItems.removeAtIndex(indexPath.row)
+                    tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+                })
+            }, fail: {})
+            
+        }
+    }
+
+    
     /* Camera */
     let albumName = "Bakkle"
     

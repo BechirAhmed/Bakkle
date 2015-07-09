@@ -22,6 +22,8 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     static let JPEG_COMPRESSION_CONSTANT: CGFloat = 0.3
     static let MAX_IMAGE_COUNT = 5
     static let SCALED_IMAGES_READY_NOTIFICATION = "SCALED_IMAGES_READY"
+    
+    
     private static let CAPTURE_NOTIFICATION_TEXT = "_UIImagePickerControllerUserDidCaptureItem"
     private static let REJECT_NOTIFICATION_TEXT = "_UIImagePickerControllerUserDidRejectItem"
     private static let DEVICE_MODEL: String = UIDevice.currentDevice().modelName
@@ -32,40 +34,57 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     var fileSizes: UInt64 = 0
     var item: NSDictionary!
     var isEditting: Bool = false
+    var KEYBOARD_MOVE_VALUE: CGFloat = 250
+    var NUMPAD_MOVE_VALUE:CGFloat = 260
     
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var closeBtn: UIButton!
+    
     @IBOutlet weak var titleField: UITextField!
     @IBOutlet weak var priceField: UITextField!
-    @IBOutlet weak var tagsField: UITextView!
-    @IBOutlet weak var methodControl: UISegmentedControl!
+    @IBOutlet weak var descriptionField: UITextView!
     @IBOutlet weak var confirmButton: UIButton!
     @IBOutlet weak var confirmButtonView: UIView!
     @IBOutlet weak var shareToFacebookBtn: UISwitch!
     @IBOutlet weak var camButtonBackground: UIView!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var loadingView: UIView!
+   
+    @IBOutlet weak var titleView: UIView!
+    @IBOutlet weak var priceView: UIView!
+    @IBOutlet weak var descriptionView: UIView!
+    @IBOutlet weak var shareView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         titleField.delegate = self
         priceField.delegate = self
-        tagsField.delegate = self
+        descriptionField.delegate = self
         
         loadingView.hidden = true
         
+        // set line border
+        let borderColor = UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 0.9)
+        titleView.layer.borderWidth = 1
+        titleView.layer.borderColor = borderColor.CGColor
+        priceView.layer.borderWidth = 1
+        priceView.layer.borderColor = borderColor.CGColor
+        descriptionView.layer.borderWidth = 1
+        descriptionView.layer.borderColor = borderColor.CGColor
+        shareView.layer.borderWidth = 1
+        shareView.layer.borderColor = borderColor.CGColor
+        
         // sets placeholder text
-        textViewDidEndEditing(tagsField)
+        textViewDidEndEditing(descriptionField)
+        
+        // set camera button
         camButtonBackground.layer.cornerRadius = camButtonBackground.frame.size.width/2
         camButtonBackground.setNeedsDisplay()
         
-        // Set default
-        methodControl.selectedSegmentIndex = 0;
-        
         // -8.0 and -4.0 are y and x respectively, this is just to keep alignment of text
         // with the fields above it, because UITextView has different edges for scrolling
-        tagsField.contentInset = UIEdgeInsetsMake(-8.0, -5.0, 0, 0.0)
+        descriptionField.contentInset = UIEdgeInsetsMake(-8.0, -5.0, 0, 0.0)
         
         var nextBtn = UIToolbar(frame: CGRectMake(0, 0, 320, 50))
         nextBtn.barStyle = UIBarStyle.Default
@@ -86,13 +105,14 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         setupButtons()
     }
     
+    
     func setupButtons() {
         closeBtn.setImage(IconImage().close(), forState: .Normal)
         closeBtn.setTitle("", forState: .Normal)
     }
     
     func priceNextToggle() {
-        tagsField.becomeFirstResponder()
+        descriptionField.becomeFirstResponder()
     }
     
     static let TAG_PLACEHOLDER_STR = "5 WORDS TO DESCRIBE ITEM"
@@ -111,7 +131,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
      * *******************************************************************************
      */
     func textViewDidBeginEditing(textView: UITextView) {
-        animateViewMoving(true, moveValue: 215)
+        animateViewMoving(true, moveValue: KEYBOARD_MOVE_VALUE)
         if textView.textColor == AddItem.TAG_PLACEHOLDER_COLOR {
             textView.textColor = UIColor.blackColor()
             textView.text = ""
@@ -126,7 +146,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
             textView.text = AddItem.TAG_PLACEHOLDER_STR
         }
         
-        animateViewMoving(false, moveValue: 215)
+        animateViewMoving(false, moveValue: KEYBOARD_MOVE_VALUE)
         
         // There is an odd bug with button text on this call, see
         // disableConfirmButtonHandler() documentation for more information
@@ -153,16 +173,16 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
      * textFieldDidChange is called by titleField and priceField, specific cases for each
      */
     func textFieldDidChange(textField: UITextField) {
-        if (self.titleField == textField) {
-            populateTagsFromTitle(textField.text)
-        } else {
-            disableConfirmButtonHandler();
-        }
+        disableConfirmButtonHandler();
     }
 
     
     func textFieldDidBeginEditing(textField: UITextField) {
-        animateViewMoving(true, moveValue: 215)
+        if textField == priceField {
+            animateViewMoving(true, moveValue: NUMPAD_MOVE_VALUE)
+        }else{
+            animateViewMoving(true, moveValue: KEYBOARD_MOVE_VALUE)
+        }
         formatPrice()
     }
     
@@ -171,9 +191,10 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
      */
     func textFieldDidEndEditing(textField: UITextField) {
         if textField == priceField {
-            animateViewMoving(false, moveValue: 30)
+            animateViewMoving(false, moveValue: NUMPAD_MOVE_VALUE)
+        }else{
+            animateViewMoving(false, moveValue: KEYBOARD_MOVE_VALUE)
         }
-        animateViewMoving(false, moveValue: 215)
         formatPrice()
         disableConfirmButtonHandler()
     }
@@ -207,20 +228,18 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         // set content if it's in edit mode
         if isEditting {
             titleLabel.text = "EDIT ITEM"
-            let method = item.valueForKey("method") as! String
-            switch method {
-                case "Pick up":methodControl.selectedSegmentIndex = 0;break;
-                case "Meet": methodControl.selectedSegmentIndex = 1;break;
-                case "Ship": methodControl.selectedSegmentIndex = 2;break;
-                default: methodControl.selectedSegmentIndex = 0;break;
-            }
             titleField.text = item.valueForKey("title") as! String
             priceField.text = item.valueForKey("price") as! String
             formatPrice()
-            let tags = item.valueForKey("tags") as! Array<String>
-            tagsField.text = ", ".join(tags)
-            tagsField.textColor = UIColor.blackColor()
-                
+            let description = item.valueForKey("description") as! String
+            if description != "" {
+                descriptionField.text = description as String
+                descriptionField.textColor = UIColor.blackColor()
+            }else{
+                let tags = item.valueForKey("tags") as! Array<String>
+                descriptionField.text = ", ".join(tags)
+                descriptionField.textColor = UIColor.blackColor()
+            }
             confirmButton.setTitle("SAVE", forState: UIControlState.Normal)
             let imageUrls = item.valueForKey("image_urls") as! Array<String>
             for index in 0...imageUrls.count-1 {
@@ -236,27 +255,28 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     }
     
     @IBAction func beginEditingPrice(sender: AnyObject) {
-        animateViewMoving(true, moveValue: 30)
+        animateViewMoving(true, moveValue: KEYBOARD_MOVE_VALUE)
         if priceField.text == "take it!" {
             priceField.text = "0"
         }
     }
     
     func dismissKeyboard() {
-        self.titleField.resignFirstResponder() || self.priceField.resignFirstResponder() || self.tagsField.resignFirstResponder()
+        self.titleField.resignFirstResponder() || self.priceField.resignFirstResponder() || self.descriptionField.resignFirstResponder()
         disableConfirmButtonHandler()
     }
 
     @IBAction func cancelAdd(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
-    
+
     static let CONFIRM_BUTTON_RED = 51
     static let CONFIRM_BUTTON_GREEN = 205
     static let CONFIRM_BUTTON_BLUE = 95
     static let BAKKLE_GREEN_COLOR = UIColor(red: CGFloat(AddItem.CONFIRM_BUTTON_RED)/255.0, green: CGFloat(AddItem.CONFIRM_BUTTON_GREEN)/255.0, blue: CGFloat(AddItem.CONFIRM_BUTTON_BLUE)/255.0, alpha: CGFloat(1.0))
     static let CONFIRM_BUTTON_DISABLED_COLOR = UIColor.lightGrayColor()
     var confirmHit = false
+    
     /**
     * @return Bool: true if confirm button is enabled
     *
@@ -274,7 +294,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     * ever to be changed
     */
     func disableConfirmButtonHandler() -> Bool {
-        if confirmHit || trimString(self.priceField.text) == "$" || tagsField.textColor == AddItem.TAG_PLACEHOLDER_COLOR || self.titleField.text.isEmpty || self.priceField.text.isEmpty || self.tagsField.text.isEmpty || itemImages?.count < 1 || itemImages?.count > AddItem.MAX_IMAGE_COUNT {
+        if confirmHit || trimString(self.priceField.text) == "$" || descriptionField.textColor == AddItem.TAG_PLACEHOLDER_COLOR || self.titleField.text.isEmpty || self.priceField.text.isEmpty || self.descriptionField.text.isEmpty || itemImages?.count < 1 || itemImages?.count > AddItem.MAX_IMAGE_COUNT {
             confirmButton.enabled = false
             confirmButton.backgroundColor = AddItem.CONFIRM_BUTTON_DISABLED_COLOR
         } else {
@@ -304,8 +324,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     @IBAction func btnConfirm(sender: AnyObject) {
         self.titleField.enabled = false
         self.priceField.enabled = false
-        self.tagsField.editable = false
-        self.methodControl.enabled = false
+        self.descriptionField.editable = false
         
         confirmHit = true
         
@@ -325,8 +344,8 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
             } else {
                 item_id = nil
             }
-            Bakkle.sharedInstance.addItem(self.titleField.text, description: "", location: Bakkle.sharedInstance.user_location,
-                price: self.priceField.text, tags: self.tagsField.text, method: self.methodControl.titleForSegmentAtIndex(self.methodControl.selectedSegmentIndex)!,
+            Bakkle.sharedInstance.addItem(self.titleField.text, description: self.descriptionField.text, location: Bakkle.sharedInstance.user_location,
+                price: self.priceField.text,
                 images:self.scaledImages!, item_id: item_id, success: {
                     (item_id:Int?, item_url: String?) -> () in
                         time = NSDate.timeIntervalSinceReferenceDate() - time
@@ -381,17 +400,16 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
             priceField.becomeFirstResponder()
         }
         else if textField == priceField {
-           tagsField.becomeFirstResponder()
+           descriptionField.becomeFirstResponder()
         }
-        else if textField == tagsField {
-            tagsField.resignFirstResponder()
+        else if textField == descriptionField {
+            descriptionField.resignFirstResponder()
         }
         return true
     }
     
     var imagePicker = UIImagePickerController()
-    internal static let frameHeightAdjust  = ["iPhone 4S"    : CGFloat(20.0),
-                                             "iPhone 5"      : CGFloat(20.0), // Confirmed
+    internal static let frameHeightAdjust  = ["iPhone 5"      : CGFloat(20.0), // Confirmed
                                              "iPhone 5S"     : CGFloat(20.0),
                                              "iPhone 5C"     : CGFloat(20.0),
                                              "iPhone 6"      : CGFloat(20.0), // Confirmed
@@ -405,8 +423,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
                                              "iPad Mini 2"   : CGFloat(20.0),
                                              "iPod Touch 5"  : CGFloat(20.0)]
     
-    internal static let retakeFrameAdjust = ["iPhone 4S"     : CGFloat(20.0),
-                                             "iPhone 5"      : CGFloat(22.0), // Confirmed
+    internal static let retakeFrameAdjust = ["iPhone 5"      : CGFloat(22.0), // Confirmed
                                              "iPhone 5S"     : CGFloat( 0.0),
                                              "iPhone 5C"     : CGFloat( 0.0),
                                              "iPhone 6"      : CGFloat(20.0), // Confirmed
@@ -420,8 +437,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
                                              "iPad Mini 2"   : CGFloat(20.0),
                                              "iPod Touch 5"  : CGFloat(20.0)]
     
-    internal static let captureFrameAdjust = ["iPhone 4S"    : CGFloat(20.0),
-                                             "iPhone 5"      : CGFloat( 4.0), // Confirmed
+    internal static let captureFrameAdjust = ["iPhone 5"      : CGFloat( 4.0), // Confirmed
                                              "iPhone 5S"     : CGFloat( 0.0),
                                              "iPhone 5C"     : CGFloat( 0.0),
                                              "iPhone 6"      : CGFloat( 0.0), // Confirmed
@@ -467,8 +483,6 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     private static var firstChange: CGFloat?
     private static var statusBarHeight = UIScreen.mainScreen().bounds.height
     private static var dontChangeBar = false
-    private var secondIteration = false
-    private var secondStatusBarHeight = UIApplication.sharedApplication().statusBarFrame.size.height
     
     func drawCameraOverlay() {
         drawCameraOverlay(false)
@@ -609,71 +623,6 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         }
         dismissViewControllerAnimated(true, completion: nil)
     }
- 
-    let commonWords: Set<NSString> = ["the", "of", "and", "a", "to", "in", "is", "you", "that", "it", "he", "was", "for", "on", "are", "as", "with", "his", "they", "i", "at", "be", "this", "have", "from", "or", "one", "had", "by", "but", "not", "what", "all", "were", "we", "when", "your", "can", "said", "there", "use", "an", "each", "which", "she", "do", "how", "their", "if", "will", "up", "other", "about", "out", "many", "then", "them", "these", "so", "some", "her"," would", "make", "like", "him", "into", "has", "look", "more", "write", "go", "see", "no", "way", "could", "people", "my", "than", "first", "been", "call", "who","its","now","find","down","day","did","get","come","made","may","part", "another", "any", "anybody", "anyone", "anything", "both", "either", "everybody", "everyone", "everything", "am"]
-    
-    var oldGeneratedTags = ""
-    
-    /**
-     * This generates tags if the last generation of tags is the same as the current tag field
-     * This is only called AFTER the title updates. The check is so that it doesn't overwrite
-     * any user added tags
-     */
-    func populateTagsFromTitle(fullTitle: String) {
-        var generatedTags = generateTags(fullTitle)
-        
-        // the lines before and after the statement make simulate a user accessing the text field
-        textViewDidBeginEditing(tagsField)
-        if tagsField.text == oldGeneratedTags || tagsField.text == AddItem.TAG_PLACEHOLDER_STR || tagsField.textColor == AddItem.TAG_PLACEHOLDER_COLOR {
-            tagsField.text = generatedTags
-        }
-        textViewDidEndEditing(tagsField)
-        
-        oldGeneratedTags = generatedTags
-    }
-    
-    /**
-     * Generates tags from the title text:
-     * Splits title text into pices by spaces / punctuation
-     * Iterates through the array and makes sure there aren't any duplicate words
-     * Turns the list of words into a string and returns it
-     * Performance should not be a large issue due to the character limit on title
-     */
-    func generateTags(fullTitle: String) -> String {
-        var titleFieldText = trimString(fullTitle.uppercaseString)
-        var tagList: Set<String> = Set<String>()
-        
-        titleFieldText = titleFieldText.stringByReplacingOccurrencesOfString(".", withString: " ")
-        titleFieldText = titleFieldText.stringByReplacingOccurrencesOfString(",", withString: " ")
-        titleFieldText = titleFieldText.stringByReplacingOccurrencesOfString(";", withString: " ")
-        titleFieldText = titleFieldText.stringByReplacingOccurrencesOfString("  ", withString: " ")
-        
-        var titleWords = split(titleFieldText) {$0 == " "}
-        var tagOrder = [String]()
-        
-        var index = 0
-        for tag in titleWords {
-            if !tagList.contains(tag) {
-                tagOrder.append(tag)
-                tagList.insert(tag)
-            }
-            index++
-        }
-        
-        var tagFieldText = ""
-        for tag in tagOrder {
-            if !commonWords.contains(tag.lowercaseString) {
-                tagFieldText = tagFieldText +  " \(tag),"
-            }
-        }
-        
-        var size = count(tagFieldText) - 1
-        if size > 0 && Array(tagFieldText)[size] == "," {
-            tagFieldText = tagFieldText.substringToIndex(advance(tagFieldText.startIndex, count(tagFieldText) - 1))
-        }
-        
-        return trimString(tagFieldText)
-    }
     
     /**
      * This method trims a string
@@ -688,7 +637,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         var conn: FBRequestConnection = FBRequestConnection()
 //        var handler: FBRequestHandler = conn
         
-        var postString: String = "\(titleField.text) \(tagsField.text))"
+        var postString: String = "\(titleField.text) \(descriptionField.text))"
 
        // if FBSession
         

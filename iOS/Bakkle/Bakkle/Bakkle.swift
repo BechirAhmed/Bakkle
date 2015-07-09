@@ -88,6 +88,9 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         self.getFilter()
         self.restoreData()
         self.initLocation()
+        
+        let appName = NSBundle.mainBundle().infoDictionary!["CFBundleName"] as! String;
+        self.flavor = appName == "Bakkle" ? 1 : 2;
     }
     
     /* Set version of app for branding 1=Bakkle, 2=Goodwill */
@@ -651,13 +654,13 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         
     }
 
-    func addItem(title: String, description: String, location: String, price: String, tags: String, method: String, images: [NSData],item_id: NSInteger?, success: (item_id: Int?, item_url: String?)->(), fail: ()->() ) {
+    // take out tags right now, but if needed, will add later
+    func addItem(title: String, description: String, location: String, price: String, images: [NSData],item_id: NSInteger?, success: (item_id: Int?, item_url: String?)->(), fail: ()->() ) {
         // URL encode some vars.
         let escTitle = title.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         let escDescription = description.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         let escLocation = location.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-        let escTags = tags.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-        let escMethod = method.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
+//        let escTags = tags.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         var escPrice: String!
         if price == "take it!" {
             escPrice = "0.00"
@@ -667,10 +670,10 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         
         var postString : NSString;
         if(item_id != nil){
-            postString = "device_uuid=\(self.deviceUUID)&title=\(escTitle)&description=\(escDescription)&location=\(escLocation)&auth_token=\(self.auth_token)&price=\(escPrice)&tags=\(escTags)&method=\(escMethod)&item_id=\(item_id!)"
+            postString = "device_uuid=\(self.deviceUUID)&title=\(escTitle)&description=\(escDescription)&location=\(escLocation)&auth_token=\(self.auth_token)&price=\(escPrice)&item_id=\(item_id!)"
         }
         else{
-            postString = "device_uuid=\(self.deviceUUID)&title=\(escTitle)&description=\(escDescription)&location=\(escLocation)&auth_token=\(self.auth_token)&price=\(escPrice)&tags=\(escTags)&method=\(escMethod)"
+            postString = "device_uuid=\(self.deviceUUID)&title=\(escTitle)&description=\(escDescription)&location=\(escLocation)&auth_token=\(self.auth_token)&price=\(escPrice)"
         }
         let url: NSURL? = NSURL(string: url_base +  url_add_item + "?\(postString)")
         
@@ -731,7 +734,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         task.resume()
     }
     
-    func removeItem(item_id: NSInteger, success: (item_id: Int?, item_url: String?)->(), fail: ()->() ) {
+    func removeItem(item_id: NSInteger, success: ()->(), fail: ()->() ) {
         // URL encode some vars.
                 var postString : NSString;
             postString = "device_uuid=\(self.deviceUUID)&auth_token=\(self.auth_token)&item_id=\(item_id)"
@@ -761,9 +764,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             self.debg("RESPONSE DICT IS: \(self.responseDict)")
             
             if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
-                let item_id: Int = self.responseDict.valueForKey("item_id") as! Int
-                let item_url: String = self.getImageURL(item_id)
-                success(item_id: item_id, item_url: item_url)
+                success()
             } else {
                 fail()
             }

@@ -38,6 +38,7 @@ class Account(models.Model):
         max_digits=7, decimal_places=2, default=100.00)
     display_num_items = models.IntegerField(default=100)
     user_location = models.CharField(max_length=25, null=True)
+    app_flavor = models.IntegerField(default=1)
     disabled = models.BooleanField(default=False)
 
     def __str__(self):
@@ -50,7 +51,8 @@ class Account(models.Model):
             'seller_rating': self.seller_rating,
             'buyer_rating': self.buyer_rating,
             'user_location': self.user_location,
-            'facebook_id': self.facebook_id}
+            'facebook_id': self.facebook_id,
+            'flavor': self.app_flavor}
         return valuesDict
 
 
