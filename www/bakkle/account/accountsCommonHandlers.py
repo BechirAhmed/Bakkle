@@ -63,15 +63,27 @@ def settings(request):
 #         'items_viewed': items_viewed
 #     }
 #     print(context)
-#     return render(request, 'account/detail.html', context)
-
-# Method for reseting account feed (only for detail page)
+#     return render(request,
 
 
 @time_method
-def reset(request, account_id):
-    BuyerItem.objects.filter(buyer=account_id).delete()
-    return {"status": 1}
+def set_description(account_id, description):
+    try:
+        account = Account.objects.get(pk=account_id)
+    except Account.DoesNotExist:
+        return {"status": 0, "message": "Invalid account id"}
+    account.description = description
+    account.save()
+    return {"status": 1, "account": account.toDictionary()}
+
+
+@time_method
+def get_account(accountId):
+    try:
+        account = Account.objects.get(pk=accountId)
+    except Account.DoesNotExist:
+        return {"status": 0, "message": "Invalid account id"}
+    return {"status": 1, "account": account.toDictionary()}
 
 # Show detail on a device
 # @csrf_exempt
