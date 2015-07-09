@@ -2,16 +2,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.bakkle.bakkle.AddItem">
 
     <HorizontalScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="200dp"
-        android:paddingBottom="25dp"
+        android:layout_width="fill_parent"
+        android:layout_height="250dp"
+        android:background="@color/black"
         android:id="@+id/images">
 
         <RelativeLayout
@@ -33,6 +29,7 @@
                 android:src="@drawable/ic_action_camera"
                 android:id="@+id/add"
                 android:layout_toRightOf="@+id/imageCollection"
+                android:layout_alignParentBottom="true"
                 android:onClick="addAnotherImage" />
 
         </RelativeLayout>
@@ -43,6 +40,9 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/title"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="15dp"
         android:layout_below="@+id/images">
         <TextView
             android:layout_width="wrap_content"
@@ -54,6 +54,7 @@
         <EditText
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/titleField"
             android:layout_toRightOf="@+id/titlePrompt"
             android:layout_alignBaseline="@+id/titlePrompt"
             android:layout_alignRight="@+id/priceField"
@@ -68,6 +69,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/price"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
         android:layout_below="@+id/title">
         <TextView
             android:layout_width="wrap_content"
@@ -92,6 +95,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/tags"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
         android:layout_below="@+id/price">
         <TextView
             android:layout_width="wrap_content"
@@ -103,6 +108,7 @@
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/tagsField"
             android:layout_toRightOf="@+id/tagsPrompt"
             android:layout_alignBaseline="@+id/tagsPrompt"
             android:hint="5 words to describe item"
@@ -115,55 +121,30 @@
         android:layout_height="wrap_content"
         android:id="@+id/method"
         android:layout_below="@+id/tags"
+        android:paddingLeft="16dp"
         android:layout_alignLeft="@+id/confirm"
         android:paddingBottom="25dp"
         android:text="Method"
         android:textStyle="bold"/>
 
-    <RadioGroup
+    <Spinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:entries="@array/Methods"
+        android:prompt="@string/choose"
+        android:id="@+id/methodPicker"
         android:layout_alignTop="@+id/method"
         android:layout_alignParentEnd="true"
-        android:paddingBottom="25dp">
-
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Pick up"
-            android:id="@+id/pickup"
-            android:layout_above="@+id/method"
-            android:layout_alignParentEnd="true"
-            android:buttonTint="@color/green" />
-
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Meet"
-            android:id="@+id/meet"
-            android:layout_above="@+id/method"
-            android:layout_alignParentEnd="true"
-            android:buttonTint="@color/green"/>
-
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Ship"
-            android:id="@+id/ship"
-            android:layout_above="@+id/method"
-            android:layout_alignParentEnd="true"
-            android:buttonTint="@color/green"/>
-    </RadioGroup>
-
-
-
-
+        android:paddingRight="16dp"
+        android:paddingBottom="25dp"
+        android:backgroundTint="@color/green" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Share to Facebook?"
         android:textStyle="bold"
+        android:paddingLeft="16dp"
         android:layout_alignBaseline="@+id/share"
         android:layout_alignLeft="@+id/confirm"/>
 
@@ -175,18 +156,20 @@
         android:layout_above="@+id/confirm"
         android:layout_alignRight="@+id/confirm"
         android:paddingBottom="25dp"
+        android:paddingRight="16dp"
         android:backgroundTint="@color/green"
         android:backgroundTintMode="src_atop" />
 
 
     <Button
         android:layout_width="fill_parent"
-        android:layout_height="30dp"
+        android:layout_height="45dp"
         android:id="@+id/confirm"
         android:layout_alignParentBottom="true"
         android:background="@color/green"
         android:textColor="@color/white"
         android:text="CONFIRM"
+        android:onClick="uploadItem"
         android:textStyle="bold"/>
 
 

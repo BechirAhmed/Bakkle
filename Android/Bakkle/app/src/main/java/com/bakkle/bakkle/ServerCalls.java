@@ -1,13 +1,15 @@
 package com.bakkle.bakkle;
 
 import android.content.Context;
-import android.media.Image;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.gson.JsonObject;
+import com.koushikdutta.async.http.body.FilePart;
+import com.koushikdutta.async.http.body.Part;
 import com.koushikdutta.ion.Ion;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -16,23 +18,23 @@ import java.util.ArrayList;
 public class ServerCalls{
 
     double apiVersion = 1.2;
-    final String url_base                 = "https://bakkle.rhventures.org/";
-//    final String url_base                 = "https://app.bakkle.com/";
-    final String url_login                = "account/login_facebook/";
-    final String url_logout               = "account/logout/";
-    final String url_facebook             = "account/facebook/";
-    final String url_register_push        = "account/device/register_push/";
-    final String url_reset                = "items/reset/";
-    final String url_mark                 = "items/"; //+status/
-    final String url_feed                 = "items/feed/";
-    final String url_garage               = "items/get_seller_items/";
-    final String url_add_item             = "items/add_item/";
-    final String url_send_chat            = "conversation/send_message/";
-    final String url_view_item            = "items/";
-    final String url_buyers_trunk         = "items/get_buyers_trunk/";
-    final String url_get_holding_pattern  = "items/get_holding_pattern/";
-    final String url_buyertransactions    = "items/get_buyer_transactions/";
-    final String url_sellertransactions   = "items/get_seller_transactions/";
+    final static String url_base                 = "https://bakkle.rhventures.org/";
+//    final static String url_base                 = "https://app.bakkle.com/";
+    final static String url_login                = "account/login_facebook/";
+    final static String url_logout               = "account/logout/";
+    final static String url_facebook             = "account/facebook/";
+    final static String url_register_push        = "account/device/register_push/";
+    final static String url_reset                = "items/reset/";
+    final static String url_mark                 = "items/"; //+status/
+    final static String url_feed                 = "items/feed/";
+    final static String url_garage               = "items/get_seller_items/";
+    final static String url_add_item             = "items/add_item/";
+    final static String url_send_chat            = "conversation/send_message/";
+    final static String url_view_item            = "items/";
+    final static String url_buyers_trunk         = "items/get_buyers_trunk/";
+    final static String url_get_holding_pattern  = "items/get_holding_pattern/";
+    final static String url_buyertransactions    = "items/get_buyer_transactions/";
+    final static String url_sellertransactions   = "items/get_seller_transactions/";
 
     Context mContext;
     int response;
@@ -294,7 +296,41 @@ public class ServerCalls{
 
     }
 
-    public void addItem(String name, String description, double price, double rating, String pickupMethod, String[] tags, Image[] pictures, boolean shareFB){
+    public JsonObject addItem(String name, String description, String price, String pickupMethod, String tags,
+                              ArrayList<String> imageUri, boolean shareFB, String authToken, String uuid)
+    {
+
+        ArrayList<Part> fileParts = new ArrayList<>();
+        for(String uri : imageUri)
+        {
+            fileParts.add(new FilePart("image", new File(uri)));
+        }
+       /* MultipartBodyBuilder<?> request =*/
+        try {
+            jsonResponse = Ion.with(mContext)
+                    .load(url_base + url_add_item)
+                    .setMultipartParameter("auth_token", authToken)
+                    .setMultipartParameter("device_uuid", uuid)
+                    .setMultipartParameter("title", name)
+                    .setMultipartParameter("description", description)
+                    .setMultipartParameter("price", price)
+                    .setMultipartParameter("method", pickupMethod)
+                    .setMultipartParameter("tags", tags)
+                    .setMultipartParameter("location", "32,32") //TODO: GET REAL LOCATION
+                    .addMultipartParts(fileParts)
+                    .asJsonObject()
+                    .get();
+            //        for(String uri : imageUri)
+            //        {
+            //            request = request.setMultipartFile("image", new File(uri));
+            //        }
+        }
+        catch (Exception e){
+            Log.v("test", e.getMessage());
+        }
+
+        return jsonResponse;
+
 
     }
 

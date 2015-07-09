@@ -1,21 +1,29 @@
 package com.bakkle.bakkle;
 
-import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
-import android.support.annotation.IdRes;
+import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
+import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -27,13 +35,19 @@ import java.util.Date;
 
 public class AddItem extends Activity{
 
+    private ActionBar mActionBar;
+
     String mCurrentPhotoPath;
     static final int REQUEST_TAKE_PHOTO = 1;
     static final int MAX_IMAGE_COUNT = 5;
+    EditText titleEditText, priceEditText, tagsEditText;
+    Spinner methodSpinner;
+    Switch facebookSwitch;
     //Bitmap firstPhoto;
     //ImageView firstImageView;
-    ArrayList <Bitmap> productPictures = new ArrayList<>();
+    //ArrayList <Bitmap> productPictures = new ArrayList<>();
     ArrayList <ImageView> productPictureViews = new ArrayList<>();
+    ArrayList <String> picturePaths = new ArrayList<>();
     final String[] commonWords = {"the", "of", "and", "a", "to", "in", "is", "you",
             "that", "it", "he", "was", "for", "on", "are", "as", "with", "his", "they", "i", "at",
             "be", "this", "have", "from", "or", "one", "had", "by", "but", "not", "what", "all",
@@ -67,6 +81,32 @@ public class AddItem extends Activity{
         }
         setContentView(R.layout.activity_add_item);
 
+        mActionBar = getActionBar();
+        mActionBar.setDisplayShowHomeEnabled(false);
+        mActionBar.setDisplayShowTitleEnabled(false);
+        LayoutInflater mInflater = LayoutInflater.from(this);
+
+        View mCustomView = mInflater.inflate(R.layout.action_bar_title, null);
+
+        TextView textView = (TextView) mCustomView.findViewById(R.id.action_bar_title);
+
+        textView.setText("List Item");
+
+        mCustomView.findViewById(R.id.action_bar_home).setVisibility(View.GONE);
+        mCustomView.findViewById(R.id.action_bar_right).setVisibility(View.GONE);
+
+
+        mActionBar.setCustomView(mCustomView);
+        mActionBar.setDisplayShowCustomEnabled(true);
+
+        titleEditText = (EditText) findViewById(R.id.titleField);
+        priceEditText = (EditText) findViewById(R.id.priceField);
+        tagsEditText = (EditText) findViewById(R.id.tagsField);
+
+        methodSpinner = (Spinner) findViewById(R.id.methodPicker);
+
+        facebookSwitch = (Switch) findViewById(R.id.share);
+
         //productPictureViews.add((ImageView) findViewById(R.id.firstImage));
 
     }
@@ -88,11 +128,23 @@ public class AddItem extends Activity{
         return image;
     }
 
+    public int dpToPx(int dp) {
+        DisplayMetrics displayMetrics = this.getResources().getDisplayMetrics();
+        int px = Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+        return px;
+    }
+
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         if(requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK)
         {
-            Bitmap temp = BitmapFactory.decodeFile(mCurrentPhotoPath);
+
+            Matrix matrix = new Matrix();
+            matrix.postRotate(90);
+
+            Bitmap temp = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(mCurrentPhotoPath), dpToPx(250), dpToPx(250));
+            temp = Bitmap.createBitmap(temp, 0, 0, temp.getWidth(), temp.getHeight(), matrix, true);
+
             //productPictureViews.get(productPictureViews.size() - 1).setImageBitmap(temp);
 
             RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.imageCollection);
@@ -103,22 +155,21 @@ public class AddItem extends Activity{
                     RelativeLayout.LayoutParams.WRAP_CONTENT,
                     RelativeLayout.LayoutParams.MATCH_PARENT);
             if(imageView.getId() == 1){
-                //layoutParams.addRule(RelativeLayout.LEFT_OF, R.id.add);
             }
             else{
                 ImageView previous = productPictureViews.get(productPictureViews.size() - 1);
                 layoutParams.addRule(RelativeLayout.RIGHT_OF, previous.getId());
-                //layoutParams.addRule(RelativeLayout.LEFT_OF, R.id.add);
+                imageView.setPadding(10, 0, 0, 0);
             }
             imageView.setLayoutParams(layoutParams);
             imageView.setAdjustViewBounds(true);
             imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            imageView.setPadding(10, 0, 0, 0);
 
             relativeLayout.addView(imageView);
 
-            productPictures.add(temp);
+            //productPictures.add(temp);
             productPictureViews.add(imageView);
+            picturePaths.add(mCurrentPhotoPath);
             temp = null;
             imageView = null;
             relativeLayout = null;
@@ -151,7 +202,7 @@ public class AddItem extends Activity{
 
     public void addAnotherImage(View view)
     {
-        if(productPictures.size() == MAX_IMAGE_COUNT){
+        if(picturePaths.size() == MAX_IMAGE_COUNT){
             Toast.makeText(this, "5 Pictures Max!", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -174,5 +225,21 @@ public class AddItem extends Activity{
             }
         }
 
+    }
+
+    public void uploadItem(View view)
+    {
+        String title = titleEditText.getText().toString();
+        String price = priceEditText.getText().toString();
+        String tags = tagsEditText.getText().toString();
+        String description = "";
+        String method = methodSpinner.getSelectedItem().toString();
+
+        boolean shareFB = facebookSwitch.isChecked();
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        new ServerCalls(this).addItem(title, description, price, method, tags, picturePaths, shareFB,
+                preferences.getString("auth_token", "0"), preferences.getString("uuid", "0"));
     }
 }
