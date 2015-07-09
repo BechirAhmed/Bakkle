@@ -20,6 +20,7 @@
 		13AB6FAB1B0E40F60092EE61 /* btb-want.png in Resources */ = {isa = PBXBuildFile; fileRef = 13AB6FAA1B0E40F60092EE61 /* btb-want.png */; };
 		1B00CB1B1B22231B00710C01 /* ItemData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B00CB1A1B22231B00710C01 /* ItemData.swift */; };
 		1B56D5D41B30709F009D81C6 /* UIDevice+ModelName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B56D5D31B30709F009D81C6 /* UIDevice+ModelName.swift */; };
+		1B754B251B4D4D960002C41D /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B754B241B4D4D960002C41D /* CameraView.swift */; };
 		5E023F861AD592B80002AFBC /* btn-addItem.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E023F851AD592B80002AFBC /* btn-addItem.png */; };
 		5E023F881AD59F200002AFBC /* logo-white-design-png-transp-100.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E023F871AD59F200002AFBC /* logo-white-design-png-transp-100.png */; };
 		5E1DCC9F1AD44C72002D41FD /* tiger.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5E1DCC9E1AD44C71002D41FD /* tiger.jpg */; };
@@ -362,6 +363,7 @@
 		13AB6FAA1B0E40F60092EE61 /* btb-want.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btb-want.png"; sourceTree = "<group>"; };
 		1B00CB1A1B22231B00710C01 /* ItemData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemData.swift; sourceTree = "<group>"; };
 		1B56D5D31B30709F009D81C6 /* UIDevice+ModelName.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIDevice+ModelName.swift"; sourceTree = "<group>"; };
+		1B754B241B4D4D960002C41D /* CameraView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
 		1D710285C97E0FF7D33DEB9E /* Pods-Bakkle.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bakkle.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Bakkle/Pods-Bakkle.debug.xcconfig"; sourceTree = "<group>"; };
 		3E0CABDBE20E9D5B2EED4810 /* Pods_Bakkle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Bakkle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E023F851AD592B80002AFBC /* btn-addItem.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-addItem.png"; sourceTree = "<group>"; };
@@ -817,6 +819,7 @@
 				A014B46B1B09215800E01FEF /* ProfileView.swift */,
 				72B5D8041B41E12D00E4B6EA /* BuyItemView.swift */,
 				72B5D8081B42DF7300E4B6EA /* RateUserView.swift */,
+				1B754B241B4D4D960002C41D /* CameraView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1484,6 +1487,7 @@
 				A0D96F8A1AD773DB0046DA13 /* RefineView.swift in Sources */,
 				1B00CB1B1B22231B00710C01 /* ItemData.swift in Sources */,
 				728647EE1B309F6F009A24C9 /* NSDate+String.swift in Sources */,
+				1B754B251B4D4D960002C41D /* CameraView.swift in Sources */,
 				602C390C1B3C9933005CB493 /* PNLineChart.swift in Sources */,
 				5EE2C9B91AB9F0FB0031D8CD /* UIColor+MDCRGB8Bit.m in Sources */,
 				F0E7C5081B2F2B3E006B013A /* WSManager.m in Sources */,
