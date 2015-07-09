@@ -50,6 +50,9 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Always look for updates
+        requestUpdates()
+        
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         progressIndicator.startAnimating()
         
@@ -102,9 +105,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                 }
             }
         }
-        
-        // Always look for updates
-        requestUpdates()
+
         fromCamera = false
     
         // add instructional overlay for the first time usage
@@ -133,8 +134,6 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             var mainWindow: UIWindow = UIApplication .sharedApplication().keyWindow!
             mainWindow.addSubview(effectView)
             mainWindow.addSubview(instructionImgView)
-//            self.drawer.insertSubview(effectView, aboveSubview: self.swipeView)
-//            self.drawer.insertSubview(instructionImgView, aboveSubview: effectView)
         }
         
     }
