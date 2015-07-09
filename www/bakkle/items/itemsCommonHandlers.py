@@ -134,10 +134,6 @@ def add_item(title, description, location, seller_id, price, tags, notifyFlag, i
     # Get the item id if present (If it is present an item will be edited not added)
 
     # Ensure that required fields are present otherwise send back a failed status
-    if (title == None or title == "") or (tags == None or tags == "") or (price == None or price == "") or (method == None or method == ""):
-        response_data = { "status":0, "error": "A required parameter was not provided." }
-        return response_data
-
     # Ensure that the price can be converted to a decimal otherwise send back a failed status
     try:
         price = Decimal(price)

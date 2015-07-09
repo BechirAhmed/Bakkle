@@ -38,7 +38,7 @@ class addItemHandler(bakkleRequestHandler):
             images = self.request.files['image']
         except QueryArgumentError as error:
             self.writeJSON({"status": 0, "message": error.message})
-            self.finish();
+            self.finish()
 
         self.writeJSON(itemsCommonHandlers.add_item(
             title, description, location, seller_id, price,
@@ -73,7 +73,7 @@ class addItemNoImageHandler(bakkleRequestHandler):
 
         except QueryArgumentError as error:
             self.writeJSON({"status": 0, "message": error.message})
-            self.finish();
+            self.finish()
 
         self.writeJSON(itemsCommonHandlers.add_item_no_image(
             title, description, location, seller_id, price,
