@@ -185,7 +185,7 @@ public class SellersGarage extends ListFragment {
 
         for(JsonElement element : jsonArray)
         {
-            item = element.getAsJsonObject().getAsJsonObject("item");
+            item = element.getAsJsonObject();
             feedItem = new FeedItem(this.getActivity().getApplicationContext());
             //temp = element.getAsJsonObject();
 

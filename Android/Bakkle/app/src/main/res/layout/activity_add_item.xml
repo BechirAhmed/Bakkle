@@ -9,23 +9,185 @@
     tools:context="com.bakkle.bakkle.AddItem">
 
     <HorizontalScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="200dp">
+        android:layout_width="wrap_content"
+        android:layout_height="200dp"
+        android:paddingBottom="25dp"
+        android:id="@+id/images">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="fill_parent">
+            android:layout_height="fill_parent"
+            android:id="@+id/imageRelativeLayout">
 
-
-            <ImageView
+            <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:scaleType="fitCenter"
-                android:id="@+id/firstImage"/>
+                android:layout_height="wrap_content"
+                android:id="@+id/imageCollection">
 
 
-        </LinearLayout>
+            </RelativeLayout>
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_action_camera"
+                android:id="@+id/add"
+                android:layout_toRightOf="@+id/imageCollection"
+                android:onClick="addAnotherImage" />
+
+        </RelativeLayout>
 
     </HorizontalScrollView>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/title"
+        android:layout_below="@+id/images">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/titlePrompt"
+            android:text="Title"
+            android:paddingRight="10dp"
+            android:textStyle="bold"/>
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/titlePrompt"
+            android:layout_alignBaseline="@+id/titlePrompt"
+            android:layout_alignRight="@+id/priceField"
+            android:hint="Title"
+            android:editable="false"
+            android:inputType="text"
+            android:lines="1"
+            android:backgroundTint="@color/green"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/price"
+        android:layout_below="@+id/title">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/pricePrompt"
+            android:text="Price"
+            android:paddingRight="10dp"
+            android:textStyle="bold"/>
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/priceField"
+            android:layout_toRightOf="@+id/pricePrompt"
+            android:layout_alignBaseline="@+id/pricePrompt"
+            android:hint="$--.--"
+            android:numeric="decimal"
+            android:inputType="numberDecimal"
+            android:backgroundTint="@color/green"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tags"
+        android:layout_below="@+id/price">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tagsPrompt"
+            android:text="Tags"
+            android:paddingRight="10dp"
+            android:textStyle="bold"/>
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/tagsPrompt"
+            android:layout_alignBaseline="@+id/tagsPrompt"
+            android:hint="5 words to describe item"
+            android:inputType="textCapWords"
+            android:backgroundTint="@color/green" />
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/method"
+        android:layout_below="@+id/tags"
+        android:layout_alignLeft="@+id/confirm"
+        android:paddingBottom="25dp"
+        android:text="Method"
+        android:textStyle="bold"/>
+
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/method"
+        android:layout_alignParentEnd="true"
+        android:paddingBottom="25dp">
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pick up"
+            android:id="@+id/pickup"
+            android:layout_above="@+id/method"
+            android:layout_alignParentEnd="true"
+            android:buttonTint="@color/green" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Meet"
+            android:id="@+id/meet"
+            android:layout_above="@+id/method"
+            android:layout_alignParentEnd="true"
+            android:buttonTint="@color/green"/>
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ship"
+            android:id="@+id/ship"
+            android:layout_above="@+id/method"
+            android:layout_alignParentEnd="true"
+            android:buttonTint="@color/green"/>
+    </RadioGroup>
+
+
+
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Share to Facebook?"
+        android:textStyle="bold"
+        android:layout_alignBaseline="@+id/share"
+        android:layout_alignLeft="@+id/confirm"/>
+
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/share"
+        android:layout_above="@+id/confirm"
+        android:layout_alignRight="@+id/confirm"
+        android:paddingBottom="25dp"
+        android:backgroundTint="@color/green"
+        android:backgroundTintMode="src_atop" />
+
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="30dp"
+        android:id="@+id/confirm"
+        android:layout_alignParentBottom="true"
+        android:background="@color/green"
+        android:textColor="@color/white"
+        android:text="CONFIRM"
+        android:textStyle="bold"/>
+
 
 </RelativeLayout>

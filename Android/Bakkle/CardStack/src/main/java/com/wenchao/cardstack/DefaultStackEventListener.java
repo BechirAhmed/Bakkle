@@ -1,5 +1,7 @@
 package com.wenchao.cardstack;
 
+import android.util.Log;
+
 public class DefaultStackEventListener implements CardStack.CardEventListener {
 
     private float mThreshold;
@@ -10,6 +12,9 @@ public class DefaultStackEventListener implements CardStack.CardEventListener {
 
     @Override
     public boolean swipeEnd(int section, float distance) {
+
+        Log.v("test", "test swipeend");
+
         if(distance > mThreshold){
             return true;
         }else{
