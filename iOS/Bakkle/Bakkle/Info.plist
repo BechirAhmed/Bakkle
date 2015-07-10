@@ -37,10 +37,6 @@
 	<true/>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Bakkle uses your location to find you the most relevant content.</string>
-	<key>UIAppFonts</key>
-	<array>
-		<string>ionicons.ttf</string>
-	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

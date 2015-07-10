@@ -19,6 +19,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     
     let albumName = "Bakkle"
     
+    // move this to camera view eventually
     static let JPEG_COMPRESSION_CONSTANT: CGFloat = 0.3
     static let MAX_IMAGE_COUNT = 5
     static let SCALED_IMAGES_READY_NOTIFICATION = "SCALED_IMAGES_READY"
