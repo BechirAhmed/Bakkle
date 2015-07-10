@@ -11,36 +11,26 @@ import Photos
 import Haneke
 
 class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDelegate, UINavigationControllerDelegate, MDCSwipeToChooseDelegate {
-    
-    var state : MDCPanState!
+
     let menuSegue = "presentNav"
     let addItemSegue = "AddItemSegue"
     let itemDetailSegue = "ItemDetailSegue"
     let refineSegue = "RefineSegue"
-    var searching = false
-    
     let options = MDCSwipeToChooseViewOptions()
-    // the first card in the feedView
-    var swipeView : MDCSwipeToChooseView!
-    // the card behind the first card
-    var bottomView : MDCSwipeToChooseView!
+    
     
     private static let CAPTURE_NOTIFICATION_TEXT = "_UIImagePickerControllerUserDidCaptureItem"
     private static let REJECT_NOTIFICATION_TEXT = "_UIImagePickerControllerUserDidRejectItem"
     private static let DEVICE_MODEL: String = UIDevice.currentDevice().modelName
+    
     var chosenImage: UIImage?
     var fromCamera: Bool! = false
-    
-    @IBOutlet weak var menuBtn: UIButton!
-    @IBOutlet weak var noNewItemsLabel: UILabel!
-    @IBOutlet weak var drawer: UIView!
-    @IBOutlet weak var progressIndicator: UIActivityIndicatorView!
-    
-    @IBOutlet weak var searchBar: UISearchBar!
-    @IBOutlet weak var refineButton: UIButton!
-    
-    @IBOutlet weak var btnAddItem: UIButton!
-    @IBOutlet weak var titleBar: UIView!
+    var searching = false
+    var state : MDCPanState!
+    // the first card in the feedView
+    var swipeView : MDCSwipeToChooseView!
+    // the card behind the first card
+    var bottomView : MDCSwipeToChooseView!
     
     // for instructional overlay appeared above the feedView
     var instructionImgView: UIImageView!
@@ -48,6 +38,15 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     
     var itemDetailTap: UITapGestureRecognizer!
     var item_id = 42 //TODO: unhardcode this
+    
+    @IBOutlet weak var menuBtn: UIButton!
+    @IBOutlet weak var noNewItemsLabel: UILabel!
+    @IBOutlet weak var drawer: UIView!
+    @IBOutlet weak var progressIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak var refineButton: UIButton!
+    @IBOutlet weak var btnAddItem: UIButton!
+    @IBOutlet weak var titleBar: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,7 +56,6 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         progressIndicator.startAnimating()
-        
         
         // for swipe
         options.delegate = self
@@ -114,6 +112,9 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
         if userDefaults.boolForKey("instruction") {
             // disable user interaction and show instruction
+            self.searchBar.userInteractionEnabled = false
+            self.refineButton.userInteractionEnabled = false
+            self.menuBtn.userInteractionEnabled = false
             self.itemDetailTap.enabled = false
             self.constructInstructionView()
         }
@@ -137,12 +138,14 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             mainWindow.addSubview(effectView)
             mainWindow.addSubview(instructionImgView)
         }
-        
     }
     
     func closeBtnPressed(sender: UIButton!) {
         var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults();
         userDefaults.setBool(false, forKey: "instruction")
+        self.searchBar.userInteractionEnabled = true
+        self.refineButton.userInteractionEnabled = true
+        self.menuBtn.userInteractionEnabled = true
         self.itemDetailTap.enabled = true
         instructionImgView.removeFromSuperview()
         effectView.removeFromSuperview()

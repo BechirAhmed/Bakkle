@@ -80,6 +80,8 @@ class ProfileView: UIViewController, UITextViewDelegate {
         if descriptionTextView.text.isEmpty {
             descriptionTextView.textColor = AddItem.DESCRIPTION_PLACEHOLDER_COLOR
             descriptionTextView.text = "DESCRIPTION"
+        }else {
+            descriptionTextView.textColor = UIColor.blackColor()
         }
     }
     
@@ -97,7 +99,7 @@ class ProfileView: UIViewController, UITextViewDelegate {
         saveBtn.hidden = false
         descriptionTextView.editable = true
         descriptionTextView.becomeFirstResponder()
-        if descriptionTextView.text.isEmpty {
+        if descriptionTextView.textColor == AddItem.DESCRIPTION_PLACEHOLDER_COLOR {
             descriptionTextView.textColor = UIColor.blackColor()
             descriptionTextView.text = ""
         }

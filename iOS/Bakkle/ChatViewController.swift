@@ -16,7 +16,6 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     var textView: UITextView!
     var messageType: UISegmentedControl!
     var profileButton: UIButton!
-    var userName: UILabel!
     var sendButton: UIButton!
     var rotating = false
     var chatID: String!
@@ -101,7 +100,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         let profileButtonWidth: CGFloat = 36
         let profileXpos:CGFloat = (header.bounds.size.width - header.bounds.origin.x
-            - profileButtonWidth) / 2.35
+            - profileButtonWidth) / 2
         profileButton = UIButton(frame: CGRectMake(profileXpos, header.bounds.origin.y+topHeight+4, profileButtonWidth, headerHeight-4))
         profileButton.backgroundColor = Theme.ColorGreen
         profileButton.setImage(UIImage(named: "loading.png"), forState: UIControlState.Normal)
@@ -110,12 +109,6 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         profileButton.imageView?.layer.borderColor = UIColor.whiteColor().CGColor
         profileButton.addTarget(self, action: "btnProfile:", forControlEvents: UIControlEvents.TouchUpInside)
         header.addSubview(profileButton)
-        
-        userName = UILabel()
-        userName.font = UIFont(name: "Avenir-Heavy", size: 18)
-        userName.textColor = UIColor.whiteColor()
-        userName.textAlignment = NSTextAlignment.Left
-        header.addSubview(userName)
         
         let infoButtonWidth:CGFloat = 50
         var infoButton = UIButton(frame: CGRectMake(header.bounds.origin.x+header.bounds.size.width-infoButtonWidth, header.bounds.origin.y+topHeight, infoButtonWidth, headerHeight))
@@ -173,19 +166,13 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             var facebookProfileImageUrlString = "http://graph.facebook.com/\(seller_facebookid)/picture?width=142&height=142"
             let imgURL = NSURL(string: facebookProfileImageUrlString)
             profileButton.hnk_setImageFromURL(imgURL!, state: UIControlState.Normal, placeholder: UIImage(named:"loading.png"), format: nil, failure: nil, success: nil)
-            let seller_displayName = seller.valueForKey("display_name") as! String
-            let fullNameArr = split(seller_displayName) {$0 == " "}
-            userName.frame = CGRectMake(profileButton.frame.origin.x + 45, header.bounds.origin.y+24, 100, 40)
-            userName.text = fullNameArr[0]
         }
         else {
             let user = chat.user
             var facebookProfileImageUrlString = "http://graph.facebook.com/\(user.facebookID)/picture?width=142&height=142"
             let imgURL = NSURL(string: facebookProfileImageUrlString)
             profileButton.hnk_setImageFromURL(imgURL!, state: UIControlState.Normal, placeholder: UIImage(named:"loading.png"), format: nil, failure: nil, success: nil)
-            userName.frame = CGRectMake(profileButton.frame.origin.x + 45, header.bounds.origin.y+24, 100, 40)
-            userName.text = user.firstName
-        }
+            }
         
     }
     
