@@ -38,6 +38,7 @@ class MenuTableController: UITableViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        self.view.userInteractionEnabled = true
         
         /* set up the function of pushing back frontViewController when tapped frontViewController */
         if self.revealViewController() != nil {
@@ -107,6 +108,7 @@ class MenuTableController: UITableViewController {
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        self.view.userInteractionEnabled = false
         if segue.identifier == self.profileSegue {
             let destinationVC = segue.destinationViewController as! ProfileView
             Bakkle.sharedInstance.getAccount(Bakkle.sharedInstance.account_id, success: {

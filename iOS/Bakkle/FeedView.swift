@@ -190,6 +190,9 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     }
     /* End search bar delegate */
     
+    func dismissKeyboard() {
+        self.searchBar.resignFirstResponder()
+    }
     
     
     /* Call when filter parameters change. Updates text when all cards are exhausted */
@@ -200,6 +203,11 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         } else {
             self.noNewItemsLabel.text = "There are no new items near you."
         }
+    }
+    
+    
+    @IBAction func btnRefine(sender: AnyObject) {
+        self.dismissKeyboard()
     }
     
     func goToDetails() {

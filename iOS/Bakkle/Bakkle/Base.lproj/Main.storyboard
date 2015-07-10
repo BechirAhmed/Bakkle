@@ -226,6 +226,7 @@
                                             </mask>
                                         </variation>
                                         <connections>
+                                            <action selector="btnRefine:" destination="dzt-bR-uoN" eventType="touchUpInside" id="q1P-qy-hY0"/>
                                             <segue destination="Ly4-7t-E63" kind="presentation" identifier="RefineSegue" id="6i9-zB-GhB"/>
                                         </connections>
                                     </button>
@@ -5805,6 +5806,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="Rco-rv-njI"/>
-        <segue reference="Ay4-Il-I0O"/>
+        <segue reference="Chj-xB-zO6"/>
     </inferredMetricsTieBreakers>
 </document>
