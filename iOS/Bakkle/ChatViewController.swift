@@ -307,7 +307,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     {
         self.dismissKeyboard()
         self.toolBar.hidden = true
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.navigationController?.popViewControllerAnimated(true)
         
     }
     
@@ -357,7 +357,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     {
         let sb: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let vc: ProfileView = sb.instantiateViewControllerWithIdentifier("ProfileView") as! ProfileView
-        vc.modalTransitionStyle = UIModalTransitionStyle.FlipHorizontal
+        vc.modalTransitionStyle = UIModalTransitionStyle.CoverVertical
         vc.canEdit = false
         if isBuyer {
             let account_id = seller.valueForKey("pk") as! Int

@@ -109,17 +109,21 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
         let sellerFacebookProfileImgString = "http://graph.facebook.com/\(sellerFBID)/picture?width=142&height=142"
         let topTitle: String = item!.valueForKey("title") as! String
         let topPrice: String = item!.valueForKey("price") as! String
-        let topMethod: String = item!.valueForKey("method") as! String
         let tags : [String] = item!.valueForKey("tags") as! [String]
         let tagString = ", ".join(tags)
+        let descriptions: String = item!.valueForKey("description") as! String
+        let location: String = item!.valueForKey("location") as! String
+        let distance = Bakkle.sharedInstance.distanceTo(CLLocation(locationString: location)) as CLLocationDistance!
         
         itemTitleLabel.text = topTitle
         itemPriceLabel.text = "$" + topPrice
-        itemTagsTextView.text = tagString
+        if description == "" {
+            itemTagsTextView.text = tagString
+        }else {
+            itemTagsTextView.text = descriptions
+        }
         sellerName.text = sellersName
-        
-        
-        
+        itemDistanceLabel.text = String(format: "%.2f miles", distance)
         
         for index in 0...imgURLs.count-1{
             let firstURL = imgURLs[index] as! String

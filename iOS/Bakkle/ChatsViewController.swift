@@ -182,7 +182,7 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
         let chatViewController = ChatViewController(chat: chat)
         chatViewController.itemIndex = self.garageIndex
         chatViewController.isBuyer = false
-        self.presentViewController(chatViewController, animated: true, completion: {})
+        self.navigationController?.pushViewController(chatViewController, animated: true)
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
 

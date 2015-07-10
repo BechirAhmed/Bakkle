@@ -55,6 +55,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     var facebook_id_str: String!
     var first_name: String!
     var last_name: String!
+    var profileImgURL: NSURL!
     
     var feedItems: [NSObject]!
     var garageItems: [NSObject]!
@@ -252,6 +253,9 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                     self.email = email
                     self.first_name = first_name
                     self.last_name = last_name
+                    let facebookProfileImageUrlString = "http://graph.facebook.com/\(Bakkle.sharedInstance.facebook_id_str)/picture?width=250&height=250"
+                    self.profileImgURL = NSURL(string: facebookProfileImageUrlString)
+
                     success()
                 }
             } else {
