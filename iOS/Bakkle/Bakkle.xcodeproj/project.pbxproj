@@ -21,7 +21,6 @@
 		1B00CB1B1B22231B00710C01 /* ItemData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B00CB1A1B22231B00710C01 /* ItemData.swift */; };
 		1B56D5D41B30709F009D81C6 /* UIDevice+ModelName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B56D5D31B30709F009D81C6 /* UIDevice+ModelName.swift */; };
 		1B754B251B4D4D960002C41D /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B754B241B4D4D960002C41D /* CameraView.swift */; };
-		1BF812D31B500A8C007C0B0F /* switch-camera-outline.png in Resources */ = {isa = PBXBuildFile; fileRef = 1BF812D21B500A8C007C0B0F /* switch-camera-outline.png */; };
 		5E023F861AD592B80002AFBC /* btn-addItem.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E023F851AD592B80002AFBC /* btn-addItem.png */; };
 		5E023F881AD59F200002AFBC /* logo-white-design-png-transp-100.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E023F871AD59F200002AFBC /* logo-white-design-png-transp-100.png */; };
 		5E1DCC9F1AD44C72002D41FD /* tiger.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5E1DCC9E1AD44C71002D41FD /* tiger.jpg */; };
@@ -365,7 +364,6 @@
 		1B00CB1A1B22231B00710C01 /* ItemData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemData.swift; sourceTree = "<group>"; };
 		1B56D5D31B30709F009D81C6 /* UIDevice+ModelName.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIDevice+ModelName.swift"; sourceTree = "<group>"; };
 		1B754B241B4D4D960002C41D /* CameraView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
-		1BF812D21B500A8C007C0B0F /* switch-camera-outline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "switch-camera-outline.png"; sourceTree = "<group>"; };
 		1D710285C97E0FF7D33DEB9E /* Pods-Bakkle.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bakkle.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Bakkle/Pods-Bakkle.debug.xcconfig"; sourceTree = "<group>"; };
 		3E0CABDBE20E9D5B2EED4810 /* Pods_Bakkle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Bakkle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E023F851AD592B80002AFBC /* btn-addItem.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-addItem.png"; sourceTree = "<group>"; };
@@ -829,7 +827,6 @@
 		A08D53B71B07DC8E000C406C /* Images */ = {
 			isa = PBXGroup;
 			children = (
-				1BF812D21B500A8C007C0B0F /* switch-camera-outline.png */,
 				727FA76C1B4C15750023C126 /* new-x.png */,
 				602C389A1B38AF1E005CB493 /* x-image.png */,
 				602C38981B389A2E005CB493 /* WrongLocationForPhone.png */,
@@ -1261,7 +1258,6 @@
 				A003EB1A1AD4DB8800EE51A1 /* item-lawnmower.png in Resources */,
 				DB6726E91B178F250014A896 /* star_full.png in Resources */,
 				A018DF8D1ADE09A500AF5550 /* mock-additem.png in Resources */,
-				1BF812D31B500A8C007C0B0F /* switch-camera-outline.png in Resources */,
 				A08D53B11B06DBD8000C406C /* icon-x@3x.png in Resources */,
 				DB5DB3571B18E18100734692 /* icon-marker75.png in Resources */,
 				13AB6F9D1B0E3C520092EE61 /* btn-meh.png in Resources */,

@@ -8,6 +8,7 @@
 
 import Foundation
 import FontAwesomeIconFactory
+import ionicons
 
 class IconImage {
     
@@ -122,6 +123,8 @@ class IconImage {
     }
     
     func switchCamera() -> UIImage {
-        return UIImage(named: "switch-camera-outline.png")!
+        setup(NAV_SIZE)
+        // this is the unicode for the ion-ios-reverse-camera-outline in the ionicons.ttf font
+        return IonIcons.imageWithIcon(ion_ios_reverse_camera_outline, iconColor: UIColor.whiteColor(), iconSize: NAV_SIZE, imageSize: CGSize(width: NAV_SIZE, height: NAV_SIZE))
     }
 }
