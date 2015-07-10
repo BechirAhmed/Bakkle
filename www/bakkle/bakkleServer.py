@@ -53,6 +53,8 @@ app = web.Application([
     web.url(r'^/account/logout/$', accountsRESTHandlers.logoutHandler, name='logout'),
     web.url(r'^/account/facebook/$', accountsRESTHandlers.facebookHandler, name='facebook'),
     web.url(r'^/account/device/register_push/$', accountsRESTHandlers.deviceRegisterPushHandler, name='device_register_push'),
+    web.url(r'^/account/set_description/$', accountsRESTHandlers.setDescriptionHandler, name='set_description'),
+    web.url(r'^/account/get_account/$', accountsRESTHandlers.getAccountHandler, name='get_account'),
 
 
     #(r"/item/feed/.*", itemsRESTHandlers.feedHandler),
