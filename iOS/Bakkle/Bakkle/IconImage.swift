@@ -8,6 +8,7 @@
 
 import Foundation
 import FontAwesomeIconFactory
+import ionicons
 
 class IconImage {
     
@@ -16,7 +17,6 @@ class IconImage {
     let MENU_SIZE: CGFloat = 24.0
     let FEED_SIZE: CGFloat = 20.0
     let CHAT_SIZE: CGFloat = 17.0
-    
     
     func setup(size: CGFloat){
         factory.size = size
@@ -39,11 +39,6 @@ class IconImage {
     func chevron() -> UIImage {
         setup(NAV_SIZE)
         return factory.createImageForIcon(NIKFontAwesomeIcon.ChevronLeft)
-    }
-    
-    func gallery() -> UIImage {
-        setup(NAV_SIZE)
-        return factory.createImageForIcon(NIKFontAwesomeIcon.Image)
     }
     
     func check() -> UIImage {
@@ -118,5 +113,18 @@ class IconImage {
         factory.strokeColor = UIColor.redColor()
         factory.strokeWidth = 0.0
         return factory.createImageForIcon(NIKFontAwesomeIcon.Camera)
+    }
+    
+    /* CAMERA ICONS */
+    
+    func gallery() -> UIImage {
+        setup(NAV_SIZE)
+        return factory.createImageForIcon(NIKFontAwesomeIcon.Image)
+    }
+    
+    func switchCamera() -> UIImage {
+        setup(NAV_SIZE)
+        // this is the unicode for the ion-ios-reverse-camera-outline in the ionicons.ttf font
+        return IonIcons.imageWithIcon(ion_ios_reverse_camera_outline, iconColor: UIColor.whiteColor(), iconSize: NAV_SIZE, imageSize: CGSize(width: NAV_SIZE, height: NAV_SIZE))
     }
 }

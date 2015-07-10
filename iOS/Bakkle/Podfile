@@ -4,4 +4,5 @@ target 'Bakkle' do
   pod 'HanekeSwift'
   pod 'FontAwesomeIconFactory'
   pod 'SocketRocket'
+  pod 'ionicons'
 end
