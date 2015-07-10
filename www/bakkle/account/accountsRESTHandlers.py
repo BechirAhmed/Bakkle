@@ -34,6 +34,42 @@ class loginFacebookHandler(bakkleRequestHandler):
         self.writeJSON(respObj)
 
 
+class setDescriptionHandler(bakkleRequestHandler):
+
+    def post(self):
+
+        print("loginFacebook")
+        # TODO: Handle location
+        # Get the rest of the necessary params from the request
+        try:
+            user_id = self.getUser()
+            description = self.getArgument('description')
+        except QueryArgumentError as error:
+            return self.writeJSON({"status": 0, "message": error.message})
+
+        respObj = accountsCommonHandlers.set_description(user_id,
+                                                         description)
+
+        self.writeJSON(respObj)
+
+
+class getAccountHandler(bakkleRequestHandler):
+
+    def post(self):
+
+        print("loginFacebook")
+        # TODO: Handle location
+        # Get the rest of the necessary params from the request
+        try:
+            accountId = self.getArgument('accountId')
+        except QueryArgumentError as error:
+            return self.writeJSON({"status": 0, "message": error.message})
+
+        respObj = accountsCommonHandlers.get_account(accountId)
+
+        self.writeJSON(respObj)
+
+
 class logoutHandler(bakkleRequestHandler):
 
     def post(self):

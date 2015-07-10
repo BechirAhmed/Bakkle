@@ -1,8 +1,20 @@
 from tornado import web
 import json
+from account.models import Device
 
 
 class bakkleRequestHandler(web.RequestHandler):
+
+    def authenticate(self):
+        authToken = self.getArgument("auth_token")
+        uuid = self.getArgument("uuid")
+
+        try:
+            Device.objects.get(auth_token=authToken, uuid=uuid)
+        except Device.DoesNotExist:
+            return False
+
+        return True
 
     def getArgument(self, key, default=None):
 
