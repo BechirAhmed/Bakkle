@@ -26,12 +26,13 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var pageControl: UIPageControl!
     
-    @IBOutlet weak var wantLabel: UILabel!
+    
+    @IBOutlet weak var wantBtn: UIButton!
     @IBOutlet weak var closeBtn: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = UIColor.whiteColor()
+
         activityInd?.startAnimating()
         
         var swipeDown = UISwipeGestureRecognizer(target: self, action: "respondToSwipeGesture:")
@@ -85,7 +86,7 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
                 for index in 0...Bakkle.sharedInstance.trunkItems.count-1 {
                     if item == Bakkle.sharedInstance.trunkItems[index].valueForKey("item") as! NSDictionary {
                         wanted = true
-                        wantLabel.text = "ACCEPT OFFER"
+                        wantBtn.setTitle("ACCEPT OFFER", forState: UIControlState.Normal)
                         break
                     }
                 }
