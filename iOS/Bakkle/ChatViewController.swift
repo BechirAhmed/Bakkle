@@ -108,7 +108,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         profileButton.imageView?.layer.cornerRadius = profileButton.imageView!.frame.size.width/2
         profileButton.imageView?.layer.borderWidth = 1.5
         profileButton.imageView?.layer.borderColor = UIColor.whiteColor().CGColor
-        //profileButton.addTarget(self, action: "btnProfile:", forControlEvents: UIControlEvents.TouchUpInside)
+        profileButton.addTarget(self, action: "btnProfile:", forControlEvents: UIControlEvents.TouchUpInside)
         header.addSubview(profileButton)
         
         userName = UILabel()
@@ -369,9 +369,26 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     func btnProfile(sender:UIButton!)
     {
         let sb: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        let vc: UIViewController = sb.instantiateViewControllerWithIdentifier("ProfileView") as! UIViewController
+        let vc: ProfileView = sb.instantiateViewControllerWithIdentifier("ProfileView") as! ProfileView
         vc.modalTransitionStyle = UIModalTransitionStyle.FlipHorizontal
-        self.presentViewController(vc, animated: true, completion: nil)
+        vc.canEdit = false
+        if isBuyer {
+            let account_id = seller.valueForKey("pk") as! Int
+            Bakkle.sharedInstance.getAccount(account_id, success: {
+                vc.user = Bakkle.sharedInstance.responseDict
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.presentViewController(vc, animated: true, completion: nil)
+                })
+                }, fail: {})
+        }else {
+            Bakkle.sharedInstance.getAccount(chat.user.accountID, success: {
+                vc.user = Bakkle.sharedInstance.responseDict
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.presentViewController(vc, animated: true, completion: nil)
+                })
+                }, fail: {})
+        }
+        
     }
     
     func dismissKeyboard(){

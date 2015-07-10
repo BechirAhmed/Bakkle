@@ -29,6 +29,8 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     let url_get_holding_pattern: String = "items/get_holding_pattern/"
     let url_buyertransactions: String   = "items/get_buyer_transactions/"
     let url_sellertransactions: String  = "items/get_seller_transactions/"
+    let url_getaccount:String = "account/get_account/"
+    let url_setdescription:String = "account/set_description/"
 
     static let bkFeedUpdate    = "com.bakkle.feedUpdate"
     static let bkGarageUpdate  = "com.bakkle.garageUpdate"
@@ -45,7 +47,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     var deviceUUID : String = UIDevice.currentDevice().identifierForVendor.UUIDString
     var flavor: Int = 0
     
-//    var account_id: Int! = 0
+    var account_id: Int! = 0
     var auth_token: String!
     var display_name: String!
     var email: String!
@@ -156,6 +158,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             return .None
         }
     }
+    
     func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
         if locations[0].latitude == nil {
             return
@@ -294,6 +297,8 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                 
                 if responseDict.valueForKey("status")?.integerValue == 1 {
                     self.auth_token = responseDict.valueForKey("auth_token") as! String
+                    var accountId = split(self.auth_token) {$0 == "_"}
+                    self.account_id = accountId[1].toInt()
                     
                     // Connect to web socket
                     WSManager.setAuthenticationWithUUID(self.deviceUUID, withToken: self.auth_token)
@@ -331,6 +336,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             println("Response: \(responseString)")
             
             self.auth_token = ""
+            self.account_id = 0
         }
         task.resume()
     }
@@ -736,7 +742,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     
     func removeItem(item_id: NSInteger, success: ()->(), fail: ()->() ) {
         // URL encode some vars.
-                var postString : NSString;
+            var postString: String
             postString = "device_uuid=\(self.deviceUUID)&auth_token=\(self.auth_token)&item_id=\(item_id)"
 
         let url: NSURL? = NSURL(string: url_base +  url_delete_item + "?\(postString)")
@@ -772,6 +778,80 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         task.resume()
     }
     
+    func getAccount(account_id: NSInteger, success: ()->(), fail: ()->()) {
+        var postString: String
+         postString = "device_uuid=\(self.deviceUUID)&auth_token=\(self.auth_token)&accountId=\(account_id)"
+        let url: NSURL? = NSURL(string: url_base +  url_getaccount + "?\(postString)")
+        
+        let request = NSMutableURLRequest(URL: url!)
+        request.HTTPMethod = "POST"
+        
+        info("[Bakkle] getAccount")
+        info("URL: \(url) METHOD: \(request.HTTPMethod)")
+        
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
+            data, response, error in
+            
+            if error != nil {
+                self.err("error= \(error)")
+                return
+            }
+            
+            let responseString: String = NSString(data: data, encoding: NSUTF8StringEncoding)! as String
+            self.debg("Response: \(responseString)")
+            println("Response: \(responseString)")
+            
+            var parseError: NSError?
+            self.responseDict = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! NSDictionary!
+            self.debg("RESPONSE DICT IS: \(self.responseDict)")
+            
+            if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
+                success()
+            } else {
+                fail()
+            }
+        }
+        task.resume()
+    }
+    
+    func setDescription(description: String!, success: ()->(), fail: ()->()) {
+        var postString: String
+        let escDescription = description.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
+        postString = "device_uuid=\(self.deviceUUID)&auth_token=\(self.auth_token)&description=\(escDescription)"
+        let url: NSURL? = NSURL(string: url_base +  url_setdescription + "?\(postString)")
+        
+        let request = NSMutableURLRequest(URL: url!)
+        request.HTTPMethod = "POST"
+        
+        info("[Bakkle] getAccount")
+        info("URL: \(url) METHOD: \(request.HTTPMethod)")
+        
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
+            data, response, error in
+            
+            if error != nil {
+                self.err("error= \(error)")
+                return
+            }
+            
+            let responseString: String = NSString(data: data, encoding: NSUTF8StringEncoding)! as String
+            self.debg("Response: \(responseString)")
+            println("Response: \(responseString)")
+            
+            var parseError: NSError?
+            self.responseDict = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! NSDictionary!
+            self.debg("RESPONSE DICT IS: \(self.responseDict)")
+            
+            if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
+                success()
+            } else {
+                fail()
+            }
+        }
+        task.resume()
+    }
+
+    
     /* reset feed items on server for DEMO */
     func resetDemo(success: ()->()) {
         let url:NSURL? = NSURL(string: url_base + url_reset)
@@ -783,6 +863,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         
         info("[Bakkle] reset")
         info("URL: \(url) METHOD: \(request.HTTPMethod) BODY: \(postString)")
+        
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
             data, response, error in
             

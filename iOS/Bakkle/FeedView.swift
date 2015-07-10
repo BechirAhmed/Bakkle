@@ -20,7 +20,9 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     var searching = false
     
     let options = MDCSwipeToChooseViewOptions()
+    // the first card in the feedView
     var swipeView : MDCSwipeToChooseView!
+    // the card behind the first card
     var bottomView : MDCSwipeToChooseView!
     
     private static let CAPTURE_NOTIFICATION_TEXT = "_UIImagePickerControllerUserDidCaptureItem"
@@ -316,7 +318,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         }
     }
     
-    // helper function
+    /* helper function */
     func setupView(view: MDCSwipeToChooseView!, item: NSDictionary!) {
         let imgURLs = item.valueForKey("image_urls") as! NSArray
         let topTitle: String = item.valueForKey("title") as! String
@@ -437,22 +439,22 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     }
     
     func view(view: UIView!, wasChosenWithDirection direction: MDCSwipeDirection) {
-        if direction == MDCSwipeDirection.Left {
+        switch direction {
+        case MDCSwipeDirection.Left:
             Bakkle.sharedInstance.markItem("meh", item_id: self.item_id, success: {}, fail: {})
-            loadNext()
-        }
-        else if direction == MDCSwipeDirection.Right {
+            break
+        case MDCSwipeDirection.Right:
             Bakkle.sharedInstance.markItem("want", item_id: self.item_id, success: {}, fail: {})
-            loadNext()
-        }
-        else if direction == MDCSwipeDirection.Up {
+            break
+        case MDCSwipeDirection.Up:
             Bakkle.sharedInstance.markItem("hold", item_id: self.item_id, success: {}, fail: {})
-            loadNext()
-        }
-        else if direction == MDCSwipeDirection.Down {
+            break
+        case MDCSwipeDirection.Down:
             Bakkle.sharedInstance.markItem("report", item_id: self.item_id, success: {}, fail: {})
-            loadNext()
+            break
+        default: break
         }
+        loadNext()
     }
     
     

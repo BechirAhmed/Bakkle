@@ -9,8 +9,10 @@
 import UIKit
 
 class MenuTableController: UITableViewController {
-    
+
+    let profileSegue = "PushToProfileView"
     var backView: UIView!
+    var segueNotifier: dispatch_semaphore_t = dispatch_semaphore_create(0)
     
     @IBOutlet weak var profileImg: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
@@ -19,7 +21,8 @@ class MenuTableController: UITableViewController {
     @IBOutlet weak var buyerImg: UIImageView!
     @IBOutlet weak var holdImg: UIImageView!
     @IBOutlet weak var contactImg: UIImageView!
-    @IBOutlet weak var settingButton: UIButton!
+    @IBOutlet weak var profileBtn: UIImageView!
+    
     
     var imgURL: NSURL!
     override func viewDidLoad() {
@@ -35,7 +38,7 @@ class MenuTableController: UITableViewController {
         setupImages()
         setupBackground()
         setupProfileLabel()
-        settingButton.setImage(IconImage().settings(), forState: UIControlState.Normal)
+        profileBtn.image = IconImage().settings()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -89,7 +92,7 @@ class MenuTableController: UITableViewController {
     func setupProfileImg() {
         self.profileImg.hnk_setImageFromURL(imgURL!)
         self.profileImg.layer.cornerRadius = self.profileImg.frame.size.width/2
-        self.profileImg.layer.borderWidth = 3.0
+        self.profileImg.layer.borderWidth = 5.0
         self.profileImg.clipsToBounds = true
         let borderColor = UIColor.whiteColor()
         self.profileImg.layer.borderColor = borderColor.CGColor
@@ -106,6 +109,17 @@ class MenuTableController: UITableViewController {
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         /* This fixes the small lines on the left hand side of the cell dividers */
         cell.backgroundColor = UIColor.clearColor()
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == self.profileSegue {
+            let destinationVC = segue.destinationViewController as! ProfileView
+            Bakkle.sharedInstance.getAccount(Bakkle.sharedInstance.account_id, success: {
+                destinationVC.user = Bakkle.sharedInstance.responseDict
+                dispatch_semaphore_signal(self.segueNotifier)
+            }, fail: {})
+            dispatch_semaphore_wait(segueNotifier, DISPATCH_TIME_FOREVER)
+        }
     }
 }
 

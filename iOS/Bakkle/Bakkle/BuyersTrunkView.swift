@@ -115,7 +115,7 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let buyer = User(facebookID: Bakkle.sharedInstance.facebook_id_str,
+        let buyer = User(facebookID: Bakkle.sharedInstance.facebook_id_str,accountID: Bakkle.sharedInstance.account_id,
             firstName: Bakkle.sharedInstance.first_name, lastName: Bakkle.sharedInstance.last_name)
         let account = Account(user: buyer)
         let chatItem = Bakkle.sharedInstance.trunkItems[indexPath.row].valueForKey("item") as! NSDictionary
