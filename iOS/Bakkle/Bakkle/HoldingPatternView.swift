@@ -15,7 +15,8 @@ class HoldingPatternCell : UITableViewCell {
     @IBOutlet var priceLabel: UILabel?
     @IBOutlet var timeRemainingLabel: UILabel?
     
-    var timeRemaining: NSTimeInterval = 5400 {
+//    259200 = 4 days
+    var timeRemaining: NSTimeInterval = 60 {
         didSet {
             // TODO: This should calculate currentTime-timeWhenPlacedInHoldingPattern
             let (h,m,s) = secondsToHoursMinutesSeconds(Int(timeRemaining))
@@ -28,6 +29,15 @@ class HoldingPatternCell : UITableViewCell {
             }
             if timeRemaining > 3600 {
                 remaining = String(format: "%d:", h) + remaining
+            }
+            if timeRemaining > 86400 {
+                remaining = "1 day"
+            }
+            if timeRemaining > 172800 {
+                remaining = "2 days"
+            }
+            if timeRemaining > 259200 {
+                remaining = "3 days"
             }
             self.timeRemainingLabel?.text = remaining
         }
@@ -88,11 +98,16 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
 
         Bakkle.sharedInstance.populateHolding({});
     }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(true)
+        self.timer?.invalidate()
+    }
+    
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self)
         
         self.timer?.invalidate()
-        self.timer = nil
     }
     
     func setupButtons() {
@@ -124,20 +139,16 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
         cell.itemImage?.contentMode = UIViewContentMode.ScaleAspectFill
         cell.itemImage?.layer.cornerRadius = 10.0
         cell.itemImage?.clipsToBounds = true
-        if Bakkle.sharedInstance.holdingItems.count > 0 {
-            let entry : NSDictionary = Bakkle.sharedInstance.holdingItems[indexPath.row] as! NSDictionary
-            let item = entry.valueForKey("item") as! NSDictionary
-            let imgURLs : [String] = item.valueForKey("image_urls") as! [String]
-            let firstURL = imgURLs[0] as String
-            let imgURL = NSURL(string: firstURL)
-            cell.itemImage!.hnk_setImageFromURL(imgURL!)
+        let entry : NSDictionary = Bakkle.sharedInstance.holdingItems[indexPath.row] as! NSDictionary
+        let item = entry.valueForKey("item") as! NSDictionary
+        let imgURLs : [String] = item.valueForKey("image_urls") as! [String]
+        let firstURL = imgURLs[0] as String
+        let imgURL = NSURL(string: firstURL)
+        cell.itemImage!.hnk_setImageFromURL(imgURL!)
             
-            cell.titleLabel!.text = item.valueForKey("title") as? String
-            cell.priceLabel!.text  = "$" + (item.valueForKey("price") as? String)!
-        } else {
-            // No items in trunk
-            println("[HoldingPattern] Tried loading holding pattern items, none to be found")
-        }
+        cell.titleLabel!.text = item.valueForKey("title") as? String
+        cell.priceLabel!.text  = "$" + (item.valueForKey("price") as? String)!
+        
         return cell
     }
     

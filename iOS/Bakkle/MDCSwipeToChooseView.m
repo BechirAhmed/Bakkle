@@ -134,7 +134,7 @@ static CGFloat const MDCSwipeToChooseViewLabelHeight = 65.f;
     
     [self constructUserProfileImg];
     [self constructSellersName];
-    [self constructRatingView];
+    //[self constructRatingView];
     
 }
 
@@ -161,19 +161,19 @@ static CGFloat const MDCSwipeToChooseViewLabelHeight = 65.f;
     [_topUserInfoView addSubview:_sellerName];
 }
 
--(void)constructRatingView {
-    CGRect frame = CGRectMake(CGRectGetWidth(_topUserInfoView.frame)*3/4 - 30, 0, 90, CGRectGetHeight(_topUserInfoView.frame));
-    _ratingView = [[RateView alloc] initWithFrame:frame];
-    
-    self.ratingView.notSelectedImage = [UIImage imageNamed:@"star_none.png"];
-    self.ratingView.halfSelectedImage = [UIImage imageNamed:@"star_half.png"];
-    self.ratingView.fullSelectedImage = [UIImage imageNamed:@"star_full.png"];
-    self.ratingView.editable = NO;
-    self.ratingView.maxRating = 5;
-    
-    [_topUserInfoView addSubview:_ratingView];
-    
-}
+//-(void)constructRatingView {
+//    CGRect frame = CGRectMake(CGRectGetWidth(_topUserInfoView.frame)*3/4 - 30, 0, 90, CGRectGetHeight(_topUserInfoView.frame));
+//    _ratingView = [[RateView alloc] initWithFrame:frame];
+//    
+//    self.ratingView.notSelectedImage = [UIImage imageNamed:@"star_none.png"];
+//    self.ratingView.halfSelectedImage = [UIImage imageNamed:@"star_half.png"];
+//    self.ratingView.fullSelectedImage = [UIImage imageNamed:@"star_full.png"];
+//    self.ratingView.editable = NO;
+//    self.ratingView.maxRating = 5;
+//    
+//    [_topUserInfoView addSubview:_ratingView];
+//    
+//}
 
 - (void)constructNameLabel {
     CGFloat topPadding = 10.f;
@@ -291,12 +291,12 @@ static CGFloat const MDCSwipeToChooseViewLabelHeight = 65.f;
             nopeImageView.alpha = 0.f;
             holdImageView.alpha = 0.f;
             reportImageView.alpha = 0.f;
-        } else if (state.direction == MDCSwipeDirectionUp) {
-            transparentImageView.alpha = state.thresholdRatio / 3 * 2;
-            reportImageView.alpha = state.thresholdRatio;
-            nopeImageView.alpha = 0.f;
-            likedImageView.alpha = 0.f;
-            holdImageView.alpha = 0.f;
+//        } else if (state.direction == MDCSwipeDirectionUp) {
+//            transparentImageView.alpha = state.thresholdRatio / 3 * 2;
+//            reportImageView.alpha = state.thresholdRatio;
+//            nopeImageView.alpha = 0.f;
+//            likedImageView.alpha = 0.f;
+//            holdImageView.alpha = 0.f;
         } else if (state.direction == MDCSwipeDirectionDown) {
             transparentImageView.alpha = state.thresholdRatio / 3 * 2;
             holdImageView.alpha = state.thresholdRatio;

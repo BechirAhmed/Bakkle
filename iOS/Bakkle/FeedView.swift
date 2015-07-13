@@ -69,6 +69,8 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         // Item detail tap
         itemDetailTap = UITapGestureRecognizer(target: self, action: "goToDetails")
         
+        // dismiss tap
+        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "dismissKeyboard"))
         // Register for feed updates
         let notificationCenter = NSNotificationCenter.defaultCenter()
         let mainQueue = NSOperationQueue.mainQueue()
@@ -116,6 +118,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             self.refineButton.userInteractionEnabled = false
             self.menuBtn.userInteractionEnabled = false
             self.itemDetailTap.enabled = false
+            self.btnAddItem.userInteractionEnabled = false
             self.constructInstructionView()
         }
     }
@@ -146,6 +149,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         self.searchBar.userInteractionEnabled = true
         self.refineButton.userInteractionEnabled = true
         self.menuBtn.userInteractionEnabled = true
+        self.btnAddItem.userInteractionEnabled = true
         self.itemDetailTap.enabled = true
         instructionImgView.removeFromSuperview()
         effectView.removeFromSuperview()
@@ -358,13 +362,13 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         }
         view.priceLabel.text = myString
         view.sellerName.text = firstName
-        view.ratingView.rating = 3.5
+//        view.ratingView.rating = 3.5
     
         if imgURL != nil {
             view.bottomBlurImg.hnk_setImageFromURL(imgURL!)
             view.imageView.hnk_setImageFromURL(imgURL!)
             view.imageView.contentMode = UIViewContentMode.ScaleAspectFill
-            view.profileImg.image = UIImage(data: NSData(contentsOfURL: profileImgURL!)!)
+            view.profileImg.image = UIImage(data: NSData(contentsOfURL: imgURL!)!)
         }
         
         if view == self.swipeView {

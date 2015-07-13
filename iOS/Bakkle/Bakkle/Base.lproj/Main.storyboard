@@ -973,21 +973,21 @@
                                         <exclude reference="piq-G6-r24"/>
                                     </mask>
                                     <mask key="constraints">
-                                        <exclude reference="2qg-xG-qAk"/>
-                                        <exclude reference="ELJ-4z-Skq"/>
-                                        <exclude reference="xEc-IJ-r7a"/>
                                         <exclude reference="Gof-g0-vEy"/>
-                                        <exclude reference="Kdi-BK-N55"/>
-                                        <exclude reference="lnc-XJ-FVs"/>
-                                        <exclude reference="plX-k9-R2I"/>
-                                        <exclude reference="wvc-Rq-D4t"/>
+                                        <exclude reference="DsR-cY-Vqf"/>
+                                        <exclude reference="UOe-Mi-FnZ"/>
+                                        <exclude reference="aKc-Jc-9Tp"/>
                                         <exclude reference="PlM-oi-MQ8"/>
                                         <exclude reference="inG-5g-btK"/>
                                         <exclude reference="sSz-M5-0qQ"/>
                                         <exclude reference="tHa-JQ-uFL"/>
-                                        <exclude reference="DsR-cY-Vqf"/>
-                                        <exclude reference="UOe-Mi-FnZ"/>
-                                        <exclude reference="aKc-Jc-9Tp"/>
+                                        <exclude reference="Kdi-BK-N55"/>
+                                        <exclude reference="lnc-XJ-FVs"/>
+                                        <exclude reference="plX-k9-R2I"/>
+                                        <exclude reference="wvc-Rq-D4t"/>
+                                        <exclude reference="2qg-xG-qAk"/>
+                                        <exclude reference="ELJ-4z-Skq"/>
+                                        <exclude reference="xEc-IJ-r7a"/>
                                     </mask>
                                 </variation>
                                 <variation key="heightClass=regular-widthClass=compact">
@@ -999,21 +999,21 @@
                                         <include reference="piq-G6-r24"/>
                                     </mask>
                                     <mask key="constraints">
-                                        <include reference="2qg-xG-qAk"/>
-                                        <include reference="ELJ-4z-Skq"/>
-                                        <include reference="xEc-IJ-r7a"/>
                                         <include reference="Gof-g0-vEy"/>
-                                        <include reference="Kdi-BK-N55"/>
-                                        <include reference="lnc-XJ-FVs"/>
-                                        <include reference="plX-k9-R2I"/>
-                                        <include reference="wvc-Rq-D4t"/>
+                                        <include reference="DsR-cY-Vqf"/>
+                                        <include reference="UOe-Mi-FnZ"/>
+                                        <include reference="aKc-Jc-9Tp"/>
                                         <include reference="PlM-oi-MQ8"/>
                                         <include reference="inG-5g-btK"/>
                                         <include reference="sSz-M5-0qQ"/>
                                         <include reference="tHa-JQ-uFL"/>
-                                        <include reference="DsR-cY-Vqf"/>
-                                        <include reference="UOe-Mi-FnZ"/>
-                                        <include reference="aKc-Jc-9Tp"/>
+                                        <include reference="Kdi-BK-N55"/>
+                                        <include reference="lnc-XJ-FVs"/>
+                                        <include reference="plX-k9-R2I"/>
+                                        <include reference="wvc-Rq-D4t"/>
+                                        <include reference="2qg-xG-qAk"/>
+                                        <include reference="ELJ-4z-Skq"/>
+                                        <include reference="xEc-IJ-r7a"/>
                                     </mask>
                                 </variation>
                             </view>
@@ -3462,6 +3462,9 @@
                                                     <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="15"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
+                                                    <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                                        <rect key="frame" x="99" y="8" width="213" height="21"/>
+                                                    </variation>
                                                 </label>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ABU-0d-c2I">
                                                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
