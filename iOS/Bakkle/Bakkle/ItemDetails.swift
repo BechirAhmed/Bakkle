@@ -26,13 +26,12 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var pageControl: UIPageControl!
     
-    
-    @IBOutlet weak var wantBtn: UIButton!
+    @IBOutlet weak var wantLabel: UILabel!
     @IBOutlet weak var closeBtn: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.view.backgroundColor = UIColor.whiteColor()
         activityInd?.startAnimating()
         
         var swipeDown = UISwipeGestureRecognizer(target: self, action: "respondToSwipeGesture:")
@@ -86,7 +85,7 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
                 for index in 0...Bakkle.sharedInstance.trunkItems.count-1 {
                     if item == Bakkle.sharedInstance.trunkItems[index].valueForKey("item") as! NSDictionary {
                         wanted = true
-                        wantBtn.setTitle("ACCEPT OFFER", forState: UIControlState.Normal)
+                        wantLabel.text = "ACCEPT OFFER"
                         break
                     }
                 }
@@ -110,21 +109,17 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
         let sellerFacebookProfileImgString = "http://graph.facebook.com/\(sellerFBID)/picture?width=142&height=142"
         let topTitle: String = item!.valueForKey("title") as! String
         let topPrice: String = item!.valueForKey("price") as! String
+        let topMethod: String = item!.valueForKey("method") as! String
         let tags : [String] = item!.valueForKey("tags") as! [String]
         let tagString = ", ".join(tags)
-        let descriptions: String = item!.valueForKey("description") as! String
-        let location: String = item!.valueForKey("location") as! String
-        let distance = Bakkle.sharedInstance.distanceTo(CLLocation(locationString: location)) as CLLocationDistance!
         
         itemTitleLabel.text = topTitle
         itemPriceLabel.text = "$" + topPrice
-        if description == "" {
-            itemTagsTextView.text = tagString
-        }else {
-            itemTagsTextView.text = descriptions
-        }
+        itemTagsTextView.text = tagString
         sellerName.text = sellersName
-        itemDistanceLabel.text = String(format: "%.2f miles", distance)
+        
+        
+        
         
         for index in 0...imgURLs.count-1{
             let firstURL = imgURLs[index] as! String

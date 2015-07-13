@@ -104,7 +104,7 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     func loadChats(){
         
-        let seller = User(facebookID: Bakkle.sharedInstance.facebook_id_str, accountID: Bakkle.sharedInstance.account_id,
+        let seller = User(facebookID: Bakkle.sharedInstance.facebook_id_str,
             firstName: Bakkle.sharedInstance.first_name, lastName: Bakkle.sharedInstance.last_name)
         self.account = Account(user: seller)
         
@@ -131,7 +131,6 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
                 id = chat.valueForKey("pk") as! Int
                 
                 var buyer: NSDictionary = chat.valueForKey("buyer") as! NSDictionary
-                let account_id = buyer.valueForKey("pk") as! Int
                 let facebookID = buyer.valueForKey("facebook_id") as! String
                 
                 let buyersName = buyer.valueForKey("display_name") as! String
@@ -139,7 +138,7 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
                 let firstName = dividedName[0] as String
                 let lastName = dividedName[1] as String
                 
-                let buyerUser = User(facebookID: facebookID, accountID: account_id, firstName: firstName, lastName: lastName)
+                let buyerUser = User(facebookID: facebookID, firstName: firstName, lastName: lastName)
                 var buyerChat = Chat(user: buyerUser, lastMessageText: message, lastMessageSentDate: date, chatId: id)
                 self.account.chats.append(buyerChat)
             }
@@ -182,7 +181,7 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
         let chatViewController = ChatViewController(chat: chat)
         chatViewController.itemIndex = self.garageIndex
         chatViewController.isBuyer = false
-        self.navigationController?.pushViewController(chatViewController, animated: true)
+        self.presentViewController(chatViewController, animated: true, completion: {})
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
 

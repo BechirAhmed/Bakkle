@@ -1,11 +1,9 @@
 import Foundation
 
 class User {
-    var facebookID: String
-    var accountID: Int
+    let facebookID: String
     var firstName: String?
     var lastName: String?
-    
     var name: String? {
         if firstName != nil && lastName != nil {
             return firstName! + " " + lastName!
@@ -28,9 +26,8 @@ class User {
         return initials
     }
 
-    init(facebookID: String, accountID: Int, firstName: String?, lastName: String?) {
+    init(facebookID: String, firstName: String?, lastName: String?) {
         self.facebookID = facebookID
-        self.accountID = accountID
         self.firstName = firstName
         self.lastName = lastName
     }

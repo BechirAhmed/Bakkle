@@ -17,7 +17,6 @@ class IconImage {
     let FEED_SIZE: CGFloat = 20.0
     let CHAT_SIZE: CGFloat = 17.0
     
-    
     func setup(size: CGFloat){
         factory.size = size
         factory.colors = [UIColor.whiteColor()]
@@ -39,11 +38,6 @@ class IconImage {
     func chevron() -> UIImage {
         setup(NAV_SIZE)
         return factory.createImageForIcon(NIKFontAwesomeIcon.ChevronLeft)
-    }
-    
-    func gallery() -> UIImage {
-        setup(NAV_SIZE)
-        return factory.createImageForIcon(NIKFontAwesomeIcon.Image)
     }
     
     func check() -> UIImage {
@@ -118,5 +112,16 @@ class IconImage {
         factory.strokeColor = UIColor.redColor()
         factory.strokeWidth = 0.0
         return factory.createImageForIcon(NIKFontAwesomeIcon.Camera)
+    }
+    
+    /* CAMERA ICONS */
+    
+    func gallery() -> UIImage {
+        setup(NAV_SIZE)
+        return factory.createImageForIcon(NIKFontAwesomeIcon.Image)
+    }
+    
+    func switchCamera() -> UIImage {
+        return UIImage(named: "switch-camera-outline.png")!
     }
 }

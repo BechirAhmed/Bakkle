@@ -17,6 +17,29 @@ class HoldingPatternCell : UITableViewCell {
     
 //    259200 = 4 days
     var timeRemaining: NSTimeInterval = 60 {
+    func loadCell(imgURLs: [String], title: String, price: String, delivery: String, tags: [String], location: String, indexPath: NSIndexPath) {
+        println("[HoldingPattern] Attempting to load image in cell")
+        dispatch_async(dispatch_get_global_queue(
+            Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
+                let firstURL = imgURLs[0] as String
+                let imgURL = NSURL(string: firstURL)
+                dispatch_async(dispatch_get_main_queue()) {
+                    let superview: UITableView = self.superview?.superview! as! UITableView
+                    if let cellToUpdate = superview.cellForRowAtIndexPath(indexPath) {
+                        println("[HoldingPattern] displaying cell image")
+                        self.itemImage!.hnk_setImageFromURL(imgURL!)
+                        self.itemImage?.contentMode = UIViewContentMode.ScaleAspectFill
+                        self.itemImage?.layer.cornerRadius = 10.0
+                        self.itemImage?.clipsToBounds = true
+                    }
+                }
+        }
+        titleLabel!.text = title.uppercaseString
+        priceLabel!.text = "$" + price
+        timeRemainingLabel!.text = "55:55" //TODO: Set this to count down
+    }
+    
+    var timeRemaining: NSTimeInterval = 5400 {
         didSet {
             // TODO: This should calculate currentTime-timeWhenPlacedInHoldingPattern
             let (h,m,s) = secondsToHoursMinutesSeconds(Int(timeRemaining))
@@ -149,6 +172,26 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
         cell.titleLabel!.text = item.valueForKey("title") as? String
         cell.priceLabel!.text  = "$" + (item.valueForKey("price") as? String)!
         
+        if Bakkle.sharedInstance.holdingItems.count > 0 {
+            let entry : NSDictionary = Bakkle.sharedInstance.holdingItems[indexPath.row] as! NSDictionary
+            //            if let x: AnyObject = topItem.valueForKey("pk") {
+            //                self.item_id = Int(x.intValue)
+            //            }
+            let item = entry.valueForKey("item") as! NSDictionary
+            println(item.description)
+            let imgURLs : [String] = item.valueForKey("image_urls") as! [String]
+            let description : String = item.valueForKey("description") as! String
+            let title : String = item.valueForKey("title") as! String
+            let price : String = item.valueForKey("price") as! String
+            let delivery : String = item.valueForKey("method") as! String
+            let tags : [String] = item.valueForKey("tags") as! [String]
+            let location : String =
+            item.valueForKey("location") as! String
+            cell.loadCell(imgURLs, title: title, price: price, delivery: delivery, tags: tags, location: location, indexPath: indexPath)
+        } else {
+            // No items in trunk
+            println("[HoldingPattern] Tried loading holding pattern items, none to be found")
+        }
         return cell
     }
     

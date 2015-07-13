@@ -16,6 +16,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     var textView: UITextView!
     var messageType: UISegmentedControl!
     var profileButton: UIButton!
+    var userName: UILabel!
     var sendButton: UIButton!
     var rotating = false
     var chatID: String!
@@ -100,15 +101,21 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         let profileButtonWidth: CGFloat = 36
         let profileXpos:CGFloat = (header.bounds.size.width - header.bounds.origin.x
-            - profileButtonWidth) / 2
+            - profileButtonWidth) / 2.35
         profileButton = UIButton(frame: CGRectMake(profileXpos, header.bounds.origin.y+topHeight+4, profileButtonWidth, headerHeight-4))
         profileButton.backgroundColor = Theme.ColorGreen
         profileButton.setImage(UIImage(named: "loading.png"), forState: UIControlState.Normal)
         profileButton.imageView?.layer.cornerRadius = profileButton.imageView!.frame.size.width/2
         profileButton.imageView?.layer.borderWidth = 1.5
         profileButton.imageView?.layer.borderColor = UIColor.whiteColor().CGColor
-        profileButton.addTarget(self, action: "btnProfile:", forControlEvents: UIControlEvents.TouchUpInside)
+        //profileButton.addTarget(self, action: "btnProfile:", forControlEvents: UIControlEvents.TouchUpInside)
         header.addSubview(profileButton)
+        
+        userName = UILabel()
+        userName.font = UIFont(name: "Avenir-Heavy", size: 18)
+        userName.textColor = UIColor.whiteColor()
+        userName.textAlignment = NSTextAlignment.Left
+        header.addSubview(userName)
         
         let infoButtonWidth:CGFloat = 50
         var infoButton = UIButton(frame: CGRectMake(header.bounds.origin.x+header.bounds.size.width-infoButtonWidth, header.bounds.origin.y+topHeight, infoButtonWidth, headerHeight))
@@ -166,13 +173,19 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             var facebookProfileImageUrlString = "http://graph.facebook.com/\(seller_facebookid)/picture?width=142&height=142"
             let imgURL = NSURL(string: facebookProfileImageUrlString)
             profileButton.hnk_setImageFromURL(imgURL!, state: UIControlState.Normal, placeholder: UIImage(named:"loading.png"), format: nil, failure: nil, success: nil)
+            let seller_displayName = seller.valueForKey("display_name") as! String
+            let fullNameArr = split(seller_displayName) {$0 == " "}
+            userName.frame = CGRectMake(profileButton.frame.origin.x + 45, header.bounds.origin.y+24, 100, 40)
+            userName.text = fullNameArr[0]
         }
         else {
             let user = chat.user
             var facebookProfileImageUrlString = "http://graph.facebook.com/\(user.facebookID)/picture?width=142&height=142"
             let imgURL = NSURL(string: facebookProfileImageUrlString)
             profileButton.hnk_setImageFromURL(imgURL!, state: UIControlState.Normal, placeholder: UIImage(named:"loading.png"), format: nil, failure: nil, success: nil)
-            }
+            userName.frame = CGRectMake(profileButton.frame.origin.x + 45, header.bounds.origin.y+24, 100, 40)
+            userName.text = user.firstName
+        }
         
     }
     
@@ -307,7 +320,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     {
         self.dismissKeyboard()
         self.toolBar.hidden = true
-        self.navigationController?.popViewControllerAnimated(true)
+        self.dismissViewControllerAnimated(true, completion: nil)
         
     }
     
@@ -356,26 +369,9 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     func btnProfile(sender:UIButton!)
     {
         let sb: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        let vc: ProfileView = sb.instantiateViewControllerWithIdentifier("ProfileView") as! ProfileView
-        vc.modalTransitionStyle = UIModalTransitionStyle.CoverVertical
-        vc.canEdit = false
-        if isBuyer {
-            let account_id = seller.valueForKey("pk") as! Int
-            Bakkle.sharedInstance.getAccount(account_id, success: {
-                vc.user = Bakkle.sharedInstance.responseDict
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    self.presentViewController(vc, animated: true, completion: nil)
-                })
-                }, fail: {})
-        }else {
-            Bakkle.sharedInstance.getAccount(chat.user.accountID, success: {
-                vc.user = Bakkle.sharedInstance.responseDict
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    self.presentViewController(vc, animated: true, completion: nil)
-                })
-                }, fail: {})
-        }
-        
+        let vc: UIViewController = sb.instantiateViewControllerWithIdentifier("ProfileView") as! UIViewController
+        vc.modalTransitionStyle = UIModalTransitionStyle.FlipHorizontal
+        self.presentViewController(vc, animated: true, completion: nil)
     }
     
     func dismissKeyboard(){
