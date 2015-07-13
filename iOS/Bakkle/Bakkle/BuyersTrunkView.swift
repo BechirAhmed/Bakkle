@@ -13,27 +13,6 @@ class BuyersTrunkCell : UITableViewCell {
     @IBOutlet var itemImage: UIImageView?
     @IBOutlet var titleLabel: UILabel?
     @IBOutlet var priceLabel: UILabel?
-    
-    func loadCell(imgURLs: [String], title: String, price: String, delivery: String, tags: [String], location: String, indexPath: NSIndexPath) {
-        println("[BuyersTrunk] Attempting to load image in cell")
-        dispatch_async(dispatch_get_global_queue(
-            Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
-                let firstURL = imgURLs[0] as String
-                let imgURL = NSURL(string: firstURL)
-                dispatch_async(dispatch_get_main_queue()) {
-                    let superview: UITableView = self.superview?.superview! as! UITableView
-                    if let cellToUpdate = superview.cellForRowAtIndexPath(indexPath) {
-                        println("[BuyersTrunk] displaying cell image")
-                        self.itemImage!.hnk_setImageFromURL(imgURL!)
-                        self.itemImage?.contentMode = UIViewContentMode.ScaleAspectFill
-                        self.itemImage?.layer.cornerRadius = 10.0
-                        self.itemImage?.clipsToBounds = true
-                    }
-                }
-        }
-        titleLabel!.text = title.uppercaseString
-        priceLabel!.text = "$" + price
-    }
 }
 
 class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDelegate {
@@ -102,11 +81,12 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
             let description : String = item.valueForKey("description") as! String
             let title : String = item.valueForKey("title") as! String
             let price : String = item.valueForKey("price") as! String
-            let delivery : String = item.valueForKey("method") as! String
-            let tags : [String] = item.valueForKey("tags") as! [String]
-            let location : String =
-                item.valueForKey("location") as! String
-            cell.loadCell(imgURLs, title: title, price: price, delivery: delivery, tags: tags, location: location, indexPath: indexPath)
+            let firstURL = imgURLs[0] as String
+            let imgURL = NSURL(string: firstURL)
+            
+            cell.itemImage!.hnk_setImageFromURL(imgURL!)
+            cell.titleLabel!.text = title.uppercaseString
+            cell.priceLabel!.text = "$" + price
         } else {
             // No items in trunk
             println("[BuyersTrunk] Tried loading trunk items, none to be found")

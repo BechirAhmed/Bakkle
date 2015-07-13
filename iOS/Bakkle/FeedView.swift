@@ -137,13 +137,10 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     func closeBtnPressed(sender: UIButton!) {
         var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults();
         userDefaults.setBool(false, forKey: "instruction")
-<<<<<<< HEAD
         self.searchBar.userInteractionEnabled = true
         self.refineButton.userInteractionEnabled = true
         self.menuBtn.userInteractionEnabled = true
         self.btnAddItem.userInteractionEnabled = true
-=======
->>>>>>> f10234c19afbb7b1540b5aba8015134b23dff8c0
         self.itemDetailTap.enabled = true
         instructionImgView.removeFromSuperview()
         effectView.removeFromSuperview()
