@@ -24,9 +24,3 @@
 #define COCOAPODS_VERSION_MINOR_SocketRocket 2
 #define COCOAPODS_VERSION_PATCH_SocketRocket 0
 
-// ionicons
-#define COCOAPODS_POD_AVAILABLE_ionicons
-#define COCOAPODS_VERSION_MAJOR_ionicons 2
-#define COCOAPODS_VERSION_MINOR_ionicons 0
-#define COCOAPODS_VERSION_PATCH_ionicons 1
-

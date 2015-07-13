@@ -1,19 +1,16 @@
 PODS:
   - FontAwesomeIconFactory (2.0)
   - HanekeSwift (0.9.1)
-  - ionicons (2.0.1)
   - SocketRocket (0.2.0)
 
 DEPENDENCIES:
   - FontAwesomeIconFactory
   - HanekeSwift
-  - ionicons
   - SocketRocket
 
 SPEC CHECKSUMS:
   FontAwesomeIconFactory: d161a1832f8220d764033e0fcc4f4a8388495ab7
   HanekeSwift: 50d37bfbc4432edc649167e538c259feccb4a2bb
-  ionicons: c7b0867373392e85c17f613d19ade04ccfbe5a7c
   SocketRocket: 54a4ac2f354c4e8c51ef5dcd4a13bc556d4f2b7c
 
 COCOAPODS: 0.37.2
