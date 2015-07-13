@@ -15,23 +15,12 @@ import Social
 //import FBSDKShareKit
 //import FBSDKLoginKit
 
-class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UITextViewDelegate {
+class AddItem: UIViewController, UINavigationControllerDelegate, UITextFieldDelegate, UITextViewDelegate {
     
     let albumName = "Bakkle"
     
-    static let JPEG_COMPRESSION_CONSTANT: CGFloat = 0.3
-    static let MAX_IMAGE_COUNT = 5
-    static let SCALED_IMAGES_READY_NOTIFICATION = "SCALED_IMAGES_READY"
-    
-    
-    private static let CAPTURE_NOTIFICATION_TEXT = "_UIImagePickerControllerUserDidCaptureItem"
-    private static let REJECT_NOTIFICATION_TEXT = "_UIImagePickerControllerUserDidRejectItem"
-    private static let DEVICE_MODEL: String = UIDevice.currentDevice().modelName
-    
     let listItemCellIdentifier = "ListItemCell"
     var itemImages: [UIImage]? = [UIImage]()
-    var scaledImages: [NSData]? = [NSData]()
-    var fileSizes: UInt64 = 0
     var item: NSDictionary!
     var isEditting: Bool = false
     var KEYBOARD_MOVE_VALUE: CGFloat = 250
@@ -46,7 +35,6 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     @IBOutlet weak var confirmButton: UIButton!
     @IBOutlet weak var confirmButtonView: UIView!
     @IBOutlet weak var shareToFacebookBtn: UISwitch!
-    @IBOutlet weak var camButtonBackground: UIView!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var loadingView: UIView!
    
@@ -78,10 +66,6 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         // sets placeholder text
         textViewDidEndEditing(descriptionField)
         
-        // set camera button
-        camButtonBackground.layer.cornerRadius = camButtonBackground.frame.size.width/2
-        camButtonBackground.setNeedsDisplay()
-        
         // -8.0 and -4.0 are y and x respectively, this is just to keep alignment of text
         // with the fields above it, because UITextView has different edges for scrolling
         descriptionField.contentInset = UIEdgeInsetsMake(-8.0, -5.0, 0, 0.0)
@@ -98,16 +82,12 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         titleField.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
         priceField.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleNotification:", name: AddItem.CAPTURE_NOTIFICATION_TEXT, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleNotification:", name: AddItem.REJECT_NOTIFICATION_TEXT, object: nil)
-        
-        
         setupButtons()
     }
     
     
     func setupButtons() {
-        closeBtn.setImage(IconImage().close(), forState: .Normal)
+        closeBtn.setImage(IconImage().chevron(), forState: .Normal)
         closeBtn.setTitle("", forState: .Normal)
     }
     
@@ -246,7 +226,6 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
                 var imageURL: NSURL = NSURL(string: imageUrls[index])!
                 var imageData: NSData = NSData(contentsOfURL: imageURL)!
                 itemImages?.append(UIImage(data: imageData)!)
-                scaledImages?.append(imageData)
             }
             isEditting = false
         }
@@ -294,7 +273,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     * ever to be changed
     */
     func disableConfirmButtonHandler() -> Bool {
-        if confirmHit || trimString(self.priceField.text) == "$" || descriptionField.textColor == AddItem.TAG_PLACEHOLDER_COLOR || self.titleField.text.isEmpty || self.priceField.text.isEmpty || self.descriptionField.text.isEmpty || itemImages?.count < 1 || itemImages?.count > AddItem.MAX_IMAGE_COUNT {
+        if confirmHit || trimString(self.priceField.text) == "$" || descriptionField.textColor == AddItem.TAG_PLACEHOLDER_COLOR || self.titleField.text.isEmpty || self.priceField.text.isEmpty || self.descriptionField.text.isEmpty || itemImages?.count < 1 || itemImages?.count > CameraView.MAX_IMAGE_COUNT {
             confirmButton.enabled = false
             confirmButton.backgroundColor = AddItem.CONFIRM_BUTTON_DISABLED_COLOR
         } else {
@@ -336,63 +315,59 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         //TODO: Get location from GPS
         var factor: CGFloat = 1.0 //imageView.image!.size.height/imageView.image!.size.width
         
-        if scaledImages?.count == itemImages?.count {
-            var time = NSDate.timeIntervalSinceReferenceDate()
-            let item_id: NSInteger?
-            if self.item != nil {
-                item_id = self.item.valueForKey("pk") as? NSInteger
-            } else {
-                item_id = nil
-            }
-            Bakkle.sharedInstance.addItem(self.titleField.text, description: self.descriptionField.text, location: Bakkle.sharedInstance.user_location,
-                price: self.priceField.text,
-                images:self.scaledImages!, item_id: item_id, success: {
-                    (item_id:Int?, item_url: String?) -> () in
-                        time = NSDate.timeIntervalSinceReferenceDate() - time
-                        println("Time taken to upload in sec: \(time)")
-                        if self.shareToFacebookBtn.on {
-                            let topImg = UIImage(named: "pendant-tag660.png")
-                            let bottomImg = UIImage(data:self.scaledImages![0])!
-                            let size = bottomImg.size
-                            UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
-                            bottomImg.drawInRect(CGRect(origin: CGPointZero, size: size))
-                            topImg!.drawInRect(CGRect(origin: CGPointZero, size: size))
-
-                            let newImg = UIGraphicsGetImageFromCurrentImageContext()
-                            UIGraphicsEndImageContext()
-
-                            var photo: FBSDKSharePhoto! = FBSDKSharePhoto()
-                            photo.image = newImg
-                            photo.userGenerated = true
-
-                            var cont: FBSDKSharePhotoContent! = FBSDKSharePhotoContent()
-                            cont.photos = [photo]
-
-                            var dialog: FBSDKShareDialog = FBSDKShareDialog.showFromViewController(self, withContent: cont, delegate: nil)
-                        }
-                    
-                    
-                        // We just added one so schedule an update.
-                        // TODO: Could just add this to the feed
-                        // and hope we are fairly current.
-                        dispatch_async(dispatch_get_main_queue()) {
-                            Bakkle.sharedInstance.populateFeed({})
-                            println("item_id=\(item_id) item_url=\(item_url)")
-
-                            let alertController = UIAlertController(title: "Bakkle", message:
-                                "Item uploaded to Bakkle.", preferredStyle: UIAlertControllerStyle.Alert)
-
-                            let dismissAction = UIAlertAction(title: "OK!", style: UIAlertActionStyle.Default) { (action) -> Void in
-                                self.dismissViewControllerAnimated(true, completion: nil)
-                            }
-                            alertController.addAction(dismissAction)
-                            self.presentViewController(alertController, animated: true, completion: nil)
-                        }                    }, fail: {() -> () in
-                    //TODO: Show error popup and close.
-                })
+        var time = NSDate.timeIntervalSinceReferenceDate()
+        let item_id: NSInteger?
+        if self.item != nil {
+            item_id = self.item.valueForKey("pk") as? NSInteger
         } else {
-            println("[LIST ITEM] Error: All images were not included in scaled images.")
+            item_id = nil
         }
+        Bakkle.sharedInstance.addItem(self.titleField.text, description: self.descriptionField.text, location: Bakkle.sharedInstance.user_location,
+            price: self.priceField.text,
+            images:self.itemImages!, item_id: item_id, success: {
+                (item_id:Int?, item_url: String?) -> () in
+                    time = NSDate.timeIntervalSinceReferenceDate() - time
+                    println("Time taken to upload in sec: \(time)")
+                    if self.shareToFacebookBtn.on {
+                        let topImg = UIImage(named: "pendant-tag660.png")
+                        let bottomImg = self.itemImages![0]
+                        let size = bottomImg.size
+                        UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
+                        bottomImg.drawInRect(CGRect(origin: CGPointZero, size: size))
+                        topImg!.drawInRect(CGRect(origin: CGPointZero, size: size))
+
+                        let newImg = UIGraphicsGetImageFromCurrentImageContext()
+                        UIGraphicsEndImageContext()
+
+                        var photo: FBSDKSharePhoto! = FBSDKSharePhoto()
+                        photo.image = newImg
+                        photo.userGenerated = true
+
+                        var cont: FBSDKSharePhotoContent! = FBSDKSharePhotoContent()
+                        cont.photos = [photo]
+
+                        var dialog: FBSDKShareDialog = FBSDKShareDialog.showFromViewController(self, withContent: cont, delegate: nil)
+                    }
+                
+                
+                    // We just added one so schedule an update.
+                    // TODO: Could just add this to the feed
+                    // and hope we are fairly current.
+                    dispatch_async(dispatch_get_main_queue()) {
+                        Bakkle.sharedInstance.populateFeed({})
+                        println("item_id=\(item_id) item_url=\(item_url)")
+
+                        let alertController = UIAlertController(title: "Bakkle", message:
+                            "Item uploaded to Bakkle.", preferredStyle: UIAlertControllerStyle.Alert)
+
+                        let dismissAction = UIAlertAction(title: "OK!", style: UIAlertActionStyle.Default) { (action) -> Void in
+                            self.dismissViewControllerAnimated(true, completion: nil)
+                        }
+                        alertController.addAction(dismissAction)
+                        self.presentViewController(alertController, animated: true, completion: nil)
+                    }                    }, fail: {() -> () in
+                //TODO: Show error popup and close.
+            })
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
@@ -406,222 +381,6 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
             descriptionField.resignFirstResponder()
         }
         return true
-    }
-    
-    var imagePicker = UIImagePickerController()
-    internal static let frameHeightAdjust  = ["iPhone 5"      : CGFloat(20.0), // Confirmed
-                                             "iPhone 5S"     : CGFloat(20.0),
-                                             "iPhone 5C"     : CGFloat(20.0),
-                                             "iPhone 6"      : CGFloat(20.0), // Confirmed
-                                             "iPhone 6 Plus" : CGFloat(22.0), // Confirmed
-                                             "iPad 2"        : CGFloat(20.0),
-                                             "iPad 3"        : CGFloat(20.0),
-                                             "iPad 4"        : CGFloat( 0.0), // testing -> needs a lot of work
-                                             "iPad Air"      : CGFloat(20.0),
-                                             "iPad Air 2"    : CGFloat(20.0),
-                                             "iPad Mini"     : CGFloat(20.0),
-                                             "iPad Mini 2"   : CGFloat(20.0),
-                                             "iPod Touch 5"  : CGFloat(20.0)]
-    
-    internal static let retakeFrameAdjust = ["iPhone 5"      : CGFloat(22.0), // Confirmed
-                                             "iPhone 5S"     : CGFloat( 0.0),
-                                             "iPhone 5C"     : CGFloat( 0.0),
-                                             "iPhone 6"      : CGFloat(20.0), // Confirmed
-                                             "iPhone 6 Plus" : CGFloat(20.0), // Confirmed
-                                             "iPad 2"        : CGFloat(20.0),
-                                             "iPad 3"        : CGFloat(20.0),
-                                             "iPad 4"        : CGFloat( 0.0), // testing -> needs a lot of work
-                                             "iPad Air"      : CGFloat(20.0),
-                                             "iPad Air 2"    : CGFloat(20.0),
-                                             "iPad Mini"     : CGFloat(20.0),
-                                             "iPad Mini 2"   : CGFloat(20.0),
-                                             "iPod Touch 5"  : CGFloat(20.0)]
-    
-    internal static let captureFrameAdjust = ["iPhone 5"      : CGFloat( 4.0), // Confirmed
-                                             "iPhone 5S"     : CGFloat( 0.0),
-                                             "iPhone 5C"     : CGFloat( 0.0),
-                                             "iPhone 6"      : CGFloat( 0.0), // Confirmed
-                                             "iPhone 6 Plus" : CGFloat(26.0), // Confirmed
-                                             "iPad 2"        : CGFloat(20.0),
-                                             "iPad 3"        : CGFloat(20.0),
-                                             "iPad 4"        : CGFloat( 0.0), // testing -> needs a lot of work
-                                             "iPad Air"      : CGFloat(20.0),
-                                             "iPad Air 2"    : CGFloat(20.0),
-                                             "iPad Mini"     : CGFloat(20.0),
-                                             "iPad Mini 2"   : CGFloat(20.0),
-                                             "iPod Touch 5"  : CGFloat(20.0)]
-    
-    
-    @IBAction func cameraBtn(sender: AnyObject) {
-        if itemImages!.count >= AddItem.MAX_IMAGE_COUNT {
-            var alert = UIAlertController(title: "Image Limit Reached", message: "You cannot add more than \(AddItem.MAX_IMAGE_COUNT) images.", preferredStyle: .Alert)
-            alert.addAction(UIAlertAction(title: "Okay", style: .Default, handler: {(alertAction)in
-                alert.dismissViewControllerAnimated(true, completion: nil)
-            }))
-            self.presentViewController(alert, animated: true, completion: nil)
-            return
-        }
-        
-        let fetchOptions = PHFetchOptions()
-        fetchOptions.predicate = NSPredicate(format: "title = %@", albumName)
-        
-        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
-            self.imagePicker.delegate = self
-            self.imagePicker.sourceType = UIImagePickerControllerSourceType.Camera
-            drawCameraOverlay()
-            self.presentViewController(imagePicker, animated: true, completion: nil)
-        } else{
-            //no camera available
-            var alert = UIAlertController(title: "Error", message: "There is no camera available.", preferredStyle: .Alert)
-            alert.addAction(UIAlertAction(title: "Okay", style: .Default, handler: {(alertAction)in
-                alert.dismissViewControllerAnimated(true, completion: nil)
-            }))
-            self.presentViewController(alert, animated: true, completion: nil)
-        }
-    }
-    
-    private static var firstChange: CGFloat?
-    private static var statusBarHeight = UIScreen.mainScreen().bounds.height
-    private static var dontChangeBar = false
-    
-    func drawCameraOverlay() {
-        drawCameraOverlay(false)
-    }
-    
-    
-    /**
-     * This function either defaults as the initial camera overlay
-     */
-    func drawCameraOverlay(retakeView: Bool) {
-        let screenSize = UIScreen.mainScreen().bounds
-        let imgWidth = screenSize.width < screenSize.height ? screenSize.width : screenSize.height
-        
-        if !AddItem.dontChangeBar {
-            AddItem.statusBarHeight = UIApplication.sharedApplication().statusBarFrame.size.height
-            AddItem.dontChangeBar = true
-        }
-        
-        let newStatusBarHeight: CGFloat
-        let pickerFrame: CGRect
-        let squareFrame: CGRect
-        var adjust = imagePicker.view.bounds.height - imagePicker.navigationBar.bounds.size.height - imagePicker.toolbar.bounds.size.height
-        
-        if retakeView {
-            newStatusBarHeight = UIApplication.sharedApplication().statusBarFrame.size.height
-            // temp, as soon as the dictionary is complete this can be removed
-            if AddItem.firstChange == nil {
-                AddItem.firstChange = abs(AddItem.statusBarHeight - newStatusBarHeight)
-            }
-            
-            pickerFrame = CGRectMake(0, 0, imagePicker.view.bounds.width, adjust + AddItem.frameHeightAdjust[AddItem.DEVICE_MODEL]!)
-            squareFrame = CGRectMake(pickerFrame.width/2 - imgWidth/2, adjust/2 - imgWidth/2 + AddItem.firstChange! + AddItem.retakeFrameAdjust[AddItem.DEVICE_MODEL]!, imgWidth, imgWidth)
-        } else {
-            // 20.0 is the default height for the menu near the origin of the canvas
-            pickerFrame = CGRectMake(0, 20.0, imagePicker.view.bounds.width, adjust - AddItem.frameHeightAdjust[AddItem.DEVICE_MODEL]!)
-            squareFrame = CGRectMake(pickerFrame.width/2 - imgWidth/2, adjust/2 - imgWidth/2 - AddItem.captureFrameAdjust[AddItem.DEVICE_MODEL]!, imgWidth, imgWidth)
-        }
-        
-        var galleryButtonIcon = IconImage().gallery()
-        var galleryButton: UIButton = UIButton.buttonWithType(UIButtonType.System) as! UIButton
-        galleryButton.frame = CGRectMake(screenSize.width - (imagePicker.navigationBar.bounds.size.height/2 + galleryButtonIcon.size.width), screenSize.height - (imagePicker.navigationBar.bounds.size.height/2 + galleryButtonIcon.size.height), galleryButtonIcon.size.width, galleryButtonIcon.size.height)
-        galleryButton.setImage(galleryButtonIcon, forState: .Normal)
-        galleryButton.setTitle("", forState: .Normal)
-        galleryButton.addTarget(self, action: "changeImagePickerSourceType:", forControlEvents: UIControlEvents.TouchUpInside)
-        galleryButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        galleryButton.setTitleColor(UIColor.lightGrayColor(), forState: .Selected)
-        UIGraphicsBeginImageContext(pickerFrame.size)
-        
-        let context = UIGraphicsGetCurrentContext()
-        
-        CGContextClearRect(context, screenSize)
-        
-        CGContextSaveGState(context)
-        CGContextAddRect(context, CGContextGetClipBoundingBox(context))
-        CGContextMoveToPoint(context, squareFrame.origin.x, squareFrame.origin.y)
-        CGContextAddLineToPoint(context, squareFrame.origin.x + squareFrame.width, squareFrame.origin.y)
-        CGContextAddLineToPoint(context, squareFrame.origin.x + squareFrame.width, squareFrame.origin.y + squareFrame.size.height)
-        CGContextAddLineToPoint(context, squareFrame.origin.x, squareFrame.origin.y + squareFrame.size.height)
-        CGContextAddLineToPoint(context, squareFrame.origin.x, squareFrame.origin.y)
-        CGContextEOClip(context)
-        CGContextMoveToPoint(context, pickerFrame.origin.x, pickerFrame.origin.y)
-        CGContextSetRGBFillColor(context, 0, 0, 0, 1)
-        CGContextFillRect(context, pickerFrame)
-        
-        CGContextRestoreGState(context)
-        let overlayImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext();
-        
-        let squareOverlayView = UIImageView(frame: pickerFrame)
-        squareOverlayView.image = overlayImage
-        
-        if !retakeView && UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.SavedPhotosAlbum) {
-            imagePicker.cameraOverlayView?.addSubview(squareOverlayView)
-            imagePicker.cameraOverlayView?.addSubview(galleryButton)
-        } else {
-            imagePicker.cameraOverlayView = squareOverlayView
-        }
-    }
-    
-    func handleNotification(message: NSNotification) {
-        if message.name == AddItem.CAPTURE_NOTIFICATION_TEXT {
-            drawCameraOverlay(true)
-        } else if message.name == AddItem.REJECT_NOTIFICATION_TEXT {
-            drawCameraOverlay()
-        }
-    }
-    
-    func changeImagePickerSourceType(sender: AnyObject) {
-        if imagePicker.sourceType == UIImagePickerControllerSourceType.Camera {
-            //imagePicker.sourceType = UIImagePickerControllerSourceType.SavedPhotosAlbum
-            imagePicker.dismissViewControllerAnimated(false, completion: {
-                self.imagePicker = UIImagePickerController()
-                self.imagePicker.delegate = self
-                self.imagePicker.sourceType = UIImagePickerControllerSourceType.SavedPhotosAlbum
-                self.presentViewController(self.imagePicker, animated: true, completion: nil)
-            })
-        } else {
-            imagePicker.sourceType = UIImagePickerControllerSourceType.Camera
-            drawCameraOverlay()
-        }
-    }
-    
-    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
-        picker.sourceType = UIImagePickerControllerSourceType.Camera
-        picker.dismissViewControllerAnimated(true, completion: nil)
-    }
-    
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
-        var chosen = info[UIImagePickerControllerOriginalImage] as! UIImage
-        self.itemImages?.append(chosen)
-        var itemIndex: Int?
-        for i in 0...(itemImages!.count - 1) {
-            if itemImages![i] == chosen {
-                itemIndex = i;
-                break;
-            }
-        }
-        
-        // Scaled image size
-        let scaledImageWidth: CGFloat = 660.0;
-        var size = CGSize(width: scaledImageWidth, height: scaledImageWidth)
-        dispatch_async(dispatch_get_global_queue(
-            Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
-                chosen.cropAndResize(size, completionHandler: { (resizedImage:UIImage, data:NSData) -> () in
-                    var compressedImage = UIImageJPEGRepresentation(resizedImage, AddItem.JPEG_COMPRESSION_CONSTANT)
-                    self.itemImages?[itemIndex!] = UIImage(data: compressedImage)!
-                    var index: NSIndexPath = NSIndexPath(forRow: itemIndex!, inSection: 0)
-                    self.collectionView.insertItemsAtIndexPaths([index])
-                    self.scaledImages?.insert(compressedImage, atIndex: itemIndex!)
-                    self.fileSizes = 0
-                    for i in self.scaledImages! {
-                        self.fileSizes += UInt64(i.length)
-                    }
-                    println("Image \(itemIndex! + 1) bit count: \(compressedImage.length) b")
-                    println("Total image size bit count: \(self.fileSizes) b")
-                })
-                
-        }
-        dismissViewControllerAnimated(true, completion: nil)
     }
     
     /**

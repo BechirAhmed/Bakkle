@@ -10,17 +10,23 @@ import AVFoundation
 import QuartzCore
 
 class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    /* Constants */
+    // if you change this you need to update storyboard with an extra image view
+    // and you need to add extra views to the array of image views
+    static let MAX_IMAGE_COUNT = 4
+    static let JPEG_COMPRESSION_FACTOR: CGFloat = 0.3
     
     /* SEGUE NAVIGATION */
     @IBOutlet weak var closeButton: UIButton!
-    @IBOutlet weak var switchCamera: UIButton!
+    @IBOutlet weak var nextButton: UIButton!
     
     /* AVFOUNDATION */
     @IBOutlet weak var cameraView: UIView!
     var capturePreview: AVCaptureVideoPreviewLayer? = nil
-    let captureSession = AVCaptureSession()
+    var captureSession = AVCaptureSession()
     var selectedDevice: AVCaptureDeviceInput?
     var stillImageOutput = AVCaptureStillImageOutput()
+    @IBOutlet weak var switchCamera: UIButton!
     var error: NSError? = nil
     
     /* IMAGE CONTAINERS */
@@ -37,25 +43,75 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     @IBOutlet weak var capButtonSpace: UIView!
     @IBOutlet weak var capButton: UIButton!
     
-    /* LOWER CONTROLS */
-    @IBOutlet weak var nextButton: UIButton!
-    @IBOutlet weak var galleryButton: UIButton!
     
     /* GALLERY PICKER */
     var galleryPicker: UIImagePickerController?
     @IBOutlet weak var stillImagePreview: UIImageView!
+    @IBOutlet weak var galleryButton: UIButton!
     var stopVideoPreview: Bool = false
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // used array literals instead of append because the array should never have to be resized (less space taken up)
+        // ensures that arrays do not occupy more space than needed (capacity == count)
         imageViews = [imageView1, imageView2, imageView3, imageView4]
-        images = [UIImage.alloc(),UIImage.alloc(),UIImage.alloc(),UIImage.alloc()]
+        images = [UIImage](count:CameraView.MAX_IMAGE_COUNT, repeatedValue:UIImage.alloc())
         
         UIApplication.sharedApplication().statusBarHidden = true
+        UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent
         
+        galleryButton.setImage(IconImage().gallery(), forState: .Normal)
+        closeButton.setImage(IconImage().close(), forState: .Normal)
+        switchCamera.setImage(IconImage().switchCamera(), forState: .Normal)
+        
+        galleryButton.setTitle("", forState: .Normal)
+        closeButton.setTitle("", forState: .Normal)
+        switchCamera.setTitle("", forState: .Normal)
+        
+//        for view in imageViews {
+//            var gestureRecognizer: UIGestureRecognizer = UIGestureRecognizer.
+//            var imageButton: UIGestureRecognizer = UITapGestureRecognizer.addTarget(self, action:"")
+//        }
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        UIApplication.sharedApplication().statusBarHidden = true
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent
+        
+        setupAVFoundation()
+        
+        for view: UIImageView in imageViews {
+            view.layer.cornerRadius = 15.0
+            view.layer.masksToBounds = true
+            view.layer.borderWidth = 1.0
+            view.layer.borderColor = UIColor.whiteColor().CGColor
+        }
+        
+        capButtonSpace.layer.cornerRadius = capButtonSpace.frame.size.width / 2
+        capButtonOutline.layer.cornerRadius = capButtonOutline.frame.size.width / 2
+        capButton.layer.cornerRadius = capButton.frame.size.width / 2
+        
+        capButtonSpace.layer.masksToBounds = true
+        capButtonOutline.layer.masksToBounds = true
+        capButton.layer.masksToBounds = true
+        
+        self.nextButton.enabled = imageCount > 0
+        self.nextButton.hidden = imageCount < 1
+        
+        if !stopVideoPreview {
+            displayImagePreview()
+        }
+    }
+    
+    func setupAVFoundation(){
+        captureSession = AVCaptureSession()
         captureSession.sessionPreset = AVCaptureSessionPresetPhoto
         var frontCam = findCameraWithPosition(.Front)
         var backCam = findCameraWithPosition(.Back)
@@ -75,47 +131,16 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         } else {
             // alert
         }
-        
     }
     
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        UIApplication.sharedApplication().statusBarHidden = true
-    }
-    
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        for view: UIImageView in imageViews {
-            view.layer.cornerRadius = 15.0
-            view.layer.masksToBounds = true
-            view.layer.borderWidth = 1.0
-            view.layer.borderColor = UIColor.whiteColor().CGColor
-        }
-        
-        capButtonSpace.layer.cornerRadius = capButtonSpace.frame.size.width / 2
-        capButtonOutline.layer.cornerRadius = capButtonOutline.frame.size.width / 2
-        capButton.layer.cornerRadius = capButton.frame.size.width / 2
-        
-        capButtonSpace.layer.masksToBounds = true
-        capButtonOutline.layer.masksToBounds = true
-        capButton.layer.masksToBounds = true
-        
-        galleryButton.setImage(IconImage().gallery(), forState: .Normal)
-        closeButton.setImage(IconImage().close(), forState: .Normal)
-        switchCamera.setImage(IconImage().switchCamera(), forState: .Normal)
-        
-        galleryButton.setTitle("", forState: .Normal)
-        closeButton.setTitle("", forState: .Normal)
-        switchCamera.setTitle("", forState: .Normal)
-        if !stopVideoPreview {
-            displayImagePreview()
-        }
+    @IBAction func cancel(sender: AnyObject) {
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         UIApplication.sharedApplication().statusBarHidden = false
+        capturePreview?.removeFromSuperlayer()
     }
     
     @IBAction func swapCamera(sender: AnyObject) {
@@ -146,12 +171,12 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.75 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
             self.stillImagePreview.image = nil
             self.displayImagePreview()
-            self.capButton.enabled = true
+            self.buttonEnabledHandler()
         }
     }
     
     func displayImagePreview() {
-        if self.imageCount >= AddItem.MAX_IMAGE_COUNT {
+        if self.imageCount >= CameraView.MAX_IMAGE_COUNT {
             // no more images
         }
         
@@ -200,10 +225,10 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         
         var videoConnection = self.stillImageOutput.connectionWithMediaType(AVMediaTypeVideo)
         
-        var itemIndex = self.imageCount
-        self.imageCount++
         if videoConnection != nil {
             self.capButton.enabled = false
+            self.nextButton.enabled = false
+            var itemIndex = self.imageCount++
             stillImageOutput.captureStillImageAsynchronouslyFromConnection(videoConnection, completionHandler: { (imageDataSampleBuffer, error) -> Void in
                 if imageDataSampleBuffer != nil {
                     var recentImage = UIImage(data: (AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageDataSampleBuffer)))
@@ -215,13 +240,13 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
                     self.captureSession.stopRunning()
                     
                     recentImage!.cropAndResize(size, completionHandler: { (resizedImage:UIImage, data:NSData) -> () in
-                        var compressedImage = UIImageJPEGRepresentation(resizedImage, AddItem.JPEG_COMPRESSION_CONSTANT)
+                        var compressedImage = UIImageJPEGRepresentation(resizedImage, CameraView.JPEG_COMPRESSION_FACTOR)
                         self.images[itemIndex] = UIImage(data: compressedImage)!
                         self.populatePhotos()
                         
                         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.75 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
                             self.captureSession.startRunning()
-                            self.capButton.enabled = true
+                            self.buttonEnabledHandler()
                         }
                     }) // cropAndResize
                 } else {
@@ -235,8 +260,10 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     
     @IBAction func getFromGallery(sender: AnyObject) {
         // set sourcetype to the proper saved photos in load
+        UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.Default
         captureSession.stopRunning()
         self.capButton.enabled = false
+        self.nextButton.enabled = false
         self.galleryPicker = UIImagePickerController()
         self.galleryPicker!.delegate = self
         self.galleryPicker!.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
@@ -249,7 +276,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         var itemIndex = self.imageCount++ // set the index to imageCount then increment the total count by 1
         var image = info[UIImagePickerControllerOriginalImage] as! UIImage
         image.cropAndResize(size, completionHandler: { (resizedImage:UIImage, data:NSData) -> () in
-        var compressedImage = UIImageJPEGRepresentation(resizedImage, AddItem.JPEG_COMPRESSION_CONSTANT)
+        var compressedImage = UIImageJPEGRepresentation(resizedImage, CameraView.JPEG_COMPRESSION_FACTOR)
             self.images[itemIndex] = UIImage(data: compressedImage)!
             self.displayStillImage(self.images[itemIndex])
             self.populatePhotos()
@@ -260,7 +287,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
 
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
         captureSession.startRunning()
-        self.capButton.enabled = true
+        self.buttonEnabledHandler()
         picker.dismissViewControllerAnimated(true, completion: nil)
     }
     
@@ -279,9 +306,37 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
                 self.imageViews[i].image = imagesNoSpace[i]
             }
         }
+        
+        imageCount = imagesNoSpace.count
+        buttonEnabledHandler()
     }
     
+    func buttonEnabledHandler() {
+        self.nextButton.enabled = imageCount > 0
+        self.nextButton.hidden = imageCount < 1
+        
+        var imageCountGreaterThanMaxCount = imageCount >= CameraView.MAX_IMAGE_COUNT
+        self.capButton.enabled = !imageCountGreaterThanMaxCount
+        self.galleryButton.enabled = !imageCountGreaterThanMaxCount
+        self.switchCamera.enabled = !imageCountGreaterThanMaxCount
+        
+        self.capButton.hidden = imageCountGreaterThanMaxCount
+        self.galleryButton.hidden = imageCountGreaterThanMaxCount
+        self.switchCamera.hidden = imageCountGreaterThanMaxCount
+        self.capButtonOutline.hidden = imageCountGreaterThanMaxCount
+        self.capButtonSpace.hidden = imageCountGreaterThanMaxCount
+    }
+    
+    // rename to long press
     @IBAction func photoHeld(sender: AnyObject) {
+        
+    }
+    
+    @IBAction func photoPreview(sender: AnyObject) {
+        
+    }
+    
+    @IBAction func resetToCameraView(sender: AnyObject) {
         
     }
     
@@ -295,6 +350,16 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         
         self.imageCount--
         self.populatePhotos()
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "AddItemSegue" {
+            let destinationVC = segue.destinationViewController as! AddItem
+            for image in self.images {
+                destinationVC.itemImages?.append(image)
+//                destinationVC.scaledImages?.append(UIImageJPEGRepresentation(image, 1.0))
+            }
+        }
     }
     
     override func shouldAutorotate() -> Bool {

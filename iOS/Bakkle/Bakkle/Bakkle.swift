@@ -655,7 +655,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     }
 
     // take out tags right now, but if needed, will add later
-    func addItem(title: String, description: String, location: String, price: String, images: [NSData],item_id: NSInteger?, success: (item_id: Int?, item_url: String?)->(), fail: ()->() ) {
+    func addItem(title: String, description: String, location: String, price: String, images: [UIImage],item_id: NSInteger?, success: (item_id: Int?, item_url: String?)->(), fail: ()->() ) {
         // URL encode some vars.
         let escTitle = title.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         let escDescription = description.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
@@ -680,8 +680,14 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         let request = NSMutableURLRequest(URL: url!)
         request.HTTPMethod = "POST"
         
+        var imageData = [NSData]()
+        
+        for image in images {
+            imageData.append(UIImageJPEGRepresentation(image, 1.0))
+        }
+        
         var imageDataLength = 0;
-        for i in images {
+        for i in imageData {
             imageDataLength += i.length;
         }
         
@@ -695,7 +701,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         var body:NSMutableData = NSMutableData()
                 
         //add all images as neccessary.
-        for i in images{
+        for i in imageData {
             body.appendData("\r\n--\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
             body.appendData("Content-Disposition: form-data; name=\"image\"; filename=\"image.jpg\"\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
             body.appendData("Content-Type: application/octet-stream\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)

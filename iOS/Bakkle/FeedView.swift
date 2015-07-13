@@ -14,7 +14,6 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     
     var state : MDCPanState!
     let menuSegue = "presentNav"
-    let addItemSegue = "AddItemSegue"
     let itemDetailSegue = "ItemDetailSegue"
     let refineSegue = "RefineSegue"
     var searching = false
@@ -23,10 +22,6 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     var swipeView : MDCSwipeToChooseView!
     var bottomView : MDCSwipeToChooseView!
     
-    private static let CAPTURE_NOTIFICATION_TEXT = "_UIImagePickerControllerUserDidCaptureItem"
-    private static let REJECT_NOTIFICATION_TEXT = "_UIImagePickerControllerUserDidRejectItem"
-    private static let DEVICE_MODEL: String = UIDevice.currentDevice().modelName
-    var chosenImage: UIImage?
     var fromCamera: Bool! = false
     
     @IBOutlet weak var menuBtn: UIButton!
@@ -82,9 +77,6 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         searchBar.barTintColor = titleBar.backgroundColor
         searchBar.layer.borderColor = titleBar.backgroundColor?.CGColor
         searchBar.layer.borderWidth = 1
-
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleNotification:", name: FeedView.CAPTURE_NOTIFICATION_TEXT, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleNotification:", name: FeedView.REJECT_NOTIFICATION_TEXT, object: nil)
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -456,137 +448,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         }
     }
     
-    
-    /* Camera */
-    let albumName = "Bakkle"
-    
-    func showAddItem(){
-        var addItem: UIViewController = AddItem()
-        presentViewController(addItem, animated: true, completion: nil)
-    }
-    
-    var imagePicker = UIImagePickerController()
-    
-    // Display camera as first step of add-item
-    @IBAction func cameraBtn(sender: AnyObject) {
-        let fetchOptions = PHFetchOptions()
-        fetchOptions.predicate = NSPredicate(format: "title = %@", albumName)
-        
-        if(UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera)){
-            self.imagePicker.delegate = self
-            self.imagePicker.sourceType = UIImagePickerControllerSourceType.Camera
-            
-            drawCameraOverlay(false)
-            
-            self.presentViewController(imagePicker, animated: true, completion: nil)
-            fromCamera = true
-            
-        } else{
-            //no camera available
-            var alert = UIAlertController(title: "Sorry", message: "Bakkle requires a picture when selling items", preferredStyle: .Alert)
-            alert.addAction(UIAlertAction(title: "Okay", style: .Default, handler: {(alertAction)in
-                alert.dismissViewControllerAnimated(false, completion: nil)
-                
-                /* This allows us to test add item without camera on simulator */
-                if UIDevice.currentDevice().model == "iPhone Simulator" {
-                    self.chosenImage = UIImage(named: "tiger.jpg")
-                    self.performSegueWithIdentifier(self.addItemSegue, sender: self)
-                }
-                
-            }))
-            self.presentViewController(alert, animated: false, completion: nil)
-        }
-    }
-    
-    /**
-    * This function either defaults as the initial camera overlay
-    */
-    func drawCameraOverlay(retakeView: Bool) {
-        // firstChange is value is the only value recorded while watching firstChange in AddItem during testing
-        let firstChange: CGFloat = 20.0
-        let screenSize = UIScreen.mainScreen().bounds
-        let imgWidth = screenSize.width < screenSize.height ? screenSize.width : screenSize.height
-        let newStatusBarHeight: CGFloat
-        let pickerFrame: CGRect
-        let squareFrame: CGRect
-        
-        var adjust = imagePicker.view.bounds.height - imagePicker.navigationBar.bounds.size.height - imagePicker.toolbar.bounds.size.height
-        if retakeView {
-            newStatusBarHeight = UIApplication.sharedApplication().statusBarFrame.size.height
-            pickerFrame = CGRectMake(0, 0, imagePicker.view.bounds.width, adjust + AddItem.frameHeightAdjust[FeedView.DEVICE_MODEL]!)
-            squareFrame = CGRectMake(pickerFrame.width/2 - imgWidth/2, adjust/2 - imgWidth/2 + firstChange + AddItem.retakeFrameAdjust[FeedView.DEVICE_MODEL]!, imgWidth, imgWidth)
-        } else {
-            // 20.0 is the default height of the toolbar near the origin
-            pickerFrame = CGRectMake(0, 20.0, imagePicker.view.bounds.width, adjust - AddItem.frameHeightAdjust[FeedView.DEVICE_MODEL]!)
-            squareFrame = CGRectMake(pickerFrame.width/2 - imgWidth/2, adjust/2 - imgWidth/2 - AddItem.captureFrameAdjust[FeedView.DEVICE_MODEL]!, imgWidth, imgWidth)
-        }
-        
-        UIGraphicsBeginImageContext(pickerFrame.size)
-        
-        let context = UIGraphicsGetCurrentContext()
-        
-        CGContextClearRect(context, screenSize)
-        
-        CGContextSaveGState(context)
-        CGContextAddRect(context, CGContextGetClipBoundingBox(context))
-        CGContextMoveToPoint(context, squareFrame.origin.x, squareFrame.origin.y)
-        CGContextAddLineToPoint(context, squareFrame.origin.x + squareFrame.width, squareFrame.origin.y)
-        CGContextAddLineToPoint(context, squareFrame.origin.x + squareFrame.width, squareFrame.origin.y + squareFrame.size.height)
-        CGContextAddLineToPoint(context, squareFrame.origin.x, squareFrame.origin.y + squareFrame.size.height)
-        CGContextAddLineToPoint(context, squareFrame.origin.x, squareFrame.origin.y)
-        CGContextEOClip(context)
-        CGContextMoveToPoint(context, pickerFrame.origin.x, pickerFrame.origin.y)
-        CGContextSetRGBFillColor(context, 0, 0, 0, 1)
-        CGContextFillRect(context, pickerFrame)
-        
-        CGContextRestoreGState(context)
-        let overlayImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext();
-        
-        let overlayView = UIImageView(frame: pickerFrame)
-        overlayView.image = overlayImage
-        self.imagePicker.sourceType = UIImagePickerControllerSourceType.Camera
-        self.imagePicker.cameraOverlayView = overlayView
-    }
-    
-    func handleNotification(message: NSNotification) {
-        if message.name == FeedView.CAPTURE_NOTIFICATION_TEXT {
-            drawCameraOverlay(true)
-        } else if message.name == FeedView.REJECT_NOTIFICATION_TEXT {
-            drawCameraOverlay(false)
-        }
-    }
-    
-    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
-        fromCamera = true
-        picker.dismissViewControllerAnimated(true, completion: nil)
-        // checkForUpdates()
-    }
-    
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
-        let chosen = info[UIImagePickerControllerOriginalImage] as! UIImage
-        
-        self.chosenImage = chosen
-        dismissViewControllerAnimated(false, completion: {
-            self.performSegueWithIdentifier(self.addItemSegue, sender: self)
-        })
-    }
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
-        if segue.identifier == self.addItemSegue {
-            // Scaled image size
-            let scaledImageWidth: CGFloat = 660.0;
-            var size = CGSize(width: scaledImageWidth, height: scaledImageWidth)
-            let destinationVC = segue.destinationViewController as! AddItem
-            destinationVC.itemImages?.insert(self.chosenImage!, atIndex:0)
-            dispatch_async(dispatch_get_global_queue(
-                Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
-                    self.chosenImage!.cropAndResize(size, completionHandler: { (resizedImage:UIImage, data:NSData) -> () in
-                        let compressedImage = UIImageJPEGRepresentation(resizedImage, AddItem.JPEG_COMPRESSION_CONSTANT)
-                        destinationVC.itemImages?[0] = UIImage(data:compressedImage)!
-                        destinationVC.scaledImages?.insert(compressedImage, atIndex: 0)
-                    })
-            }
-        }
         if segue.identifier == self.itemDetailSegue {
             let destinationVC = segue.destinationViewController as! ItemDetails
             
