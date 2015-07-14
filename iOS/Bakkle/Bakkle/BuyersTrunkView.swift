@@ -13,27 +13,6 @@ class BuyersTrunkCell : UITableViewCell {
     @IBOutlet var itemImage: UIImageView?
     @IBOutlet var titleLabel: UILabel?
     @IBOutlet var priceLabel: UILabel?
-    
-    func loadCell(imgURLs: [String], title: String, price: String, delivery: String, tags: [String], location: String, indexPath: NSIndexPath) {
-        println("[BuyersTrunk] Attempting to load image in cell")
-        dispatch_async(dispatch_get_global_queue(
-            Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
-                let firstURL = imgURLs[0] as String
-                let imgURL = NSURL(string: firstURL)
-                dispatch_async(dispatch_get_main_queue()) {
-                    let superview: UITableView = self.superview?.superview! as! UITableView
-                    if let cellToUpdate = superview.cellForRowAtIndexPath(indexPath) {
-                        println("[BuyersTrunk] displaying cell image")
-                        self.itemImage!.hnk_setImageFromURL(imgURL!)
-                        self.itemImage?.contentMode = UIViewContentMode.ScaleAspectFill
-                        self.itemImage?.layer.cornerRadius = 10.0
-                        self.itemImage?.clipsToBounds = true
-                    }
-                }
-        }
-        titleLabel!.text = title.uppercaseString
-        priceLabel!.text = "$" + price
-    }
 }
 
 class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDelegate {
@@ -42,8 +21,7 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
     @IBOutlet weak var menuBtn: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
-        var nib = UINib(nibName: "BuyersTrunkCell", bundle: nil)
-        self.tableView.registerNib(nib, forCellReuseIdentifier: "GarageCell")
+        
         setupButtons()
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
     }
@@ -58,7 +36,6 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
         }
         
         Bakkle.sharedInstance.populateTrunk({});
-        self.tableView.tableFooterView = UIView()
     }
     
     deinit {
@@ -77,6 +54,7 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
+    
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let x = Bakkle.sharedInstance.trunkItems {
             println("Actually got items from the trunk!")
@@ -97,16 +75,13 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
         if Bakkle.sharedInstance.trunkItems.count > 0 {
             let trunkEntry : NSDictionary = Bakkle.sharedInstance.trunkItems[indexPath.row] as! NSDictionary
             let item = trunkEntry.valueForKey("item") as! NSDictionary
-            println(item.description)
             let imgURLs : [String] = item.valueForKey("image_urls") as! [String]
-            let description : String = item.valueForKey("description") as! String
-            let title : String = item.valueForKey("title") as! String
-            let price : String = item.valueForKey("price") as! String
-            let delivery : String = item.valueForKey("method") as! String
-            let tags : [String] = item.valueForKey("tags") as! [String]
-            let location : String =
-                item.valueForKey("location") as! String
-            cell.loadCell(imgURLs, title: title, price: price, delivery: delivery, tags: tags, location: location, indexPath: indexPath)
+            let firstURL = imgURLs[0] as String
+            let imgURL = NSURL(string: firstURL)
+            cell.itemImage!.hnk_setImageFromURL(imgURL!)
+            
+            cell.titleLabel!.text = item.valueForKey("title") as? String
+            cell.priceLabel!.text  = "$" + (item.valueForKey("price") as? String)!
         } else {
             // No items in trunk
             println("[BuyersTrunk] Tried loading trunk items, none to be found")
@@ -115,7 +90,7 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let buyer = User(facebookID: Bakkle.sharedInstance.facebook_id_str,
+        let buyer = User(facebookID: Bakkle.sharedInstance.facebook_id_str,accountID: Bakkle.sharedInstance.account_id,
             firstName: Bakkle.sharedInstance.first_name, lastName: Bakkle.sharedInstance.last_name)
         let account = Account(user: buyer)
         let chatItem = Bakkle.sharedInstance.trunkItems[indexPath.row].valueForKey("item") as! NSDictionary
@@ -130,7 +105,7 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
             chatViewController.itemIndex = indexPath.row
             chatViewController.seller = chatItem.valueForKey("seller") as! NSDictionary
             chatViewController.isBuyer = true
-            self.presentViewController(chatViewController, animated: true, completion: {})
+            self.navigationController?.pushViewController(chatViewController, animated: true)
             tableView.deselectRowAtIndexPath(indexPath, animated: true)
         }
         WSManager.enqueueWorkPayload(chatPayload)  

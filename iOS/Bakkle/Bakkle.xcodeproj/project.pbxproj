@@ -168,7 +168,6 @@
 		A0D96F7E1AD765990046DA13 /* icon-house.png in Resources */ = {isa = PBXBuildFile; fileRef = A0D96F781AD765990046DA13 /* icon-house.png */; };
 		A0D96F801AD767BD0046DA13 /* MenuTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D96F7F1AD767BD0046DA13 /* MenuTableView.swift */; };
 		A0D96F821AD76D8E0046DA13 /* BuyersTrunkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D96F811AD76D8E0046DA13 /* BuyersTrunkView.swift */; };
-		A0D96F841AD76F1F0046DA13 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D96F831AD76F1F0046DA13 /* SettingsView.swift */; };
 		A0D96F861AD771900046DA13 /* SellersGarage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D96F851AD771900046DA13 /* SellersGarage.swift */; };
 		A0D96F881AD772DA0046DA13 /* HoldingPatternView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D96F871AD772DA0046DA13 /* HoldingPatternView.swift */; };
 		A0D96F8A1AD773DB0046DA13 /* RefineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D96F891AD773DB0046DA13 /* RefineView.swift */; };
@@ -186,7 +185,6 @@
 		A0E1EB561B2B5B2200662C08 /* HoldingPatternView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D96F871AD772DA0046DA13 /* HoldingPatternView.swift */; };
 		A0E1EB571B2B5B2200662C08 /* OffsetTextAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 723D532D1B2718590067A80A /* OffsetTextAttachment.swift */; };
 		A0E1EB581B2B5B2200662C08 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A003EB131AD4CCA600EE51A1 /* SWRevealViewController.m */; };
-		A0E1EB591B2B5B2200662C08 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D96F831AD76F1F0046DA13 /* SettingsView.swift */; };
 		A0E1EB5A1B2B5B2200662C08 /* ItemDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E8055411AE541460035521C /* ItemDetails.swift */; };
 		A0E1EB5B1B2B5B2200662C08 /* UIView+MDCBorderedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EE2C9AE1AB9F0FB0031D8CD /* UIView+MDCBorderedLabel.m */; };
 		A0E1EB5C1B2B5B2200662C08 /* BuyersTrunkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D96F811AD76D8E0046DA13 /* BuyersTrunkView.swift */; };
@@ -526,7 +524,6 @@
 		A0D96F781AD765990046DA13 /* icon-house.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-house.png"; sourceTree = "<group>"; };
 		A0D96F7F1AD767BD0046DA13 /* MenuTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuTableView.swift; sourceTree = "<group>"; };
 		A0D96F811AD76D8E0046DA13 /* BuyersTrunkView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuyersTrunkView.swift; sourceTree = "<group>"; };
-		A0D96F831AD76F1F0046DA13 /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		A0D96F851AD771900046DA13 /* SellersGarage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SellersGarage.swift; sourceTree = "<group>"; };
 		A0D96F871AD772DA0046DA13 /* HoldingPatternView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HoldingPatternView.swift; sourceTree = "<group>"; };
 		A0D96F891AD773DB0046DA13 /* RefineView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RefineView.swift; sourceTree = "<group>"; };
@@ -811,7 +808,6 @@
 				A0D96F811AD76D8E0046DA13 /* BuyersTrunkView.swift */,
 				A0D96F871AD772DA0046DA13 /* HoldingPatternView.swift */,
 				A0D96F891AD773DB0046DA13 /* RefineView.swift */,
-				A0D96F831AD76F1F0046DA13 /* SettingsView.swift */,
 				A0D96F7F1AD767BD0046DA13 /* MenuTableView.swift */,
 				5E1DCCA41AD486D2002D41FD /* AddItem.swift */,
 				5E8055411AE541460035521C /* ItemDetails.swift */,
@@ -1496,7 +1492,6 @@
 				602C390D1B3C9933005CB493 /* PNLineChartData.swift in Sources */,
 				723D532E1B2718590067A80A /* OffsetTextAttachment.swift in Sources */,
 				A003EB141AD4CCA600EE51A1 /* SWRevealViewController.m in Sources */,
-				A0D96F841AD76F1F0046DA13 /* SettingsView.swift in Sources */,
 				5E8055421AE541460035521C /* ItemDetails.swift in Sources */,
 				5EE2C9BA1AB9F0FB0031D8CD /* UIView+MDCBorderedLabel.m in Sources */,
 				A0D96F821AD76D8E0046DA13 /* BuyersTrunkView.swift in Sources */,
@@ -1573,7 +1568,6 @@
 				A03E93D31B4375C300F12733 /* PNPieChartDataItem.m in Sources */,
 				A0E1EB571B2B5B2200662C08 /* OffsetTextAttachment.swift in Sources */,
 				A0E1EB581B2B5B2200662C08 /* SWRevealViewController.m in Sources */,
-				A0E1EB591B2B5B2200662C08 /* SettingsView.swift in Sources */,
 				A0E1EB5A1B2B5B2200662C08 /* ItemDetails.swift in Sources */,
 				A0E1EB5B1B2B5B2200662C08 /* UIView+MDCBorderedLabel.m in Sources */,
 				A03E93CE1B4375C300F12733 /* PNLineChartData.swift in Sources */,

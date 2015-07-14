@@ -31,7 +31,7 @@
 
 static CGFloat const MDCSwipeToChooseViewHorizontalPadding = 10.f;
 static CGFloat const MDCSwipeToChooseViewTopPadding = 20.f;
-static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
+static CGFloat const MDCSwipeToChooseViewLabelHeight = 65.f;
 
 
 @interface MDCSwipeToChooseView ()
@@ -205,9 +205,9 @@ static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
 
 - (void)constructHoldView {
     CGRect frame = CGRectMake(CGRectGetMidX(_imageView.bounds)/2,
-                              MDCSwipeToChooseViewTopPadding,
+                              self.bounds.size.height/2,
                               CGRectGetMidX(_imageView.bounds),
-                              MDCSwipeToChooseViewLabelWidth);
+                              MDCSwipeToChooseViewLabelHeight);
     self.holdView = [[UIView alloc] initWithFrame:frame];
     [self.holdView constructBorderedLabelWithText:self.options.holdText
                                             color:self.options.holdColor
@@ -219,7 +219,7 @@ static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
 }
 
 - (void)constructReportView {
-    CGRect frame = CGRectMake(CGRectGetMidX(_imageView.bounds)/2, MDCSwipeToChooseViewTopPadding, CGRectGetMidX(_imageView.bounds), MDCSwipeToChooseViewLabelWidth);
+    CGRect frame = CGRectMake(CGRectGetMidX(_imageView.bounds)/2, MDCSwipeToChooseViewTopPadding, CGRectGetMidX(_imageView.bounds), MDCSwipeToChooseViewLabelHeight);
     self.reportView = [[UIImageView alloc] initWithFrame:frame];
     [self.reportView constructBorderedLabelWithText:self.options.reportText
                                               color:self.options.reportColor
@@ -235,7 +235,7 @@ static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
     CGRect frame = CGRectMake(MDCSwipeToChooseViewHorizontalPadding,
                               MDCSwipeToChooseViewTopPadding,
                               CGRectGetMidX(_imageView.bounds),
-                              MDCSwipeToChooseViewLabelWidth);
+                              MDCSwipeToChooseViewLabelHeight);
     self.likedView = [[UIView alloc] initWithFrame:frame];
     [self.likedView constructBorderedLabelWithText:self.options.likedText
                                              color:self.options.likedColor
@@ -252,7 +252,7 @@ static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
     self.nopeView = [[UIImageView alloc] initWithFrame:CGRectMake(xOrigin,
                                                                   MDCSwipeToChooseViewTopPadding,
                                                                   width,
-                                                                  MDCSwipeToChooseViewLabelWidth)];
+                                                                  MDCSwipeToChooseViewLabelHeight)];
     [self.nopeView constructBorderedLabelWithText:self.options.nopeText
                                             color:self.options.nopeColor
                                             angle:self.options.nopeRotationAngle
