@@ -3694,7 +3694,7 @@
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" red="0.1960784314" green="0.1960784314" blue="0.1960784314" alpha="1" colorSpace="calibratedRGB"/>
                                         <connections>
-                                            <segue destination="5rT-aH-bSn" kind="custom" customClass="SWRevealViewControllerSeguePushController" id="SWR-zI-vHJ"/>
+                                            <segue destination="5rT-aH-bSn" kind="custom" identifier="PushToProfileView" customClass="SWRevealViewControllerSeguePushController" id="SWR-zI-vHJ"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="60" id="St8-VM-MZv" userLabel="FEED">
@@ -4735,7 +4735,7 @@
         <!--PROFILES-->
         <scene sceneID="qcI-mn-GRn">
             <objects>
-                <viewController id="5rT-aH-bSn" userLabel="PROFILES" customClass="ProfileView" customModule="Bakkle" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ProfileView" id="5rT-aH-bSn" userLabel="PROFILES" customClass="ProfileView" customModule="Bakkle" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Yru-iT-8bc"/>
                         <viewControllerLayoutGuide type="bottom" id="WKH-SJ-PPK"/>
@@ -4780,6 +4780,7 @@
                                             <constraint firstAttribute="height" constant="25" id="5XG-21-IFn"/>
                                             <constraint firstAttribute="width" constant="25" id="AKC-uA-7vs"/>
                                         </constraints>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <state key="normal" title="X">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -4904,7 +4905,7 @@
                                         <color key="backgroundColor" red="0.20000000000000001" green="0.80392156859999997" blue="0.37254901959999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="66" id="KLC-U0-Cf6">
-                                                <variation key="heightClass=regular-widthClass=compact" constant="44"/>
+                                                <variation key="heightClass=regular-widthClass=compact" constant="50"/>
                                             </constraint>
                                         </constraints>
                                         <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="21"/>
@@ -4924,7 +4925,6 @@
                                         </variation>
                                         <connections>
                                             <action selector="btnEdit:" destination="5rT-aH-bSn" eventType="touchUpInside" id="GdB-Bi-iJ9"/>
-                                            <action selector="btnLogout:" destination="5rT-aH-bSn" eventType="touchUpInside" id="sqS-Nr-i2z"/>
                                         </connections>
                                     </button>
                                     <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8om-Hj-gL0">
@@ -4932,7 +4932,7 @@
                                         <color key="backgroundColor" red="0.20000000000000001" green="0.80392156859999997" blue="0.37254901959999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="66" id="dvg-uX-i4f">
-                                                <variation key="heightClass=regular-widthClass=compact" constant="44"/>
+                                                <variation key="heightClass=regular-widthClass=compact" constant="50"/>
                                             </constraint>
                                         </constraints>
                                         <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="21"/>
@@ -4951,22 +4951,24 @@
                                             </mask>
                                         </variation>
                                         <connections>
-                                            <action selector="btnLogout:" destination="5rT-aH-bSn" eventType="touchUpInside" id="naV-jH-J6k"/>
                                             <action selector="btnSave:" destination="5rT-aH-bSn" eventType="touchUpInside" id="VH6-q6-dsg"/>
                                         </connections>
                                     </button>
-                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2AB-OF-TiT">
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2AB-OF-TiT">
                                         <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="17"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="5rT-aH-bSn" id="olP-d6-qau"/>
+                                        </connections>
                                     </textView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xnh-Yh-xHn">
                                         <rect key="frame" x="-23" y="-15" width="46" height="30"/>
                                         <color key="backgroundColor" red="0.20000000000000001" green="0.80392156862745101" blue="0.37254901960784315" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="66" id="2mH-ij-9Il">
-                                                <variation key="heightClass=regular-widthClass=compact" constant="44"/>
+                                                <variation key="heightClass=regular-widthClass=compact" constant="50"/>
                                             </constraint>
                                         </constraints>
                                         <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="21"/>
