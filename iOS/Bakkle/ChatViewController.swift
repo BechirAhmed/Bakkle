@@ -25,6 +25,8 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     var isBuyer: Bool = false
     var refreshControl: UIRefreshControl = UIRefreshControl()
     var offerTF: UITextField!
+    var offerSent: Bool = false
+    var offerReceived: Bool = false
     
     override var inputAccessoryView: UIView! {
         get {
@@ -221,17 +223,21 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             var messages: [NSDictionary] = success.valueForKey("messages") as! [NSDictionary]
             var loadedMessage: Message!
             for message in messages {
-                
                 // if message is null, we have an offer
                 let messageText = message.valueForKey("message") as! String
                 //let offerPrice = message.valueForKey("offer") as! String
                 let dateString = message.valueForKey("date_sent") as! String
                 let date = NSDate().dateFromString(dateString, format:  "yyyy-MM-dd HH:mm:ss")
                 let incoming = message.valueForKey("sent_by_buyer") as! Bool
+                
+                var offerPrice : String = ""
+                if let offer = message.valueForKey("offer") as? NSDictionary {
+                    offerPrice = offer.valueForKey("proposed_price") as! String
+                }
                 if !self.isBuyer {
-                    loadedMessage = Message(incoming: incoming, text: messageText, sentDate: date)
+                    loadedMessage = Message(incoming: incoming, text: messageText, offer: offerPrice, sentDate: date)
                 } else {
-                    loadedMessage = Message(incoming: !incoming, text: messageText, sentDate: date)
+                    loadedMessage = Message(incoming: !incoming, text: messageText, offer: offerPrice, sentDate: date)
                 }
                 loadedMessages.append(loadedMessage)
             }
@@ -255,7 +261,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 let dateString = message.valueForKey("date_sent") as! String
                 let date = NSDate().dateFromString(dateString, format:  "yyyy-MM-dd HH:mm:ss")
                 let incoming = (message.valueForKey("sent_by_buyer") as! Bool) == !self.isBuyer
-                let loadedMessage = Message(incoming: incoming, text: messageText, sentDate: date)
+                let loadedMessage = Message(incoming: incoming, text: messageText, offer: "", sentDate: date)
                 let incomingChatId = (message.valueForKey("chat") as! NSNumber).integerValue
                 if(incomingChatId == self.chat.chatId){
                     self.chat.loadedMessages.append(loadedMessage)
@@ -270,33 +276,33 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             }, forNotification: "newMessage")
         
         // Register for offers sent via websocket
-        //        WSManager.registerMessageHandler({ (data : [NSObject : AnyObject]!) -> Void in
-        //            var dict: NSDictionary = data as NSDictionary
-        //
-        //            var offer: NSDictionary = NSDictionary()
-        //            var messageOrigin: String = ""
-        //
-        //            if(dict.objectForKey("offer") != nil){
-        //                offer = dict.objectForKey("offer") as! NSDictionary
-        //
-        //                let offerPrice = offer.valueForKey("proposed_price") as! String
-        //                let offerMethod = offer.valueForKey("proposed_method") as! String
-        //                let dateString = offer.valueForKey("date_sent") as! String
-        //                let date = NSDate().dateFromString(dateString, format:  "yyyy-MM-dd HH:mm:ss")
-        //                let incoming = (offer.valueForKey("sent_by_buyer") as! Bool) == !self.isBuyer
-        //                let loadedOffer = Message(incoming: incoming, text: "",  sentDate: date)
-        //                let incomingChatId = (offer.valueForKey("chat") as! NSNumber).integerValue
-        //                if(incomingChatId == self.chat.chatId){
-        //                    self.chat.loadedMessages.append(loadedOffer)
-        //                }
-        //
-        //                print("[NewOfferHandler] NewOfferHandler received new offer '\(offerPrice)' from userId \(messageOrigin)");
-        //            }
-        //            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-        //                self.tableView.reloadData()
-        //                self.tableViewScrollToBottomAnimated(true)
-        //            })
-        //            }, forNotification: "newOffer")
+        WSManager.registerMessageHandler({ (data : [NSObject : AnyObject]!) -> Void in
+            var dict: NSDictionary = data as NSDictionary
+            println("received an offer")
+            var offer: NSDictionary = NSDictionary()
+            var messageOrigin: String = ""
+
+            if(dict.objectForKey("offer") != nil){
+                offer = dict.objectForKey("offer") as! NSDictionary
+
+                let offerPrice = offer.valueForKey("proposed_price") as! String
+                let offerMethod = offer.valueForKey("proposed_method") as! String
+                let dateString = offer.valueForKey("date_sent") as! String
+                let date = NSDate().dateFromString(dateString, format:  "yyyy-MM-dd HH:mm:ss")
+                let incoming = (offer.valueForKey("sent_by_buyer") as! Bool) == !self.isBuyer
+                let loadedOffer = Message(incoming: incoming, text: "", offer: offerPrice, sentDate: date)
+                let incomingChatId = (offer.valueForKey("chat") as! NSNumber).integerValue
+                if(incomingChatId == self.chat.chatId){
+                    self.chat.loadedMessages.append(loadedOffer)
+                }
+
+                print("[NewOfferHandler] NewOfferHandler received new offer '\(offerPrice)' from userId \(messageOrigin)");
+            }
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.tableView.reloadData()
+                self.tableViewScrollToBottomAnimated(true)
+            })
+            }, forNotification: "newOffer")
     }
     
 
@@ -355,15 +361,32 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         alert.addAction(UIAlertAction(title: "Propose", style: UIAlertActionStyle.Default, handler:{ (UIAlertAction)in
             self.toolBar.hidden = false
             // need to format offer text
-            //            let offerPriceString = self.offerTF.text
-            //            var formatter = NSNumberFormatter()
-            //            formatter.numberStyle = .DecimalStyle
-            //            var offerPrice: NSNumber = formatter.numberFromString(offerPriceString)!
-            //            var sendPayload: WSRequest = WSSendOfferRequest(chatId: String(self.chat.chatId), offerPrice: offerPrice, offerMethod: deliveryMethod.ship)
-            //            WSManager.enqueueWorkPayload(sendPayload)
+            let offerPriceString = self.offerTF.text
+            let offerPriceFormatted = self.formatPrice(offerPriceString)
+            var sendPayload: WSRequest = WSSendOfferRequest(chatId: String(self.chat.chatId), offerPrice: "$2.10", offerMethod: deliveryMethod.ship)
+            WSManager.enqueueWorkPayload(sendPayload)
             println("Proposed Offer: $" + self.offerTF.text)
         }))
         self.presentViewController(alert, animated: false, completion: nil)
+    }
+    
+    func formatPrice(offerPrice: String) -> String {
+        if offerPrice.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
+            var str = offerPrice.stringByReplacingOccurrencesOfString("$", withString: "")
+            str = str.stringByReplacingOccurrencesOfString(" ", withString: "")
+            var value:Float = (str as NSString).floatValue
+            // Currently capping value at 100k
+            if value > 100000 {
+                value = 100000
+            }
+            if value == 0 {
+                return "take it!"
+            } else {
+                return String(format: "$ %.2f", (str as NSString).floatValue )
+            }
+        } else {
+            return "take it!"
+        }
     }
     
     func btnProfile(sender:UIButton!)
@@ -396,8 +419,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return chat.loadedMessages.count * 2 + 1 // for sent-date cell
-        //return chat.loadedMessages.count * 2 // for sent-date cell
+        return chat.loadedMessages.count * 2 // for sent-date cell
     }
     
     func acceptButton(){
@@ -414,59 +436,57 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if (indexPath.row == chat.loadedMessages.count * 2) {
-            let cellIdentifier = NSStringFromClass(AcceptOfferCell)
-            var cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier) as! AcceptOfferCell!
-            if  cell == nil {
-                cell = AcceptOfferCell(style: UITableViewCellStyle.Default, reuseIdentifier: cellIdentifier)
-                //cell.acceptBtn.addTarget(self, action: "acceptButton", forControlEvents: UIControlEvents.TouchUpInside)
-            }
-            var price = ""
-            if isBuyer {
-                let item = Bakkle.sharedInstance.trunkItems[self.itemIndex].valueForKey("item") as! NSDictionary
-                price = item.valueForKey("price") as! String
-            } else {
-                let item = Bakkle.sharedInstance.garageItems[self.itemIndex] as! NSDictionary
-                price = item.valueForKey("price") as! String
-            }
-            cell.makeOfferLabel.text = "AN OFFER OF $\(price) HAS BEEN MADE."
-            //if !isBuyer {
-                var acceptBtn: UIButton = UIButton()
-                var counterBtn: UIButton = UIButton()
-                acceptBtn.addTarget(self, action: "btnAcceptOffer:", forControlEvents: UIControlEvents.TouchUpInside)
-                cell.contentView.addSubview(acceptBtn)
-                cell.configureAcceptBtn(acceptBtn)
-                counterBtn.addTarget(self, action: "btnCounterOffer:", forControlEvents: UIControlEvents.TouchUpInside)
-                cell.contentView.addSubview(counterBtn)
-                cell.configureCounterBtn(counterBtn)
-            //}
-            return cell
-        }
+        println("A cell exists")
+        var indexFloor: Int = Int(floor(Double(indexPath.row) * 0.5))
+        let message = chat.loadedMessages[indexFloor]
+        
+        // Date cells
         if (indexPath.row % 2) == 0 {
             let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(MessageSentDateCell), forIndexPath: indexPath) as! MessageSentDateCell
-            var indexFloor: Int = Int(floor(Double(indexPath.row) * 0.5))
-            let message = chat.loadedMessages[indexFloor]
             dateFormatter.dateStyle = .ShortStyle
             dateFormatter.timeStyle = .ShortStyle
             cell.sentDateLabel.text = dateFormatter.stringFromDate(message.sentDate)
             return cell
-        } else {
-            let cellIdentifier = NSStringFromClass(MessageBubbleCell)
-            var cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier) as! MessageBubbleCell!
-            if cell == nil {
-                cell = MessageBubbleCell(style: .Default, reuseIdentifier: cellIdentifier)
-                
-                // Add gesture recognizers #CopyMessage
-                let action: Selector = "messageShowMenuAction:"
-                let doubleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: action)
-                doubleTapGestureRecognizer.numberOfTapsRequired = 2
-                cell.bubbleImageView.addGestureRecognizer(doubleTapGestureRecognizer)
-                cell.bubbleImageView.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: action))
+        }
+        else {
+            // Offer cells
+            if message.offer != "" {
+                println("Should print offer text")
+                let cellIdentifier = NSStringFromClass(AcceptOfferCell)
+                var cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier) as! AcceptOfferCell!
+                if  cell == nil {
+                    cell = AcceptOfferCell(style: UITableViewCellStyle.Default, reuseIdentifier: cellIdentifier)
+                    if message.incoming {
+                        cell.makeOfferLabel.text = "AN OFFER OF \(message.offer) HAS BEEN MADE."
+                        var acceptBtn: UIButton = UIButton()
+                        var counterBtn: UIButton = UIButton()
+                        acceptBtn.addTarget(self, action: "btnAcceptOffer:", forControlEvents: UIControlEvents.TouchUpInside)
+                        cell.contentView.addSubview(acceptBtn)
+                        cell.configureAcceptBtn(acceptBtn)
+                        counterBtn.addTarget(self, action: "btnCounterOffer:", forControlEvents: UIControlEvents.TouchUpInside)
+                        cell.contentView.addSubview(counterBtn)
+                        cell.configureCounterBtn(counterBtn)
+                    } else {
+                        cell.makeOfferLabel.text = "YOU PROPOSED AN OFFER OF \(message.offer)."
+                    }
+                }
+                return cell
             }
-            var indexFloor: Int = Int(floor(Double(indexPath.row) * 0.5))
-            let message = chat.loadedMessages[indexFloor]
-            cell.configureWithMessage(message)
-            return cell
+            // Message cells
+            else {
+                let cellIdentifier = NSStringFromClass(MessageBubbleCell)
+                var cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier) as! MessageBubbleCell!
+                if cell == nil {
+                    cell = MessageBubbleCell(style: .Default, reuseIdentifier: cellIdentifier)                    // Add gesture recognizers #CopyMessage
+                    let action: Selector = "messageShowMenuAction:"
+                    let doubleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: action)
+                    doubleTapGestureRecognizer.numberOfTapsRequired = 2
+                    cell.bubbleImageView.addGestureRecognizer(doubleTapGestureRecognizer)
+                    cell.bubbleImageView.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: action))
+                }
+                cell.configureWithMessage(message)
+                return cell
+            }
         }
     }
     
