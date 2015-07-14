@@ -24,7 +24,7 @@ class SellersGarageView: UIViewController, UITableViewDelegate, UITableViewDataS
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.navigationBar.hidden = true
+
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         
         setupButtons()

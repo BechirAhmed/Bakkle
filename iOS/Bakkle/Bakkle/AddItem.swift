@@ -15,20 +15,32 @@ import Social
 //import FBSDKShareKit
 //import FBSDKLoginKit
 
-class AddItem: UIViewController, UINavigationControllerDelegate, UITextFieldDelegate, UITextViewDelegate {
+class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UITextViewDelegate {
+    
+    static let KEYBOARD_MOVE_VALUE: CGFloat = 250
+    static let NUMPAD_MOVE_VALUE:CGFloat = 260
+    static let DESCRIPTION_PLACEHOLDER_COLOR = UIColor(red: CGFloat(AddItem.red)/255.0, green: CGFloat(AddItem.green)/255.0, blue: CGFloat(AddItem.blue)/255.0, alpha: CGFloat(1.0))
+    static let CONFIRM_BUTTON_RED = 51
+    static let CONFIRM_BUTTON_GREEN = 205
+    static let CONFIRM_BUTTON_BLUE = 95
+    static let BAKKLE_GREEN_COLOR = UIColor(red: CGFloat(AddItem.CONFIRM_BUTTON_RED)/255.0, green: CGFloat(AddItem.CONFIRM_BUTTON_GREEN)/255.0, blue: CGFloat(AddItem.CONFIRM_BUTTON_BLUE)/255.0, alpha: CGFloat(1.0))
+    static let CONFIRM_BUTTON_DISABLED_COLOR = UIColor.lightGrayColor()
+    private static let TAG_PLACEHOLDER_STR = "WORDS TO DESCRIBE ITEM"
+    private static let red = 201
+    private static let green = 201
+    private static let blue = 201
     
     let albumName = "Bakkle"
-    
     let listItemCellIdentifier = "ListItemCell"
     var itemImages: [UIImage]? = [UIImage]()
+    var fileSizes: UInt64 = 0
     var item: NSDictionary!
     var isEditting: Bool = false
-    var KEYBOARD_MOVE_VALUE: CGFloat = 250
-    var NUMPAD_MOVE_VALUE:CGFloat = 260
+    var initRun = true
+    var confirmHit = false
     
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var closeBtn: UIButton!
-    
     @IBOutlet weak var titleField: UITextField!
     @IBOutlet weak var priceField: UITextField!
     @IBOutlet weak var descriptionField: UITextView!
@@ -37,7 +49,6 @@ class AddItem: UIViewController, UINavigationControllerDelegate, UITextFieldDele
     @IBOutlet weak var shareToFacebookBtn: UISwitch!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var loadingView: UIView!
-   
     @IBOutlet weak var titleView: UIView!
     @IBOutlet weak var priceView: UIView!
     @IBOutlet weak var descriptionView: UIView!
@@ -46,13 +57,9 @@ class AddItem: UIViewController, UINavigationControllerDelegate, UITextFieldDele
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        titleField.delegate = self
-        priceField.delegate = self
-        descriptionField.delegate = self
-        
         loadingView.hidden = true
         
-        // set line border
+        // set line border in the detail information container
         let borderColor = UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 0.9)
         titleView.layer.borderWidth = 1
         titleView.layer.borderColor = borderColor.CGColor
@@ -63,7 +70,7 @@ class AddItem: UIViewController, UINavigationControllerDelegate, UITextFieldDele
         shareView.layer.borderWidth = 1
         shareView.layer.borderColor = borderColor.CGColor
         
-        // sets placeholder text
+        // sets placeholder text in description textView
         textViewDidEndEditing(descriptionField)
         
         // -8.0 and -4.0 are y and x respectively, this is just to keep alignment of text
@@ -76,6 +83,7 @@ class AddItem: UIViewController, UINavigationControllerDelegate, UITextFieldDele
         nextBtn.sizeToFit()
         priceField.inputAccessoryView = nextBtn
         
+        // tap gesture recognizer for dismiss keyboard
         var tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
         self.view.addGestureRecognizer(tap)
         
@@ -95,12 +103,6 @@ class AddItem: UIViewController, UINavigationControllerDelegate, UITextFieldDele
         descriptionField.becomeFirstResponder()
     }
     
-    static let TAG_PLACEHOLDER_STR = "5 WORDS TO DESCRIBE ITEM"
-    static let red = 201
-    static let green = 201
-    static let blue = 201
-    static let TAG_PLACEHOLDER_COLOR = UIColor(red: CGFloat(AddItem.red)/255.0, green: CGFloat(AddItem.green)/255.0, blue: CGFloat(AddItem.blue)/255.0, alpha: CGFloat(1.0))
-    
     /**
      * UITextView does not have placeholder text, the next 2 functions implement a placeholder
      *
@@ -111,22 +113,20 @@ class AddItem: UIViewController, UINavigationControllerDelegate, UITextFieldDele
      * *******************************************************************************
      */
     func textViewDidBeginEditing(textView: UITextView) {
-        animateViewMoving(true, moveValue: KEYBOARD_MOVE_VALUE)
-        if textView.textColor == AddItem.TAG_PLACEHOLDER_COLOR {
+        animateViewMoving(true, moveValue: AddItem.KEYBOARD_MOVE_VALUE)
+        if textView.textColor == AddItem.DESCRIPTION_PLACEHOLDER_COLOR {
             textView.textColor = UIColor.blackColor()
             textView.text = ""
         }
     }
     
-    var initRun = true
-    
     func textViewDidEndEditing(textView: UITextView) {
         if textView.text.isEmpty {
-            textView.textColor = AddItem.TAG_PLACEHOLDER_COLOR
+            textView.textColor = AddItem.DESCRIPTION_PLACEHOLDER_COLOR
             textView.text = AddItem.TAG_PLACEHOLDER_STR
         }
         
-        animateViewMoving(false, moveValue: KEYBOARD_MOVE_VALUE)
+        animateViewMoving(false, moveValue: AddItem.KEYBOARD_MOVE_VALUE)
         
         // There is an odd bug with button text on this call, see
         // disableConfirmButtonHandler() documentation for more information
@@ -150,7 +150,7 @@ class AddItem: UIViewController, UINavigationControllerDelegate, UITextFieldDele
     }
     
     /**
-     * textFieldDidChange is called by titleField and priceField, specific cases for each
+     * textFieldDidChange is called by titleField and priceField
      */
     func textFieldDidChange(textField: UITextField) {
         disableConfirmButtonHandler();
@@ -159,11 +159,13 @@ class AddItem: UIViewController, UINavigationControllerDelegate, UITextFieldDele
     
     func textFieldDidBeginEditing(textField: UITextField) {
         if textField == priceField {
-            animateViewMoving(true, moveValue: NUMPAD_MOVE_VALUE)
+            animateViewMoving(true, moveValue: AddItem.NUMPAD_MOVE_VALUE)
+            if priceField.text == "take it!" {
+                priceField.text = "0"
+            }
         }else{
-            animateViewMoving(true, moveValue: KEYBOARD_MOVE_VALUE)
+            animateViewMoving(true, moveValue: AddItem.KEYBOARD_MOVE_VALUE)
         }
-        formatPrice()
     }
     
     /**
@@ -171,14 +173,15 @@ class AddItem: UIViewController, UINavigationControllerDelegate, UITextFieldDele
      */
     func textFieldDidEndEditing(textField: UITextField) {
         if textField == priceField {
-            animateViewMoving(false, moveValue: NUMPAD_MOVE_VALUE)
+            animateViewMoving(false, moveValue: AddItem.NUMPAD_MOVE_VALUE)
         }else{
-            animateViewMoving(false, moveValue: KEYBOARD_MOVE_VALUE)
+            animateViewMoving(false, moveValue: AddItem.KEYBOARD_MOVE_VALUE)
         }
         formatPrice()
         disableConfirmButtonHandler()
     }
     
+    // helper function to help screen move up or down
     func animateViewMoving(up: Bool, moveValue: CGFloat) {
         let movementDuration = 0.5
         let movement = up ? -moveValue : moveValue
@@ -187,19 +190,6 @@ class AddItem: UIViewController, UINavigationControllerDelegate, UITextFieldDele
         UIView.setAnimationDuration(movementDuration)
         self.view.frame = CGRectOffset(self.view.frame, 0, movement)
         UIView.commitAnimations()
-    }
-    
-    /* Currently, not using it. Might use it in future. */
-    func keboardWillShow(notification: NSNotification) {
-        var info: NSDictionary = notification.userInfo!
-        var keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
-        var keyboardHeight: CGFloat = keyboardFrame.height
-        
-        var animationDuration: CGFloat = info[UIKeyboardAnimationDurationUserInfoKey] as! CGFloat
-        
-        UIView.animateWithDuration(0.25, delay: 0.25, options: UIViewAnimationOptions.CurveEaseIn, animations: { () -> Void in
-            self.view.frame = CGRectMake(0, self.view.frame.origin.y - keyboardHeight, self.view.bounds.width, self.view.bounds.height)
-        }, completion: nil)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -230,14 +220,6 @@ class AddItem: UIViewController, UINavigationControllerDelegate, UITextFieldDele
             isEditting = false
         }
         disableConfirmButtonHandler()
-
-    }
-    
-    @IBAction func beginEditingPrice(sender: AnyObject) {
-        animateViewMoving(true, moveValue: KEYBOARD_MOVE_VALUE)
-        if priceField.text == "take it!" {
-            priceField.text = "0"
-        }
     }
     
     func dismissKeyboard() {
@@ -249,13 +231,6 @@ class AddItem: UIViewController, UINavigationControllerDelegate, UITextFieldDele
         self.dismissViewControllerAnimated(true, completion: nil)
     }
 
-    static let CONFIRM_BUTTON_RED = 51
-    static let CONFIRM_BUTTON_GREEN = 205
-    static let CONFIRM_BUTTON_BLUE = 95
-    static let BAKKLE_GREEN_COLOR = UIColor(red: CGFloat(AddItem.CONFIRM_BUTTON_RED)/255.0, green: CGFloat(AddItem.CONFIRM_BUTTON_GREEN)/255.0, blue: CGFloat(AddItem.CONFIRM_BUTTON_BLUE)/255.0, alpha: CGFloat(1.0))
-    static let CONFIRM_BUTTON_DISABLED_COLOR = UIColor.lightGrayColor()
-    var confirmHit = false
-    
     /**
     * @return Bool: true if confirm button is enabled
     *
@@ -273,7 +248,7 @@ class AddItem: UIViewController, UINavigationControllerDelegate, UITextFieldDele
     * ever to be changed
     */
     func disableConfirmButtonHandler() -> Bool {
-        if confirmHit || trimString(self.priceField.text) == "$" || descriptionField.textColor == AddItem.TAG_PLACEHOLDER_COLOR || self.titleField.text.isEmpty || self.priceField.text.isEmpty || self.descriptionField.text.isEmpty || itemImages?.count < 1 || itemImages?.count > CameraView.MAX_IMAGE_COUNT {
+        if confirmHit || trimString(self.priceField.text) == "$" || descriptionField.textColor == AddItem.DESCRIPTION_PLACEHOLDER_COLOR || self.titleField.text.isEmpty || self.priceField.text.isEmpty || self.descriptionField.text.isEmpty || itemImages?.count < 1 || itemImages?.count > CameraView.MAX_IMAGE_COUNT {
             confirmButton.enabled = false
             confirmButton.backgroundColor = AddItem.CONFIRM_BUTTON_DISABLED_COLOR
         } else {
@@ -403,7 +378,9 @@ class AddItem: UIViewController, UINavigationControllerDelegate, UITextFieldDele
     }
     
     
-    /* collectionView display multiple pictures */
+    /**
+    * collectionView delegate and collectionView data source
+    */
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection: Int) -> Int {
         return self.itemImages!.count
     }
@@ -431,12 +408,7 @@ class AddItem: UIViewController, UINavigationControllerDelegate, UITextFieldDele
         cell.imgView.contentMode = UIViewContentMode.ScaleAspectFill
         cell.imgView.clipsToBounds  = true
         if let images = self.itemImages {
-            /* This allows us to test adding image using simulator */
-            if UIDevice.currentDevice().model == "iPhone Simulator" && !isEditting{
-                cell.imgView.image = UIImage(named: "tiger.jpg")
-            } else {
-                cell.imgView.image = images[indexPath.row]
-            }
+            cell.imgView.image = images[indexPath.row]
         }
         return cell
     }

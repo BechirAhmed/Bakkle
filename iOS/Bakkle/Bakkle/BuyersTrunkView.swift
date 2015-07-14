@@ -61,6 +61,7 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
+    
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let x = Bakkle.sharedInstance.trunkItems {
             println("Actually got items from the trunk!")
@@ -122,7 +123,7 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
         if indexPath.row == 0 || indexPath.row == Bakkle.sharedInstance.trunkItems.count + 1 || indexPath.row == Bakkle.sharedInstance.trunkItems.count + 2 {
             return
         }
-        let buyer = User(facebookID: Bakkle.sharedInstance.facebook_id_str,
+        let buyer = User(facebookID: Bakkle.sharedInstance.facebook_id_str,accountID: Bakkle.sharedInstance.account_id,
             firstName: Bakkle.sharedInstance.first_name, lastName: Bakkle.sharedInstance.last_name)
         let account = Account(user: buyer)
         let chatItem = Bakkle.sharedInstance.trunkItems[indexPath.row-1].valueForKey("item") as! NSDictionary
@@ -137,7 +138,7 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
             chatViewController.itemIndex = indexPath.row-1
             chatViewController.seller = chatItem.valueForKey("seller") as! NSDictionary
             chatViewController.isBuyer = true
-            self.presentViewController(chatViewController, animated: true, completion: {})
+            self.navigationController?.pushViewController(chatViewController, animated: true)
             tableView.deselectRowAtIndexPath(indexPath, animated: true)
         }
         WSManager.enqueueWorkPayload(chatPayload)  
