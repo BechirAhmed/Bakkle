@@ -65,7 +65,7 @@ class ProfileView: UIViewController, UITextViewDelegate {
                     println("[SettingsView] displaying image \(facebookProfileImageUrlString)")
                     self.backgroundAvatar.hnk_setImageFromURL(imgURL!)
                     self.avatar.hnk_setImageFromURL(imgURL!)
-                    var visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .Dark)) as UIVisualEffectView
+                    var visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .Light)) as UIVisualEffectView
                     visualEffectView.frame = self.backgroundAvatar.frame
                     self.backgroundAvatar.addSubview(visualEffectView)
                     
