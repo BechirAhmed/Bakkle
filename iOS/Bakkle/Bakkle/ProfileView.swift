@@ -31,6 +31,7 @@ class ProfileView: UIViewController, UITextViewDelegate {
         setupButtons()
         self.backgroundAvatar.contentMode = UIViewContentMode.ScaleAspectFill
         self.backgroundAvatar.clipsToBounds = true
+        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "dismissKeyboard"))
         
         if canEdit {
             self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
@@ -51,6 +52,10 @@ class ProfileView: UIViewController, UITextViewDelegate {
             menuBtn.setImage(IconImage().menu(), forState: .Normal)
             menuBtn.setTitle("", forState: .Normal)
         }
+    }
+    
+    func dismissKeyboard() {
+        self.descriptionTextView.resignFirstResponder()
     }
     
     override func viewWillAppear(animated: Bool) {
