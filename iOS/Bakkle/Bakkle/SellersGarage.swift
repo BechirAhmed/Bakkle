@@ -43,6 +43,8 @@ class SellersGarageView: UIViewController, UITableViewDelegate, UITableViewDataS
             self.refreshData()
         }
 
+        self.view.userInteractionEnabled = true
+        
         requestUpdates()
     }
     
@@ -152,6 +154,7 @@ class SellersGarageView: UIViewController, UITableViewDelegate, UITableViewDataS
         chatsViewController.chatItemID = (Bakkle.sharedInstance.garageItems[indexPath.row-1].valueForKey("pk") as! NSNumber).stringValue
         chatsViewController.garageIndex = indexPath.row-1
         self.navigationController?.pushViewController(chatsViewController, animated: true)
+        self.view.userInteractionEnabled = false
     }
     
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {

@@ -139,7 +139,6 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
             chatViewController.seller = chatItem.valueForKey("seller") as! NSDictionary
             chatViewController.isBuyer = true
             self.navigationController?.pushViewController(chatViewController, animated: true)
-            tableView.deselectRowAtIndexPath(indexPath, animated: true)
         }
         WSManager.enqueueWorkPayload(chatPayload)  
     }
@@ -157,7 +156,9 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
             Bakkle.sharedInstance.markItem("meh", item_id: item.valueForKey("pk")!.integerValue, success: {
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     Bakkle.sharedInstance.trunkItems.removeAtIndex(indexPath.row-1)
-                    tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)                })
+                    tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+                    tableView.reloadData()
+                })
             }, fail: {})
             
         }

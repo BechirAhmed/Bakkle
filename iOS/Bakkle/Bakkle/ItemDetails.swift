@@ -35,7 +35,7 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
 
         activityInd?.startAnimating()
         
-        var swipeDown = UISwipeGestureRecognizer(target: self, action: "respondToSwipeGesture:")
+        var swipeDown = UISwipeGestureRecognizer(target: self, action: "goback:")
         swipeDown.direction = UISwipeGestureRecognizerDirection.Down
         self.view.addGestureRecognizer(swipeDown)
         
@@ -60,22 +60,6 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
     func setupButtons() {
         closeBtn.setImage(IconImage().close(), forState: .Normal)
         closeBtn.setTitle("", forState: .Normal)
-    }
-    
-    func respondToSwipeGesture(gesture: UIGestureRecognizer) {
-        
-        if let swipeGesture = gesture as? UISwipeGestureRecognizer {
-            
-            switch swipeGesture.direction {
-            case UISwipeGestureRecognizerDirection.Right:
-                break;
-            case UISwipeGestureRecognizerDirection.Down:
-                self.goback(self)
-                break;
-            default:
-                break
-            }
-        }
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -156,6 +140,7 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
         else {
             Bakkle.sharedInstance.markItem("want", item_id: self.item!.valueForKey("pk")!.integerValue, success: {
                 NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkHoldingUpdate, object: nil)
+                NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkFeedUpdate, object: nil)
                 self.dismissViewControllerAnimated(true, completion: nil)
                 }, fail: {
                 self.dismissViewControllerAnimated(true, completion: nil)

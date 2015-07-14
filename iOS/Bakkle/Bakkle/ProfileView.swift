@@ -31,6 +31,7 @@ class ProfileView: UIViewController, UITextViewDelegate {
         setupButtons()
         self.backgroundAvatar.contentMode = UIViewContentMode.ScaleAspectFill
         self.backgroundAvatar.clipsToBounds = true
+        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "dismissKeyboard"))
         
         if canEdit {
             self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
@@ -53,6 +54,10 @@ class ProfileView: UIViewController, UITextViewDelegate {
         }
     }
     
+    func dismissKeyboard() {
+        self.descriptionTextView.resignFirstResponder()
+    }
+    
     override func viewWillAppear(animated: Bool) {
         
         let facebook_id = user.valueForKey("facebook_id") as! String
@@ -65,7 +70,7 @@ class ProfileView: UIViewController, UITextViewDelegate {
                     println("[SettingsView] displaying image \(facebookProfileImageUrlString)")
                     self.backgroundAvatar.hnk_setImageFromURL(imgURL!)
                     self.avatar.hnk_setImageFromURL(imgURL!)
-                    var visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .Dark)) as UIVisualEffectView
+                    var visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .Light)) as UIVisualEffectView
                     visualEffectView.frame = self.backgroundAvatar.frame
                     self.backgroundAvatar.addSubview(visualEffectView)
                     

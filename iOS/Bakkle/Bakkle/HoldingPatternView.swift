@@ -78,11 +78,7 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // Start time remaining timer
-        self.timer = NSTimer(timeInterval: 1.0, target: self, selector: Selector("updateTimeRemaining"), userInfo: nil, repeats: true)
-        NSRunLoop.currentRunLoop().addTimer(self.timer, forMode: NSRunLoopCommonModes)
-        
+    
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         
         setupButtons()
@@ -100,7 +96,9 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
             self.tableView.reloadData()
         }
         
-        
+        // Start time remaining timer
+        self.timer = NSTimer(timeInterval: 1.0, target: self, selector: Selector("updateTimeRemaining"), userInfo: nil, repeats: true)
+        NSRunLoop.currentRunLoop().addTimer(self.timer, forMode: NSRunLoopCommonModes)
 
         Bakkle.sharedInstance.populateHolding({});
     }
@@ -206,6 +204,7 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     Bakkle.sharedInstance.holdingItems.removeAtIndex(indexPath.row-1)
                     tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+                    tableView.reloadData()
                 })
             }, fail: {})
             

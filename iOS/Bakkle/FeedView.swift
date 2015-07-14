@@ -84,7 +84,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(true)
-        
+
         filterChanged()
         
         resetSwipeView()
@@ -309,6 +309,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     /* Called when new data is available to display.*/
     func refreshData() {
         dispatch_async(dispatch_get_main_queue()) {
+            Bakkle.sharedInstance.populateFeed({})
             //TODO: Check items 0 and 1, if they are the same, do nothing
             var revealViewController: SWRevealViewController! = self.revealViewController()
             if revealViewController == nil {
