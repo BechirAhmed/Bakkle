@@ -204,6 +204,7 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     Bakkle.sharedInstance.holdingItems.removeAtIndex(indexPath.row-1)
                     tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+                    tableView.reloadData()
                 })
             }, fail: {})
             
