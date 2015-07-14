@@ -291,12 +291,12 @@ static CGFloat const MDCSwipeToChooseViewLabelWidth = 65.f;
             nopeImageView.alpha = 0.f;
             holdImageView.alpha = 0.f;
             reportImageView.alpha = 0.f;
-//        } else if (state.direction == MDCSwipeDirectionUp) {
-//            transparentImageView.alpha = state.thresholdRatio / 3 * 2;
-//            reportImageView.alpha = state.thresholdRatio;
-//            nopeImageView.alpha = 0.f;
-//            likedImageView.alpha = 0.f;
-//            holdImageView.alpha = 0.f;
+        } else if (state.direction == MDCSwipeDirectionUp) {
+            transparentImageView.alpha = state.thresholdRatio / 3 * 2;
+            reportImageView.alpha = state.thresholdRatio;
+            nopeImageView.alpha = 0.f;
+            likedImageView.alpha = 0.f;
+            holdImageView.alpha = 0.f;
         } else if (state.direction == MDCSwipeDirectionDown) {
             transparentImageView.alpha = state.thresholdRatio / 3 * 2;
             holdImageView.alpha = state.thresholdRatio;
