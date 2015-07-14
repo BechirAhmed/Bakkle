@@ -11,29 +11,19 @@ import Photos
 import Haneke
 
 class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDelegate, UINavigationControllerDelegate, MDCSwipeToChooseDelegate {
-    
-    var state : MDCPanState!
+
     let menuSegue = "presentNav"
     let itemDetailSegue = "ItemDetailSegue"
     let refineSegue = "RefineSegue"
-    var searching = false
-    
     let options = MDCSwipeToChooseViewOptions()
-    var swipeView : MDCSwipeToChooseView!
-    var bottomView : MDCSwipeToChooseView!
     
     var fromCamera: Bool! = false
-    
-    @IBOutlet weak var menuBtn: UIButton!
-    @IBOutlet weak var noNewItemsLabel: UILabel!
-    @IBOutlet weak var drawer: UIView!
-    @IBOutlet weak var progressIndicator: UIActivityIndicatorView!
-    
-    @IBOutlet weak var searchBar: UISearchBar!
-    @IBOutlet weak var refineButton: UIButton!
-    
-    @IBOutlet weak var btnAddItem: UIButton!
-    @IBOutlet weak var titleBar: UIView!
+    var searching = false
+    var state : MDCPanState!
+    // the first card in the feedView
+    var swipeView : MDCSwipeToChooseView!
+    // the card behind the first card
+    var bottomView : MDCSwipeToChooseView!
     
     // for instructional overlay appeared above the feedView
     var instructionImgView: UIImageView!
@@ -42,12 +32,23 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     var itemDetailTap: UITapGestureRecognizer!
     var item_id = 42 //TODO: unhardcode this
     
+    @IBOutlet weak var menuBtn: UIButton!
+    @IBOutlet weak var noNewItemsLabel: UILabel!
+    @IBOutlet weak var drawer: UIView!
+    @IBOutlet weak var progressIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak var refineButton: UIButton!
+    @IBOutlet weak var btnAddItem: UIButton!
+    @IBOutlet weak var titleBar: UIView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Always look for updates
+        requestUpdates()
+        
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         progressIndicator.startAnimating()
-        
         
         // for swipe
         options.delegate = self
@@ -61,6 +62,8 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         // Item detail tap
         itemDetailTap = UITapGestureRecognizer(target: self, action: "goToDetails")
         
+        // dismiss tap
+        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "dismissKeyboard"))
         // Register for feed updates
         let notificationCenter = NSNotificationCenter.defaultCenter()
         let mainQueue = NSOperationQueue.mainQueue()
@@ -81,7 +84,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(true)
-        
+
         filterChanged()
         
         resetSwipeView()
@@ -94,16 +97,18 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                 }
             }
         }
-        
-        // Always look for updates
-        requestUpdates()
+
         fromCamera = false
     
         // add instructional overlay for the first time usage
         var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
         if userDefaults.boolForKey("instruction") {
             // disable user interaction and show instruction
+            self.searchBar.userInteractionEnabled = false
+            self.refineButton.userInteractionEnabled = false
+            self.menuBtn.userInteractionEnabled = false
             self.itemDetailTap.enabled = false
+            self.btnAddItem.userInteractionEnabled = false
             self.constructInstructionView()
         }
     }
@@ -125,15 +130,16 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             var mainWindow: UIWindow = UIApplication .sharedApplication().keyWindow!
             mainWindow.addSubview(effectView)
             mainWindow.addSubview(instructionImgView)
-//            self.drawer.insertSubview(effectView, aboveSubview: self.swipeView)
-//            self.drawer.insertSubview(instructionImgView, aboveSubview: effectView)
         }
-        
     }
     
     func closeBtnPressed(sender: UIButton!) {
         var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults();
         userDefaults.setBool(false, forKey: "instruction")
+        self.searchBar.userInteractionEnabled = true
+        self.refineButton.userInteractionEnabled = true
+        self.menuBtn.userInteractionEnabled = true
+        self.btnAddItem.userInteractionEnabled = true
         self.itemDetailTap.enabled = true
         instructionImgView.removeFromSuperview()
         effectView.removeFromSuperview()
@@ -178,6 +184,9 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     }
     /* End search bar delegate */
     
+    func dismissKeyboard() {
+        self.searchBar.resignFirstResponder()
+    }
     
     
     /* Call when filter parameters change. Updates text when all cards are exhausted */
@@ -188,6 +197,11 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         } else {
             self.noNewItemsLabel.text = "There are no new items near you."
         }
+    }
+    
+    
+    @IBAction func btnRefine(sender: AnyObject) {
+        self.dismissKeyboard()
     }
     
     func goToDetails() {
@@ -295,6 +309,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     /* Called when new data is available to display.*/
     func refreshData() {
         dispatch_async(dispatch_get_main_queue()) {
+            Bakkle.sharedInstance.populateFeed({})
             //TODO: Check items 0 and 1, if they are the same, do nothing
             var revealViewController: SWRevealViewController! = self.revealViewController()
             if revealViewController == nil {
@@ -309,7 +324,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         }
     }
     
-    // helper function
+    /* helper function */
     func setupView(view: MDCSwipeToChooseView!, item: NSDictionary!) {
         let imgURLs = item.valueForKey("image_urls") as! NSArray
         let topTitle: String = item.valueForKey("title") as! String
@@ -338,13 +353,13 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         }
         view.priceLabel.text = myString
         view.sellerName.text = firstName
-        view.ratingView.rating = 3.5
+//        view.ratingView.rating = 3.5
     
         if imgURL != nil {
             view.bottomBlurImg.hnk_setImageFromURL(imgURL!)
             view.imageView.hnk_setImageFromURL(imgURL!)
             view.imageView.contentMode = UIViewContentMode.ScaleAspectFill
-            view.profileImg.image = UIImage(data: NSData(contentsOfURL: profileImgURL!)!)
+            view.profileImg.image = UIImage(data: NSData(contentsOfURL: imgURL!)!)
         }
         
         if view == self.swipeView {
@@ -430,22 +445,22 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     }
     
     func view(view: UIView!, wasChosenWithDirection direction: MDCSwipeDirection) {
-        if direction == MDCSwipeDirection.Left {
+        switch direction {
+        case MDCSwipeDirection.Left:
             Bakkle.sharedInstance.markItem("meh", item_id: self.item_id, success: {}, fail: {})
-            loadNext()
-        }
-        else if direction == MDCSwipeDirection.Right {
+            break
+        case MDCSwipeDirection.Right:
             Bakkle.sharedInstance.markItem("want", item_id: self.item_id, success: {}, fail: {})
-            loadNext()
-        }
-        else if direction == MDCSwipeDirection.Up {
+            break
+        case MDCSwipeDirection.Up:
             Bakkle.sharedInstance.markItem("hold", item_id: self.item_id, success: {}, fail: {})
-            loadNext()
-        }
-        else if direction == MDCSwipeDirection.Down {
+            break
+        case MDCSwipeDirection.Down:
             Bakkle.sharedInstance.markItem("report", item_id: self.item_id, success: {}, fail: {})
-            loadNext()
+            break
+        default: break
         }
+        loadNext()
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {

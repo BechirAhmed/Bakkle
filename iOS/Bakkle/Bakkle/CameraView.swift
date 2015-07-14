@@ -10,11 +10,17 @@ import AVFoundation
 import QuartzCore
 
 class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    /* Constants */
+    
+    /* CONSTANTS */
     // if you change this you need to update storyboard with an extra image view
     // and you need to add extra views to the array of image views
+    private static let IMAGE_FREEZE_TIME = 0.25
+    private static let FADE_IN_TIME = 0.5
+    private static let FLASH_TIME = 0.05
     static let MAX_IMAGE_COUNT = 4
     static let JPEG_COMPRESSION_FACTOR: CGFloat = 0.3
+    static let scaledImageWidth: CGFloat = 660.0
+    var size: CGSize? = nil
     
     /* SEGUE NAVIGATION */
     @IBOutlet weak var closeButton: UIButton!
@@ -38,6 +44,13 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     var imageCount = 0
     var images = [UIImage]()
     
+    /* REMOVE IMAGE BUTTONS */
+    @IBOutlet weak var removeImage1: UIButton!
+    @IBOutlet weak var removeImage2: UIButton!
+    @IBOutlet weak var removeImage3: UIButton!
+    @IBOutlet weak var removeImage4: UIButton!
+    var removeImageButtons = [UIButton]()
+    
     /* CAPTURE BUTTON */
     @IBOutlet weak var capButtonOutline: UIView!
     @IBOutlet weak var capButtonSpace: UIView!
@@ -50,12 +63,30 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     @IBOutlet weak var galleryButton: UIButton!
     var stopVideoPreview: Bool = false
     
+    /* FADE VIEWS */
+    @IBOutlet weak var fadeView: UIView!
+    @IBOutlet weak var flashView: UIView!
+    @IBOutlet weak var fadeViewLoadLogo: UIImageView!
+    
+    /* HELPER VARIABLES */
+    var displayingStill = false
+    var addItem: AddItem?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // ensures that arrays do not occupy more space than needed (capacity == count)
+        setupAVFoundation()
+        
+        size = CGSize(width: CameraView.scaledImageWidth, height: CameraView.scaledImageWidth)
+        
+        // consider auto-generating these based on the static CameraView.MAX_IMAGE_COUNT
         imageViews = [imageView1, imageView2, imageView3, imageView4]
+        removeImageButtons = [removeImage1, removeImage2, removeImage3, removeImage4]
+        
+        // ensures that arrays do not occupy more space than needed (capacity == count)
+        imageViews.reserveCapacity(imageViews.count)
+        removeImageButtons.reserveCapacity(removeImageButtons.count)
+        
         images = [UIImage](count:CameraView.MAX_IMAGE_COUNT, repeatedValue:UIImage.alloc())
         
         UIApplication.sharedApplication().statusBarHidden = true
@@ -68,16 +99,31 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         galleryButton.setTitle("", forState: .Normal)
         closeButton.setTitle("", forState: .Normal)
         switchCamera.setTitle("", forState: .Normal)
-        
-//        for view in imageViews {
-//            var gestureRecognizer: UIGestureRecognizer = UIGestureRecognizer.
-//            var imageButton: UIGestureRecognizer = UITapGestureRecognizer.addTarget(self, action:"")
-//        }
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         UIApplication.sharedApplication().statusBarHidden = true
+        self.fadeView.alpha = 1.0
+        if self.addItem != nil && self.addItem!.successfulAdd {
+            self.fadeViewLoadLogo.image = UIImage(named: "logo-white-design-clear.png")!
+            var backgroundImage = UIImageView(frame: self.fadeView.frame)
+            backgroundImage.image = UIImage(named:"LoginScreen-bkg.png")!
+            self.fadeView.insertSubview(backgroundImage, belowSubview: self.fadeViewLoadLogo)
+            var successLabel = UILabel(frame: CGRectMake(0, 0, self.fadeViewLoadLogo.frame.size.width, self.fadeViewLoadLogo.frame.size.height))
+            successLabel.center = CGPointMake(self.fadeView.bounds.size.width / 2, (self.fadeViewLoadLogo.bounds.maxY + self.fadeView.bounds.maxY)/2)
+            successLabel.numberOfLines = 0
+            successLabel.font = UIFont(name: "Avenir-Black", size: 36)
+            successLabel.text = "Your item has been listed!"
+            successLabel.layer.shadowColor = Theme.ColorGreen.CGColor
+            successLabel.layer.shadowRadius = 5.0
+            successLabel.layer.shadowOpacity = 1.0
+            successLabel.textColor = UIColor.whiteColor()
+            successLabel.textAlignment = .Center
+            self.fadeView.addSubview(successLabel)
+        
+            self.dismissViewControllerAnimated(true, completion: nil)
+        }
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -87,11 +133,18 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         
         setupAVFoundation()
         
-        for view: UIImageView in imageViews {
-            view.layer.cornerRadius = 15.0
-            view.layer.masksToBounds = true
-            view.layer.borderWidth = 1.0
-            view.layer.borderColor = UIColor.whiteColor().CGColor
+        for imageView: UIImageView in imageViews {
+            imageView.layer.cornerRadius = 15.0
+            imageView.layer.masksToBounds = true
+            imageView.layer.borderWidth = 1.0
+            imageView.layer.borderColor = UIColor.whiteColor().CGColor
+        }
+        
+        for removeButton: UIButton in removeImageButtons {
+            removeButton.layer.cornerRadius = removeButton.frame.size.width / 2
+            removeButton.layer.shadowColor = UIColor.blackColor().CGColor
+            removeButton.layer.shadowRadius = 5
+            removeButton.layer.shadowOpacity = 1.0
         }
         
         capButtonSpace.layer.cornerRadius = capButtonSpace.frame.size.width / 2
@@ -107,6 +160,14 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         
         if !stopVideoPreview {
             displayImagePreview()
+        }
+        
+        buttonEnabledHandler()
+        
+        if self.addItem == nil || !self.addItem!.successfulAdd {
+            UIView.animateWithDuration(CameraView.FADE_IN_TIME, animations: {
+                self.fadeView.alpha = 0.0
+            })
         }
     }
     
@@ -129,7 +190,12 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         } else if frontCam != nil {
             selectedDevice = AVCaptureDeviceInput(device: frontCam!, error: &error)
         } else {
-            // alert
+            let alertController = UIAlertController(title: "No Camera Available", message:"Sorry, you need to have a camera to list an item.", preferredStyle: .Alert)
+            let defaultAction = UIAlertAction(title: "OK", style: .Default, handler: nil)
+            
+            presentViewController(alertController, animated: true, completion: {
+                self.dismissViewControllerAnimated(true, completion: nil)
+            })
         }
     }
     
@@ -162,22 +228,18 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     }
     
     func displayStillImage(image: UIImage) {
+        displayingStill = true
         // make AVFoundation display a still image (for gallery and image preview)
         captureSession.removeInput(selectedDevice)
         capturePreview?.removeFromSuperlayer()
         
         stillImagePreview.image = image
-        
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.75 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
-            self.stillImagePreview.image = nil
-            self.displayImagePreview()
-            self.buttonEnabledHandler()
-        }
     }
     
     func displayImagePreview() {
         if self.imageCount >= CameraView.MAX_IMAGE_COUNT {
             // no more images
+            return
         }
         
         if !contains(captureSession.inputs, item: selectedDevice) {
@@ -189,10 +251,12 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             return
         }
         
+        displayingStill = false
+        
         capturePreview = AVCaptureVideoPreviewLayer(session: captureSession)
-        capturePreview?.frame = cameraView.layer.frame
+        capturePreview?.frame = CGRectMake(0, 0, cameraView.layer.frame.width, cameraView.layer.frame.height)
         capturePreview?.videoGravity = AVLayerVideoGravityResizeAspectFill
-        self.view.layer.addSublayer(capturePreview)
+        self.cameraView.layer.insertSublayer(capturePreview, below: self.flashView.layer)
         captureSession.startRunning()
         
         if captureSession.canAddOutput(stillImageOutput) && !contains(captureSession.outputs, item: stillImageOutput) {
@@ -208,6 +272,25 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             }
         }
         return false
+    }
+    
+    // Tap to focus, need to draw square
+    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+        var touchPoint = touches.first as! UITouch
+        var screenSize = cameraView.bounds.size
+        var focusPoint = CGPoint(x: touchPoint.locationInView(cameraView).y / screenSize.height, y: touchPoint.locationInView(cameraView).x / screenSize.width)
+        
+        if CGRectContainsPoint(self.cameraView.frame, touchPoint.locationInView(nil)) {
+            if let device = self.selectedDevice!.device {
+                if(device.lockForConfiguration(nil)) {
+                    device.focusPointOfInterest = focusPoint
+                    device.focusMode = AVCaptureFocusMode.ContinuousAutoFocus
+                    device.exposurePointOfInterest = focusPoint
+                    device.exposureMode = AVCaptureExposureMode.ContinuousAutoExposure
+                    device.unlockForConfiguration()
+                }
+            }
+        }
     }
     
     @IBAction func pressedCaptureButton(sender: AnyObject) {
@@ -232,21 +315,32 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             stillImageOutput.captureStillImageAsynchronouslyFromConnection(videoConnection, completionHandler: { (imageDataSampleBuffer, error) -> Void in
                 if imageDataSampleBuffer != nil {
                     var recentImage = UIImage(data: (AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageDataSampleBuffer)))
-                    let scaledImageWidth: CGFloat = 660.0
-                    var size = CGSize(width: scaledImageWidth, height: scaledImageWidth)
                     
                     // this makes it appear as if there was a "flash" after you press capture on the image, and it ensures that the flash will unfreeze
                     // after the image has been displayed in
                     self.captureSession.stopRunning()
+                    self.flashView.alpha = 0.0
+                    self.flashView.hidden = false
+                    UIView.animateWithDuration(CameraView.FLASH_TIME, animations: {
+                        self.flashView.alpha = 1.0
+                    })
+                    UIView.animateWithDuration(CameraView.FLASH_TIME * 2, delay: CameraView.FLASH_TIME, options: nil, animations: {
+                        self.flashView.alpha = 0
+                    }, completion: nil)
                     
-                    recentImage!.cropAndResize(size, completionHandler: { (resizedImage:UIImage, data:NSData) -> () in
+                    
+                    recentImage!.cropAndResize(self.size!, completionHandler: { (resizedImage:UIImage, data:NSData) -> () in
                         var compressedImage = UIImageJPEGRepresentation(resizedImage, CameraView.JPEG_COMPRESSION_FACTOR)
                         self.images[itemIndex] = UIImage(data: compressedImage)!
                         self.populatePhotos()
                         
-                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.75 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
-                            self.captureSession.startRunning()
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(CameraView.IMAGE_FREEZE_TIME * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
                             self.buttonEnabledHandler()
+                            if self.imageCount >= CameraView.MAX_IMAGE_COUNT {
+                                self.displayStillImage(self.imageViews[CameraView.MAX_IMAGE_COUNT - 1].image!)
+                            } else {
+                                self.captureSession.startRunning()
+                            }
                         }
                     }) // cropAndResize
                 } else {
@@ -271,14 +365,23 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     }
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
-        let scaledImageWidth: CGFloat = 660.0 // make this a constant
-        var size = CGSize(width: scaledImageWidth, height: scaledImageWidth) // make this a global constant
         var itemIndex = self.imageCount++ // set the index to imageCount then increment the total count by 1
         var image = info[UIImagePickerControllerOriginalImage] as! UIImage
-        image.cropAndResize(size, completionHandler: { (resizedImage:UIImage, data:NSData) -> () in
+        image.cropAndResize(self.size!, completionHandler: { (resizedImage:UIImage, data:NSData) -> () in
         var compressedImage = UIImageJPEGRepresentation(resizedImage, CameraView.JPEG_COMPRESSION_FACTOR)
             self.images[itemIndex] = UIImage(data: compressedImage)!
             self.displayStillImage(self.images[itemIndex])
+            
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(CameraView.IMAGE_FREEZE_TIME * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
+                self.stillImagePreview.image = nil
+                self.buttonEnabledHandler()
+                if self.imageCount >= CameraView.MAX_IMAGE_COUNT {
+                    self.displayStillImage(self.imageViews[CameraView.MAX_IMAGE_COUNT - 1].image!)
+                } else {
+                    self.displayImagePreview()
+                }
+            }
+            
             self.populatePhotos()
         }) // cropAndResize
         stopVideoPreview = true
@@ -301,6 +404,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         for i in 0...(self.images.count - 1) {
             if i >= imagesNoSpace.count {
                 self.images[i] = UIImage.alloc()
+                self.imageViews[i].image = nil
             } else {
                 self.images[i] = imagesNoSpace[i]
                 self.imageViews[i].image = imagesNoSpace[i]
@@ -308,6 +412,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         }
         
         imageCount = imagesNoSpace.count
+        
         buttonEnabledHandler()
     }
     
@@ -325,48 +430,91 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         self.switchCamera.hidden = imageCountGreaterThanMaxCount
         self.capButtonOutline.hidden = imageCountGreaterThanMaxCount
         self.capButtonSpace.hidden = imageCountGreaterThanMaxCount
+        
+        for i in 0...(self.imageViews.count - 1) {
+            self.removeImageButtons[i].hidden = self.imageViews[i].image == nil
+            self.removeImageButtons[i].enabled = self.imageViews[i].image != nil
+        }
     }
     
     // rename to long press
     @IBAction func photoHeld(sender: AnyObject) {
-        
+        //switch(sender. )
+        //case :
+        //case :
+        //case :
+        //case :
     }
     
-    @IBAction func photoPreview(sender: AnyObject) {
+    @IBAction func photoPreview(sender: UITapGestureRecognizer) {
+        var imageViewIndex = sender.view!.tag - 31
         
-    }
-    
-    @IBAction func resetToCameraView(sender: AnyObject) {
+        let validTags = [1, 10, 20, 21, 30, 31, 32, 33, 34, 40, 41, 42, 43]
         
-    }
-    
-    func reorderPhoto(startIndex: Int, endIndex: Int) {
-        
-    }
-    
-    @IBAction func removePhoto(sender: AnyObject) {
-        // do stuff
-        // remember to check which sender to identify which image
-        
-        self.imageCount--
-        self.populatePhotos()
-    }
-    
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "AddItemSegue" {
-            let destinationVC = segue.destinationViewController as! AddItem
-            for image in self.images {
-                destinationVC.itemImages?.append(image)
-//                destinationVC.scaledImages?.append(UIImageJPEGRepresentation(image, 1.0))
+        if imageViewIndex >= 0 && imageViewIndex < imageViews.count {
+            if imageViews[imageViewIndex].image == nil && displayingStill && imageCount < CameraView.MAX_IMAGE_COUNT {
+                self.stillImagePreview.image = nil
+                displayImagePreview()
+            } else if imageViews[imageViewIndex].image != nil { // safety check
+                self.displayStillImage(imageViews[imageViewIndex].image!)
+            }
+        } else {
+            if !contains(validTags, item: sender.view!.tag) {
+                NSLog("[CameraView] Error in photoPreview: Unknown Sender\n\(sender)")
             }
         }
     }
     
-    override func shouldAutorotate() -> Bool {
-        return false
+    @IBAction func removePhoto(sender: UIButton) {
+        // the format for tags of remove buttons should be as follows:
+        // 321 = removeImage2 where:
+        //   3 = row on main UIScreen that the superview is on (3rd row down is images)
+        //   2 = second column of items in the row (2nd image)
+        //   1 = element in order from left to right (only 1 element, so one identifier)
+        // conversion to get the image number is integer division / 10 (get rid of ones)
+        // subtract by 31 (row + offset) and the result is the imageView number from left
+        // to right in the range of 0-3
+        var removeImageIndex = sender.tag / 10 - 31
+        
+        if removeImageIndex < 0 { // || removeImageIndex >= removeImageButtons.count
+            NSLog("[CameraView] Error in removePhoto: Unknown Sender\n\(sender)")
+        } else if imageViews[removeImageIndex].image != nil {
+            let alertController = UIAlertController(title: "Remove Photo", message:"Are you sure that you want to remove image #\(removeImageIndex + 1)?", preferredStyle: .Alert)
+            let defaultAction = UIAlertAction(title: "NO", style: .Default, handler: nil)
+            let acceptAction = UIAlertAction(title: "YES", style: .Destructive, handler: { (action: UIAlertAction!) in
+                var wasDisplayingRemovedImage = self.displayingStill && self.stillImagePreview.image?.isEqual(self.imageViews[removeImageIndex].image!) != nil
+                if wasDisplayingRemovedImage {
+                    self.stillImagePreview.image = nil
+                }
+                
+                self.imageViews[removeImageIndex].image = nil
+                self.images[removeImageIndex] = UIImage.alloc()
+                
+                self.imageCount--
+                self.populatePhotos()
+                
+                if wasDisplayingRemovedImage {
+                    self.displayImagePreview()
+                }
+            })
+            
+            alertController.addAction(acceptAction)
+            alertController.addAction(defaultAction)
+            presentViewController(alertController, animated: true, completion: nil)
+        }
     }
     
-    override func supportedInterfaceOrientations() -> Int {
-        return UIInterfaceOrientation.Portrait.rawValue
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "AddItemSegue" {
+            self.populatePhotos() // to be safe
+            let destinationVC = segue.destinationViewController as! AddItem
+            self.addItem = destinationVC
+            destinationVC.itemImages = [UIImage]()
+            for image in self.images {
+                if !(image.CIImage == nil && image.CGImage == nil) {
+                    destinationVC.itemImages?.append(image)
+                }
+            }
+        }
     }
 }

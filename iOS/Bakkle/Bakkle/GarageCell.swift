@@ -22,9 +22,5 @@ class GarageCell: UITableViewCell {
     @IBOutlet weak var numViews: UILabel!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var priceLabel: UILabel!
-    
-    func setCornerRadius() {
-        
-    }
 
 }

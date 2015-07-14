@@ -26,15 +26,16 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var pageControl: UIPageControl!
     
-    @IBOutlet weak var wantLabel: UILabel!
+    
+    @IBOutlet weak var wantBtn: UIButton!
     @IBOutlet weak var closeBtn: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = UIColor.whiteColor()
+
         activityInd?.startAnimating()
         
-        var swipeDown = UISwipeGestureRecognizer(target: self, action: "respondToSwipeGesture:")
+        var swipeDown = UISwipeGestureRecognizer(target: self, action: "goback:")
         swipeDown.direction = UISwipeGestureRecognizerDirection.Down
         self.view.addGestureRecognizer(swipeDown)
         
@@ -61,22 +62,6 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
         closeBtn.setTitle("", forState: .Normal)
     }
     
-    func respondToSwipeGesture(gesture: UIGestureRecognizer) {
-        
-        if let swipeGesture = gesture as? UISwipeGestureRecognizer {
-            
-            switch swipeGesture.direction {
-            case UISwipeGestureRecognizerDirection.Right:
-                break;
-            case UISwipeGestureRecognizerDirection.Down:
-                self.goback(self)
-                break;
-            default:
-                break
-            }
-        }
-    }
-    
     override func viewWillAppear(animated: Bool) {
         //TODO: This needs to load the item SENT to the view controller, not the top feed item.
         super.viewWillAppear(true)
@@ -85,7 +70,7 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
                 for index in 0...Bakkle.sharedInstance.trunkItems.count-1 {
                     if item == Bakkle.sharedInstance.trunkItems[index].valueForKey("item") as! NSDictionary {
                         wanted = true
-                        wantLabel.text = "ACCEPT OFFER"
+                        wantBtn.setTitle("ACCEPT OFFER", forState: UIControlState.Normal)
                         break
                     }
                 }
@@ -109,17 +94,21 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
         let sellerFacebookProfileImgString = "http://graph.facebook.com/\(sellerFBID)/picture?width=142&height=142"
         let topTitle: String = item!.valueForKey("title") as! String
         let topPrice: String = item!.valueForKey("price") as! String
-        let topMethod: String = item!.valueForKey("method") as! String
         let tags : [String] = item!.valueForKey("tags") as! [String]
         let tagString = ", ".join(tags)
+        let descriptions: String = item!.valueForKey("description") as! String
+        let location: String = item!.valueForKey("location") as! String
+        let distance = Bakkle.sharedInstance.distanceTo(CLLocation(locationString: location)) as CLLocationDistance!
         
         itemTitleLabel.text = topTitle
         itemPriceLabel.text = "$" + topPrice
-        itemTagsTextView.text = tagString
+        if description == "" {
+            itemTagsTextView.text = tagString
+        }else {
+            itemTagsTextView.text = descriptions
+        }
         sellerName.text = sellersName
-        
-        
-        
+        itemDistanceLabel.text = String(format: "%.2f miles", distance)
         
         for index in 0...imgURLs.count-1{
             let firstURL = imgURLs[index] as! String
@@ -151,6 +140,7 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
         else {
             Bakkle.sharedInstance.markItem("want", item_id: self.item!.valueForKey("pk")!.integerValue, success: {
                 NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkHoldingUpdate, object: nil)
+                NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkFeedUpdate, object: nil)
                 self.dismissViewControllerAnimated(true, completion: nil)
                 }, fail: {
                 self.dismissViewControllerAnimated(true, completion: nil)
