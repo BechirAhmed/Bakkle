@@ -139,7 +139,6 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
             chatViewController.seller = chatItem.valueForKey("seller") as! NSDictionary
             chatViewController.isBuyer = true
             self.navigationController?.pushViewController(chatViewController, animated: true)
-            tableView.deselectRowAtIndexPath(indexPath, animated: true)
         }
         WSManager.enqueueWorkPayload(chatPayload)  
     }
