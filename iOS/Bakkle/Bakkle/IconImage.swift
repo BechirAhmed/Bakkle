@@ -124,4 +124,8 @@ class IconImage {
     func switchCamera() -> UIImage {
         return UIImage(named: "switch-camera-outline.png")!
     }
+    
+    func remove() -> UIImage {
+        return UIImage(named: "new-x-black.jpeg")!
+    }
 }
