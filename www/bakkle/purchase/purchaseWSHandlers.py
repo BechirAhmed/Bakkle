@@ -108,7 +108,7 @@ class PurchaseWSHandler():
                 'error': 'Offer has already been ' + str(offer.status)
             }
 
-        if((offer.sent_by_buyer is True and offer.buyer == user) or (offer.sent_by_buyer is False and offer.item.seller == user)):
+        if((offer.sent_by_buyer is True and offer.buyer != user) or (offer.sent_by_buyer is False and offer.item.seller != user)):
             return {
                 'success': 0,
                 'error': "Cannot retract someone else's offer"

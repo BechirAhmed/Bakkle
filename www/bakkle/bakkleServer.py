@@ -57,14 +57,7 @@ app = web.Application([
     web.url(r'^/account/get_account/$', accountsRESTHandlers.getAccountHandler, name='get_account'),
 
 
-    #(r"/item/feed/.*", itemsRESTHandlers.feedHandler),
     web.url(r"/ws.*", baseWSHandlers.BaseWSHandler),
-    # (r"/.*", baseRESTRequestHandlers.baseRESTRequestHandler),
-
-
-    # (r"/ws/", chatRequestHandlers.ChatWSHandler),
-    # (r"/items/[0-9]+/detail", itemsRequestHandlers.ItemRequestHandler),
-    # (r"/items/[0-9]+/detail", itemsRequestHandlers.ItemRequestHandler),
 ], debug=True
 )
 

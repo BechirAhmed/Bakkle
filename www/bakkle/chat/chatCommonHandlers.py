@@ -131,12 +131,12 @@ def sendChatMessage(clients, chatId, senderId, message, offerPrice, offerMethod)
         if(chat.item.seller.pk in clients):
             for uuid in clients[chat.item.seller.pk]:
                 clients[chat.item.seller.pk][uuid].write_message(
-                    {'success': 1, 'messageOrigin': senderId, 'notificationType': 'newOffer', 'offer': newMessage.offer.toDictionary()})
+                    {'success': 1, 'messageOrigin': senderId, 'notificationType': 'newOffer', 'message': newMessage.toDictionary()})
 
         if(chat.buyer.pk in clients):
             for uuid in clients[chat.buyer.pk]:
                 clients[chat.buyer.pk][uuid].write_message(
-                    {'success': 1, 'messageOrigin': senderId, 'notificationType': 'newOffer', 'offer': newMessage.offer.toDictionary()})
+                    {'success': 1, 'messageOrigin': senderId, 'notificationType': 'newOffer', 'message': newMessage.toDictionary()})
 
     return {'success': 1}
 
