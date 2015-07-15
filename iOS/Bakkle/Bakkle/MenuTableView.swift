@@ -9,15 +9,19 @@
 import UIKit
 
 class MenuTableController: UITableViewController {
-    
+
+    let profileSegue = "PushToProfileView"
     var backView: UIView!
+    var segueNotifier: dispatch_semaphore_t = dispatch_semaphore_create(0)
     
-    @IBOutlet weak var feedLbl: UILabel!
-    @IBOutlet weak var garageLbl: UILabel!
-    @IBOutlet weak var trunkLbl: UILabel!
-    @IBOutlet weak var holdingLbl: UILabel!
-    @IBOutlet weak var filterLbl: UILabel!
-    @IBOutlet weak var settingsLbl: UILabel!
+    @IBOutlet weak var profileImg: UIImageView!
+    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var feedImg: UIImageView!
+    @IBOutlet weak var sellerImg: UIImageView!
+    @IBOutlet weak var buyerImg: UIImageView!
+    @IBOutlet weak var holdImg: UIImageView!
+    @IBOutlet weak var contactImg: UIImageView!
+    @IBOutlet weak var profileBtn: UIImageView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,20 +31,26 @@ class MenuTableController: UITableViewController {
             self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         }
         setupImages()
+        setupBackground()
+        setupProfileLabel()
+        profileBtn.image = IconImage().settings()
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        self.view.userInteractionEnabled = true
         
         /* set up the function of pushing back frontViewController when tapped frontViewController */
         if self.revealViewController() != nil {
             self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
             
             backView = UIView(frame: self.revealViewController().frontViewController.view.frame)
-            //backView.backgroundColor = UIColor(red: CGFloat(1.0), green: CGFloat(0.0), blue: CGFloat(0.0), alpha: CGFloat(1.0))
             self.revealViewController().frontViewController.view.addSubview(backView)
             self.revealViewController().frontViewController.view.addGestureRecognizer(self.revealViewController().tapGestureRecognizer())
         }
+    }
+    override func viewDidAppear(animated: Bool) {
+        setupProfileImg()
     }
     
     override func viewDidDisappear(animated: Bool) {
@@ -58,49 +68,55 @@ class MenuTableController: UITableViewController {
     }
     
     func setupImages() {
-        self.feedLbl.attributedText = stringWithIcon("FEED", image: IconImage().home())
-        self.garageLbl.attributedText = stringWithIcon("SELLER'S GARAGE", image: IconImage().edit())
-        self.trunkLbl.attributedText = stringWithIcon("BUYER'S TRUNK", image: IconImage().cart())
-        self.holdingLbl.attributedText = stringWithIcon("HOLDING PATTERN", image: IconImage().down())
-        self.filterLbl.attributedText = stringWithIcon("FEED FILTER", image: IconImage().filter())
-        self.settingsLbl.attributedText = stringWithIcon("SETTINGS", image: IconImage().settings())
+        self.feedImg.image = IconImage().home()
+        self.sellerImg.image = IconImage().edit()
+        self.buyerImg.image = IconImage().cart()
+        self.holdImg.image = IconImage().down()
+        self.contactImg.image = IconImage().contact()
     }
     
-    func stringWithIcon(label: String, image: UIImage) -> NSAttributedString {
-        var attachment: OffsetTextAttachment = OffsetTextAttachment()
-        let font: UIFont = self.feedLbl.font
-        attachment.fontDescender = font.descender
-        attachment.image = image
-        
-        var attachmentString : NSAttributedString = NSAttributedString(attachment: attachment)
-        var stringFinal : NSMutableAttributedString = NSMutableAttributedString(string: " " + label)
-        stringFinal.insertAttributedString(attachmentString, atIndex: 0)
-        
-        return stringFinal
+    func setupBackground() {
+        var visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .Dark)) as UIVisualEffectView
+        visualEffectView.frame = tableView.bounds
+        var backgroundImageView = UIImageView(frame: tableView.bounds)
+        backgroundImageView.hnk_setImageFromURL(Bakkle.sharedInstance.profileImgURL!)
+        backgroundImageView.clipsToBounds = true
+        backgroundImageView.addSubview(visualEffectView)
+        tableView.backgroundView = backgroundImageView
     }
     
-    @IBAction func btnReset(sender: AnyObject) {
-        Bakkle.sharedInstance.resetDemo({
-            
-            let alertController = UIAlertController(title: "Bakkle Server", message:
-                "Items in the feed have been reset for DEMO.", preferredStyle: UIAlertControllerStyle.Alert)
-            alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default,handler: nil))
-            self.presentViewController(alertController, animated: true, completion: nil)
-            
-        })
+    func setupProfileImg() {
+        self.profileImg.hnk_setImageFromURL(Bakkle.sharedInstance.profileImgURL!)
+        self.profileImg.layer.cornerRadius = self.profileImg.frame.size.width/2
+        self.profileImg.layer.borderWidth = 5.0
+        self.profileImg.clipsToBounds = true
+        let borderColor = UIColor.whiteColor()
+        self.profileImg.layer.borderColor = borderColor.CGColor
     }
     
-    @IBAction func btnLogout(sender: AnyObject) {
-        Bakkle.sharedInstance.logout()
-        FBSession.activeSession().closeAndClearTokenInformation()
-        self.revealViewController().dismissViewControllerAnimated(true, completion: { () -> Void in
-            //
-        })
+    func setupProfileLabel() {
+        self.nameLabel.text = Bakkle.sharedInstance.first_name + " " + Bakkle.sharedInstance.last_name
+    }
+    
+    @IBAction func btnContact(sender: AnyObject) {
+        UIApplication.sharedApplication().openURL(NSURL(string: "http://www.bakkle.com/")!)
     }
     
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         /* This fixes the small lines on the left hand side of the cell dividers */
-        cell.backgroundColor = UIColor(red: 153/255, green: 153/255, blue: 153/255, alpha: 1.0)
+        cell.backgroundColor = UIColor.clearColor()
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        self.view.userInteractionEnabled = false
+        if segue.identifier == self.profileSegue {
+            let destinationVC = segue.destinationViewController as! ProfileView
+            Bakkle.sharedInstance.getAccount(Bakkle.sharedInstance.account_id, success: {
+                destinationVC.user = Bakkle.sharedInstance.responseDict
+                dispatch_semaphore_signal(self.segueNotifier)
+            }, fail: {})
+            dispatch_semaphore_wait(segueNotifier, DISPATCH_TIME_FOREVER)
+        }
     }
 }
 

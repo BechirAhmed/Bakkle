@@ -14,49 +14,52 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
     let itemDetailsCellIdentifier = "ItemDetailsCell"
     var wanted: Bool = false
     var itemImages: [NSData]? = [NSData]()
-
+    
+    @IBOutlet weak var sellerName: UILabel!
+    @IBOutlet weak var sellerAvatar: UIImageView!
     
     @IBOutlet weak var itemTitleLabel: UILabel!
-    @IBOutlet weak var itemTagsLabel: UILabel!
+    @IBOutlet weak var itemTagsTextView: UITextView!
+    @IBOutlet weak var itemPriceLabel: UILabel!
+    @IBOutlet weak var itemDistanceLabel: UILabel!
+    
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var pageControl: UIPageControl!
     
-    @IBOutlet weak var itemMethodLabel: UILabel!
-    @IBOutlet weak var itemPriceLabel: UILabel!
-    @IBOutlet weak var wantLabel: UILabel!
+    
+    @IBOutlet weak var wantBtn: UIButton!
     @IBOutlet weak var closeBtn: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = UIColor.whiteColor()
+
         activityInd?.startAnimating()
         
-        var swipeDown = UISwipeGestureRecognizer(target: self, action: "respondToSwipeGesture:")
+        var swipeDown = UISwipeGestureRecognizer(target: self, action: "goback:")
         swipeDown.direction = UISwipeGestureRecognizerDirection.Down
         self.view.addGestureRecognizer(swipeDown)
         
         setupButtons()
     }
     
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        let sellerProfile: NSDictionary = item!.valueForKey("seller") as! NSDictionary
+        let sellerFBID: String = sellerProfile.valueForKey("facebook_id") as! String
+        let sellerFacebookProfileImgString = "http://graph.facebook.com/\(sellerFBID)/picture?width=142&height=142"
+        let profileImageURL = NSURL(string: sellerFacebookProfileImgString)
+        println("FACEBOOK PROFILE LINK IS: \(sellerFacebookProfileImgString)")
+        sellerAvatar.image = UIImage(data: NSData(contentsOfURL: profileImageURL!)!)
+        sellerAvatar.layer.borderWidth = 2.0
+        sellerAvatar.layer.borderColor = UIColor.whiteColor().CGColor
+        sellerAvatar.layer.cornerRadius = sellerAvatar.layer.frame.size.width / 2
+        sellerAvatar.layer.masksToBounds = true
+    }
+    
     func setupButtons() {
         closeBtn.setImage(IconImage().close(), forState: .Normal)
         closeBtn.setTitle("", forState: .Normal)
-    }
-    
-    func respondToSwipeGesture(gesture: UIGestureRecognizer) {
-        
-        if let swipeGesture = gesture as? UISwipeGestureRecognizer {
-            
-            switch swipeGesture.direction {
-            case UISwipeGestureRecognizerDirection.Right:
-                break;
-            case UISwipeGestureRecognizerDirection.Down:
-                self.goback(self)
-                break;
-            default:
-                break
-            }
-        }
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -67,7 +70,7 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
                 for index in 0...Bakkle.sharedInstance.trunkItems.count-1 {
                     if item == Bakkle.sharedInstance.trunkItems[index].valueForKey("item") as! NSDictionary {
                         wanted = true
-                        wantLabel.text = "ACCEPT OFFER"
+                        wantBtn.setTitle("ACCEPT OFFER", forState: UIControlState.Normal)
                         break
                     }
                 }
@@ -84,17 +87,28 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
         
         //TOOD: Load all images into an array and UIScrollView.
         
+        let sellerProfile: NSDictionary = item!.valueForKey("seller") as! NSDictionary
+        // get the first name of the seller (split seller name by " " and get first element)
+        let sellersName: String = (split(sellerProfile.valueForKey("display_name") as! String) {$0 == " "})[0]
+        let sellerFBID: String = sellerProfile.valueForKey("facebook_id") as! String
+        let sellerFacebookProfileImgString = "http://graph.facebook.com/\(sellerFBID)/picture?width=142&height=142"
         let topTitle: String = item!.valueForKey("title") as! String
         let topPrice: String = item!.valueForKey("price") as! String
-        let topMethod: String = item!.valueForKey("method") as! String
         let tags : [String] = item!.valueForKey("tags") as! [String]
         let tagString = ", ".join(tags)
+        let descriptions: String = item!.valueForKey("description") as! String
+        let location: String = item!.valueForKey("location") as! String
+        let distance = Bakkle.sharedInstance.distanceTo(CLLocation(locationString: location)) as CLLocationDistance!
         
-        itemTitleLabel.text = topTitle.uppercaseString
+        itemTitleLabel.text = topTitle
         itemPriceLabel.text = "$" + topPrice
-        itemMethodLabel.text = topMethod
-        itemTagsLabel.text = tagString
-        
+        if description == "" {
+            itemTagsTextView.text = tagString
+        }else {
+            itemTagsTextView.text = descriptions
+        }
+        sellerName.text = sellersName
+        itemDistanceLabel.text = String(format: "%.2f miles", distance)
         
         for index in 0...imgURLs.count-1{
             let firstURL = imgURLs[index] as! String
@@ -126,6 +140,7 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
         else {
             Bakkle.sharedInstance.markItem("want", item_id: self.item!.valueForKey("pk")!.integerValue, success: {
                 NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkHoldingUpdate, object: nil)
+                NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkFeedUpdate, object: nil)
                 self.dismissViewControllerAnimated(true, completion: nil)
                 }, fail: {
                 self.dismissViewControllerAnimated(true, completion: nil)

@@ -45,10 +45,10 @@
         _holdRotationAngle = -15.f;
         _holdTextSize = 38.0f;
         
-        _reportText = [NSLocalizedString(@"COMMENT", nil) uppercaseString];
+        _reportText = [NSLocalizedString(@"REPORT", nil) uppercaseString];
         _reportColor = [UIColor colorWith8BitRed:255.0f green:102.f blue:0 alpha:1.f];
         _reportRotationAngle = -15.f;
-        _reportTextSize = 35.0f;
+        _reportTextSize = 38.0f;
 
         _threshold = 100.f;
     }

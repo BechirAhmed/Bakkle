@@ -100,7 +100,7 @@ class WSSendChatMessageRequest: WSRequest{
 
 class WSSendOfferRequest: WSRequest{
     
-    init(chatId: NSString, offerPrice: NSNumber, offerMethod: deliveryMethod){
+    init(chatId: NSString, offerPrice: NSString, offerMethod: deliveryMethod){
         super.init(method:methodType.sendChatMessage.rawValue);
         
         super.data["chatId"] = chatId

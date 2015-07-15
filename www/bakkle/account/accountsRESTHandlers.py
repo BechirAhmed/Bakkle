@@ -19,6 +19,7 @@ class loginFacebookHandler(bakkleRequestHandler):
             app_version = self.getArgument('app_version')
             is_ios = self.getArgument('is_ios', True)
             client_ip = self.getIP()
+            app_flavor = self.getArgument("flavor", 0)
         except QueryArgumentError as error:
             return self.writeJSON({"status": 0, "message": error.message})
 
@@ -27,7 +28,44 @@ class loginFacebookHandler(bakkleRequestHandler):
                                                         user_location,
                                                         app_version,
                                                         is_ios,
-                                                        client_ip)
+                                                        client_ip,
+                                                        app_flavor)
+
+        self.writeJSON(respObj)
+
+
+class setDescriptionHandler(bakkleRequestHandler):
+
+    def post(self):
+
+        print("loginFacebook")
+        # TODO: Handle location
+        # Get the rest of the necessary params from the request
+        try:
+            user_id = self.getUser()
+            description = self.getArgument('description')
+        except QueryArgumentError as error:
+            return self.writeJSON({"status": 0, "message": error.message})
+
+        respObj = accountsCommonHandlers.set_description(user_id,
+                                                         description)
+
+        self.writeJSON(respObj)
+
+
+class getAccountHandler(bakkleRequestHandler):
+
+    def post(self):
+
+        print("loginFacebook")
+        # TODO: Handle location
+        # Get the rest of the necessary params from the request
+        try:
+            accountId = self.getArgument('accountId')
+        except QueryArgumentError as error:
+            return self.writeJSON({"status": 0, "message": error.message})
+
+        respObj = accountsCommonHandlers.get_account(accountId)
 
         self.writeJSON(respObj)
 
@@ -62,13 +100,15 @@ class facebookHandler(bakkleRequestHandler):
             display_name = self.getArgument('name')
             email = self.getArgument('email')
             device_uuid = self.getArgument('device_uuid')
+            app_flavor = self.getArgument('flavor', 0)
         except QueryArgumentError as error:
             return self.writeJSON({"status": 0, "message": error.message})
 
         respObj = accountsCommonHandlers.facebook(facebook_id,
                                                   display_name,
                                                   email,
-                                                  device_uuid)
+                                                  device_uuid,
+                                                  app_flavor)
 
         self.writeJSON(respObj)
 
