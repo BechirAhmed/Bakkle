@@ -12,14 +12,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.andtinder.model.CardModel;
+import com.andtinder.model.Orientations;
 import com.andtinder.view.CardContainer;
+import com.andtinder.view.SimpleCardStackAdapter;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.koushikdutta.ion.Ion;
-import com.wenchao.cardstack.CardStack;
 
 import java.util.ArrayList;
 
@@ -33,7 +35,7 @@ public class FeedFragment extends Fragment {
     FeedItem feedItem = null;
     CardContainer mCardContainer;
 
-    CardStack mCardStack;
+    //CardStack mCardStack;
 
     String status, description, price, postDate, title, buyerRating, sellerDisplayName, sellerLocation, sellerFacebookId, sellerPk, sellerRating, location, pk, method;
 
@@ -81,12 +83,12 @@ public class FeedFragment extends Fragment {
         catch (Exception e){Log.d("testing", e.getMessage());}
 
 
-//        mCardContainer = (CardContainer) view.findViewById(R.id.cardView);
-//        mCardContainer.setOrientation(Orientations.Orientation.Ordered);
+        mCardContainer = (CardContainer) view.findViewById(R.id.cardView);
+        mCardContainer.setOrientation(Orientations.Orientation.Ordered);
 
-        mCardStack = (CardStack) view.findViewById(R.id.container);
-        mCardStack.setContentResource(R.layout.card_layout);
-        mCardStack.setStackMargin(0);
+//        mCardStack = (CardStack) view.findViewById(R.id.container);
+//        mCardStack.setContentResource(R.layout.card_layout);
+//        mCardStack.setStackMargin(0);
 
         return view;
     }
@@ -94,8 +96,8 @@ public class FeedFragment extends Fragment {
     public void populateFeed(JsonObject json)
     {
         JsonArray jsonArray = json.getAsJsonArray("feed");
-        //SimpleCardStackAdapter adapter = new SimpleCardStackAdapter(getActivity());
-        CardAdapter mCardAdapter = new CardAdapter(getActivity().getApplicationContext());
+        SimpleCardStackAdapter adapter = new SimpleCardStackAdapter(getActivity());
+        //CardAdapter mCardAdapter = new CardAdapter(getActivity().getApplicationContext());
         JsonObject temp;
         ArrayList<FeedItem> feedItems = new ArrayList<>();
         CardModel card;
@@ -110,14 +112,12 @@ public class FeedFragment extends Fragment {
             temp = element.getAsJsonObject();
 
             feedItem.setTitle(temp.get("title").getAsString());
-            feedItem.setDescription(temp.get("description").getAsString());
             feedItem.setSellerDisplayName(temp.get("seller").getAsJsonObject().get("display_name").getAsString());
             feedItem.setPrice(temp.get("price").getAsString());
             feedItem.setLocation(temp.get("location").getAsString()); //TODO: difference between location and sellerlocation??
             feedItem.setMethod(temp.get("method").getAsString());
             feedItem.setSellerFacebookId(temp.get("seller").getAsJsonObject().get("facebook_id").getAsString());
-            pk = temp.get("pk").getAsString();
-            feedItem.setPk(pk);
+            feedItem.setPk(temp.get("pk").getAsString());
 
 
             imageUrlArray = temp.get("image_urls").getAsJsonArray();
@@ -128,10 +128,10 @@ public class FeedFragment extends Fragment {
             }
             feedItem.setImageUrls(imageUrls);
 
-            mCardAdapter.add(feedItem);
-            mCardStack.setAdapter(mCardAdapter);
+            //mCardAdapter.add(feedItem);
+            //mCardStack.setAdapter(mCardAdapter);
 
-            /*card = new CardModel(feedItem.getTitle(), feedItem.getSellerDisplayName(), "$" + feedItem.getPrice(),
+            card = new CardModel(feedItem.getTitle(), feedItem.getSellerDisplayName(), "$" + feedItem.getPrice(),
                     feedItem.getDistance(), feedItem.getMethod(), getCardImage(feedItem), getSellerImage(sellerFacebookId));
 
             card.setOnCardDismissedListener(new CardModel.OnCardDismissedListener() {
@@ -191,7 +191,7 @@ public class FeedFragment extends Fragment {
             });
 
             adapter.add(card);
-            mCardContainer.setAdapter(adapter);*/
+            mCardContainer.setAdapter(adapter);
             feedItem = null;
 //            temp = null;
 //            imageUrlArray = null;
@@ -266,7 +266,7 @@ public class FeedFragment extends Fragment {
 
         @Override
         protected void onPreExecute(){
-            this.dialog.setMessage("Please wait");
+            this.dialog.setMessage("Loading Items");
             this.dialog.show();
         }
         @Override

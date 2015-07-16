@@ -40,6 +40,9 @@ public class CardModel {
 	private Drawable cardLikeImageDrawable;
 	private Drawable cardDislikeImageDrawable;
 
+	public Bitmap sellerImageBitmap;
+	public Bitmap cardImageBitmap;
+
     private OnCardDismissedListener mOnCardDismissedListener = null;
 
     private OnClickListener mOnClickListener = null;
@@ -67,6 +70,8 @@ public class CardModel {
 		this.method = method;
 		this.cardImageDrawable = cardImage;
 		this.sellerImageDrawable = sellerImage;
+		this.sellerImageBitmap = ((BitmapDrawable) sellerImageDrawable).getBitmap();
+		this.cardImageBitmap = ((BitmapDrawable) cardImageDrawable).getBitmap();
 	}
 
 	public CardModel(String title, String seller, String price, String distance, String method, Bitmap cardImage, Bitmap sellerImage) {
@@ -77,6 +82,8 @@ public class CardModel {
 		this.method = method;
 		this.cardImageDrawable = new BitmapDrawable(null, cardImage);
 		this.sellerImageDrawable = new BitmapDrawable(null, sellerImage);
+		this.sellerImageBitmap = sellerImage;
+		this.cardImageBitmap = cardImage;
 	}
 
 	public String getTitle() {

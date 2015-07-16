@@ -1,20 +1,17 @@
 package com.bakkle.bakkle;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -32,7 +29,7 @@ import com.facebook.login.widget.LoginButton;
 import java.util.Arrays;
 
 
-public class LoginActivity extends Activity implements OnClickListener {
+public class LoginActivity extends AppCompatActivity implements OnClickListener {
 
     private LoginButton loginButton;
     private CallbackManager callbackManager;
@@ -106,16 +103,16 @@ public class LoginActivity extends Activity implements OnClickListener {
         });
 
         // Set up custom Action Bar and enable up navigation
-        getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        getActionBar().setCustomView(R.layout.action_bar_title);
-        getActionBar().setDisplayHomeAsUpEnabled(false);
-        getActionBar().setDisplayShowHomeEnabled(false);
-        getActionBar().setHomeButtonEnabled(false);
+//        getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+//        getActionBar().setCustomView(R.layout.action_bar_title);
+//        getActionBar().setDisplayHomeAsUpEnabled(false);
+//        getActionBar().setDisplayShowHomeEnabled(false);
+//        getActionBar().setHomeButtonEnabled(false);
 
-        ((TextView)findViewById(R.id.action_bar_title)).setText(R.string.title_activity_sign_in);
-        ((ImageButton)findViewById(R.id.action_bar_right)).setVisibility(View.INVISIBLE);
-        ((ImageButton) findViewById(R.id.action_bar_home)).setImageResource(R.drawable.ic_action_cancel);
-        ((ImageButton) findViewById(R.id.action_bar_home)).setOnClickListener(this);
+//        ((TextView)findViewById(R.id.action_bar_title)).setText(R.string.title_activity_sign_in);
+//        ((ImageButton)findViewById(R.id.action_bar_right)).setVisibility(View.INVISIBLE);
+//        ((ImageButton) findViewById(R.id.action_bar_home)).setImageResource(R.drawable.ic_action_cancel);
+//        ((ImageButton) findViewById(R.id.action_bar_home)).setOnClickListener(this);
 
         // Add on click listeners to buttons
         ((Button)findViewById(R.id.btnSignIn)).setOnClickListener(this);
