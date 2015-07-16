@@ -35,6 +35,8 @@ public class FeedFragment extends Fragment {
     FeedItem feedItem = null;
     CardContainer mCardContainer;
 
+    CardModel card;
+
     //CardStack mCardStack;
 
     String status, description, price, postDate, title, buyerRating, sellerDisplayName, sellerLocation, sellerFacebookId, sellerPk, sellerRating, location, pk, method;
@@ -93,113 +95,119 @@ public class FeedFragment extends Fragment {
         return view;
     }
 
-    public void populateFeed(JsonObject json)
+    public void populateFeed(JsonArray jsonArray)
     {
-        JsonArray jsonArray = json.getAsJsonArray("feed");
-        SimpleCardStackAdapter adapter = new SimpleCardStackAdapter(getActivity());
+        jsonArray = populateOneFeedItem(jsonArray);
+        jsonArray = populateOneFeedItem(jsonArray);
+        jsonArray = populateOneFeedItem(jsonArray);
+    }
+
+    public JsonArray populateOneFeedItem(final JsonArray jsonArray)
+    {
+        final SimpleCardStackAdapter adapter = new SimpleCardStackAdapter(getActivity());
         //CardAdapter mCardAdapter = new CardAdapter(getActivity().getApplicationContext());
         JsonObject temp;
         ArrayList<FeedItem> feedItems = new ArrayList<>();
-        CardModel card;
         ArrayList<String> tags, imageUrls;
         JsonObject seller;
         JsonArray imageUrlArray;
+        JsonElement element;
+
+        element = jsonArray.remove(jsonArray.size() - 1);
+
+        feedItem = new FeedItem(this.getActivity().getApplicationContext());
+        temp = element.getAsJsonObject();
+
+        feedItem.setTitle(temp.get("title").getAsString());
+        feedItem.setSellerDisplayName(temp.get("seller").getAsJsonObject().get("display_name").getAsString());
+        feedItem.setPrice(temp.get("price").getAsString());
+        feedItem.setLocation(temp.get("location").getAsString()); //TODO: difference between location and sellerlocation??
+        feedItem.setMethod(temp.get("method").getAsString());
+        feedItem.setSellerFacebookId(temp.get("seller").getAsJsonObject().get("facebook_id").getAsString());
+        pk = temp.get("pk").getAsString();
+        feedItem.setPk(pk);
 
 
-        for(JsonElement element : jsonArray)
+        imageUrlArray = temp.get("image_urls").getAsJsonArray();
+        imageUrls = new ArrayList<>();
+        for(JsonElement urlElement : imageUrlArray)
         {
-            feedItem = new FeedItem(this.getActivity().getApplicationContext());
-            temp = element.getAsJsonObject();
-
-            feedItem.setTitle(temp.get("title").getAsString());
-            feedItem.setSellerDisplayName(temp.get("seller").getAsJsonObject().get("display_name").getAsString());
-            feedItem.setPrice(temp.get("price").getAsString());
-            feedItem.setLocation(temp.get("location").getAsString()); //TODO: difference between location and sellerlocation??
-            feedItem.setMethod(temp.get("method").getAsString());
-            feedItem.setSellerFacebookId(temp.get("seller").getAsJsonObject().get("facebook_id").getAsString());
-            feedItem.setPk(temp.get("pk").getAsString());
-
-
-            imageUrlArray = temp.get("image_urls").getAsJsonArray();
-            imageUrls = new ArrayList<>();
-            for(JsonElement urlElement : imageUrlArray)
-            {
-                imageUrls.add(urlElement.getAsString());
-            }
-            feedItem.setImageUrls(imageUrls);
-
-            //mCardAdapter.add(feedItem);
-            //mCardStack.setAdapter(mCardAdapter);
-
-            card = new CardModel(feedItem.getTitle(), feedItem.getSellerDisplayName(), "$" + feedItem.getPrice(),
-                    feedItem.getDistance(), feedItem.getMethod(), getCardImage(feedItem), getSellerImage(sellerFacebookId));
-
-            card.setOnCardDismissedListener(new CardModel.OnCardDismissedListener() {
-                @Override
-                public void onLike() {
-                    Toast.makeText(getActivity(), "Like", Toast.LENGTH_SHORT).show();
-                    serverCalls.markItem("want",
-                            preferences.getString("auth_token", "0"),
-                            preferences.getString("uuid", "0"),
-                            pk,
-                            "42");
-                }
-
-                @Override
-                public void onDislike() {
-                    Toast.makeText(getActivity(), "Dislike", Toast.LENGTH_SHORT).show();
-
-                    serverCalls.markItem("meh",
-                            preferences.getString("auth_token", "0"),
-                            preferences.getString("uuid", "0"),
-                            pk,
-                            "42");
-                }
-
-                @Override
-                public void onUp() {
-                    Toast.makeText(getActivity(), "Up", Toast.LENGTH_SHORT).show();
-                    serverCalls.markItem("hold",
-                            preferences.getString("auth_token", "0"),
-                            preferences.getString("uuid", "0"),
-                            pk,
-                            "42");
-
-                }
-
-                @Override
-                public void onDown() {
-                    Toast.makeText(getActivity(), "Down", Toast.LENGTH_SHORT).show();
-                    serverCalls.markItem("report",
-                            preferences.getString("auth_token", "0"),
-                            preferences.getString("uuid", "0"),
-                            pk,
-                            "42");
-
-                }
-            });
-            final CardModel tempCard = card;
-            card.setOnClickListener(new CardModel.OnClickListener() {
-                @Override
-                public void OnClickListener() {
-                    //onCardSelected.OnCardSelected(feedItem);
-//title, tags, img, method, price
-
-
-                    //TODO: bring up description page, with all pictures, description, etc
-                }
-            });
-
-            adapter.add(card);
-            mCardContainer.setAdapter(adapter);
-            feedItem = null;
-//            temp = null;
-//            imageUrlArray = null;
-//            imageUrls = null;
-            //card = null;
+            imageUrls.add(urlElement.getAsString());
         }
+        feedItem.setImageUrls(imageUrls);
+
+        //mCardAdapter.add(feedItem);
+        //mCardStack.setAdapter(mCardAdapter);
+
+        card = new CardModel(feedItem.getTitle(), feedItem.getSellerDisplayName(), "$" + feedItem.getPrice(),
+                feedItem.getDistance(), feedItem.getMethod(), feedItem.getPk(), feedItem.getImageUrls().get(0)/*, getCardImage(feedItem), getSellerImage(sellerFacebookId)*/);
+
+        card.setOnCardDismissedListener(new CardModel.OnCardDismissedListener() {
+            @Override
+            public void onLike() {
+                Toast.makeText(getActivity(), "Want", Toast.LENGTH_SHORT).show();
+                serverCalls.markItem("want",
+                        preferences.getString("auth_token", "0"),
+                        preferences.getString("uuid", "0"),
+                        adapter.getCardModel(0).getPk(),
+                        "42");
+                populateOneFeedItem(jsonArray);
 
 
+                Log.v("pk is ", card.getPk());
+            }
+
+            @Override
+            public void onDislike() {
+                Toast.makeText(getActivity(), "Nope", Toast.LENGTH_SHORT).show();
+
+                serverCalls.markItem("meh",
+                        preferences.getString("auth_token", "0"),
+                        preferences.getString("uuid", "0"),
+                        adapter.getCardModel(0).getPk(),
+                        "42");
+                populateOneFeedItem(jsonArray);
+            }
+
+            @Override
+            public void onUp() {
+                Toast.makeText(getActivity(), "Holding", Toast.LENGTH_SHORT).show();
+                serverCalls.markItem("hold",
+                        preferences.getString("auth_token", "0"),
+                        preferences.getString("uuid", "0"),
+                        adapter.getCardModel(0).getPk(),
+                        "42");
+                populateOneFeedItem(jsonArray);
+
+            }
+
+            @Override
+            public void onDown() {
+                Toast.makeText(getActivity(), "Comment", Toast.LENGTH_SHORT).show();
+                serverCalls.markItem("report",
+                        preferences.getString("auth_token", "0"),
+                        preferences.getString("uuid", "0"),
+                        adapter.getCardModel(0).getPk(),
+                        "42");
+                populateOneFeedItem(jsonArray);
+
+            }
+        });
+        card.setOnClickListener(new CardModel.OnClickListener() {
+            @Override
+            public void OnClickListener() {
+                //onCardSelected.OnCardSelected(feedItem);
+                //title, tags, img, method, price
+
+
+                //TODO: bring up description page, with all pictures, description, etc
+            }
+        });
+
+        adapter.add(card);
+        mCardContainer.setAdapter(adapter);
+
+        return jsonArray;
     }
 
     public Bitmap getCardImage(FeedItem item)
@@ -291,7 +299,7 @@ public class FeedFragment extends Fragment {
             }
 
             if(jsonResult != null)
-                populateFeed(jsonResult);
+                populateFeed(jsonResult.getAsJsonArray("feed"));
             else
                 Log.d("umm", "what");
         }

@@ -216,19 +216,30 @@ public class ServerCalls{
 
     public void markItem(String status, String authToken, String uuid, String item_id, String viewDuration){
 //TODO: defintely make these Async as soon as possible
-        try {
-            jsonResponse = Ion.with(mContext)
+            Ion.with(mContext)
                     .load(url_base + url_mark + status + "/")
                     .setBodyParameter("auth_token", authToken)
                     .setBodyParameter("device_uuid", uuid)
                     .setBodyParameter("item_id", item_id)
                     .setBodyParameter("view_duration", viewDuration)
                     .asJsonObject()
-                    .get();
-        }
-        catch (Exception e){
-            Log.d("testing error 00", e.getMessage());
-        }
+                    .setCallback(new FutureCallback<JsonObject>() {
+                        @Override
+                        public void onCompleted(Exception e, JsonObject result) {
+
+                            if(e == null)
+                                jsonResponse = result;
+                            else
+                                jsonResponse = null;
+
+                            try{
+                            Log.v("response is ", jsonResponse.toString());}
+                            catch (Exception f){
+                                Log.v("testing error 00", "json was null (there was an exception)");
+                            }
+                        }
+                    });
+            Log.v("auth token is ", authToken);
 
     }
 
@@ -372,12 +383,17 @@ public class ServerCalls{
 
     public void resetDemo(String authToken, String uuid){
         try {
-            jsonResponse = Ion.with(mContext)
+            Ion.with(mContext)
                     .load(url_base + url_reset)
                     .setBodyParameter("auth_token", authToken)
                     .setBodyParameter("device_uuid", uuid)
                     .asJsonObject()
-                    .get();
+                    .setCallback(new FutureCallback<JsonObject>() {
+                        @Override
+                        public void onCompleted(Exception e, JsonObject result) {
+                            jsonResponse = result;
+                        }
+                    });
         }
         catch (Exception e) {
             Log.d("testing error 00", e.getMessage());

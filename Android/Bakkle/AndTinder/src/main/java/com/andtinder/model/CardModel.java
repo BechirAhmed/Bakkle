@@ -18,7 +18,6 @@
 package com.andtinder.model;
 
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
 public class CardModel {
@@ -28,6 +27,8 @@ public class CardModel {
 	private String price;
 	private String distance;
 	private String method;
+	private String pk;
+	private String cardImageURL;
 
 	private Drawable cardImageDrawable;
 
@@ -59,32 +60,38 @@ public class CardModel {
     }
 
 	public CardModel() {
-		this(null, null, null, null, null, (Drawable)null, (Drawable)null);
+		this(null, null, null, null, null, null, null/*, (Drawable)null, (Drawable)null*/);
 	}
 
-	public CardModel(String title, String seller, String price, String distance, String method, Drawable cardImage, Drawable sellerImage) {
+	public CardModel(String title, String seller, String price, String distance, String method, String pk, String cardImageURL/*, Drawable cardImage, Drawable sellerImage*/) {
 		this.title = title;
 		this.seller = seller;
 		this.price = price;
 		this.distance = distance;
 		this.method = method;
-		this.cardImageDrawable = cardImage;
-		this.sellerImageDrawable = sellerImage;
-		this.sellerImageBitmap = ((BitmapDrawable) sellerImageDrawable).getBitmap();
-		this.cardImageBitmap = ((BitmapDrawable) cardImageDrawable).getBitmap();
+		this.pk = pk;
+		this.cardImageURL = cardImageURL;
+//		this.cardImageDrawable = cardImage;
+//		this.sellerImageDrawable = sellerImage;
+//		this.sellerImageBitmap = ((BitmapDrawable) sellerImageDrawable).getBitmap();
+//		this.cardImageBitmap = ((BitmapDrawable) cardImageDrawable).getBitmap();
 	}
 
-	public CardModel(String title, String seller, String price, String distance, String method, Bitmap cardImage, Bitmap sellerImage) {
+	/*public CardModel(String title, String seller, String price, String distance, String method, String pk, String cardImageURL, Bitmap cardImage, Bitmap sellerImage) {
 		this.title = title;
 		this.seller = seller;
 		this.price = price;
 		this.distance = distance;
 		this.method = method;
-		this.cardImageDrawable = new BitmapDrawable(null, cardImage);
-		this.sellerImageDrawable = new BitmapDrawable(null, sellerImage);
-		this.sellerImageBitmap = sellerImage;
-		this.cardImageBitmap = cardImage;
-	}
+		this.pk = pk;
+		this.cardImageURL = cardImageURL;
+//		this.cardImageDrawable = new BitmapDrawable(null, cardImage);
+//		this.sellerImageDrawable = new BitmapDrawable(null, sellerImage);
+//		this.sellerImageBitmap = sellerImage;
+//		this.cardImageBitmap = cardImage;
+	}*/
+
+
 
 	public String getTitle() {
 		return title;
@@ -132,6 +139,22 @@ public class CardModel {
 
 	public Drawable getCardImageDrawable() {
 		return cardImageDrawable;
+	}
+
+	public String getPk() {
+		return pk;
+	}
+
+	public void setPk(String pk) {
+		this.pk = pk;
+	}
+
+	public String getCardImageURL() {
+		return cardImageURL;
+	}
+
+	public void setCardImageURL(String cardImageURL) {
+		this.cardImageURL = cardImageURL;
 	}
 
 	public void setCardImageDrawable(Drawable cardImageDrawable) {

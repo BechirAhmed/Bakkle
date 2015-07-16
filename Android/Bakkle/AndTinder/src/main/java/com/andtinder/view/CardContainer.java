@@ -16,11 +16,11 @@ import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.Gravity;
 import android.view.MotionEvent;
+import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
-import android.view.animation.LinearInterpolator;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 
@@ -57,7 +57,7 @@ public class CardContainer extends AdapterView<ListAdapter> {
 
 
     //TODO: determine max dynamically based on device speed
-    private int mMaxVisible = 10;
+    private int mMaxVisible = 3;
     private GestureDetector mGestureDetector;
     private int mFlingSlop;
     private Orientation mOrientation;
@@ -73,7 +73,7 @@ public class CardContainer extends AdapterView<ListAdapter> {
     public CardContainer(Context context) {
         super(context);
 
-        setOrientation(Orientation.Disordered);
+        setOrientation(Orientation.Ordered);
         setGravity(Gravity.CENTER);
         init();
 
@@ -240,8 +240,11 @@ public class CardContainer extends AdapterView<ListAdapter> {
         }
     }
 
+    private VelocityTracker mVelocityTracker = null;
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+
         if (mTopCard == null) {
             return false;
         }
@@ -254,6 +257,15 @@ public class CardContainer extends AdapterView<ListAdapter> {
         final float dx, dy;
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
+
+                if (mVelocityTracker == null) {
+                    mVelocityTracker = VelocityTracker.obtain();
+                } else {
+                    mVelocityTracker.clear();
+                }
+                mVelocityTracker.addMovement(event);
+
+
                 mTopCard.getHitRect(childRect);
 
                 pointerIndex = event.getActionIndex();
@@ -277,6 +289,8 @@ public class CardContainer extends AdapterView<ListAdapter> {
                 break;
             case MotionEvent.ACTION_MOVE:
 
+                mVelocityTracker.addMovement(event);
+                mVelocityTracker.computeCurrentVelocity(1000);
                 pointerIndex = event.findPointerIndex(mActivePointerId);
                 x = event.getX(pointerIndex);
                 y = event.getY(pointerIndex);
@@ -300,9 +314,51 @@ public class CardContainer extends AdapterView<ListAdapter> {
                 mLastTouchX = x;
                 mLastTouchY = y;
 
-                OverlayView likeOverlay = (OverlayView) findViewById(R.id.like_overlay);
-                if(x > 0)
-                    likeOverlay.show();
+
+                float targetX = mTopCard.getX();
+                float targetY = mTopCard.getY();
+                long duration = 0;
+
+                boundsRect.set(0 - mTopCard.getWidth() - 100, 0 - mTopCard.getHeight() - 100, getWidth() + 100, getHeight() + 100);
+
+                float velocityX;
+                float velocityY;
+
+                final int pointerid = event.getPointerId(pointerIndex);
+
+                velocityX = mVelocityTracker.getXVelocity(pointerid);
+                velocityY = mVelocityTracker.getYVelocity(pointerid);
+
+//                while (boundsRect.contains((int) targetX, (int) targetY)) {
+//                    targetX += velocityX / 10;
+//                    targetY += velocityY / 10;
+//                }
+//
+//                OverlayView overlayView = null;
+//
+//                if (targetX > 0 && (targetY < 1500 && targetY > -1500)) {
+//                    overlayView = (OverlayView) mTopCard.findViewById(R.id.like_overlay);
+//                    overlayView.show();
+//                    overlayView.setAlpha(128);
+//                }
+//                else if(targetX < 0 && (targetY < 1500 && targetY > -1500)){
+//                    overlayView = (OverlayView) mTopCard.findViewById(R.id.dislike_overlay);
+//                    overlayView.show();
+//                    overlayView.setAlpha(128);
+//                }
+//                else if(targetY < 0 && (targetX < 1000 && targetX > -1000)){
+//                    overlayView = (OverlayView) mTopCard.findViewById(R.id.holding_overlay);
+//                    overlayView.show();
+//                    overlayView.setAlpha(128);
+//                } else if(targetY > 0 && (targetX < 700 && targetX > -700)){
+//                    overlayView = (OverlayView) mTopCard.findViewById(R.id.comment_overlay);
+//                    overlayView.show();
+//                    overlayView.setAlpha(128);
+//                }
+
+
+
+
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
@@ -433,8 +489,9 @@ public class CardContainer extends AdapterView<ListAdapter> {
             Log.d("Fling", "Fling with " + velocityX + ", " + velocityY);
             final View topCard = mTopCard;
             float dx = e2.getX() - e1.getX();
-            if (Math.abs(dx) > mTouchSlop && Math.abs(velocityX) > Math.abs(velocityY) && //Maybe change the value mTouchSlop so that it doesnt fling as easily
-                    Math.abs(velocityX) > mFlingSlop * 3)
+            float dy = e2.getY() - e1.getY();
+            if ((Math.abs(dx) > mTouchSlop || Math.abs(dy) > mTouchSlop) && //TODO: Maybe change the value mTouchSlop so that it doesnt fling as easily
+                    (Math.abs(velocityX) > mFlingSlop * 3 || Math.abs(velocityY) > mFlingSlop * 3))
             {
                 float targetX = topCard.getX();
                 float targetY = topCard.getY();
@@ -442,32 +499,41 @@ public class CardContainer extends AdapterView<ListAdapter> {
 
                 boundsRect.set(0 - topCard.getWidth() - 100, 0 - topCard.getHeight() - 100, getWidth() + 100, getHeight() + 100);
 
+
                 while (boundsRect.contains((int) targetX, (int) targetY)) {
                     targetX += velocityX / 10;
                     targetY += velocityY / 10;
                     duration += 100;
                 }
 
-                duration = Math.min(500, duration);
+                duration = Math.min(150, duration);
 
-                mTopCard = getChildAt(getChildCount() - 2);
+
                 CardModel cardModel = (CardModel)getAdapter().getItem(getChildCount() - 1);
 
                 if(mTopCard != null)
                     mTopCard.setLayerType(LAYER_TYPE_HARDWARE, null);
 
                 if (cardModel.getOnCardDismissedListener() != null) {
-                    if ( targetX > 0 && (targetY < 1200 && targetY > -1200)) { //TODO: this is where i add the callback for the holding pattern
+                    if (targetX > 0 && (targetY < 1500 && targetY > -1500)) {
                         cardModel.getOnCardDismissedListener().onLike();
                     }
-                    else if(targetX < 0 && (targetY < 1200 && targetY > -1200)){
+                    else if(targetX < 0 && (targetY < 1500 && targetY > -1500)){
                         cardModel.getOnCardDismissedListener().onDislike();
                     }
-                    else if(targetY > 0 && (targetX < 1200 && targetX > -1200)){
+                    else if(targetY < 0 && (targetX < 1000 && targetX > -1000)){
                         cardModel.getOnCardDismissedListener().onUp();
+                    } else if(targetY > 0 && (targetX < 700 && targetX > -700)){
+                        cardModel.getOnCardDismissedListener().onDown();
                     }
                     else{
-                        cardModel.getOnCardDismissedListener().onDown();
+                        topCard.animate()
+                                .setDuration(duration)
+                                .setInterpolator(new AccelerateInterpolator())
+                                .translationX(0)
+                                .translationY(0)
+                                .rotation(0);
+                        return true;
                     }
                     Log.d("testing", "targetX is: " + targetX + " and targetY is: " + targetY);
 
@@ -475,8 +541,7 @@ public class CardContainer extends AdapterView<ListAdapter> {
 
                 topCard.animate()
                         .setDuration(duration)
-                        .alpha(.75f)
-                        .setInterpolator(new LinearInterpolator())
+                        .setInterpolator(new AccelerateInterpolator())
                         .x(targetX)
                         .y(targetY)
                         .rotation(Math.copySign(25, velocityX)) //used to be 45, not 35
@@ -492,6 +557,8 @@ public class CardContainer extends AdapterView<ListAdapter> {
                                 onAnimationEnd(animation);
                             }
                         });
+                mTopCard = getChildAt(getChildCount() - 2);
+
                 return true;
             } else
                 return false;
