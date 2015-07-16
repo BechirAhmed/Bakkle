@@ -396,7 +396,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             if value > 100000 {
                 value = 100000
             }
-            return String(format: "%.2f", (str as NSString).floatValue )
+            return String(format: "%.2f", value )
         } else {
             return "0"
         }
