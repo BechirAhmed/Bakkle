@@ -95,12 +95,12 @@ class RefineView: UIViewController, UISearchBarDelegate {
         //println("d:\(Int(distance.value)) p:\(price.value) n: \(number.value)")
         self.dismissKeyboard()
         if distance.value >= 100 {
-            distanceLbl.text = "100+ mi"
+            distanceLbl.text = "∞"
         } else {
             distanceLbl.text = "\(Int(distance.value)) mi"
         }
         if price.value >= 100 {
-            priceLbl.text = "$100+"
+            priceLbl.text = "∞"
         } else {
             priceLbl.text = "$\(Int(price.value))"
         }
@@ -110,12 +110,12 @@ class RefineView: UIViewController, UISearchBarDelegate {
         println("SET d:\(Int(distance.value)) p:\(price.value)")
         self.dismissKeyboard()
         if distance.value >= 100 {
-            distanceLbl.text = "100+ mi"
+            distanceLbl.text = "∞"
         } else {
             distanceLbl.text = "\(Int(distance.value)) mi"
         }
         if price.value >= 100 {
-            priceLbl.text = "$100+"
+            priceLbl.text = "∞"
         } else {
             priceLbl.text = "$\(Int(price.value))"
         }

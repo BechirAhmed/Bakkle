@@ -268,7 +268,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
             if value == 0 {
                 priceField.text = "take it!"
             } else {
-                priceField.text = String(format: "$ %.2f", (str as NSString).floatValue )
+                priceField.text = String(format: "$ %.2f", value )
             }
         }
     }

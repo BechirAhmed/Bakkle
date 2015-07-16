@@ -50,10 +50,12 @@ class MenuTableController: UITableViewController {
         }
     }
     override func viewDidAppear(animated: Bool) {
+        UIApplication.sharedApplication().statusBarHidden = true
         setupProfileImg()
     }
     
     override func viewDidDisappear(animated: Bool) {
+        UIApplication.sharedApplication().statusBarHidden = false
         super.viewDidDisappear(animated)
         
         if self.revealViewController() != nil {

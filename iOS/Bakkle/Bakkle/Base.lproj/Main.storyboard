@@ -2966,6 +2966,9 @@
                                 <exclude reference="tfn-dK-RZO"/>
                             </mask>
                             <mask key="constraints">
+                                <exclude reference="Bft-8B-HUQ"/>
+                                <exclude reference="LvK-il-b5s"/>
+                                <exclude reference="MlM-Ea-obh"/>
                                 <exclude reference="2eq-TC-9XQ"/>
                                 <exclude reference="EQm-mV-nKh"/>
                                 <exclude reference="zTZ-5T-nlH"/>
@@ -2973,9 +2976,6 @@
                                 <exclude reference="QgO-7D-wea"/>
                                 <exclude reference="sbs-xv-aaa"/>
                                 <exclude reference="zE9-Je-zlr"/>
-                                <exclude reference="Bft-8B-HUQ"/>
-                                <exclude reference="LvK-il-b5s"/>
-                                <exclude reference="MlM-Ea-obh"/>
                                 <exclude reference="C19-44-Cpt"/>
                                 <exclude reference="NHi-R4-UCN"/>
                                 <exclude reference="VIu-vP-Q0U"/>
@@ -2990,6 +2990,9 @@
                                 <include reference="tfn-dK-RZO"/>
                             </mask>
                             <mask key="constraints">
+                                <include reference="Bft-8B-HUQ"/>
+                                <include reference="LvK-il-b5s"/>
+                                <include reference="MlM-Ea-obh"/>
                                 <include reference="2eq-TC-9XQ"/>
                                 <include reference="EQm-mV-nKh"/>
                                 <include reference="zTZ-5T-nlH"/>
@@ -2997,9 +3000,6 @@
                                 <include reference="QgO-7D-wea"/>
                                 <include reference="sbs-xv-aaa"/>
                                 <include reference="zE9-Je-zlr"/>
-                                <include reference="Bft-8B-HUQ"/>
-                                <include reference="LvK-il-b5s"/>
-                                <include reference="MlM-Ea-obh"/>
                                 <include reference="C19-44-Cpt"/>
                                 <include reference="NHi-R4-UCN"/>
                                 <include reference="VIu-vP-Q0U"/>
@@ -4538,6 +4538,9 @@
                                                     <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="15"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
+                                                    <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                                        <rect key="frame" x="99" y="8" width="213" height="21"/>
+                                                    </variation>
                                                 </label>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ABU-0d-c2I">
                                                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
@@ -5081,7 +5084,6 @@
                                         <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="17"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                         <connections>
-                                            <outlet property="delegate" destination="5rT-aH-bSn" id="olP-d6-qau"/>
                                             <outlet property="delegate" destination="5rT-aH-bSn" id="Tgn-UI-LEW"/>
                                         </connections>
                                     </textView>
@@ -5118,11 +5120,10 @@
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Uyh-ZG-Yko">
                                                 <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
                                                 <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="25"/>
-                                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                         </subviews>
-                                        <color key="backgroundColor" red="0.73583491161616155" green="0.73583491161616155" blue="0.73583491161616155" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="centerX" secondItem="Uyh-ZG-Yko" secondAttribute="centerX" id="2YZ-gW-bVW"/>
                                             <constraint firstAttribute="centerY" secondItem="Uyh-ZG-Yko" secondAttribute="centerY" id="5Y4-Be-i1K"/>
@@ -6941,6 +6942,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="Rco-rv-njI"/>
-        <segue reference="l07-Jc-m61"/>
+        <segue reference="zsR-Bp-dYb"/>
     </inferredMetricsTieBreakers>
 </document>
