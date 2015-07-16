@@ -93,8 +93,8 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         header.backgroundColor = Theme.ColorGreen
         
         
-        let buttonWidth: CGFloat = 96.0
-        var backButton = UIButton(frame: CGRectMake(header.bounds.origin.x, header.bounds.origin.y+20, buttonWidth, headerHeight))
+        let buttonWidth: CGFloat = 80.0
+        var backButton = UIButton(frame: CGRectMake(header.bounds.origin.x + 4, header.bounds.origin.y+24, buttonWidth, headerHeight - 8))
         backButton.setImage(UIImage(named: "icon-back.png"), forState: UIControlState.Normal)
         backButton.addTarget(self, action: "btnBack:", forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(backButton)
