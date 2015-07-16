@@ -330,6 +330,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     func btnCounterOffer(sender: UIButton!) {
         proposeOffer()
+        loadMessages()
         println("Countered offer")
     }
 
