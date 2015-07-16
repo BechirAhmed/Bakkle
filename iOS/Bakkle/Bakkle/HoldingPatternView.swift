@@ -14,7 +14,7 @@ class HoldingPatternCell : UITableViewCell {
     @IBOutlet var titleLabel: UILabel?
     @IBOutlet var priceLabel: UILabel?
     @IBOutlet var timeRemainingLabel: UILabel?
-
+    var viewTime:Int = 0
     
 //    259200 = 4 days
     var timeRemaining: NSTimeInterval = 5400 {
@@ -75,6 +75,9 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var menuBtn: UIButton!
+    var activeItem = [Int]()
+    var expiredItem = [Int]()
+    var soldItem = [Int]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -100,7 +103,10 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
         self.timer = NSTimer(timeInterval: 1.0, target: self, selector: Selector("updateTimeRemaining"), userInfo: nil, repeats: true)
         NSRunLoop.currentRunLoop().addTimer(self.timer, forMode: NSRunLoopCommonModes)
 
-        Bakkle.sharedInstance.populateHolding({});
+        Bakkle.sharedInstance.populateHolding({
+            self.classifyData()
+            self.tableView.reloadData()
+        });
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -119,8 +125,68 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
         menuBtn.setTitle("", forState: .Normal)
     }
     
+    // helper function
+    func getItem(indexPath: NSIndexPath) -> NSDictionary {
+        if indexPath.row > 0 && indexPath.row <= activeItem.count {
+            let item = Bakkle.sharedInstance.holdingItems[activeItem[indexPath.row-1]] as! NSDictionary
+            return item
+        }else if indexPath.row > activeItem.count+1 && indexPath.row <= activeItem.count+soldItem.count+1 {
+            let item = Bakkle.sharedInstance.holdingItems[soldItem[indexPath.row-2-activeItem.count]] as! NSDictionary
+            return item
+        }else {
+            let item = Bakkle.sharedInstance.holdingItems[expiredItem[indexPath.row-3-activeItem.count-soldItem.count]] as! NSDictionary
+            return item
+        }
+    }
+    
+    func removeAtIndex(indexPath: NSIndexPath) {
+        if indexPath.row > 0 && indexPath.row <= activeItem.count {
+            Bakkle.sharedInstance.holdingItems.removeAtIndex(activeItem[indexPath.row-1])
+        }else if indexPath.row > activeItem.count+1 && indexPath.row <= activeItem.count+soldItem.count+1 {
+            Bakkle.sharedInstance.holdingItems.removeAtIndex(soldItem[indexPath.row-2-activeItem.count])
+        }else {
+            Bakkle.sharedInstance.holdingItems.removeAtIndex(expiredItem[indexPath.row-3-activeItem.count-soldItem.count])
+        }
+    }
+    
+    func getIndex(indexPath: NSIndexPath) -> Int {
+        if indexPath.row > 0 && indexPath.row <= activeItem.count {
+            return activeItem[indexPath.row-1]
+        }else if indexPath.row > activeItem.count+1 && indexPath.row <= activeItem.count+soldItem.count+1 {
+            return soldItem[indexPath.row-2-activeItem.count]
+        }else {
+            return expiredItem[indexPath.row-3-activeItem.count-soldItem.count]
+        }
+        
+    }
+    
+    func classifyData() {
+        self.activeItem = [Int]()
+        self.expiredItem = [Int]()
+        self.soldItem = [Int]()
+        if Bakkle.sharedInstance.holdingItems.count == 0 {
+            return
+        }
+        for index in 0...Bakkle.sharedInstance.holdingItems.count-1 {
+            let item = Bakkle.sharedInstance.holdingItems[index].valueForKey("item") as? NSDictionary
+            let status = item?.valueForKey("status") as! String
+            switch status {
+            case "Active":
+                self.activeItem.append(index)
+                // calculate to be expired later
+                break
+            case "Sold":
+                self.soldItem.append(index)
+                break
+            default: break
+            }
+        }
+        
+    }
+
+    
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if indexPath.row == 0 || indexPath.row == Bakkle.sharedInstance.holdingItems.count + 1 || indexPath.row == Bakkle.sharedInstance.holdingItems.count + 2 {
+        if indexPath.row == 0 || indexPath.row == activeItem.count+1 || indexPath.row == activeItem.count + soldItem.count + 2 {
             return CGFloat (30.0)
         }
         return CGFloat(100.0)
@@ -133,7 +199,7 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
         if let x = Bakkle.sharedInstance.holdingItems {
             println("Actually got items from the holding pattern!")
             println(String(Bakkle.sharedInstance.holdingItems.count) + " items in holding pattern")
-            return Bakkle.sharedInstance.holdingItems.count + 3
+            return activeItem.count + soldItem.count + expiredItem.count + 3
         }
         println("Didn't get anything in holding pattern")
         return 0
@@ -142,18 +208,18 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if indexPath.row == 0 {
             let cell : StatusCell = tableView.dequeueReusableCellWithIdentifier(self.statusCellIdentifier, forIndexPath: indexPath) as! StatusCell
-            cell.statusLabel.text = "Active (\(Bakkle.sharedInstance.holdingItems.count))"
+            cell.statusLabel.text = "Active (\(activeItem.count))"
             cell.statusLabel.textColor = UIColor(red: 0.3, green: 0.3, blue: 0.3, alpha: 1.0)
             cell.selectionStyle = UITableViewCellSelectionStyle.None
             return cell
-        }else if indexPath.row == Bakkle.sharedInstance.holdingItems.count + 1 {
+        }else if indexPath.row == activeItem.count + 1 {
             let cell : StatusCell = tableView.dequeueReusableCellWithIdentifier(self.statusCellIdentifier, forIndexPath: indexPath) as! StatusCell
             cell.statusLabel.text = "Sold (\(0))"
             cell.statusLabel.textColor = UIColor(red: 0.3, green: 0.3, blue: 0.3, alpha: 1.0)
             cell.selectionStyle = UITableViewCellSelectionStyle.None
             return cell
         }
-        if indexPath.row == Bakkle.sharedInstance.holdingItems.count + 2 {
+        if indexPath.row == activeItem.count + expiredItem.count + 2 {
             let cell : StatusCell = tableView.dequeueReusableCellWithIdentifier(self.statusCellIdentifier, forIndexPath: indexPath) as! StatusCell
             cell.statusLabel.text = "Expired (\(0))"
             cell.statusLabel.textColor = UIColor(red: 0.3, green: 0.3, blue: 0.3, alpha: 1.0)
@@ -167,7 +233,7 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
         cell.itemImage?.contentMode = UIViewContentMode.ScaleAspectFill
         cell.itemImage?.layer.cornerRadius = 10.0
         cell.itemImage?.clipsToBounds = true
-        let entry : NSDictionary = Bakkle.sharedInstance.holdingItems[indexPath.row-1] as! NSDictionary
+        let entry : NSDictionary = getItem(indexPath)
         let item = entry.valueForKey("item") as! NSDictionary
         let imgURLs : [String] = item.valueForKey("image_urls") as! [String]
         let firstURL = imgURLs[0] as String
@@ -181,17 +247,17 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.row == 0 || indexPath.row == Bakkle.sharedInstance.holdingItems.count + 1 || indexPath.row == Bakkle.sharedInstance.holdingItems.count + 2 {
+        if indexPath.row == 0 || indexPath.row == activeItem.count+1 || indexPath.row == activeItem.count + soldItem.count + 2  {
             return
         }
         let sb: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let vc: ItemDetails = sb.instantiateViewControllerWithIdentifier("ItemDetails") as! ItemDetails
-        vc.item = Bakkle.sharedInstance.holdingItems[indexPath.row-1].valueForKey("item") as! NSDictionary
+        vc.item = getItem(indexPath).valueForKey("item") as! NSDictionary
         self.presentViewController(vc, animated: true, completion: {})
     }
     
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        if indexPath.row == 0 || indexPath.row == Bakkle.sharedInstance.holdingItems.count + 1 || indexPath.row == Bakkle.sharedInstance.holdingItems.count + 2 {
+        if indexPath.row == 0 || indexPath.row == activeItem.count+1 || indexPath.row == activeItem.count + soldItem.count + 2  {
             return false
         }
         return true
@@ -199,10 +265,11 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == UITableViewCellEditingStyle.Delete {
-            let item = Bakkle.sharedInstance.holdingItems[indexPath.row-1].valueForKey("item") as! NSDictionary
+            let item = getItem(indexPath).valueForKey("item") as! NSDictionary
             Bakkle.sharedInstance.markItem("meh", item_id: item.valueForKey("pk")!.integerValue, success: {
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    Bakkle.sharedInstance.holdingItems.removeAtIndex(indexPath.row-1)
+                    self.removeAtIndex(indexPath)
+                    self.classifyData()
                     tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
                     tableView.reloadData()
                 })
