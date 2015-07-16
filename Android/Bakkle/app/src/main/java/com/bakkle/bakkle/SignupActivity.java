@@ -1,6 +1,5 @@
 package com.bakkle.bakkle;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,20 +7,21 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 
 
-public class SignupActivity extends Activity implements OnClickListener {
+public class SignupActivity extends AppCompatActivity implements OnClickListener {
 
     boolean locationEnabled = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActionBar().hide();
+        //getActionBar().hide();
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -45,7 +45,7 @@ public class SignupActivity extends Activity implements OnClickListener {
         setContentView(R.layout.activity_signup);
 
         ((Button)findViewById(R.id.btnSignIn)).setOnClickListener(this);
-        ((Button)findViewById(R.id.btnSignUpEmail)).setOnClickListener(this);
+        //((Button)findViewById(R.id.btnSignUpEmail)).setOnClickListener(this);
     }
 
     @Override

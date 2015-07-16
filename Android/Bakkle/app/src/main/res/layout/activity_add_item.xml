@@ -23,7 +23,7 @@
 
             </RelativeLayout>
 
-            <ImageButton
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_action_camera"
@@ -55,6 +55,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/titleField"
+            android:textColor="@color/black"
             android:layout_toRightOf="@+id/titlePrompt"
             android:layout_alignBaseline="@+id/titlePrompt"
             android:layout_alignRight="@+id/priceField"
@@ -83,6 +84,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/priceField"
+            android:textColor="@color/black"
             android:layout_toRightOf="@+id/pricePrompt"
             android:layout_alignBaseline="@+id/pricePrompt"
             android:hint="$--.--"
@@ -109,6 +111,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/tagsField"
+            android:textColor="@color/black"
             android:layout_toRightOf="@+id/tagsPrompt"
             android:layout_alignBaseline="@+id/tagsPrompt"
             android:hint="5 words to describe item"
@@ -135,6 +138,7 @@
         android:id="@+id/methodPicker"
         android:layout_alignTop="@+id/method"
         android:layout_alignParentEnd="true"
+        android:textColor="@color/black"
         android:paddingRight="16dp"
         android:paddingBottom="25dp"
         android:backgroundTint="@color/green" />
@@ -149,7 +153,7 @@
         android:layout_alignLeft="@+id/confirm"/>
 
 
-    <Switch
+    <android.support.v7.widget.SwitchCompat
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/share"
@@ -158,6 +162,7 @@
         android:paddingBottom="25dp"
         android:paddingRight="16dp"
         android:backgroundTint="@color/green"
+        android:theme="@style/AppCompatTheme"
         android:backgroundTintMode="src_atop" />
 
 

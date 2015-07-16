@@ -13,7 +13,10 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SwitchCompat;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,14 +29,17 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.JsonObject;
+
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
 
-public class AddItem extends Activity{
+public class AddItem extends AppCompatActivity{
 
     private ActionBar mActionBar;
 
@@ -42,7 +48,7 @@ public class AddItem extends Activity{
     static final int MAX_IMAGE_COUNT = 5;
     EditText titleEditText, priceEditText, tagsEditText;
     Spinner methodSpinner;
-    Switch facebookSwitch;
+    SwitchCompat facebookSwitch;
     //Bitmap firstPhoto;
     //ImageView firstImageView;
     //ArrayList <Bitmap> productPictures = new ArrayList<>();
@@ -72,7 +78,7 @@ public class AddItem extends Activity{
             }
             catch (Exception e)
             {
-
+                Log.v("create image file error", e.getMessage());
             }
             if(photoFile != null) {
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
@@ -81,9 +87,9 @@ public class AddItem extends Activity{
         }
         setContentView(R.layout.activity_add_item);
 
-        mActionBar = getActionBar();
-        mActionBar.setDisplayShowHomeEnabled(false);
-        mActionBar.setDisplayShowTitleEnabled(false);
+//        mActionBar = getActionBar();
+//        mActionBar.setDisplayShowHomeEnabled(false);
+//        mActionBar.setDisplayShowTitleEnabled(false);
         LayoutInflater mInflater = LayoutInflater.from(this);
 
         View mCustomView = mInflater.inflate(R.layout.action_bar_title, null);
@@ -96,8 +102,8 @@ public class AddItem extends Activity{
         mCustomView.findViewById(R.id.action_bar_right).setVisibility(View.GONE);
 
 
-        mActionBar.setCustomView(mCustomView);
-        mActionBar.setDisplayShowCustomEnabled(true);
+//        mActionBar.setCustomView(mCustomView);
+//        mActionBar.setDisplayShowCustomEnabled(true);
 
         titleEditText = (EditText) findViewById(R.id.titleField);
         priceEditText = (EditText) findViewById(R.id.priceField);
@@ -105,7 +111,7 @@ public class AddItem extends Activity{
 
         methodSpinner = (Spinner) findViewById(R.id.methodPicker);
 
-        facebookSwitch = (Switch) findViewById(R.id.share);
+        facebookSwitch = (SwitchCompat) findViewById(R.id.share);
 
         //productPictureViews.add((ImageView) findViewById(R.id.firstImage));
 
@@ -143,7 +149,21 @@ public class AddItem extends Activity{
             matrix.postRotate(90);
 
             Bitmap temp = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(mCurrentPhotoPath), dpToPx(250), dpToPx(250));
-            temp = Bitmap.createBitmap(temp, 0, 0, temp.getWidth(), temp.getHeight(), matrix, true);
+            temp = Bitmap.createBitmap(temp, 0, 0, temp.getWidth(), temp.getHeight(), matrix, true); //rotate picture 90 degrees
+
+
+            FileOutputStream fileOutputStream = null;
+
+            try {
+                fileOutputStream = new FileOutputStream(mCurrentPhotoPath);
+                Bitmap.createScaledBitmap(BitmapFactory.decodeFile(mCurrentPhotoPath), 640, 640, true)
+                        .compress(Bitmap.CompressFormat.JPEG, 70, fileOutputStream);
+                fileOutputStream.flush();
+                fileOutputStream.close();
+            }
+            catch (Exception e){
+                Log.v("Bitmap scaling error", e.getMessage());
+            }
 
             //productPictureViews.get(productPictureViews.size() - 1).setImageBitmap(temp);
 
@@ -239,7 +259,9 @@ public class AddItem extends Activity{
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        new ServerCalls(this).addItem(title, description, price, method, tags, picturePaths, shareFB,
-                preferences.getString("auth_token", "0"), preferences.getString("uuid", "0"));
+        JsonObject json = new ServerCalls(this).addItem(title, description, price, method, tags, picturePaths, shareFB,
+            preferences.getString("auth_token", "0"), preferences.getString("uuid", "0"));
+
+
     }
 }

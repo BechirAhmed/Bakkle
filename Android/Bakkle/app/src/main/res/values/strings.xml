@@ -41,6 +41,9 @@
     <string name="reset_demo_feed">Reset Demo Feed</string>
     <string name="title_activity_add_item">AddItem</string>
 
+    <string name="openDrawer">Open Drawer</string>
+    <string name="closeDrawer">Close Drawer</string>
+
 
     <string name="choose">Choose a method</string>
     <string-array name="Methods">

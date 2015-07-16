@@ -4,15 +4,77 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <!-- The main content view -->
-    <FrameLayout
-        android:id="@+id/content_frame"
+    <LinearLayout
+        android:id="@+id/content_frame_holder"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    </FrameLayout>
+        <android.support.v7.widget.Toolbar
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="vertical"
+            android:id="@+id/toolbar"
+            android:background="@color/green"
+            android:layout_width="match_parent"
+            android:layout_height="56dp">
+
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/green">
+
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/action_bar_image"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="7dp"
+                    android:layout_marginBottom="7dp"
+                    android:paddingRight="17dp"
+                    android:src="@drawable/logo_green_design_png_white_with_ko"
+                    />
+
+                <ImageButton
+                    android:id="@+id/action_bar_rightImage"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="8dp"
+                    android:background="@null"
+                    android:onClick="addItem"
+                    android:src="@drawable/ic_action_camera"
+                    android:longClickable="true" />
+
+                <ImageButton
+                    android:id="@+id/search_button"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="0dp"
+                    android:layout_toLeftOf="@+id/action_bar_rightImage"
+                    android:background="@null"
+                    android:src="@drawable/ic_search"
+                    />
+
+
+            </RelativeLayout>
+
+        </android.support.v7.widget.Toolbar>
+        <FrameLayout
+            android:id="@+id/content_frame"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <!--^^that linear layout used to be framelayout (in case of any crashes) -->
 
     <!-- The navigation drawer -->
-    <ListView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/left_drawer"
         android:layout_width="260dp"
         android:layout_height="match_parent"
