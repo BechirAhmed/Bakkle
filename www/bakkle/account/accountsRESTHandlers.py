@@ -38,9 +38,12 @@ class setDescriptionHandler(bakkleRequestHandler):
 
     def post(self):
 
-        print("loginFacebook")
-        # TODO: Handle location
-        # Get the rest of the necessary params from the request
+
+        if(not self.authenticate()):
+            self.writeJSON({'success': 0, 'error': 'Device not authenticated'})
+            self.finish()
+            return
+
         try:
             user_id = self.getUser()
             description = self.getArgument('description')
@@ -57,9 +60,12 @@ class getAccountHandler(bakkleRequestHandler):
 
     def post(self):
 
-        print("loginFacebook")
-        # TODO: Handle location
-        # Get the rest of the necessary params from the request
+
+        if(not self.authenticate()):
+            self.writeJSON({'success': 0, 'error': 'Device not authenticated'})
+            self.finish()
+            return
+
         try:
             accountId = self.getArgument('accountId')
         except QueryArgumentError as error:
@@ -74,9 +80,12 @@ class logoutHandler(bakkleRequestHandler):
 
     def post(self):
 
-        print("Logout")
-        # TODO: Handle location
-        # Get the rest of the necessary params from the request
+
+        if(not self.authenticate()):
+            self.writeJSON({'success': 0, 'error': 'Device not authenticated'})
+            self.finish()
+            return
+                
         try:
             auth_token = self.getArgument('auth_token')
             device_uuid = self.getArgument('device_uuid')
@@ -116,6 +125,11 @@ class facebookHandler(bakkleRequestHandler):
 class deviceRegisterPushHandler(bakkleRequestHandler):
 
     def post(self):
+
+        if(not self.authenticate()):
+            self.writeJSON({'success': 0, 'error': 'Device not authenticated'})
+            self.finish()
+            return
 
         try:
             account_id = self.getUser()

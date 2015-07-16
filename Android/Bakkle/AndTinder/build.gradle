@@ -34,4 +34,6 @@ android {
 
 dependencies {
     compile 'org.projectlombok:lombok:1.12.4'
+    compile 'de.hdodenhof:circleimageview:1.2.1'
+    compile project (':StackBlur')
 }

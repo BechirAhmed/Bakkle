@@ -152,8 +152,8 @@ def add_item(title, description, location, seller_id, price, tags, notifyFlag, i
             title = title,
             seller_id = seller_id,
             description = description,
-            longitude = Decimal(location.split(",")[0]).quantize(TWOPLACES),
-            latitude = Decimal(location.split(",")[1]).quantize(TWOPLACES),
+            latitude = Decimal(location.split(",")[0]).quantize(TWOPLACES),
+            longitude = Decimal(location.split(",")[1]).quantize(TWOPLACES),
             price = price,
             tags = tags,
             image_urls = image_urls,
@@ -323,8 +323,6 @@ def feed(buyer_id, device_uuid, user_location, search_text, filter_distance, fil
     items_viewed = BuyerItem.objects.filter(buyer = buyer_id).values('item')
     appFlavor = account.app_flavor
 
-    print("\n\n" + str(buyer_id) + "\n\n")
-
     item_list = None
     users_list = None
         
@@ -457,7 +455,7 @@ def report(buyer_id, item_id, view_duration):
 @time_method
 def get_seller_items(seller_id):
 
-    item_list = Items.objects.filter(seller=seller_id).filter(Q(status=Items.ACTIVE) | Q(status=Items.PENDING)).prefetch_related('buyeritem_set')
+    item_list = Items.objects.filter(seller=seller_id).filter(Q(status=Items.ACTIVE) | Q(status=Items.PENDING) | Q(status=Items.SOLD)).prefetch_related('buyeritem_set')
     #item_list_2 = Items.objects.filter(Q(seller=seller_id, status=Items.ACTIVE) | Q(seller=seller_id, status=Items.PENDING)).filter(buyeritem__pk__isnull=False)#.aggregate(Sum("buyeritem__number_of_views"))
 
     print(item_list.query);
@@ -534,7 +532,7 @@ def get_seller_transactions(seller_id):
 @time_method
 def get_buyers_trunk(buyer_id):
 
-    item_list = BuyerItem.objects.filter(Q(buyer=buyer_id, status=BuyerItem.WANT) | Q(buyer=buyer_id, status=BuyerItem.PENDING) | Q(buyer=buyer_id, status=BuyerItem.NEGOTIATING)).exclude(item__seller__pk = buyer_id)
+    item_list = BuyerItem.objects.filter(Q(buyer=buyer_id, status=BuyerItem.WANT) | Q(buyer=buyer_id, status=BuyerItem.PENDING) | Q(buyer=buyer_id, status=BuyerItem.SOLD) | Q(buyer=buyer_id, status=BuyerItem.NEGOTIATING)).exclude(item__seller__pk = buyer_id)
 
     item_array = []
     # get json representaion of item array

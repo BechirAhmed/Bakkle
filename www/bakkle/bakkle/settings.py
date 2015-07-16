@@ -96,6 +96,7 @@ DATABASES = {
 }
 
 default_database = environ.get('DJANGO_DATABASE', 'dev')
+default_database = 'production'
 DATABASES['default'] = DATABASES[default_database]
 
 # Internationalization

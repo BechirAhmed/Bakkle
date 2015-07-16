@@ -1,13 +1,14 @@
 from tornado import web
 import json
 from account.models import Device
+from django.db import close_old_connections
 
 
 class bakkleRequestHandler(web.RequestHandler):
 
     def authenticate(self):
         authToken = self.getArgument("auth_token")
-        uuid = self.getArgument("uuid")
+        uuid = self.getArgument("device_uuid")
 
         try:
             Device.objects.get(auth_token=authToken, uuid=uuid)
@@ -56,6 +57,8 @@ class bakkleRequestHandler(web.RequestHandler):
     def writeJSON(self, response):
         # print(json.dumps(response))
         self.write(response)
+
+        close_old_connections()
         # self.finish()
 
     def getIP(self):

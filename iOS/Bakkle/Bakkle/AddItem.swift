@@ -20,10 +20,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     static let KEYBOARD_MOVE_VALUE: CGFloat = 250
     static let NUMPAD_MOVE_VALUE:CGFloat = 260
     static let DESCRIPTION_PLACEHOLDER_COLOR = UIColor(red: CGFloat(AddItem.red)/255.0, green: CGFloat(AddItem.green)/255.0, blue: CGFloat(AddItem.blue)/255.0, alpha: CGFloat(1.0))
-    static let CONFIRM_BUTTON_RED = 51
-    static let CONFIRM_BUTTON_GREEN = 205
-    static let CONFIRM_BUTTON_BLUE = 95
-    static let BAKKLE_GREEN_COLOR = UIColor(red: CGFloat(AddItem.CONFIRM_BUTTON_RED)/255.0, green: CGFloat(AddItem.CONFIRM_BUTTON_GREEN)/255.0, blue: CGFloat(AddItem.CONFIRM_BUTTON_BLUE)/255.0, alpha: CGFloat(1.0))
+    static let BAKKLE_GREEN_COLOR = Theme.ColorGreen
     static let CONFIRM_BUTTON_DISABLED_COLOR = UIColor.lightGrayColor()
     private static let TAG_PLACEHOLDER_STR = "WORDS TO DESCRIBE ITEM"
     private static let red = 201
@@ -38,6 +35,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     var isEditting: Bool = false
     var initRun = true
     var confirmHit = false
+    var successfulAdd = false
     
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var closeBtn: UIButton!
@@ -286,9 +284,9 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         confirmButton.backgroundColor = AddItem.CONFIRM_BUTTON_DISABLED_COLOR
         
         self.loadingView.hidden = false
+        self.view.bringSubviewToFront(self.loadingView)
         
         //TODO: Get location from GPS
-        var factor: CGFloat = 1.0 //imageView.image!.size.height/imageView.image!.size.width
         
         var time = NSDate.timeIntervalSinceReferenceDate()
         let item_id: NSInteger?
@@ -331,16 +329,10 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
                     dispatch_async(dispatch_get_main_queue()) {
                         Bakkle.sharedInstance.populateFeed({})
                         println("item_id=\(item_id) item_url=\(item_url)")
-
-                        let alertController = UIAlertController(title: "Bakkle", message:
-                            "Item uploaded to Bakkle.", preferredStyle: UIAlertControllerStyle.Alert)
-
-                        let dismissAction = UIAlertAction(title: "OK!", style: UIAlertActionStyle.Default) { (action) -> Void in
-                            self.dismissViewControllerAnimated(true, completion: nil)
-                        }
-                        alertController.addAction(dismissAction)
-                        self.presentViewController(alertController, animated: true, completion: nil)
-                    }                    }, fail: {() -> () in
+                        self.successfulAdd = true
+                        self.dismissViewControllerAnimated(true, completion: nil)
+                    }
+            }, fail: {() -> () in
                 //TODO: Show error popup and close.
             })
     }

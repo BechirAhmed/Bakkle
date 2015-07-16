@@ -100,9 +100,9 @@ public class BuyersTrunk extends ListFragment{
         //super.onCreateOptionsMenu(menu, inflater);
         menu.clear();
 
-        mActionBar = getActivity().getActionBar();
-        mActionBar.setDisplayShowHomeEnabled(false);
-        mActionBar.setDisplayShowTitleEnabled(false);
+//        mActionBar = getActivity().getActionBar();
+//        mActionBar.setDisplayShowHomeEnabled(false);
+//        mActionBar.setDisplayShowTitleEnabled(false);
         LayoutInflater mInflater = LayoutInflater.from(getActivity());
 
         View mCustomView = mInflater.inflate(R.layout.action_bar_trunk, null);

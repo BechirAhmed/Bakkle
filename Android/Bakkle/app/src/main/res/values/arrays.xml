@@ -6,9 +6,7 @@
         <item>@string/title_activity_buyers_trunk</item>
         <item>@string/title_activity_holding_pattern</item>
         <item>@string/title_activity_feed_filter</item>
-        <item>@string/title_activity_settings</item>
         <item>@string/title_activity_demo_options</item>
-        <item>@string/logout</item>
     </string-array>
     <string-array name="drawer_icons">
         <item>@drawable/ic_home</item>
@@ -16,7 +14,7 @@
         <item>@drawable/ic_shopping_cart</item>
         <item>@drawable/ic_down</item>
         <item>@drawable/ic_filter</item>
-        <item>@drawable/ic_action_settings</item>
+        <item>@drawable/app_icon</item>
         <item></item>
     </string-array>
 </resources>

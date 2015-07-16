@@ -55,6 +55,19 @@ class AcceptOfferCell: UITableViewCell {
         contentView.addConstraint(NSLayoutConstraint(item: contentView, attribute: .Bottom, relatedBy: .Equal, toItem: counterBtn, attribute: .Bottom, multiplier: 1, constant: 0))
     }
     
+    func configureRetractBtn(retractBtn: UIButton){
+        retractBtn.setTitle("RETRACT", forState: UIControlState.Normal)
+        retractBtn.titleLabel?.font = UIFont(name: "Avenir-Black", size: 14)
+        retractBtn.tintColor = UIColor.whiteColor()
+        retractBtn.backgroundColor = UIColor.redColor()
+        
+        retractBtn.setTranslatesAutoresizingMaskIntoConstraints(false)
+        contentView.addConstraint(NSLayoutConstraint(item: retractBtn, attribute: .Left, relatedBy: .Equal, toItem: contentView, attribute: .CenterX, multiplier: 1, constant: -100))
+        contentView.addConstraint(NSLayoutConstraint(item: retractBtn, attribute: .Right, relatedBy: .Equal, toItem: contentView, attribute: .CenterX, multiplier: 1, constant: 100))
+        contentView.addConstraint(NSLayoutConstraint(item: makeOfferLabel, attribute: .Bottom, relatedBy: .Equal, toItem: retractBtn, attribute: .Top, multiplier: 1, constant: -5))
+        contentView.addConstraint(NSLayoutConstraint(item: contentView, attribute: .Bottom, relatedBy: .Equal, toItem: retractBtn, attribute: .Bottom, multiplier: 1, constant: 0))
+    }
+    
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
