@@ -3,40 +3,56 @@
     android:id="@+id/global_container"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:background="@drawable/rounded_corners"
+    android:layout_width="325dp"
+    android:layout_height="440dp"
+    android:layout_gravity="center"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageView
         android:id="@+id/image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scaleType="centerCrop"
-        tools:src="@drawable/loading"
+        android:src="@drawable/loading"
         android:layout_above="@+id/title"
         android:layout_below="@+id/topBar" />
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:id="@+id/topBar"
         android:background="@color/gray">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/sellerImage"
+            android:src="@drawable/loading"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="17dp"
+            android:layout_marginStart="17dp"
+            app:border_width="2dp"
+            app:border_color="#FFFFFF"/>
 
 
         <TextView
             android:id="@+id/seller"
             style="@android:style/TextAppearance.Small"
             android:textColor="@android:color/primary_text_dark"
-            android:textSize="14sp"
+            android:textSize="16sp"
+            android:textStyle="bold"
             android:fontFamily="sans-serif-light"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="Seller"
             android:layout_centerVertical="true"
-            android:padding="10dp"
-            android:layout_alignBottom="@+id/rating"
+            android:paddingLeft="20dp"
             android:layout_toRightOf="@+id/sellerImage"/>
 
-        <com.andtinder.CircleImageView
+        <!-- <com.andtinder.CircleImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:paddingTop="2dp"
@@ -44,8 +60,9 @@
             android:layout_alignTop="@+id/seller"
             android:paddingLeft="10dp"
             android:id="@+id/sellerImage"
-            android:src="@drawable/loading"/>
-        <RatingBar
+            android:src="@drawable/loading"/> -->
+
+        <!--<RatingBar
             android:id="@+id/rating"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -56,81 +73,51 @@
             android:isIndicator="true"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true" /> -->
 
     </RelativeLayout>
 
-
-    <TextView
-        android:id="@+id/title"
-        style="@android:style/TextAppearance.Large.Inverse"
-        android:textColor="@android:color/primary_text_dark"
-        android:gravity="center"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:fontFamily="sans-serif"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/gray"
-        tools:text="Title"
-        android:padding="10dp"
-        android:layout_above="@+id/info"
-        />
     <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
         android:layout_alignParentBottom="true"
         android:id="@+id/info"
         android:background="@color/gray"
-        android:gravity="center"
-        android:paddingBottom="7dp">
-        <ImageView
-            android:layout_width="wrap_content"
+        android:gravity="center">
+
+
+        <com.andtinder.FontFitTextView
+            android:id="@+id/title"
+            android:textColor="@android:color/primary_text_dark"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif"
+            android:layout_width="225dp"
             android:layout_height="wrap_content"
-            android:id="@+id/priceIcon"
-            android:src="@drawable/pricetag"
-            android:paddingRight="10dp"/>
+            tools:text="Title"
+            android:padding="10dp"
+            />
+
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="85dp"
             android:layout_height="wrap_content"
             android:textColor="@android:color/primary_text_dark"
-            android:layout_toRightOf="@+id/priceIcon"
+            android:layout_alignBaseline="@+id/title"
+            android:layout_alignParentRight="true"
             android:id="@+id/price"
             android:text="$15"
             android:textSize="20sp"
             android:paddingRight="20dp"/>
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/locationIcon"
-            android:src="@drawable/location_marker"
-            android:layout_toRightOf="@+id/price"
-            android:paddingRight="10dp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/location"
-            android:textColor="@android:color/primary_text_dark"
-            android:layout_toRightOf="@+id/locationIcon"
-            android:paddingRight="20dp"
-            android:text="100 mi"
-            android:textSize="20sp"/>
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/method_icon"
-            android:layout_toRightOf="@+id/location"
-            android:src="@drawable/method_icon"
-            android:paddingRight="10dp" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/method"
-            android:textColor="@android:color/primary_text_dark"
-            android:layout_toRightOf="@+id/method_icon"
-            android:text="Pick up"
-            android:textSize="20sp"/>
+
     </RelativeLayout>
+
+
+
+
+
+
+
+
 
     <com.andtinder.OverlayView
         android:layout_width="wrap_content"

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="green">#36B454</color>
+    <color name="dark_green">#218F3B</color>
     <color name="white">#FFFFFF</color>
     <color name="facebook_blue">#3B5998</color>
     <color name="brown">#3D3D3D</color>
@@ -9,4 +10,6 @@
     <color name="interior_green">@color/light_green</color>
     <color name="blue">#00A0FF</color>
     <color name="red">#E9393D</color>
+    <color name="black">#000000</color>
+    <color name="gray">#323232</color>
 </resources>

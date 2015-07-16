@@ -359,7 +359,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             view.bottomBlurImg.hnk_setImageFromURL(imgURL!)
             view.imageView.hnk_setImageFromURL(imgURL!)
             view.imageView.contentMode = UIViewContentMode.ScaleAspectFill
-            view.profileImg.image = UIImage(data: NSData(contentsOfURL: imgURL!)!)
+            view.profileImg.image = UIImage(data: NSData(contentsOfURL: profileImgURL!)!)
         }
         
         if view == self.swipeView {

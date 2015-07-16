@@ -205,7 +205,7 @@ public class FeedItem {
 
     public String getDistance(){
         //TODO: Use location services to figure out how far away item actually is
-        return "100 mi";
+        return "10 mi";
     }
 
     public Bitmap getFirstImage()

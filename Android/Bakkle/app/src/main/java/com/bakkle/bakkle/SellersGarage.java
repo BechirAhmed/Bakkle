@@ -76,7 +76,7 @@ public class SellersGarage extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        serverCalls = new ServerCalls(getActivity().getApplicationContext());
+        serverCalls = new ServerCalls(getActivity());
 
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
@@ -185,8 +185,8 @@ public class SellersGarage extends ListFragment {
 
         for(JsonElement element : jsonArray)
         {
-            item = element.getAsJsonObject().getAsJsonObject("item");
-            feedItem = new FeedItem(this.getActivity().getApplicationContext());
+            item = element.getAsJsonObject();
+            feedItem = new FeedItem(this.getActivity());
             //temp = element.getAsJsonObject();
 
             feedItem.setTitle(item.get("title").getAsString());
