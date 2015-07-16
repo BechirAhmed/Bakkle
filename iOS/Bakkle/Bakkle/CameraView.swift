@@ -56,6 +56,10 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     @IBOutlet weak var capButtonSpace: UIView!
     @IBOutlet weak var capButton: UIButton!
     
+    /* CAMERA OPTIONS */
+    // swap camera is only an IBAction
+//    @IBOutlet weak var flashSettings: ??
+    var flashMode: AVCaptureFlashMode = .Auto
     
     /* GALLERY PICKER */
     var galleryPicker: UIImagePickerController?
@@ -74,8 +78,6 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        setupAVFoundation()
         
         size = CGSize(width: CameraView.scaledImageWidth, height: CameraView.scaledImageWidth)
         
@@ -104,6 +106,9 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         UIApplication.sharedApplication().statusBarHidden = true
+        
+        setupAVFoundation()
+        
         self.fadeView.alpha = 1.0
         if self.addItem != nil && self.addItem!.successfulAdd {
             self.fadeViewLoadLogo.image = UIImage(named: "logo-white-design-clear.png")!
@@ -121,7 +126,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             successLabel.textColor = UIColor.whiteColor()
             successLabel.textAlignment = .Center
             self.fadeView.addSubview(successLabel)
-        
+            
             self.dismissViewControllerAnimated(true, completion: nil)
         }
     }
@@ -130,8 +135,6 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         super.viewDidAppear(animated)
         
         UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent
-        
-        setupAVFoundation()
         
         for imageView: UIImageView in imageViews {
             imageView.layer.cornerRadius = 15.0
@@ -190,12 +193,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         } else if frontCam != nil {
             selectedDevice = AVCaptureDeviceInput(device: frontCam!, error: &error)
         } else {
-            let alertController = UIAlertController(title: "No Camera Available", message:"Sorry, you need to have a camera to list an item.", preferredStyle: .Alert)
-            let defaultAction = UIAlertAction(title: "OK", style: .Default, handler: nil)
-            
-            presentViewController(alertController, animated: true, completion: {
-                self.dismissViewControllerAnimated(true, completion: nil)
-            })
+            // alert is called when previewing, this code is only run before an alert can be shown
         }
     }
     
@@ -230,15 +228,34 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     func displayStillImage(image: UIImage) {
         displayingStill = true
         // make AVFoundation display a still image (for gallery and image preview)
-        captureSession.removeInput(selectedDevice)
-        capturePreview?.removeFromSuperlayer()
-        
+//        captureSession.removeInput(selectedDevice)
+//        capturePreview?.removeFromSuperlayer()
+        cameraView.contentMode = .ScaleAspectFill
+        cameraView.bringSubviewToFront(stillImagePreview)
         stillImagePreview.image = image
+    }
+    
+    func removeStillImage() {
+        displayingStill = false
+        stillImagePreview.image = nil
+        cameraView.sendSubviewToBack(stillImagePreview)
     }
     
     func displayImagePreview() {
         if self.imageCount >= CameraView.MAX_IMAGE_COUNT {
             // no more images
+            return
+        }
+        
+        captureSession.stopRunning()
+        
+        if findCameraWithPosition(.Front) == nil &&  findCameraWithPosition(.Back) == nil {
+            let alertController = UIAlertController(title: "No Camera Available", message:"Sorry, you need to have a camera to list an item.", preferredStyle: .Alert)
+            let defaultAction = UIAlertAction(title: "OK", style: .Default, handler: { action in
+                self.dismissViewControllerAnimated(true, completion: nil)
+            })
+            alertController.addAction(defaultAction)
+            presentViewController(alertController, animated: true, completion: nil)
             return
         }
         
@@ -293,6 +310,10 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         }
     }
     
+    func drawFocusRect() {
+        
+    }
+    
     @IBAction func pressedCaptureButton(sender: AnyObject) {
         // action event: touchDown
         self.capButton.backgroundColor = UIColor.lightGrayColor()
@@ -312,22 +333,35 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             self.capButton.enabled = false
             self.nextButton.enabled = false
             var itemIndex = self.imageCount++
+            
+            var err: NSError?
+            
+            if self.selectedDevice!.device.hasFlash && self.selectedDevice!.device.lockForConfiguration(&err) {
+                self.selectedDevice!.device.flashMode = self.flashMode
+                self.selectedDevice!.device.unlockForConfiguration()
+            }
+            
+            if err != nil {
+                println(err)
+            }
+            
             stillImageOutput.captureStillImageAsynchronouslyFromConnection(videoConnection, completionHandler: { (imageDataSampleBuffer, error) -> Void in
                 if imageDataSampleBuffer != nil {
                     var recentImage = UIImage(data: (AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageDataSampleBuffer)))
                     
-                    // this makes it appear as if there was a "flash" after you press capture on the image, and it ensures that the flash will unfreeze
-                    // after the image has been displayed in
-                    self.captureSession.stopRunning()
                     self.flashView.alpha = 0.0
                     self.flashView.hidden = false
                     UIView.animateWithDuration(CameraView.FLASH_TIME, animations: {
                         self.flashView.alpha = 1.0
                     })
+                    
+                    self.displayStillImage(recentImage!)
+//                    self.displayStillImage(recentImage!)
+//                    self.capturePreview?.removeFromSuperlayer()
+                    
                     UIView.animateWithDuration(CameraView.FLASH_TIME * 2, delay: CameraView.FLASH_TIME, options: nil, animations: {
                         self.flashView.alpha = 0
                     }, completion: nil)
-                    
                     
                     recentImage!.cropAndResize(self.size!, completionHandler: { (resizedImage:UIImage, data:NSData) -> () in
                         var compressedImage = UIImageJPEGRepresentation(resizedImage, CameraView.JPEG_COMPRESSION_FACTOR)
@@ -337,12 +371,17 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
                         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(CameraView.IMAGE_FREEZE_TIME * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
                             self.buttonEnabledHandler()
                             if self.imageCount >= CameraView.MAX_IMAGE_COUNT {
-                                self.displayStillImage(self.imageViews[CameraView.MAX_IMAGE_COUNT - 1].image!)
+                                if let image = self.imageViews[CameraView.MAX_IMAGE_COUNT - 1].image {
+                                    // Incase rapid fire ends up
+                                    self.displayStillImage(image)
+                                }
                             } else {
-                                self.captureSession.startRunning()
+                                self.removeStillImage()
+                                //                                self.cameraView.layer.addSublayer(self.capturePreview)
                             }
                         }
                     }) // cropAndResize
+                    
                 } else {
                     NSLog("Error capturing image:\n\(error)")
                 }
@@ -355,7 +394,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     @IBAction func getFromGallery(sender: AnyObject) {
         // set sourcetype to the proper saved photos in load
         UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.Default
-        captureSession.stopRunning()
+//        captureSession.stopRunning()
         self.capButton.enabled = false
         self.nextButton.enabled = false
         self.galleryPicker = UIImagePickerController()
@@ -368,7 +407,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         var itemIndex = self.imageCount++ // set the index to imageCount then increment the total count by 1
         var image = info[UIImagePickerControllerOriginalImage] as! UIImage
         image.cropAndResize(self.size!, completionHandler: { (resizedImage:UIImage, data:NSData) -> () in
-        var compressedImage = UIImageJPEGRepresentation(resizedImage, CameraView.JPEG_COMPRESSION_FACTOR)
+            var compressedImage = UIImageJPEGRepresentation(resizedImage, CameraView.JPEG_COMPRESSION_FACTOR)
             self.images[itemIndex] = UIImage(data: compressedImage)!
             self.displayStillImage(self.images[itemIndex])
             
@@ -387,9 +426,9 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         stopVideoPreview = true
         dismissViewControllerAnimated(true, completion: nil)
     }
-
+    
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
-        captureSession.startRunning()
+//        captureSession.startRunning()
         self.buttonEnabledHandler()
         picker.dismissViewControllerAnimated(true, completion: nil)
     }
@@ -453,8 +492,9 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         
         if imageViewIndex >= 0 && imageViewIndex < imageViews.count {
             if imageViews[imageViewIndex].image == nil && displayingStill && imageCount < CameraView.MAX_IMAGE_COUNT {
-                self.stillImagePreview.image = nil
-                displayImagePreview()
+                self.removeStillImage()
+//                self.stillImagePreview.image = nil
+//                displayImagePreview()
             } else if imageViews[imageViewIndex].image != nil { // safety check
                 self.displayStillImage(imageViews[imageViewIndex].image!)
             }

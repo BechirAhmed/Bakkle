@@ -21,7 +21,7 @@
 		1B00CB1B1B22231B00710C01 /* ItemData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B00CB1A1B22231B00710C01 /* ItemData.swift */; };
 		1B56D5D41B30709F009D81C6 /* UIDevice+ModelName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B56D5D31B30709F009D81C6 /* UIDevice+ModelName.swift */; };
 		1B754B251B4D4D960002C41D /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B754B241B4D4D960002C41D /* CameraView.swift */; };
-		1BF48D6E1B555B2A002C6496 /* new-x-black.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 1BF48D6D1B555B2A002C6496 /* new-x-black.jpeg */; };
+		1B876B161B57F65C00D79D82 /* camera-remove.png in Resources */ = {isa = PBXBuildFile; fileRef = 1B876B151B57F65C00D79D82 /* camera-remove.png */; };
 		5E023F861AD592B80002AFBC /* btn-addItem.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E023F851AD592B80002AFBC /* btn-addItem.png */; };
 		5E023F881AD59F200002AFBC /* logo-white-design-png-transp-100.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E023F871AD59F200002AFBC /* logo-white-design-png-transp-100.png */; };
 		5E1DCC9F1AD44C72002D41FD /* tiger.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5E1DCC9E1AD44C71002D41FD /* tiger.jpg */; };
@@ -364,7 +364,7 @@
 		1B00CB1A1B22231B00710C01 /* ItemData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemData.swift; sourceTree = "<group>"; };
 		1B56D5D31B30709F009D81C6 /* UIDevice+ModelName.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIDevice+ModelName.swift"; sourceTree = "<group>"; };
 		1B754B241B4D4D960002C41D /* CameraView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
-		1BF48D6D1B555B2A002C6496 /* new-x-black.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "new-x-black.jpeg"; sourceTree = "<group>"; };
+		1B876B151B57F65C00D79D82 /* camera-remove.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera-remove.png"; sourceTree = "<group>"; };
 		1D710285C97E0FF7D33DEB9E /* Pods-Bakkle.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bakkle.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Bakkle/Pods-Bakkle.debug.xcconfig"; sourceTree = "<group>"; };
 		3E0CABDBE20E9D5B2EED4810 /* Pods_Bakkle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Bakkle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E023F851AD592B80002AFBC /* btn-addItem.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-addItem.png"; sourceTree = "<group>"; };
@@ -827,7 +827,7 @@
 		A08D53B71B07DC8E000C406C /* Images */ = {
 			isa = PBXGroup;
 			children = (
-				1BF48D6D1B555B2A002C6496 /* new-x-black.jpeg */,
+				1B876B151B57F65C00D79D82 /* camera-remove.png */,
 				60EEB9971B5546F100E87B8D /* switch-camera-outline.png */,
 				727FA76C1B4C15750023C126 /* new-x.png */,
 				602C389A1B38AF1E005CB493 /* x-image.png */,
@@ -1226,7 +1226,6 @@
 				A058A2B41AFDADA2005E7432 /* mask-buyer-grey.png in Resources */,
 				A0A200011ACE2F7500A42CD8 /* btn-email40.png in Resources */,
 				A058A2B91AFDADA2005E7432 /* mask-buyer-white@3x.png in Resources */,
-				1BF48D6E1B555B2A002C6496 /* new-x-black.jpeg in Resources */,
 				A0A8F8FE1B1F2BB70055BBC0 /* cartoon_fast_whoosh_good_for_karate_chop_other_fast_movement_or_swipe_001.mp3 in Resources */,
 				5E1DCCA21AD47C53002D41FD /* btn-check.png in Resources */,
 				A018DF8B1ADE08DB00AF5550 /* btn-add-disabled.png in Resources */,
@@ -1278,6 +1277,7 @@
 				DB5DB3561B18E18100734692 /* icon-car75.png in Resources */,
 				A0A200031ACE2F7500A42CD8 /* btn-sign-in40.png in Resources */,
 				A03508F31AB3C34900CA6455 /* SplashScreen-bkg.png in Resources */,
+				1B876B161B57F65C00D79D82 /* camera-remove.png in Resources */,
 				A0D96F7A1AD765990046DA13 /* icon-filter.png in Resources */,
 				A0D96F7D1AD765990046DA13 /* icon-pencil.png in Resources */,
 				A0D96F7E1AD765990046DA13 /* icon-house.png in Resources */,

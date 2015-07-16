@@ -2133,7 +2133,7 @@
                                                     </constraint>
                                                 </constraints>
                                                 <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                <state key="normal" image="new-x-black.jpeg">
+                                                <state key="normal" image="camera-remove.png">
                                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
@@ -2221,7 +2221,7 @@
                                                     </constraint>
                                                 </constraints>
                                                 <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                <state key="normal" image="new-x-black.jpeg">
+                                                <state key="normal" image="camera-remove.png">
                                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
@@ -2308,7 +2308,7 @@
                                                     <constraint firstAttribute="width" secondItem="6Jw-pK-vFW" secondAttribute="height" multiplier="1:1" id="HfQ-yz-U4E"/>
                                                 </constraints>
                                                 <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                <state key="normal" image="new-x-black.jpeg">
+                                                <state key="normal" image="camera-remove.png">
                                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
@@ -2395,7 +2395,7 @@
                                                     </constraint>
                                                 </constraints>
                                                 <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                <state key="normal" image="new-x-black.jpeg">
+                                                <state key="normal" image="camera-remove.png">
                                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
@@ -2966,6 +2966,9 @@
                                 <exclude reference="tfn-dK-RZO"/>
                             </mask>
                             <mask key="constraints">
+                                <exclude reference="Bft-8B-HUQ"/>
+                                <exclude reference="LvK-il-b5s"/>
+                                <exclude reference="MlM-Ea-obh"/>
                                 <exclude reference="2eq-TC-9XQ"/>
                                 <exclude reference="EQm-mV-nKh"/>
                                 <exclude reference="zTZ-5T-nlH"/>
@@ -2973,9 +2976,6 @@
                                 <exclude reference="QgO-7D-wea"/>
                                 <exclude reference="sbs-xv-aaa"/>
                                 <exclude reference="zE9-Je-zlr"/>
-                                <exclude reference="Bft-8B-HUQ"/>
-                                <exclude reference="LvK-il-b5s"/>
-                                <exclude reference="MlM-Ea-obh"/>
                                 <exclude reference="C19-44-Cpt"/>
                                 <exclude reference="NHi-R4-UCN"/>
                                 <exclude reference="VIu-vP-Q0U"/>
@@ -2990,6 +2990,9 @@
                                 <include reference="tfn-dK-RZO"/>
                             </mask>
                             <mask key="constraints">
+                                <include reference="Bft-8B-HUQ"/>
+                                <include reference="LvK-il-b5s"/>
+                                <include reference="MlM-Ea-obh"/>
                                 <include reference="2eq-TC-9XQ"/>
                                 <include reference="EQm-mV-nKh"/>
                                 <include reference="zTZ-5T-nlH"/>
@@ -2997,9 +3000,6 @@
                                 <include reference="QgO-7D-wea"/>
                                 <include reference="sbs-xv-aaa"/>
                                 <include reference="zE9-Je-zlr"/>
-                                <include reference="Bft-8B-HUQ"/>
-                                <include reference="LvK-il-b5s"/>
-                                <include reference="MlM-Ea-obh"/>
                                 <include reference="C19-44-Cpt"/>
                                 <include reference="NHi-R4-UCN"/>
                                 <include reference="VIu-vP-Q0U"/>
@@ -4538,6 +4538,9 @@
                                                     <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="15"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
+                                                    <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                                        <rect key="frame" x="99" y="8" width="213" height="21"/>
+                                                    </variation>
                                                 </label>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ABU-0d-c2I">
                                                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
@@ -5081,7 +5084,6 @@
                                         <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="17"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                         <connections>
-                                            <outlet property="delegate" destination="5rT-aH-bSn" id="olP-d6-qau"/>
                                             <outlet property="delegate" destination="5rT-aH-bSn" id="Tgn-UI-LEW"/>
                                         </connections>
                                     </textView>
@@ -6934,10 +6936,10 @@
         <image name="btn-addCam.png" width="163" height="125"/>
         <image name="btn-email40.png" width="230" height="40"/>
         <image name="btn-sign-in40.png" width="230" height="40"/>
+        <image name="camera-remove.png" width="500" height="500"/>
         <image name="logo-white-design-clear.png" width="1001" height="404"/>
         <image name="logo-white-design-png-transp-100.png" width="248" height="100"/>
         <image name="mock-rating-stars.png" width="1600" height="373"/>
-        <image name="new-x-black.jpeg" width="512" height="512"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="Rco-rv-njI"/>
