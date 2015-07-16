@@ -7,267 +7,531 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		19C722F49874B73C1618B65E /* NSFileManager+Haneke.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2F2163275724577B091DD0 /* NSFileManager+Haneke.swift */; };
-		1AA3E61253D89DE74AD780E6 /* NetworkFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCA3B946FBD05F09C8253A5 /* NetworkFetcher.swift */; };
-		32D8B19C98802BB47EB1D82F /* DiskCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = A35919493BD09B9B27835C26 /* DiskCache.swift */; };
-		3BCEDABA0A6223F0E3EA13FC /* Fetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = D49C344E56FC6C237F62C74D /* Fetcher.swift */; };
-		46EB3FC9764F2E2BC01F739B /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D8850A58BC5328E3FA20CAA /* Data.swift */; };
-		47D4E7E4E60E198E8C74EA38 /* UIButton+Haneke.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67129E29A1BB17875E630755 /* UIButton+Haneke.swift */; };
-		4E6C51A2176F412BCA0DAB8A /* Haneke.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC11B8F475D6742E93100EB2 /* Haneke.swift */; };
-		5203AA904FB951FD2FA970C1 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8322EC6E363B800675840F0 /* Log.swift */; };
-		59A18756F834F8B609F76F3E /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B8BE629FA9A48897E095A86 /* Cache.swift */; };
-		6AB3574535D5531B88E01D94 /* UIView+Haneke.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2C03A8A4F2B095405611429 /* UIView+Haneke.swift */; };
-		70B518DE5C4ADD3082FE0652 /* Pods-Bakkle-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = DDA8A320C081CB5A51437077 /* Pods-Bakkle-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8093E6EA79BCD0D9AE4BAD31 /* Fetch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6DBCC526405AED77506E52 /* Fetch.swift */; };
-		80D73222BF96AE754776E634 /* String+Haneke.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C16013E721EFF1B63EC4FD3 /* String+Haneke.swift */; };
-		83CA4FFB1E39B0FE98ED6731 /* Pods-Bakkle-HanekeSwift-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 89885E5D0EAB45AF0BA66913 /* Pods-Bakkle-HanekeSwift-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8634270A2BD4509785E25DB0 /* CryptoSwiftMD5.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA62D7B0B1FA30C04289DE8D /* CryptoSwiftMD5.swift */; };
-		888FA8F78F64D3C7DE0FD6A3 /* CGSize+Swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8712A96CB4EA1DBEF1324F27 /* CGSize+Swift.swift */; };
-		8FD6264F277C14A385F28604 /* UIImage+Haneke.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BD231829DF547F45CB226D4 /* UIImage+Haneke.swift */; };
-		A0AD57691BD78C4CA022DAC6 /* Pods-Bakkle-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = ECC4596A4D6A1A42E8A502A6 /* Pods-Bakkle-dummy.m */; };
-		A158D5092693A51FD1941694 /* Pods-Bakkle-HanekeSwift-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 027CD01DF673E7E22D1E1E34 /* Pods-Bakkle-HanekeSwift-dummy.m */; };
-		B7A6BA6BA419419A74E64005 /* NSHTTPURLResponse+Haneke.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB06A7B916633B9EBB1D2A6 /* NSHTTPURLResponse+Haneke.swift */; };
-		D45095E85604DE022266D9F8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08695FE70AB33218F3850A23 /* Foundation.framework */; };
-		E899379A65ECDB446EA7EE54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08695FE70AB33218F3850A23 /* Foundation.framework */; };
-		F73BC68731FCA80251AFD407 /* Format.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC6C085F1133A883154CF5B /* Format.swift */; };
-		F7974A716DA06FA3642B0EA0 /* DiskFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6A769578F638FE2089934E /* DiskFetcher.swift */; };
-		FA004771AC088BD5A69FC79F /* UIImageView+Haneke.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBBE01B830693C319F962A7A /* UIImageView+Haneke.swift */; };
+		0352C6203546432B9B8C1A1D /* SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 48FBBFFD8692CA818B06E57D /* SRWebSocket.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		07EE57558F1187448C6CABB0 /* NIKFontAwesomeIconFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DE0584C263E4D4669C35B18 /* NIKFontAwesomeIconFactory.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		0A792CCC4125B820D6461C1E /* NIKFontAwesomeImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = F15C9CC1FE01D519BF8EEC05 /* NIKFontAwesomeImageView.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		1693DFE2DF9E21920719F9AF /* NIKFontAwesomePathFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BC42DDA4E33E37EACFA2AEF /* NIKFontAwesomePathFactory.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		1A1D184DDADC8AE102A92120 /* NIKFontAwesomePathFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 3230D48278254DADF5AE909D /* NIKFontAwesomePathFactory.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		24661DD149C2376FB8EBF85E /* NIKFontAwesomeTabBarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = A9BD8EE115C81C070DD3B24A /* NIKFontAwesomeTabBarItem.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		28E4A7896225A51159D35920 /* NIKFontAwesomeIcon.h in Headers */ = {isa = PBXBuildFile; fileRef = 5410C8FA157942679D2DDCF6 /* NIKFontAwesomeIcon.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2D99686C303CA83D7EC658DB /* Fetch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F5F1C3227742889166D8A8 /* Fetch.swift */; };
+		2FAEA29928FA0FC8F3620FA3 /* NIKFontAwesomePathRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3413A3919B532881D12B7E6B /* NIKFontAwesomePathRenderer.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		2FE11770877C3DF7CA1C5FC4 /* NIKFontAwesomeIconFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 03F5B213E81F7A33B2F0AB37 /* NIKFontAwesomeIconFactory.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		34B9118A2DE7E09C2F859028 /* CGSize+Swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893F1C639892A37E259951EA /* CGSize+Swift.swift */; };
+		3D6EA9FB8EF8906FDCEAF2E6 /* CryptoSwiftMD5.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20120671684C6F133754C991 /* CryptoSwiftMD5.swift */; };
+		3E86449529F5451068D9E1F3 /* NSData+SRB64Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 3195169F3192D8B3A329DC6E /* NSData+SRB64Additions.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		4BB1954CBACFE757361BD84F /* Pods-Bakkle-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 6E2FAE4E5986430D2551D7EE /* Pods-Bakkle-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4E281C1D18BF97F707AEDA95 /* NIKFontAwesomeIconFactory+iOS.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B6B1728E6E393191377922F /* NIKFontAwesomeIconFactory+iOS.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		51A5CF3B5CE8B77832C77DBC /* Pods-Bakkle-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F6B353F16C970DEAB52C3FA /* Pods-Bakkle-dummy.m */; };
+		53D9EAE277AAE94C28491600 /* NetworkFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4421740231BCBC93E9CA47A /* NetworkFetcher.swift */; };
+		5D5304B6FB877BD892FD8B32 /* UIImageView+Haneke.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72377226737C1A53A9E482E0 /* UIImageView+Haneke.swift */; };
+		615ED24637F426A09231EEBC /* Format.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3A34EB5A4CB7AB2CE3A9D89 /* Format.swift */; };
+		63368A595CB40C309D00232F /* NIKFontAwesomeImageView.h in Headers */ = {isa = PBXBuildFile; fileRef = 0FD298BD43F63A7EF0CCC503 /* NIKFontAwesomeImageView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		66F3CA7DE528BB32280CF231 /* UIView+Haneke.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5502CF4CCD2029486FD3FFA1 /* UIView+Haneke.swift */; };
+		673A4DE3B3B218730441450C /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CD097348E09B345229EA4E8 /* Data.swift */; };
+		6B2F5B81CA8C3198A398E0D3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D7B03A0EE645E7820FA2854 /* Foundation.framework */; };
+		72CAC27D7D7E9BEDA9A5342E /* Fetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE494D07D0793D72ECF08B1 /* Fetcher.swift */; };
+		7344035385E80963BEBB87B8 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7C0AB083E960C28AB33B856 /* CoreGraphics.framework */; };
+		73BDBF99114D3E8EFA6F0A45 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D7B03A0EE645E7820FA2854 /* Foundation.framework */; };
+		74EADD041DD325AFDE5F1AAA /* Pods-Bakkle-HanekeSwift-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = F57AB70BD313D9360034C886 /* Pods-Bakkle-HanekeSwift-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7953158E3206D7042041722A /* NIKFontAwesomeIconTraits.h in Headers */ = {isa = PBXBuildFile; fileRef = BE9B313423D646F4DA16B944 /* NIKFontAwesomeIconTraits.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7B82FA512EF08A832C762F31 /* FontAwesomeIconFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = B043C076783E03EEEE3C3CFC /* FontAwesomeIconFactory.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		841AC670A37B817E9CBFEE44 /* NSFileManager+Haneke.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB794BC8CA149FE181A52DE3 /* NSFileManager+Haneke.swift */; };
+		936799C169089A725E487982 /* NIKFontAwesomePathRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = BB14ACD4D5473C3731B2077B /* NIKFontAwesomePathRenderer.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		94B13567C014893870FEE631 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D7B03A0EE645E7820FA2854 /* Foundation.framework */; };
+		9739A9D5D9A7765464563887 /* FontAwesome.otf in Resources */ = {isa = PBXBuildFile; fileRef = 08462BB92D760087AB72C87F /* FontAwesome.otf */; };
+		9906B5E02A26538396FF2410 /* NSHTTPURLResponse+Haneke.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D053B21B0595837F847F36 /* NSHTTPURLResponse+Haneke.swift */; };
+		A50B406379AD77DE981E5E3D /* base64.c in Sources */ = {isa = PBXBuildFile; fileRef = B1280A73E739B5C42C3F7684 /* base64.c */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		A551CA19509D3D2D414CF0E9 /* String+Haneke.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0412DA157FD31D4600F0255 /* String+Haneke.swift */; };
+		A75DC9B8827306021536C3C4 /* NIKFontAwesomeIconFactory+iOS.h in Headers */ = {isa = PBXBuildFile; fileRef = E38BCCCA451E4AA890916FB8 /* NIKFontAwesomeIconFactory+iOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A7BF6671E5E5AEFACBC6B8C3 /* Pods-Bakkle-HanekeSwift-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = DA8A5BDB3C1CF4A4EF0E6711 /* Pods-Bakkle-HanekeSwift-dummy.m */; };
+		AA3C4616560AB396A8146BB4 /* SRWebSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 469148DF0E9662BC3681E022 /* SRWebSocket.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B61B517C674064125053F30D /* DiskCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8DE86691BFC483414A5B78 /* DiskCache.swift */; };
+		B8F2D4BECBEDF0B77487F588 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00BA1E74531642D4CCF2649B /* CFNetwork.framework */; };
+		BA6AAD07F90B52DE2C1987B8 /* Pods-Bakkle-FontAwesomeIconFactory-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AE26F0A338D6838FD35E0BD /* Pods-Bakkle-FontAwesomeIconFactory-dummy.m */; };
+		BAC3673A2D7E5E653EF3FC4B /* UIButton+Haneke.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABC38427A3FB8A3D2E3EA7A /* UIButton+Haneke.swift */; };
+		C4E0415A4B55C263BBC068C9 /* Haneke.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A64C9CCA5828B5B1A44D29A /* Haneke.swift */; };
+		C82CCF219F50B0EFA31B00BB /* Pods-Bakkle-SocketRocket-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BFA50EA85AD6F4309A5821F /* Pods-Bakkle-SocketRocket-dummy.m */; };
+		CA3059DF83399EA245F29C1E /* NIKFontAwesomeButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 82A0EDF09202B2C2BA4319F5 /* NIKFontAwesomeButton.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		CBC3C6E2782A04D2A8357C35 /* NSData+SRB64Additions.h in Headers */ = {isa = PBXBuildFile; fileRef = DBCC23D93E0E6B80A2F66CD4 /* NSData+SRB64Additions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		CBF0EBE34F9691B41B62DAF4 /* Pods-Bakkle-FontAwesomeIconFactory-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = C3D795787EECD7DE327CCD0B /* Pods-Bakkle-FontAwesomeIconFactory-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		CFDDFF439074FCD8826AEBFC /* Pods-Bakkle-SocketRocket-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 2867FC8D53335D86EFA85FE3 /* Pods-Bakkle-SocketRocket-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DB6EC690D3EC5DAA539F961F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D7B03A0EE645E7820FA2854 /* Foundation.framework */; };
+		DC82C580AE8C4900F39F44EA /* NIKFontAwesomeTabBarItem.h in Headers */ = {isa = PBXBuildFile; fileRef = F92FBDFE72ABFA8E054EC222 /* NIKFontAwesomeTabBarItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E1564EBBA722962BB674BEE6 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAA195795806BCBF0A32D574 /* Cache.swift */; };
+		E617237171FE5A39C6C8A2EA /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FA18E0A62FC071C81F9621 /* Log.swift */; };
+		EB84321617E1F2ADC6A4470E /* NIKFontAwesomeButton.h in Headers */ = {isa = PBXBuildFile; fileRef = F8AB935309999124B22B6E61 /* NIKFontAwesomeButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F188F9947B02BB32436A5216 /* base64.h in Headers */ = {isa = PBXBuildFile; fileRef = A1073107471A39F91EBDDC98 /* base64.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F2F88E67488F5BC1BCA4CB79 /* UIImage+Haneke.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB70B4FEABFF0950CA436CC /* UIImage+Haneke.swift */; };
+		FB7D6565527E541AF9BC7D06 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82DE53BBEC52C906F2386A7D /* Security.framework */; };
+		FBF53CC5D8FF01C1209DE82E /* DiskFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89600B91174BE9E063EC00DF /* DiskFetcher.swift */; };
+		FD68A067021B72B2745A506E /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AB27E2C02CC7F0308574DCC /* CoreText.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		49A5326179DBDECEE5453A0C /* PBXContainerItemProxy */ = {
+		17ED3AC07A6C7EBC05149005 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 4F35F32EF065F9CD2BEA66B9 /* Project object */;
+			containerPortal = B7F3F23F82621478B94D2C45 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 9AEB051691A7DB2446DDD438;
+			remoteGlobalIDString = 3BCE1AA6A4B393F127B5B7DD;
+			remoteInfo = "Pods-Bakkle-SocketRocket";
+		};
+		278547431C0B773AC84F0CAD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B7F3F23F82621478B94D2C45 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9A60D62DE973ADC3284A25D4;
+			remoteInfo = "Pods-Bakkle-FontAwesomeIconFactory";
+		};
+		CCA1990921CA54B70107085E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B7F3F23F82621478B94D2C45 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D7C8B55A8C6134B1DD6D6993;
 			remoteInfo = "Pods-Bakkle-HanekeSwift";
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0101B6DC124DEA60EE221A5B /* Pods-Bakkle.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Bakkle.debug.xcconfig"; sourceTree = "<group>"; };
-		027CD01DF673E7E22D1E1E34 /* Pods-Bakkle-HanekeSwift-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Bakkle-HanekeSwift-dummy.m"; sourceTree = "<group>"; };
-		08695FE70AB33218F3850A23 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		1F2F2163275724577B091DD0 /* NSFileManager+Haneke.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "NSFileManager+Haneke.swift"; path = "Haneke/NSFileManager+Haneke.swift"; sourceTree = "<group>"; };
-		1FC6C085F1133A883154CF5B /* Format.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Format.swift; path = Haneke/Format.swift; sourceTree = "<group>"; };
-		287440A17BAC26CCEC0F2DF6 /* Pods_Bakkle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Bakkle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		3649BBA7259A1A439125CF6A /* Haneke.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Haneke.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		3E6DBCC526405AED77506E52 /* Fetch.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Fetch.swift; path = Haneke/Fetch.swift; sourceTree = "<group>"; };
-		44381FC0D31DB31C1104750A /* Pods-Bakkle-environment.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Bakkle-environment.h"; sourceTree = "<group>"; };
-		4B8BE629FA9A48897E095A86 /* Cache.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Cache.swift; path = Haneke/Cache.swift; sourceTree = "<group>"; };
-		5BD231829DF547F45CB226D4 /* UIImage+Haneke.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "UIImage+Haneke.swift"; path = "Haneke/UIImage+Haneke.swift"; sourceTree = "<group>"; };
-		62DE8E024F543CE1B63EE9AD /* Podfile */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		67129E29A1BB17875E630755 /* UIButton+Haneke.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "UIButton+Haneke.swift"; path = "Haneke/UIButton+Haneke.swift"; sourceTree = "<group>"; };
-		6ADE632F405F06E2C8EE2CF9 /* Pods-Bakkle-HanekeSwift-Private.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Bakkle-HanekeSwift-Private.xcconfig"; sourceTree = "<group>"; };
-		838A85B0E1CB40DFB45F7B5A /* Pods-Bakkle.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-Bakkle.modulemap"; sourceTree = "<group>"; };
-		8712A96CB4EA1DBEF1324F27 /* CGSize+Swift.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "CGSize+Swift.swift"; path = "Haneke/CGSize+Swift.swift"; sourceTree = "<group>"; };
-		89885E5D0EAB45AF0BA66913 /* Pods-Bakkle-HanekeSwift-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Bakkle-HanekeSwift-umbrella.h"; sourceTree = "<group>"; };
-		8DD2FC8691AD4AC84EAC0A43 /* Pods-Bakkle-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Bakkle-acknowledgements.markdown"; sourceTree = "<group>"; };
-		971493F21BF0C7837FA5937D /* Pods-Bakkle.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Bakkle.release.xcconfig"; sourceTree = "<group>"; };
-		9C16013E721EFF1B63EC4FD3 /* String+Haneke.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "String+Haneke.swift"; path = "Haneke/String+Haneke.swift"; sourceTree = "<group>"; };
-		9D8850A58BC5328E3FA20CAA /* Data.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Data.swift; path = Haneke/Data.swift; sourceTree = "<group>"; };
-		A35919493BD09B9B27835C26 /* DiskCache.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DiskCache.swift; path = Haneke/DiskCache.swift; sourceTree = "<group>"; };
-		AA5C0AC1DE6577189A36FE37 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		AC73D88C9FF163CA0AC14027 /* Pods-Bakkle-HanekeSwift-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Bakkle-HanekeSwift-prefix.pch"; sourceTree = "<group>"; };
-		B7BDADDD4F6F24E5598FB5EB /* Pods-Bakkle-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Bakkle-acknowledgements.plist"; sourceTree = "<group>"; };
-		B8322EC6E363B800675840F0 /* Log.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Log.swift; path = Haneke/Log.swift; sourceTree = "<group>"; };
-		BBCA3B946FBD05F09C8253A5 /* NetworkFetcher.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NetworkFetcher.swift; path = Haneke/NetworkFetcher.swift; sourceTree = "<group>"; };
-		BCB06A7B916633B9EBB1D2A6 /* NSHTTPURLResponse+Haneke.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "NSHTTPURLResponse+Haneke.swift"; path = "Haneke/NSHTTPURLResponse+Haneke.swift"; sourceTree = "<group>"; };
-		BE62F97D07C8219F3AF321A5 /* Pods-Bakkle-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Bakkle-resources.sh"; sourceTree = "<group>"; };
-		BE742E1AAD2BA36D2DEC4C47 /* Pods-Bakkle-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Bakkle-frameworks.sh"; sourceTree = "<group>"; };
-		BF6A769578F638FE2089934E /* DiskFetcher.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DiskFetcher.swift; path = Haneke/DiskFetcher.swift; sourceTree = "<group>"; };
-		D2C03A8A4F2B095405611429 /* UIView+Haneke.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "UIView+Haneke.swift"; path = "Haneke/UIView+Haneke.swift"; sourceTree = "<group>"; };
-		D49C344E56FC6C237F62C74D /* Fetcher.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Fetcher.swift; path = Haneke/Fetcher.swift; sourceTree = "<group>"; };
-		DBBE01B830693C319F962A7A /* UIImageView+Haneke.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "UIImageView+Haneke.swift"; path = "Haneke/UIImageView+Haneke.swift"; sourceTree = "<group>"; };
-		DDA8A320C081CB5A51437077 /* Pods-Bakkle-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Bakkle-umbrella.h"; sourceTree = "<group>"; };
-		DE31AFE4D21E49A24C9E90E7 /* Pods-Bakkle-HanekeSwift.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-Bakkle-HanekeSwift.modulemap"; sourceTree = "<group>"; };
-		E0BFE801281424FCF183D720 /* Pods-Bakkle-HanekeSwift.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Bakkle-HanekeSwift.xcconfig"; sourceTree = "<group>"; };
-		EC11B8F475D6742E93100EB2 /* Haneke.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Haneke.swift; path = Haneke/Haneke.swift; sourceTree = "<group>"; };
-		ECC4596A4D6A1A42E8A502A6 /* Pods-Bakkle-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Bakkle-dummy.m"; sourceTree = "<group>"; };
-		F52F55EAFB7EFD44F4809CC8 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		FA62D7B0B1FA30C04289DE8D /* CryptoSwiftMD5.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CryptoSwiftMD5.swift; path = Haneke/CryptoSwiftMD5.swift; sourceTree = "<group>"; };
+		002827F79A7BC3E819ED031F /* Pods-Bakkle-HanekeSwift.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Bakkle-HanekeSwift.xcconfig"; sourceTree = "<group>"; };
+		00BA1E74531642D4CCF2649B /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.3.sdk/System/Library/Frameworks/CFNetwork.framework; sourceTree = DEVELOPER_DIR; };
+		02EDB298F2B620D5BB7E0615 /* Pods-Bakkle-SocketRocket.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-Bakkle-SocketRocket.modulemap"; sourceTree = "<group>"; };
+		03F5B213E81F7A33B2F0AB37 /* NIKFontAwesomeIconFactory.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = NIKFontAwesomeIconFactory.h; sourceTree = "<group>"; };
+		04FA18E0A62FC071C81F9621 /* Log.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Log.swift; path = Haneke/Log.swift; sourceTree = "<group>"; };
+		08462BB92D760087AB72C87F /* FontAwesome.otf */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file; name = FontAwesome.otf; path = "Font-Awesome/fonts/FontAwesome.otf"; sourceTree = "<group>"; };
+		0BDF28CD3DEDA7505CAF9DE1 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0FD298BD43F63A7EF0CCC503 /* NIKFontAwesomeImageView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = NIKFontAwesomeImageView.h; path = iOS/NIKFontAwesomeImageView.h; sourceTree = "<group>"; };
+		1146B6BAEF68FD459479919D /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		16E204E145AAA57357A70340 /* Pods-Bakkle-HanekeSwift-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Bakkle-HanekeSwift-prefix.pch"; sourceTree = "<group>"; };
+		1A64C9CCA5828B5B1A44D29A /* Haneke.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Haneke.swift; path = Haneke/Haneke.swift; sourceTree = "<group>"; };
+		20120671684C6F133754C991 /* CryptoSwiftMD5.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CryptoSwiftMD5.swift; path = Haneke/CryptoSwiftMD5.swift; sourceTree = "<group>"; };
+		27D053B21B0595837F847F36 /* NSHTTPURLResponse+Haneke.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "NSHTTPURLResponse+Haneke.swift"; path = "Haneke/NSHTTPURLResponse+Haneke.swift"; sourceTree = "<group>"; };
+		2867FC8D53335D86EFA85FE3 /* Pods-Bakkle-SocketRocket-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Bakkle-SocketRocket-umbrella.h"; sourceTree = "<group>"; };
+		29F0AC3D43E04E00CDA99FBE /* Pods-Bakkle-FontAwesomeIconFactory.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-Bakkle-FontAwesomeIconFactory.modulemap"; sourceTree = "<group>"; };
+		2B19CB555F24CA5960E42D2E /* Pods-Bakkle-HanekeSwift-Private.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Bakkle-HanekeSwift-Private.xcconfig"; sourceTree = "<group>"; };
+		3195169F3192D8B3A329DC6E /* NSData+SRB64Additions.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSData+SRB64Additions.m"; path = "SocketRocket/NSData+SRB64Additions.m"; sourceTree = "<group>"; };
+		3230D48278254DADF5AE909D /* NIKFontAwesomePathFactory.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = NIKFontAwesomePathFactory.m; sourceTree = "<group>"; };
+		3413A3919B532881D12B7E6B /* NIKFontAwesomePathRenderer.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = NIKFontAwesomePathRenderer.m; sourceTree = "<group>"; };
+		3D8DE86691BFC483414A5B78 /* DiskCache.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DiskCache.swift; path = Haneke/DiskCache.swift; sourceTree = "<group>"; };
+		3E95161EB5E4F9AE5AF8DBF9 /* Pods-Bakkle-SocketRocket-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Bakkle-SocketRocket-prefix.pch"; sourceTree = "<group>"; };
+		3F6B353F16C970DEAB52C3FA /* Pods-Bakkle-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Bakkle-dummy.m"; sourceTree = "<group>"; };
+		41A6022A033134CC20D630E6 /* Pods-Bakkle-FontAwesomeIconFactory-Private.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Bakkle-FontAwesomeIconFactory-Private.xcconfig"; sourceTree = "<group>"; };
+		435E53585DAC3E427BB9D320 /* Pods-Bakkle-SocketRocket.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Bakkle-SocketRocket.xcconfig"; sourceTree = "<group>"; };
+		469148DF0E9662BC3681E022 /* SRWebSocket.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SRWebSocket.h; path = SocketRocket/SRWebSocket.h; sourceTree = "<group>"; };
+		48FBBFFD8692CA818B06E57D /* SRWebSocket.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SRWebSocket.m; path = SocketRocket/SRWebSocket.m; sourceTree = "<group>"; };
+		4BC42DDA4E33E37EACFA2AEF /* NIKFontAwesomePathFactory.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = NIKFontAwesomePathFactory.h; sourceTree = "<group>"; };
+		4CD097348E09B345229EA4E8 /* Data.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Data.swift; path = Haneke/Data.swift; sourceTree = "<group>"; };
+		4CE9AF201B671A036B2B2671 /* Pods-Bakkle-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Bakkle-resources.sh"; sourceTree = "<group>"; };
+		4DE0584C263E4D4669C35B18 /* NIKFontAwesomeIconFactory.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = NIKFontAwesomeIconFactory.m; sourceTree = "<group>"; };
+		4E196DD91D9D5FD3786808D3 /* FontAwesomeIconFactory.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FontAwesomeIconFactory.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5410C8FA157942679D2DDCF6 /* NIKFontAwesomeIcon.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = NIKFontAwesomeIcon.h; sourceTree = "<group>"; };
+		5502CF4CCD2029486FD3FFA1 /* UIView+Haneke.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "UIView+Haneke.swift"; path = "Haneke/UIView+Haneke.swift"; sourceTree = "<group>"; };
+		577B1E4B58D0D79F942CB7E4 /* Pods-Bakkle-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Bakkle-frameworks.sh"; sourceTree = "<group>"; };
+		5A772D5D67E9081500C38006 /* Pods-Bakkle-HanekeSwift.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-Bakkle-HanekeSwift.modulemap"; sourceTree = "<group>"; };
+		5AB27E2C02CC7F0308574DCC /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.3.sdk/System/Library/Frameworks/CoreText.framework; sourceTree = DEVELOPER_DIR; };
+		5B6B1728E6E393191377922F /* NIKFontAwesomeIconFactory+iOS.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "NIKFontAwesomeIconFactory+iOS.m"; sourceTree = "<group>"; };
+		5EE8999824D9501126B8387C /* Pods-Bakkle-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Bakkle-acknowledgements.markdown"; sourceTree = "<group>"; };
+		612123D895B8F0375582483B /* Pods-Bakkle.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Bakkle.debug.xcconfig"; sourceTree = "<group>"; };
+		6AE26F0A338D6838FD35E0BD /* Pods-Bakkle-FontAwesomeIconFactory-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Bakkle-FontAwesomeIconFactory-dummy.m"; sourceTree = "<group>"; };
+		6BFA50EA85AD6F4309A5821F /* Pods-Bakkle-SocketRocket-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Bakkle-SocketRocket-dummy.m"; sourceTree = "<group>"; };
+		6E2FAE4E5986430D2551D7EE /* Pods-Bakkle-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Bakkle-umbrella.h"; sourceTree = "<group>"; };
+		72377226737C1A53A9E482E0 /* UIImageView+Haneke.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "UIImageView+Haneke.swift"; path = "Haneke/UIImageView+Haneke.swift"; sourceTree = "<group>"; };
+		73F5F1C3227742889166D8A8 /* Fetch.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Fetch.swift; path = Haneke/Fetch.swift; sourceTree = "<group>"; };
+		745EB3DA600E6ADB1BAB60C3 /* SocketRocket.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SocketRocket.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		777ABD82CE49F8459907BBC6 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7AB70B4FEABFF0950CA436CC /* UIImage+Haneke.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "UIImage+Haneke.swift"; path = "Haneke/UIImage+Haneke.swift"; sourceTree = "<group>"; };
+		7D7B03A0EE645E7820FA2854 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		805DF324289256D20BEF8454 /* Pods-Bakkle-FontAwesomeIconFactory-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Bakkle-FontAwesomeIconFactory-prefix.pch"; sourceTree = "<group>"; };
+		82A0EDF09202B2C2BA4319F5 /* NIKFontAwesomeButton.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = NIKFontAwesomeButton.m; path = iOS/NIKFontAwesomeButton.m; sourceTree = "<group>"; };
+		82DE53BBEC52C906F2386A7D /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.3.sdk/System/Library/Frameworks/Security.framework; sourceTree = DEVELOPER_DIR; };
+		889A437467E77D1D5C3994B4 /* Pods-Bakkle.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Bakkle.release.xcconfig"; sourceTree = "<group>"; };
+		893F1C639892A37E259951EA /* CGSize+Swift.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "CGSize+Swift.swift"; path = "Haneke/CGSize+Swift.swift"; sourceTree = "<group>"; };
+		89600B91174BE9E063EC00DF /* DiskFetcher.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DiskFetcher.swift; path = Haneke/DiskFetcher.swift; sourceTree = "<group>"; };
+		8E8FCE347A5571C3092A2C58 /* Pods-Bakkle-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Bakkle-acknowledgements.plist"; sourceTree = "<group>"; };
+		94B9F05538A7C7B656623A77 /* Pods_Bakkle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Bakkle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A1073107471A39F91EBDDC98 /* base64.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = base64.h; path = SocketRocket/base64.h; sourceTree = "<group>"; };
+		A9BD8EE115C81C070DD3B24A /* NIKFontAwesomeTabBarItem.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = NIKFontAwesomeTabBarItem.m; path = iOS/NIKFontAwesomeTabBarItem.m; sourceTree = "<group>"; };
+		ACE494D07D0793D72ECF08B1 /* Fetcher.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Fetcher.swift; path = Haneke/Fetcher.swift; sourceTree = "<group>"; };
+		B043C076783E03EEEE3C3CFC /* FontAwesomeIconFactory.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = FontAwesomeIconFactory.h; sourceTree = "<group>"; };
+		B1280A73E739B5C42C3F7684 /* base64.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; name = base64.c; path = SocketRocket/base64.c; sourceTree = "<group>"; };
+		BB14ACD4D5473C3731B2077B /* NIKFontAwesomePathRenderer.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = NIKFontAwesomePathRenderer.h; sourceTree = "<group>"; };
+		BE9B313423D646F4DA16B944 /* NIKFontAwesomeIconTraits.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = NIKFontAwesomeIconTraits.h; sourceTree = "<group>"; };
+		C0412DA157FD31D4600F0255 /* String+Haneke.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "String+Haneke.swift"; path = "Haneke/String+Haneke.swift"; sourceTree = "<group>"; };
+		C2646CAE69F27D5E742593EE /* Pods-Bakkle-SocketRocket-Private.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Bakkle-SocketRocket-Private.xcconfig"; sourceTree = "<group>"; };
+		C3D795787EECD7DE327CCD0B /* Pods-Bakkle-FontAwesomeIconFactory-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Bakkle-FontAwesomeIconFactory-umbrella.h"; sourceTree = "<group>"; };
+		C5FF107EF19FC4C1D2C6EACE /* Haneke.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Haneke.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C7C0AB083E960C28AB33B856 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.3.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
+		CAA195795806BCBF0A32D574 /* Cache.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Cache.swift; path = Haneke/Cache.swift; sourceTree = "<group>"; };
+		CABC38427A3FB8A3D2E3EA7A /* UIButton+Haneke.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "UIButton+Haneke.swift"; path = "Haneke/UIButton+Haneke.swift"; sourceTree = "<group>"; };
+		CB794BC8CA149FE181A52DE3 /* NSFileManager+Haneke.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "NSFileManager+Haneke.swift"; path = "Haneke/NSFileManager+Haneke.swift"; sourceTree = "<group>"; };
+		DA8A5BDB3C1CF4A4EF0E6711 /* Pods-Bakkle-HanekeSwift-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Bakkle-HanekeSwift-dummy.m"; sourceTree = "<group>"; };
+		DBCC23D93E0E6B80A2F66CD4 /* NSData+SRB64Additions.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSData+SRB64Additions.h"; path = "SocketRocket/NSData+SRB64Additions.h"; sourceTree = "<group>"; };
+		DEB6DED02D91EF28567E6BC3 /* Pods-Bakkle-environment.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Bakkle-environment.h"; sourceTree = "<group>"; };
+		E348418413263D4176BF4B04 /* Pods-Bakkle-FontAwesomeIconFactory.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Bakkle-FontAwesomeIconFactory.xcconfig"; sourceTree = "<group>"; };
+		E38BCCCA451E4AA890916FB8 /* NIKFontAwesomeIconFactory+iOS.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "NIKFontAwesomeIconFactory+iOS.h"; sourceTree = "<group>"; };
+		E393639A2A24E0B1FFD0C46E /* Podfile */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		E4421740231BCBC93E9CA47A /* NetworkFetcher.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NetworkFetcher.swift; path = Haneke/NetworkFetcher.swift; sourceTree = "<group>"; };
+		EF1C8D348F78D7F401D64245 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F15C9CC1FE01D519BF8EEC05 /* NIKFontAwesomeImageView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = NIKFontAwesomeImageView.m; path = iOS/NIKFontAwesomeImageView.m; sourceTree = "<group>"; };
+		F3A34EB5A4CB7AB2CE3A9D89 /* Format.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Format.swift; path = Haneke/Format.swift; sourceTree = "<group>"; };
+		F57AB70BD313D9360034C886 /* Pods-Bakkle-HanekeSwift-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Bakkle-HanekeSwift-umbrella.h"; sourceTree = "<group>"; };
+		F8AB935309999124B22B6E61 /* NIKFontAwesomeButton.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = NIKFontAwesomeButton.h; path = iOS/NIKFontAwesomeButton.h; sourceTree = "<group>"; };
+		F92FBDFE72ABFA8E054EC222 /* NIKFontAwesomeTabBarItem.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = NIKFontAwesomeTabBarItem.h; path = iOS/NIKFontAwesomeTabBarItem.h; sourceTree = "<group>"; };
+		FBE7D245C1B6CE873F345D09 /* Pods-Bakkle.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-Bakkle.modulemap"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		10D67DB515AA62975F20BF05 /* Frameworks */ = {
+		4B68BEF7169933BF71EE74C2 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E899379A65ECDB446EA7EE54 /* Foundation.framework in Frameworks */,
+				7344035385E80963BEBB87B8 /* CoreGraphics.framework in Frameworks */,
+				FD68A067021B72B2745A506E /* CoreText.framework in Frameworks */,
+				DB6EC690D3EC5DAA539F961F /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		FC3EF801CBADC8F1799158D7 /* Frameworks */ = {
+		53A18CF1654283918D76B37F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D45095E85604DE022266D9F8 /* Foundation.framework in Frameworks */,
+				94B13567C014893870FEE631 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D2B914FF5CA3DF8678FD15D8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				73BDBF99114D3E8EFA6F0A45 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DA7888023EE2791E59A36154 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B8F2D4BECBEDF0B77487F588 /* CFNetwork.framework in Frameworks */,
+				6B2F5B81CA8C3198A398E0D3 /* Foundation.framework in Frameworks */,
+				FB7D6565527E541AF9BC7D06 /* Security.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		2B91EAA9592F4870F1217877 /* Pods-Bakkle */ = {
+		19A23C1E880CC9B30B50C4C6 /* Pods-Bakkle */ = {
 			isa = PBXGroup;
 			children = (
-				F52F55EAFB7EFD44F4809CC8 /* Info.plist */,
-				838A85B0E1CB40DFB45F7B5A /* Pods-Bakkle.modulemap */,
-				8DD2FC8691AD4AC84EAC0A43 /* Pods-Bakkle-acknowledgements.markdown */,
-				B7BDADDD4F6F24E5598FB5EB /* Pods-Bakkle-acknowledgements.plist */,
-				ECC4596A4D6A1A42E8A502A6 /* Pods-Bakkle-dummy.m */,
-				44381FC0D31DB31C1104750A /* Pods-Bakkle-environment.h */,
-				BE742E1AAD2BA36D2DEC4C47 /* Pods-Bakkle-frameworks.sh */,
-				BE62F97D07C8219F3AF321A5 /* Pods-Bakkle-resources.sh */,
-				DDA8A320C081CB5A51437077 /* Pods-Bakkle-umbrella.h */,
-				0101B6DC124DEA60EE221A5B /* Pods-Bakkle.debug.xcconfig */,
-				971493F21BF0C7837FA5937D /* Pods-Bakkle.release.xcconfig */,
+				0BDF28CD3DEDA7505CAF9DE1 /* Info.plist */,
+				FBE7D245C1B6CE873F345D09 /* Pods-Bakkle.modulemap */,
+				5EE8999824D9501126B8387C /* Pods-Bakkle-acknowledgements.markdown */,
+				8E8FCE347A5571C3092A2C58 /* Pods-Bakkle-acknowledgements.plist */,
+				3F6B353F16C970DEAB52C3FA /* Pods-Bakkle-dummy.m */,
+				DEB6DED02D91EF28567E6BC3 /* Pods-Bakkle-environment.h */,
+				577B1E4B58D0D79F942CB7E4 /* Pods-Bakkle-frameworks.sh */,
+				4CE9AF201B671A036B2B2671 /* Pods-Bakkle-resources.sh */,
+				6E2FAE4E5986430D2551D7EE /* Pods-Bakkle-umbrella.h */,
+				612123D895B8F0375582483B /* Pods-Bakkle.debug.xcconfig */,
+				889A437467E77D1D5C3994B4 /* Pods-Bakkle.release.xcconfig */,
 			);
 			name = "Pods-Bakkle";
 			path = "Target Support Files/Pods-Bakkle";
 			sourceTree = "<group>";
 		};
-		2BFDF0FDD6728E0FB30C2D73 /* iOS */ = {
+		76B1A16914DF5D8A250A4F97 /* Support Files */ = {
 			isa = PBXGroup;
 			children = (
-				08695FE70AB33218F3850A23 /* Foundation.framework */,
+				EF1C8D348F78D7F401D64245 /* Info.plist */,
+				02EDB298F2B620D5BB7E0615 /* Pods-Bakkle-SocketRocket.modulemap */,
+				435E53585DAC3E427BB9D320 /* Pods-Bakkle-SocketRocket.xcconfig */,
+				C2646CAE69F27D5E742593EE /* Pods-Bakkle-SocketRocket-Private.xcconfig */,
+				6BFA50EA85AD6F4309A5821F /* Pods-Bakkle-SocketRocket-dummy.m */,
+				3E95161EB5E4F9AE5AF8DBF9 /* Pods-Bakkle-SocketRocket-prefix.pch */,
+				2867FC8D53335D86EFA85FE3 /* Pods-Bakkle-SocketRocket-umbrella.h */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/Pods-Bakkle-SocketRocket";
+			sourceTree = "<group>";
+		};
+		7BD6702F7ED3C6BEC2FF6942 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				00BA1E74531642D4CCF2649B /* CFNetwork.framework */,
+				C7C0AB083E960C28AB33B856 /* CoreGraphics.framework */,
+				5AB27E2C02CC7F0308574DCC /* CoreText.framework */,
+				7D7B03A0EE645E7820FA2854 /* Foundation.framework */,
+				82DE53BBEC52C906F2386A7D /* Security.framework */,
 			);
 			name = iOS;
 			sourceTree = "<group>";
 		};
-		426804ACA91F9F02A6C92F4A /* Targets Support Files */ = {
+		7E8D5625082CFB925303AD27 /* Support Files */ = {
 			isa = PBXGroup;
 			children = (
-				2B91EAA9592F4870F1217877 /* Pods-Bakkle */,
+				1146B6BAEF68FD459479919D /* Info.plist */,
+				29F0AC3D43E04E00CDA99FBE /* Pods-Bakkle-FontAwesomeIconFactory.modulemap */,
+				E348418413263D4176BF4B04 /* Pods-Bakkle-FontAwesomeIconFactory.xcconfig */,
+				41A6022A033134CC20D630E6 /* Pods-Bakkle-FontAwesomeIconFactory-Private.xcconfig */,
+				6AE26F0A338D6838FD35E0BD /* Pods-Bakkle-FontAwesomeIconFactory-dummy.m */,
+				805DF324289256D20BEF8454 /* Pods-Bakkle-FontAwesomeIconFactory-prefix.pch */,
+				C3D795787EECD7DE327CCD0B /* Pods-Bakkle-FontAwesomeIconFactory-umbrella.h */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/Pods-Bakkle-FontAwesomeIconFactory";
+			sourceTree = "<group>";
+		};
+		88A2728EBE57EA67C5744C10 /* Targets Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				19A23C1E880CC9B30B50C4C6 /* Pods-Bakkle */,
 			);
 			name = "Targets Support Files";
 			sourceTree = "<group>";
 		};
-		534E04D44A17C19BA93AD3FA /* Pods */ = {
+		9DB2EDE5CAEB74C5851B0442 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				A2AFC543D433462864B238D5 /* HanekeSwift */,
+				D4D706F4B503F00D1BEA3D19 /* FontAwesomeIconFactory */,
+				E57A62AF05A9F20B58788A8A /* HanekeSwift */,
+				D98C25F5F9D8B9516D01C8D2 /* SocketRocket */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
 		};
-		99DD3F428343C7A0B72F3872 /* Support Files */ = {
+		AFC6D3E7D7F360B0E506426E /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				AA5C0AC1DE6577189A36FE37 /* Info.plist */,
-				DE31AFE4D21E49A24C9E90E7 /* Pods-Bakkle-HanekeSwift.modulemap */,
-				E0BFE801281424FCF183D720 /* Pods-Bakkle-HanekeSwift.xcconfig */,
-				6ADE632F405F06E2C8EE2CF9 /* Pods-Bakkle-HanekeSwift-Private.xcconfig */,
-				027CD01DF673E7E22D1E1E34 /* Pods-Bakkle-HanekeSwift-dummy.m */,
-				AC73D88C9FF163CA0AC14027 /* Pods-Bakkle-HanekeSwift-prefix.pch */,
-				89885E5D0EAB45AF0BA66913 /* Pods-Bakkle-HanekeSwift-umbrella.h */,
+				4E196DD91D9D5FD3786808D3 /* FontAwesomeIconFactory.framework */,
+				C5FF107EF19FC4C1D2C6EACE /* Haneke.framework */,
+				94B9F05538A7C7B656623A77 /* Pods_Bakkle.framework */,
+				745EB3DA600E6ADB1BAB60C3 /* SocketRocket.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C3B91654E7EE9F7DA5756856 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7BD6702F7ED3C6BEC2FF6942 /* iOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C6BCCFE1BF3E8CCE84A30D18 = {
+			isa = PBXGroup;
+			children = (
+				E393639A2A24E0B1FFD0C46E /* Podfile */,
+				C3B91654E7EE9F7DA5756856 /* Frameworks */,
+				9DB2EDE5CAEB74C5851B0442 /* Pods */,
+				AFC6D3E7D7F360B0E506426E /* Products */,
+				88A2728EBE57EA67C5744C10 /* Targets Support Files */,
+			);
+			sourceTree = "<group>";
+		};
+		CD47B2EEADF24ACA084E09FD /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				777ABD82CE49F8459907BBC6 /* Info.plist */,
+				5A772D5D67E9081500C38006 /* Pods-Bakkle-HanekeSwift.modulemap */,
+				002827F79A7BC3E819ED031F /* Pods-Bakkle-HanekeSwift.xcconfig */,
+				2B19CB555F24CA5960E42D2E /* Pods-Bakkle-HanekeSwift-Private.xcconfig */,
+				DA8A5BDB3C1CF4A4EF0E6711 /* Pods-Bakkle-HanekeSwift-dummy.m */,
+				16E204E145AAA57357A70340 /* Pods-Bakkle-HanekeSwift-prefix.pch */,
+				F57AB70BD313D9360034C886 /* Pods-Bakkle-HanekeSwift-umbrella.h */,
 			);
 			name = "Support Files";
 			path = "../Target Support Files/Pods-Bakkle-HanekeSwift";
 			sourceTree = "<group>";
 		};
-		9C66746EDD9E4CAE2691DEF9 /* Frameworks */ = {
+		CF21867CA360AD8167E116A5 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				2BFDF0FDD6728E0FB30C2D73 /* iOS */,
+				08462BB92D760087AB72C87F /* FontAwesome.otf */,
 			);
-			name = Frameworks;
+			name = Resources;
 			sourceTree = "<group>";
 		};
-		A2AFC543D433462864B238D5 /* HanekeSwift */ = {
+		D4D706F4B503F00D1BEA3D19 /* FontAwesomeIconFactory */ = {
 			isa = PBXGroup;
 			children = (
-				8712A96CB4EA1DBEF1324F27 /* CGSize+Swift.swift */,
-				4B8BE629FA9A48897E095A86 /* Cache.swift */,
-				FA62D7B0B1FA30C04289DE8D /* CryptoSwiftMD5.swift */,
-				9D8850A58BC5328E3FA20CAA /* Data.swift */,
-				A35919493BD09B9B27835C26 /* DiskCache.swift */,
-				BF6A769578F638FE2089934E /* DiskFetcher.swift */,
-				3E6DBCC526405AED77506E52 /* Fetch.swift */,
-				D49C344E56FC6C237F62C74D /* Fetcher.swift */,
-				1FC6C085F1133A883154CF5B /* Format.swift */,
-				EC11B8F475D6742E93100EB2 /* Haneke.swift */,
-				B8322EC6E363B800675840F0 /* Log.swift */,
-				1F2F2163275724577B091DD0 /* NSFileManager+Haneke.swift */,
-				BCB06A7B916633B9EBB1D2A6 /* NSHTTPURLResponse+Haneke.swift */,
-				BBCA3B946FBD05F09C8253A5 /* NetworkFetcher.swift */,
-				9C16013E721EFF1B63EC4FD3 /* String+Haneke.swift */,
-				67129E29A1BB17875E630755 /* UIButton+Haneke.swift */,
-				5BD231829DF547F45CB226D4 /* UIImage+Haneke.swift */,
-				DBBE01B830693C319F962A7A /* UIImageView+Haneke.swift */,
-				D2C03A8A4F2B095405611429 /* UIView+Haneke.swift */,
-				99DD3F428343C7A0B72F3872 /* Support Files */,
+				B043C076783E03EEEE3C3CFC /* FontAwesomeIconFactory.h */,
+				F8AB935309999124B22B6E61 /* NIKFontAwesomeButton.h */,
+				82A0EDF09202B2C2BA4319F5 /* NIKFontAwesomeButton.m */,
+				5410C8FA157942679D2DDCF6 /* NIKFontAwesomeIcon.h */,
+				03F5B213E81F7A33B2F0AB37 /* NIKFontAwesomeIconFactory.h */,
+				4DE0584C263E4D4669C35B18 /* NIKFontAwesomeIconFactory.m */,
+				E38BCCCA451E4AA890916FB8 /* NIKFontAwesomeIconFactory+iOS.h */,
+				5B6B1728E6E393191377922F /* NIKFontAwesomeIconFactory+iOS.m */,
+				BE9B313423D646F4DA16B944 /* NIKFontAwesomeIconTraits.h */,
+				0FD298BD43F63A7EF0CCC503 /* NIKFontAwesomeImageView.h */,
+				F15C9CC1FE01D519BF8EEC05 /* NIKFontAwesomeImageView.m */,
+				4BC42DDA4E33E37EACFA2AEF /* NIKFontAwesomePathFactory.h */,
+				3230D48278254DADF5AE909D /* NIKFontAwesomePathFactory.m */,
+				BB14ACD4D5473C3731B2077B /* NIKFontAwesomePathRenderer.h */,
+				3413A3919B532881D12B7E6B /* NIKFontAwesomePathRenderer.m */,
+				F92FBDFE72ABFA8E054EC222 /* NIKFontAwesomeTabBarItem.h */,
+				A9BD8EE115C81C070DD3B24A /* NIKFontAwesomeTabBarItem.m */,
+				CF21867CA360AD8167E116A5 /* Resources */,
+				7E8D5625082CFB925303AD27 /* Support Files */,
+			);
+			path = FontAwesomeIconFactory;
+			sourceTree = "<group>";
+		};
+		D98C25F5F9D8B9516D01C8D2 /* SocketRocket */ = {
+			isa = PBXGroup;
+			children = (
+				DBCC23D93E0E6B80A2F66CD4 /* NSData+SRB64Additions.h */,
+				3195169F3192D8B3A329DC6E /* NSData+SRB64Additions.m */,
+				469148DF0E9662BC3681E022 /* SRWebSocket.h */,
+				48FBBFFD8692CA818B06E57D /* SRWebSocket.m */,
+				B1280A73E739B5C42C3F7684 /* base64.c */,
+				A1073107471A39F91EBDDC98 /* base64.h */,
+				76B1A16914DF5D8A250A4F97 /* Support Files */,
+			);
+			path = SocketRocket;
+			sourceTree = "<group>";
+		};
+		E57A62AF05A9F20B58788A8A /* HanekeSwift */ = {
+			isa = PBXGroup;
+			children = (
+				893F1C639892A37E259951EA /* CGSize+Swift.swift */,
+				CAA195795806BCBF0A32D574 /* Cache.swift */,
+				20120671684C6F133754C991 /* CryptoSwiftMD5.swift */,
+				4CD097348E09B345229EA4E8 /* Data.swift */,
+				3D8DE86691BFC483414A5B78 /* DiskCache.swift */,
+				89600B91174BE9E063EC00DF /* DiskFetcher.swift */,
+				73F5F1C3227742889166D8A8 /* Fetch.swift */,
+				ACE494D07D0793D72ECF08B1 /* Fetcher.swift */,
+				F3A34EB5A4CB7AB2CE3A9D89 /* Format.swift */,
+				1A64C9CCA5828B5B1A44D29A /* Haneke.swift */,
+				04FA18E0A62FC071C81F9621 /* Log.swift */,
+				CB794BC8CA149FE181A52DE3 /* NSFileManager+Haneke.swift */,
+				27D053B21B0595837F847F36 /* NSHTTPURLResponse+Haneke.swift */,
+				E4421740231BCBC93E9CA47A /* NetworkFetcher.swift */,
+				C0412DA157FD31D4600F0255 /* String+Haneke.swift */,
+				CABC38427A3FB8A3D2E3EA7A /* UIButton+Haneke.swift */,
+				7AB70B4FEABFF0950CA436CC /* UIImage+Haneke.swift */,
+				72377226737C1A53A9E482E0 /* UIImageView+Haneke.swift */,
+				5502CF4CCD2029486FD3FFA1 /* UIView+Haneke.swift */,
+				CD47B2EEADF24ACA084E09FD /* Support Files */,
 			);
 			path = HanekeSwift;
-			sourceTree = "<group>";
-		};
-		CF68D2C33C4A0F9EA8FE1EDC /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				3649BBA7259A1A439125CF6A /* Haneke.framework */,
-				287440A17BAC26CCEC0F2DF6 /* Pods_Bakkle.framework */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		EDE08DC7806D8A495EB30AF3 = {
-			isa = PBXGroup;
-			children = (
-				62DE8E024F543CE1B63EE9AD /* Podfile */,
-				9C66746EDD9E4CAE2691DEF9 /* Frameworks */,
-				534E04D44A17C19BA93AD3FA /* Pods */,
-				CF68D2C33C4A0F9EA8FE1EDC /* Products */,
-				426804ACA91F9F02A6C92F4A /* Targets Support Files */,
-			);
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		18CB92CA19AFF79198B0A6E5 /* Headers */ = {
+		2EBEFA2454C76C429CE737A0 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				70B518DE5C4ADD3082FE0652 /* Pods-Bakkle-umbrella.h in Headers */,
+				CBC3C6E2782A04D2A8357C35 /* NSData+SRB64Additions.h in Headers */,
+				CFDDFF439074FCD8826AEBFC /* Pods-Bakkle-SocketRocket-umbrella.h in Headers */,
+				AA3C4616560AB396A8146BB4 /* SRWebSocket.h in Headers */,
+				F188F9947B02BB32436A5216 /* base64.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		BE29AEC1B110020E76CA6764 /* Headers */ = {
+		45288C49046AABBE69C571F5 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				83CA4FFB1E39B0FE98ED6731 /* Pods-Bakkle-HanekeSwift-umbrella.h in Headers */,
+				74EADD041DD325AFDE5F1AAA /* Pods-Bakkle-HanekeSwift-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		824A120EEFC165318F2C2339 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7B82FA512EF08A832C762F31 /* FontAwesomeIconFactory.h in Headers */,
+				EB84321617E1F2ADC6A4470E /* NIKFontAwesomeButton.h in Headers */,
+				28E4A7896225A51159D35920 /* NIKFontAwesomeIcon.h in Headers */,
+				A75DC9B8827306021536C3C4 /* NIKFontAwesomeIconFactory+iOS.h in Headers */,
+				2FE11770877C3DF7CA1C5FC4 /* NIKFontAwesomeIconFactory.h in Headers */,
+				7953158E3206D7042041722A /* NIKFontAwesomeIconTraits.h in Headers */,
+				63368A595CB40C309D00232F /* NIKFontAwesomeImageView.h in Headers */,
+				1693DFE2DF9E21920719F9AF /* NIKFontAwesomePathFactory.h in Headers */,
+				936799C169089A725E487982 /* NIKFontAwesomePathRenderer.h in Headers */,
+				DC82C580AE8C4900F39F44EA /* NIKFontAwesomeTabBarItem.h in Headers */,
+				CBF0EBE34F9691B41B62DAF4 /* Pods-Bakkle-FontAwesomeIconFactory-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CE9B8A09FE86CD43A89D4378 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4BB1954CBACFE757361BD84F /* Pods-Bakkle-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		41E6DCE304EAA6A32365AC64 /* Pods-Bakkle */ = {
+		27BC40A5D3D29743158AD522 /* Pods-Bakkle */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 171F86C4EE3DA4A8D3E7F327 /* Build configuration list for PBXNativeTarget "Pods-Bakkle" */;
+			buildConfigurationList = 448389CE38799E3FCA309C73 /* Build configuration list for PBXNativeTarget "Pods-Bakkle" */;
 			buildPhases = (
-				A597D7C0279C867ECD310F3E /* Sources */,
-				10D67DB515AA62975F20BF05 /* Frameworks */,
-				18CB92CA19AFF79198B0A6E5 /* Headers */,
+				4B2459F76938DA870F5ED9FE /* Sources */,
+				D2B914FF5CA3DF8678FD15D8 /* Frameworks */,
+				CE9B8A09FE86CD43A89D4378 /* Headers */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				0DB3BE034A052FDA3D169555 /* PBXTargetDependency */,
+				2A8F9518A52E76C673DCA776 /* PBXTargetDependency */,
+				F7B327A2901073043D9DC7B5 /* PBXTargetDependency */,
+				64D3C9678C08C3013D454E77 /* PBXTargetDependency */,
 			);
 			name = "Pods-Bakkle";
 			productName = "Pods-Bakkle";
-			productReference = 287440A17BAC26CCEC0F2DF6 /* Pods_Bakkle.framework */;
+			productReference = 94B9F05538A7C7B656623A77 /* Pods_Bakkle.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		9AEB051691A7DB2446DDD438 /* Pods-Bakkle-HanekeSwift */ = {
+		3BCE1AA6A4B393F127B5B7DD /* Pods-Bakkle-SocketRocket */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 9B9EC88136927FFCE1FDE9A3 /* Build configuration list for PBXNativeTarget "Pods-Bakkle-HanekeSwift" */;
+			buildConfigurationList = 21CDE2440A14DBAD71FAAB84 /* Build configuration list for PBXNativeTarget "Pods-Bakkle-SocketRocket" */;
 			buildPhases = (
-				56CEB57A8778650CFB98FB64 /* Sources */,
-				FC3EF801CBADC8F1799158D7 /* Frameworks */,
-				BE29AEC1B110020E76CA6764 /* Headers */,
+				8D5D85857077C666A1EB4211 /* Sources */,
+				DA7888023EE2791E59A36154 /* Frameworks */,
+				2EBEFA2454C76C429CE737A0 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Pods-Bakkle-SocketRocket";
+			productName = "Pods-Bakkle-SocketRocket";
+			productReference = 745EB3DA600E6ADB1BAB60C3 /* SocketRocket.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		9A60D62DE973ADC3284A25D4 /* Pods-Bakkle-FontAwesomeIconFactory */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3386866F96F3B43248879A0C /* Build configuration list for PBXNativeTarget "Pods-Bakkle-FontAwesomeIconFactory" */;
+			buildPhases = (
+				7E5D92879D631261BC05AF78 /* Sources */,
+				4B68BEF7169933BF71EE74C2 /* Frameworks */,
+				824A120EEFC165318F2C2339 /* Headers */,
+				BC6777706D536BD013863800 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Pods-Bakkle-FontAwesomeIconFactory";
+			productName = "Pods-Bakkle-FontAwesomeIconFactory";
+			productReference = 4E196DD91D9D5FD3786808D3 /* FontAwesomeIconFactory.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		D7C8B55A8C6134B1DD6D6993 /* Pods-Bakkle-HanekeSwift */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E3DB6A945D8D72EFFDDF0808 /* Build configuration list for PBXNativeTarget "Pods-Bakkle-HanekeSwift" */;
+			buildPhases = (
+				5F3280A0313D4BA35D42AD74 /* Sources */,
+				53A18CF1654283918D76B37F /* Frameworks */,
+				45288C49046AABBE69C571F5 /* Headers */,
 			);
 			buildRules = (
 			);
@@ -275,113 +539,137 @@
 			);
 			name = "Pods-Bakkle-HanekeSwift";
 			productName = "Pods-Bakkle-HanekeSwift";
-			productReference = 3649BBA7259A1A439125CF6A /* Haneke.framework */;
+			productReference = C5FF107EF19FC4C1D2C6EACE /* Haneke.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		4F35F32EF065F9CD2BEA66B9 /* Project object */ = {
+		B7F3F23F82621478B94D2C45 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0640;
 			};
-			buildConfigurationList = 7C005EE2F59EDDD1BAC22725 /* Build configuration list for PBXProject "Pods" */;
+			buildConfigurationList = B6760A985EC8D0791F7B9892 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 			);
-			mainGroup = EDE08DC7806D8A495EB30AF3;
-			productRefGroup = CF68D2C33C4A0F9EA8FE1EDC /* Products */;
+			mainGroup = C6BCCFE1BF3E8CCE84A30D18;
+			productRefGroup = AFC6D3E7D7F360B0E506426E /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				41E6DCE304EAA6A32365AC64 /* Pods-Bakkle */,
-				9AEB051691A7DB2446DDD438 /* Pods-Bakkle-HanekeSwift */,
+				27BC40A5D3D29743158AD522 /* Pods-Bakkle */,
+				9A60D62DE973ADC3284A25D4 /* Pods-Bakkle-FontAwesomeIconFactory */,
+				D7C8B55A8C6134B1DD6D6993 /* Pods-Bakkle-HanekeSwift */,
+				3BCE1AA6A4B393F127B5B7DD /* Pods-Bakkle-SocketRocket */,
 			);
 		};
 /* End PBXProject section */
 
-/* Begin PBXSourcesBuildPhase section */
-		56CEB57A8778650CFB98FB64 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
+/* Begin PBXResourcesBuildPhase section */
+		BC6777706D536BD013863800 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				888FA8F78F64D3C7DE0FD6A3 /* CGSize+Swift.swift in Sources */,
-				59A18756F834F8B609F76F3E /* Cache.swift in Sources */,
-				8634270A2BD4509785E25DB0 /* CryptoSwiftMD5.swift in Sources */,
-				46EB3FC9764F2E2BC01F739B /* Data.swift in Sources */,
-				32D8B19C98802BB47EB1D82F /* DiskCache.swift in Sources */,
-				F7974A716DA06FA3642B0EA0 /* DiskFetcher.swift in Sources */,
-				8093E6EA79BCD0D9AE4BAD31 /* Fetch.swift in Sources */,
-				3BCEDABA0A6223F0E3EA13FC /* Fetcher.swift in Sources */,
-				F73BC68731FCA80251AFD407 /* Format.swift in Sources */,
-				4E6C51A2176F412BCA0DAB8A /* Haneke.swift in Sources */,
-				5203AA904FB951FD2FA970C1 /* Log.swift in Sources */,
-				19C722F49874B73C1618B65E /* NSFileManager+Haneke.swift in Sources */,
-				B7A6BA6BA419419A74E64005 /* NSHTTPURLResponse+Haneke.swift in Sources */,
-				1AA3E61253D89DE74AD780E6 /* NetworkFetcher.swift in Sources */,
-				A158D5092693A51FD1941694 /* Pods-Bakkle-HanekeSwift-dummy.m in Sources */,
-				80D73222BF96AE754776E634 /* String+Haneke.swift in Sources */,
-				47D4E7E4E60E198E8C74EA38 /* UIButton+Haneke.swift in Sources */,
-				8FD6264F277C14A385F28604 /* UIImage+Haneke.swift in Sources */,
-				FA004771AC088BD5A69FC79F /* UIImageView+Haneke.swift in Sources */,
-				6AB3574535D5531B88E01D94 /* UIView+Haneke.swift in Sources */,
+				9739A9D5D9A7765464563887 /* FontAwesome.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A597D7C0279C867ECD310F3E /* Sources */ = {
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4B2459F76938DA870F5ED9FE /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A0AD57691BD78C4CA022DAC6 /* Pods-Bakkle-dummy.m in Sources */,
+				51A5CF3B5CE8B77832C77DBC /* Pods-Bakkle-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5F3280A0313D4BA35D42AD74 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				34B9118A2DE7E09C2F859028 /* CGSize+Swift.swift in Sources */,
+				E1564EBBA722962BB674BEE6 /* Cache.swift in Sources */,
+				3D6EA9FB8EF8906FDCEAF2E6 /* CryptoSwiftMD5.swift in Sources */,
+				673A4DE3B3B218730441450C /* Data.swift in Sources */,
+				B61B517C674064125053F30D /* DiskCache.swift in Sources */,
+				FBF53CC5D8FF01C1209DE82E /* DiskFetcher.swift in Sources */,
+				2D99686C303CA83D7EC658DB /* Fetch.swift in Sources */,
+				72CAC27D7D7E9BEDA9A5342E /* Fetcher.swift in Sources */,
+				615ED24637F426A09231EEBC /* Format.swift in Sources */,
+				C4E0415A4B55C263BBC068C9 /* Haneke.swift in Sources */,
+				E617237171FE5A39C6C8A2EA /* Log.swift in Sources */,
+				841AC670A37B817E9CBFEE44 /* NSFileManager+Haneke.swift in Sources */,
+				9906B5E02A26538396FF2410 /* NSHTTPURLResponse+Haneke.swift in Sources */,
+				53D9EAE277AAE94C28491600 /* NetworkFetcher.swift in Sources */,
+				A7BF6671E5E5AEFACBC6B8C3 /* Pods-Bakkle-HanekeSwift-dummy.m in Sources */,
+				A551CA19509D3D2D414CF0E9 /* String+Haneke.swift in Sources */,
+				BAC3673A2D7E5E653EF3FC4B /* UIButton+Haneke.swift in Sources */,
+				F2F88E67488F5BC1BCA4CB79 /* UIImage+Haneke.swift in Sources */,
+				5D5304B6FB877BD892FD8B32 /* UIImageView+Haneke.swift in Sources */,
+				66F3CA7DE528BB32280CF231 /* UIView+Haneke.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7E5D92879D631261BC05AF78 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CA3059DF83399EA245F29C1E /* NIKFontAwesomeButton.m in Sources */,
+				4E281C1D18BF97F707AEDA95 /* NIKFontAwesomeIconFactory+iOS.m in Sources */,
+				07EE57558F1187448C6CABB0 /* NIKFontAwesomeIconFactory.m in Sources */,
+				0A792CCC4125B820D6461C1E /* NIKFontAwesomeImageView.m in Sources */,
+				1A1D184DDADC8AE102A92120 /* NIKFontAwesomePathFactory.m in Sources */,
+				2FAEA29928FA0FC8F3620FA3 /* NIKFontAwesomePathRenderer.m in Sources */,
+				24661DD149C2376FB8EBF85E /* NIKFontAwesomeTabBarItem.m in Sources */,
+				BA6AAD07F90B52DE2C1987B8 /* Pods-Bakkle-FontAwesomeIconFactory-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8D5D85857077C666A1EB4211 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3E86449529F5451068D9E1F3 /* NSData+SRB64Additions.m in Sources */,
+				C82CCF219F50B0EFA31B00BB /* Pods-Bakkle-SocketRocket-dummy.m in Sources */,
+				0352C6203546432B9B8C1A1D /* SRWebSocket.m in Sources */,
+				A50B406379AD77DE981E5E3D /* base64.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		0DB3BE034A052FDA3D169555 /* PBXTargetDependency */ = {
+		2A8F9518A52E76C673DCA776 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Pods-Bakkle-FontAwesomeIconFactory";
+			target = 9A60D62DE973ADC3284A25D4 /* Pods-Bakkle-FontAwesomeIconFactory */;
+			targetProxy = 278547431C0B773AC84F0CAD /* PBXContainerItemProxy */;
+		};
+		64D3C9678C08C3013D454E77 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Pods-Bakkle-SocketRocket";
+			target = 3BCE1AA6A4B393F127B5B7DD /* Pods-Bakkle-SocketRocket */;
+			targetProxy = 17ED3AC07A6C7EBC05149005 /* PBXContainerItemProxy */;
+		};
+		F7B327A2901073043D9DC7B5 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "Pods-Bakkle-HanekeSwift";
-			target = 9AEB051691A7DB2446DDD438 /* Pods-Bakkle-HanekeSwift */;
-			targetProxy = 49A5326179DBDECEE5453A0C /* PBXContainerItemProxy */;
+			target = D7C8B55A8C6134B1DD6D6993 /* Pods-Bakkle-HanekeSwift */;
+			targetProxy = CCA1990921CA54B70107085E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		11B84697CA34E0E92C80BECB /* Release */ = {
+		0EBF260016C63CDD392D338A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6ADE632F405F06E2C8EE2CF9 /* Pods-Bakkle-HanekeSwift-Private.xcconfig */;
-			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_PREFIX_HEADER = "Target Support Files/Pods-Bakkle-HanekeSwift/Pods-Bakkle-HanekeSwift-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/Pods-Bakkle-HanekeSwift/Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/Pods-Bakkle-HanekeSwift/Pods-Bakkle-HanekeSwift.modulemap";
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_NAME = Haneke;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
-		3684AD41994CFE6374221506 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6ADE632F405F06E2C8EE2CF9 /* Pods-Bakkle-HanekeSwift-Private.xcconfig */;
+			baseConfigurationReference = 2B19CB555F24CA5960E42D2E /* Pods-Bakkle-HanekeSwift-Private.xcconfig */;
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
@@ -407,9 +695,36 @@
 			};
 			name = Debug;
 		};
-		3D17F575AD61F9B61DEE4597 /* Debug */ = {
+		1F49DDB2C2087C69774588EB /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0101B6DC124DEA60EE221A5B /* Pods-Bakkle.debug.xcconfig */;
+			baseConfigurationReference = 41A6022A033134CC20D630E6 /* Pods-Bakkle-FontAwesomeIconFactory-Private.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/Pods-Bakkle-FontAwesomeIconFactory/Pods-Bakkle-FontAwesomeIconFactory-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Pods-Bakkle-FontAwesomeIconFactory/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/Pods-Bakkle-FontAwesomeIconFactory/Pods-Bakkle-FontAwesomeIconFactory.modulemap";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = FontAwesomeIconFactory;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		2DF885D257AAD651B22A2DB4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 889A437467E77D1D5C3994B4 /* Pods-Bakkle.release.xcconfig */;
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
@@ -423,21 +738,47 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/Pods-Bakkle/Pods-Bakkle.modulemap";
-				MTL_ENABLE_DEBUG_INFO = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
 				PODS_ROOT = "$(SRCROOT)";
 				PRODUCT_NAME = Pods_Bakkle;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		49AF893BD5AACC580751D60F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = C2646CAE69F27D5E742593EE /* Pods-Bakkle-SocketRocket-Private.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/Pods-Bakkle-SocketRocket/Pods-Bakkle-SocketRocket-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Pods-Bakkle-SocketRocket/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/Pods-Bakkle-SocketRocket/Pods-Bakkle-SocketRocket.modulemap";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = SocketRocket;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
 			name = Debug;
 		};
-		3FCAA6D42117CCA0FA3AE86B /* Release */ = {
+		721D553FF883791F865210E5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -471,9 +812,9 @@
 			};
 			name = Release;
 		};
-		DC43D84D9143EDD75835810E /* Release */ = {
+		96C23804574CE1721B1B3AF8 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 971493F21BF0C7837FA5937D /* Pods-Bakkle.release.xcconfig */;
+			baseConfigurationReference = 612123D895B8F0375582483B /* Pods-Bakkle.debug.xcconfig */;
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
@@ -487,11 +828,39 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/Pods-Bakkle/Pods-Bakkle.modulemap";
-				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_ENABLE_DEBUG_INFO = YES;
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
 				PODS_ROOT = "$(SRCROOT)";
 				PRODUCT_NAME = Pods_Bakkle;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		A7A6B0D4D0FC9E4FA7373175 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = C2646CAE69F27D5E742593EE /* Pods-Bakkle-SocketRocket-Private.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/Pods-Bakkle-SocketRocket/Pods-Bakkle-SocketRocket-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Pods-Bakkle-SocketRocket/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/Pods-Bakkle-SocketRocket/Pods-Bakkle-SocketRocket.modulemap";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = SocketRocket;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -500,7 +869,7 @@
 			};
 			name = Release;
 		};
-		E54E9ABC9EB668122C9C411E /* Debug */ = {
+		C25E73646838B64F65CE29B3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -539,37 +908,109 @@
 			};
 			name = Debug;
 		};
+		E5711DBB589CE5D8CB68D14D /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2B19CB555F24CA5960E42D2E /* Pods-Bakkle-HanekeSwift-Private.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/Pods-Bakkle-HanekeSwift/Pods-Bakkle-HanekeSwift-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Pods-Bakkle-HanekeSwift/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/Pods-Bakkle-HanekeSwift/Pods-Bakkle-HanekeSwift.modulemap";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = Haneke;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		EE744E657F064B59A117792B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 41A6022A033134CC20D630E6 /* Pods-Bakkle-FontAwesomeIconFactory-Private.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/Pods-Bakkle-FontAwesomeIconFactory/Pods-Bakkle-FontAwesomeIconFactory-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Pods-Bakkle-FontAwesomeIconFactory/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/Pods-Bakkle-FontAwesomeIconFactory/Pods-Bakkle-FontAwesomeIconFactory.modulemap";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = FontAwesomeIconFactory;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		171F86C4EE3DA4A8D3E7F327 /* Build configuration list for PBXNativeTarget "Pods-Bakkle" */ = {
+		21CDE2440A14DBAD71FAAB84 /* Build configuration list for PBXNativeTarget "Pods-Bakkle-SocketRocket" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				3D17F575AD61F9B61DEE4597 /* Debug */,
-				DC43D84D9143EDD75835810E /* Release */,
+				49AF893BD5AACC580751D60F /* Debug */,
+				A7A6B0D4D0FC9E4FA7373175 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7C005EE2F59EDDD1BAC22725 /* Build configuration list for PBXProject "Pods" */ = {
+		3386866F96F3B43248879A0C /* Build configuration list for PBXNativeTarget "Pods-Bakkle-FontAwesomeIconFactory" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				E54E9ABC9EB668122C9C411E /* Debug */,
-				3FCAA6D42117CCA0FA3AE86B /* Release */,
+				EE744E657F064B59A117792B /* Debug */,
+				1F49DDB2C2087C69774588EB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		9B9EC88136927FFCE1FDE9A3 /* Build configuration list for PBXNativeTarget "Pods-Bakkle-HanekeSwift" */ = {
+		448389CE38799E3FCA309C73 /* Build configuration list for PBXNativeTarget "Pods-Bakkle" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				3684AD41994CFE6374221506 /* Debug */,
-				11B84697CA34E0E92C80BECB /* Release */,
+				96C23804574CE1721B1B3AF8 /* Debug */,
+				2DF885D257AAD651B22A2DB4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B6760A985EC8D0791F7B9892 /* Build configuration list for PBXProject "Pods" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C25E73646838B64F65CE29B3 /* Debug */,
+				721D553FF883791F865210E5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E3DB6A945D8D72EFFDDF0808 /* Build configuration list for PBXNativeTarget "Pods-Bakkle-HanekeSwift" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0EBF260016C63CDD392D338A /* Debug */,
+				E5711DBB589CE5D8CB68D14D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = 4F35F32EF065F9CD2BEA66B9 /* Project object */;
+	rootObject = B7F3F23F82621478B94D2C45 /* Project object */;
 }
