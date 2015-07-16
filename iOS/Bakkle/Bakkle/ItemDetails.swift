@@ -140,7 +140,7 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
         else {
             Bakkle.sharedInstance.markItem("want", item_id: self.item!.valueForKey("pk")!.integerValue, success: {
                 NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkHoldingUpdate, object: nil)
-                NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkFeedUpdate, object: nil)
+                Bakkle.sharedInstance.populateFeed({})
                 self.dismissViewControllerAnimated(true, completion: nil)
                 }, fail: {
                 self.dismissViewControllerAnimated(true, completion: nil)
