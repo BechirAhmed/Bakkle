@@ -21,7 +21,9 @@ class SellersGarageView: UIViewController, UITableViewDelegate, UITableViewDataS
     
     @IBOutlet weak var menuBtn: UIButton!
     @IBOutlet weak var tableView: UITableView!
-    
+    var activeItem = [Int]()
+    var soldItem = [Int]()
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -52,6 +54,56 @@ class SellersGarageView: UIViewController, UITableViewDelegate, UITableViewDataS
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
+    // helper function
+    func getItem(indexPath: NSIndexPath) -> NSDictionary {
+        if indexPath.row > 0 && indexPath.row <= activeItem.count {
+            let item = Bakkle.sharedInstance.garageItems[activeItem[indexPath.row-1]] as! NSDictionary
+            return item
+        }else {
+            let item = Bakkle.sharedInstance.garageItems[soldItem[indexPath.row-2-activeItem.count]] as! NSDictionary
+            return item
+        }
+    }
+    
+    func removeAtIndex(indexPath: NSIndexPath) {
+        if indexPath.row > 0 && indexPath.row <= activeItem.count {
+            Bakkle.sharedInstance.garageItems.removeAtIndex(activeItem[indexPath.row-1])
+        }else {
+            Bakkle.sharedInstance.garageItems.removeAtIndex(soldItem[indexPath.row-2-activeItem.count])
+        }
+    }
+    
+    func getIndex(indexPath: NSIndexPath) -> Int {
+        if indexPath.row > 0 && indexPath.row <= activeItem.count {
+            return activeItem[indexPath.row-1]
+        }else {
+            return soldItem[indexPath.row-2-activeItem.count]
+        }
+        
+    }
+    
+    func classifyData() {
+        self.activeItem = [Int]()
+        self.soldItem = [Int]()
+        if Bakkle.sharedInstance.garageItems.count == 0 {
+            return
+        }
+        for index in 0...Bakkle.sharedInstance.garageItems.count-1 {
+            let item = Bakkle.sharedInstance.garageItems[index] as? NSDictionary
+            let status = item?.valueForKey("status") as! String
+            switch status {
+            case "Active":
+                self.activeItem.append(index)
+                break
+            case "Sold":
+                self.soldItem.append(index)
+                break
+            default: break
+            }
+        }
+        
+    }
+
     func setupButtons() {
         menuBtn.setImage(IconImage().menu(), forState: .Normal)
         menuBtn.setTitle("", forState: .Normal)
@@ -69,7 +121,10 @@ class SellersGarageView: UIViewController, UITableViewDelegate, UITableViewDataS
     func requestUpdates() {
         println("[Sellers Garage] Requesting updates from server")
         dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
-            Bakkle.sharedInstance.populateGarage({})
+            Bakkle.sharedInstance.populateGarage({
+                self.classifyData()
+                self.tableView.reloadData()
+            })
         }
     }
     
@@ -84,11 +139,11 @@ class SellersGarageView: UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return Bakkle.sharedInstance.garageItems != nil ? Bakkle.sharedInstance.garageItems.count+2 : 0
+        return Bakkle.sharedInstance.garageItems != nil ? activeItem.count + soldItem.count  + 2 : 0
     }
 
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if indexPath.row == 0 || indexPath.row == Bakkle.sharedInstance.garageItems.count + 1 {
+        if indexPath.row == 0 || indexPath.row == activeItem.count + 1 {
             return CGFloat (30.0)
         }
         return CGFloat(100.0)
@@ -97,13 +152,13 @@ class SellersGarageView: UIViewController, UITableViewDelegate, UITableViewDataS
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if indexPath.row == 0 {
             let cell : StatusCell = tableView.dequeueReusableCellWithIdentifier(self.statusCellIdentifier, forIndexPath: indexPath) as! StatusCell
-            cell.statusLabel.text = "Active (\(Bakkle.sharedInstance.garageItems.count))"
+            cell.statusLabel.text = "Active (\(activeItem.count))"
             cell.statusLabel.textColor = UIColor(red: 0.3, green: 0.3, blue: 0.3, alpha: 1.0)
             cell.selectionStyle = UITableViewCellSelectionStyle.None
             return cell
-        }else if indexPath.row == Bakkle.sharedInstance.garageItems.count + 1 {
+        }else if indexPath.row == activeItem.count + 1 {
             let cell : StatusCell = tableView.dequeueReusableCellWithIdentifier(self.statusCellIdentifier, forIndexPath: indexPath) as! StatusCell
-            cell.statusLabel.text = "Sold (\(0))"
+            cell.statusLabel.text = "Sold (\(soldItem.count))"
             cell.statusLabel.textColor = UIColor(red: 0.3, green: 0.3, blue: 0.3, alpha: 1.0)
             cell.selectionStyle = UITableViewCellSelectionStyle.None
             return cell
@@ -111,12 +166,7 @@ class SellersGarageView: UIViewController, UITableViewDelegate, UITableViewDataS
         
         let cell : GarageCell = tableView.dequeueReusableCellWithIdentifier(self.garageCellIdentifier, forIndexPath: indexPath) as! GarageCell
         
-        var item: NSDictionary! = nil
-        if indexPath.row < Bakkle.sharedInstance.garageItems.count + 1{
-            item = Bakkle.sharedInstance.garageItems[indexPath.row-1] as? NSDictionary
-        }else {
-//            item = nil
-        }
+        let item = getItem(indexPath) as NSDictionary
         let imgURLs = item.valueForKey("image_urls") as! NSArray
             
         let firstURL = imgURLs[0] as! String
@@ -147,18 +197,18 @@ class SellersGarageView: UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.row == 0 || indexPath.row == Bakkle.sharedInstance.garageItems.count + 1 {
+        if indexPath.row == 0 || indexPath.row == activeItem.count + 1 {
             return
         }
         let chatsViewController = ChatsViewController()
-        chatsViewController.chatItemID = (Bakkle.sharedInstance.garageItems[indexPath.row-1].valueForKey("pk") as! NSNumber).stringValue
-        chatsViewController.garageIndex = indexPath.row-1
+        chatsViewController.chatItemID = (getItem(indexPath).valueForKey("pk") as! NSNumber).stringValue
+        chatsViewController.garageIndex = getIndex(indexPath)
         self.navigationController?.pushViewController(chatsViewController, animated: true)
         self.view.userInteractionEnabled = false
     }
     
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        if indexPath.row == 0 || indexPath.row == Bakkle.sharedInstance.garageItems.count + 1 {
+        if indexPath.row == 0 || indexPath.row == activeItem.count + 1 {
             return false
         }
         return true
@@ -166,11 +216,13 @@ class SellersGarageView: UIViewController, UITableViewDelegate, UITableViewDataS
 
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == UITableViewCellEditingStyle.Delete {
-            let item = Bakkle.sharedInstance.garageItems[indexPath.row-1] as! NSDictionary
+            let item = getItem(indexPath) as NSDictionary
             Bakkle.sharedInstance.removeItem(item.valueForKey("pk")!.integerValue, success: {
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    Bakkle.sharedInstance.garageItems.removeAtIndex(indexPath.row-1)
+                    self.removeAtIndex(indexPath)
+                    self.classifyData()
                     tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+                    
                     tableView.reloadData()
                 })
             }, fail: {})

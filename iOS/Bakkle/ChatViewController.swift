@@ -481,7 +481,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         else {
             // Offer cells
-            if message.offer != "" {
+            if message.offer.count != 0 {
                 let cellIdentifier = NSStringFromClass(AcceptOfferCell)
                 var cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier) as! AcceptOfferCell!
                 if  cell == nil {
