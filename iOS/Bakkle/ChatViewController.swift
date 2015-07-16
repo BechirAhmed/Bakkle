@@ -291,7 +291,6 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 self.tableViewScrollToBottomAnimated(true)
             })
             }, forNotification: "newOffer")
-        
     }
     
 
@@ -484,41 +483,39 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             if message.offer.count != 0 {
                 let cellIdentifier = NSStringFromClass(AcceptOfferCell)
                 var cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier) as! AcceptOfferCell!
-                if  cell == nil {
-                    cell = AcceptOfferCell(style: UITableViewCellStyle.Default, reuseIdentifier: cellIdentifier)
-                    let status = message.offer.valueForKey("status") as! String
-                    let offer = message.offer.valueForKey("proposed_price") as! String
-                    if message.incoming {
-                        if status == "Accepted" {
-                            cell.makeOfferLabel.text = "YOU ACCEPTED THE OFFER OF $\(offer)."
-                        } else if status == "Retracted" {
-                            cell.makeOfferLabel.text = "YOU REJECTED THE OFFER OF $\(offer)."
-                        } else {
-                            cell.makeOfferLabel.text = "AN OFFER OF $\(offer) HAS BEEN MADE."
-                            var acceptBtn: UIButton = UIButton()
-                            var counterBtn: UIButton = UIButton()
-                            acceptBtn.addTarget(self, action: "btnAcceptOffer:", forControlEvents: UIControlEvents.TouchUpInside)
-                            acceptBtn.tag = message.offer.valueForKey("pk") as! Int
-                            cell.contentView.addSubview(acceptBtn)
-                            cell.configureAcceptBtn(acceptBtn)
-                            counterBtn.addTarget(self, action: "btnCounterOffer:", forControlEvents: UIControlEvents.TouchUpInside)
-                            counterBtn.tag = message.offer.valueForKey("pk") as! Int
-                            cell.contentView.addSubview(counterBtn)
-                            cell.configureCounterBtn(counterBtn)
-                        }
+                cell = AcceptOfferCell(style: UITableViewCellStyle.Default, reuseIdentifier: cellIdentifier)
+                let status = message.offer.valueForKey("status") as! String
+                let offer = message.offer.valueForKey("proposed_price") as! String
+                if message.incoming {
+                    if status == "Accepted" {
+                        cell.makeOfferLabel.text = "YOU ACCEPTED THE OFFER OF $\(offer)."
+                    } else if status == "Retracted" {
+                        cell.makeOfferLabel.text = "YOU REJECTED THE OFFER OF $\(offer)."
                     } else {
-                        if status == "Accepted" {
-                            cell.makeOfferLabel.text = "YOUR OFFER OF $\(offer) WAS ACCEPTED."
-                        } else if status == "Retracted" {
-                            cell.makeOfferLabel.text = "YOUR OFFER OF $\(offer) WAS REJECTED."
-                        } else {
-                            cell.makeOfferLabel.text = "YOU PROPOSED AN OFFER OF $\(offer)."
-                            var retractBtn: UIButton = UIButton()
-                            retractBtn.addTarget(self, action: "btnRetractOffer:", forControlEvents: UIControlEvents.TouchUpInside)
-                            retractBtn.tag = message.offer.valueForKey("pk") as! Int
-                            cell.contentView.addSubview(retractBtn)
-                            cell.configureRetractBtn(retractBtn)
-                        }
+                        cell.makeOfferLabel.text = "AN OFFER OF $\(offer) HAS BEEN MADE."
+                        var acceptBtn: UIButton = UIButton()
+                        var counterBtn: UIButton = UIButton()
+                        acceptBtn.addTarget(self, action: "btnAcceptOffer:", forControlEvents: UIControlEvents.TouchUpInside)
+                        acceptBtn.tag = message.offer.valueForKey("pk") as! Int
+                        cell.contentView.addSubview(acceptBtn)
+                        cell.configureAcceptBtn(acceptBtn)
+                        counterBtn.addTarget(self, action: "btnCounterOffer:", forControlEvents: UIControlEvents.TouchUpInside)
+                        counterBtn.tag = message.offer.valueForKey("pk") as! Int
+                        cell.contentView.addSubview(counterBtn)
+                        cell.configureCounterBtn(counterBtn)
+                    }
+                } else {
+                    if status == "Accepted" {
+                        cell.makeOfferLabel.text = "YOUR OFFER OF $\(offer) WAS ACCEPTED."
+                    } else if status == "Retracted" {
+                        cell.makeOfferLabel.text = "YOUR OFFER OF $\(offer) WAS REJECTED."
+                    } else {
+                        cell.makeOfferLabel.text = "YOU PROPOSED AN OFFER OF $\(offer)."
+                        var retractBtn: UIButton = UIButton()
+                        retractBtn.addTarget(self, action: "btnRetractOffer:", forControlEvents: UIControlEvents.TouchUpInside)
+                        retractBtn.tag = message.offer.valueForKey("pk") as! Int
+                        cell.contentView.addSubview(retractBtn)
+                        cell.configureRetractBtn(retractBtn)
                     }
                 }
                 return cell
