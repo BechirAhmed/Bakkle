@@ -14,14 +14,13 @@ class HoldingPatternCell : UITableViewCell {
     @IBOutlet var titleLabel: UILabel?
     @IBOutlet var priceLabel: UILabel?
     @IBOutlet var timeRemainingLabel: UILabel?
-    var viewTime:Int = 0
     
 //    259200 = 4 days
-    var timeRemaining: NSTimeInterval = 5400 {
+    var timeRemaining: NSTimeInterval = 259200 {
         didSet {
             // TODO: This should calculate currentTime-timeWhenPlacedInHoldingPattern
             let (h,m,s) = secondsToHoursMinutesSeconds(Int(timeRemaining))
-            var remaining = "--"
+            var remaining = ""
             if timeRemaining > 0 {
                 remaining = String(format: "%02d", s)
             }
@@ -32,12 +31,9 @@ class HoldingPatternCell : UITableViewCell {
                 remaining = String(format: "%d:", h) + remaining
             }
             if timeRemaining > 86400 {
-                remaining = "1 day"
-            }
-            if timeRemaining > 172800 {
                 remaining = "2 days"
             }
-            if timeRemaining > 259200 {
+            if timeRemaining > 172800 {
                 remaining = "3 days"
             }
             self.timeRemainingLabel?.text = remaining
@@ -70,6 +66,7 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
     static let bkTimeRemainingUpdate    = "com.bakkle.timeRemainingUpdate"
 
     var timer: NSTimer!
+    var dateFormatter: NSDateFormatter = NSDateFormatter()
     
     let statusCellIdentifier = "StatusCell"
     
@@ -87,6 +84,10 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
         setupButtons()
         
         self.tableView.tableFooterView = UIView()
+        
+        dateFormatter.timeZone = NSTimeZone(abbreviation: "GMT")
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:SS"
+
         
     }
     
@@ -172,8 +173,14 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
             let status = item?.valueForKey("status") as! String
             switch status {
             case "Active":
-                self.activeItem.append(index)
-                // calculate to be expired later
+                let viewTime = Bakkle.sharedInstance.holdingItems[index].valueForKey("view_time") as! String
+                var viewDate :NSDate = dateFormatter.dateFromString(viewTime)!
+                var currentTime = NSDate()
+                if viewDate.timeIntervalSinceDate(currentTime) + 259200 <= 0 {
+                    self.expiredItem.append(index)
+                }else{
+                    self.activeItem.append(index)
+                }
                 break
             case "Sold":
                 self.soldItem.append(index)
@@ -214,14 +221,14 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
             return cell
         }else if indexPath.row == activeItem.count + 1 {
             let cell : StatusCell = tableView.dequeueReusableCellWithIdentifier(self.statusCellIdentifier, forIndexPath: indexPath) as! StatusCell
-            cell.statusLabel.text = "Sold (\(0))"
+            cell.statusLabel.text = "Sold (\(soldItem.count))"
             cell.statusLabel.textColor = UIColor(red: 0.3, green: 0.3, blue: 0.3, alpha: 1.0)
             cell.selectionStyle = UITableViewCellSelectionStyle.None
             return cell
         }
-        if indexPath.row == activeItem.count + expiredItem.count + 2 {
+        if indexPath.row == activeItem.count + soldItem.count + 2 {
             let cell : StatusCell = tableView.dequeueReusableCellWithIdentifier(self.statusCellIdentifier, forIndexPath: indexPath) as! StatusCell
-            cell.statusLabel.text = "Expired (\(0))"
+            cell.statusLabel.text = "Expired (\(expiredItem.count))"
             cell.statusLabel.textColor = UIColor(red: 0.3, green: 0.3, blue: 0.3, alpha: 1.0)
             cell.selectionStyle = UITableViewCellSelectionStyle.None
             return cell
@@ -238,8 +245,13 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
         let imgURLs : [String] = item.valueForKey("image_urls") as! [String]
         let firstURL = imgURLs[0] as String
         let imgURL = NSURL(string: firstURL)
+        let viewTime = entry.valueForKey("view_time") as! String
+        var viewDate :NSDate = dateFormatter.dateFromString(viewTime)!
+        var currentTime = NSDate()
+        cell.timeRemaining = viewDate.timeIntervalSinceDate(currentTime) + 259200
+        
+        
         cell.itemImage!.hnk_setImageFromURL(imgURL!)
-            
         cell.titleLabel!.text = item.valueForKey("title") as? String
         cell.priceLabel!.text  = "$" + (item.valueForKey("price") as? String)!
         
