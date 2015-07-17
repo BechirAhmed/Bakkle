@@ -37,8 +37,10 @@ class LoginView: UIViewController, FBLoginViewDelegate {
         // check if the user already logged in, if not, set the background image to transparent
         if FBSession.activeSession().accessTokenData != nil {
             background.hidden = false
+            view.userInteractionEnabled = false
         }else{
             background.hidden = true
+            view.userInteractionEnabled = true
         }
     }
     
