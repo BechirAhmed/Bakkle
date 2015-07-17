@@ -20,9 +20,9 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var menuBtn: UIButton!
     let statusCellIdentifier = "StatusCell"
-    var activeItem = [Int]()
-    var boughtItem = [Int]()
-    var soldItem = [Int]()
+    var activeItem: [Int]!
+    var boughtItem: [Int]!
+    var soldItem: [Int]!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,9 +39,13 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
         let notificationCenter = NSNotificationCenter.defaultCenter()
         let mainQueue = NSOperationQueue.mainQueue()
         var observer = notificationCenter.addObserverForName(Bakkle.bkTrunkUpdate, object: nil, queue: mainQueue) { _ in
+            self.classifyData()
             self.tableView.reloadData()
         }
         
+        self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "messageCell")
+        
+        classifyData()
         Bakkle.sharedInstance.populateTrunk({
             self.classifyData()
             self.tableView.reloadData()
@@ -121,9 +125,9 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         if indexPath.row == 0 || indexPath.row == activeItem.count + 1 || indexPath.row == activeItem.count + boughtItem.count + 2 {
-            return CGFloat (30.0)
+            return 30.0
         }
-        return CGFloat(100.0)
+        return 100.0
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -131,16 +135,30 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let x = Bakkle.sharedInstance.trunkItems {
+        if activeItem == nil || boughtItem == nil || soldItem == nil {
+            return 0
+        }
+        if activeItem.count != 0 || boughtItem.count != 0 || soldItem.count != 0 {
             println("Actually got items from the trunk!")
             println(String(Bakkle.sharedInstance.trunkItems.count) + " items in trunk")
             return activeItem.count + soldItem.count + boughtItem.count + 3
         }
         println("Didn't get anything in trunk")
-        return 0
+        return 3
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        if tableView.numberOfRowsInSection(0) == 3 {
+            let cell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier("messageCell") as! UITableViewCell
+            if indexPath.row == 1 {
+                cell.textLabel!.text = "There are no items!"
+            }
+            cell.textLabel?.font = UIFont(name: "Avenir-Black", size: 25.0)
+            cell.textLabel?.textAlignment = NSTextAlignment.Center
+            tableView.separatorStyle = UITableViewCellSeparatorStyle.None
+            return cell
+        }
+
         if indexPath.row == 0 {
             let cell : StatusCell = tableView.dequeueReusableCellWithIdentifier(self.statusCellIdentifier, forIndexPath: indexPath) as! StatusCell
             cell.statusLabel.text = "Active (\(activeItem.count))"

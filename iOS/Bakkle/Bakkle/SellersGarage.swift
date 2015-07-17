@@ -21,8 +21,8 @@ class SellersGarageView: UIViewController, UITableViewDelegate, UITableViewDataS
     
     @IBOutlet weak var menuBtn: UIButton!
     @IBOutlet weak var tableView: UITableView!
-    var activeItem = [Int]()
-    var soldItem = [Int]()
+    var activeItem: [Int]!
+    var soldItem: [Int]!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,7 +46,10 @@ class SellersGarageView: UIViewController, UITableViewDelegate, UITableViewDataS
         }
 
         self.view.userInteractionEnabled = true
+        self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "messageCell")
         
+        
+        classifyData()
         requestUpdates()
     }
     
@@ -103,6 +106,13 @@ class SellersGarageView: UIViewController, UITableViewDelegate, UITableViewDataS
         }
         
     }
+    
+    func updateStatusCell() {
+        self.tableView.beginUpdates()
+        self.tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: UITableViewRowAnimation.None)
+        self.tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: self.activeItem.count+1, inSection: 0)], withRowAnimation: UITableViewRowAnimation.None)
+        self.tableView.endUpdates()
+    }
 
     func setupButtons() {
         menuBtn.setImage(IconImage().menu(), forState: .Normal)
@@ -113,6 +123,7 @@ class SellersGarageView: UIViewController, UITableViewDelegate, UITableViewDataS
     func refreshData() {
         Bakkle.sharedInstance.info("Refreshing sellers garage items")
         dispatch_async(dispatch_get_main_queue()) {
+            self.classifyData()
             self.tableView.reloadData()
         }
     }
@@ -139,17 +150,36 @@ class SellersGarageView: UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return Bakkle.sharedInstance.garageItems != nil ? activeItem.count + soldItem.count  + 2 : 0
+        if activeItem == nil || soldItem == nil {
+            return 0
+        }
+        if activeItem.count != 0 || soldItem.count != 0 {
+            println("Actually got items from the garage!")
+            println(String(Bakkle.sharedInstance.garageItems.count) + " items in garage")
+            return activeItem.count + soldItem.count  + 2
+        }
+        println("Didn't get anything in garage")
+        return 2;
     }
 
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         if indexPath.row == 0 || indexPath.row == activeItem.count + 1 {
-            return CGFloat (30.0)
+            return 30.0
         }
-        return CGFloat(100.0)
+        return 100.0
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        if tableView.numberOfRowsInSection(0) == 2 {
+            let cell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier("messageCell") as! UITableViewCell
+            if indexPath.row == 1 {
+                cell.textLabel!.text = "There are no items!"
+            }
+            cell.textLabel?.font = UIFont(name: "Avenir-Black", size: 25.0)
+            cell.textLabel?.textAlignment = NSTextAlignment.Center
+            tableView.separatorStyle = UITableViewCellSeparatorStyle.None
+            return cell
+        }
         if indexPath.row == 0 {
             let cell : StatusCell = tableView.dequeueReusableCellWithIdentifier(self.statusCellIdentifier, forIndexPath: indexPath) as! StatusCell
             cell.statusLabel.text = "Active (\(activeItem.count))"

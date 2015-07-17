@@ -403,9 +403,11 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                 case "meh":
                     break
                 case "want":
+                    self.populateTrunk({})
                     NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkGarageUpdate, object: self)
                     break
                 case "hold":
+                    self.populateHolding({})
                     NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkHoldingUpdate, object: self)
                     break
                 case "report":
@@ -530,8 +532,6 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             
             if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
                 self.trunkItems = self.responseDict.valueForKey("buyers_trunk") as! Array
-                // cheap hack to get data for testing
-                //self.trunkItems = self.feedItems
                 self.persistData()
                 NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkTrunkUpdate, object: self)
                 success()
@@ -945,6 +945,15 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                     NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkFeedUpdate, object: self)
                 }
                 
+                // restore TRUNK
+                if let f = userDefaults.objectForKey("trunkItems") as? NSString {
+                    var parseError: NSError?
+                    var jsonData: NSData = f.dataUsingEncoding(NSUTF8StringEncoding)!
+                    self.trunkItems = NSJSONSerialization.JSONObjectWithData(jsonData, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! Array
+                    self.info("Restored \( (self.trunkItems as Array).count) trunk items.")
+                    NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkTrunkUpdate, object: self)
+                }
+                
                 // restore GARAGE
                 if let f = userDefaults.objectForKey("garageItems") as? NSString {
                     var parseError: NSError?
@@ -982,6 +991,16 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             self.info("Stored \( (self.feedItems as Array).count) feed items")
         } else {
             userDefaults.removeObjectForKey("feedItems")
+        }
+        
+        // Store TRUNK
+        if self.trunkItems != nil {
+            let data1 = NSJSONSerialization.dataWithJSONObject(self.trunkItems, options: nil, error: nil)
+            let string = NSString(data: data1!, encoding: NSUTF8StringEncoding)
+            userDefaults.setObject(string, forKey: "trunkItems")
+            self.info("Stored \( (self.trunkItems as Array).count) trunk items")
+        }else {
+            userDefaults.removeObjectForKey("trunkItems")
         }
         
         // Store GARAGE

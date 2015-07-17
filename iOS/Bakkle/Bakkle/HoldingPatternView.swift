@@ -72,9 +72,9 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var menuBtn: UIButton!
-    var activeItem = [Int]()
-    var expiredItem = [Int]()
-    var soldItem = [Int]()
+    var activeItem: [Int]!
+    var expiredItem: [Int]!
+    var soldItem: [Int]!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -84,6 +84,7 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
         setupButtons()
         
         self.tableView.tableFooterView = UIView()
+        self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "messageCell")
         
         dateFormatter.timeZone = NSTimeZone(abbreviation: "GMT")
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:SS"
@@ -97,6 +98,7 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
         let notificationCenter = NSNotificationCenter.defaultCenter()
         let mainQueue = NSOperationQueue.mainQueue()
         var observer = notificationCenter.addObserverForName(Bakkle.bkHoldingUpdate, object: nil, queue: mainQueue) { _ in
+            self.classifyData()
             self.tableView.reloadData()
         }
         
@@ -104,9 +106,9 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
         self.timer = NSTimer(timeInterval: 1.0, target: self, selector: Selector("updateTimeRemaining"), userInfo: nil, repeats: true)
         NSRunLoop.currentRunLoop().addTimer(self.timer, forMode: NSRunLoopCommonModes)
 
+        classifyData()
         Bakkle.sharedInstance.populateHolding({
-            self.classifyData()
-            self.tableView.reloadData()
+            NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkHoldingUpdate, object: self)
         });
     }
     
@@ -194,25 +196,38 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         if indexPath.row == 0 || indexPath.row == activeItem.count+1 || indexPath.row == activeItem.count + soldItem.count + 2 {
-            return CGFloat (30.0)
+            return 30.0
         }
-        return CGFloat(100.0)
+        return 100.0
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let x = Bakkle.sharedInstance.holdingItems {
+        if activeItem == nil || expiredItem == nil || soldItem == nil {
+            return 0
+        }
+        if activeItem.count != 0 || expiredItem.count != 0 || soldItem.count != 0 {
             println("Actually got items from the holding pattern!")
             println(String(Bakkle.sharedInstance.holdingItems.count) + " items in holding pattern")
             return activeItem.count + soldItem.count + expiredItem.count + 3
         }
         println("Didn't get anything in holding pattern")
-        return 0
+        return 3
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        if tableView.numberOfRowsInSection(0) == 3 {
+            let cell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier("messageCell") as! UITableViewCell
+            if indexPath.row == 1 {
+                cell.textLabel!.text = "There are no items!"
+            }
+            cell.textLabel?.font = UIFont(name: "Avenir-Black", size: 25.0)
+            cell.textLabel?.textAlignment = NSTextAlignment.Center
+            tableView.separatorStyle = UITableViewCellSeparatorStyle.None
+            return cell
+        }
         if indexPath.row == 0 {
             let cell : StatusCell = tableView.dequeueReusableCellWithIdentifier(self.statusCellIdentifier, forIndexPath: indexPath) as! StatusCell
             cell.statusLabel.text = "Active (\(activeItem.count))"
