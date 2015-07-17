@@ -2863,6 +2863,12 @@
                             <view tag="20" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0yJ-lP-sLK" userLabel="Camera View">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading Camera Preview..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K8S-jb-9YX" userLabel="Loading Camera Preview...">
+                                        <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
+                                        <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="21"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                     <imageView userInteractionEnabled="NO" tag="21" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="f07-wz-xp9" userLabel="Still Image View">
                                         <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                         <gestureRecognizers/>
@@ -2881,8 +2887,10 @@
                                     <constraint firstAttribute="width" secondItem="0yJ-lP-sLK" secondAttribute="height" multiplier="1:1" id="2b6-CC-CLE"/>
                                     <constraint firstAttribute="trailing" secondItem="f07-wz-xp9" secondAttribute="trailing" id="45A-55-4MF"/>
                                     <constraint firstAttribute="bottom" secondItem="f07-wz-xp9" secondAttribute="bottom" id="4SH-2Q-84e"/>
+                                    <constraint firstAttribute="centerY" secondItem="K8S-jb-9YX" secondAttribute="centerY" id="Bgb-eH-Wf5"/>
                                     <constraint firstItem="9aM-3y-PsN" firstAttribute="leading" secondItem="0yJ-lP-sLK" secondAttribute="leading" id="EK5-iR-V4A"/>
                                     <constraint firstItem="f07-wz-xp9" firstAttribute="top" secondItem="0yJ-lP-sLK" secondAttribute="top" id="MCL-BE-JzV"/>
+                                    <constraint firstAttribute="centerX" secondItem="K8S-jb-9YX" secondAttribute="centerX" id="TBR-Gf-7pI"/>
                                     <constraint firstItem="9aM-3y-PsN" firstAttribute="top" secondItem="0yJ-lP-sLK" secondAttribute="top" id="bT6-a4-6vF"/>
                                     <constraint firstAttribute="trailing" secondItem="9aM-3y-PsN" secondAttribute="trailing" id="dqX-KL-lQR"/>
                                     <constraint firstAttribute="bottom" secondItem="9aM-3y-PsN" secondAttribute="bottom" id="uU1-zs-Sam"/>
@@ -2890,36 +2898,42 @@
                                 </constraints>
                                 <variation key="default">
                                     <mask key="subviews">
+                                        <exclude reference="K8S-jb-9YX"/>
                                         <exclude reference="f07-wz-xp9"/>
                                         <exclude reference="9aM-3y-PsN"/>
                                     </mask>
                                     <mask key="constraints">
                                         <exclude reference="2b6-CC-CLE"/>
-                                        <exclude reference="45A-55-4MF"/>
-                                        <exclude reference="4SH-2Q-84e"/>
-                                        <exclude reference="MCL-BE-JzV"/>
-                                        <exclude reference="zld-KC-8nq"/>
                                         <exclude reference="EK5-iR-V4A"/>
                                         <exclude reference="bT6-a4-6vF"/>
                                         <exclude reference="dqX-KL-lQR"/>
                                         <exclude reference="uU1-zs-Sam"/>
+                                        <exclude reference="45A-55-4MF"/>
+                                        <exclude reference="4SH-2Q-84e"/>
+                                        <exclude reference="MCL-BE-JzV"/>
+                                        <exclude reference="zld-KC-8nq"/>
+                                        <exclude reference="Bgb-eH-Wf5"/>
+                                        <exclude reference="TBR-Gf-7pI"/>
                                     </mask>
                                 </variation>
                                 <variation key="heightClass=regular-widthClass=compact">
                                     <mask key="subviews">
+                                        <include reference="K8S-jb-9YX"/>
                                         <include reference="f07-wz-xp9"/>
                                         <include reference="9aM-3y-PsN"/>
                                     </mask>
                                     <mask key="constraints">
                                         <include reference="2b6-CC-CLE"/>
-                                        <include reference="45A-55-4MF"/>
-                                        <include reference="4SH-2Q-84e"/>
-                                        <include reference="MCL-BE-JzV"/>
-                                        <include reference="zld-KC-8nq"/>
                                         <include reference="EK5-iR-V4A"/>
                                         <include reference="bT6-a4-6vF"/>
                                         <include reference="dqX-KL-lQR"/>
                                         <include reference="uU1-zs-Sam"/>
+                                        <include reference="45A-55-4MF"/>
+                                        <include reference="4SH-2Q-84e"/>
+                                        <include reference="MCL-BE-JzV"/>
+                                        <include reference="zld-KC-8nq"/>
+                                        <include reference="Bgb-eH-Wf5"/>
+                                        <include reference="TBR-Gf-7pI"/>
                                     </mask>
                                 </variation>
                                 <connections>
@@ -3053,12 +3067,14 @@
                         <outlet property="closeButton" destination="XLR-9G-4yq" id="nUz-NA-Aev"/>
                         <outlet property="fadeView" destination="tfn-dK-RZO" id="9X0-R9-QJT"/>
                         <outlet property="fadeViewLoadLogo" destination="H9E-7W-nFK" id="jEM-DA-ZJa"/>
+                        <outlet property="flashSettings" destination="U4q-iM-IDL" id="e06-0n-z9u"/>
                         <outlet property="flashView" destination="9aM-3y-PsN" id="fVo-nl-IiQ"/>
                         <outlet property="galleryButton" destination="HU8-SI-NoM" id="cXF-Me-K85"/>
                         <outlet property="imageView1" destination="3ON-ms-wFG" id="sSP-nh-4ly"/>
                         <outlet property="imageView2" destination="kGh-Td-ObG" id="4eT-KZ-GfH"/>
                         <outlet property="imageView3" destination="JLs-86-nLR" id="Vd9-Lx-rC3"/>
                         <outlet property="imageView4" destination="kTL-Ji-NT1" id="Ob2-2H-Jnl"/>
+                        <outlet property="loadingCameraPreviewLabel" destination="K8S-jb-9YX" id="rh9-zk-c9P"/>
                         <outlet property="nextButton" destination="4A3-TI-c15" id="jV6-hK-Jbt"/>
                         <outlet property="removeImage1" destination="Izd-Xs-rvS" id="x9W-8l-fsX"/>
                         <outlet property="removeImage2" destination="orw-kK-Oiy" id="A5o-Kr-8hB"/>
@@ -4572,9 +4588,6 @@
                                                     <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="15"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
-                                                    <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
-                                                        <rect key="frame" x="99" y="8" width="213" height="21"/>
-                                                    </variation>
                                                 </label>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ABU-0d-c2I">
                                                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
