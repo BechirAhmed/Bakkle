@@ -24,7 +24,6 @@ import android.view.animation.AccelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 
-import com.andtinder.OverlayView;
 import com.andtinder.R;
 import com.andtinder.model.CardModel;
 import com.andtinder.model.Orientations.Orientation;
@@ -409,10 +408,10 @@ public class CardContainer extends AdapterView<ListAdapter> {
             case MotionEvent.ACTION_DOWN:
                 mTopCard.getHitRect(childRect);
 
-                CardModel cardModel = (CardModel)getAdapter().getItem(getChildCount()-1);
+                CardModel cardModel = (CardModel)getAdapter().getItem(getChildCount() - 1);
 
                 if (cardModel.getOnClickListener() != null) {
-                    cardModel.getOnClickListener().OnClickListener();
+                    cardModel.getOnClickListener().OnClickListener(cardModel);
                 }
                 pointerIndex = event.getActionIndex();
                 x = event.getX(pointerIndex);
@@ -508,23 +507,23 @@ public class CardContainer extends AdapterView<ListAdapter> {
 
                 duration = Math.min(150, duration);
 
-
-                CardModel cardModel = (CardModel)getAdapter().getItem(getChildCount() - 1);
+                mTopCard = getChildAt(getChildCount() - 2);
+                CardModel cardModel = (CardModel)getAdapter().getItem(/*getChildCount() - 1*/mNextAdapterPosition - 3);
 
                 if(mTopCard != null)
                     mTopCard.setLayerType(LAYER_TYPE_HARDWARE, null);
 
                 if (cardModel.getOnCardDismissedListener() != null) {
                     if (targetX > 0 && (targetY < 1500 && targetY > -1500)) {
-                        cardModel.getOnCardDismissedListener().onLike();
+                        cardModel.getOnCardDismissedListener().onLike(cardModel);
                     }
                     else if(targetX < 0 && (targetY < 1500 && targetY > -1500)){
-                        cardModel.getOnCardDismissedListener().onDislike();
+                        cardModel.getOnCardDismissedListener().onDislike(cardModel);
                     }
                     else if(targetY < 0 && (targetX < 1000 && targetX > -1000)){
-                        cardModel.getOnCardDismissedListener().onUp();
+                        cardModel.getOnCardDismissedListener().onUp(cardModel);
                     } else if(targetY > 0 && (targetX < 700 && targetX > -700)){
-                        cardModel.getOnCardDismissedListener().onDown();
+                        cardModel.getOnCardDismissedListener().onDown(cardModel);
                     }
                     else{
                         topCard.animate()
@@ -557,7 +556,7 @@ public class CardContainer extends AdapterView<ListAdapter> {
                                 onAnimationEnd(animation);
                             }
                         });
-                mTopCard = getChildAt(getChildCount() - 2);
+
 
                 return true;
             } else

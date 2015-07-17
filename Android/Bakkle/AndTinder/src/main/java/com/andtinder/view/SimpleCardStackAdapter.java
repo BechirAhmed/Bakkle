@@ -56,7 +56,5 @@ public final class SimpleCardStackAdapter extends CardStackAdapter {
 				.placeholder(R.drawable.loading)
 				.error(R.drawable.camera)
 				.load(url);
-
-
 	}
 }

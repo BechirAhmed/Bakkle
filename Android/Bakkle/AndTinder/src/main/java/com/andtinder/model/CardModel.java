@@ -49,14 +49,14 @@ public class CardModel {
     private OnClickListener mOnClickListener = null;
 
     public interface OnCardDismissedListener {
-        void onLike();
-        void onDislike();
-		void onUp();
-		void onDown();
+        void onLike(CardModel cardModel);
+        void onDislike(CardModel cardModel);
+		void onUp(CardModel cardModel);
+		void onDown(CardModel cardModel);
     }
 
     public interface OnClickListener {
-        void OnClickListener();
+        void OnClickListener(CardModel cardModel);
     }
 
 	public CardModel() {

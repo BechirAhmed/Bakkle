@@ -16,6 +16,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * A fragment representing a list of Items.
@@ -142,7 +143,7 @@ public class HoldingPattern extends ListFragment {
         JsonObject seller;
         JsonArray imageUrlArray, tagArray;
         FeedItem feedItem;
-        String pk, sellerFacebookId;
+        String pk, sellerFacebookId, tagsString;
 
 
         for(JsonElement element : jsonArray)
@@ -170,13 +171,17 @@ public class HoldingPattern extends ListFragment {
             }
             feedItem.setImageUrls(imageUrls);
 
-            tagArray = item.get("tags").getAsJsonArray();
-            tags = new ArrayList<String>();
-            for(JsonElement tagElement : tagArray)
-            {
-                tags.add(tagElement.getAsString());
-            }
+            tagsString = item.get("tags").getAsString();
+            tags = new ArrayList<String>(Arrays.asList(tagsString.split(",")));
             feedItem.setTags(tags);
+
+//            tagArray = item.get("tags").getAsJsonArray();
+//            tags = new ArrayList<String>();
+//            for(JsonElement tagElement : tagArray)
+//            {
+//                tags.add(tagElement.getAsString());
+//            }
+//            feedItem.setTags(tags);
             feedItems.add(feedItem);
 
 

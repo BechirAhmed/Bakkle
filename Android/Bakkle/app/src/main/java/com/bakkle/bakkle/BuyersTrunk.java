@@ -20,6 +20,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * A fragment representing a list of Items.
@@ -105,10 +106,10 @@ public class BuyersTrunk extends ListFragment{
 //        mActionBar.setDisplayShowTitleEnabled(false);
         LayoutInflater mInflater = LayoutInflater.from(getActivity());
 
-        View mCustomView = mInflater.inflate(R.layout.action_bar_trunk, null);
+        //View mCustomView = mInflater.inflate(R.layout.action_bar_trunk, null);
 
-        mActionBar.setCustomView(mCustomView);
-        mActionBar.setDisplayShowCustomEnabled(true);
+//        mActionBar.setCustomView(mCustomView);
+//        mActionBar.setDisplayShowCustomEnabled(true);
     }
 
 
@@ -159,8 +160,7 @@ public class BuyersTrunk extends ListFragment{
 
     public ArrayList<FeedItem> getItems(JsonObject json)
     {
-
-        JsonArray jsonArray = json.getAsJsonArray("buyers_trunk");
+        JsonArray jsonArray = json.get("buyers_trunk").getAsJsonArray();;
         SimpleCardStackAdapter adapter = new SimpleCardStackAdapter(getActivity());
         JsonObject temp, item;
         ArrayList<FeedItem> feedItems = new ArrayList<FeedItem>();
@@ -169,7 +169,7 @@ public class BuyersTrunk extends ListFragment{
         JsonArray imageUrlArray, tagArray;
         FeedItem feedItem;
         String pk, sellerFacebookId;
-
+        String tagsString;
 
         for(JsonElement element : jsonArray)
         {
@@ -196,13 +196,17 @@ public class BuyersTrunk extends ListFragment{
             }
             feedItem.setImageUrls(imageUrls);
 
-            tagArray = item.get("tags").getAsJsonArray();
-            tags = new ArrayList<String>();
-            for(JsonElement tagElement : tagArray)
-            {
-                tags.add(tagElement.getAsString());
-            }
+            tagsString = item.get("tags").getAsString();
+            tags = new ArrayList<String>(Arrays.asList(tagsString.split(",")));
             feedItem.setTags(tags);
+
+//            tagArray = item.get("tags").getAsJsonArray();
+//            tags = new ArrayList<String>();
+//            for(JsonElement tagElement : tagArray)
+//            {
+//                tags.add(tagElement.getAsString());
+//            }
+//            feedItem.setTags(tags);
             feedItems.add(feedItem);
 
 

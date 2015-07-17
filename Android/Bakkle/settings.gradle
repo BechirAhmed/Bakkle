@@ -1,2 +1,2 @@
-include ':app', ':CardStack', ':StackBlur'
+include ':app', ':StackBlur'
 include 'AndTinder'
