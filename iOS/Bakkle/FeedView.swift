@@ -99,10 +99,12 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         }
 
         fromCamera = false
+
+    }
     
-        // add instructional overlay for the first time usage
+    func displayInstruction() {
         var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
-        if userDefaults.boolForKey("instruction") {
+        if userDefaults.boolForKey("instruction") && swipeView != nil && instructionImgView == nil {
             // disable user interaction and show instruction
             self.searchBar.userInteractionEnabled = false
             self.refineButton.userInteractionEnabled = false
@@ -116,7 +118,6 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     /* instruction overlay code begins */
     // create the instruction image and show it on screen
     func constructInstructionView() {
-        if self.swipeView != nil {
             effectView = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.Dark))
             instructionImgView = UIImageView(frame: CGRectMake(drawer.frame.origin.x, drawer.frame.origin.y+drawer.superview!.frame.origin.y, drawer.frame.size.width, drawer.frame.size.height))
             effectView.frame = instructionImgView.frame
@@ -130,7 +131,6 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             var mainWindow: UIWindow = UIApplication .sharedApplication().keyWindow!
             mainWindow.addSubview(effectView)
             mainWindow.addSubview(instructionImgView)
-        }
     }
     
     func closeBtnPressed(sender: UIButton!) {
@@ -296,6 +296,9 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             //add gesture recognizer to top view (swipeView)
             self.swipeView.addGestureRecognizer(itemDetailTap)
         }
+        
+        // always check that if it is necessary to display instruction, to prevent the nil of swipeView when the first time open the app
+        self.displayInstruction()
     }
     
     /* Check server for new items */
