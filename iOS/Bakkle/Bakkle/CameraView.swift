@@ -17,10 +17,13 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     private static let IMAGE_FREEZE_TIME = 0.25
     private static let FADE_IN_TIME = 0.5
     private static let FLASH_TIME = 0.05
+    private static let FOCUS_SQUARE_WIDTH_SCALE: CGFloat = 1.0 / 8.0
+    private static let FOCUS_SQUARE_OFFSET: CGFloat = 2.0
     static let MAX_IMAGE_COUNT = 4
     static let JPEG_COMPRESSION_FACTOR: CGFloat = 0.3
     static let scaledImageWidth: CGFloat = 660.0
     var size: CGSize? = nil
+    var stopFocus = false
     
     /* SEGUE NAVIGATION */
     @IBOutlet weak var closeButton: UIButton!
@@ -58,7 +61,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     
     /* CAMERA OPTIONS */
     // swap camera is only an IBAction
-//    @IBOutlet weak var flashSettings: ??
+    @IBOutlet weak var flashSettings: UIButton!
     var flashMode: AVCaptureFlashMode = .Auto
     
     /* GALLERY PICKER */
@@ -68,6 +71,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     var stopVideoPreview: Bool = false
     
     /* FADE VIEWS */
+    var focusIndicator: UIImageView!
     @IBOutlet weak var fadeView: UIView!
     @IBOutlet weak var flashView: UIView!
     @IBOutlet weak var fadeViewLoadLogo: UIImageView!
@@ -80,6 +84,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         super.viewDidLoad()
         
         size = CGSize(width: CameraView.scaledImageWidth, height: CameraView.scaledImageWidth)
+        stopFocus = false
         
         // consider auto-generating these based on the static CameraView.MAX_IMAGE_COUNT
         imageViews = [imageView1, imageView2, imageView3, imageView4]
@@ -167,11 +172,19 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         
         buttonEnabledHandler()
         
+        focusIndicator = UIImageView(frame: CGRectMake(0, 0, CameraView.FOCUS_SQUARE_WIDTH_SCALE * cameraView.frame.size.width, CameraView.FOCUS_SQUARE_WIDTH_SCALE * cameraView.frame.size.width))
+        focusIndicator.image = UIImage(named:"FocusIndicator.png")!
+        focusIndicator.hidden = true
+        focusIndicator.userInteractionEnabled = false
+        cameraView.addSubview(focusIndicator)
+        
         if self.addItem == nil || !self.addItem!.successfulAdd {
             UIView.animateWithDuration(CameraView.FADE_IN_TIME, animations: {
                 self.fadeView.alpha = 0.0
             })
         }
+        
+        drawFocusRect()
     }
     
     func setupAVFoundation(){
@@ -204,14 +217,18 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         UIApplication.sharedApplication().statusBarHidden = false
+        stopFocus = true
         capturePreview?.removeFromSuperlayer()
     }
     
     @IBAction func swapCamera(sender: AnyObject) {
-        captureSession.stopRunning()
+        captureSession.beginConfiguration()
+        
         captureSession.removeInput(selectedDevice)
         selectedDevice = selectedDevice!.device.isEqual(findCameraWithPosition(.Front)) ? AVCaptureDeviceInput(device: findCameraWithPosition(.Back)!, error: &error) : AVCaptureDeviceInput(device: findCameraWithPosition(.Front)!, error: &error)
-        displayImagePreview()
+        captureSession.addInput(selectedDevice!)
+        
+        captureSession.commitConfiguration()
     }
     
     func findCameraWithPosition(position: AVCaptureDevicePosition) -> AVCaptureDevice? {
@@ -241,6 +258,9 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         cameraView.sendSubviewToBack(stillImagePreview)
     }
     
+    /*
+    ** Starts the camera preview. NOT to be confused with displayStillImage
+    */
     func displayImagePreview() {
         if self.imageCount >= CameraView.MAX_IMAGE_COUNT {
             // no more images
@@ -248,6 +268,8 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         }
         
         captureSession.stopRunning()
+        
+        captureSession.beginConfiguration()
         
         if findCameraWithPosition(.Front) == nil &&  findCameraWithPosition(.Back) == nil {
             let alertController = UIAlertController(title: "No Camera Available", message:"Sorry, you need to have a camera to list an item.", preferredStyle: .Alert)
@@ -274,11 +296,16 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         capturePreview?.frame = CGRectMake(0, 0, cameraView.layer.frame.width, cameraView.layer.frame.height)
         capturePreview?.videoGravity = AVLayerVideoGravityResizeAspectFill
         self.cameraView.layer.insertSublayer(capturePreview, below: self.flashView.layer)
-        captureSession.startRunning()
         
         if captureSession.canAddOutput(stillImageOutput) && !contains(captureSession.outputs, item: stillImageOutput) {
             stillImageOutput.outputSettings = [AVVideoCodecKey: AVVideoCodecJPEG]
             captureSession.addOutput(stillImageOutput)
+        }
+        
+        captureSession.commitConfiguration()
+        
+        if !captureSession.running {
+            captureSession.startRunning()
         }
     }
     
@@ -293,25 +320,69 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     
     // Tap to focus, need to draw square
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
-        var touchPoint = touches.first as! UITouch
-        var screenSize = cameraView.bounds.size
-        var focusPoint = CGPoint(x: touchPoint.locationInView(cameraView).y / screenSize.height, y: touchPoint.locationInView(cameraView).x / screenSize.width)
-        
-        if CGRectContainsPoint(self.cameraView.frame, touchPoint.locationInView(nil)) {
-            if let device = self.selectedDevice!.device {
-                if(device.lockForConfiguration(nil)) {
-                    device.focusPointOfInterest = focusPoint
-                    device.focusMode = AVCaptureFocusMode.ContinuousAutoFocus
-                    device.exposurePointOfInterest = focusPoint
-                    device.exposureMode = AVCaptureExposureMode.ContinuousAutoExposure
-                    device.unlockForConfiguration()
+        if selectedDevice != nil && selectedDevice!.device.focusPointOfInterestSupported {
+            var touchPoint = touches.first as! UITouch
+            var screenSize = cameraView.bounds.size
+            var focusPoint = CGPoint(x: touchPoint.locationInView(cameraView).x / screenSize.width, y: touchPoint.locationInView(cameraView).y / screenSize.height)
+            
+            if CGRectContainsPoint(self.cameraView.frame, touchPoint.locationInView(nil)) {
+                if let device = self.selectedDevice!.device {
+                    if(device.lockForConfiguration(nil)) {
+                        // focusIndicator removeAllAnimations (this is incase we have the image darken with exposure
+                        focusIndicator.hidden = true
+                        device.focusPointOfInterest = focusPoint
+                        device.focusMode = AVCaptureFocusMode.ContinuousAutoFocus
+                        device.exposurePointOfInterest = focusPoint
+                        device.exposureMode = AVCaptureExposureMode.ContinuousAutoExposure
+                        device.unlockForConfiguration()
+                    }
                 }
             }
         }
     }
     
     func drawFocusRect() {
+        // update frame of the indicator IF the device is previewing or displaying a still
+        if selectedDevice!.device.adjustingFocus && !displayingStill {
+            focusIndicator.removeFromSuperview()
+            var focusPoint = clampFocusRectInside(CGPointMake(selectedDevice!.device.focusPointOfInterest.x * cameraView.bounds.size.width, selectedDevice!.device.focusPointOfInterest.y * cameraView.bounds.size.height))
+            focusIndicator.frame = CGRectMake(focusPoint.x, focusPoint.y, focusIndicator.frame.size.width, focusIndicator.frame.size.height)
+            cameraView.addSubview(focusIndicator)
+            cameraView.bringSubviewToFront(focusIndicator)
+            focusIndicator.hidden = false
+        } else {
+            focusIndicator.hidden = true
+        }
         
+        if !stopFocus {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64((1.0/32.0) * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
+                self.drawFocusRect()
+            }
+        }
+    }
+    
+    func clampFocusRectInside(focusPoint: CGPoint) -> CGPoint {
+        var modifiedX = focusPoint.x
+        var modifiedY = focusPoint.y
+        
+        // separated in the case that the width of the indicator is NOT the same as the height
+        var padX: CGFloat = focusIndicator.frame.width  / 2.0 + CameraView.FOCUS_SQUARE_OFFSET
+        var padY: CGFloat = focusIndicator.frame.height / 2.0 + CameraView.FOCUS_SQUARE_OFFSET
+        
+        if modifiedX + padX > cameraView.bounds.maxX {
+            modifiedX = cameraView.bounds.maxX - padX
+        } else if modifiedX - padX < cameraView.bounds.minX {
+            modifiedX = cameraView.bounds.minX + padX
+        }
+        
+        if modifiedY + padY > cameraView.bounds.maxY {
+            modifiedX = cameraView.bounds.maxY - padY
+        } else if modifiedY - padY < cameraView.bounds.minY {
+            modifiedY = cameraView.bounds.minY + padY
+        }
+        
+        // returns the point to draw, not the center point of the focus indicator
+        return CGPointMake(modifiedX - focusIndicator.frame.width / 2, modifiedY - focusIndicator.frame.height / 2)
     }
     
     @IBAction func pressedCaptureButton(sender: AnyObject) {
@@ -326,7 +397,6 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     
     @IBAction func takePhoto(sender: AnyObject) {
         self.releasedCaptureButton(self)
-        
         var videoConnection = self.stillImageOutput.connectionWithMediaType(AVMediaTypeVideo)
         
         if videoConnection != nil {
@@ -377,7 +447,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
                                 }
                             } else {
                                 self.removeStillImage()
-                                //                                self.cameraView.layer.addSublayer(self.capturePreview)
+                                //self.cameraView.layer.addSublayer(self.capturePreview)
                             }
                         }
                     }) // cropAndResize
@@ -428,7 +498,6 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     }
     
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
-//        captureSession.startRunning()
         self.buttonEnabledHandler()
         picker.dismissViewControllerAnimated(true, completion: nil)
     }
@@ -463,12 +532,14 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         self.capButton.enabled = !imageCountGreaterThanMaxCount
         self.galleryButton.enabled = !imageCountGreaterThanMaxCount
         self.switchCamera.enabled = !imageCountGreaterThanMaxCount
+//        self.flashSettings.enabled = !imageCountGreaterThanMaxCount || (selectedDevice != nil && selectedDevice!.device.hasFlash)
         
         self.capButton.hidden = imageCountGreaterThanMaxCount
         self.galleryButton.hidden = imageCountGreaterThanMaxCount
         self.switchCamera.hidden = imageCountGreaterThanMaxCount
         self.capButtonOutline.hidden = imageCountGreaterThanMaxCount
         self.capButtonSpace.hidden = imageCountGreaterThanMaxCount
+//        self.flashSettings.hidden = imageCountGreaterThanMaxCount || !(selectedDevice != nil && selectedDevice!.device.hasFlash)
         
         for i in 0...(self.imageViews.count - 1) {
             self.removeImageButtons[i].hidden = self.imageViews[i].image == nil
