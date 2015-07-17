@@ -51,10 +51,10 @@
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" misplaced="YES" image="btn-email40.png" translatesAutoresizingMaskIntoConstraints="NO" id="AKQ-6X-cVL">
+                            <imageView hidden="YES" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" misplaced="YES" image="btn-email40.png" translatesAutoresizingMaskIntoConstraints="NO" id="AKQ-6X-cVL">
                                 <rect key="frame" x="45" y="373" width="230" height="40"/>
                             </imageView>
-                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" misplaced="YES" image="btn-sign-in40.png" translatesAutoresizingMaskIntoConstraints="NO" id="YRx-jL-q0e">
+                            <imageView hidden="YES" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" misplaced="YES" image="btn-sign-in40.png" translatesAutoresizingMaskIntoConstraints="NO" id="YRx-jL-q0e">
                                 <rect key="frame" x="45" y="448" width="230" height="40"/>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="M2Y-Q2-c87" customClass="FBLoginView">
