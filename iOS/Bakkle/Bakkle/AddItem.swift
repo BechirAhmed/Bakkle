@@ -204,8 +204,8 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
                 descriptionField.text = description as String
                 descriptionField.textColor = UIColor.blackColor()
             }else{
-                let tags = item.valueForKey("tags") as! Array<String>
-                descriptionField.text = ", ".join(tags)
+                let tags = item.valueForKey("tags") as! String
+                descriptionField.text = tags
                 descriptionField.textColor = UIColor.blackColor()
             }
             confirmButton.setTitle("SAVE", forState: UIControlState.Normal)

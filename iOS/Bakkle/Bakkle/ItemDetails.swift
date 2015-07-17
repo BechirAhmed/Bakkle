@@ -94,8 +94,7 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
         let sellerFacebookProfileImgString = "http://graph.facebook.com/\(sellerFBID)/picture?width=142&height=142"
         let topTitle: String = item!.valueForKey("title") as! String
         let topPrice: String = item!.valueForKey("price") as! String
-        let tags : [String] = item!.valueForKey("tags") as! [String]
-        let tagString = ", ".join(tags)
+        let tags = item!.valueForKey("tags") as! String
         let descriptions: String = item!.valueForKey("description") as! String
         let location: String = item!.valueForKey("location") as! String
         let distance = Bakkle.sharedInstance.distanceTo(CLLocation(locationString: location)) as CLLocationDistance!
@@ -103,7 +102,7 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
         itemTitleLabel.text = topTitle
         itemPriceLabel.text = "$" + topPrice
         if description == "" {
-            itemTagsTextView.text = tagString
+            itemTagsTextView.text = tags
         }else {
             itemTagsTextView.text = descriptions
         }
@@ -140,6 +139,7 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
         else {
             Bakkle.sharedInstance.markItem("want", item_id: self.item!.valueForKey("pk")!.integerValue, success: {
                 NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkHoldingUpdate, object: nil)
+                Bakkle.sharedInstance.populateFeed({})
                 NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkFeedUpdate, object: nil)
                 self.dismissViewControllerAnimated(true, completion: nil)
                 }, fail: {

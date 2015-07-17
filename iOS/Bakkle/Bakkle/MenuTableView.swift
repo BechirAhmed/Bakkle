@@ -81,6 +81,7 @@ class MenuTableController: UITableViewController {
         var visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .Dark)) as UIVisualEffectView
         visualEffectView.frame = tableView.bounds
         var backgroundImageView = UIImageView(frame: tableView.bounds)
+        backgroundImageView.contentMode = UIViewContentMode.ScaleAspectFill
         backgroundImageView.hnk_setImageFromURL(Bakkle.sharedInstance.profileImgURL!)
         backgroundImageView.clipsToBounds = true
         backgroundImageView.addSubview(visualEffectView)
