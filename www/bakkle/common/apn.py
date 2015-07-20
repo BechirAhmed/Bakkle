@@ -9,7 +9,7 @@ use_sandbox = True
 token_hex = 'e69ffa8cb3299d2c3428641d4213be48ce37d373554ab18ce905dd2eab7c7655'
 # token_hex = '3c28f1cc5c714aa05f959ccd7def34a87df4dabc46979c0a58741cba362a83b0'
 message = 'Test Payload'
-soundname = 'default'
+soundname = 'chord.m4r'
 badge = 1
 
 # Config

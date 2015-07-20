@@ -20,8 +20,6 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     private static let FOCUS_SQUARE_WIDTH_SCALE: CGFloat = 1.0 / 8.0
     private static let FOCUS_SQUARE_OFFSET: CGFloat = 2.0
     static let MAX_IMAGE_COUNT = 4
-    static let JPEG_COMPRESSION_FACTOR: CGFloat = 0.3
-    static let scaledImageWidth: CGFloat = 660.0
     var size: CGSize? = nil
     var stopFocus = false
     
@@ -84,7 +82,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        size = CGSize(width: CameraView.scaledImageWidth, height: CameraView.scaledImageWidth)
+        size = CGSize(width: Bakkle.sharedInstance.image_width, height: Bakkle.sharedInstance.image_height)
         stopFocus = false
         
         // consider auto-generating these based on the static CameraView.MAX_IMAGE_COUNT
@@ -117,16 +115,17 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         loadingCameraPreviewLabel.hidden = false
         
         self.fadeView.alpha = 1.0
-        if self.addItem != nil && self.addItem!.successfulAdd {
+        if self.addItem != nil && (self.addItem!.successfulAdd || self.addItem!.confirmHit) {
             self.fadeViewLoadLogo.image = UIImage(named: "logo-white-design-clear.png")!
             var backgroundImage = UIImageView(frame: self.fadeView.frame)
             backgroundImage.image = UIImage(named:"LoginScreen-bkg.png")!
             self.fadeView.insertSubview(backgroundImage, belowSubview: self.fadeViewLoadLogo)
-            var successLabel = UILabel(frame: CGRectMake(0, 0, self.fadeViewLoadLogo.frame.size.width, self.fadeViewLoadLogo.frame.size.height))
-            successLabel.center = CGPointMake(self.fadeView.bounds.size.width / 2, (self.fadeViewLoadLogo.bounds.maxY + self.fadeView.bounds.maxY)/2)
+            var successLabel = UILabel(frame: CGRectMake(0, 0, UIScreen.mainScreen().bounds.width * 0.90, self.fadeViewLoadLogo.frame.size.height))
+            successLabel.center = CGPointMake(UIScreen.mainScreen().bounds.width / 2, (self.fadeViewLoadLogo.bounds.maxY + UIScreen.mainScreen().bounds.maxY) / 2)
             successLabel.numberOfLines = 0
             successLabel.font = UIFont(name: "Avenir-Black", size: 36)
-            successLabel.text = "Your item has been listed!"
+            successLabel.text = self.addItem!.successfulAdd ? "Your item has been listed!" : "Enjoy browsing while we continue to list your item!"
+            successLabel.sizeToFit()
             successLabel.layer.shadowColor = Theme.ColorGreen.CGColor
             successLabel.layer.shadowRadius = 5.0
             successLabel.layer.shadowOpacity = 1.0
@@ -178,10 +177,13 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         
         flashSettings.userInteractionEnabled = false
         
+        
+        stopFocus = false
         focusIndicator = UIImageView(frame: CGRectMake(0, 0, CameraView.FOCUS_SQUARE_WIDTH_SCALE * cameraView.frame.size.width, CameraView.FOCUS_SQUARE_WIDTH_SCALE * cameraView.frame.size.width))
         focusIndicator.image = UIImage(named:"FocusIndicator.png")!
         focusIndicator.hidden = true
         focusIndicator.userInteractionEnabled = false
+        cameraView.clipsToBounds = true
         cameraView.addSubview(focusIndicator)
         
         if self.addItem == nil {
@@ -355,7 +357,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     
     func drawFocusRect() {
         // update frame of the indicator IF the device is previewing or displaying a still
-        if selectedDevice!.device.adjustingFocus && !displayingStill {
+        if (selectedDevice!.device.adjustingFocus || selectedDevice!.device.adjustingExposure || selectedDevice!.device.adjustingWhiteBalance) && !displayingStill {
             focusIndicator.removeFromSuperview()
             var focusPoint = clampFocusRectInside(CGPointMake(selectedDevice!.device.focusPointOfInterest.x * cameraView.bounds.size.width, selectedDevice!.device.focusPointOfInterest.y * cameraView.bounds.size.height))
             focusIndicator.frame = CGRectMake(focusPoint.x, focusPoint.y, focusIndicator.frame.size.width, focusIndicator.frame.size.height)
@@ -381,20 +383,20 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         var padX: CGFloat = focusIndicator.frame.width  / 2.0 + CameraView.FOCUS_SQUARE_OFFSET
         var padY: CGFloat = focusIndicator.frame.height / 2.0 + CameraView.FOCUS_SQUARE_OFFSET
         
-        if modifiedX + padX > cameraView.bounds.maxX {
+        if modifiedX + focusIndicator.frame.width + CameraView.FOCUS_SQUARE_OFFSET > cameraView.bounds.maxX {
             modifiedX = cameraView.bounds.maxX - padX
-        } else if modifiedX - padX < cameraView.bounds.minX {
+        } else if modifiedX - CameraView.FOCUS_SQUARE_OFFSET < cameraView.bounds.minX {
             modifiedX = cameraView.bounds.minX + padX
         }
         
-        if modifiedY + padY > cameraView.bounds.maxY {
-            modifiedX = cameraView.bounds.maxY - padY
+        if modifiedY + focusIndicator.frame.height + CameraView.FOCUS_SQUARE_OFFSET > cameraView.bounds.maxY {
+            modifiedX = cameraView.bounds.maxY - (focusIndicator.frame.height + padY)
         } else if modifiedY - padY < cameraView.bounds.minY {
             modifiedY = cameraView.bounds.minY + padY
         }
         
         // returns the point to draw, not the center point of the focus indicator
-        return CGPointMake(modifiedX - focusIndicator.frame.width / 2, modifiedY - focusIndicator.frame.height / 2)
+        return CGPointMake(modifiedX, modifiedY)
     }
     
     @IBAction func pressedCaptureButton(sender: AnyObject) {
@@ -438,7 +440,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
                     })
                     
                     recentImage!.cropAndResize(self.size!, completionHandler: { (resizedImage:UIImage, data:NSData) -> () in
-                        var compressedImage = UIImageJPEGRepresentation(resizedImage, CameraView.JPEG_COMPRESSION_FACTOR)
+                        var compressedImage = UIImageJPEGRepresentation(resizedImage, CGFloat(Bakkle.sharedInstance.image_quality))
                         self.images[itemIndex] = UIImage(data: compressedImage)!
                         self.displayStillImage(self.images[itemIndex])
                         self.populatePhotos()
@@ -484,7 +486,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         var itemIndex = self.imageCount++ // set the index to imageCount then increment the total count by 1
         var image = info[UIImagePickerControllerOriginalImage] as! UIImage
         image.cropAndResize(self.size!, completionHandler: { (resizedImage:UIImage, data:NSData) -> () in
-            var compressedImage = UIImageJPEGRepresentation(resizedImage, CameraView.JPEG_COMPRESSION_FACTOR)
+            var compressedImage = UIImageJPEGRepresentation(resizedImage, CGFloat(Bakkle.sharedInstance.image_quality))
             self.images[itemIndex] = UIImage(data: compressedImage)!
             self.displayStillImage(self.images[itemIndex])
             

@@ -38,8 +38,10 @@ from django.db.models import Avg, Max, Min, Sum
 from common.decorators import time_method
 from django.conf import settings
 import math;
+from django.utils import timezone
 
 from common.decorators import run_async
+from django.core.mail import send_mail
 
 MAX_ITEM_IMAGE = 5
 
@@ -57,15 +59,15 @@ config['S3_URL'] = 'https://s3-us-west-2.amazonaws.com/com.bakkle.prod/'
 #--------------------------------------------#
 #               Web page requests            #
 #--------------------------------------------#
-# @time_method
-# def index(requestHandler):
-#     # List all items (this is for web viewing of data only)
-#     item_list = Items.objects.all()
-#     context = {
-#         'item_list': item_list,
-#     }
-#     return requestHandler.render('djangoTemplates/items/index.html',
-#         item_list = item_list)
+@time_method
+def index():
+    # List all items (this is for web viewing of data only)
+    item_list = Items.objects.all()
+    context = {
+        'item_list': item_list,
+    }
+
+    return item_list
 
 # @time_method
 # def public_detail(request, item_id):
@@ -78,48 +80,34 @@ config['S3_URL'] = 'https://s3-us-west-2.amazonaws.com/com.bakkle.prod/'
 #     }
 #     return render(request, 'items/public_detail.html', context)
 
-# @staff_member_required
-# @csrf_exempt
-# @time_method
-# def detail(request, item_id):
-#     # get the item with the item id (this is for web viewing of data only)
-#     item = get_object_or_404(Items, pk=item_id)
-#     urls = item.image_urls.split(',');
-#     context = {
-#         'item': item,
-#         'urls': urls,
-#     }
-#     return render(request, 'items/detail.html', context)
+@time_method
+def item_detail(item_id):
+    # get the item with the item id (this is for web viewing of data only)
+    item = get_object_or_404(Items, pk=item_id)
+    urls = item.image_urls.split(',');
+    context = {
+        'item': item,
+        'urls': urls,
+    }
+    return context
 
-# @staff_member_required
-# @csrf_exempt
-# @time_method
-# def mark_as_spam(request, item_id):
-#     # Get the item
-#     item = Items.objects.get(pk=item_id)
-#     item.status = Items.SPAM
-#     item.save()
+@time_method
+def mark_as_spam(item_id):
+    # Get the item
+    item = Items.objects.get(pk=item_id)
+    item.status = Items.SPAM
+    item.save()
 
-#     item_list = Items.objects.all()
-#     context = {
-#         'item_list': item_list,
-#     }
-#     return render(request, 'items/index.html', context)
+    return index()
 
-# @staff_member_required
-# @csrf_exempt
-# @time_method
-# def mark_as_deleted(request, item_id):
-#     # Get the item id
-#     item = Items.objects.get(pk=item_id)
-#     item.status = Items.DELETED
-#     item.save()
+@time_method
+def mark_as_deleted(item_id):
+    # Get the item id
+    item = Items.objects.get(pk=item_id)
+    item.status = Items.DELETED
+    item.save()
 
-#     item_list = Items.objects.all()
-#     context = {
-#         'item_list': item_list,
-#     }
-#     return render(request, 'items/index.html', context)
+    return index()
 
 #--------------------------------------------#
 #               Item Methods                 #
@@ -362,7 +350,7 @@ def feed(buyer_id, device_uuid, user_location, search_text, filter_distance, fil
     if(not users_list is None and len(users_list) != 0):
         for item in users_list:
             if(len(BuyerItem.objects.filter(buyer__pk = buyer_id).filter(item__pk = item.pk)) == 0):
-                item_dict = get_item_dictionary(item)
+                item_dict = item.toDictionary()
                 item_array.append(item_dict)
     
     # add all other items - show after top user item
@@ -371,7 +359,7 @@ def feed(buyer_id, device_uuid, user_location, search_text, filter_distance, fil
         itemPage = paginatedItems.page(page);
         for item in itemPage.object_list:
             if (len(item_array) < RETURN_ITEM_ARRAY_SIZE):
-                item_dict = get_item_dictionary(item)
+                item_dict = item.toDictionary()
                 item_array.append(item_dict)
         
         page += 1;
@@ -408,7 +396,7 @@ def want(buyer_id, item_id, view_duration):
     chat = Chat.objects.get_or_create(
         item = item,
         buyer = buyer)[0]
-    chat.start_time = datetime.datetime.now()
+    chat.start_time = timezone.now()
     chat.save()
 
     return add_item_to_buyer_items(buyer_id, item_id, view_duration, BuyerItem.WANT)
@@ -422,12 +410,17 @@ def report(buyer_id, item_id, view_duration):
 
     # Get item and update the times reported
     try:
+        user = Account.objects.get(pk=buyer_id)
         item = Items.objects.get(pk=item_id)
-    except Item.DoesNotExist:
+    except Items.DoesNotExist:
         return {"status":0, "error":"Item {} does not exist.".format(item_id)}
+    except Account.DoesNotExist:
+        return {"status":0, "error":"Account {} does not exist.".format(buyer_id)}
 
     item.times_reported = item.times_reported + 1
     item.save()
+
+    # send_mail('Item reported', 'Item has been reported by user ' + str(user.display_name), 'backend@app.bakkle.com', ['wongb@rose-hulman.edu'], fail_silently=False)
 
     return add_item_to_buyer_items(buyer_id, item_id, view_duration, BuyerItem.REPORT)
 
@@ -497,7 +490,7 @@ def get_seller_items(seller_id):
 
 
         # create the dictionary for the item and append it
-        item_dict = get_item_dictionary(item)
+        item_dict = item.toDictionary()
         item_dict['convos_with_new_message'] = convos_with_new_message
         item_dict['number_of_views'] = number_of_views
         item_dict['number_of_meh'] = number_of_meh
@@ -519,7 +512,7 @@ def get_seller_transactions(seller_id):
     item_array = []
     # get json representaion of item array
     for item in item_list:
-        item_dict = get_item_dictionary(item)
+        item_dict = item.toDictionary()
         item_array.append(item_dict)
 
     # create json string
@@ -537,7 +530,7 @@ def get_buyers_trunk(buyer_id):
     item_array = []
     # get json representaion of item array
     for item in item_list:
-        item_dict = get_buyer_item_dictionary(item)
+        item_dict = item.toDictionary()
         item_array.append(item_dict)
 
     response_data = { 'status': 1, 'buyers_trunk': item_array }
@@ -551,7 +544,7 @@ def get_holding_pattern(buyer_id):
     item_array = []
     # get json representaion of item array
     for item in item_list:
-        item_dict = get_buyer_item_dictionary(item)
+        item_dict = item.toDictionary()
         item_array.append(item_dict)
 
     response_data = { 'status': 1, 'holding_pattern': item_array}
@@ -565,7 +558,7 @@ def get_buyer_transactions(buyer_id):
     item_array = []
     # get json representaion of item array
     for item in item_list:
-        item_dict = get_buyer_item_dictionary(item)
+        item_dict = item.toDictionary()
         item_array.append(item_dict)
 
     response_data = { 'status': 1, 'buyer_history': item_array}
@@ -637,7 +630,7 @@ def add_item_to_buyer_items(buyer_id, item_id, view_duration, status):
     # get the item
     try:
         item = Items.objects.get(pk=item_id)
-    except Item.DoesNotExist:
+    except Items.DoesNotExist:
         item = None
         return {"status":0, "error":"Item {} does not exist.".format(item_id)}
 
@@ -659,6 +652,7 @@ def add_item_to_buyer_items(buyer_id, item_id, view_duration, status):
                 item = item,
                 status = status, 
                 confirmed_price = item.price,
+                view_time = timezone.now(),
                 view_duration = 0)
 
             # If the item seller is the same as the buyer mark it as their item instead of the status
@@ -706,61 +700,6 @@ def update_status(itemId, status):
     item.save()
     response_data = { "status":1 }
     return response_data
-
-# Helper for making an Item into a dictionary for JSON
-def get_item_dictionary(item):
-    images = []
-    hashtags = []
-
-    urls = item.image_urls.split(",")
-    for url in urls:
-        if url != "" and url != " ":
-            images.append(url)
-
-    tags = item.tags.split(",")
-    for tag in tags:
-        if tag != "" and tag != " ":
-            hashtags.append(tag)
-
-    seller_dict = get_account_dictionary(item.seller)
-    item_dict = {'pk':item.pk, 
-        'description': item.description, 
-        'seller': seller_dict,
-        'image_urls': images,
-        'tags': hashtags,
-        'title': item.title,
-        'location': str(item.latitude) + "," + str(item.longitude),
-        'price': str(item.price),
-        'method': item.method,
-        'status': item.status,
-        'post_date': item.post_date.strftime("%Y-%m-%d %H:%M:%S")}
-    return item_dict
-
-# Helper for getting account information for items for JSON
-# TODO: may need to add more fields
-def get_account_dictionary(account):
-    seller_dict = {'pk': account.pk, 
-        'display_name': account.display_name, 
-        'seller_rating': account.seller_rating,
-        'buyer_rating': account.buyer_rating,
-        'user_location': account.user_location,
-        'facebook_id': account.facebook_id }
-    return seller_dict
-
-# Helper for making a BuyerItem into a dictionary for JSON
-def get_buyer_item_dictionary(buyer_item):
-    buyer_dict = get_account_dictionary(buyer_item.buyer)
-    item_dict = get_item_dictionary(buyer_item.item)
-
-    buyer_item_dict = {'pk': buyer_item.pk,
-        'view_time': buyer_item.view_time.strftime("%Y-%m-%d %H:%M:%S"),
-        'view_duration': str(buyer_item.view_duration),
-        'status': buyer_item.status,
-        'confirmed_price': str(buyer_item.confirmed_price),
-        'accepted_sale_price': buyer_item.accepted_sale_price,
-        'item': item_dict,
-        'buyer': buyer_dict}
-    return buyer_item_dict
 
 # Helper to return the delivery methods for items
 def get_delivery_methods():
@@ -828,7 +767,7 @@ def reset_items():
         tags = "lawnmower, orange, somewear",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now,
+        post_date = timezone.now(),
         times_reported = 0 )
     i.save()
     i = Items(
@@ -842,7 +781,7 @@ def reset_items():
         tags = "service, oil change",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now,
+        post_date = timezone.now(),
         times_reported = 0 )
     i.save()
     i = Items(
@@ -856,7 +795,7 @@ def reset_items():
         tags = "tv, led, netflix",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now,
+        post_date = timezone.now(),
         times_reported = 0 )
     i.save()
     i = Items(
@@ -870,7 +809,7 @@ def reset_items():
         tags = "mac, apple, macbook, macbook pro",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now,
+        post_date = timezone.now(),
         times_reported = 0 )
     i.save()
     i = Items(
@@ -884,7 +823,7 @@ def reset_items():
         tags = "paintball, gun, bump paintball",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now,
+        post_date = timezone.now(),
         times_reported = 0 )
     i.save()
     i = Items(
@@ -898,7 +837,7 @@ def reset_items():
         tags = "textbook, business law",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now,
+        post_date = timezone.now(),
         times_reported = 0 )
     i.save()
     i = Items(
@@ -912,7 +851,7 @@ def reset_items():
         tags = "baseball mitt",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now,
+        post_date = timezone.now(),
         times_reported = 0 )
     i.save()
     i = Items(
@@ -926,7 +865,7 @@ def reset_items():
         tags = "bicycle",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now,
+        post_date = timezone.now(),
         times_reported = 0 )
     i.save()
     i = Items(
@@ -940,7 +879,7 @@ def reset_items():
         tags = "canon, 50d, digital camera",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now,
+        post_date = timezone.now(),
         times_reported = 0 )
     i.save()
     i = Items(
@@ -954,7 +893,7 @@ def reset_items():
         tags = "apple, iphone, iphone 5",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now,
+        post_date = timezone.now(),
         times_reported = 0 )
     i.save()
     i = Items(
@@ -968,7 +907,7 @@ def reset_items():
         tags = "weights, barbell",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now,
+        post_date = timezone.now(),
         times_reported = 0 )
     i.save()
     i = Items(
@@ -982,7 +921,7 @@ def reset_items():
         tags = "blender",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now,
+        post_date = timezone.now(),
         times_reported = 0 )
     i.save()
     i = Items(
@@ -996,7 +935,7 @@ def reset_items():
         tags = "sony, playstation, controller",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now,
+        post_date = timezone.now(),
         times_reported = 0 )
     i.save()
     i = Items(
@@ -1010,7 +949,7 @@ def reset_items():
         tags = "baseball, security, bat",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now,
+        post_date = timezone.now(),
         times_reported = 0 )
     i.save()
     i = Items(
@@ -1024,7 +963,7 @@ def reset_items():
         tags = "propane, gas, grille, barbeque, bbq",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now,
+        post_date = timezone.now(),
         times_reported = 0 )
     i.save()
     i = Items(
@@ -1038,7 +977,7 @@ def reset_items():
         tags = "marketing, textbooks",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now,
+        post_date = timezone.now(),
         times_reported = 0 )
     i.save()
     i = Items(
@@ -1052,7 +991,7 @@ def reset_items():
         tags = "shoes, nike, womens",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now,
+        post_date = timezone.now(),
         times_reported = 0 )
     i.save()
     i = Items(
@@ -1066,7 +1005,7 @@ def reset_items():
         tags = "lawnmower, homemade, rabbit",
         method = Items.PICK_UP,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now,
+        post_date = timezone.now(),
         times_reported = 0 )
     i.save()
     i = Items(
@@ -1080,7 +1019,7 @@ def reset_items():
         tags = "iPhone6, cracked, damaged",
         method = Items.DELIVERY,
         status = Items.ACTIVE,
-        post_date = datetime.datetime.now,
+        post_date = timezone.now(),
         times_reported = 0 )
     i.save()
 

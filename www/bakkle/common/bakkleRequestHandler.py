@@ -1,5 +1,6 @@
 from tornado import web
 import json
+from tornado.ioloop import IOLoop
 from account.models import Device
 from django.db import close_old_connections
 
@@ -64,6 +65,12 @@ class bakkleRequestHandler(web.RequestHandler):
     def getIP(self):
         x_real_ip = self.request.headers.get("X-Real-IP")
         return self.request.remote_ip if not x_real_ip else x_real_ip
+
+    def finish_request(self, chunk=None):
+        super(bakkleRequestHandler, self).finish(chunk)
+
+    def finish(self, chunk=None):
+            IOLoop.instance().add_callback(self.finish_request, chunk)
 
 
 class QueryArgumentError(Exception):

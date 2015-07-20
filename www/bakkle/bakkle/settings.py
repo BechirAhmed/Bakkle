@@ -113,6 +113,19 @@ USE_L10N = True
 USE_TZ = True
 
 
+# Host for sending e-mail.
+EMAIL_HOST = 'email-smtp.us-west-2.amazonaws.com'
+
+# Port for sending e-mail.
+EMAIL_PORT = '25'
+
+# Optional SMTP authentication information for EMAIL_HOST.
+EMAIL_HOST_USER = 'AKIAIWU57Q5HQBFHEYGQ'
+EMAIL_HOST_PASSWORD = 'Atuz2dvDHbHZCvq7mWZF2cORjZn+XL5TFtYe2VsT2rlf'
+
+EMAIL_USE_TLS = True
+EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 

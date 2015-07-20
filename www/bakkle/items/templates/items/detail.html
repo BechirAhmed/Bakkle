@@ -1,6 +1,6 @@
-{% extends "base.html" %}
+{% extends "../base.html" %}
 
-{% block title %}Bakkle item detail{% endblock %}
+{% block title %}Bakkle item detail{% end %}
 
 {% block content %}
 
@@ -14,7 +14,7 @@
   <br/>Method of Delivery: {{ item.method }}
   <br/>Status: {{ item.status }}
   <br/>PostDate: {{ item.post_date }}
-  <br/>Location: {{ item.location }}
+  <br/>Location: {{ item.latitude }}, {{ item.longitude }}
   <br/>Times Reported: {{ item.times_reported }}
 
   {% if urls %}
@@ -22,11 +22,11 @@
     {% for imageUrl in urls %}
       <li>{{ imageUrl }} 
       <br /><img src= {{ imageUrl }} /></li>
-    {% endfor %}
-  {% endif %}
+    {% end %}
+  {% end %}
 
 {% else %}
   <p> No item with that id </p>
-{% endif %}
+{% end %}
 
-{% endblock %}
+{% end %}

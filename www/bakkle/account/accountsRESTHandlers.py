@@ -1,9 +1,166 @@
 from common.bakkleRequestHandler import bakkleRequestHandler
 from common.bakkleRequestHandler import QueryArgumentError
+from common.decorators import run_async
+from tornado.web import asynchronous
 
 
 import accountsCommonHandlers
 
+
+class indexHandler(bakkleRequestHandler):
+
+    @asynchronous
+    def get(self):
+        self.asyncHelper()
+
+    @run_async
+    def asyncHelper(self):
+
+        account_list = accountsCommonHandlers.index()
+
+        self.render('templates/account/index.html',
+                    title="account",
+                    account_list=account_list
+                    )
+        return
+
+
+class accountDashboardHandler(bakkleRequestHandler):
+
+    @asynchronous
+    def get(self):
+        self.asyncHelper()
+
+    @run_async
+    def asyncHelper(self):
+
+        context = accountsCommonHandlers.dashboard()
+
+        self.render('templates/account/dashboard.html',
+                    title="account",
+                    register_users=context['register_users'],
+                    active_users=context['active_users'],
+                    total_items=context['total_items'],
+                    total_sold=context['total_sold'],
+                    total_expired=context['total_expired'],
+                    total_deleted=context['total_deleted'],
+                    total_spam=context['total_spam'],
+                    total_pending=context['total_pending']
+                    )
+        return
+
+
+class accountDetailHandler(bakkleRequestHandler):
+
+    @asynchronous
+    def get(self, account_id):
+        self.asyncHelper(account_id)
+
+    @run_async
+    def asyncHelper(self, account_id):
+
+        context = accountsCommonHandlers.detail(account_id)
+
+        self.render('templates/account/detail.html',
+                    title="account",
+                    account=context['account'],
+                    devices=context['devices'],
+                    items=context['items'],
+                    selling=context['selling'],
+                    item_count=context['item_count'],
+                    items_sold=context['items_sold'],
+                    items_viewed=context['items_viewed']
+                    )
+        return
+
+
+class deviceDetailHandler(bakkleRequestHandler):
+
+    @asynchronous
+    def get(self, device_id):
+        self.asyncHelper(device_id)
+
+    @run_async
+    def asyncHelper(self, device_id):
+
+        device = accountsCommonHandlers.device_detail(device_id)
+
+        self.render('templates/account/device_detail.html',
+                    title="device",
+                    device=device
+                    )
+        return
+
+
+class deviceNotifyHandler(bakkleRequestHandler):
+
+    @asynchronous
+    def get(self, device_id):
+        self.asyncHelper(device_id)
+
+    @run_async
+    def asyncHelper(self, device_id):
+
+        respObj = accountsCommonHandlers.device_notify(device_id)
+
+        self.writeJSON(respObj)
+        self.finish()
+        return
+
+
+class deviceNotifyAllHandler(bakkleRequestHandler):
+
+    @asynchronous
+    def get(self, account_id):
+        self.asyncHelper(account_id)
+
+    @run_async
+    def asyncHelper(self, account_id):
+
+        respObj = accountsCommonHandlers.device_notify_all(account_id)
+
+        self.writeJSON(respObj)
+        self.finish()
+        return
+
+
+class accountResetHandler(bakkleRequestHandler):
+
+    @asynchronous
+    def get(self, account_id):
+        self.asyncHelper(account_id)
+
+    @run_async
+    def asyncHelper(self, account_id):
+
+        context = accountsCommonHandlers.reset(account_id)
+
+        self.render('templates/account/detail.html',
+                    title="account",
+                    account=context['account'],
+                    devices=context['devices'],
+                    items=context['items'],
+                    selling=context['selling'],
+                    item_count=context['item_count'],
+                    items_sold=context['items_sold'],
+                    items_viewed=context['items_viewed']
+                    )
+        return
+
+class settingsHandler(bakkleRequestHandler):
+
+    @asynchronous
+    def get(self):
+        self.asyncHelper()
+
+    @run_async
+    def asyncHelper(self):
+
+        respObj = accountsCommonHandlers.settings()
+
+        self.writeJSON(respObj)
+        self.finish()
+        return
 
 class loginFacebookHandler(bakkleRequestHandler):
 
@@ -38,7 +195,6 @@ class setDescriptionHandler(bakkleRequestHandler):
 
     def post(self):
 
-
         if(not self.authenticate()):
             self.writeJSON({'success': 0, 'error': 'Device not authenticated'})
             self.finish()
@@ -60,7 +216,6 @@ class getAccountHandler(bakkleRequestHandler):
 
     def post(self):
 
-
         if(not self.authenticate()):
             self.writeJSON({'success': 0, 'error': 'Device not authenticated'})
             self.finish()
@@ -80,12 +235,11 @@ class logoutHandler(bakkleRequestHandler):
 
     def post(self):
 
-
         if(not self.authenticate()):
             self.writeJSON({'success': 0, 'error': 'Device not authenticated'})
             self.finish()
             return
-                
+
         try:
             auth_token = self.getArgument('auth_token')
             device_uuid = self.getArgument('device_uuid')

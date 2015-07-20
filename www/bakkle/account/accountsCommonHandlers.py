@@ -9,10 +9,8 @@ from django.core.urlresolvers import reverse
 from django.template import RequestContext, loader
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
-from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from decimal import *
-from django.contrib.admin.views.decorators import staff_member_required
 
 from .models import Account, Device
 from items.models import Items, BuyerItem
@@ -22,48 +20,138 @@ from common.decorators import time_method
 # Show a list of all accounts in the system.
 
 
-@staff_member_required
-@csrf_exempt
 @time_method
-def index(request):
+def index():
     account_list = Account.objects.all()
-    context = {
-        'account_list': account_list,
-    }
-    return render(request, 'account/index.html', context)
+
+    return account_list
 
 # Show detail on an account
 
 
-@csrf_exempt
 @time_method
-def settings(request):
-    response_data = {"status": 1, "settings_dict": {"image_width": 660, "image_height":
-                                                    660, "image_quality": 0.7, "feed_items_to_load": 10, "image_precache": 5}}
+def detail(account_id):
+    account = get_object_or_404(Account, pk=account_id)
+    devices = Device.objects.filter(account_id=account_id)
+    buyer_items = BuyerItem.objects.filter(buyer=account_id)
+    items_viewed = buyer_items.count()
+    seller_items = Items.objects.filter(seller=account_id)
+    total_items = seller_items.count()
+    items_sold = Items.objects.filter(seller=account_id,
+                                      status=Items.SOLD).count()
+    context = {
+        'account': account,
+        'devices': devices,
+        'items': buyer_items,
+        'selling': seller_items,
+        'item_count': total_items,
+        'items_sold': items_sold,
+        'items_viewed': items_viewed
+    }
+    return context
+
+# Method for reseting account feed (only for detail page)
+
+
+@time_method
+def reset(account_id):
+    BuyerItem.objects.filter(buyer=account_id).delete()
+
+    return detail(account_id)
+
+# Show dashboard
+
+
+@time_method
+def dashboard():
+    registered_users = Account.objects.count()
+    active_users = Account.objects.filter(disabled=False).count()
+    total_items = Items.objects.count()
+    total_sold = Items.objects.filter(status=Items.SOLD).count()
+    total_expired = Items.objects.filter(status=Items.EXPIRED).count()
+    total_spam = Items.objects.filter(status=Items.SPAM).count()
+    total_deleted = Items.objects.filter(status=Items.DELETED).count()
+    total_pending = Items.objects.filter(status=Items.PENDING).count()
+
+    context = {
+        'register_users': registered_users,
+        'active_users': active_users,
+        'total_items': total_items,
+        'total_sold': total_sold,
+        'total_expired': total_expired,
+        'total_deleted': total_deleted,
+        'total_spam': total_spam,
+        'total_pending': total_pending
+    }
+    return context
+
+
+@time_method
+def device_detail(device_id):
+    try:
+        device = Device.objects.get(pk=device_id)
+    except Device.DoesNotExist:
+        return None
+
+    return device
+
+
+@time_method
+def device_notify(device_id):
+    try:
+        device = Device.objects.get(pk=device_id)
+    except Device.DoesNotExist:
+        device = None
+        response_data = {
+            "status": 0,
+            "error": "Device {} does not exist.".format(device_id)}
+        return response_data
+
+    if (device.is_ios):
+        device.send_notification("Test: New Item", "0", "default", {
+                                 'item_id': 42,
+                                 'title': 'Apple mouse with scroll wheel'})
+        device.send_notification("Test: New Chat Image", "1", "default", {
+                                 'conversation_id': 25,
+                                 'message': 'Buyer/Seller sent new picture',
+                                 'image':
+                                 'https://app.bakkle.com/img/b8348df.jpg',
+                                 'name': 'Taro Finnick'})
+        device.send_notification("Test: New Chat", "2", "default", {
+                                 'conversation_id': 24,
+                                 'message': 'I want to buy your mower',
+                                 'name': 'Konger Smith'})
+        device.send_notification("Test: New Offer", "3", "default", {
+                                 'conversation_id': 24,
+                                 'message':
+                                 'New offer received, $12.22 for Orange Mower',
+                                 'proposed_price': 12.22,
+                                 'name': 'Konger Smith'})
+
+    response_data = {"status": 1}
     return response_data
 
-# Show detail on an account
-# @csrf_exempt
-# @time_method
-# def detail(request, account_id):
-#     account = get_object_or_404(Account, pk=account_id)
-#     devices = Device.objects.filter(account_id=account_id)
-#     buyer_items = BuyerItem.objects.filter(buyer=account_id)
-#     items_viewed = buyer_items.count()
-#     seller_items = Items.objects.filter(seller=account_id)
-#     total_items = seller_items.count()
-#     items_sold = Items.objects.filter(seller=account_id, status=Items.SOLD).count()
-#     context = {
-#         'account': account,
-#         'devices': devices,
-#         'items': buyer_items,
-#         'selling': seller_items,
-#         'item_count': total_items,
-#         'items_sold': items_sold,
-#         'items_viewed': items_viewed
-#     }
-#     print(context)
-#     return render(request,
+
+@time_method
+def device_notify_all(account_id):
+    # Get all devices for the account
+    devices = Device.objects.filter(account_id=account_id, is_ios=True)
+
+    # notify each device
+    for device in devices:
+        device_notify(device.id)
+
+    response_data = {"status": 1}
+    return response_data
+
+
+@time_method
+def settings():
+    response_data = {"status": 1, "settings_dict":
+                     {"image_width": 660, "image_height": 660,
+                      "image_quality": 0.2, "feed_items_to_load": 20,
+                      "image_precache": 10}}
+    return response_data
 
 
 @time_method

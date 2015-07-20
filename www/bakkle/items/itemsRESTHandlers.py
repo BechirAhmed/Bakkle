@@ -3,12 +3,98 @@ from common.bakkleRequestHandler import QueryArgumentError
 
 from common.decorators import run_async
 from tornado.web import asynchronous
-from tornado.gen import coroutine
-from tornado.concurrent import Future
-import time
-import datetime
 
 import itemsCommonHandlers
+
+
+class indexHandler(bakkleRequestHandler):
+
+    @asynchronous
+    def get(self):
+        self.asyncHelper()
+
+    @run_async
+    def asyncHelper(self):
+
+        item_list = itemsCommonHandlers.index()
+
+        self.render('templates/items/index.html',
+                    title="items",
+                    item_list=item_list
+                    )
+        return
+
+class itemDetailHandler(bakkleRequestHandler):
+
+    @asynchronous
+    def get(self, item_id):
+        self.asyncHelper(item_id)
+
+    @run_async
+    def asyncHelper(self, item_id):
+
+        context = itemsCommonHandlers.item_detail(item_id)
+
+        print(context['item'])
+        print(context['urls'])
+
+        self.render('templates/items/detail.html',
+                    title="items",
+                    item=context['item'],
+                    urls=context['urls']
+                    )
+        return
+
+class markDeletedHandler(bakkleRequestHandler):
+
+    @asynchronous
+    def get(self, item_id):
+        self.asyncHelper(item_id)
+
+    @run_async
+    def asyncHelper(self, item_id):
+
+        item_list = itemsCommonHandlers.mark_as_deleted(item_id)
+
+        self.render('templates/items/index.html',
+                    title="items",
+                    item_list=item_list
+                    )
+        return
+
+class markSpamHandler(bakkleRequestHandler):
+
+    @asynchronous
+    def get(self, item_id):
+        self.asyncHelper(item_id)
+
+    @run_async
+    def asyncHelper(self, item_id):
+
+        item_list = itemsCommonHandlers.mark_as_spam(item_id)
+
+        self.render('templates/items/index.html',
+                    title="items",
+                    item_list=item_list
+                    )
+        return
+
+class testHandler(bakkleRequestHandler):
+
+    # @asynchronous
+    def get(self, param1):
+        self.write(param1)
+
+    # @run_async
+    # def asyncHelper(self):
+
+    #     item_list = itemsCommonHandlers.index()
+
+    #     self.render('templates/items/index.html',
+    #                 title="items",
+    #                 item_list=item_list
+    #                 )
+    #     return
 
 
 class addItemHandler(bakkleRequestHandler):
@@ -22,7 +108,8 @@ class addItemHandler(bakkleRequestHandler):
         try:
 
             if(not self.authenticate()):
-                self.writeJSON({'success': 0, 'error': 'Device not authenticated'})
+                self.writeJSON(
+                    {'success': 0, 'error': 'Device not authenticated'})
                 self.finish()
                 return
 
@@ -63,7 +150,8 @@ class addItemNoImageHandler(bakkleRequestHandler):
         try:
 
             if(not self.authenticate()):
-                self.writeJSON({'success': 0, 'error': 'Device not authenticated'})
+                self.writeJSON(
+                    {'success': 0, 'error': 'Device not authenticated'})
                 self.finish()
                 return
 
@@ -106,9 +194,10 @@ class feedHandler(bakkleRequestHandler):
     @run_async
     def asyncHelper(self):
         try:
-            
+
             if(not self.authenticate()):
-                self.writeJSON({'success': 0, 'error': 'Device not authenticated'})
+                self.writeJSON(
+                    {'success': 0, 'error': 'Device not authenticated'})
                 self.finish()
                 return
 
@@ -124,7 +213,7 @@ class feedHandler(bakkleRequestHandler):
             self.writeJSON({"status": 0, "message": error.message})
             self.finish()
             return
-            
+
         self.writeJSON(itemsCommonHandlers.feed(buyer_id,
                                                 device_uuid,
                                                 user_location,
@@ -144,9 +233,10 @@ class mehHandler(bakkleRequestHandler):
     @run_async
     def asyncHelper(self):
         try:
-            
+
             if(not self.authenticate()):
-                self.writeJSON({'success': 0, 'error': 'Device not authenticated'})
+                self.writeJSON(
+                    {'success': 0, 'error': 'Device not authenticated'})
                 self.finish()
                 return
 
@@ -173,16 +263,17 @@ class deleteItemHandler(bakkleRequestHandler):
     @run_async
     def asyncHelper(self):
         try:
-            
+
             if(not self.authenticate()):
-                self.writeJSON({'success': 0, 'error': 'Device not authenticated'})
+                self.writeJSON(
+                    {'success': 0, 'error': 'Device not authenticated'})
                 self.finish()
                 return
-                
+
             item_id = self.getArgument('item_id')
         except QueryArgumentError as error:
             self.writeJSON({"status": 0, "message": error.message})
-            self.finish();
+            self.finish()
             return
 
         self.writeJSON(itemsCommonHandlers.delete_item(item_id))
@@ -198,16 +289,17 @@ class spamItemHandler(bakkleRequestHandler):
     @run_async
     def asyncHelper(self):
         try:
-            
+
             if(not self.authenticate()):
-                self.writeJSON({'success': 0, 'error': 'Device not authenticated'})
+                self.writeJSON(
+                    {'success': 0, 'error': 'Device not authenticated'})
                 self.finish()
                 return
-                
+
             item_id = self.getArgument('item_id')
         except QueryArgumentError as error:
             self.writeJSON({"status": 0, "message": error.message})
-            self.finish();
+            self.finish()
             return
 
         self.writeJSON(itemsCommonHandlers.spam_item(item_id))
@@ -223,18 +315,19 @@ class soldHandler(bakkleRequestHandler):
     @run_async
     def asyncHelper(self):
         try:
-            
+
             if(not self.authenticate()):
-                self.writeJSON({'success': 0, 'error': 'Device not authenticated'})
+                self.writeJSON(
+                    {'success': 0, 'error': 'Device not authenticated'})
                 self.finish()
                 return
-                
+
             buyer_id = self.getUser()
             item_id = self.getArgument('item_id')
             view_duration = self.getArgument('view_duration', 0)
         except QueryArgumentError as error:
             self.writeJSON({"status": 0, "message": error.message})
-            self.finish();
+            self.finish()
             return
 
         self.writeJSON(itemsCommonHandlers.sold(buyer_id,
@@ -251,18 +344,19 @@ class wantHandler(bakkleRequestHandler):
     @run_async
     def asyncHelper(self):
         try:
-            
+
             if(not self.authenticate()):
-                self.writeJSON({'success': 0, 'error': 'Device not authenticated'})
+                self.writeJSON(
+                    {'success': 0, 'error': 'Device not authenticated'})
                 self.finish()
                 return
-                
+
             buyer_id = self.getUser()
             item_id = self.getArgument('item_id')
             view_duration = self.getArgument('view_duration', 0)
         except QueryArgumentError as error:
             self.writeJSON({"status": 0, "message": error.message})
-            self.finish();
+            self.finish()
             return
 
         self.writeJSON(itemsCommonHandlers.want(buyer_id,
@@ -279,18 +373,19 @@ class holdHandler(bakkleRequestHandler):
     @run_async
     def asyncHelper(self):
         try:
-            
+
             if(not self.authenticate()):
-                self.writeJSON({'success': 0, 'error': 'Device not authenticated'})
+                self.writeJSON(
+                    {'success': 0, 'error': 'Device not authenticated'})
                 self.finish()
                 return
-                
+
             buyer_id = self.getUser()
             item_id = self.getArgument('item_id')
             view_duration = self.getArgument('view_duration', 0)
         except QueryArgumentError as error:
             self.writeJSON({"status": 0, "message": error.message})
-            self.finish();
+            self.finish()
             return
 
         self.writeJSON(itemsCommonHandlers.hold(buyer_id,
@@ -307,18 +402,19 @@ class reportHandler(bakkleRequestHandler):
     @run_async
     def asyncHelper(self):
         try:
-            
+
             if(not self.authenticate()):
-                self.writeJSON({'success': 0, 'error': 'Device not authenticated'})
+                self.writeJSON(
+                    {'success': 0, 'error': 'Device not authenticated'})
                 self.finish()
                 return
-                
+
             buyer_id = self.getUser()
             item_id = self.getArgument('item_id')
             view_duration = self.getArgument('view_duration', 0)
         except QueryArgumentError as error:
             self.writeJSON({"status": 0, "message": error.message})
-            self.finish();
+            self.finish()
             return
 
         self.writeJSON(itemsCommonHandlers.report(buyer_id,
@@ -336,16 +432,17 @@ class getSellerItemsHandler(bakkleRequestHandler):
     @run_async
     def asyncHelper(self):
         try:
-            
+
             if(not self.authenticate()):
-                self.writeJSON({'success': 0, 'error': 'Device not authenticated'})
+                self.writeJSON(
+                    {'success': 0, 'error': 'Device not authenticated'})
                 self.finish()
                 return
-                
+
             seller_id = self.getUser()
         except QueryArgumentError as error:
             self.writeJSON({"status": 0, "message": error.message})
-            self.finish();
+            self.finish()
             return
 
         self.writeJSON(itemsCommonHandlers.get_seller_items(seller_id))
@@ -361,16 +458,17 @@ class getSellerTransactionsHandler(bakkleRequestHandler):
     @run_async
     def asyncHelper(self):
         try:
-            
+
             if(not self.authenticate()):
-                self.writeJSON({'success': 0, 'error': 'Device not authenticated'})
+                self.writeJSON(
+                    {'success': 0, 'error': 'Device not authenticated'})
                 self.finish()
                 return
-                
+
             seller_id = self.getUser()
         except QueryArgumentError as error:
             self.writeJSON({"status": 0, "message": error.message})
-            self.finish();
+            self.finish()
             return
 
         self.writeJSON(
@@ -387,16 +485,17 @@ class getBuyersTrunkHandler(bakkleRequestHandler):
     @run_async
     def asyncHelper(self):
         try:
-            
+
             if(not self.authenticate()):
-                self.writeJSON({'success': 0, 'error': 'Device not authenticated'})
+                self.writeJSON(
+                    {'success': 0, 'error': 'Device not authenticated'})
                 self.finish()
                 return
-                
+
             buyer_id = self.getUser()
         except QueryArgumentError as error:
             self.writeJSON({"status": 0, "message": error.message})
-            self.finish();
+            self.finish()
             return
 
         self.writeJSON(itemsCommonHandlers.get_buyers_trunk(buyer_id))
@@ -412,16 +511,17 @@ class getHoldingPatternHandler(bakkleRequestHandler):
     @run_async
     def asyncHelper(self):
         try:
-            
+
             if(not self.authenticate()):
-                self.writeJSON({'success': 0, 'error': 'Device not authenticated'})
+                self.writeJSON(
+                    {'success': 0, 'error': 'Device not authenticated'})
                 self.finish()
                 return
-                
+
             buyer_id = self.getUser()
         except QueryArgumentError as error:
             self.writeJSON({"status": 0, "message": error.message})
-            self.finish();
+            self.finish()
             return
 
         self.writeJSON(
@@ -438,16 +538,17 @@ class getBuyerTransactionsHandler(bakkleRequestHandler):
     @run_async
     def asyncHelper(self):
         try:
-            
+
             if(not self.authenticate()):
-                self.writeJSON({'success': 0, 'error': 'Device not authenticated'})
+                self.writeJSON(
+                    {'success': 0, 'error': 'Device not authenticated'})
                 self.finish()
                 return
-                
+
             buyer_id = self.getUser()
         except QueryArgumentError as error:
             self.writeJSON({"status": 0, "message": error.message})
-            self.finish();
+            self.finish()
             return
 
         self.writeJSON(
@@ -463,12 +564,11 @@ class getDeliveryMethodsHandler(bakkleRequestHandler):
 
     @run_async
     def asyncHelper(self):
-            
+
         if(not self.authenticate()):
             self.writeJSON({'success': 0, 'error': 'Device not authenticated'})
             self.finish()
             return
-                
 
         self.writeJSON(itemsCommonHandlers.get_delivery_methods())
         self.finish()
@@ -483,16 +583,17 @@ class resetHandler(bakkleRequestHandler):
     @run_async
     def asyncHelper(self):
         try:
-            
+
             if(not self.authenticate()):
-                self.writeJSON({'success': 0, 'error': 'Device not authenticated'})
+                self.writeJSON(
+                    {'success': 0, 'error': 'Device not authenticated'})
                 self.finish()
                 return
-                
+
             buyer_id = self.getUser()
         except QueryArgumentError as error:
             self.writeJSON({"status": 0, "message": error.message})
-            self.finish();
+            self.finish()
             return
 
         self.writeJSON(itemsCommonHandlers.reset(buyer_id))
@@ -507,8 +608,7 @@ class resetItemsHandler(bakkleRequestHandler):
 
     @run_async
     def asyncHelper(self):
-            
 
         self.writeJSON(itemsCommonHandlers.reset_items())
         self.finish()
-        return  
+        return
