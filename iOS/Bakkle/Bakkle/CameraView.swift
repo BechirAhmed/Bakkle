@@ -20,8 +20,6 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     private static let FOCUS_SQUARE_WIDTH_SCALE: CGFloat = 1.0 / 8.0
     private static let FOCUS_SQUARE_OFFSET: CGFloat = 2.0
     static let MAX_IMAGE_COUNT = 4
-    static let JPEG_COMPRESSION_FACTOR: CGFloat = 0.3
-    static let scaledImageWidth: CGFloat = 660.0
     var size: CGSize? = nil
     var stopFocus = false
     
@@ -86,7 +84,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        size = CGSize(width: CameraView.scaledImageWidth, height: CameraView.scaledImageWidth)
+        size = CGSize(width: Bakkle.sharedInstance.image_width, height: Bakkle.sharedInstance.image_height)
         stopFocus = false
         
         // consider auto-generating these based on the static CameraView.MAX_IMAGE_COUNT
@@ -474,7 +472,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
                     })
                     
                     recentImage!.cropAndResize(self.size!, completionHandler: { (resizedImage:UIImage, data:NSData) -> () in
-                        var compressedImage = UIImageJPEGRepresentation(resizedImage, CameraView.JPEG_COMPRESSION_FACTOR)
+                        var compressedImage = UIImageJPEGRepresentation(resizedImage, CGFloat(Bakkle.sharedInstance.image_quality))
                         self.images[itemIndex] = UIImage(data: compressedImage)!
                         self.displayStillImage(self.images[itemIndex])
                         self.populatePhotos()
@@ -520,7 +518,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         var itemIndex = self.imageCount++ // set the index to imageCount then increment the total count by 1
         var image = info[UIImagePickerControllerOriginalImage] as! UIImage
         image.cropAndResize(self.size!, completionHandler: { (resizedImage:UIImage, data:NSData) -> () in
-            var compressedImage = UIImageJPEGRepresentation(resizedImage, CameraView.JPEG_COMPRESSION_FACTOR)
+            var compressedImage = UIImageJPEGRepresentation(resizedImage, CGFloat(Bakkle.sharedInstance.image_quality))
             self.images[itemIndex] = UIImage(data: compressedImage)!
             self.displayStillImage(self.images[itemIndex])
             

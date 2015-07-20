@@ -13,6 +13,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     let apiVersion: Float = 1.2
     var url_base: String          = "https://app.bakkle.com/"
     let url_login: String         = "account/login_facebook/"
+    let url_settings: String         = "account/settings/"
     let url_logout: String        = "account/logout/"
     let url_facebook: String      = "account/facebook/"
     let url_register_push: String = "account/device/register_push/"
@@ -72,6 +73,12 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     var user_location: String = ""
     var user_loc: CLLocation?
     
+    var feed_items_to_load : Int = 20
+    var image_height : Int = 660
+    var image_width : Int = 660
+    var image_quality : Float = 0.3
+    var image_precache : Int = 10
+    
     class var sharedInstance: Bakkle {
         struct Static {
             static let instance: Bakkle = Bakkle()
@@ -94,6 +101,8 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         
         let appName = NSBundle.mainBundle().infoDictionary!["CFBundleName"] as! String;
         self.flavor = appName == "Bakkle" ? 1 : 2;
+        
+        settings()
     }
     
     /* Set version of app for branding 1=Bakkle, 2=Goodwill */
@@ -214,6 +223,62 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         
         return (build,bundleName)
     }
+    /* register and login using facebook */
+    func settings() {
+            let url:NSURL? = NSURL(string: url_base + url_settings)
+            let request = NSMutableURLRequest(URL: url!)
+        
+            request.HTTPMethod = "GET"
+            let postString = ""
+            request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+            
+            info("facebook")
+            info("URL: \(url)")
+            info("METHOD: \(request.HTTPMethod)")
+            info("BODY: \(postString)")
+            let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
+                data, response, error in
+                
+                if error != nil {
+                    println("error=\(error)")
+                    return
+                }
+                
+                let responseString = NSString(data: data, encoding:NSUTF8StringEncoding)
+                println("Response: \(responseString)")
+                
+                /* JSON parse */
+                var error: NSError? = error
+                if (data != nil && data.length != 0) {
+                    var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &error) as! NSDictionary
+                    
+                    if responseDict.valueForKey("status")?.integerValue == 1 {
+                        var settings_dict :NSDictionary = responseDict.valueForKey("settings_dict") as! NSDictionary
+                        
+                        if(settings_dict.valueForKey("feed_items_to_load") != nil){
+                            self.feed_items_to_load = settings_dict.valueForKey("feed_items_to_load")!.integerValue!
+                        }
+                        if(settings_dict.valueForKey("image_height") != nil){
+                            self.image_height = settings_dict.valueForKey("image_height")!.integerValue!
+                        }
+                        if(settings_dict.valueForKey("image_width") != nil){
+                            self.image_width = settings_dict.valueForKey("image_width")!.integerValue!
+                        }
+                        if(settings_dict.valueForKey("image_quality") != nil){
+                            self.image_quality = settings_dict.valueForKey("image_quality")!.floatValue!
+                        }
+                        if(settings_dict.valueForKey("image_precache") != nil){
+                            self.image_precache = settings_dict.valueForKey("image_precache")!.integerValue!
+                        }
+                        
+                    }
+                } else {
+                    //TODO: Trigger reattempt to connect timer.
+                }
+            }
+            task.resume()
+    }
+
     
     /* register and login using facebook */
     func facebook(email: String, gender: String, username: String,
