@@ -1,6 +1,6 @@
-{% extends "base.html" %}
+{% extends "../base.html" %}
 
-{% block title %}Bakkle device detail{% endblock %}
+{% block title %}Bakkle device detail{% end %}
 
 {% block content %}
 
@@ -11,11 +11,11 @@
   <br/>APNS: {{ device.apns_token }} 
   <br/>DateAdded: {{ device.date_added }} 
   <br/>Auth Token: {{ device.auth_token }}
-  <br/>LastSeen: {{ device.last_seen_date }} (<a href="{% url 'account:device_notify' device.id %}">Notify</a>)
+  <br/>LastSeen: {{ device.last_seen_date }} (<a href="{{ reverse_url('deviceNotify', device.id) }}">Notify</a>)
   <br/>Location: {{ device.user_location }}
   <br/>Software Version: {{ device.app_version }}
 {% else %}
   <p> No device with that id </p>
-{% endif %}
+{% end %}
 
-{% endblock %}
+{% end %}

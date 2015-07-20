@@ -1,6 +1,6 @@
-{% extends "base.html" %}
+{% extends "../base.html" %}
 
-{% block title %}Bakkle account detail{% endblock %}
+{% block title %}Bakkle account detail{% end %}
 
 {% block content %}
 
@@ -12,45 +12,45 @@
   <br/>Location = {{ account.user_location }}
   <br/>
 
-  <br/>Devices: (<a href="{% url 'account:device_notify_all' account.id %}">Notify All</a>)
+  <br/>Devices: (<a href="{{ reverse_url('deviceNotifyAll', account.id) }}">Notify All</a>)
   {% if devices %}
     <ul>
       {% for device in devices %} 
-         <li><a href="{% url 'account:device_detail' device.id %}">{{ device.id }}</a>: {{ device.uuid }} (<a href="{% url 'account:device_notify' device.id %}">Notify</a>)</li>
-      {% endfor %}
+         <li><a href="{{ reverse_url('deviceDetail', device.id) }}">{{ device.id }}</a>: {{ device.uuid }} (<a href="{{ reverse_url('deviceNotify', device.id) }}">Notify</a>)</li>
+      {% end %}
     </ul> 
   {% else %}
    <p> This account has no registered devices </p>
-  {% endif %}
+  {% end %}
 
   <br/> Seller Stats:
     <br/> &nbsp;&nbsp;&nbsp;&nbsp;Total Items Listed: {{ item_count }}
     <br/> &nbsp;&nbsp;&nbsp;&nbsp;Total Items Sold: {{ items_sold }}
-
-  <br/>Items Viewed: <a href="{% url 'account:reset' account.id %}">Reset Feed</a>
+    <br/>
+  <br/>Items Viewed: <a href="{{ reverse_url('accountReset', account.id) }}">Reset Feed</a>
     <br />&nbsp;&nbsp;&nbsp;&nbsp;Total Viewed: {{ items_viewed }}
   {% if items %}
     <ul>
       {% for buyer_item in items %}
-        <li><a href="{% url 'items:detail' buyer_item.item.id %}">{{ buyer_item.item.id }}:</a> {{ buyer_item.item.title }} <br /> Item Status For Buyer: {{ buyer_item.status }} <br /> BuyerItem Id: {{ buyer_item.id }}</li>
-      {% endfor %}
+        <li><a href="{{ reverse_url('itemDetail', buyer_item.item.id) }}">{{ buyer_item.item.id }}:</a> {{ buyer_item.item.title }} <br /> Item Status For Buyer: {{ buyer_item.status }} <br /> BuyerItem Id: {{ buyer_item.id }}</li>
+      {% end %}
     </ul>
   {% else %}
    <p> This account has not viewed any items </p>
-  {% endif %}
+  {% end %}
   <br/>Items Selling:
   {% if selling %}
     <ul>
       {% for seller_item in selling %}
-        <li><a href="{% url 'items:detail' seller_item.id %}">{{ seller_item.id }}:</a> {{ seller_item.title }} </li>
-      {% endfor %}
+        <li><a href="{{ reverse_url('itemDetail', seller_item.id) }}">{{ seller_item.id }}:</a> {{ seller_item.title }} </li>
+      {% end %}
     </ul>
   {% else %}
    <p> This account is not selling any items </p>
-  {% endif %}
+  {% end %}
 
 {% else %}
   <p> No account with that id </p>
-{% endif %}
+{% end %}
 
-{% endblock %}
+{% end %}

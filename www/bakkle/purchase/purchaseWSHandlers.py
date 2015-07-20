@@ -3,6 +3,7 @@
 from account.models import Account
 from models import Offer
 from models import Sale
+from items.models import BuyerItem
 from django.db.models import Avg
 
 # import baseWSHandlers
@@ -48,10 +49,13 @@ class PurchaseWSHandler():
         pass
 
     def acceptOffer(self, offerId, userId):
+        buyerItem = None
+
         try:
             offer = Offer.objects.get(pk=offerId)
             item = offer.item
             user = Account.objects.get(pk=userId)
+            buyerItem = BuyerItem.objects.get(item=item, buyer=user)
         except Offer.DoesNotExist:
             return {
                 'success': 0,
@@ -60,6 +64,8 @@ class PurchaseWSHandler():
             return {
                 'success': 0,
                 'error': 'Invalid userId provided'}
+        except BuyerItem.DoesNotExist:
+            pass
 
         if(offer.status != "Active"):
             return {
@@ -82,6 +88,11 @@ class PurchaseWSHandler():
         sale = Sale.objects.create(
             item=item,
             acceptedOffer=offer)
+
+        if (buyerItem is not None):
+
+            buyerItem.sale = sale
+            buyerItem.save()
 
         item.status = "Sold"
         item.save()

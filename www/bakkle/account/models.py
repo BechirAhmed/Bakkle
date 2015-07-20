@@ -94,7 +94,7 @@ class Device(models.Model):
 
     """
 
-    def send_notification(self, message="", badge=1, sound="default", custom={}):
+    def send_notification(self, message="", badge=1, sound="chord.m4r", custom={}):
         dt = self.apns_token.replace(' ', '').replace('<', '').replace('>', '')
         if (dt is None or dt == ""):
             return
