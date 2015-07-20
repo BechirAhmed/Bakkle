@@ -2904,16 +2904,16 @@
                                     </mask>
                                     <mask key="constraints">
                                         <exclude reference="2b6-CC-CLE"/>
-                                        <exclude reference="EK5-iR-V4A"/>
-                                        <exclude reference="bT6-a4-6vF"/>
-                                        <exclude reference="dqX-KL-lQR"/>
-                                        <exclude reference="uU1-zs-Sam"/>
+                                        <exclude reference="Bgb-eH-Wf5"/>
+                                        <exclude reference="TBR-Gf-7pI"/>
                                         <exclude reference="45A-55-4MF"/>
                                         <exclude reference="4SH-2Q-84e"/>
                                         <exclude reference="MCL-BE-JzV"/>
                                         <exclude reference="zld-KC-8nq"/>
-                                        <exclude reference="Bgb-eH-Wf5"/>
-                                        <exclude reference="TBR-Gf-7pI"/>
+                                        <exclude reference="EK5-iR-V4A"/>
+                                        <exclude reference="bT6-a4-6vF"/>
+                                        <exclude reference="dqX-KL-lQR"/>
+                                        <exclude reference="uU1-zs-Sam"/>
                                     </mask>
                                 </variation>
                                 <variation key="heightClass=regular-widthClass=compact">
@@ -2924,16 +2924,16 @@
                                     </mask>
                                     <mask key="constraints">
                                         <include reference="2b6-CC-CLE"/>
-                                        <include reference="EK5-iR-V4A"/>
-                                        <include reference="bT6-a4-6vF"/>
-                                        <include reference="dqX-KL-lQR"/>
-                                        <include reference="uU1-zs-Sam"/>
+                                        <include reference="Bgb-eH-Wf5"/>
+                                        <include reference="TBR-Gf-7pI"/>
                                         <include reference="45A-55-4MF"/>
                                         <include reference="4SH-2Q-84e"/>
                                         <include reference="MCL-BE-JzV"/>
                                         <include reference="zld-KC-8nq"/>
-                                        <include reference="Bgb-eH-Wf5"/>
-                                        <include reference="TBR-Gf-7pI"/>
+                                        <include reference="EK5-iR-V4A"/>
+                                        <include reference="bT6-a4-6vF"/>
+                                        <include reference="dqX-KL-lQR"/>
+                                        <include reference="uU1-zs-Sam"/>
                                     </mask>
                                 </variation>
                                 <connections>
@@ -4588,6 +4588,9 @@
                                                     <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="15"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
+                                                    <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                                        <rect key="frame" x="99" y="8" width="213" height="21"/>
+                                                    </variation>
                                                 </label>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ABU-0d-c2I">
                                                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
@@ -5488,7 +5491,6 @@
                                                 <connections>
                                                     <action selector="filterChanged:" destination="Ly4-7t-E63" eventType="touchUpInside" id="Hjy-ai-wep"/>
                                                     <action selector="filterChanged:" destination="Ly4-7t-E63" eventType="touchUpOutside" id="tHZ-aE-umB"/>
-                                                    <action selector="filterRealtime:" destination="Ly4-7t-E63" eventType="valueChanged" id="pZx-HB-qov"/>
                                                 </connections>
                                             </slider>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oMX-ZL-YHg">
@@ -5497,9 +5499,9 @@
                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="100+" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s6g-Bi-C4f">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="∞" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s6g-Bi-C4f">
                                                 <rect key="frame" x="38" y="128" width="192" height="21"/>
-                                                <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="17"/>
+                                                <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="20"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
@@ -5586,9 +5588,9 @@
                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="100+" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WWf-Ws-4b6">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="∞" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WWf-Ws-4b6">
                                                 <rect key="frame" x="38" y="128" width="192" height="21"/>
-                                                <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="17"/>
+                                                <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="20"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
@@ -5600,7 +5602,6 @@
                                                 <connections>
                                                     <action selector="filterChanged:" destination="Ly4-7t-E63" eventType="touchUpInside" id="2Fs-r1-NbU"/>
                                                     <action selector="filterChanged:" destination="Ly4-7t-E63" eventType="touchUpOutside" id="OgE-LL-GQZ"/>
-                                                    <action selector="filterRealtime:" destination="Ly4-7t-E63" eventType="valueChanged" id="Tem-1h-phE"/>
                                                 </connections>
                                             </slider>
                                         </subviews>

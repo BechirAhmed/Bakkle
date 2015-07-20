@@ -48,8 +48,9 @@ class SellersGarageView: UIViewController, UITableViewDelegate, UITableViewDataS
         self.view.userInteractionEnabled = true
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "messageCell")
         
-        
-        classifyData()
+        if Bakkle.sharedInstance.garageItems != nil {
+            classifyData()
+        }
         requestUpdates()
     }
     

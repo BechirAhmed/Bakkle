@@ -45,7 +45,9 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
         
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "messageCell")
         
-        classifyData()
+        if Bakkle.sharedInstance.trunkItems != nil {
+            classifyData()
+        }
         Bakkle.sharedInstance.populateTrunk({
             self.classifyData()
             self.tableView.reloadData()

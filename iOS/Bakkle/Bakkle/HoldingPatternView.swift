@@ -106,7 +106,9 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
         self.timer = NSTimer(timeInterval: 1.0, target: self, selector: Selector("updateTimeRemaining"), userInfo: nil, repeats: true)
         NSRunLoop.currentRunLoop().addTimer(self.timer, forMode: NSRunLoopCommonModes)
 
-        classifyData()
+        if Bakkle.sharedInstance.holdingItems != nil {
+            classifyData()
+        }
         Bakkle.sharedInstance.populateHolding({
             NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkHoldingUpdate, object: self)
         });

@@ -660,10 +660,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         }
         task.resume()
     }
-    func onNewChat(conversation_id: Int, message: String, timestamp: time_t) {
-        
-    }
-
+    
     // take out tags right now, but if needed, will add later
     func addItem(title: String, description: String, location: String, price: String, images: [UIImage],item_id: NSInteger?, success: (item_id: Int?, item_url: String?)->(), fail: ()->() ) {
         // URL encode some vars.
@@ -1038,16 +1035,6 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     
     func info(logMessage: String, functionName: String = __FUNCTION__, line: Int = __LINE__, file: String = __FILE__) {
         var prettyFunc = functionName
-//        var range = functionName.rangeOfString("(")
-//        
-//        if let r = range {
-//        //the correct solution
-//            var intIndex: Int = distance(functionName.startIndex, range!.startIndex)
-//            var startIndex2 = advance(functionName.startIndex, intIndex)
-//            var range2 = startIndex2...startIndex2
-//            
-//            prettyFunc = functionName[range2]
-//        }
         if self.debug>=2 {
             println("[INFO] \(file.lastPathComponent.stringByDeletingPathExtension):\(prettyFunc)(\(line)): \(logMessage)")
         }

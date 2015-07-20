@@ -19,7 +19,7 @@ class RefineView: UIViewController, UISearchBarDelegate {
     @IBOutlet weak var distanceLbl: UILabel!
     @IBOutlet weak var priceLbl: UILabel!
     var parentView: FeedView!
-    var search_text: String! = nil
+    var search_text: String!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,14 +54,10 @@ class RefineView: UIViewController, UISearchBarDelegate {
     
     /* UISearch Bar delegate */
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
-        Bakkle.sharedInstance.search_text = searchText
         self.parentView.searchBar.text = searchText
         self.parentView.searchBar(self.parentView.searchBar, textDidChange: searchText)
     }
     
-    func searchBarTextDidBeginEditing(searchBar: UISearchBar){
-
-    }
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
     }
