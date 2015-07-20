@@ -25,6 +25,13 @@ import account.accountsRESTHandlers as accountsRESTHandlers
 import chat.chatWSHandlers as ChatWSHandlers
 
 app = web.Application([
+
+
+    web.url(r'^/items/$', itemsRESTHandlers.indexHandler, name='itemIndex'),
+    web.url(r'^/items/(?P<item_id>[0-9]+)/detail/$', itemsRESTHandlers.itemDetailHandler, name='itemDetail'),
+    web.url(r'^/items/(?P<item_id>[0-9]+)/delete/$', itemsRESTHandlers.markDeletedHandler, name='itemMarkDelete'),
+    web.url(r'^/items/(?P<item_id>[0-9]+)/spam/$', itemsRESTHandlers.markSpamHandler, name='itemMarkSpam'),
+
     web.url(r'^/items/reset/$', itemsRESTHandlers.resetHandler, name='reset'),
     web.url(r'^/items/reset_items/$', itemsRESTHandlers.resetItemsHandler, name='reset_items'),
     web.url(r'^/items/feed/$', itemsRESTHandlers.feedHandler, name='feed'),
@@ -48,10 +55,19 @@ app = web.Application([
     web.url(r'^/items/get_delivery_methods/$', itemsRESTHandlers.getDeliveryMethodsHandler, name='get_delivery_methods'),
 
 
+    web.url(r'^/account/$', accountsRESTHandlers.indexHandler, name='accountIndex'),
+    web.url(r'^/account/dashboard/$', accountsRESTHandlers.accountDashboardHandler, name='dashboard'),
+    web.url(r'^/account/(?P<account_id>[0-9]+)/detail/$', accountsRESTHandlers.accountDetailHandler, name='accountDetail'),
+    web.url(r'^/account/(?P<account_id>[0-9]+)/reset/$', accountsRESTHandlers.accountResetHandler, name='accountReset'),
+    web.url(r'^/account/(?P<account_id>[0-9]+)/notify/$', accountsRESTHandlers.deviceNotifyAllHandler, name='deviceNotifyAll'),
+    web.url(r'^/account/device/(?P<device_id>[0-9]+)/detail/$', accountsRESTHandlers.deviceDetailHandler, name='deviceDetail'),
+    web.url(r'^/account/device/(?P<device_id>[0-9]+)/notify/$', accountsRESTHandlers.deviceNotifyHandler, name='deviceNotify'),
+    # web.url(r'^/items/(?P<account_id>[0-9]+)/spam/$', accountsRESTHandlers.markSpamHandler, name='itemMarkSpam'),
 
     web.url(r'^/account/login_facebook/$', accountsRESTHandlers.loginFacebookHandler, name='login_facebook'),
     web.url(r'^/account/logout/$', accountsRESTHandlers.logoutHandler, name='logout'),
     web.url(r'^/account/facebook/$', accountsRESTHandlers.facebookHandler, name='facebook'),
+    web.url(r'^/account/settings/$', accountsRESTHandlers.settingsHandler, name='settings'),
     web.url(r'^/account/device/register_push/$', accountsRESTHandlers.deviceRegisterPushHandler, name='device_register_push'),
     web.url(r'^/account/set_description/$', accountsRESTHandlers.setDescriptionHandler, name='set_description'),
     web.url(r'^/account/get_account/$', accountsRESTHandlers.getAccountHandler, name='get_account'),

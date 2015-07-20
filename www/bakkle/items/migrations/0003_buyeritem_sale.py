@@ -7,13 +7,14 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('account', '0003_auto_20150701_1709'),
+        ('purchase', '0004_auto_20150707_1956'),
+        ('items', '0002_auto_20150624_1744'),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='account',
-            name='decription',
-            field=models.CharField(max_length=2000, null=True),
+            model_name='buyeritem',
+            name='sale',
+            field=models.ForeignKey(to='purchase.Sale', null=True),
         ),
     ]
