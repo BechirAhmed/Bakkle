@@ -111,6 +111,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             self.menuBtn.userInteractionEnabled = false
             self.itemDetailTap.enabled = false
             self.btnAddItem.userInteractionEnabled = false
+            self.revealViewController().panGestureRecognizer().enabled = false
             self.constructInstructionView()
         }
     }
@@ -141,6 +142,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         self.menuBtn.userInteractionEnabled = true
         self.btnAddItem.userInteractionEnabled = true
         self.itemDetailTap.enabled = true
+        self.revealViewController().panGestureRecognizer().enabled = true
         instructionImgView.removeFromSuperview()
         effectView.removeFromSuperview()
     }
