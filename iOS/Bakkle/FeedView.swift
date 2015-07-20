@@ -44,9 +44,6 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Always look for updates
-        requestUpdates()
-        
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         progressIndicator.startAnimating()
         
@@ -84,6 +81,9 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(true)
+    
+        // Always look for updates
+        requestUpdates()
 
         filterChanged()
         
