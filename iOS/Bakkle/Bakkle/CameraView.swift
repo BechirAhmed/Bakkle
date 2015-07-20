@@ -122,12 +122,11 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             var backgroundImage = UIImageView(frame: self.fadeView.frame)
             backgroundImage.image = UIImage(named:"LoginScreen-bkg.png")!
             self.fadeView.insertSubview(backgroundImage, belowSubview: self.fadeViewLoadLogo)
-            var successLabel = UILabel(frame: CGRectMake(0, 0, self.fadeViewLoadLogo.frame.size.width, self.fadeViewLoadLogo.frame.size.height))
-            successLabel.center = CGPointMake(self.fadeView.bounds.size.width / 2, (self.fadeViewLoadLogo.bounds.maxY + self.fadeView.bounds.maxY)/2)
+            var successLabel = UILabel(frame: CGRectMake(0, 0, UIScreen.mainScreen().bounds.width * 0.90, self.fadeViewLoadLogo.frame.size.height))
+            successLabel.center = CGPointMake(UIScreen.mainScreen().bounds.width / 2, (self.fadeViewLoadLogo.bounds.maxY + UIScreen.mainScreen().bounds.maxY) / 2)
             successLabel.numberOfLines = 0
             successLabel.font = UIFont(name: "Avenir-Black", size: 36)
             successLabel.text = self.addItem!.successfulAdd ? "Your item has been listed!" : "Enjoy browsing while we continue to list your item!"
-            successLabel.text = "Enjoy browsing while we continue to list your item!"
             successLabel.sizeToFit()
             successLabel.layer.shadowColor = Theme.ColorGreen.CGColor
             successLabel.layer.shadowRadius = 5.0
