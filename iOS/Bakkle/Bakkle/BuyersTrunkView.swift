@@ -29,12 +29,9 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
         
         setupButtons()
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
+        self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "messageCell")
         
         self.tableView.tableFooterView = UIView()
-    }
-    
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(true)
         
         let notificationCenter = NSNotificationCenter.defaultCenter()
         let mainQueue = NSOperationQueue.mainQueue()
@@ -42,12 +39,15 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
             self.classifyData()
             self.tableView.reloadData()
         }
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(true)
         
-        self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "messageCell")
+        self.view.userInteractionEnabled = true
         
-        if Bakkle.sharedInstance.trunkItems != nil {
-            classifyData()
-        }
+        classifyData()
+        
         Bakkle.sharedInstance.populateTrunk({
             self.classifyData()
             self.tableView.reloadData()
@@ -102,7 +102,7 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
         self.activeItem = [Int]()
         self.boughtItem = [Int]()
         self.soldItem = [Int]()
-        if Bakkle.sharedInstance.trunkItems.count == 0 {
+        if Bakkle.sharedInstance.trunkItems == nil || Bakkle.sharedInstance.trunkItems.count == 0 {
             return
         }
         for index in 0...Bakkle.sharedInstance.trunkItems.count-1 {
@@ -230,6 +230,8 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
             self.navigationController?.pushViewController(chatViewController, animated: true)
         }
         WSManager.enqueueWorkPayload(chatPayload)  
+        self.view.userInteractionEnabled = false
+        self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
     
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {

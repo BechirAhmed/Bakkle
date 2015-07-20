@@ -10,7 +10,7 @@ import UIKit
 import Photos
 import Haneke
 
-class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDelegate, UINavigationControllerDelegate, MDCSwipeToChooseDelegate {
+class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDelegate, UINavigationControllerDelegate, MDCSwipeToChooseDelegate, UIAlertViewDelegate {
 
     let menuSegue = "presentNav"
     let itemDetailSegue = "ItemDetailSegue"
@@ -431,6 +431,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     
     func viewDidCancelSwipe(view: UIView!) {
         // Do nothing. Resets the swipe view
+        self.refreshData()
     }
     
     func view(view: UIView!, shouldBeChosenWithDirection direction: MDCSwipeDirection) -> Bool {
@@ -450,19 +451,39 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         switch direction {
         case MDCSwipeDirection.Left:
             Bakkle.sharedInstance.markItem("meh", item_id: self.item_id, success: {}, fail: {})
+            loadNext()
             break
         case MDCSwipeDirection.Right:
             Bakkle.sharedInstance.markItem("want", item_id: self.item_id, success: {}, fail: {})
+            loadNext()
             break
         case MDCSwipeDirection.Up:
             Bakkle.sharedInstance.markItem("hold", item_id: self.item_id, success: {}, fail: {})
+            loadNext()
             break
         case MDCSwipeDirection.Down:
-            Bakkle.sharedInstance.markItem("report", item_id: self.item_id, success: {}, fail: {})
+            let alertController = UIAlertController(title: "Alert", message:"INPUT BELOW", preferredStyle: .Alert)
+            var report: UITextField!
+            let confirmAction = UIAlertAction(title: "Confirm", style: .Default, handler: { action in
+                if report != nil {
+                    println(report.text)
+                }
+                Bakkle.sharedInstance.markItem("report", item_id: self.item_id, success: {}, fail: {})
+                self.loadNext()
+            })
+            let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Default, handler: { action in
+                self.refreshData()
+            })
+            alertController.addAction(cancelAction)
+            alertController.addAction(confirmAction)
+            alertController.addTextFieldWithConfigurationHandler({ (textField: UITextField!) -> Void in
+                report = textField
+                })
+            presentViewController(alertController, animated: true, completion: nil)
             break
         default: break
         }
-        loadNext()
+        
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {

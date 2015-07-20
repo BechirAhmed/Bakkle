@@ -13,6 +13,7 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
     var item: NSDictionary!
     let itemDetailsCellIdentifier = "ItemDetailsCell"
     var wanted: Bool = false
+    var holding: Bool = false
     var itemImages: [NSData]? = [NSData]()
     
     @IBOutlet weak var sellerName: UILabel!
@@ -131,19 +132,21 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
     @IBAction func wantBtn(sender: AnyObject) {
         if wanted {
             Bakkle.sharedInstance.markItem("sold", item_id: self.item!.valueForKey("pk")!.integerValue, success: {
-                    self.dismissViewControllerAnimated(true, completion: nil)
-                }, fail: {
-                    self.dismissViewControllerAnimated(true, completion: nil)
-            })
+                Bakkle.sharedInstance.populateTrunk({})
+                self.dismissViewControllerAnimated(true, completion: nil)
+                }, fail: {})
         }
         else {
             Bakkle.sharedInstance.markItem("want", item_id: self.item!.valueForKey("pk")!.integerValue, success: {
-                NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkHoldingUpdate, object: nil)
-                Bakkle.sharedInstance.feedItems.removeAtIndex(0)
-                self.dismissViewControllerAnimated(true, completion: nil)
-                }, fail: {
-                self.dismissViewControllerAnimated(true, completion: nil)
-                })
+                if self.holding {
+                    Bakkle.sharedInstance.populateHolding({
+                        self.dismissViewControllerAnimated(true, completion: nil)
+                    })
+                }else {
+                    Bakkle.sharedInstance.feedItems.removeAtIndex(0)
+                    self.dismissViewControllerAnimated(true, completion: nil)
+                }
+                }, fail: {})
         }
         //TODO: refresh feed screen to get rid of the top card.
     }

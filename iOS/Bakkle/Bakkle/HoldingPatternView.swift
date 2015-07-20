@@ -106,9 +106,8 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
         self.timer = NSTimer(timeInterval: 1.0, target: self, selector: Selector("updateTimeRemaining"), userInfo: nil, repeats: true)
         NSRunLoop.currentRunLoop().addTimer(self.timer, forMode: NSRunLoopCommonModes)
 
-        if Bakkle.sharedInstance.holdingItems != nil {
-            classifyData()
-        }
+        
+        classifyData()
         Bakkle.sharedInstance.populateHolding({
             NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkHoldingUpdate, object: self)
         });
@@ -169,7 +168,7 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
         self.activeItem = [Int]()
         self.expiredItem = [Int]()
         self.soldItem = [Int]()
-        if Bakkle.sharedInstance.holdingItems.count == 0 {
+        if Bakkle.sharedInstance.holdingItems == nil || Bakkle.sharedInstance.holdingItems.count == 0 {
             return
         }
         for index in 0...Bakkle.sharedInstance.holdingItems.count-1 {
@@ -282,7 +281,9 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
         let sb: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let vc: ItemDetails = sb.instantiateViewControllerWithIdentifier("ItemDetails") as! ItemDetails
         vc.item = getItem(indexPath).valueForKey("item") as! NSDictionary
+        vc.holding = true
         self.presentViewController(vc, animated: true, completion: {})
+        self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
     
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
