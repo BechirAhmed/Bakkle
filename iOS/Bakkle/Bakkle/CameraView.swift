@@ -80,6 +80,8 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     /* HELPER VARIABLES */
     var displayingStill = false
     var addItem: AddItem?
+    var dragActivated = -1 // -1 = not activated, 0...3 = drag on image n
+    var draggedImage: UIButton?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -354,6 +356,36 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
                     }
                 }
             }
+        }
+    }
+    
+    override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
+        var touchPoint = touches.first as! UITouch
+        
+        if dragActivated > -1 && dragActivated < imageViews.count {
+            
+        }
+    }
+    
+    /*
+    ** If the touch is ended by the user, insert the view where it is wanted
+    */
+    override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
+        var touchPoint = touches.first as! UITouch
+        
+        if dragActivated > -1 && dragActivated < imageViews.count {
+            
+        }
+    }
+    
+    /*
+    ** If the touch is cancelled because of a system event: act as if the user didn't move the view properly
+    */
+    override func touchesCancelled(touches: Set<NSObject>!, withEvent event: UIEvent!) {
+        var touchPoint = touches.first as! UITouch
+        
+        if dragActivated > -1 && dragActivated < imageViews.count {
+            
         }
     }
     
