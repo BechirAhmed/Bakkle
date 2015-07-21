@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14A388b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="Quz-fO-fTe">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFill" image="SplashScreen-bkg.png" translatesAutoresizingMaskIntoConstraints="NO" id="Gvq-OW-UdQ">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                </imageView>
+                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" image="Goodwill Logo-White.png" translatesAutoresizingMaskIntoConstraints="NO" id="mkG-Lu-7Qf">
+                    <rect key="frame" x="36" y="49" width="342" height="138"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="mkG-Lu-7Qf" secondAttribute="height" multiplier="62:25" id="MHV-JU-P9s"/>
+                    </constraints>
+                    <variation key="heightClass=compact-widthClass=compact" misplaced="YES">
+                        <rect key="frame" x="-293" y="100" width="1001" height="404"/>
+                    </variation>
+                </imageView>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="Gvq-OW-UdQ" secondAttribute="bottom" id="HOT-EI-mbT"/>
+                <constraint firstAttribute="trailing" secondItem="mkG-Lu-7Qf" secondAttribute="trailing" constant="36" id="Md0-rU-yN6"/>
+                <constraint firstItem="mkG-Lu-7Qf" firstAttribute="top" secondItem="Quz-fO-fTe" secondAttribute="top" constant="49" id="P3c-HM-A8a"/>
+                <constraint firstItem="Gvq-OW-UdQ" firstAttribute="leading" secondItem="Quz-fO-fTe" secondAttribute="leading" id="mwP-KM-4hG"/>
+                <constraint firstItem="Gvq-OW-UdQ" firstAttribute="top" secondItem="Quz-fO-fTe" secondAttribute="top" id="wVc-Hs-ett"/>
+                <constraint firstItem="mkG-Lu-7Qf" firstAttribute="leading" secondItem="Quz-fO-fTe" secondAttribute="leading" constant="36" id="yJQ-cq-pdz"/>
+                <constraint firstAttribute="trailing" secondItem="Gvq-OW-UdQ" secondAttribute="trailing" id="yer-VS-16w"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
+            <point key="canvasLocation" x="548" y="455"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="Goodwill Logo-White.png" width="2225" height="323"/>
+        <image name="SplashScreen-bkg.png" width="1242" height="2208"/>
+    </resources>
+</document>
