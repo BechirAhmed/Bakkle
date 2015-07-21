@@ -540,7 +540,6 @@
 		A0D96F891AD773DB0046DA13 /* RefineView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RefineView.swift; sourceTree = "<group>"; };
 		A0D96F8F1AD7751E0046DA13 /* mock-settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mock-settings.png"; sourceTree = "<group>"; };
 		A0E1EBD01B2B5B2200662C08 /* Goodwill.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Goodwill.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		A0E1EBD11B2B5B2200662C08 /* Goodwill-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Goodwill-Info.plist"; path = "/Users/xiaox/omnisite-bakkle/iOS/Bakkle/Bakkle/Goodwill-Info.plist"; sourceTree = "<absolute>"; };
 		D0C6A42C1B080ACB0027ACCF /* mock-rating-stars.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mock-rating-stars.png"; sourceTree = "<group>"; };
 		D0FCDFF91B03B2E0006F76F7 /* btn-addCam.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-addCam.png"; sourceTree = "<group>"; };
 		DB53728F1B0806B600CC49B7 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
@@ -681,7 +680,6 @@
 			isa = PBXGroup;
 			children = (
 				60EEB9A51B598F9900E87B8D /* chord.m4r */,
-				A0E1EBD11B2B5B2200662C08 /* Goodwill-Info.plist */,
 				A0B765431B0E3A2700107F7E /* Bakkle.entitlements */,
 				5E5CB0A81AB7547800F32BE6 /* Bridging-Header.h */,
 				A0A5F71C1AEDAE54001A7D7A /* Settings.bundle */,
