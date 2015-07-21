@@ -77,6 +77,10 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         searchBar.barTintColor = titleBar.backgroundColor
         searchBar.layer.borderColor = titleBar.backgroundColor?.CGColor
         searchBar.layer.borderWidth = 1
+        
+        if Bakkle.sharedInstance.flavor == 2 {
+            btnAddItem.hidden = true
+        }
     }
     
     override func viewDidAppear(animated: Bool) {

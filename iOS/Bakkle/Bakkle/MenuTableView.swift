@@ -22,7 +22,7 @@ class MenuTableController: UITableViewController {
     @IBOutlet weak var holdImg: UIImageView!
     @IBOutlet weak var contactImg: UIImageView!
     @IBOutlet weak var profileBtn: UIImageView!
-    
+       
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -34,6 +34,7 @@ class MenuTableController: UITableViewController {
         setupBackground()
         setupProfileLabel()
         profileBtn.image = IconImage().settings()
+        self.tableView.tableFooterView = UIView()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -108,6 +109,19 @@ class MenuTableController: UITableViewController {
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         /* This fixes the small lines on the left hand side of the cell dividers */
         cell.backgroundColor = UIColor.clearColor()
+        if indexPath.row == 2 && Bakkle.sharedInstance.flavor == 2 {
+            cell.hidden = true
+        }
+    }
+    
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        if indexPath.row == 0 {
+            return 177
+        }
+        if indexPath.row == 2 && Bakkle.sharedInstance.flavor == 2 {
+            return 0
+        }
+        return 60
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
