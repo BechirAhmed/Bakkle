@@ -176,6 +176,8 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <outlet property="fbLoginView" destination="M2Y-Q2-c87" id="MfE-ah-HZo"/>
+                        <outlet property="logoImageView" destination="A3C-sg-V8F" id="paZ-R5-rLh"/>
+                        <outlet property="logoImageViewAspectRatio" destination="7hl-Cc-pmE" id="Tgv-Xe-xQI"/>
                         <segue destination="nJL-RM-6Db" kind="show" identifier="PushToFeedSegue" id="zhM-P9-5wu"/>
                     </connections>
                 </viewController>
@@ -550,6 +552,9 @@
                     <connections>
                         <outlet property="btnAddItem" destination="tls-6h-cM3" id="BLj-fb-VSS"/>
                         <outlet property="drawer" destination="TvW-JJ-Vqb" id="L0b-bd-0hM"/>
+                        <outlet property="logoImageView" destination="SVO-SE-GJf" id="2Vi-iP-Gaw"/>
+                        <outlet property="logoImageViewHeight" destination="7nC-uC-5Xx" id="mu3-4n-aQi"/>
+                        <outlet property="logoImageViewWidth" destination="vCz-Sl-o8e" id="PM6-6r-Fso"/>
                         <outlet property="menuBtn" destination="RLk-Hy-bab" id="Uch-yE-2QO"/>
                         <outlet property="noNewItemsLabel" destination="gXy-mo-Jm8" id="ETD-2Q-A3U"/>
                         <outlet property="progressIndicator" destination="t37-H0-tA2" id="Fyg-ZW-tJR"/>

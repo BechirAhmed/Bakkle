@@ -40,9 +40,23 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     @IBOutlet weak var refineButton: UIButton!
     @IBOutlet weak var btnAddItem: UIButton!
     @IBOutlet weak var titleBar: UIView!
+    @IBOutlet weak var logoImageView: UIImageView!
+    
+    @IBOutlet weak var logoImageViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var logoImageViewWidth: NSLayoutConstraint!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if(Bakkle.sharedInstance.flavor == 2){
+            var logo : UIImage = UIImage(named: "Goodwill Logo-White.png")!
+            logoImageView.image = logo;
+            logoImageViewHeight.constant = 20;
+            logoImageViewWidth.constant = 140;
+        }
+        
+        // Always look for updates
+        requestUpdates()
         
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         progressIndicator.startAnimating()

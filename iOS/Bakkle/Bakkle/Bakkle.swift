@@ -79,6 +79,9 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     var image_quality : Float = 0.3
     var image_precache : Int = 10
     
+    let goodwill_blue : UIColor = UIColor(red: 0, green: 83, blue: 160, alpha: 1)
+    let goodwill_darkBlue : UIColor = UIColor(red: 0, green: 70, blue: 136, alpha: 1)
+    
     class var sharedInstance: Bakkle {
         struct Static {
             static let instance: Bakkle = Bakkle()
