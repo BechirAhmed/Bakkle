@@ -26,6 +26,7 @@ class LoginView: UIViewController, FBLoginViewDelegate {
         super.viewDidLoad()
         
         logoImageView.image = UIImage(named: "Goodwill Logo-White.png")!
+        logo.image = UIImage(named: "Goodwill Logo-White.png")!
         
         self.fbLoginView.readPermissions = ["public_profile", "email", "user_friends", "publish_actions"]
         
