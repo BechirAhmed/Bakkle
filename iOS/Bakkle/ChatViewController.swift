@@ -114,7 +114,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let profileButtonWidth: CGFloat = 36
         let profileXpos:CGFloat = (header.bounds.size.width - header.bounds.origin.x
             - profileButtonWidth) / 2
-        profileButton = UIButton(frame: CGRectMake(profileXpos, header.bounds.origin.y+topHeight+4, profileButtonWidth, headerHeight-4))
+        profileButton = UIButton(frame: CGRectMake(profileXpos, header.bounds.origin.y+topHeight+4, profileButtonWidth, profileButtonWidth))
         profileButton.backgroundColor = Bakkle.sharedInstance.theme_base
         profileButton.setImage(UIImage(named: "loading.png"), forState: UIControlState.Normal)
         profileButton.imageView?.layer.cornerRadius = profileButton.imageView!.frame.size.width/2
@@ -178,7 +178,13 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             let seller_facebookid = seller.valueForKey("facebook_id") as! String
             var facebookProfileImageUrlString = "http://graph.facebook.com/\(seller_facebookid)/picture?width=142&height=142"
             let imgURL = NSURL(string: facebookProfileImageUrlString)
-            profileButton.hnk_setImageFromURL(imgURL!, state: UIControlState.Normal, placeholder: UIImage(named:"loading.png"), format: nil, failure: nil, success: nil)
+            
+            if(Bakkle.sharedInstance.flavor == 2){
+                profileButton.hnk_setImage(UIImage(named: "gwIcon@2x.png")!, state: UIControlState.Normal, animated: false, success: nil)
+            }
+            else{
+                profileButton.hnk_setImageFromURL(imgURL!, state: UIControlState.Normal, placeholder: UIImage(named:"loading.png"), format: nil, failure: nil, success: nil)
+            }
         }
         else {
             let user = chat.user

@@ -31,6 +31,7 @@ class ProfileView: UIViewController, UITextViewDelegate {
             self.view.backgroundColor = Bakkle.sharedInstance.theme_base
             self.editBtn.backgroundColor = Bakkle.sharedInstance.theme_base
             self.logoutBtn.backgroundColor = Bakkle.sharedInstance.theme_base
+            self.saveBtn.backgroundColor = Bakkle.sharedInstance.theme_base
         }
         
         user = user.valueForKey("account") as! NSDictionary

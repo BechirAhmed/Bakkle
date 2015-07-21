@@ -128,10 +128,12 @@ class MenuTableController: UITableViewController {
         self.view.userInteractionEnabled = false
         if segue.identifier == self.profileSegue {
             let destinationVC = segue.destinationViewController as! ProfileView
-            Bakkle.sharedInstance.getAccount(Bakkle.sharedInstance.account_id, success: {
-                destinationVC.user = Bakkle.sharedInstance.responseDict
-                dispatch_semaphore_signal(self.segueNotifier)
-            }, fail: {})
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
+                Bakkle.sharedInstance.getAccount(Bakkle.sharedInstance.account_id, success: {
+                    destinationVC.user = Bakkle.sharedInstance.responseDict
+                    dispatch_semaphore_signal(self.segueNotifier)
+                    }, fail: {})
+            })
             dispatch_semaphore_wait(segueNotifier, DISPATCH_TIME_FOREVER)
         }
     }

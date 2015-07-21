@@ -27,8 +27,9 @@ class LoginView: UIViewController, FBLoginViewDelegate {
         super.viewDidLoad()
         
         if (Bakkle.sharedInstance.flavor == 2 ){
-            self.logoImageView.image = UIImage(named: "Goodwill Logo-White.png")!
-            self.loginScreenBkg.image = UIImage(named: "LoginScreen-bkg-Blue.png")!
+            self.logoImageView.image = UIImage(named: "GWLogo_Full@2x.png")!
+            logoImageView.contentMode = UIViewContentMode.ScaleAspectFit
+            self.loginScreenBkg.image = UIImage(named: "LoginScreen-bkg-blue.png")!
         }
         
         self.fbLoginView.readPermissions = ["public_profile", "email", "user_friends", "publish_actions"]
@@ -68,8 +69,9 @@ class LoginView: UIViewController, FBLoginViewDelegate {
     // create the logo image, which is the same as the launch screen logo
     func setLogoImg(){
         if Bakkle.sharedInstance.flavor == 2 {
-            logo = UIImageView(image: UIImage(named: "Goodwill Logo-White.png"))
-            logo.addConstraint(NSLayoutConstraint(item: logo, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: logo, attribute: NSLayoutAttribute.Height, multiplier: 6.909, constant: 0.0))
+            logo = UIImageView(image: UIImage(named: "GWLogo_Full@2x.png"))
+            logo.contentMode = UIViewContentMode.ScaleAspectFit
+            logo.addConstraint(NSLayoutConstraint(item: logo, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: logo, attribute: NSLayoutAttribute.Height, multiplier: 2, constant: 0.0))
         }else{
             logo = UIImageView(image: UIImage(named: "logo-white-design-clear.png"))
             logo.addConstraint(NSLayoutConstraint(item: logo, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: logo, attribute: NSLayoutAttribute.Width, multiplier: 25.0/62.0, constant: 0.0))
