@@ -330,6 +330,10 @@
 		F0D6F4091B5EA28900938A06 /* SplashScreen-bkg-Blue.png in Resources */ = {isa = PBXBuildFile; fileRef = F0D6F4071B5EA28900938A06 /* SplashScreen-bkg-Blue.png */; };
 		F0D6F40B1B5EA29600938A06 /* LoginScreen-bkg-blue.png in Resources */ = {isa = PBXBuildFile; fileRef = F0D6F40A1B5EA29600938A06 /* LoginScreen-bkg-blue.png */; };
 		F0D6F40C1B5EA29600938A06 /* LoginScreen-bkg-blue.png in Resources */ = {isa = PBXBuildFile; fileRef = F0D6F40A1B5EA29600938A06 /* LoginScreen-bkg-blue.png */; };
+		F0D6F40E1B5EC1A500938A06 /* gwIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F0D6F40D1B5EC1A500938A06 /* gwIcon@2x.png */; };
+		F0D6F40F1B5EC1A500938A06 /* gwIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F0D6F40D1B5EC1A500938A06 /* gwIcon@2x.png */; };
+		F0D6F4111B5EC54700938A06 /* GWLogo_Full@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F0D6F4101B5EC54700938A06 /* GWLogo_Full@2x.png */; };
+		F0D6F4121B5EC54700938A06 /* GWLogo_Full@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F0D6F4101B5EC54700938A06 /* GWLogo_Full@2x.png */; };
 		F0E7C5081B2F2B3E006B013A /* WSManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F0E7C5071B2F2B3E006B013A /* WSManager.m */; };
 		F0E7C50B1B2F2B4B006B013A /* WSRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E7C50A1B2F2B4B006B013A /* WSRequest.swift */; };
 /* End PBXBuildFile section */
@@ -585,6 +589,8 @@
 		F0D6F4041B5EA18700938A06 /* SplashScreen-bkg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "SplashScreen-bkg.png"; sourceTree = "<group>"; };
 		F0D6F4071B5EA28900938A06 /* SplashScreen-bkg-Blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "SplashScreen-bkg-Blue.png"; sourceTree = "<group>"; };
 		F0D6F40A1B5EA29600938A06 /* LoginScreen-bkg-blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "LoginScreen-bkg-blue.png"; sourceTree = "<group>"; };
+		F0D6F40D1B5EC1A500938A06 /* gwIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gwIcon@2x.png"; sourceTree = "<group>"; };
+		F0D6F4101B5EC54700938A06 /* GWLogo_Full@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "GWLogo_Full@2x.png"; sourceTree = "<group>"; };
 		F0E7C5061B2F2B3E006B013A /* WSManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSManager.h; sourceTree = "<group>"; };
 		F0E7C5071B2F2B3E006B013A /* WSManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WSManager.m; sourceTree = "<group>"; };
 		F0E7C50A1B2F2B4B006B013A /* WSRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WSRequest.swift; sourceTree = "<group>"; };
@@ -857,6 +863,8 @@
 		A08D53B71B07DC8E000C406C /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				F0D6F40D1B5EC1A500938A06 /* gwIcon@2x.png */,
+				F0D6F4101B5EC54700938A06 /* GWLogo_Full@2x.png */,
 				F0D6F3FE1B5EA06600938A06 /* icon-i-blue.png */,
 				1BF7D3611B592D7800EC7789 /* FocusIndicator.png */,
 				1BF7D3621B592D7800EC7789 /* ios-flash-on-white.png */,
@@ -1316,6 +1324,7 @@
 				A058A2B51AFDADA2005E7432 /* mask-buyer-grey@2x.png in Resources */,
 				60F3BC131B5E91710033EF83 /* Goodwill-Info.plist in Resources */,
 				A0A200051ACE30C200A42CD8 /* btn-logout40.png in Resources */,
+				F0D6F40E1B5EC1A500938A06 /* gwIcon@2x.png in Resources */,
 				DB6726EB1B178F250014A896 /* star_none.png in Resources */,
 				60F3BC111B5E90BC0033EF83 /* Goodwill-LaunchScreen.xib in Resources */,
 				A058A2BB1AFDB87F005E7432 /* loading.png in Resources */,
@@ -1323,6 +1332,7 @@
 				DBEE0E971AF3C464005E60BD /* item-detail-overlay.png in Resources */,
 				DB5DB3561B18E18100734692 /* icon-car75.png in Resources */,
 				A0A200031ACE2F7500A42CD8 /* btn-sign-in40.png in Resources */,
+				F0D6F4111B5EC54700938A06 /* GWLogo_Full@2x.png in Resources */,
 				1B876B161B57F65C00D79D82 /* camera-remove.png in Resources */,
 				A0D96F7A1AD765990046DA13 /* icon-filter.png in Resources */,
 				A0D96F7D1AD765990046DA13 /* icon-pencil.png in Resources */,
@@ -1346,6 +1356,7 @@
 				A0E1EB861B2B5B2200662C08 /* btn-want-disabled.png in Resources */,
 				A0E1EB871B2B5B2200662C08 /* mock-tile.png in Resources */,
 				60F3BC141B5E921D0033EF83 /* Goodwill-LaunchScreen.xib in Resources */,
+				F0D6F40F1B5EC1A500938A06 /* gwIcon@2x.png in Resources */,
 				A03E93C71B43755600F12733 /* x-image.png in Resources */,
 				A0E1EB881B2B5B2200662C08 /* icon-i.png in Resources */,
 				A0E1EB891B2B5B2200662C08 /* Settings.bundle in Resources */,
@@ -1385,6 +1396,7 @@
 				A0E1EBA91B2B5B2200662C08 /* icon-gear.png in Resources */,
 				A0E1EBAA1B2B5B2200662C08 /* MessageOutgoing.aiff in Resources */,
 				A0E1EBAB1B2B5B2200662C08 /* btn-facebook40.png in Resources */,
+				F0D6F4121B5EC54700938A06 /* GWLogo_Full@2x.png in Resources */,
 				F0D6F4091B5EA28900938A06 /* SplashScreen-bkg-Blue.png in Resources */,
 				60F3BC0A1B5E8FD10033EF83 /* logo-white-design-clear.png in Resources */,
 				A0E1EBAC1B2B5B2200662C08 /* btn-x.png in Resources */,
