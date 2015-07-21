@@ -94,25 +94,18 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         setServer()
         info("Using server: \(self.serverNum) \(self.url_base)")
 
-        self.setFlavor()
         self.getFilter()
         self.restoreData()
         self.initLocation()
         
+        
+        /* Set version of app for branding 1=Bakkle, 2=Goodwill */
         let appName = NSBundle.mainBundle().infoDictionary!["CFBundleName"] as! String;
         self.flavor = appName == "Bakkle" ? 1 : 2;
         
         settings()
     }
     
-    /* Set version of app for branding 1=Bakkle, 2=Goodwill */
-    func setFlavor() {
-//#if defined(TARGET_BAKKLE)
-    self.flavor = 1
-//#else
-//    self.flavor = 2
-//#endif
-    }
         
     /* Return a public URL to the item on the web */
     /* In future we hope to have a URL shortener */
