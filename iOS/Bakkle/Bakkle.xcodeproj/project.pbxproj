@@ -315,6 +315,7 @@
 		DBEE0E991AF3C855005E60BD /* btb-want.png in Resources */ = {isa = PBXBuildFile; fileRef = DBEE0E981AF3C855005E60BD /* btb-want.png */; };
 		DBEE0E9B1AF3C85C005E60BD /* btn-want-disabled.png in Resources */ = {isa = PBXBuildFile; fileRef = DBEE0E9A1AF3C85C005E60BD /* btn-want-disabled.png */; };
 		E5016D9C10A43489915BBFC7 /* Pods_Bakkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E0CABDBE20E9D5B2EED4810 /* Pods_Bakkle.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		F0D6F3D41B5E725A00938A06 /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B754B241B4D4D960002C41D /* CameraView.swift */; };
 		F0E7C5081B2F2B3E006B013A /* WSManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F0E7C5071B2F2B3E006B013A /* WSManager.m */; };
 		F0E7C50B1B2F2B4B006B013A /* WSRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E7C50A1B2F2B4B006B013A /* WSRequest.swift */; };
 /* End PBXBuildFile section */
@@ -1624,6 +1625,7 @@
 				A03E93CA1B4375AA00F12733 /* PNLineChart.swift in Sources */,
 				A0E1EB6E1B2B5B2200662C08 /* ComposeViewController.swift in Sources */,
 				A0E1EB6F1B2B5B2200662C08 /* Message.swift in Sources */,
+				F0D6F3D41B5E725A00938A06 /* CameraView.swift in Sources */,
 				A0E1EB701B2B5B2200662C08 /* AppDelegate.swift in Sources */,
 				A03E93CB1B4375C300F12733 /* PNChartConfig.swift in Sources */,
 				A0E1EB711B2B5B2200662C08 /* MessageBubbleCell.swift in Sources */,
@@ -1805,6 +1807,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_INTERFACE_HEADER_NAME = "Bakkle-Swift.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -1840,6 +1843,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_INTERFACE_HEADER_NAME = "Bakkle-Swift.h";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -1848,6 +1852,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1D710285C97E0FF7D33DEB9E /* Pods-Bakkle.debug.xcconfig */;
 			buildSettings = {
+				APP_NAME = Bakkle;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = Bakkle/Bakkle.entitlements;
@@ -1878,6 +1883,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 698270E0C83AB2371F464BB2 /* Pods-Bakkle.release.xcconfig */;
 			buildSettings = {
+				APP_NAME = Bakkle;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = Bakkle/Bakkle.entitlements;
@@ -1942,6 +1948,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1D710285C97E0FF7D33DEB9E /* Pods-Bakkle.debug.xcconfig */;
 			buildSettings = {
+				APP_NAME = Goodwill;
 				ASSETCATALOG_COMPILER_APPICON_NAME = Goodwill;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -1971,6 +1978,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 698270E0C83AB2371F464BB2 /* Pods-Bakkle.release.xcconfig */;
 			buildSettings = {
+				APP_NAME = Goodwill;
 				ASSETCATALOG_COMPILER_APPICON_NAME = Goodwill;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
