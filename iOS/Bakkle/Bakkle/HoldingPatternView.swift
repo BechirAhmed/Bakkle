@@ -78,6 +78,10 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if(Bakkle.sharedInstance.flavor == 2){
+            self.view.backgroundColor = Bakkle.sharedInstance.theme_base
+        }
     
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         

@@ -49,6 +49,9 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         super.viewDidLoad()
         
         if(Bakkle.sharedInstance.flavor == 2){
+            self.view.backgroundColor = Bakkle.sharedInstance.theme_base
+            self.titleBar.backgroundColor = Bakkle.sharedInstance.theme_baseDark
+            
             var logo : UIImage = UIImage(named: "Goodwill Logo-White.png")!
             logoImageView.image = logo;
             logoImageViewHeight.constant = 20;

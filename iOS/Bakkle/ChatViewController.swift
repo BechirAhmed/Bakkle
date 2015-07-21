@@ -90,7 +90,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let topHeight: CGFloat = 20
         let headerHeight: CGFloat = 44
         header = UIView(frame: CGRectMake(view.bounds.origin.x, view.bounds.origin.y, view.bounds.size.width, headerHeight+topHeight))
-        header.backgroundColor = Theme.ColorGreen
+        header.backgroundColor = Bakkle.sharedInstance.theme_base
         
         
         let buttonWidth: CGFloat = 80.0
@@ -104,7 +104,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let profileXpos:CGFloat = (header.bounds.size.width - header.bounds.origin.x
             - profileButtonWidth) / 2
         profileButton = UIButton(frame: CGRectMake(profileXpos, header.bounds.origin.y+topHeight+4, profileButtonWidth, headerHeight-4))
-        profileButton.backgroundColor = Theme.ColorGreen
+        profileButton.backgroundColor = Bakkle.sharedInstance.theme_base
         profileButton.setImage(UIImage(named: "loading.png"), forState: UIControlState.Normal)
         profileButton.imageView?.layer.cornerRadius = profileButton.imageView!.frame.size.width/2
         profileButton.imageView?.layer.borderWidth = 1.5
@@ -114,7 +114,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         let infoButtonWidth:CGFloat = 50
         var infoButton = UIButton(frame: CGRectMake(header.bounds.origin.x+header.bounds.size.width-infoButtonWidth, header.bounds.origin.y+topHeight, infoButtonWidth, headerHeight))
-        infoButton.setImage(UIImage(named: "icon-i.png"), forState: UIControlState.Normal)
+        infoButton.setImage(UIImage(named: Bakkle.sharedInstance.flavor == 2 ? "icon-i-blue.png" : "icon-i.png"), forState: UIControlState.Normal)
         infoButton.addTarget(self, action: "btnI:", forControlEvents: UIControlEvents.TouchUpInside)
         header.addSubview(infoButton)
         

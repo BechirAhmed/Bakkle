@@ -79,9 +79,8 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     var image_quality : Float = 0.3
     var image_precache : Int = 10
     
-    let goodwill_blue : UIColor = UIColor(red: 0, green: 83, blue: 160, alpha: 1)
-    let goodwill_darkBlue : UIColor = UIColor(red: 0, green: 70, blue: 136, alpha: 1)
-    
+    var theme_base : UIColor = UIColor(red: 51.0/255.0, green: 205.0/255.0, blue: 95.0/255.0, alpha: 1.0);
+    var theme_baseDark : UIColor = UIColor(red: 41.0/255.0, green: 170.0/255.0, blue: 66.0/255.0, alpha: 1.0);
     class var sharedInstance: Bakkle {
         struct Static {
             static let instance: Bakkle = Bakkle()
@@ -105,6 +104,12 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         /* Set version of app for branding 1=Bakkle, 2=Goodwill */
         let appName = NSBundle.mainBundle().infoDictionary!["CFBundleName"] as! String;
         self.flavor = appName == "Bakkle" ? 1 : 2;
+        
+        if(self.flavor == 2){
+            self.theme_base = UIColor(red: 0, green: 83.0/255.0, blue: 160.0/255.0, alpha: 1);
+            self.theme_baseDark = UIColor(red: 0, green: 70.0/255.0, blue: 136.0/255.0, alpha: 1);
+
+        }
         
         settings()
     }

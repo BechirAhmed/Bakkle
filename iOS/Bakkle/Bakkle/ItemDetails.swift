@@ -30,9 +30,15 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
     
     @IBOutlet weak var wantBtn: UIButton!
     @IBOutlet weak var closeBtn: UIButton!
+    @IBOutlet weak var detailBugHack: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if(Bakkle.sharedInstance.flavor == 2){
+            self.detailBugHack.backgroundColor = Bakkle.sharedInstance.theme_base
+            self.wantBtn.backgroundColor = Bakkle.sharedInstance.theme_base
+        }
 
         activityInd?.startAnimating()
         
