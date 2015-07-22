@@ -78,6 +78,10 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     /* HELPER VARIABLES */
     var displayingStill = false
     var addItem: AddItem?
+    var dragActivated = -1 // -1 = not activated, 0...3 = drag on image n
+    var draggedImage: UIButton?
+    var imageViewY: CGFloat!
+    var imageViewX: [CGFloat!]!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -144,11 +148,16 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         
         UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent
         
+        imageViewX = [0.0, 0.0, 0.0, 0.0]
+        
+        var i = 0
         for imageView: UIImageView in imageViews {
             imageView.layer.cornerRadius = 15.0
             imageView.layer.masksToBounds = true
             imageView.layer.borderWidth = 1.0
             imageView.layer.borderColor = UIColor.whiteColor().CGColor
+            imageViewY = imageView.convertPoint(imageView.frame.origin, toView: self.view).y
+            imageViewX[i++] = imageView.convertPoint(imageView.frame.origin, toView: self.view).x
         }
         
         for removeButton: UIButton in removeImageButtons {
@@ -355,6 +364,36 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         }
     }
     
+    override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
+        var touchPoint = touches.first as! UITouch
+        
+        if dragActivated > -1 && dragActivated < imageViews.count {
+            
+        }
+    }
+    
+    /*
+    ** If the touch is ended by the user, insert the view where it is wanted
+    */
+    override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
+        var touchPoint = touches.first as! UITouch
+        
+        if dragActivated > -1 && dragActivated < imageViews.count {
+            
+        }
+    }
+    
+    /*
+    ** If the touch is cancelled because of a system event: act as if the user didn't move the view properly
+    */
+    override func touchesCancelled(touches: Set<NSObject>!, withEvent event: UIEvent!) {
+        var touchPoint = touches.first as! UITouch
+        
+        if dragActivated > -1 && dragActivated < imageViews.count {
+            
+        }
+    }
+    
     func drawFocusRect() {
         // update frame of the indicator IF the device is previewing or displaying a still
         if (selectedDevice!.device.adjustingFocus || selectedDevice!.device.adjustingExposure || selectedDevice!.device.adjustingWhiteBalance) && !displayingStill {
@@ -516,21 +555,47 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         for i in 0...(self.images.count - 1) {
             if !(self.images[i].CIImage == nil && self.images[i].CGImage == nil) {
                 imagesNoSpace.append(self.images[i])
+                
+                if i > 0 && (self.imageViews[i - 1].image == nil) {
+                    animateSlide(i, toIndex: i-1)
+                } else {
+                    self.imageViews[i].image = self.images[i]
+                }
             }
         }
+        
+        // This is needed to stop any concurrent modification for the first for loop
         for i in 0...(self.images.count - 1) {
-            if i >= imagesNoSpace.count {
-                self.images[i] = UIImage.alloc()
-                self.imageViews[i].image = nil
-            } else {
-                self.images[i] = imagesNoSpace[i]
-                self.imageViews[i].image = imagesNoSpace[i]
-            }
+            self.images[i] = i >= imagesNoSpace.count ? UIImage.alloc() : imagesNoSpace[i];
         }
         
         imageCount = imagesNoSpace.count
         
         buttonEnabledHandler()
+    }
+    
+    func animateSlide(fromIndex: Int, toIndex: Int) {
+        if fromIndex < self.imageViews.count && toIndex < self.imageViews.count && fromIndex != toIndex {
+            var startPoint = self.imageViews[fromIndex].convertPoint(self.imageViews[fromIndex].frame.origin, toView: self.view)
+            var slideView = UIImageView(frame: CGRectMake(startPoint.x, startPoint.y, self.imageViews[fromIndex].frame.width, self.imageViews[fromIndex].frame.height))
+            slideView.image = self.imageViews[fromIndex].image
+            slideView.layer.cornerRadius = 15.0
+            slideView.layer.borderColor = UIColor.whiteColor().CGColor
+            slideView.layer.borderWidth = 1.0
+            slideView.layer.masksToBounds = true
+            self.view.addSubview(slideView)
+            self.imageViews[fromIndex].image = nil
+            buttonEnabledHandler()
+            
+            UIView.animateWithDuration(0.5, delay: 0.0, options: nil, animations: {
+                slideView.frame = CGRectMake(self.imageViewX[toIndex], self.imageViewY, slideView.frame.width, slideView.frame.height)
+                }, completion: { Void in
+                    self.imageViews[toIndex].image = slideView.image
+                    slideView.image = nil
+                    slideView.removeFromSuperview()
+                    self.buttonEnabledHandler()
+            })
+        }
     }
     
     func buttonEnabledHandler() {
@@ -557,12 +622,61 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     }
     
     // rename to long press
-    @IBAction func photoHeld(sender: AnyObject) {
-        //switch(sender. )
-        //case :
-        //case :
-        //case :
-        //case :
+    @IBAction func photoHeld(sender: UILongPressGestureRecognizer) {
+//        if ((sender.view!) as! UIImageView).image != nil {
+//            var newW:CGFloat = sender.view!.frame.width * 1.1
+//            var newH:CGFloat = sender.view!.frame.height * 1.1
+//            var actualBeginPt = sender.view!.convertPoint(sender.view!.frame.origin, toView: self.view)
+//            
+//            draggedImage = UIButton(frame: CGRectMake(actualBeginPt.x, actualBeginPt.y, sender.view!.frame.width, sender.view!.frame.height))
+//            
+//            var x: CGFloat = actualBeginPt.x - (newW - sender.view!.frame.width)
+//            var y: CGFloat = actualBeginPt.y - (newH - sender.view!.frame.height)
+//            draggedImage!.layer.cornerRadius = 15.0
+//            draggedImage!.layer.borderColor = UIColor.whiteColor().CGColor
+//            draggedImage!.layer.borderWidth = 1.0
+//            draggedImage!.layer.masksToBounds = true
+//            draggedImage!.setImage((sender.view! as! UIImageView).image, forState: .Selected)
+//            draggedImage!.setImage((sender.view! as! UIImageView).image, forState: .Normal)
+//            draggedImage!.hidden = false
+//            draggedImage!.enabled = false
+//            (sender.view! as! UIImageView).image = nil
+//            buttonEnabledHandler()
+//            self.view.addSubview(draggedImage!)
+//            
+////            dragActivated = 
+//            
+//            UIView.animateWithDuration(1.0, animations: { Void in
+//                self.draggedImage!.frame = CGRectMake(x, y, newW, newH)
+//                self.draggedImage!.alpha = 0.875
+//            })
+//        }
+    }
+    
+    func dragImage(point: CGPoint) {
+        //        var point: CGPoint = (event.allTouches() as! AnyObject).locationInView(self.view)
+        //        sender.frame = CGRectMake(point.x - sender.frame.width / 2, point.y - sender.frame.width / 2, sender.frame.width, sender.frame.height)
+        //        UIView.animateWithDuration(0.05, animations: { Void in
+        //            sender.frame = CGRectMake(point.x - sender.frame.width / 2, point.y - sender.frame.width / 2, sender.frame.width, sender.frame.height)
+        //        })
+    }
+    
+    
+    
+    func hoverOverPosition(point: CGPoint) {
+        
+    }
+    
+    
+    
+    func successfulRelease(point: CGPoint) {
+        
+    }
+    
+    
+    
+    func failedRelease(point: CGPoint) {
+        
     }
     
     @IBAction func photoPreview(sender: UITapGestureRecognizer) {

@@ -17,6 +17,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     var messageType: UISegmentedControl!
     var profileButton: UIButton!
     var sendButton: UIButton!
+    var photoButton: UIButton!
     var rotating = false
     var chatID: String!
     var itemIndex: Int = 0
@@ -31,6 +32,13 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         get {
             if toolBar == nil {
                 toolBar = UIToolbar(frame: CGRectMake(0, 0, 0, toolBarMinHeight-0.5))
+                
+                photoButton = UIButton.buttonWithType(.System) as! UIButton
+                photoButton.setTitle("", forState: .Normal)
+                photoButton.setImage(IconImage().camera(), forState: .Normal)
+                photoButton.contentEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+                photoButton.addTarget(self, action: "openPhoto", forControlEvents: UIControlEvents.TouchUpInside)
+                toolBar.addSubview(photoButton)
                 
                 textView = InputTextView(frame: CGRectZero)
                 textView.backgroundColor = UIColor.whiteColor()
@@ -57,7 +65,10 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 // Auto Layout allows `sendButton` to change width, e.g., for localization.
                 textView.setTranslatesAutoresizingMaskIntoConstraints(false)
                 sendButton.setTranslatesAutoresizingMaskIntoConstraints(false)
-                toolBar.addConstraint(NSLayoutConstraint(item: textView, attribute: .Left, relatedBy: .Equal, toItem: toolBar, attribute: .Left, multiplier: 1, constant: 8))
+                photoButton.setTranslatesAutoresizingMaskIntoConstraints(false)
+                toolBar.addConstraint(NSLayoutConstraint(item: photoButton, attribute: .Left, relatedBy: .Equal, toItem: toolBar, attribute: .Left, multiplier: 1, constant: 2))
+                toolBar.addConstraint(NSLayoutConstraint(item: photoButton, attribute: .Bottom, relatedBy: .Equal, toItem: toolBar, attribute: .Bottom, multiplier: 1, constant: -4.5))
+                toolBar.addConstraint(NSLayoutConstraint(item: textView, attribute: .Left, relatedBy: .Equal, toItem: photoButton, attribute: .Right, multiplier: 1, constant: 2))
                 toolBar.addConstraint(NSLayoutConstraint(item: textView, attribute: .Top, relatedBy: .Equal, toItem: toolBar, attribute: .Top, multiplier: 1, constant: 7.5))
                 toolBar.addConstraint(NSLayoutConstraint(item: textView, attribute: .Right, relatedBy: .Equal, toItem: sendButton, attribute: .Left, multiplier: 1, constant: -2))
                 toolBar.addConstraint(NSLayoutConstraint(item: textView, attribute: .Bottom, relatedBy: .Equal, toItem: toolBar, attribute: .Bottom, multiplier: 1, constant: -8))
@@ -612,6 +623,10 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         if newHeight != oldHeight {
             toolBar.frame.size.height = newHeight+8*2-0.5
         }
+    }
+    
+    func openPhoto() {
+        
     }
     
     func sendAction() {
