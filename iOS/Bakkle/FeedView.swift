@@ -192,17 +192,20 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     /* UISearch Bar delegate */
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
         Bakkle.sharedInstance.search_text = searchText
-        requestUpdates()
-        //TODO: need to fix queuing mechanism so multple requests are not dispatched.
+        if searchText == "" {
+            requestUpdates()
+        }
     }
     
     func searchBarTextDidBeginEditing(searchBar: UISearchBar){
         searching = true
     }
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+        requestUpdates()
         searchBar.resignFirstResponder()
     }
     func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+        requestUpdates()
         searchBar.resignFirstResponder()
     }
     /* End search bar delegate */
