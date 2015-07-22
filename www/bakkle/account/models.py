@@ -21,9 +21,9 @@ if use_sandbox:
 
 # Create your models here.
 class Account(models.Model):
-    email = models.CharField(max_length=200, unique=True)
+    email = models.CharField(max_length=200)
     password = models.CharField(max_length=20)
-    facebook_id = models.CharField(max_length=200, unique=True)
+    facebook_id = models.CharField(max_length=200)
     twitter_id = models.CharField(max_length=200)
     display_name = models.CharField(max_length=200)
     avatar_image_url = models.CharField(max_length=200)
@@ -41,6 +41,10 @@ class Account(models.Model):
     app_flavor = models.IntegerField(default=1)
     disabled = models.BooleanField(default=False)
     description = models.CharField(max_length=2000, default=None, null=True)
+
+    class Meta:
+        unique_together = ("email", "app_flavor")
+        unique_together = ("facebook_id", "app_flavor")
 
     def __str__(self):
         return "ID={} email={} displayname={}".format(self.id, self.email, self.display_name)
@@ -99,5 +103,5 @@ class Device(models.Model):
         if (dt is None or dt == ""):
             return
         print("notifying {} token {}".format(self.account_id, dt))
-        sendPushMessage(dt, message, badge, sound)
+        sendPushMessage(self.account_id.app_flavor, dt, message, badge, sound)
         # TODO: Log this to db so we know what we did.
