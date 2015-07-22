@@ -74,6 +74,8 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     @IBOutlet weak var fadeView: UIView!
     @IBOutlet weak var flashView: UIView!
     @IBOutlet weak var fadeViewLoadLogo: UIImageView!
+    @IBOutlet weak var listedLabel: UILabel!
+    @IBOutlet weak var willBeListedLabel: UILabel!
     
     /* HELPER VARIABLES */
     var displayingStill = false
@@ -124,18 +126,13 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             var backgroundImage = UIImageView(frame: self.fadeView.frame)
             backgroundImage.image = UIImage(named:"LoginScreen-bkg.png")!
             self.fadeView.insertSubview(backgroundImage, belowSubview: self.fadeViewLoadLogo)
-            var successLabel = UILabel(frame: CGRectMake(0, 0, UIScreen.mainScreen().bounds.width * 0.90, self.fadeViewLoadLogo.frame.size.height))
-            successLabel.center = CGPointMake(UIScreen.mainScreen().bounds.width / 2, (self.fadeViewLoadLogo.bounds.maxY + UIScreen.mainScreen().bounds.maxY) / 2)
-            successLabel.numberOfLines = 0
-            successLabel.font = UIFont(name: "Avenir-Black", size: 36)
-            successLabel.text = self.addItem!.successfulAdd ? "Your item has been listed!" : "Enjoy browsing while we continue to list your item!"
-            successLabel.sizeToFit()
+            
+            // Text is set in storyboard to get a feel of orientation
+            var successLabel = self.addItem!.successfulAdd ? listedLabel : willBeListedLabel
             successLabel.layer.shadowColor = Theme.ColorGreen.CGColor
             successLabel.layer.shadowRadius = 5.0
             successLabel.layer.shadowOpacity = 1.0
-            successLabel.textColor = UIColor.whiteColor()
-            successLabel.textAlignment = .Center
-            self.fadeView.addSubview(successLabel)
+            successLabel.hidden = false
             
             self.dismissViewControllerAnimated(true, completion: nil)
         } else if self.addItem != nil {
@@ -241,6 +238,13 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         UIApplication.sharedApplication().setStatusBarHidden(false, withAnimation: .Fade)
         stopFocus = true
         capturePreview?.removeFromSuperlayer()
+    }
+    
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        self.listedLabel.hidden = true
+        self.willBeListedLabel.hidden = true
     }
     
     @IBAction func swapCamera(sender: AnyObject) {
