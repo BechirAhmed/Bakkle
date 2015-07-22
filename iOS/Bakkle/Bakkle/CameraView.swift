@@ -99,7 +99,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         
         images = [UIImage](count:CameraView.MAX_IMAGE_COUNT, repeatedValue:UIImage.alloc())
         
-        UIApplication.sharedApplication().statusBarHidden = true
+        UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: .Fade)
         UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent
         
         galleryButton.setImage(IconImage().gallery(), forState: .Normal)
@@ -113,7 +113,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        UIApplication.sharedApplication().statusBarHidden = true
+        UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: .Fade)
         
         setupAVFoundation()
         loadingCameraPreviewLabel.hidden = false
@@ -238,7 +238,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         loadingCameraPreviewLabel.hidden = true
-        UIApplication.sharedApplication().statusBarHidden = false
+        UIApplication.sharedApplication().setStatusBarHidden(false, withAnimation: .Fade)
         stopFocus = true
         capturePreview?.removeFromSuperlayer()
     }
@@ -403,8 +403,8 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         // update frame of the indicator IF the device is previewing or displaying a still
         if (selectedDevice!.device.adjustingFocus || selectedDevice!.device.adjustingExposure || selectedDevice!.device.adjustingWhiteBalance) && !displayingStill {
             focusIndicator.removeFromSuperview()
-            var focusPoint = clampFocusRectInside(CGPointMake(selectedDevice!.device.focusPointOfInterest.x * cameraView.bounds.size.width, selectedDevice!.device.focusPointOfInterest.y * cameraView.bounds.size.height))
-            focusIndicator.frame = CGRectMake(focusPoint.x, focusPoint.y, focusIndicator.frame.size.width, focusIndicator.frame.size.height)
+            focusIndicator.frame.origin.x = selectedDevice!.device.focusPointOfInterest.x * cameraView.bounds.size.width - focusIndicator.frame.width / 2.0
+            focusIndicator.frame.origin.y = selectedDevice!.device.focusPointOfInterest.y * cameraView.bounds.size.height - focusIndicator.frame.height / 2.0
             cameraView.addSubview(focusIndicator)
             cameraView.bringSubviewToFront(focusIndicator)
             focusIndicator.hidden = false
@@ -417,30 +417,6 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
                 self.drawFocusRect()
             }
         }
-    }
-    
-    func clampFocusRectInside(focusPoint: CGPoint) -> CGPoint {
-        var modifiedX = focusPoint.x
-        var modifiedY = focusPoint.y
-        
-        // separated in the case that the width of the indicator is NOT the same as the height
-        var padX: CGFloat = focusIndicator.frame.width  / 2.0 + CameraView.FOCUS_SQUARE_OFFSET
-        var padY: CGFloat = focusIndicator.frame.height / 2.0 + CameraView.FOCUS_SQUARE_OFFSET
-        
-        if modifiedX + focusIndicator.frame.width + CameraView.FOCUS_SQUARE_OFFSET > cameraView.bounds.maxX {
-            modifiedX = cameraView.bounds.maxX - padX
-        } else if modifiedX - CameraView.FOCUS_SQUARE_OFFSET < cameraView.bounds.minX {
-            modifiedX = cameraView.bounds.minX + padX
-        }
-        
-        if modifiedY + focusIndicator.frame.height + CameraView.FOCUS_SQUARE_OFFSET > cameraView.bounds.maxY {
-            modifiedX = cameraView.bounds.maxY - (focusIndicator.frame.height + padY)
-        } else if modifiedY - padY < cameraView.bounds.minY {
-            modifiedY = cameraView.bounds.minY + padY
-        }
-        
-        // returns the point to draw, not the center point of the focus indicator
-        return CGPointMake(modifiedX, modifiedY)
     }
     
     @IBAction func pressedCaptureButton(sender: AnyObject) {

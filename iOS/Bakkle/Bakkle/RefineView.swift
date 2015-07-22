@@ -59,9 +59,11 @@ class RefineView: UIViewController, UISearchBarDelegate {
     }
     
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+        self.parentView.requestUpdates()
         searchBar.resignFirstResponder()
     }
     func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+        self.parentView.requestUpdates()
         searchBar.resignFirstResponder()
     }
     /* End search bar delegate */

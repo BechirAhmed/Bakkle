@@ -86,13 +86,16 @@
 
 @property (strong, nonatomic) RateView *ratingView;
 
+// shows that if this view is a tutorial page or not
+@property BOOL tutorial;
+
 
 /*!
  * The designated initializer takes a `frame` and a set of options to customize
  * the behavior of the view.
  */
 - (instancetype)initWithFrame:(CGRect)frame
-                      options:(MDCSwipeToChooseViewOptions *)options;
+                      options:(MDCSwipeToChooseViewOptions *)options tutorial:(BOOL)tutorial;
 
 @end
 
