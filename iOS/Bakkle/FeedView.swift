@@ -123,52 +123,19 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
 
     }
     
-    func displayInstruction() {
-        var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
-        if userDefaults.boolForKey("instruction") && swipeView != nil && instructionImgView == nil {
-            // disable user interaction and show instruction
-            self.searchBar.userInteractionEnabled = false
-            self.refineButton.userInteractionEnabled = false
-            self.menuBtn.userInteractionEnabled = false
-            self.itemDetailTap.enabled = false
-            self.btnAddItem.userInteractionEnabled = false
-            self.revealViewController().panGestureRecognizer().enabled = false
-            self.constructInstructionView()
-        }
+    func displayInstruction(view: MDCSwipeToChooseView!) {
+        // disable user interaction and show instruction
+        self.searchBar.userInteractionEnabled = false
+        self.refineButton.userInteractionEnabled = false
+        self.menuBtn.userInteractionEnabled = false
+        self.itemDetailTap.enabled = false
+        self.btnAddItem.userInteractionEnabled = false
+        self.revealViewController().panGestureRecognizer().enabled = false
+        
+        // set up image for tutorial
+        view.imageView.image = UIImage(named: "InstructionScreen.png")
     }
-    
-    /* instruction overlay code begins */
-    // create the instruction image and show it on screen
-    func constructInstructionView() {
-            effectView = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.Dark))
-            instructionImgView = UIImageView(frame: CGRectMake(drawer.frame.origin.x, drawer.frame.origin.y+drawer.superview!.frame.origin.y, drawer.frame.size.width, drawer.frame.size.height))
-            effectView.frame = instructionImgView.frame
-            instructionImgView.contentMode = UIViewContentMode.ScaleToFill
-            instructionImgView.clipsToBounds = true
-            instructionImgView.userInteractionEnabled = true
-            instructionImgView.image = UIImage(named: "InstructionScreen.png")
-            let closeBtn = UIButton(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
-            closeBtn.addTarget(self, action: "closeBtnPressed:", forControlEvents: .TouchUpInside)
-            instructionImgView.addSubview(closeBtn)
-            var mainWindow: UIWindow = UIApplication .sharedApplication().keyWindow!
-            mainWindow.addSubview(effectView)
-            mainWindow.addSubview(instructionImgView)
-    }
-    
-    func closeBtnPressed(sender: UIButton!) {
-        var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults();
-        userDefaults.setBool(false, forKey: "instruction")
-        self.searchBar.userInteractionEnabled = true
-        self.refineButton.userInteractionEnabled = true
-        self.menuBtn.userInteractionEnabled = true
-        self.btnAddItem.userInteractionEnabled = true
-        self.itemDetailTap.enabled = true
-        self.revealViewController().panGestureRecognizer().enabled = true
-        instructionImgView.removeFromSuperview()
-        effectView.removeFromSuperview()
-    }
-    
-    /* instruction overlay code ends */
+        
     
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self)
@@ -291,14 +258,15 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                     self.swipeView.removeFromSuperview()
                     self.swipeView = nil
                 }
-                self.swipeView = MDCSwipeToChooseView(frame: CGRectMake(drawer.frame.origin.x, drawer.frame.origin.y+drawer.superview!.frame.origin.y, drawer.frame.size.width, drawer.frame.size.height), options: options)
+                var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
+                self.swipeView = MDCSwipeToChooseView(frame: CGRectMake(drawer.frame.origin.x, drawer.frame.origin.y+drawer.superview!.frame.origin.y, drawer.frame.size.width, drawer.frame.size.height), options: options, tutorial: userDefaults.boolForKey("instruction"))
                 self.swipeView.addGestureRecognizer(itemDetailTap)
                 if Bakkle.sharedInstance.feedItems.count > 1 {
                     if self.bottomView != nil {
                         self.bottomView.removeFromSuperview()
                         self.bottomView = nil
                     }
-                    self.bottomView = MDCSwipeToChooseView(frame: self.swipeView.frame, options: nil)
+                    self.bottomView = MDCSwipeToChooseView(frame: self.swipeView.frame, options: nil, tutorial: false)
                     self.view.insertSubview(self.bottomView, belowSubview: self.swipeView)
                 }
         }
@@ -317,14 +285,12 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             self.swipeView = self.bottomView
             
             //create new bottomView
-            self.bottomView = MDCSwipeToChooseView(frame: self.swipeView.frame, options: nil)
+            self.bottomView = MDCSwipeToChooseView(frame: self.swipeView.frame, options: nil, tutorial: false)
             
             //add gesture recognizer to top view (swipeView)
             self.swipeView.addGestureRecognizer(itemDetailTap)
         }
-        
-        // always check that if it is necessary to display instruction, to prevent the nil of swipeView when the first time open the app
-        self.displayInstruction()
+
     }
     
     /* Check server for new items */
@@ -418,7 +384,13 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                 if let x: AnyObject = topItem.valueForKey("pk") {
                     self.item_id = Int(x.intValue)
                 }
-                setupView(self.swipeView, item: topItem)
+
+                if self.swipeView.tutorial  {
+                    displayInstruction(self.swipeView)
+                }else{
+                    setupView(self.swipeView, item: topItem)
+                }
+                
                 self.view.addSubview(swipeView)
                 
                 if Bakkle.sharedInstance.feedItems.count > 1 {
@@ -474,6 +446,18 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     }
     
     func view(view: UIView!, wasChosenWithDirection direction: MDCSwipeDirection) {
+        var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        if userDefaults.boolForKey("instruction") {
+            userDefaults.setBool(false, forKey: "instruction")
+            self.searchBar.userInteractionEnabled = true
+            self.refineButton.userInteractionEnabled = true
+            self.menuBtn.userInteractionEnabled = true
+            self.btnAddItem.userInteractionEnabled = true
+            self.itemDetailTap.enabled = true
+            self.revealViewController().panGestureRecognizer().enabled = true
+            loadNext()
+            return
+        }
         switch direction {
         case MDCSwipeDirection.Left:
             Bakkle.sharedInstance.markItem("meh", item_id: self.item_id, success: {}, fail: {})

@@ -48,21 +48,27 @@ static CGFloat const MDCSwipeToChooseViewLabelHeight = 65.f;
 
 
 
-- (instancetype)initWithFrame:(CGRect)frame options:(MDCSwipeToChooseViewOptions *)options {
+- (instancetype)initWithFrame:(CGRect)frame options:(MDCSwipeToChooseViewOptions *)options  tutorial:(BOOL) tutorial{
     
     self = [super initWithFrame: frame];
     if (self) {
         _options = options ? options : [MDCSwipeToChooseViewOptions new];
+        self.tutorial = tutorial;
         [self setupView];
         [self constructBlurBackground];
-        [self constructImageView];
+        if (tutorial) {
+            [self constructInstructionImageView];
+        }else {
+            [self constructImageView];
+            [self constructTopUserInfoView];
+            [self constructInformationView];
+                    }
         [self constructLikedView];
         [self constructNopeImageView];
         [self constructHoldView];
         [self constructReportView];
-        [self constructTopUserInfoView];
-        [self constructInformationView];
         [self setupSwipeToChoose];
+
     }
     return self;
 }
@@ -86,6 +92,18 @@ static CGFloat const MDCSwipeToChooseViewLabelHeight = 65.f;
     _bottomBlurImg.clipsToBounds = YES;
     [_bottomBlurImg addSubview:effectView];
     [self addSubview:_bottomBlurImg];
+}
+
+- (void)constructInstructionImageView {
+    _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height)];
+    [_imageView setContentMode:UIViewContentModeScaleAspectFill];
+    _imageView.clipsToBounds = YES;
+    [self addSubview:_imageView];
+    
+    _transparentImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, _imageView.frame.size.width, _imageView.frame.size.height)];
+    _transparentImage.backgroundColor = [UIColor blackColor];
+    _transparentImage.alpha = 0.f;
+    [_imageView addSubview:_transparentImage];
 }
 
 - (void)constructImageView {
