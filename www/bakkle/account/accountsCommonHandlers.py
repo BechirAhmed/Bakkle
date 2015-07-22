@@ -173,46 +173,7 @@ def get_account(accountId):
         return {"status": 0, "message": "Invalid account id"}
     return {"status": 1, "account": account.toDictionary()}
 
-# Show detail on a device
-# @csrf_exempt
-# @time_method
-# def device_detail(request, device_id):
-#     device = get_object_or_404(Device, pk=device_id)
-#     context = {
-#         'device': device,
-#     }
-#     return render(request, 'account/device_detail.html', context)
 
-# Show detail on an account
-# @csrf_exempt
-# @time_method
-# def dashboard(request):
-#     registered_users = Account.objects.count()
-#     active_users = Account.objects.filter(disabled = False).count()
-#     total_items = Items.objects.count()
-#     total_sold = Items.objects.filter(status = Items.SOLD).count()
-#     total_expired = Items.objects.filter(status = Items.EXPIRED).count()
-#     total_spam = Items.objects.filter(status = Items.SPAM).count()
-#     total_deleted = Items.objects.filter(status = Items.DELETED).count()
-#     total_pending = Items.objects.filter(status = Items.PENDING).count()
-
-#     context = {
-#         'register_users': registered_users,
-#         'active_users': active_users,
-#         'total_items': total_items,
-#         'total_sold': total_sold,
-#         'total_expired': total_expired,
-#         'total_deleted': total_deleted,
-#         'total_spam': total_spam,
-#         'total_pending': total_pending
-#     }
-#     print(context)
-#     return render(request, 'account/dashboard.html', context)
-
-# Login to account using Facebook
-
-
-#@require_POST
 @time_method
 def login_facebook(facebook_id, device_uuid, user_location, app_version, is_ios, client_ip, app_flavor):
 
@@ -235,7 +196,8 @@ def login_facebook(facebook_id, device_uuid, user_location, app_version, is_ios,
 
     # Get the account for that facebook ID and it's associated device
     try:
-        account = Account.objects.get(facebook_id=facebook_id)
+        account = Account.objects.get(
+            facebook_id=facebook_id, app_flavor=app_flavor)
     except Account.DoesNotExist:
         account = None
         response_data = {
