@@ -188,23 +188,28 @@ const void * const MDCViewStateKey = &MDCViewStateKey;
 - (void)mdc_executeOnPanBlockForTranslation:(CGPoint)translation {
     if (self.mdc_options.onPan) {
         
-        CGFloat thresholdRatio;// = MIN(1.f, fabsf(translation.x)/self.mdc_options.threshold);
+        CGFloat thresholdRatio;
 
         MDCSwipeDirection direction = MDCSwipeDirectionNone;
         
+        CGFloat absX = fabs(translation.x);
+        CGFloat absY = fabs(translation.y);
         
-        if (translation.x > 10.f) {
-            thresholdRatio = MIN(1.f, fabs(translation.x)/self.mdc_options.threshold);
-            direction = MDCSwipeDirectionRight;
-        } else if (translation.x < -10.f) {
-            thresholdRatio = MIN(1.f, fabs(translation.x)/self.mdc_options.threshold);
-            direction = MDCSwipeDirectionLeft;
-        } else if (translation.y > -10.f) {
-            thresholdRatio = MIN(1.f, fabs(translation.y)/self.mdc_options.threshold);
-            direction = MDCSwipeDirectionUp;
-        } else if (translation.y < 10.f){
-            thresholdRatio = MIN(1.f, fabs(translation.y)/self.mdc_options.threshold);
-            direction = MDCSwipeDirectionDown;
+        // Scaling factor for x vs y priority (numerator > denom = prioritize x, vice versa for y, == means do not prioritize)
+        CGFloat xPriorityAdjustment = 5.f / 3.f;
+        
+        // Distance from origin to disregard
+        CGFloat detectionCircleRadius = 10.f;
+        
+        // If the pan has left the minimum distance from the origin, figure out which direction swipe is
+        if (sqrt( absX * absX + absY * absY ) > detectionCircleRadius) {
+            if (absX * xPriorityAdjustment >= absY) {
+                thresholdRatio = MIN(1.f, absX/self.mdc_options.threshold);
+                direction = translation.x > 0 ? MDCSwipeDirectionRight : MDCSwipeDirectionLeft;
+            } else {
+                thresholdRatio = MIN(1.f, absY/self.mdc_options.threshold);
+                direction = translation.y > 0 ? MDCSwipeDirectionUp : MDCSwipeDirectionDown;
+            }
         }
 
         MDCPanState *state = [MDCPanState new];

@@ -17,7 +17,7 @@ import base64
 import random
 #import Image
 
-server_id = 1  # SET to change server
+server_id = 0  # SET to change server
 image_width = 660
 image_height = image_width
 
@@ -160,7 +160,7 @@ class Bakkle():
 
         # if(hostname == 'ip-172-31-21-18' or hostname == 'ip-172-31-27-192'):
         if(server_id == 0):
-            return "https://app.bakkle.com/"
+            return "https://app.bakkle.com"
 
         # elif(hostname == 'bakkle'):
         elif(server_id == 1):
@@ -188,6 +188,7 @@ class Bakkle():
                 'last_name': last_name,
                 'device_uuid': device_uuid,
                 'user_location': self.location,
+                'flavor': 2,
                 'app_version': '1.1',
                 }
         self.facebook_user_id = facebook_user_id
@@ -207,6 +208,7 @@ class Bakkle():
                 'app_version': '1',
                 'app_build': '1',
                 'is_ios': False,
+                'flavor':2
                 }
         r = requests.post(url, data=data)
         print("Login(facebook). Return: {}".format(r.text))
@@ -236,8 +238,8 @@ q = Queue()
 b = Bakkle()
 b.set_location = "39.8661123,-86.1239327"
 print("Uploading items to bakkle server: {}".format(b.server_url()))
-b.facebook("goodwill@pethes.com", "male", "goodwill",
-           "Goodwill Industries", 2, "", "Goodwill", "Industries", 0)
+b.facebook("goodwill2@pethes.com", "male", "goodwill",
+           "Goodwill Industries", 3, "", "Goodwill", "Industries", 0)
 b.login()
 
 
