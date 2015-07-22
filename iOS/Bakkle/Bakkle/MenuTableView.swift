@@ -51,12 +51,17 @@ class MenuTableController: UITableViewController {
         }
     }
     override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
         UIApplication.sharedApplication().statusBarHidden = true
         setupProfileImg()
     }
     
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        UIApplication.sharedApplication().setStatusBarHidden(false, withAnimation: UIStatusBarAnimation.None)
+    }
+    
     override func viewDidDisappear(animated: Bool) {
-        UIApplication.sharedApplication().statusBarHidden = false
         super.viewDidDisappear(animated)
         
         if self.revealViewController() != nil {
@@ -126,6 +131,7 @@ class MenuTableController: UITableViewController {
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         self.view.userInteractionEnabled = false
+        UIApplication.sharedApplication().setStatusBarHidden(false, withAnimation: UIStatusBarAnimation.None)
         if segue.identifier == self.profileSegue {
             let destinationVC = segue.destinationViewController as! ProfileView
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in

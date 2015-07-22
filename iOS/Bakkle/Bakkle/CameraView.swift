@@ -99,7 +99,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         
         images = [UIImage](count:CameraView.MAX_IMAGE_COUNT, repeatedValue:UIImage.alloc())
         
-        UIApplication.sharedApplication().statusBarHidden = true
+        UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: .Fade)
         UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent
         
         galleryButton.setImage(IconImage().gallery(), forState: .Normal)
@@ -113,7 +113,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        UIApplication.sharedApplication().statusBarHidden = true
+        UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: .Fade)
         
         setupAVFoundation()
         loadingCameraPreviewLabel.hidden = false
@@ -238,7 +238,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         loadingCameraPreviewLabel.hidden = true
-        UIApplication.sharedApplication().statusBarHidden = false
+        UIApplication.sharedApplication().setStatusBarHidden(false, withAnimation: .Fade)
         stopFocus = true
         capturePreview?.removeFromSuperlayer()
     }
