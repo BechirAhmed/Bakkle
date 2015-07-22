@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14A388b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
@@ -176,6 +176,9 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <outlet property="fbLoginView" destination="M2Y-Q2-c87" id="MfE-ah-HZo"/>
+                        <outlet property="loginScreenBkg" destination="qfH-YC-Z4o" id="HIM-gk-6X3"/>
+                        <outlet property="logoImageView" destination="A3C-sg-V8F" id="paZ-R5-rLh"/>
+                        <outlet property="logoImageViewAspectRatio" destination="7hl-Cc-pmE" id="Tgv-Xe-xQI"/>
                         <segue destination="nJL-RM-6Db" kind="show" identifier="PushToFeedSegue" id="zhM-P9-5wu"/>
                     </connections>
                 </viewController>
@@ -433,7 +436,6 @@
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" red="0.20000000000000001" green="0.80392156859999997" blue="0.37254901959999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstItem="RLk-Hy-bab" firstAttribute="leading" secondItem="cvc-cz-rgJ" secondAttribute="leading" constant="4" id="1Ai-ZR-q5U"/>
                                     <constraint firstAttribute="trailing" secondItem="tls-6h-cM3" secondAttribute="trailing" constant="4" id="GWF-zd-yBs"/>
@@ -550,6 +552,9 @@
                     <connections>
                         <outlet property="btnAddItem" destination="tls-6h-cM3" id="BLj-fb-VSS"/>
                         <outlet property="drawer" destination="TvW-JJ-Vqb" id="L0b-bd-0hM"/>
+                        <outlet property="logoImageView" destination="SVO-SE-GJf" id="2Vi-iP-Gaw"/>
+                        <outlet property="logoImageViewHeight" destination="7nC-uC-5Xx" id="mu3-4n-aQi"/>
+                        <outlet property="logoImageViewWidth" destination="vCz-Sl-o8e" id="PM6-6r-Fso"/>
                         <outlet property="menuBtn" destination="RLk-Hy-bab" id="Uch-yE-2QO"/>
                         <outlet property="noNewItemsLabel" destination="gXy-mo-Jm8" id="ETD-2Q-A3U"/>
                         <outlet property="progressIndicator" destination="t37-H0-tA2" id="Fyg-ZW-tJR"/>
@@ -644,7 +649,6 @@
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" red="0.20000000000000001" green="0.80392156859999997" blue="0.37254901959999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstItem="rHb-57-fRi" firstAttribute="leading" secondItem="HIi-YO-rQj" secondAttribute="leading" constant="8" id="eLs-MS-8eC"/>
                                     <constraint firstAttribute="height" constant="44" id="elZ-2f-UPS"/>
@@ -1111,6 +1115,7 @@
                         <outlet property="activityInd" destination="LBF-eC-nfr" id="ufp-W3-XB5"/>
                         <outlet property="closeBtn" destination="rHb-57-fRi" id="TU2-xm-Dz6"/>
                         <outlet property="collectionView" destination="VKL-bg-bJT" id="Yc7-xn-1gB"/>
+                        <outlet property="detailBugHack" destination="xJ1-PN-RFp" id="1au-hr-k8E"/>
                         <outlet property="itemDistanceLabel" destination="eFc-bD-LXQ" id="HMk-ww-zXK"/>
                         <outlet property="itemPriceLabel" destination="MQo-Ae-Dt8" id="ewC-Sb-8Xy"/>
                         <outlet property="itemTagsTextView" destination="28X-N0-gRm" id="5Oi-V8-C31"/>
@@ -1175,7 +1180,6 @@
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" red="0.20000000000000001" green="0.80392156859999997" blue="0.37254901959999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="centerY" secondItem="vH5-vp-d6l" secondAttribute="centerY" id="5kR-vB-KmQ"/>
                                     <constraint firstItem="uGM-QL-ftI" firstAttribute="top" secondItem="kUg-97-XDg" secondAttribute="top" id="Ah0-tu-cxC"/>
@@ -1377,7 +1381,6 @@
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" red="0.20000000000000001" green="0.80392156859999997" blue="0.37254901959999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="centerY" secondItem="0sn-gT-lxF" secondAttribute="centerY" id="4cd-PB-7mo"/>
                                     <constraint firstAttribute="height" constant="35" id="Sel-Bl-yGp">
@@ -3183,7 +3186,6 @@
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" red="0.20000000000000001" green="0.80392156859999997" blue="0.37254901959999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="centerY" secondItem="OPP-on-gOv" secondAttribute="centerY" id="4bo-nA-UqM"/>
                                     <constraint firstItem="OPP-on-gOv" firstAttribute="leading" secondItem="sLN-Ib-JUW" secondAttribute="leading" constant="8" id="6io-Ic-I42"/>
@@ -4330,13 +4332,6 @@
                                             <segue destination="Og7-OV-A1I" kind="custom" customClass="SWRevealViewControllerSeguePushController" id="WMP-4Z-55Q"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="338" id="z6g-nX-Xey" userLabel="Blank Content">
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="z6g-nX-Xey" id="xNJ-Sy-Dsn">
-                                            <autoresizingMask key="autoresizingMask"/>
-                                        </tableViewCellContentView>
-                                        <color key="backgroundColor" red="0.1960784314" green="0.1960784314" blue="0.1960784314" alpha="1" colorSpace="calibratedRGB"/>
-                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                         </sections>
@@ -4433,7 +4428,6 @@
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" red="0.20000000000000001" green="0.80392156859999997" blue="0.37254901959999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstItem="zTX-TZ-6Zh" firstAttribute="top" secondItem="uxj-sH-6r9" secondAttribute="top" constant="4" id="53Q-va-VWT"/>
                                     <constraint firstAttribute="centerX" secondItem="e7V-yc-Rjq" secondAttribute="centerX" id="BgF-bQ-9Gy"/>
@@ -4982,7 +4976,6 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
-                                <color key="backgroundColor" red="0.20000000000000001" green="0.80392156859999997" blue="0.37254901959999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="bPV-Zk-aNO" secondAttribute="bottom" id="44E-c2-o1r">
                                         <variation key="heightClass=regular-widthClass=compact" constant="0.0"/>
@@ -5851,7 +5844,6 @@
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" red="0.20000000000000001" green="0.80392156859999997" blue="0.37254901959999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="centerY" secondItem="dWA-na-vWS" secondAttribute="centerY" id="7w9-21-H9Y"/>
                                     <constraint firstAttribute="bottom" secondItem="vmo-0r-UxV" secondAttribute="bottom" id="DPq-P2-qlZ"/>
@@ -6093,7 +6085,6 @@
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" red="0.20000000000000001" green="0.80392156859999997" blue="0.37254901959999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="centerX" secondItem="Nx7-Vp-yom" secondAttribute="centerX" id="G68-Vn-gAf"/>
                                     <constraint firstAttribute="bottom" secondItem="pxj-KC-84X" secondAttribute="bottom" id="Hrn-zP-48f"/>
@@ -6334,7 +6325,6 @@
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" red="0.20000000000000001" green="0.80392156859999997" blue="0.37254901959999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstItem="egU-84-Zv7" firstAttribute="leading" secondItem="PRm-UW-zKM" secondAttribute="leading" constant="8" id="3ma-1a-VPQ"/>
                                     <constraint firstAttribute="centerY" secondItem="cU7-wD-aRm" secondAttribute="centerY" id="He4-E1-2me"/>

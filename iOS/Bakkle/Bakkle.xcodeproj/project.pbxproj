@@ -70,6 +70,14 @@
 		6034E6951B41B93900DEA291 /* AcceptOfferCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6034E6941B41B93900DEA291 /* AcceptOfferCell.swift */; };
 		60EEB9981B5546F100E87B8D /* switch-camera-outline.png in Resources */ = {isa = PBXBuildFile; fileRef = 60EEB9971B5546F100E87B8D /* switch-camera-outline.png */; };
 		60EEB9A61B598F9900E87B8D /* chord.m4r in Resources */ = {isa = PBXBuildFile; fileRef = 60EEB9A51B598F9900E87B8D /* chord.m4r */; };
+		60F3BC0A1B5E8FD10033EF83 /* logo-white-design-clear.png in Resources */ = {isa = PBXBuildFile; fileRef = 726A38E21B39BE1E00CF5553 /* logo-white-design-clear.png */; };
+		60F3BC0C1B5E90010033EF83 /* Goodwill Logo-White.png in Resources */ = {isa = PBXBuildFile; fileRef = F0D6F3F81B5E8B3E00938A06 /* Goodwill Logo-White.png */; };
+		60F3BC0D1B5E90040033EF83 /* Goodwill Logo-White.png in Resources */ = {isa = PBXBuildFile; fileRef = F0D6F3F81B5E8B3E00938A06 /* Goodwill Logo-White.png */; };
+		60F3BC0E1B5E900A0033EF83 /* Goodwill Logo.png in Resources */ = {isa = PBXBuildFile; fileRef = F0D6F3F91B5E8B3E00938A06 /* Goodwill Logo.png */; };
+		60F3BC0F1B5E900A0033EF83 /* Goodwill Logo.png in Resources */ = {isa = PBXBuildFile; fileRef = F0D6F3F91B5E8B3E00938A06 /* Goodwill Logo.png */; };
+		60F3BC111B5E90BC0033EF83 /* Goodwill-LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 60F3BC101B5E90BC0033EF83 /* Goodwill-LaunchScreen.xib */; };
+		60F3BC131B5E91710033EF83 /* Goodwill-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 60F3BC121B5E91710033EF83 /* Goodwill-Info.plist */; };
+		60F3BC141B5E921D0033EF83 /* Goodwill-LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 60F3BC101B5E90BC0033EF83 /* Goodwill-LaunchScreen.xib */; };
 		720510341B1F839B00D059AB /* ListItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720510331B1F839B00D059AB /* ListItemCell.swift */; };
 		723D532C1B25F42B0067A80A /* IconImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 723D532B1B25F42B0067A80A /* IconImage.swift */; };
 		723D532E1B2718590067A80A /* OffsetTextAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 723D532D1B2718590067A80A /* OffsetTextAttachment.swift */; };
@@ -89,7 +97,6 @@
 		A018DF891ADE07E700AF5550 /* btn-cancel.png in Resources */ = {isa = PBXBuildFile; fileRef = A018DF871ADE07E700AF5550 /* btn-cancel.png */; };
 		A018DF8B1ADE08DB00AF5550 /* btn-add-disabled.png in Resources */ = {isa = PBXBuildFile; fileRef = A018DF8A1ADE08DB00AF5550 /* btn-add-disabled.png */; };
 		A018DF8D1ADE09A500AF5550 /* mock-additem.png in Resources */ = {isa = PBXBuildFile; fileRef = A018DF8C1ADE09A500AF5550 /* mock-additem.png */; };
-		A03508F31AB3C34900CA6455 /* SplashScreen-bkg.png in Resources */ = {isa = PBXBuildFile; fileRef = A03508F21AB3C34900CA6455 /* SplashScreen-bkg.png */; };
 		A03508F71AB3C5FB00CA6455 /* logo-green-design-png-white.png in Resources */ = {isa = PBXBuildFile; fileRef = A03508F61AB3C5FB00CA6455 /* logo-green-design-png-white.png */; };
 		A03508F91AB3C6AE00CA6455 /* logo-white-design-png.png in Resources */ = {isa = PBXBuildFile; fileRef = A03508F81AB3C6AE00CA6455 /* logo-white-design-png.png */; };
 		A03E93B81B4338DB00F12733 /* UIDevice+ModelName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B56D5D31B30709F009D81C6 /* UIDevice+ModelName.swift */; };
@@ -157,7 +164,6 @@
 		A0A200031ACE2F7500A42CD8 /* btn-sign-in40.png in Resources */ = {isa = PBXBuildFile; fileRef = A0A200001ACE2F7500A42CD8 /* btn-sign-in40.png */; };
 		A0A200051ACE30C200A42CD8 /* btn-logout40.png in Resources */ = {isa = PBXBuildFile; fileRef = A0A200041ACE30C200A42CD8 /* btn-logout40.png */; };
 		A0A2FFF31ACE213F00A42CD8 /* logo-white-design-png-100.png in Resources */ = {isa = PBXBuildFile; fileRef = A0A2FFF21ACE213F00A42CD8 /* logo-white-design-png-100.png */; };
-		A0A2FFF51ACE232F00A42CD8 /* LoginScreen-bkg.png in Resources */ = {isa = PBXBuildFile; fileRef = A0A2FFF41ACE232F00A42CD8 /* LoginScreen-bkg.png */; };
 		A0A2FFF71ACE276200A42CD8 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0A2FFF61ACE276200A42CD8 /* FBSDKCoreKit.framework */; };
 		A0A5F71D1AEDAE54001A7D7A /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A0A5F71C1AEDAE54001A7D7A /* Settings.bundle */; };
 		A0A709CE1ACAC9D700E772B9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5EBDD6941AB211E600C7FBE7 /* Main.storyboard */; };
@@ -237,7 +243,6 @@
 		A0E1EB881B2B5B2200662C08 /* icon-i.png in Resources */ = {isa = PBXBuildFile; fileRef = A08D53D91B08269A000C406C /* icon-i.png */; };
 		A0E1EB891B2B5B2200662C08 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A0A5F71C1AEDAE54001A7D7A /* Settings.bundle */; };
 		A0E1EB8A1B2B5B2200662C08 /* logo-white-design-png.png in Resources */ = {isa = PBXBuildFile; fileRef = A03508F81AB3C6AE00CA6455 /* logo-white-design-png.png */; };
-		A0E1EB8B1B2B5B2200662C08 /* LoginScreen-bkg.png in Resources */ = {isa = PBXBuildFile; fileRef = A0A2FFF41ACE232F00A42CD8 /* LoginScreen-bkg.png */; };
 		A0E1EB8C1B2B5B2200662C08 /* blank.png in Resources */ = {isa = PBXBuildFile; fileRef = A0B7F4B91AFB053B00065407 /* blank.png */; };
 		A0E1EB8D1B2B5B2200662C08 /* logo-green-design-png-white.png in Resources */ = {isa = PBXBuildFile; fileRef = A03508F61AB3C5FB00CA6455 /* logo-green-design-png-white.png */; };
 		A0E1EB8E1B2B5B2200662C08 /* bkg-chat-text.png in Resources */ = {isa = PBXBuildFile; fileRef = A058A2AC1AFDAD96005E7432 /* bkg-chat-text.png */; };
@@ -294,7 +299,6 @@
 		A0E1EBC11B2B5B2200662C08 /* item-detail-overlay.png in Resources */ = {isa = PBXBuildFile; fileRef = DBEE0E961AF3C464005E60BD /* item-detail-overlay.png */; };
 		A0E1EBC21B2B5B2200662C08 /* icon-car75.png in Resources */ = {isa = PBXBuildFile; fileRef = DB5DB3531B18E18100734692 /* icon-car75.png */; };
 		A0E1EBC31B2B5B2200662C08 /* btn-sign-in40.png in Resources */ = {isa = PBXBuildFile; fileRef = A0A200001ACE2F7500A42CD8 /* btn-sign-in40.png */; };
-		A0E1EBC41B2B5B2200662C08 /* SplashScreen-bkg.png in Resources */ = {isa = PBXBuildFile; fileRef = A03508F21AB3C34900CA6455 /* SplashScreen-bkg.png */; };
 		A0E1EBC51B2B5B2200662C08 /* icon-filter.png in Resources */ = {isa = PBXBuildFile; fileRef = A0D96F741AD765990046DA13 /* icon-filter.png */; };
 		A0E1EBC61B2B5B2200662C08 /* icon-pencil.png in Resources */ = {isa = PBXBuildFile; fileRef = A0D96F771AD765990046DA13 /* icon-pencil.png */; };
 		A0E1EBC71B2B5B2200662C08 /* icon-house.png in Resources */ = {isa = PBXBuildFile; fileRef = A0D96F781AD765990046DA13 /* icon-house.png */; };
@@ -315,6 +319,21 @@
 		DBEE0E991AF3C855005E60BD /* btb-want.png in Resources */ = {isa = PBXBuildFile; fileRef = DBEE0E981AF3C855005E60BD /* btb-want.png */; };
 		DBEE0E9B1AF3C85C005E60BD /* btn-want-disabled.png in Resources */ = {isa = PBXBuildFile; fileRef = DBEE0E9A1AF3C85C005E60BD /* btn-want-disabled.png */; };
 		E5016D9C10A43489915BBFC7 /* Pods_Bakkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E0CABDBE20E9D5B2EED4810 /* Pods_Bakkle.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		F0D6F3D41B5E725A00938A06 /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B754B241B4D4D960002C41D /* CameraView.swift */; };
+		F0D6F3FF1B5EA06600938A06 /* icon-i-blue.png in Resources */ = {isa = PBXBuildFile; fileRef = F0D6F3FE1B5EA06600938A06 /* icon-i-blue.png */; };
+		F0D6F4001B5EA06600938A06 /* icon-i-blue.png in Resources */ = {isa = PBXBuildFile; fileRef = F0D6F3FE1B5EA06600938A06 /* icon-i-blue.png */; };
+		F0D6F4021B5EA17100938A06 /* LoginScreen-bkg.png in Resources */ = {isa = PBXBuildFile; fileRef = F0D6F4011B5EA17100938A06 /* LoginScreen-bkg.png */; };
+		F0D6F4031B5EA17100938A06 /* LoginScreen-bkg.png in Resources */ = {isa = PBXBuildFile; fileRef = F0D6F4011B5EA17100938A06 /* LoginScreen-bkg.png */; };
+		F0D6F4051B5EA18700938A06 /* SplashScreen-bkg.png in Resources */ = {isa = PBXBuildFile; fileRef = F0D6F4041B5EA18700938A06 /* SplashScreen-bkg.png */; };
+		F0D6F4061B5EA18700938A06 /* SplashScreen-bkg.png in Resources */ = {isa = PBXBuildFile; fileRef = F0D6F4041B5EA18700938A06 /* SplashScreen-bkg.png */; };
+		F0D6F4081B5EA28900938A06 /* SplashScreen-bkg-Blue.png in Resources */ = {isa = PBXBuildFile; fileRef = F0D6F4071B5EA28900938A06 /* SplashScreen-bkg-Blue.png */; };
+		F0D6F4091B5EA28900938A06 /* SplashScreen-bkg-Blue.png in Resources */ = {isa = PBXBuildFile; fileRef = F0D6F4071B5EA28900938A06 /* SplashScreen-bkg-Blue.png */; };
+		F0D6F40B1B5EA29600938A06 /* LoginScreen-bkg-blue.png in Resources */ = {isa = PBXBuildFile; fileRef = F0D6F40A1B5EA29600938A06 /* LoginScreen-bkg-blue.png */; };
+		F0D6F40C1B5EA29600938A06 /* LoginScreen-bkg-blue.png in Resources */ = {isa = PBXBuildFile; fileRef = F0D6F40A1B5EA29600938A06 /* LoginScreen-bkg-blue.png */; };
+		F0D6F40E1B5EC1A500938A06 /* gwIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F0D6F40D1B5EC1A500938A06 /* gwIcon@2x.png */; };
+		F0D6F40F1B5EC1A500938A06 /* gwIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F0D6F40D1B5EC1A500938A06 /* gwIcon@2x.png */; };
+		F0D6F4111B5EC54700938A06 /* GWLogo_Full@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F0D6F4101B5EC54700938A06 /* GWLogo_Full@2x.png */; };
+		F0D6F4121B5EC54700938A06 /* GWLogo_Full@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F0D6F4101B5EC54700938A06 /* GWLogo_Full@2x.png */; };
 		F0E7C5081B2F2B3E006B013A /* WSManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F0E7C5071B2F2B3E006B013A /* WSManager.m */; };
 		F0E7C50B1B2F2B4B006B013A /* WSRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E7C50A1B2F2B4B006B013A /* WSRequest.swift */; };
 /* End PBXBuildFile section */
@@ -448,6 +467,8 @@
 		6034E6941B41B93900DEA291 /* AcceptOfferCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AcceptOfferCell.swift; sourceTree = "<group>"; };
 		60EEB9971B5546F100E87B8D /* switch-camera-outline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "switch-camera-outline.png"; sourceTree = "<group>"; };
 		60EEB9A51B598F9900E87B8D /* chord.m4r */ = {isa = PBXFileReference; lastKnownFileType = file; path = chord.m4r; sourceTree = "<group>"; };
+		60F3BC101B5E90BC0033EF83 /* Goodwill-LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "Goodwill-LaunchScreen.xib"; sourceTree = "<group>"; };
+		60F3BC121B5E91710033EF83 /* Goodwill-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Goodwill-Info.plist"; sourceTree = "<group>"; };
 		698270E0C83AB2371F464BB2 /* Pods-Bakkle.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bakkle.release.xcconfig"; path = "Pods/Target Support Files/Pods-Bakkle/Pods-Bakkle.release.xcconfig"; sourceTree = "<group>"; };
 		720510331B1F839B00D059AB /* ListItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemCell.swift; sourceTree = "<group>"; };
 		723D532B1B25F42B0067A80A /* IconImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IconImage.swift; sourceTree = "<group>"; };
@@ -466,7 +487,6 @@
 		A018DF871ADE07E700AF5550 /* btn-cancel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-cancel.png"; sourceTree = "<group>"; };
 		A018DF8A1ADE08DB00AF5550 /* btn-add-disabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-add-disabled.png"; sourceTree = "<group>"; };
 		A018DF8C1ADE09A500AF5550 /* mock-additem.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mock-additem.png"; sourceTree = "<group>"; };
-		A03508F21AB3C34900CA6455 /* SplashScreen-bkg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "SplashScreen-bkg.png"; path = "../../../graphics/SplashScreen-bkg.png"; sourceTree = "<group>"; };
 		A03508F61AB3C5FB00CA6455 /* logo-green-design-png-white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-green-design-png-white.png"; sourceTree = "<group>"; };
 		A03508F81AB3C6AE00CA6455 /* logo-white-design-png.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-white-design-png.png"; sourceTree = "<group>"; };
 		A03E93BA1B4339DE00F12733 /* SocketRocket.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SocketRocket.framework; path = "Pods/../build/Debug-iphoneos/Pods-Bakkle/SocketRocket.framework"; sourceTree = "<group>"; };
@@ -514,7 +534,6 @@
 		A0A200001ACE2F7500A42CD8 /* btn-sign-in40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-sign-in40.png"; sourceTree = "<group>"; };
 		A0A200041ACE30C200A42CD8 /* btn-logout40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-logout40.png"; sourceTree = "<group>"; };
 		A0A2FFF21ACE213F00A42CD8 /* logo-white-design-png-100.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-white-design-png-100.png"; sourceTree = "<group>"; };
-		A0A2FFF41ACE232F00A42CD8 /* LoginScreen-bkg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "LoginScreen-bkg.png"; path = "../../../graphics/LoginScreen-bkg.png"; sourceTree = "<group>"; };
 		A0A2FFF61ACE276200A42CD8 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		A0A2FFFE1ACE2F7500A42CD8 /* btn-email40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-email40.png"; sourceTree = "<group>"; };
 		A0A2FFFF1ACE2F7500A42CD8 /* btn-facebook40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-facebook40.png"; sourceTree = "<group>"; };
@@ -539,7 +558,6 @@
 		A0D96F891AD773DB0046DA13 /* RefineView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RefineView.swift; sourceTree = "<group>"; };
 		A0D96F8F1AD7751E0046DA13 /* mock-settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mock-settings.png"; sourceTree = "<group>"; };
 		A0E1EBD01B2B5B2200662C08 /* Goodwill.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Goodwill.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		A0E1EBD11B2B5B2200662C08 /* Goodwill-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Goodwill-Info.plist"; path = "/working/bakkle/iOS/Bakkle/Goodwill-Info.plist"; sourceTree = "<absolute>"; };
 		D0C6A42C1B080ACB0027ACCF /* mock-rating-stars.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mock-rating-stars.png"; sourceTree = "<group>"; };
 		D0FCDFF91B03B2E0006F76F7 /* btn-addCam.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-addCam.png"; sourceTree = "<group>"; };
 		DB53728F1B0806B600CC49B7 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
@@ -564,6 +582,15 @@
 		DBEE0E961AF3C464005E60BD /* item-detail-overlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "item-detail-overlay.png"; sourceTree = "<group>"; };
 		DBEE0E981AF3C855005E60BD /* btb-want.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btb-want.png"; sourceTree = "<group>"; };
 		DBEE0E9A1AF3C85C005E60BD /* btn-want-disabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-want-disabled.png"; sourceTree = "<group>"; };
+		F0D6F3F81B5E8B3E00938A06 /* Goodwill Logo-White.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Goodwill Logo-White.png"; sourceTree = "<group>"; };
+		F0D6F3F91B5E8B3E00938A06 /* Goodwill Logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Goodwill Logo.png"; sourceTree = "<group>"; };
+		F0D6F3FE1B5EA06600938A06 /* icon-i-blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-i-blue.png"; sourceTree = "<group>"; };
+		F0D6F4011B5EA17100938A06 /* LoginScreen-bkg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "LoginScreen-bkg.png"; sourceTree = "<group>"; };
+		F0D6F4041B5EA18700938A06 /* SplashScreen-bkg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "SplashScreen-bkg.png"; sourceTree = "<group>"; };
+		F0D6F4071B5EA28900938A06 /* SplashScreen-bkg-Blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "SplashScreen-bkg-Blue.png"; sourceTree = "<group>"; };
+		F0D6F40A1B5EA29600938A06 /* LoginScreen-bkg-blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "LoginScreen-bkg-blue.png"; sourceTree = "<group>"; };
+		F0D6F40D1B5EC1A500938A06 /* gwIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gwIcon@2x.png"; sourceTree = "<group>"; };
+		F0D6F4101B5EC54700938A06 /* GWLogo_Full@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "GWLogo_Full@2x.png"; sourceTree = "<group>"; };
 		F0E7C5061B2F2B3E006B013A /* WSManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSManager.h; sourceTree = "<group>"; };
 		F0E7C5071B2F2B3E006B013A /* WSManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WSManager.m; sourceTree = "<group>"; };
 		F0E7C50A1B2F2B4B006B013A /* WSRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WSRequest.swift; sourceTree = "<group>"; };
@@ -679,12 +706,12 @@
 		5EBDD68E1AB211E600C7FBE7 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				60F3BC121B5E91710033EF83 /* Goodwill-Info.plist */,
+				60F3BC101B5E90BC0033EF83 /* Goodwill-LaunchScreen.xib */,
 				60EEB9A51B598F9900E87B8D /* chord.m4r */,
-				A0E1EBD11B2B5B2200662C08 /* Goodwill-Info.plist */,
 				A0B765431B0E3A2700107F7E /* Bakkle.entitlements */,
 				5E5CB0A81AB7547800F32BE6 /* Bridging-Header.h */,
 				A0A5F71C1AEDAE54001A7D7A /* Settings.bundle */,
-				A0A2FFF41ACE232F00A42CD8 /* LoginScreen-bkg.png */,
 				5EE2C9B11AB9F0FB0031D8CD /* MDCSwipeToChoose-Prefix.pch */,
 				5EBDD6991AB211E600C7FBE7 /* LaunchScreen.xib */,
 				5EBDD68F1AB211E600C7FBE7 /* Info.plist */,
@@ -798,6 +825,8 @@
 		A05DB7501AF1BBC40076D97D /* logos */ = {
 			isa = PBXGroup;
 			children = (
+				F0D6F3F81B5E8B3E00938A06 /* Goodwill Logo-White.png */,
+				F0D6F3F91B5E8B3E00938A06 /* Goodwill Logo.png */,
 				5E023F871AD59F200002AFBC /* logo-white-design-png-transp-100.png */,
 				A0A2FFF21ACE213F00A42CD8 /* logo-white-design-png-100.png */,
 				A03508F81AB3C6AE00CA6455 /* logo-white-design-png.png */,
@@ -834,6 +863,9 @@
 		A08D53B71B07DC8E000C406C /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				F0D6F40D1B5EC1A500938A06 /* gwIcon@2x.png */,
+				F0D6F4101B5EC54700938A06 /* GWLogo_Full@2x.png */,
+				F0D6F3FE1B5EA06600938A06 /* icon-i-blue.png */,
 				1BF7D3611B592D7800EC7789 /* FocusIndicator.png */,
 				1BF7D3621B592D7800EC7789 /* ios-flash-on-white.png */,
 				1B876B151B57F65C00D79D82 /* camera-remove.png */,
@@ -850,13 +882,16 @@
 				5EBDD6971AB211E600C7FBE7 /* Images.xcassets */,
 				A08D53D91B08269A000C406C /* icon-i.png */,
 				A08D53D71B0825E7000C406C /* icon-back.png */,
-				A03508F21AB3C34900CA6455 /* SplashScreen-bkg.png */,
+				F0D6F4011B5EA17100938A06 /* LoginScreen-bkg.png */,
+				F0D6F4041B5EA18700938A06 /* SplashScreen-bkg.png */,
 				A08D53B01B06DBD8000C406C /* icon-x@3x.png */,
+				F0D6F40A1B5EA29600938A06 /* LoginScreen-bkg-blue.png */,
 				A058A2BA1AFDB87F005E7432 /* loading.png */,
 				A058A2AE1AFDADA2005E7432 /* mask-buyer-grey.png */,
 				A058A2AF1AFDADA2005E7432 /* mask-buyer-grey@2x.png */,
 				A058A2B01AFDADA2005E7432 /* mask-buyer-grey@3x.png */,
 				A058A2B11AFDADA2005E7432 /* mask-buyer-white.png */,
+				F0D6F4071B5EA28900938A06 /* SplashScreen-bkg-Blue.png */,
 				A058A2B21AFDADA2005E7432 /* mask-buyer-white@2x.png */,
 				A058A2B31AFDADA2005E7432 /* mask-buyer-white@3x.png */,
 				A058A2AC1AFDAD96005E7432 /* bkg-chat-text.png */,
@@ -1224,7 +1259,6 @@
 				A0A5F71D1AEDAE54001A7D7A /* Settings.bundle in Resources */,
 				726A38E31B39BE1E00CF5553 /* logo-white-design-clear.png in Resources */,
 				A03508F91AB3C6AE00CA6455 /* logo-white-design-png.png in Resources */,
-				A0A2FFF51ACE232F00A42CD8 /* LoginScreen-bkg.png in Resources */,
 				A0B7F4BA1AFB053B00065407 /* blank.png in Resources */,
 				A03508F71AB3C5FB00CA6455 /* logo-green-design-png-white.png in Resources */,
 				A058A2AD1AFDAD96005E7432 /* bkg-chat-text.png in Resources */,
@@ -1234,8 +1268,10 @@
 				DBEE0E991AF3C855005E60BD /* btb-want.png in Resources */,
 				A058A2B41AFDADA2005E7432 /* mask-buyer-grey.png in Resources */,
 				A0A200011ACE2F7500A42CD8 /* btn-email40.png in Resources */,
+				F0D6F4051B5EA18700938A06 /* SplashScreen-bkg.png in Resources */,
 				A058A2B91AFDADA2005E7432 /* mask-buyer-white@3x.png in Resources */,
 				A0A8F8FE1B1F2BB70055BBC0 /* cartoon_fast_whoosh_good_for_karate_chop_other_fast_movement_or_swipe_001.mp3 in Resources */,
+				F0D6F40B1B5EA29600938A06 /* LoginScreen-bkg-blue.png in Resources */,
 				5E1DCCA21AD47C53002D41FD /* btn-check.png in Resources */,
 				1BF7D3641B592D7800EC7789 /* ios-flash-on-white.png in Resources */,
 				A018DF8B1ADE08DB00AF5550 /* btn-add-disabled.png in Resources */,
@@ -1246,6 +1282,7 @@
 				A05DB7541AF3F22B0076D97D /* dot@2x.png in Resources */,
 				A0A709CE1ACAC9D700E772B9 /* Main.storyboard in Resources */,
 				A058A2B71AFDADA2005E7432 /* mask-buyer-white.png in Resources */,
+				60F3BC0E1B5E900A0033EF83 /* Goodwill Logo.png in Resources */,
 				727FA76D1B4C15750023C126 /* new-x.png in Resources */,
 				5EBDD6B11AB2139700C7FBE7 /* bakkleLogo.png in Resources */,
 				A018DF881ADE07E700AF5550 /* btn-add.png in Resources */,
@@ -1256,8 +1293,12 @@
 				5EBDD6981AB211E600C7FBE7 /* Images.xcassets in Resources */,
 				602C38991B389A2E005CB493 /* WrongLocationForPhone.png in Resources */,
 				A05DB7521AF1BC090076D97D /* btn-menu.png in Resources */,
+				F0D6F4081B5EA28900938A06 /* SplashScreen-bkg-Blue.png in Resources */,
+				F0D6F4021B5EA17100938A06 /* LoginScreen-bkg.png in Resources */,
 				A058A2A91AFD6024005E7432 /* btn-menu@3x.png in Resources */,
 				1BF7D3631B592D7800EC7789 /* FocusIndicator.png in Resources */,
+				60F3BC0D1B5E90040033EF83 /* Goodwill Logo-White.png in Resources */,
+				F0D6F3FF1B5EA06600938A06 /* icon-i-blue.png in Resources */,
 				A0D96F7C1AD765990046DA13 /* icon-cart.png in Resources */,
 				A0D96F791AD765990046DA13 /* icon-gear.png in Resources */,
 				A08D53D21B0815CB000C406C /* MessageOutgoing.aiff in Resources */,
@@ -1281,14 +1322,17 @@
 				A08D53D81B0825E7000C406C /* icon-back.png in Resources */,
 				DB6726EA1B178F250014A896 /* star_half.png in Resources */,
 				A058A2B51AFDADA2005E7432 /* mask-buyer-grey@2x.png in Resources */,
+				60F3BC131B5E91710033EF83 /* Goodwill-Info.plist in Resources */,
 				A0A200051ACE30C200A42CD8 /* btn-logout40.png in Resources */,
+				F0D6F40E1B5EC1A500938A06 /* gwIcon@2x.png in Resources */,
 				DB6726EB1B178F250014A896 /* star_none.png in Resources */,
+				60F3BC111B5E90BC0033EF83 /* Goodwill-LaunchScreen.xib in Resources */,
 				A058A2BB1AFDB87F005E7432 /* loading.png in Resources */,
 				A0D96F7B1AD765990046DA13 /* icon-down.png in Resources */,
 				DBEE0E971AF3C464005E60BD /* item-detail-overlay.png in Resources */,
 				DB5DB3561B18E18100734692 /* icon-car75.png in Resources */,
 				A0A200031ACE2F7500A42CD8 /* btn-sign-in40.png in Resources */,
-				A03508F31AB3C34900CA6455 /* SplashScreen-bkg.png in Resources */,
+				F0D6F4111B5EC54700938A06 /* GWLogo_Full@2x.png in Resources */,
 				1B876B161B57F65C00D79D82 /* camera-remove.png in Resources */,
 				A0D96F7A1AD765990046DA13 /* icon-filter.png in Resources */,
 				A0D96F7D1AD765990046DA13 /* icon-pencil.png in Resources */,
@@ -1311,11 +1355,13 @@
 			files = (
 				A0E1EB861B2B5B2200662C08 /* btn-want-disabled.png in Resources */,
 				A0E1EB871B2B5B2200662C08 /* mock-tile.png in Resources */,
+				60F3BC141B5E921D0033EF83 /* Goodwill-LaunchScreen.xib in Resources */,
+				F0D6F40F1B5EC1A500938A06 /* gwIcon@2x.png in Resources */,
 				A03E93C71B43755600F12733 /* x-image.png in Resources */,
 				A0E1EB881B2B5B2200662C08 /* icon-i.png in Resources */,
 				A0E1EB891B2B5B2200662C08 /* Settings.bundle in Resources */,
+				F0D6F4001B5EA06600938A06 /* icon-i-blue.png in Resources */,
 				A0E1EB8A1B2B5B2200662C08 /* logo-white-design-png.png in Resources */,
-				A0E1EB8B1B2B5B2200662C08 /* LoginScreen-bkg.png in Resources */,
 				A0E1EB8C1B2B5B2200662C08 /* blank.png in Resources */,
 				A0E1EB8D1B2B5B2200662C08 /* logo-green-design-png-white.png in Resources */,
 				A0E1EB8E1B2B5B2200662C08 /* bkg-chat-text.png in Resources */,
@@ -1326,6 +1372,7 @@
 				A0E1EB931B2B5B2200662C08 /* mask-buyer-grey.png in Resources */,
 				A0E1EB941B2B5B2200662C08 /* btn-email40.png in Resources */,
 				A0E1EB951B2B5B2200662C08 /* mask-buyer-white@3x.png in Resources */,
+				F0D6F40C1B5EA29600938A06 /* LoginScreen-bkg-blue.png in Resources */,
 				A0E1EB961B2B5B2200662C08 /* cartoon_fast_whoosh_good_for_karate_chop_other_fast_movement_or_swipe_001.mp3 in Resources */,
 				A0E1EB971B2B5B2200662C08 /* btn-check.png in Resources */,
 				A0E1EB981B2B5B2200662C08 /* btn-add-disabled.png in Resources */,
@@ -1349,7 +1396,11 @@
 				A0E1EBA91B2B5B2200662C08 /* icon-gear.png in Resources */,
 				A0E1EBAA1B2B5B2200662C08 /* MessageOutgoing.aiff in Resources */,
 				A0E1EBAB1B2B5B2200662C08 /* btn-facebook40.png in Resources */,
+				F0D6F4121B5EC54700938A06 /* GWLogo_Full@2x.png in Resources */,
+				F0D6F4091B5EA28900938A06 /* SplashScreen-bkg-Blue.png in Resources */,
+				60F3BC0A1B5E8FD10033EF83 /* logo-white-design-clear.png in Resources */,
 				A0E1EBAC1B2B5B2200662C08 /* btn-x.png in Resources */,
+				F0D6F4061B5EA18700938A06 /* SplashScreen-bkg.png in Resources */,
 				727FA76E1B4C15790023C126 /* new-x.png in Resources */,
 				A0E1EBAD1B2B5B2200662C08 /* pendant-tag660.png in Resources */,
 				A0E1EBAE1B2B5B2200662C08 /* btn-menu@2x.png in Resources */,
@@ -1360,6 +1411,8 @@
 				A0E1EBB31B2B5B2200662C08 /* star_full.png in Resources */,
 				A0E1EBB41B2B5B2200662C08 /* mock-additem.png in Resources */,
 				A0E1EBB51B2B5B2200662C08 /* icon-x@3x.png in Resources */,
+				60F3BC0F1B5E900A0033EF83 /* Goodwill Logo.png in Resources */,
+				60F3BC0C1B5E90010033EF83 /* Goodwill Logo-White.png in Resources */,
 				A0E1EBB61B2B5B2200662C08 /* icon-marker75.png in Resources */,
 				A0E1EBB71B2B5B2200662C08 /* btn-meh.png in Resources */,
 				A0E1EBB81B2B5B2200662C08 /* mock-settings.png in Resources */,
@@ -1373,8 +1426,8 @@
 				A0E1EBC01B2B5B2200662C08 /* icon-down.png in Resources */,
 				A0E1EBC11B2B5B2200662C08 /* item-detail-overlay.png in Resources */,
 				A0E1EBC21B2B5B2200662C08 /* icon-car75.png in Resources */,
+				F0D6F4031B5EA17100938A06 /* LoginScreen-bkg.png in Resources */,
 				A0E1EBC31B2B5B2200662C08 /* btn-sign-in40.png in Resources */,
-				A0E1EBC41B2B5B2200662C08 /* SplashScreen-bkg.png in Resources */,
 				A0E1EBC51B2B5B2200662C08 /* icon-filter.png in Resources */,
 				A03E93C91B43755600F12733 /* InstructionScreen.png in Resources */,
 				A0E1EBC61B2B5B2200662C08 /* icon-pencil.png in Resources */,
@@ -1624,6 +1677,7 @@
 				A03E93CA1B4375AA00F12733 /* PNLineChart.swift in Sources */,
 				A0E1EB6E1B2B5B2200662C08 /* ComposeViewController.swift in Sources */,
 				A0E1EB6F1B2B5B2200662C08 /* Message.swift in Sources */,
+				F0D6F3D41B5E725A00938A06 /* CameraView.swift in Sources */,
 				A0E1EB701B2B5B2200662C08 /* AppDelegate.swift in Sources */,
 				A03E93CB1B4375C300F12733 /* PNChartConfig.swift in Sources */,
 				A0E1EB711B2B5B2200662C08 /* MessageBubbleCell.swift in Sources */,
@@ -1805,6 +1859,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_INTERFACE_HEADER_NAME = "Bakkle-Swift.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -1840,6 +1895,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_INTERFACE_HEADER_NAME = "Bakkle-Swift.h";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -1848,6 +1904,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1D710285C97E0FF7D33DEB9E /* Pods-Bakkle.debug.xcconfig */;
 			buildSettings = {
+				APP_NAME = Bakkle;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = Bakkle/Bakkle.entitlements;
@@ -1878,6 +1935,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 698270E0C83AB2371F464BB2 /* Pods-Bakkle.release.xcconfig */;
 			buildSettings = {
+				APP_NAME = Bakkle;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = Bakkle/Bakkle.entitlements;
@@ -1942,6 +2000,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1D710285C97E0FF7D33DEB9E /* Pods-Bakkle.debug.xcconfig */;
 			buildSettings = {
+				APP_NAME = Goodwill;
 				ASSETCATALOG_COMPILER_APPICON_NAME = Goodwill;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -1952,6 +2011,7 @@
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/build/Debug-iphoneos/Pods-Bakkle",
 				);
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				INFOPLIST_FILE = "Goodwill-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1971,6 +2031,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 698270E0C83AB2371F464BB2 /* Pods-Bakkle.release.xcconfig */;
 			buildSettings = {
+				APP_NAME = Goodwill;
 				ASSETCATALOG_COMPILER_APPICON_NAME = Goodwill;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -1981,6 +2042,7 @@
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/build/Debug-iphoneos/Pods-Bakkle",
 				);
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				INFOPLIST_FILE = "Goodwill-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

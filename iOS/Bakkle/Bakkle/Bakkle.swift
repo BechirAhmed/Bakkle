@@ -79,6 +79,8 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     var image_quality : Float = 0.3
     var image_precache : Int = 10
     
+    var theme_base : UIColor = UIColor(red: 51.0/255.0, green: 205.0/255.0, blue: 95.0/255.0, alpha: 1.0);
+    var theme_baseDark : UIColor = UIColor(red: 41.0/255.0, green: 170.0/255.0, blue: 66.0/255.0, alpha: 1.0);
     class var sharedInstance: Bakkle {
         struct Static {
             static let instance: Bakkle = Bakkle()
@@ -94,25 +96,24 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         setServer()
         info("Using server: \(self.serverNum) \(self.url_base)")
 
-        self.setFlavor()
         self.getFilter()
         self.restoreData()
         self.initLocation()
         
+        
+        /* Set version of app for branding 1=Bakkle, 2=Goodwill */
         let appName = NSBundle.mainBundle().infoDictionary!["CFBundleName"] as! String;
         self.flavor = appName == "Bakkle" ? 1 : 2;
+        
+        if(self.flavor == 2){
+            self.theme_base = UIColor(red: 0, green: 83.0/255.0, blue: 160.0/255.0, alpha: 1);
+            self.theme_baseDark = UIColor(red: 0, green: 70.0/255.0, blue: 136.0/255.0, alpha: 1);
+
+        }
         
         settings()
     }
     
-    /* Set version of app for branding 1=Bakkle, 2=Goodwill */
-    func setFlavor() {
-//#if defined(TARGET_BAKKLE)
-    self.flavor = 1
-//#else
-//    self.flavor = 2
-//#endif
-    }
         
     /* Return a public URL to the item on the web */
     /* In future we hope to have a URL shortener */

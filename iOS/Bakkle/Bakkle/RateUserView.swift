@@ -30,6 +30,10 @@ class RateUserView: UIViewController {
     override func viewDidLoad() {
         setupButtons()
         
+        if(Bakkle.sharedInstance.flavor == 2){
+            self.view.backgroundColor = Bakkle.sharedInstance.theme_base
+        }
+        
         let sellersProfile = item.valueForKey("seller") as! NSDictionary
         let facebookID = sellersProfile.valueForKey("facebook_id") as! String
         let sellersName = sellersProfile.valueForKey("display_name") as! String

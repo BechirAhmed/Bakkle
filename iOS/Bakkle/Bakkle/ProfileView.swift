@@ -27,6 +27,13 @@ class ProfileView: UIViewController, UITextViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if(Bakkle.sharedInstance.flavor == 2){
+            self.view.backgroundColor = Bakkle.sharedInstance.theme_base
+            self.editBtn.backgroundColor = Bakkle.sharedInstance.theme_base
+            self.logoutBtn.backgroundColor = Bakkle.sharedInstance.theme_base
+            self.saveBtn.backgroundColor = Bakkle.sharedInstance.theme_base
+        }
+        
         user = user.valueForKey("account") as! NSDictionary
         setupButtons()
         self.backgroundAvatar.contentMode = UIViewContentMode.ScaleAspectFill

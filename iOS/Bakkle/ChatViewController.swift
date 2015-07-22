@@ -90,7 +90,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let topHeight: CGFloat = 20
         let headerHeight: CGFloat = 44
         header = UIView(frame: CGRectMake(view.bounds.origin.x, view.bounds.origin.y, view.bounds.size.width, headerHeight+topHeight))
-        header.backgroundColor = Theme.ColorGreen
+        header.backgroundColor = Bakkle.sharedInstance.theme_base
         
         
         let buttonWidth: CGFloat = 80.0
@@ -103,8 +103,8 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let profileButtonWidth: CGFloat = 36
         let profileXpos:CGFloat = (header.bounds.size.width - header.bounds.origin.x
             - profileButtonWidth) / 2
-        profileButton = UIButton(frame: CGRectMake(profileXpos, header.bounds.origin.y+topHeight+4, profileButtonWidth, headerHeight-4))
-        profileButton.backgroundColor = Theme.ColorGreen
+        profileButton = UIButton(frame: CGRectMake(profileXpos, header.bounds.origin.y+topHeight+4, profileButtonWidth, profileButtonWidth))
+        profileButton.backgroundColor = Bakkle.sharedInstance.theme_base
         profileButton.setImage(UIImage(named: "loading.png"), forState: UIControlState.Normal)
         profileButton.imageView?.layer.cornerRadius = profileButton.imageView!.frame.size.width/2
         profileButton.imageView?.layer.borderWidth = 1.5
@@ -114,7 +114,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         let infoButtonWidth:CGFloat = 50
         var infoButton = UIButton(frame: CGRectMake(header.bounds.origin.x+header.bounds.size.width-infoButtonWidth, header.bounds.origin.y+topHeight, infoButtonWidth, headerHeight))
-        infoButton.setImage(UIImage(named: "icon-i.png"), forState: UIControlState.Normal)
+        infoButton.setImage(UIImage(named: Bakkle.sharedInstance.flavor == 2 ? "icon-i-blue.png" : "icon-i.png"), forState: UIControlState.Normal)
         infoButton.addTarget(self, action: "btnI:", forControlEvents: UIControlEvents.TouchUpInside)
         header.addSubview(infoButton)
         
@@ -167,7 +167,13 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             let seller_facebookid = seller.valueForKey("facebook_id") as! String
             var facebookProfileImageUrlString = "http://graph.facebook.com/\(seller_facebookid)/picture?width=142&height=142"
             let imgURL = NSURL(string: facebookProfileImageUrlString)
-            profileButton.hnk_setImageFromURL(imgURL!, state: UIControlState.Normal, placeholder: UIImage(named:"loading.png"), format: nil, failure: nil, success: nil)
+            
+            if(Bakkle.sharedInstance.flavor == 2){
+                profileButton.hnk_setImage(UIImage(named: "gwIcon@2x.png")!, state: UIControlState.Normal, animated: false, success: nil)
+            }
+            else{
+                profileButton.hnk_setImageFromURL(imgURL!, state: UIControlState.Normal, placeholder: UIImage(named:"loading.png"), format: nil, failure: nil, success: nil)
+            }
         }
         else {
             let user = chat.user

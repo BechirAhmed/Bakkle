@@ -14,6 +14,10 @@ class DemoView: UIViewController {
     
     override func viewDidLoad() {
         setupButtons()
+        
+        if(Bakkle.sharedInstance.flavor == 2){
+            self.view.backgroundColor = Bakkle.sharedInstance.theme_base
+        }
     }
     
     func setupButtons() {

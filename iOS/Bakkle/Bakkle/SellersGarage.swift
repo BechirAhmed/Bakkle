@@ -48,9 +48,8 @@ class SellersGarageView: UIViewController, UITableViewDelegate, UITableViewDataS
         self.view.userInteractionEnabled = true
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "messageCell")
         
-        if Bakkle.sharedInstance.garageItems != nil {
-            classifyData()
-        }
+        
+        classifyData()
         requestUpdates()
     }
     
@@ -89,7 +88,7 @@ class SellersGarageView: UIViewController, UITableViewDelegate, UITableViewDataS
     func classifyData() {
         self.activeItem = [Int]()
         self.soldItem = [Int]()
-        if Bakkle.sharedInstance.garageItems.count == 0 {
+        if Bakkle.sharedInstance.garageItems == nil || Bakkle.sharedInstance.garageItems.count == 0 {
             return
         }
         for index in 0...Bakkle.sharedInstance.garageItems.count-1 {
@@ -236,6 +235,7 @@ class SellersGarageView: UIViewController, UITableViewDelegate, UITableViewDataS
         chatsViewController.garageIndex = getIndex(indexPath)
         self.navigationController?.pushViewController(chatsViewController, animated: true)
         self.view.userInteractionEnabled = false
+        self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
     
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {

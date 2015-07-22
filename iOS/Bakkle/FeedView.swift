@@ -10,7 +10,7 @@ import UIKit
 import Photos
 import Haneke
 
-class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDelegate, UINavigationControllerDelegate, MDCSwipeToChooseDelegate {
+class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDelegate, UINavigationControllerDelegate, MDCSwipeToChooseDelegate, UIAlertViewDelegate {
 
     let menuSegue = "presentNav"
     let itemDetailSegue = "ItemDetailSegue"
@@ -40,9 +40,23 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     @IBOutlet weak var refineButton: UIButton!
     @IBOutlet weak var btnAddItem: UIButton!
     @IBOutlet weak var titleBar: UIView!
+    @IBOutlet weak var logoImageView: UIImageView!
+    
+    @IBOutlet weak var logoImageViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var logoImageViewWidth: NSLayoutConstraint!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if(Bakkle.sharedInstance.flavor == 2){
+            self.view.backgroundColor = Bakkle.sharedInstance.theme_base
+            self.titleBar.backgroundColor = Bakkle.sharedInstance.theme_baseDark
+            
+            var logo : UIImage = UIImage(named: "Goodwill Logo-White.png")!
+            logoImageView.image = logo;
+            logoImageViewHeight.constant = 20;
+            logoImageViewWidth.constant = 140;
+        }
         
         // Always look for updates
         requestUpdates()
@@ -80,10 +94,17 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         searchBar.barTintColor = titleBar.backgroundColor
         searchBar.layer.borderColor = titleBar.backgroundColor?.CGColor
         searchBar.layer.borderWidth = 1
+        
+        if Bakkle.sharedInstance.flavor == 2 {
+            btnAddItem.hidden = true
+        }
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(true)
+    
+        // Always look for updates
+        requestUpdates()
 
         filterChanged()
         
@@ -363,7 +384,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             view.bottomBlurImg.hnk_setImageFromURL(imgURL!)
             view.imageView.hnk_setImageFromURL(imgURL!)
             view.imageView.contentMode = UIViewContentMode.ScaleAspectFill
-            view.profileImg.image = UIImage(data: NSData(contentsOfURL: profileImgURL!)!)
+            view.profileImg.image = Bakkle.sharedInstance.flavor == 2 ? UIImage(named: "gwIcon@2x.png") : UIImage(data: NSData(contentsOfURL: profileImgURL!)!)
         }
         
         if view == self.swipeView {
@@ -433,6 +454,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     
     func viewDidCancelSwipe(view: UIView!) {
         // Do nothing. Resets the swipe view
+        self.refreshData()
     }
     
     func view(view: UIView!, shouldBeChosenWithDirection direction: MDCSwipeDirection) -> Bool {
@@ -452,19 +474,39 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         switch direction {
         case MDCSwipeDirection.Left:
             Bakkle.sharedInstance.markItem("meh", item_id: self.item_id, success: {}, fail: {})
+            loadNext()
             break
         case MDCSwipeDirection.Right:
             Bakkle.sharedInstance.markItem("want", item_id: self.item_id, success: {}, fail: {})
+            loadNext()
             break
         case MDCSwipeDirection.Up:
             Bakkle.sharedInstance.markItem("hold", item_id: self.item_id, success: {}, fail: {})
+            loadNext()
             break
         case MDCSwipeDirection.Down:
-            Bakkle.sharedInstance.markItem("report", item_id: self.item_id, success: {}, fail: {})
+            let alertController = UIAlertController(title: "Alert", message:"INPUT BELOW", preferredStyle: .Alert)
+            var report: UITextField!
+            let confirmAction = UIAlertAction(title: "Confirm", style: .Default, handler: { action in
+                if report != nil {
+                    println(report.text)
+                }
+                Bakkle.sharedInstance.markItem("report", item_id: self.item_id, success: {}, fail: {})
+                self.loadNext()
+            })
+            let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Default, handler: { action in
+                self.refreshData()
+            })
+            alertController.addAction(cancelAction)
+            alertController.addAction(confirmAction)
+            alertController.addTextFieldWithConfigurationHandler({ (textField: UITextField!) -> Void in
+                report = textField
+                })
+            presentViewController(alertController, animated: true, completion: nil)
             break
         default: break
         }
-        loadNext()
+        
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {

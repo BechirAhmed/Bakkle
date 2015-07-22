@@ -14,12 +14,23 @@ class LoginView: UIViewController, FBLoginViewDelegate {
     
     @IBOutlet weak var fbLoginView: FBLoginView!
     
+    @IBOutlet weak var logoImageView: UIImageView!
+    @IBOutlet weak var logoImageViewAspectRatio: NSLayoutConstraint!
+    
+    @IBOutlet weak var loginScreenBkg: UIImageView!
+    
     var background:UIImageView!
     var logo: UIImageView!
     var counter = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if (Bakkle.sharedInstance.flavor == 2 ){
+            self.logoImageView.image = UIImage(named: "GWLogo_Full@2x.png")!
+            logoImageView.contentMode = UIViewContentMode.ScaleAspectFit
+            self.loginScreenBkg.image = UIImage(named: "LoginScreen-bkg-blue.png")!
+        }
         
         self.fbLoginView.readPermissions = ["public_profile", "email", "user_friends", "publish_actions"]
         
@@ -46,18 +57,28 @@ class LoginView: UIViewController, FBLoginViewDelegate {
     
     // create the background image, which is the same as the launch screen background
     func setBackgroundImg(){
-        background = UIImageView(image: UIImage(named: "SplashScreen-bkg.png"))
+        if Bakkle.sharedInstance.flavor == 2 {
+            background = UIImageView(image: UIImage(named: "SplashScreen-bkg-Blue.png"))
+        }else{
+            background = UIImageView(image: UIImage(named: "SplashScreen-bkg.png"))
+        }
         background.frame = CGRectMake(0, 0, self.view.bounds.width, self.view.bounds.height)
         self.view.addSubview(background)
     }
     
     // create the logo image, which is the same as the launch screen logo
     func setLogoImg(){
-        logo = UIImageView(image: UIImage(named: "logo-white-design-clear.png"))
+        if Bakkle.sharedInstance.flavor == 2 {
+            logo = UIImageView(image: UIImage(named: "GWLogo_Full@2x.png"))
+            logo.contentMode = UIViewContentMode.ScaleAspectFit
+            logo.addConstraint(NSLayoutConstraint(item: logo, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: logo, attribute: NSLayoutAttribute.Height, multiplier: 2, constant: 0.0))
+        }else{
+            logo = UIImageView(image: UIImage(named: "logo-white-design-clear.png"))
+            logo.addConstraint(NSLayoutConstraint(item: logo, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: logo, attribute: NSLayoutAttribute.Width, multiplier: 25.0/62.0, constant: 0.0))
+        }
         background.addSubview(logo)
         
         logo.setTranslatesAutoresizingMaskIntoConstraints(false)
-        logo.addConstraint(NSLayoutConstraint(item: logo, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: logo, attribute: NSLayoutAttribute.Width, multiplier: 25.0/62.0, constant: 0.0))
         background.addConstraint(NSLayoutConstraint(item: logo, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: background, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0.0))
         background.addConstraint(NSLayoutConstraint(item: logo, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem: background, attribute: NSLayoutAttribute.Top, multiplier: 1.0, constant: 49.0))
         background.addConstraint(NSLayoutConstraint(item: logo, attribute: NSLayoutAttribute.Left, relatedBy: NSLayoutRelation.Equal, toItem: background, attribute: NSLayoutAttribute.Left, multiplier: 1.0, constant: 36.0))
