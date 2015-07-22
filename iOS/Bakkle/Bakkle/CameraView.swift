@@ -286,8 +286,6 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             return
         }
         
-        captureSession!.beginConfiguration()
-        
         if findCameraWithPosition(.Front) == nil &&  findCameraWithPosition(.Back) == nil {
             let alertController = UIAlertController(title: "No Camera Available", message:"Sorry, you need to have a camera to list an item.", preferredStyle: .Alert)
             let defaultAction = UIAlertAction(title: "OK", style: .Default, handler: { action in
@@ -297,6 +295,8 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             presentViewController(alertController, animated: true, completion: nil)
             return
         }
+        
+        captureSession!.beginConfiguration()
         
         if !contains(captureSession!.inputs, item: selectedDevice) {
             captureSession!.addInput(selectedDevice!)
@@ -395,6 +395,11 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     }
     
     func drawFocusRect() {
+        
+        if selectedDevice == nil {
+            return
+        }
+        
         // update frame of the indicator IF the device is previewing or displaying a still
         if (selectedDevice!.device.adjustingFocus || selectedDevice!.device.adjustingExposure || selectedDevice!.device.adjustingWhiteBalance) && !displayingStill {
             focusIndicator.removeFromSuperview()
