@@ -74,7 +74,7 @@ app = web.Application([
 
 
     web.url(r"/ws.*", baseWSHandlers.BaseWSHandler),
-], debug=True
+], debug=False
 )
 
 # Start the server
