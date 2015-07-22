@@ -55,6 +55,12 @@ class LoginView: UIViewController, FBLoginViewDelegate {
         }
     }
     
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        self.fbLoginView.sizeToFit()
+    }
+    
     // create the background image, which is the same as the launch screen background
     func setBackgroundImg(){
         if Bakkle.sharedInstance.flavor == 2 {
