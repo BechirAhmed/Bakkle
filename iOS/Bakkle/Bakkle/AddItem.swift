@@ -326,12 +326,13 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
                     // We just added one so schedule an update.
                     // TODO: Could just add this to the feed
                     // and hope we are fairly current.
-                    dispatch_async(dispatch_get_main_queue()) {
-                        Bakkle.sharedInstance.populateFeed({})
-                        println("item_id=\(item_id) item_url=\(item_url)")
-                        self.successfulAdd = true
-                        self.dismissViewControllerAnimated(true, completion: nil)
-                    }
+                    Bakkle.sharedInstance.populateFeed({
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            println("item_id=\(item_id) item_url=\(item_url)")
+                            self.successfulAdd = true
+                            self.dismissViewControllerAnimated(true, completion: nil)
+                        })
+                    })
             }, fail: {() -> () in
                 //TODO: Show error popup and close.
             })

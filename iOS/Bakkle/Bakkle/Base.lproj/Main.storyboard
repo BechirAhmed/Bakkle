@@ -2915,18 +2915,50 @@
                                             </mask>
                                         </variation>
                                     </imageView>
+                                    <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your item has been listed!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vFC-VO-6zD">
+                                        <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
+                                        <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="36"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Don't worry, we're still listing your item!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zhl-2i-FdZ">
+                                        <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
+                                        <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="36"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
+                                    <constraint firstItem="vFC-VO-6zD" firstAttribute="width" secondItem="H9E-7W-nFK" secondAttribute="width" id="3UC-aV-kb2"/>
+                                    <constraint firstAttribute="centerX" secondItem="vFC-VO-6zD" secondAttribute="centerX" id="ArT-v5-KAC"/>
+                                    <constraint firstAttribute="bottom" secondItem="vFC-VO-6zD" secondAttribute="bottom" id="DnO-Bx-LZ7"/>
                                     <constraint firstAttribute="trailing" secondItem="H9E-7W-nFK" secondAttribute="trailing" constant="36" id="GPB-F9-YBj"/>
                                     <constraint firstItem="H9E-7W-nFK" firstAttribute="top" secondItem="tfn-dK-RZO" secondAttribute="top" constant="49" id="Lff-0V-yxW"/>
+                                    <constraint firstAttribute="bottom" secondItem="zhl-2i-FdZ" secondAttribute="bottom" id="RdX-Jk-YFk"/>
                                     <constraint firstItem="H9E-7W-nFK" firstAttribute="leading" secondItem="tfn-dK-RZO" secondAttribute="leading" constant="36" id="ZrS-WB-rMu"/>
+                                    <constraint firstItem="vFC-VO-6zD" firstAttribute="leading" secondItem="H9E-7W-nFK" secondAttribute="leading" id="bmp-cg-kbd"/>
+                                    <constraint firstItem="zhl-2i-FdZ" firstAttribute="width" secondItem="H9E-7W-nFK" secondAttribute="width" id="fh1-1L-LEI"/>
+                                    <constraint firstItem="vFC-VO-6zD" firstAttribute="top" secondItem="H9E-7W-nFK" secondAttribute="bottom" id="nEY-d3-O5r"/>
+                                    <constraint firstItem="zhl-2i-FdZ" firstAttribute="top" secondItem="H9E-7W-nFK" secondAttribute="bottom" id="p9s-rN-60e"/>
+                                    <constraint firstAttribute="centerX" secondItem="zhl-2i-FdZ" secondAttribute="centerX" id="rhX-Cd-Dki"/>
                                 </constraints>
                                 <variation key="default">
                                     <mask key="subviews">
                                         <exclude reference="H9E-7W-nFK"/>
+                                        <exclude reference="vFC-VO-6zD"/>
+                                        <exclude reference="zhl-2i-FdZ"/>
                                     </mask>
                                     <mask key="constraints">
+                                        <exclude reference="3UC-aV-kb2"/>
+                                        <exclude reference="ArT-v5-KAC"/>
+                                        <exclude reference="DnO-Bx-LZ7"/>
+                                        <exclude reference="bmp-cg-kbd"/>
+                                        <exclude reference="nEY-d3-O5r"/>
+                                        <exclude reference="RdX-Jk-YFk"/>
+                                        <exclude reference="fh1-1L-LEI"/>
+                                        <exclude reference="p9s-rN-60e"/>
+                                        <exclude reference="rhX-Cd-Dki"/>
                                         <exclude reference="GPB-F9-YBj"/>
                                         <exclude reference="Lff-0V-yxW"/>
                                         <exclude reference="ZrS-WB-rMu"/>
@@ -2935,8 +2967,19 @@
                                 <variation key="heightClass=regular-widthClass=compact">
                                     <mask key="subviews">
                                         <include reference="H9E-7W-nFK"/>
+                                        <include reference="vFC-VO-6zD"/>
+                                        <include reference="zhl-2i-FdZ"/>
                                     </mask>
                                     <mask key="constraints">
+                                        <include reference="3UC-aV-kb2"/>
+                                        <include reference="ArT-v5-KAC"/>
+                                        <include reference="DnO-Bx-LZ7"/>
+                                        <include reference="bmp-cg-kbd"/>
+                                        <include reference="nEY-d3-O5r"/>
+                                        <include reference="RdX-Jk-YFk"/>
+                                        <include reference="fh1-1L-LEI"/>
+                                        <include reference="p9s-rN-60e"/>
+                                        <include reference="rhX-Cd-Dki"/>
                                         <include reference="GPB-F9-YBj"/>
                                         <include reference="Lff-0V-yxW"/>
                                         <include reference="ZrS-WB-rMu"/>
@@ -3030,6 +3073,7 @@
                         <outlet property="imageView2" destination="kGh-Td-ObG" id="4eT-KZ-GfH"/>
                         <outlet property="imageView3" destination="JLs-86-nLR" id="Vd9-Lx-rC3"/>
                         <outlet property="imageView4" destination="kTL-Ji-NT1" id="Ob2-2H-Jnl"/>
+                        <outlet property="listedLabel" destination="vFC-VO-6zD" id="2iP-uG-jcg"/>
                         <outlet property="loadingCameraPreviewLabel" destination="K8S-jb-9YX" id="rh9-zk-c9P"/>
                         <outlet property="nextButton" destination="4A3-TI-c15" id="jV6-hK-Jbt"/>
                         <outlet property="removeImage1" destination="Izd-Xs-rvS" id="x9W-8l-fsX"/>
@@ -3038,25 +3082,26 @@
                         <outlet property="removeImage4" destination="3Fi-L1-h5G" id="9dQ-7g-rkM"/>
                         <outlet property="stillImagePreview" destination="f07-wz-xp9" id="lrt-Gn-vzm"/>
                         <outlet property="switchCamera" destination="9R9-wo-lC2" id="GjM-5K-bTa"/>
+                        <outlet property="willBeListedLabel" destination="zhl-2i-FdZ" id="wwz-I5-uAu"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SLf-Sj-Buo" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="g4w-y2-2kt" userLabel="ImageView1LongPress">
+                <pongPressGestureRecognizer cancelsTouchesInView="NO" allowableMovement="10" minimumPressDuration="0.20000000000000001" id="g4w-y2-2kt" userLabel="ImageView1LongPress">
                     <connections>
                         <action selector="photoHeld:" destination="Tk1-Fv-owu" id="taM-kf-uAB"/>
                     </connections>
                 </pongPressGestureRecognizer>
-                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="2Xx-xq-RwF" userLabel="ImageView2LongPress">
+                <pongPressGestureRecognizer cancelsTouchesInView="NO" allowableMovement="10" minimumPressDuration="0.20000000000000001" id="2Xx-xq-RwF" userLabel="ImageView2LongPress">
                     <connections>
                         <action selector="photoHeld:" destination="Tk1-Fv-owu" id="oe2-ud-tK8"/>
                     </connections>
                 </pongPressGestureRecognizer>
-                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="tDa-cc-QEp" userLabel="ImageView3LongPress">
+                <pongPressGestureRecognizer cancelsTouchesInView="NO" allowableMovement="10" minimumPressDuration="0.20000000000000001" id="tDa-cc-QEp" userLabel="ImageView3LongPress">
                     <connections>
                         <action selector="photoHeld:" destination="Tk1-Fv-owu" id="NqU-OJ-1kF"/>
                     </connections>
                 </pongPressGestureRecognizer>
-                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="McC-2M-bIq" userLabel="ImageView4LongPress">
+                <pongPressGestureRecognizer cancelsTouchesInView="NO" allowableMovement="10" minimumPressDuration="0.20000000000000001" id="McC-2M-bIq" userLabel="ImageView4LongPress">
                     <connections>
                         <action selector="photoHeld:" destination="Tk1-Fv-owu" id="Xvj-Ve-c8X"/>
                     </connections>
@@ -5140,18 +5185,9 @@
                                         <exclude reference="2AB-OF-TiT"/>
                                     </mask>
                                     <mask key="constraints">
-                                        <exclude reference="84T-wd-v97"/>
-                                        <exclude reference="XZE-YO-TCv"/>
-                                        <exclude reference="hYO-3f-5hS"/>
-                                        <exclude reference="WZe-Yn-Nqs"/>
-                                        <exclude reference="Wsu-uJ-ksj"/>
-                                        <exclude reference="abd-Gx-uxC"/>
                                         <exclude reference="FUp-dQ-D9z"/>
                                         <exclude reference="nAB-bU-p0n"/>
                                         <exclude reference="q50-RA-TPP"/>
-                                        <exclude reference="F8R-Sc-fUf"/>
-                                        <exclude reference="HJc-4m-pO0"/>
-                                        <exclude reference="TYm-CT-1ao"/>
                                         <exclude reference="NXH-Ik-1ov"/>
                                         <exclude reference="V1M-Qv-9Uq"/>
                                         <exclude reference="bXK-4e-XyR"/>
@@ -5162,6 +5198,15 @@
                                         <exclude reference="GvY-zS-Y7D"/>
                                         <exclude reference="Sh6-A0-qhR"/>
                                         <exclude reference="XLu-NT-uIP"/>
+                                        <exclude reference="F8R-Sc-fUf"/>
+                                        <exclude reference="HJc-4m-pO0"/>
+                                        <exclude reference="TYm-CT-1ao"/>
+                                        <exclude reference="84T-wd-v97"/>
+                                        <exclude reference="XZE-YO-TCv"/>
+                                        <exclude reference="hYO-3f-5hS"/>
+                                        <exclude reference="WZe-Yn-Nqs"/>
+                                        <exclude reference="Wsu-uJ-ksj"/>
+                                        <exclude reference="abd-Gx-uxC"/>
                                     </mask>
                                 </variation>
                                 <variation key="heightClass=regular-widthClass=compact">
@@ -5175,18 +5220,9 @@
                                         <include reference="2AB-OF-TiT"/>
                                     </mask>
                                     <mask key="constraints">
-                                        <include reference="84T-wd-v97"/>
-                                        <include reference="XZE-YO-TCv"/>
-                                        <include reference="hYO-3f-5hS"/>
-                                        <include reference="WZe-Yn-Nqs"/>
-                                        <include reference="Wsu-uJ-ksj"/>
-                                        <include reference="abd-Gx-uxC"/>
                                         <include reference="FUp-dQ-D9z"/>
                                         <include reference="nAB-bU-p0n"/>
                                         <include reference="q50-RA-TPP"/>
-                                        <include reference="F8R-Sc-fUf"/>
-                                        <include reference="HJc-4m-pO0"/>
-                                        <include reference="TYm-CT-1ao"/>
                                         <include reference="NXH-Ik-1ov"/>
                                         <include reference="V1M-Qv-9Uq"/>
                                         <include reference="bXK-4e-XyR"/>
@@ -5197,6 +5233,15 @@
                                         <include reference="GvY-zS-Y7D"/>
                                         <include reference="Sh6-A0-qhR"/>
                                         <include reference="XLu-NT-uIP"/>
+                                        <include reference="F8R-Sc-fUf"/>
+                                        <include reference="HJc-4m-pO0"/>
+                                        <include reference="TYm-CT-1ao"/>
+                                        <include reference="84T-wd-v97"/>
+                                        <include reference="XZE-YO-TCv"/>
+                                        <include reference="hYO-3f-5hS"/>
+                                        <include reference="WZe-Yn-Nqs"/>
+                                        <include reference="Wsu-uJ-ksj"/>
+                                        <include reference="abd-Gx-uxC"/>
                                     </mask>
                                 </variation>
                             </view>

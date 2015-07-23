@@ -14,7 +14,7 @@
                 <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFill" image="SplashScreen-bkg-Blue.png" translatesAutoresizingMaskIntoConstraints="NO" id="Gvq-OW-UdQ">
                     <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                 </imageView>
-                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" image="GWLogo_Full.png" translatesAutoresizingMaskIntoConstraints="NO" id="mkG-Lu-7Qf">
+                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" misplaced="YES" image="GWLogo_Full.png" translatesAutoresizingMaskIntoConstraints="NO" id="mkG-Lu-7Qf">
                     <rect key="frame" x="36" y="49" width="342" height="138"/>
                     <constraints>
                         <constraint firstAttribute="width" secondItem="mkG-Lu-7Qf" secondAttribute="height" multiplier="4:2" id="MHV-JU-P9s"/>
