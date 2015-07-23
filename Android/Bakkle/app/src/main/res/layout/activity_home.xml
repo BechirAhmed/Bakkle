@@ -47,7 +47,7 @@
                     android:src="@drawable/ic_action_camera"
                     android:longClickable="true" />
 
-                <ImageButton
+                <!--<ImageButton
                     android:id="@+id/search_button"
                     android:layout_width="45dp"
                     android:layout_height="45dp"
@@ -56,7 +56,7 @@
                     android:layout_toLeftOf="@+id/action_bar_rightImage"
                     android:background="@null"
                     android:src="@drawable/ic_search"
-                    />
+                    /> -->
 
 
             </RelativeLayout>

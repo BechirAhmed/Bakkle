@@ -98,7 +98,7 @@
             android:padding="10dp"
             />
 
-        <TextView
+        <com.andtinder.FontFitTextView
             android:layout_width="85dp"
             android:layout_height="wrap_content"
             android:textColor="@android:color/primary_text_dark"

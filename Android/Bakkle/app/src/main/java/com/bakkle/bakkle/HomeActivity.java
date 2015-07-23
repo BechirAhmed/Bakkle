@@ -8,9 +8,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -37,7 +34,6 @@ import com.facebook.login.LoginManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
-import com.koushikdutta.ion.Ion;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.accountswitcher.AccountHeader;
@@ -115,25 +111,30 @@ public class HomeActivity extends AppCompatActivity implements SellersGarage.OnF
 //            }
 //        };
 
-        Bitmap profpic = null;
+//        Bitmap profpic = null;
+//        Drawable prof;
+//
+//        try {
+//            profpic = Ion.with(this)
+//                    .load("http://graph.facebook.com/" + preferences.getString("userID", "0") + "/picture?type=square")
+//                    .withBitmap()
+//                    .asBitmap()
+//                    .get();
+//            prof = new BitmapDrawable(getResources(), profpic);
+//        }
+//        catch(Exception e){
+//            prof = getResources().getDrawable(R.drawable.loading);
+//        }
 
-        try {
-            profpic = Ion.with(this)
-                    .load("http://graph.facebook.com/" + preferences.getString("UserID", "0") + "/picture?type=square")
-                    .withBitmap()
-                    .asBitmap()
-                    .get();
-        }
-        catch(Exception e){}
 
-        Drawable prof = new BitmapDrawable(getResources(), profpic);
+
 
         AccountHeader headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
-                .withHeaderBackground(R.drawable.splash_screen)
+                .withHeaderBackground(R.color.dark_green)
                 .withSelectionListEnabled(false)
                 .addProfiles(
-                        new ProfileDrawerItem().withName(preferences.getString("name", "Not Signed In")).withIcon(prof)
+                        new ProfileDrawerItem().withName(preferences.getString("name", "Not Signed In")).withIcon("http://graph.facebook.com/" + preferences.getString("userID", "0") + "/picture?type=square")
                 )
                 .withProfileImagesClickable(true)
                 .withProfileImagesVisible(true)
@@ -143,12 +144,15 @@ public class HomeActivity extends AppCompatActivity implements SellersGarage.OnF
                         return false;
                     }
                 })*/
+                .withSavedInstance(savedInstanceState)
                 .build();
 
 
         drawer = new DrawerBuilder()
                 .withActivity(this)
                 .withToolbar(toolbar)
+                .withSavedInstance(savedInstanceState)
+                .withAccountHeader(headerResult)
                 .addDrawerItems(
                         new PrimaryDrawerItem().withName(mDrawerItems.get(0)).withIcon(mDrawerIcons.getDrawable(0)),
                         new PrimaryDrawerItem().withName(mDrawerItems.get(1)).withIcon(mDrawerIcons.getDrawable(1)),
@@ -157,7 +161,6 @@ public class HomeActivity extends AppCompatActivity implements SellersGarage.OnF
                         new PrimaryDrawerItem().withName(mDrawerItems.get(4)).withIcon(mDrawerIcons.getDrawable(4)),
                         new PrimaryDrawerItem().withName(mDrawerItems.get(5)).withIcon(mDrawerIcons.getDrawable(5))
                 )
-                .withAccountHeader(headerResult)
                 .withTranslucentStatusBar(false)
                 /*.withAdapter(mDrawerAdapter)*/
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
@@ -332,7 +335,6 @@ public class HomeActivity extends AppCompatActivity implements SellersGarage.OnF
                             preferences.getString("uuid", "0"));
                     editor.putBoolean("done", true);
                     editor.apply();
-                    Toast.makeText(getApplicationContext(), "Did the server register for facebook call", Toast.LENGTH_SHORT).show();
                 }
                     });
 

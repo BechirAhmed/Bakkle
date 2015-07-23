@@ -68,7 +68,6 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
             @Override
             public void onSuccess(LoginResult loginResult)
             {
-                Toast.makeText(getApplicationContext(), "2", Toast.LENGTH_SHORT).show();
                 AccessToken token = loginResult.getAccessToken();
                 mProfileTracker = new ProfileTracker() {
                     @Override

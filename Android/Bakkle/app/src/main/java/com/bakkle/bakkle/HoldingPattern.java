@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.andtinder.view.SimpleCardStackAdapter;
 import com.bakkle.bakkle.dummy.DummyContent;
@@ -108,7 +107,6 @@ public class HoldingPattern extends ListFragment {
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
 
-        Toast.makeText(getActivity(), "Test", Toast.LENGTH_SHORT).show();
 
         if (mListener != null) {
             // Notify the active callbacks interface (the activity, if the

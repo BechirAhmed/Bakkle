@@ -148,7 +148,9 @@ public class AddItem extends AppCompatActivity{
             Matrix matrix = new Matrix();
             matrix.postRotate(90);
 
-            Bitmap temp = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(mCurrentPhotoPath), dpToPx(250), dpToPx(250));
+            final BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = 8;
+            Bitmap temp = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(mCurrentPhotoPath, options), dpToPx(250), dpToPx(250));
             temp = Bitmap.createBitmap(temp, 0, 0, temp.getWidth(), temp.getHeight(), matrix, true); //rotate picture 90 degrees
 
 
@@ -191,8 +193,6 @@ public class AddItem extends AppCompatActivity{
             productPictureViews.add(imageView);
             picturePaths.add(mCurrentPhotoPath);
             temp = null;
-            imageView = null;
-            relativeLayout = null;
         }
     }
 
@@ -259,9 +259,15 @@ public class AddItem extends AppCompatActivity{
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        JsonObject json = new ServerCalls(this).addItem(title, description, price, method, tags, picturePaths, shareFB,
+        JsonObject json = new ServerCalls(this).addItem(title, description, price, method, tags, picturePaths,
             preferences.getString("auth_token", "0"), preferences.getString("uuid", "0"));
 
+        if(shareFB && json.get("status").getAsInt() == 1)
+        {
+
+        }
+
+        finish();
 
     }
 }

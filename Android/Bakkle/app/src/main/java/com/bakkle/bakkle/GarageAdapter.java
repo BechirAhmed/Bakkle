@@ -1,6 +1,7 @@
 package com.bakkle.bakkle;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,16 +36,19 @@ public class GarageAdapter extends ArraySwipeAdapter<FeedItem> {
 
     }
 
+    AsyncImageLoader asyncImageLoader;
+
     public GarageAdapter(Context context, ArrayList<FeedItem> items){
         super(context, R.layout.garage_list_item, items);
         this.c = context;
         this.items = items;
+        asyncImageLoader = new AsyncImageLoader(context);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
         FeedItem item = (FeedItem) getItem(position);
-        ViewHolder viewHolder;
+        final ViewHolder viewHolder;
         if(convertView == null){
             viewHolder = new ViewHolder();
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.garage_list_item, parent, false);
@@ -61,8 +65,12 @@ public class GarageAdapter extends ArraySwipeAdapter<FeedItem> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-
-        viewHolder.icon.setImageBitmap(item.getFirstImage());
+        Drawable cachedImage = asyncImageLoader.loadDrawable(item.getImageUrls().get(0), new AsyncImageLoader.ImageCallback() {
+            public void imageLoaded(Drawable imageDrawable, String imageUrl) {
+                viewHolder.icon.setImageDrawable(imageDrawable);
+            }
+        });
+        viewHolder.icon.setImageDrawable(cachedImage);
         viewHolder.title.setText(item.getTitle());
         viewHolder.price.setText("$" + item.getPrice());
         viewHolder.want.setText(item.getNumWant());

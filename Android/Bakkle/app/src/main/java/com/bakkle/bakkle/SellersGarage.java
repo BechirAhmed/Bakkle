@@ -18,7 +18,6 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.bakkle.bakkle.dummy.DummyContent;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -146,12 +145,11 @@ public class SellersGarage extends ListFragment {
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
 
-        Toast.makeText(getActivity(), "Test", Toast.LENGTH_SHORT).show();
 
         if (mListener != null) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
-            mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
+            //mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
         }
     }
 
