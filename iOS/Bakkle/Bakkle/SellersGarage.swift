@@ -132,10 +132,7 @@ class SellersGarageView: UIViewController, UITableViewDelegate, UITableViewDataS
     func requestUpdates() {
         println("[Sellers Garage] Requesting updates from server")
         dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
-            Bakkle.sharedInstance.populateGarage({
-                self.classifyData()
-                self.tableView.reloadData()
-            })
+            Bakkle.sharedInstance.populateGarage({ })
         }
     }
     

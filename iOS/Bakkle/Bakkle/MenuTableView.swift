@@ -12,7 +12,7 @@ class MenuTableController: UITableViewController {
 
     let profileSegue = "PushToProfileView"
     var backView: UIView!
-    var segueNotifier: dispatch_semaphore_t = dispatch_semaphore_create(0)
+    var user: NSDictionary!
     
     @IBOutlet weak var profileImg: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
@@ -129,18 +129,27 @@ class MenuTableController: UITableViewController {
         return 60
     }
     
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if indexPath.row == 0 {
+            self.view.userInteractionEnabled = false
+            Bakkle.sharedInstance.getAccount(Bakkle.sharedInstance.account_id, success: {
+                self.user = Bakkle.sharedInstance.responseDict
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.performSegueWithIdentifier(self.profileSegue, sender: self)
+                })
+            }, fail: {})
+            
+        }
+    }
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         self.view.userInteractionEnabled = false
         UIApplication.sharedApplication().setStatusBarHidden(false, withAnimation: UIStatusBarAnimation.None)
         if segue.identifier == self.profileSegue {
             let destinationVC = segue.destinationViewController as! ProfileView
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
-                Bakkle.sharedInstance.getAccount(Bakkle.sharedInstance.account_id, success: {
-                    destinationVC.user = Bakkle.sharedInstance.responseDict
-                    dispatch_semaphore_signal(self.segueNotifier)
-                    }, fail: {})
-            })
-            dispatch_semaphore_wait(segueNotifier, DISPATCH_TIME_FOREVER)
+            if self.user != nil {
+                destinationVC.user = self.user
+            }
         }
     }
 }

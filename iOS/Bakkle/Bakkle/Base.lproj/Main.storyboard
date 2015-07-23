@@ -3819,9 +3819,6 @@
                                             </variation>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" red="0.1960784314" green="0.1960784314" blue="0.1960784314" alpha="1" colorSpace="calibratedRGB"/>
-                                        <connections>
-                                            <segue destination="5rT-aH-bSn" kind="custom" identifier="PushToProfileView" customClass="SWRevealViewControllerSeguePushController" id="SWR-zI-vHJ"/>
-                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="60" id="St8-VM-MZv" userLabel="FEED">
                                         <autoresizingMask key="autoresizingMask"/>
@@ -4288,6 +4285,7 @@
                         <outlet property="profileBtn" destination="Zrf-Bf-d6b" id="EFF-Ox-SyD"/>
                         <outlet property="profileImg" destination="ZhL-J3-rDG" id="9WU-Tf-62s"/>
                         <outlet property="sellerImg" destination="YfU-rl-0zX" id="hfh-Vl-BId"/>
+                        <segue destination="5rT-aH-bSn" kind="custom" identifier="PushToProfileView" customClass="SWRevealViewControllerSeguePushController" id="X5Z-FZ-iL1"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Nqw-pa-qWQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
