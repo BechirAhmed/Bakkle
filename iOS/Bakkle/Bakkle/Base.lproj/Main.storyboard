@@ -2950,18 +2950,18 @@
                                         <exclude reference="zhl-2i-FdZ"/>
                                     </mask>
                                     <mask key="constraints">
-                                        <exclude reference="GPB-F9-YBj"/>
-                                        <exclude reference="Lff-0V-yxW"/>
-                                        <exclude reference="ZrS-WB-rMu"/>
-                                        <exclude reference="RdX-Jk-YFk"/>
-                                        <exclude reference="fh1-1L-LEI"/>
-                                        <exclude reference="p9s-rN-60e"/>
-                                        <exclude reference="rhX-Cd-Dki"/>
                                         <exclude reference="3UC-aV-kb2"/>
                                         <exclude reference="ArT-v5-KAC"/>
                                         <exclude reference="DnO-Bx-LZ7"/>
                                         <exclude reference="bmp-cg-kbd"/>
                                         <exclude reference="nEY-d3-O5r"/>
+                                        <exclude reference="RdX-Jk-YFk"/>
+                                        <exclude reference="fh1-1L-LEI"/>
+                                        <exclude reference="p9s-rN-60e"/>
+                                        <exclude reference="rhX-Cd-Dki"/>
+                                        <exclude reference="GPB-F9-YBj"/>
+                                        <exclude reference="Lff-0V-yxW"/>
+                                        <exclude reference="ZrS-WB-rMu"/>
                                     </mask>
                                 </variation>
                                 <variation key="heightClass=regular-widthClass=compact">
@@ -2971,18 +2971,18 @@
                                         <include reference="zhl-2i-FdZ"/>
                                     </mask>
                                     <mask key="constraints">
-                                        <include reference="GPB-F9-YBj"/>
-                                        <include reference="Lff-0V-yxW"/>
-                                        <include reference="ZrS-WB-rMu"/>
-                                        <include reference="RdX-Jk-YFk"/>
-                                        <include reference="fh1-1L-LEI"/>
-                                        <include reference="p9s-rN-60e"/>
-                                        <include reference="rhX-Cd-Dki"/>
                                         <include reference="3UC-aV-kb2"/>
                                         <include reference="ArT-v5-KAC"/>
                                         <include reference="DnO-Bx-LZ7"/>
                                         <include reference="bmp-cg-kbd"/>
                                         <include reference="nEY-d3-O5r"/>
+                                        <include reference="RdX-Jk-YFk"/>
+                                        <include reference="fh1-1L-LEI"/>
+                                        <include reference="p9s-rN-60e"/>
+                                        <include reference="rhX-Cd-Dki"/>
+                                        <include reference="GPB-F9-YBj"/>
+                                        <include reference="Lff-0V-yxW"/>
+                                        <include reference="ZrS-WB-rMu"/>
                                     </mask>
                                 </variation>
                             </view>
@@ -3086,22 +3086,22 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SLf-Sj-Buo" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="g4w-y2-2kt" userLabel="ImageView1LongPress">
+                <pongPressGestureRecognizer cancelsTouchesInView="NO" allowableMovement="10" minimumPressDuration="0.20000000000000001" id="g4w-y2-2kt" userLabel="ImageView1LongPress">
                     <connections>
                         <action selector="photoHeld:" destination="Tk1-Fv-owu" id="taM-kf-uAB"/>
                     </connections>
                 </pongPressGestureRecognizer>
-                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="2Xx-xq-RwF" userLabel="ImageView2LongPress">
+                <pongPressGestureRecognizer cancelsTouchesInView="NO" allowableMovement="10" minimumPressDuration="0.20000000000000001" id="2Xx-xq-RwF" userLabel="ImageView2LongPress">
                     <connections>
                         <action selector="photoHeld:" destination="Tk1-Fv-owu" id="oe2-ud-tK8"/>
                     </connections>
                 </pongPressGestureRecognizer>
-                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="tDa-cc-QEp" userLabel="ImageView3LongPress">
+                <pongPressGestureRecognizer cancelsTouchesInView="NO" allowableMovement="10" minimumPressDuration="0.20000000000000001" id="tDa-cc-QEp" userLabel="ImageView3LongPress">
                     <connections>
                         <action selector="photoHeld:" destination="Tk1-Fv-owu" id="NqU-OJ-1kF"/>
                     </connections>
                 </pongPressGestureRecognizer>
-                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="McC-2M-bIq" userLabel="ImageView4LongPress">
+                <pongPressGestureRecognizer cancelsTouchesInView="NO" allowableMovement="10" minimumPressDuration="0.20000000000000001" id="McC-2M-bIq" userLabel="ImageView4LongPress">
                     <connections>
                         <action selector="photoHeld:" destination="Tk1-Fv-owu" id="Xvj-Ve-c8X"/>
                     </connections>
@@ -4565,9 +4565,6 @@
                                                     <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="15"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
-                                                    <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
-                                                        <rect key="frame" x="99" y="8" width="213" height="21"/>
-                                                    </variation>
                                                 </label>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ABU-0d-c2I">
                                                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
