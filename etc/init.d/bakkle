@@ -3,7 +3,7 @@
 # webapp
 #
 workdir="/bakkle/www/bakkle/"
-apppath=$workdir"bakkleServer.py"
+apppath=$workdir"runServer.py"
 #configfile=$workdir"dev.conf"
 
 DATABASE=default
@@ -13,13 +13,13 @@ fi
 if [ `hostname` == 'ip-172-31-27-192' ]; then
    DATABASE=production
 fi
-if [ `hostname` == 'bakkle' ]; then
+if [ `hostname` == 'rhv-bakkle' ]; then
    DATABASE=testdb
 fi
 if [ `hostname` == 'rhv-bakkle-bld' ]; then
    DATABASE=dev
 fi
-if [ `hostname` == 'RHV-291SCS-Linux' ]; then
+if [ `hostname` == 'rhv-lnx-291scs' ]; then
    DATABASE=dev
 fi
 

@@ -88,6 +88,9 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     var imageViewX: [CGFloat]!
     var lockRelease: [Bool]!
     
+    /* TEMP VARIABLES (DELETE WHEN FEATURE IS FIXED */
+    var animating: Int = 0 // image rearrangement
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -579,6 +582,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             self.imageViews[fromIndex].image = nil
             self.lockRelease[toIndex] = true
             buttonEnabledHandler()
+            animating++
             
             UIView.animateWithDuration(CameraView.IMAGE_SLIDE_ANIMATION_TIME, animations: {
                 slideView.frame = CGRectMake(self.imageViewX[toIndex], self.imageViewY, slideView.frame.width, slideView.frame.height)
@@ -588,6 +592,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
                     slideView.removeFromSuperview()
                     self.lockRelease[toIndex] = false
                     self.buttonEnabledHandler()
+                    self.animating--
             })
         }
     }
@@ -665,6 +670,10 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     
     
     func hoverOverPosition(point: CGPoint) {
+        if animating > 0 {
+            return
+        }
+        
         var i = 0
         for imageView in self.imageViews {
             var relativePoint = imageView.convertPoint(point, fromCoordinateSpace: self.view)
