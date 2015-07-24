@@ -103,6 +103,16 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(true)
     
+        if Bakkle.sharedInstance.flavor == 2 {
+            var goodwillLogo: UIImageView = UIImageView(frame: CGRectMake(btnAddItem.frame.origin.x, logoImageView.frame.midY + 2.5, 35.0, 35.0))
+            goodwillLogo.image = UIImage(named: "gwIcon@2x.png")!
+            goodwillLogo.layer.cornerRadius = 7.0
+//            goodwillLogo.layer.borderWidth = 1.0
+//            goodwillLogo.layer.borderColor = UIColor.whiteColor().CGColor
+            goodwillLogo.layer.masksToBounds = true
+            self.view.addSubview(goodwillLogo)
+        }
+        
         // Always look for updates
         requestUpdates()
 

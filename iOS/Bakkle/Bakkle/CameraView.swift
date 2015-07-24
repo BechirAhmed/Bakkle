@@ -16,7 +16,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     // and you need to add extra views to the array of image views
     private static let IMAGE_FREEZE_TIME = 0.5
     private static let FADE_IN_TIME = 0.5
-    private static let IMAGE_SLIDE_ANIMATION_TIME = 0.3
+    private static let IMAGE_SLIDE_ANIMATION_TIME = 0.2
     private static let FLASH_TIME = 0.05
     private static let FOCUS_SQUARE_WIDTH_SCALE: CGFloat = 1.0 / 8.0
     private static let FOCUS_SQUARE_OFFSET: CGFloat = 2.0

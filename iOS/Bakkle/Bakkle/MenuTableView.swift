@@ -108,7 +108,7 @@ class MenuTableController: UITableViewController {
     }
     
     @IBAction func btnContact(sender: AnyObject) {
-        UIApplication.sharedApplication().openURL(NSURL(string: "http://www.bakkle.com/")!)
+        UIApplication.sharedApplication().openURL(NSURL(string: (Bakkle.sharedInstance.flavor == 2 ? "http://www.goodwill.org/" : "http://www.bakkle.com/"))!)
     }
     
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
