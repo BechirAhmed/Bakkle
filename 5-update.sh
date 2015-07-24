@@ -48,6 +48,11 @@ sudo python manage.py makemigrations
 sudo python manage.py migrate --database=$DATABASE
 popd
 
+BAKKLE_LOG_FILE=/bakkle/log/bakkle.log
+if [ ! -e "$BAKKLE_LOG_FILE" ]; then
+	sudo touch $BAKKLE_LOG_FILE
+fi
+
 # system service script
 # sudo install -m 755      ./etc/init.d/bakkle /etc/init.d/bakkle
 # sudo update-rc.d bakkle defaults
@@ -58,3 +63,4 @@ sudo rm -f /etc/init.d/bakkle*
 sudo install -m 755      ./etc/init.d/bakkle /etc/init.d/bakkle
 sudo update-rc.d bakkle defaults
 sudo service bakkle start
+sudo tail -f $BAKKLE_LOG_FILE

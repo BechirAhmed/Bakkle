@@ -165,8 +165,6 @@ class settingsHandler(bakkleRequestHandler):
 class loginFacebookHandler(bakkleRequestHandler):
 
     def post(self):
-
-        print("loginFacebook")
         # TODO: Handle location
         # Get the rest of the necessary params from the request
         try:
