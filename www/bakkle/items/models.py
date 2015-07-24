@@ -116,9 +116,6 @@ class BuyerItem(models.Model):
             'item': self.item.toDictionary(),
             'buyer': self.buyer.toDictionary()}
 
-        print("ret" + str(self.view_time))
-
-
         if self.sale is not None:
             valuesDict['sale'] = self.sale.toDictionary()
         else:

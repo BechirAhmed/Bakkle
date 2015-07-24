@@ -3,6 +3,8 @@ from django.shortcuts import render
 import json
 import time
 import threading
+from concurrent.futures import ThreadPoolExecutor
+from functools import partial, wraps
 
 from django.http import HttpResponse, HttpResponseRedirect, Http404, HttpResponseForbidden
 from django.core.urlresolvers import reverse
@@ -12,6 +14,7 @@ from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.db.models import Q
+from tornado.log import logging
 
 # from items.models import Items
 from timing.models import Timing
@@ -69,27 +72,19 @@ def time_method(function):
             pass
 
         Timing.objects.create(user = user, func = function.func_name, time = int((time2-time1)*1000.0), args = args)
-        print '%s function took %0.3f ms' % (function.func_name, (time2-time1)*1000.0)
+        logging.info('%s function took %0.3f ms' % (function.func_name, (time2-time1)*1000.0))
         return ret
     return wrap
+    
+
+EXECUTOR = ThreadPoolExecutor(max_workers=10)
 
 # Decorator for login authentication
 def run_async(function):
     def wrap(*args, **kwargs):
 
-        print("Running function " + str(function.func_name) + " in separate thread");
-        function_t = threading.Thread(target=time_method(function), args=args, kwargs = kwargs);
-        function_t.start()
-
-    return wrap
-
-# Decorator for login authentication
-def run_future(function):
-    def wrap(*args, **kwargs):
-
-        print("Running function " + str(function.func_name) + " in separate thread");
-        function_t = threading.Thread(target=time_method(function), args=args, kwargs = kwargs);
-        function_t.start()
+        logging.info("Running function " + str(function.func_name) + " in separate thread");
+        EXECUTOR.submit(partial(function, *args, **kwargs))
 
     return wrap
 
