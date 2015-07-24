@@ -79,7 +79,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     var image_quality : Float = 0.3
     var image_precache : Int = 10
     
-    var theme_base : UIColor = UIColor(red: 51.0/255.0, green: 205.0/255.0, blue: 95.0/255.0, alpha: 1.0);
+    var theme_base : UIColor = UIColor(red: 0.0/255.0, green: 101.0/255.0, blue: 164.0/255.0, alpha: 1.0);
     var theme_baseDark : UIColor = UIColor(red: 41.0/255.0, green: 170.0/255.0, blue: 66.0/255.0, alpha: 1.0);
     class var sharedInstance: Bakkle {
         struct Static {
