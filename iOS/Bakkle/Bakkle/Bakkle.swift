@@ -171,11 +171,11 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     }
     
     func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
-        if locations[0].latitude == nil {
+        if locations[0].coordinate == nil {
             return
         }
         self.user_loc = locations[0] as? CLLocation
-        self.user_location = "\( locations[0].latitude ), \( locations[0].longitude )"
+        self.user_location = "\( locations[0].coordinate.latitude ), \( locations[0].coordinate.longitude )"
         self.debg("Received new location: \(self.user_location)")
     }
     func locationManager(manager: CLLocationManager!, didUpdateToLocation newLocation: CLLocation!, fromLocation oldLocation: CLLocation!) {
