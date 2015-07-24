@@ -35,9 +35,6 @@ class itemDetailHandler(bakkleRequestHandler):
 
         context = itemsCommonHandlers.item_detail(item_id)
 
-        print(context['item'])
-        print(context['urls'])
-
         self.render('templates/items/detail.html',
                     title="items",
                     item=context['item'],

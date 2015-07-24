@@ -42,11 +42,11 @@ def getDATABASES():
         DATABASES['default'] = DATABASES['production']
         activeDB = 'production'
 
-    elif(hostname == 'bakkle'):
+    elif(hostname == 'rhv-bakkle'):
         DATABASES['default'] = DATABASES['testdb']
         activeDB = 'testdb'
 
-    elif(hostname == 'rhv-bakkle-bld' or hostname == 'RHV-291SCS-Linux'):
+    elif(hostname == 'rhv-bakkle-bld' or hostname == 'rhv-lnx-291scs'):
         DATABASES['default'] = DATABASES['dev']
         activeDB = 'dev'
 
