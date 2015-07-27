@@ -24,6 +24,7 @@
 		1B876B161B57F65C00D79D82 /* camera-remove.png in Resources */ = {isa = PBXBuildFile; fileRef = 1B876B151B57F65C00D79D82 /* camera-remove.png */; };
 		1BF7D3631B592D7800EC7789 /* FocusIndicator.png in Resources */ = {isa = PBXBuildFile; fileRef = 1BF7D3611B592D7800EC7789 /* FocusIndicator.png */; };
 		1BF7D3641B592D7800EC7789 /* ios-flash-on-white.png in Resources */ = {isa = PBXBuildFile; fileRef = 1BF7D3621B592D7800EC7789 /* ios-flash-on-white.png */; };
+		1BFAEC661B6659FF00E264A9 /* Goodwill Logo-White.png in Resources */ = {isa = PBXBuildFile; fileRef = 1BFAEC651B6659FF00E264A9 /* Goodwill Logo-White.png */; };
 		5E023F861AD592B80002AFBC /* btn-addItem.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E023F851AD592B80002AFBC /* btn-addItem.png */; };
 		5E023F881AD59F200002AFBC /* logo-white-design-png-transp-100.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E023F871AD59F200002AFBC /* logo-white-design-png-transp-100.png */; };
 		5E1DCC9F1AD44C72002D41FD /* tiger.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5E1DCC9E1AD44C71002D41FD /* tiger.jpg */; };
@@ -71,8 +72,6 @@
 		60EEB9981B5546F100E87B8D /* switch-camera-outline.png in Resources */ = {isa = PBXBuildFile; fileRef = 60EEB9971B5546F100E87B8D /* switch-camera-outline.png */; };
 		60EEB9A61B598F9900E87B8D /* chord.m4r in Resources */ = {isa = PBXBuildFile; fileRef = 60EEB9A51B598F9900E87B8D /* chord.m4r */; };
 		60F3BC0A1B5E8FD10033EF83 /* logo-white-design-clear.png in Resources */ = {isa = PBXBuildFile; fileRef = 726A38E21B39BE1E00CF5553 /* logo-white-design-clear.png */; };
-		60F3BC0C1B5E90010033EF83 /* Goodwill Logo-White.png in Resources */ = {isa = PBXBuildFile; fileRef = F0D6F3F81B5E8B3E00938A06 /* Goodwill Logo-White.png */; };
-		60F3BC0D1B5E90040033EF83 /* Goodwill Logo-White.png in Resources */ = {isa = PBXBuildFile; fileRef = F0D6F3F81B5E8B3E00938A06 /* Goodwill Logo-White.png */; };
 		60F3BC0E1B5E900A0033EF83 /* Goodwill Logo.png in Resources */ = {isa = PBXBuildFile; fileRef = F0D6F3F91B5E8B3E00938A06 /* Goodwill Logo.png */; };
 		60F3BC0F1B5E900A0033EF83 /* Goodwill Logo.png in Resources */ = {isa = PBXBuildFile; fileRef = F0D6F3F91B5E8B3E00938A06 /* Goodwill Logo.png */; };
 		60F3BC111B5E90BC0033EF83 /* Goodwill-LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 60F3BC101B5E90BC0033EF83 /* Goodwill-LaunchScreen.xib */; };
@@ -389,6 +388,7 @@
 		1B876B151B57F65C00D79D82 /* camera-remove.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera-remove.png"; sourceTree = "<group>"; };
 		1BF7D3611B592D7800EC7789 /* FocusIndicator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = FocusIndicator.png; sourceTree = "<group>"; };
 		1BF7D3621B592D7800EC7789 /* ios-flash-on-white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ios-flash-on-white.png"; sourceTree = "<group>"; };
+		1BFAEC651B6659FF00E264A9 /* Goodwill Logo-White.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Goodwill Logo-White.png"; sourceTree = "<group>"; };
 		1D710285C97E0FF7D33DEB9E /* Pods-Bakkle.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bakkle.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Bakkle/Pods-Bakkle.debug.xcconfig"; sourceTree = "<group>"; };
 		3E0CABDBE20E9D5B2EED4810 /* Pods_Bakkle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Bakkle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E023F851AD592B80002AFBC /* btn-addItem.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-addItem.png"; sourceTree = "<group>"; };
@@ -582,7 +582,6 @@
 		DBEE0E961AF3C464005E60BD /* item-detail-overlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "item-detail-overlay.png"; sourceTree = "<group>"; };
 		DBEE0E981AF3C855005E60BD /* btb-want.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btb-want.png"; sourceTree = "<group>"; };
 		DBEE0E9A1AF3C85C005E60BD /* btn-want-disabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-want-disabled.png"; sourceTree = "<group>"; };
-		F0D6F3F81B5E8B3E00938A06 /* Goodwill Logo-White.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Goodwill Logo-White.png"; sourceTree = "<group>"; };
 		F0D6F3F91B5E8B3E00938A06 /* Goodwill Logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Goodwill Logo.png"; sourceTree = "<group>"; };
 		F0D6F3FE1B5EA06600938A06 /* icon-i-blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-i-blue.png"; sourceTree = "<group>"; };
 		F0D6F4011B5EA17100938A06 /* LoginScreen-bkg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "LoginScreen-bkg.png"; sourceTree = "<group>"; };
@@ -825,7 +824,7 @@
 		A05DB7501AF1BBC40076D97D /* logos */ = {
 			isa = PBXGroup;
 			children = (
-				F0D6F3F81B5E8B3E00938A06 /* Goodwill Logo-White.png */,
+				1BFAEC651B6659FF00E264A9 /* Goodwill Logo-White.png */,
 				F0D6F3F91B5E8B3E00938A06 /* Goodwill Logo.png */,
 				5E023F871AD59F200002AFBC /* logo-white-design-png-transp-100.png */,
 				A0A2FFF21ACE213F00A42CD8 /* logo-white-design-png-100.png */,
@@ -1255,6 +1254,7 @@
 			files = (
 				DBEE0E9B1AF3C85C005E60BD /* btn-want-disabled.png in Resources */,
 				A05DB7581AF4F8C60076D97D /* mock-tile.png in Resources */,
+				1BFAEC661B6659FF00E264A9 /* Goodwill Logo-White.png in Resources */,
 				A08D53DA1B08269A000C406C /* icon-i.png in Resources */,
 				A0A5F71D1AEDAE54001A7D7A /* Settings.bundle in Resources */,
 				726A38E31B39BE1E00CF5553 /* logo-white-design-clear.png in Resources */,
@@ -1297,7 +1297,6 @@
 				F0D6F4021B5EA17100938A06 /* LoginScreen-bkg.png in Resources */,
 				A058A2A91AFD6024005E7432 /* btn-menu@3x.png in Resources */,
 				1BF7D3631B592D7800EC7789 /* FocusIndicator.png in Resources */,
-				60F3BC0D1B5E90040033EF83 /* Goodwill Logo-White.png in Resources */,
 				F0D6F3FF1B5EA06600938A06 /* icon-i-blue.png in Resources */,
 				A0D96F7C1AD765990046DA13 /* icon-cart.png in Resources */,
 				A0D96F791AD765990046DA13 /* icon-gear.png in Resources */,
@@ -1412,7 +1411,6 @@
 				A0E1EBB41B2B5B2200662C08 /* mock-additem.png in Resources */,
 				A0E1EBB51B2B5B2200662C08 /* icon-x@3x.png in Resources */,
 				60F3BC0F1B5E900A0033EF83 /* Goodwill Logo.png in Resources */,
-				60F3BC0C1B5E90010033EF83 /* Goodwill Logo-White.png in Resources */,
 				A0E1EBB61B2B5B2200662C08 /* icon-marker75.png in Resources */,
 				A0E1EBB71B2B5B2200662C08 /* btn-meh.png in Resources */,
 				A0E1EBB81B2B5B2200662C08 /* mock-settings.png in Resources */,
