@@ -74,8 +74,8 @@ public class GarageAdapter extends ArraySwipeAdapter<FeedItem> {
         viewHolder.title.setText(item.getTitle());
         viewHolder.price.setText("$" + item.getPrice());
         viewHolder.want.setText(item.getNumWant());
-        viewHolder.hold.setText(item.getNumWant());
-        viewHolder.nope.setText(item.getNumWant());
+        viewHolder.hold.setText(item.getNumHold());
+        viewHolder.nope.setText(item.getNumMeh());
 
 //        viewHolder.icon.setImageDrawable(c.getDrawable(R.drawable.bakkle_icon));
 //        viewHolder.title.setText("Title");

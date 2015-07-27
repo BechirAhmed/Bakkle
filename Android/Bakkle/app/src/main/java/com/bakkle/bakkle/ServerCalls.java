@@ -231,12 +231,13 @@ public class ServerCalls{
 
                             if(e == null) {
                                 jsonResponse = result;
-                                Log.v("testing error 00", "json was null (there was an exception)");
+                                Log.v("response is ", jsonResponse.toString());
                             }
 
                             else{
                                 jsonResponse = null;
-                                Log.v("response is ", jsonResponse.toString());
+                                Log.v("testing error 00", "json was null (there was an exception)");
+
                             }
                         }
                     });

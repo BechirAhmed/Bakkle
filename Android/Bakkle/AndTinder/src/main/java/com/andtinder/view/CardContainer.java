@@ -406,24 +406,21 @@ public class CardContainer extends AdapterView<ListAdapter> {
         final float dx, dy;
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
-                mTopCard.getHitRect(childRect);
+//                mTopCard.getHitRect(childRect);
 
                 CardModel cardModel = (CardModel)getAdapter().getItem(getChildCount() - 1);
 
-                if (cardModel.getOnClickListener() != null) {
-                    cardModel.getOnClickListener().OnClickListener(cardModel);
-                }
-                pointerIndex = event.getActionIndex();
-                x = event.getX(pointerIndex);
-                y = event.getY(pointerIndex);
-
-                if (!childRect.contains((int) x, (int) y)) {
-                    return false;
-                }
-
-                mLastTouchX = x;
-                mLastTouchY = y;
-                mActivePointerId = event.getPointerId(pointerIndex);
+//                pointerIndex = event.getActionIndex();
+//                x = event.getX(pointerIndex);
+//                y = event.getY(pointerIndex);
+//
+//                if (!childRect.contains((int) x, (int) y)) {
+//                    return false;
+//                }
+//
+//                mLastTouchX = x;
+//                mLastTouchY = y;
+//                mActivePointerId = event.getPointerId(pointerIndex);
                 break;
             case MotionEvent.ACTION_MOVE:
                 pointerIndex = event.findPointerIndex(mActivePointerId);
@@ -444,7 +441,8 @@ public class CardContainer extends AdapterView<ListAdapter> {
 
     @Override
     public View getSelectedView() {
-        throw new UnsupportedOperationException();
+        return mTopCard;
+        //throw new UnsupportedOperationException();
     }
 
     @Override
@@ -561,6 +559,13 @@ public class CardContainer extends AdapterView<ListAdapter> {
                 return true;
             } else
                 return false;
+        }
+
+        @Override
+        public boolean onSingleTapConfirmed(MotionEvent e){
+            CardModel cardModel = (CardModel)getAdapter().getItem(mNextAdapterPosition - 3);
+            cardModel.getOnClickListener().OnClickListener(cardModel);
+            return true;
         }
     }
 }

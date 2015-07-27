@@ -20,6 +20,8 @@ package com.andtinder.model;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 
+import java.util.ArrayList;
+
 public class CardModel {
 
 	private String title;
@@ -28,7 +30,9 @@ public class CardModel {
 	private String distance;
 	private String method;
 	private String pk;
-	private String cardImageURL;
+	private String sellerImageURL;
+	private String description;
+	private ArrayList <String> imageURLs;
 
 	private Drawable cardImageDrawable;
 
@@ -60,17 +64,21 @@ public class CardModel {
     }
 
 	public CardModel() {
-		this(null, null, null, null, null, null, null/*, (Drawable)null, (Drawable)null*/);
+		this(null, null, null, null, null, null, null, null, null/*, (Drawable)null, (Drawable)null*/);
 	}
 
-	public CardModel(String title, String seller, String price, String distance, String method, String pk, String cardImageURL/*, Drawable cardImage, Drawable sellerImage*/) {
+	public CardModel(String title, String seller, String price, String distance, String method,
+					 String pk, String description, ArrayList imageURLs, String sellerImageURL
+					 /*, Drawable cardImage, Drawable sellerImage*/) {
 		this.title = title;
 		this.seller = seller;
 		this.price = price;
 		this.distance = distance;
 		this.method = method;
 		this.pk = pk;
-		this.cardImageURL = cardImageURL;
+		this.imageURLs = imageURLs;
+		this.sellerImageURL = sellerImageURL;
+		this.description = description;
 //		this.cardImageDrawable = cardImage;
 //		this.sellerImageDrawable = sellerImage;
 //		this.sellerImageBitmap = ((BitmapDrawable) sellerImageDrawable).getBitmap();
@@ -149,12 +157,32 @@ public class CardModel {
 		this.pk = pk;
 	}
 
-	public String getCardImageURL() {
-		return cardImageURL;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setCardImageURL(String cardImageURL) {
-		this.cardImageURL = cardImageURL;
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public ArrayList<String> getImageURLs() {
+		return imageURLs;
+	}
+
+	public void setImageURLs(ArrayList<String> imageURLs) {
+		this.imageURLs = imageURLs;
+	}
+
+	public String getCardImageURL() {
+		return imageURLs.get(0);
+	}
+
+	public String getSellerImageURL() {
+		return sellerImageURL;
+	}
+
+	public void setSellerImageURL(String sellerImageURL) {
+		this.sellerImageURL = sellerImageURL;
 	}
 
 	public void setCardImageDrawable(Drawable cardImageDrawable) {

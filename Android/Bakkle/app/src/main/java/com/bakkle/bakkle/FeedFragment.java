@@ -3,6 +3,7 @@ package com.bakkle.bakkle;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
@@ -108,14 +109,16 @@ public class FeedFragment extends Fragment {
 
         for(int i = jsonArray.size() - 1; i >= 0; i--) {
             element = jsonArray.get(i);
-            feedItem = new FeedItem(this.getActivity().getApplicationContext());
+            feedItem = new FeedItem(getActivity().getApplicationContext());
             temp = element.getAsJsonObject();
 
             feedItem.setTitle(temp.get("title").getAsString());
             feedItem.setSellerDisplayName(temp.get("seller").getAsJsonObject().get("display_name").getAsString());
+            feedItem.setSellerFacebookId(temp.get("seller").getAsJsonObject().get("facebook_id").getAsString());
             feedItem.setPrice(temp.get("price").getAsString());
             feedItem.setLocation(temp.get("location").getAsString()); //TODO: difference between location and sellerlocation??
             feedItem.setMethod(temp.get("method").getAsString());
+            feedItem.setDescription(temp.get("description").getAsString());
             feedItem.setSellerFacebookId(temp.get("seller").getAsJsonObject().get("facebook_id").getAsString());
             pk = temp.get("pk").getAsString();
             feedItem.setPk(pk);
@@ -130,7 +133,9 @@ public class FeedFragment extends Fragment {
 
 
             card = new CardModel(feedItem.getTitle(), feedItem.getSellerDisplayName(), "$" + feedItem.getPrice(),
-                    feedItem.getDistance(), feedItem.getMethod(), feedItem.getPk(), feedItem.getImageUrls().get(0)/*, getCardImage(feedItem), getSellerImage(sellerFacebookId)*/);
+                    feedItem.getDistance(), feedItem.getMethod(), feedItem.getPk(), feedItem.getDescription(),
+                    feedItem.getImageUrls(),
+                    "http://graph.facebook.com/" + feedItem.getSellerFacebookId() + "/picture?type=square"/*, getCardImage(feedItem), getSellerImage(sellerFacebookId)*/);
 
             card.setOnCardDismissedListener(new CardModel.OnCardDismissedListener() {
                 @Override
@@ -188,11 +193,22 @@ public class FeedFragment extends Fragment {
                 public void OnClickListener(CardModel cardModel) {
                     //onCardSelected.OnCardSelected(feedItem);
                     //title, tags, img, method, price
-
+                    Intent intent = new Intent(FeedFragment.this.getActivity(), ItemDetail.class);
+                    intent.putExtra("title", cardModel.getTitle());
+                    intent.putExtra("seller", cardModel.getSeller());
+                    intent.putExtra("price", cardModel.getPrice());
+                    intent.putExtra("distance", cardModel.getDistance());
+                    intent.putExtra("sellerImageUrl", cardModel.getSellerImageURL());
+                    intent.putExtra("description", cardModel.getDescription());
+                    intent.putExtra("pk", cardModel.getPk());
+                    intent.putExtra("url1", cardModel.getCardImageURL());
+                    //intent.putStringArrayListExtra("imageUrls", cardModel.getImageURLs());
+                    startActivity(intent);
 
                     //TODO: bring up description page, with all pictures, description, etc
                 }
             });
+
 
             adapter.add(card);
             mCardContainer.setAdapter(adapter);
@@ -238,8 +254,9 @@ public class FeedFragment extends Fragment {
         //mCardStack.setAdapter(mCardAdapter);
 
         card = new CardModel(feedItem.getTitle(), feedItem.getSellerDisplayName(), "$" + feedItem.getPrice(),
-                feedItem.getDistance(), feedItem.getMethod(), feedItem.getPk(), feedItem.getImageUrls().get(0)/*, getCardImage(feedItem), getSellerImage(sellerFacebookId)*/);
-
+                feedItem.getDistance(), feedItem.getMethod(), feedItem.getPk(), feedItem.getDescription(),
+                feedItem.getImageUrls(),
+                "http://graph.facebook.com/" + feedItem.getSellerFacebookId() + "/picture?type=square"/*, getCardImage(feedItem), getSellerImage(sellerFacebookId)*/);
         card.setOnCardDismissedListener(new CardModel.OnCardDismissedListener() {
             @Override
             public void onLike(CardModel cardModel) {

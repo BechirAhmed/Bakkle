@@ -33,8 +33,10 @@ public final class SimpleCardStackAdapter extends CardStackAdapter {
 		Drawable image = model.getCardImageDrawable();
 
 		setCardImage((ImageView)(convertView.findViewById(R.id.image)), model.getCardImageURL());
+		//setCardImage((ImageView) (convertView.findViewById(R.id.sellerImage)), model.getSellerImageURL());
 
 		//((ImageView) convertView.findViewById(R.id.image)).setImageDrawable(model.getCardImageDrawable());
+		//((de.hdodenhof.circleimageview.CircleImageView) convertView.findViewById(R.id.sellerImage)).setImageDrawable(model.getSellerImageDrawable());
 		((de.hdodenhof.circleimageview.CircleImageView) convertView.findViewById(R.id.sellerImage)).setImageResource(R.drawable.loading); /*setImageDrawable(model.getSellerImageDrawable())*/
 		((FontFitTextView) convertView.findViewById(R.id.title)).setText(model.getTitle());
 		((TextView) convertView.findViewById(R.id.seller)).setText(model.getSeller());
@@ -54,7 +56,6 @@ public final class SimpleCardStackAdapter extends CardStackAdapter {
 	{
 		Ion.with(imageView)
 				.placeholder(R.drawable.loading)
-				.error(R.drawable.camera)
 				.load(url);
 	}
 }
