@@ -374,8 +374,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             if imgURL != nil {
                 self.swipeView.userInteractionEnabled = true
             }
-        }
-        if view == self.bottomView {
+        }else if view == self.bottomView {
             self.bottomView.userInteractionEnabled = false
         }
     }

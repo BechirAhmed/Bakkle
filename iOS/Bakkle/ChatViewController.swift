@@ -108,7 +108,6 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         var backButton = UIButton(frame: CGRectMake(header.bounds.origin.x + 4, header.bounds.origin.y+24, buttonWidth, headerHeight - 8))
         backButton.setImage(UIImage(named: "icon-back.png"), forState: UIControlState.Normal)
         backButton.addTarget(self, action: "btnBack:", forControlEvents: UIControlEvents.TouchUpInside)
-        self.view.addSubview(backButton)
         header.addSubview(backButton)
         
         let profileButtonWidth: CGFloat = 36
