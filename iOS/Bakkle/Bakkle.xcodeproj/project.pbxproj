@@ -70,13 +70,14 @@
 		602C39151B3C9B12005CB493 /* PNChartConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602C39141B3C9B12005CB493 /* PNChartConfig.swift */; };
 		6034E6951B41B93900DEA291 /* AcceptOfferCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6034E6941B41B93900DEA291 /* AcceptOfferCell.swift */; };
 		60EEB9981B5546F100E87B8D /* switch-camera-outline.png in Resources */ = {isa = PBXBuildFile; fileRef = 60EEB9971B5546F100E87B8D /* switch-camera-outline.png */; };
-		60EEB9A61B598F9900E87B8D /* chord.m4r in Resources */ = {isa = PBXBuildFile; fileRef = 60EEB9A51B598F9900E87B8D /* chord.m4r */; };
 		60F3BC0A1B5E8FD10033EF83 /* logo-white-design-clear.png in Resources */ = {isa = PBXBuildFile; fileRef = 726A38E21B39BE1E00CF5553 /* logo-white-design-clear.png */; };
 		60F3BC0E1B5E900A0033EF83 /* Goodwill Logo.png in Resources */ = {isa = PBXBuildFile; fileRef = F0D6F3F91B5E8B3E00938A06 /* Goodwill Logo.png */; };
 		60F3BC0F1B5E900A0033EF83 /* Goodwill Logo.png in Resources */ = {isa = PBXBuildFile; fileRef = F0D6F3F91B5E8B3E00938A06 /* Goodwill Logo.png */; };
 		60F3BC111B5E90BC0033EF83 /* Goodwill-LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 60F3BC101B5E90BC0033EF83 /* Goodwill-LaunchScreen.xib */; };
 		60F3BC131B5E91710033EF83 /* Goodwill-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 60F3BC121B5E91710033EF83 /* Goodwill-Info.plist */; };
 		60F3BC141B5E921D0033EF83 /* Goodwill-LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 60F3BC101B5E90BC0033EF83 /* Goodwill-LaunchScreen.xib */; };
+		60F3BC161B66D1000033EF83 /* Bakkle-Notification.aif in Resources */ = {isa = PBXBuildFile; fileRef = 60F3BC151B66D1000033EF83 /* Bakkle-Notification.aif */; };
+		60F3BC171B66D1160033EF83 /* Bakkle-Notification.aif in Resources */ = {isa = PBXBuildFile; fileRef = 60F3BC151B66D1000033EF83 /* Bakkle-Notification.aif */; };
 		720510341B1F839B00D059AB /* ListItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720510331B1F839B00D059AB /* ListItemCell.swift */; };
 		723D532C1B25F42B0067A80A /* IconImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 723D532B1B25F42B0067A80A /* IconImage.swift */; };
 		723D532E1B2718590067A80A /* OffsetTextAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 723D532D1B2718590067A80A /* OffsetTextAttachment.swift */; };
@@ -466,9 +467,9 @@
 		602C39141B3C9B12005CB493 /* PNChartConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PNChartConfig.swift; sourceTree = "<group>"; };
 		6034E6941B41B93900DEA291 /* AcceptOfferCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AcceptOfferCell.swift; sourceTree = "<group>"; };
 		60EEB9971B5546F100E87B8D /* switch-camera-outline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "switch-camera-outline.png"; sourceTree = "<group>"; };
-		60EEB9A51B598F9900E87B8D /* chord.m4r */ = {isa = PBXFileReference; lastKnownFileType = file; path = chord.m4r; sourceTree = "<group>"; };
 		60F3BC101B5E90BC0033EF83 /* Goodwill-LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "Goodwill-LaunchScreen.xib"; sourceTree = "<group>"; };
 		60F3BC121B5E91710033EF83 /* Goodwill-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Goodwill-Info.plist"; sourceTree = "<group>"; };
+		60F3BC151B66D1000033EF83 /* Bakkle-Notification.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Bakkle-Notification.aif"; sourceTree = "<group>"; };
 		698270E0C83AB2371F464BB2 /* Pods-Bakkle.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bakkle.release.xcconfig"; path = "Pods/Target Support Files/Pods-Bakkle/Pods-Bakkle.release.xcconfig"; sourceTree = "<group>"; };
 		720510331B1F839B00D059AB /* ListItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemCell.swift; sourceTree = "<group>"; };
 		723D532B1B25F42B0067A80A /* IconImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IconImage.swift; sourceTree = "<group>"; };
@@ -705,9 +706,9 @@
 		5EBDD68E1AB211E600C7FBE7 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				60F3BC151B66D1000033EF83 /* Bakkle-Notification.aif */,
 				60F3BC121B5E91710033EF83 /* Goodwill-Info.plist */,
 				60F3BC101B5E90BC0033EF83 /* Goodwill-LaunchScreen.xib */,
-				60EEB9A51B598F9900E87B8D /* chord.m4r */,
 				A0B765431B0E3A2700107F7E /* Bakkle.entitlements */,
 				5E5CB0A81AB7547800F32BE6 /* Bridging-Header.h */,
 				A0A5F71C1AEDAE54001A7D7A /* Settings.bundle */,
@@ -1286,7 +1287,6 @@
 				727FA76D1B4C15750023C126 /* new-x.png in Resources */,
 				5EBDD6B11AB2139700C7FBE7 /* bakkleLogo.png in Resources */,
 				A018DF881ADE07E700AF5550 /* btn-add.png in Resources */,
-				60EEB9A61B598F9900E87B8D /* chord.m4r in Resources */,
 				A08D53D11B0815CB000C406C /* MessageIncoming.aiff in Resources */,
 				A058A2B61AFDADA2005E7432 /* mask-buyer-grey@3x.png in Resources */,
 				5E023F861AD592B80002AFBC /* btn-addItem.png in Resources */,
@@ -1318,6 +1318,7 @@
 				13AB6F9D1B0E3C520092EE61 /* btn-meh.png in Resources */,
 				A0D96F901AD7751E0046DA13 /* mock-settings.png in Resources */,
 				D0FCDFFA1B03B2E0006F76F7 /* btn-addCam.png in Resources */,
+				60F3BC161B66D1000033EF83 /* Bakkle-Notification.aif in Resources */,
 				A08D53D81B0825E7000C406C /* icon-back.png in Resources */,
 				DB6726EA1B178F250014A896 /* star_half.png in Resources */,
 				A058A2B51AFDADA2005E7432 /* mask-buyer-grey@2x.png in Resources */,
@@ -1419,6 +1420,7 @@
 				A0E1EBBB1B2B5B2200662C08 /* star_half.png in Resources */,
 				A0E1EBBC1B2B5B2200662C08 /* mask-buyer-grey@2x.png in Resources */,
 				A0E1EBBD1B2B5B2200662C08 /* btn-logout40.png in Resources */,
+				60F3BC171B66D1160033EF83 /* Bakkle-Notification.aif in Resources */,
 				A0E1EBBE1B2B5B2200662C08 /* star_none.png in Resources */,
 				A0E1EBBF1B2B5B2200662C08 /* loading.png in Resources */,
 				A0E1EBC01B2B5B2200662C08 /* icon-down.png in Resources */,
