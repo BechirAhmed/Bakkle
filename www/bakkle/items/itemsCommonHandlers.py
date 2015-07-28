@@ -42,6 +42,7 @@ from django.utils import timezone
 
 from common.decorators import run_async
 from django.core.mail import send_mail
+from tornado.log import logging
 
 MAX_ITEM_IMAGE = 5
 
@@ -149,11 +150,12 @@ def add_item(title, description, location, seller_id, price, tags, notifyFlag, i
         item.save()
         if(notifyFlag == None or notifyFlag == "" or int(notifyFlag) != 0):
             notify_all_new_item(u"New: ${} - {}".format(item.price, item.title))
+        logging.info("[AddItem] adding item: " + str(item.pk))
     else:
         # Else get the item
         try:
             item = Items.objects.get(pk=item_id)
-            print("[EditItem] editing item: " + str(item_id))
+            logging.info("[EditItem] editing item: " + str(item_id))
         except Items.DoesNotExist:
             item = None
             response_data = {"status":0, "error":"Item {} does not exist.".format(item_id)}
@@ -167,13 +169,16 @@ def add_item(title, description, location, seller_id, price, tags, notifyFlag, i
         #     handle_delete_file_s3(url)
 
         # Update item fields
+
         item.title = title
         item.description = description
         item.tags = tags
         item.price = price
-        item.method = method
         item.image_urls = image_urls
         item.save()
+
+
+    logging.info("[Add/EditItem] done with item: " + str(item_id))
 
     response_data = { "status":1, "item_id":item.id }
     return response_data
@@ -266,7 +271,7 @@ def feed(buyer_id, device_uuid, user_location, search_text, filter_distance, fil
         response_data = { "status":0, "error": "Latitude or Longitude was not a valid decimal." }
         return response_data
 
-    print('Time after %s: %0.2f ms' % ("parsing locations", (time.time()-startTime)*1000.0))
+    logging.debug('Time after %s: %0.2f ms' % ("parsing locations", (time.time()-startTime)*1000.0))
     startTime = time.time();
 
     #horizontal range
@@ -279,7 +284,7 @@ def feed(buyer_id, device_uuid, user_location, search_text, filter_distance, fil
     latMin = lat - latRange
     latMax = lat + latRange
 
-    print('Time after %s: %0.2f ms' % ("getting item range", (time.time()-startTime)*1000.0))
+    logging.debug('Time after %s: %0.2f ms' % ("getting item range", (time.time()-startTime)*1000.0))
     startTime = time.time();
 
     #filter(longitude__lte = lon + lonRange).filter(longitude__gte = lon - lonRange).filter(latitude__lte = lat + latRange).filter(latitude__gte = lat + latRange)
@@ -304,7 +309,7 @@ def feed(buyer_id, device_uuid, user_location, search_text, filter_distance, fil
         return response_data
 
 
-    print('Time after %s: %0.2f ms' % ("updating locations", (time.time()-startTime)*1000.0))
+    logging.debug('Time after %s: %0.2f ms' % ("updating locations", (time.time()-startTime)*1000.0))
     startTime = time.time();
 
     # get items
@@ -365,11 +370,10 @@ def feed(buyer_id, device_uuid, user_location, search_text, filter_distance, fil
         page += 1;
 
 
-    print('Time after %s: %0.2f ms' % ("adding feed items to return array", (time.time()-startTime)*1000.0))
+    logging.debug('Time after %s: %0.2f ms' % ("adding feed items to return array", (time.time()-startTime)*1000.0))
     startTime = time.time();
 
     response_data = { 'status': 1, 'feed': item_array }
-    print "returning feed list of size: " + str(len(item_array))
     return response_data
 
 
@@ -450,15 +454,6 @@ def get_seller_items(seller_id):
 
     item_list = Items.objects.filter(seller=seller_id).filter(Q(status=Items.ACTIVE) | Q(status=Items.PENDING) | Q(status=Items.SOLD)).prefetch_related('buyeritem_set')
     #item_list_2 = Items.objects.filter(Q(seller=seller_id, status=Items.ACTIVE) | Q(seller=seller_id, status=Items.PENDING)).filter(buyeritem__pk__isnull=False)#.aggregate(Sum("buyeritem__number_of_views"))
-
-    print(item_list.query);
-
-    # for item in item_list:
-    #     inneritems = item.buyeritem_set.all()
-    #     for inneritem in inneritems:
-    #         print inneritem.toDictionary()
-
-
 
     item_array = []
     # get json representaion of item array
@@ -582,7 +577,7 @@ def handle_file_s3(image_key, f):
     # http://boto.readthedocs.org/en/latest/s3_tut.html
     k.set_contents_from_string(image_string)
     k.set_acl('public-read')
-    print config['S3_URL'] + image_key
+    logging.debug(config['S3_URL'] + image_key)
     return config['S3_URL'] + image_key
 
 #TODO: Fix this
@@ -595,7 +590,7 @@ def handle_delete_file_s3(image_path):
     conn = S3Connection(config['AWS_ACCESS_KEY'], config['AWS_SECRET_KEY'])
     #bucket = conn.create_bucket('com.bakkle.prod')
     bucket = conn.get_bucket(bucket_name)
-    print(image_key)
+    logging.debug(image_key)
     k = bucket.get_key(image_key)
     k.delete()
 
@@ -654,14 +649,6 @@ def add_item_to_buyer_items(buyer_id, item_id, view_duration, status):
                 confirmed_price = item.price,
                 view_time = timezone.now(),
                 view_duration = 0)
-
-            # If the item seller is the same as the buyer mark it as their item instead of the status
-            # TODO: Eventually put this back in to prevent errors from user trying to buy their own item
-            # if(str(item.seller.id) == str(buyer_id)):
-            #     print("Are same")
-            #     buyer_item.status = BuyerItem.MY_ITEM
-            # else:
-            #     buyer_item.status = status
 
 
         if (status == BuyerItem.SOLD):
@@ -1023,6 +1010,6 @@ def reset_items():
         times_reported = 0 )
     i.save()
 
-    print("Adding {}".format(i.title))
+    logging.info("Adding {}".format(i.title))
     return HttpResponse("resetting {}".format(i.title)) #change success value
 

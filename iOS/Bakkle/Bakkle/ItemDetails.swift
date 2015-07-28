@@ -26,6 +26,7 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
     
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var pageControl: UIPageControl!
+    @IBOutlet weak var loadingView: UIView!
     
     
     @IBOutlet weak var wantBtn: UIButton!
@@ -35,6 +36,7 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.loadingView.hidden = true
         if(Bakkle.sharedInstance.flavor == 2){
             self.detailBugHack.backgroundColor = Bakkle.sharedInstance.theme_base
             self.wantBtn.backgroundColor = Bakkle.sharedInstance.theme_base
@@ -114,7 +116,7 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
             itemTagsTextView.text = descriptions
         }
         sellerName.text = sellersName
-        itemDistanceLabel.text = String(format: "%.2f miles", distance)
+        itemDistanceLabel.text = String(format: "%d miles", roundDist(distance))
         
         for index in 0...imgURLs.count-1{
             let firstURL = imgURLs[index] as! String
@@ -136,10 +138,14 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
     }
     
     @IBAction func wantBtn(sender: AnyObject) {
+        loadingView.hidden = false
+        self.view.bringSubviewToFront(loadingView)
         if wanted {
             Bakkle.sharedInstance.markItem("sold", item_id: self.item!.valueForKey("pk")!.integerValue, success: {
                 Bakkle.sharedInstance.populateTrunk({})
-                self.dismissViewControllerAnimated(true, completion: nil)
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.dismissViewControllerAnimated(true, completion: nil)
+                })
                 }, fail: {})
         }
         else {
@@ -173,6 +179,10 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection: Int) -> Int {
 
         return self.itemImages!.count
+    }
+    
+    func roundDist(distance: Double) -> Int {
+        return Int((distance - floor(distance)) < 0.5 ? floor(distance) : ceil(distance))
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {

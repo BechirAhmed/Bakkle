@@ -209,12 +209,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
                 descriptionField.textColor = UIColor.blackColor()
             }
             confirmButton.setTitle("SAVE", forState: UIControlState.Normal)
-            let imageUrls = item.valueForKey("image_urls") as! Array<String>
-            for index in 0...imageUrls.count-1 {
-                var imageURL: NSURL = NSURL(string: imageUrls[index])!
-                var imageData: NSData = NSData(contentsOfURL: imageURL)!
-                itemImages?.append(UIImage(data: imageData)!)
-            }
+    
             isEditting = false
         }
         disableConfirmButtonHandler()
@@ -326,12 +321,13 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
                     // We just added one so schedule an update.
                     // TODO: Could just add this to the feed
                     // and hope we are fairly current.
-                    dispatch_async(dispatch_get_main_queue()) {
-                        Bakkle.sharedInstance.populateFeed({})
-                        println("item_id=\(item_id) item_url=\(item_url)")
-                        self.successfulAdd = true
-                        self.dismissViewControllerAnimated(true, completion: nil)
-                    }
+                    Bakkle.sharedInstance.populateFeed({
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            println("item_id=\(item_id) item_url=\(item_url)")
+                            self.successfulAdd = true
+                            self.dismissViewControllerAnimated(true, completion: nil)
+                        })
+                    })
             }, fail: {() -> () in
                 //TODO: Show error popup and close.
             })

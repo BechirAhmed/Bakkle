@@ -17,6 +17,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     var messageType: UISegmentedControl!
     var profileButton: UIButton!
     var sendButton: UIButton!
+    var photoButton: UIButton!
     var rotating = false
     var chatID: String!
     var itemIndex: Int = 0
@@ -31,6 +32,13 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         get {
             if toolBar == nil {
                 toolBar = UIToolbar(frame: CGRectMake(0, 0, 0, toolBarMinHeight-0.5))
+                
+//                photoButton = UIButton.buttonWithType(.System) as! UIButton
+//                photoButton.setTitle("", forState: .Normal)
+//                photoButton.setImage(IconImage().camera(), forState: .Normal)
+//                photoButton.contentEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+//                photoButton.addTarget(self, action: "openPhoto", forControlEvents: UIControlEvents.TouchUpInside)
+//                toolBar.addSubview(photoButton)
                 
                 textView = InputTextView(frame: CGRectZero)
                 textView.backgroundColor = UIColor.whiteColor()
@@ -57,7 +65,10 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 // Auto Layout allows `sendButton` to change width, e.g., for localization.
                 textView.setTranslatesAutoresizingMaskIntoConstraints(false)
                 sendButton.setTranslatesAutoresizingMaskIntoConstraints(false)
-                toolBar.addConstraint(NSLayoutConstraint(item: textView, attribute: .Left, relatedBy: .Equal, toItem: toolBar, attribute: .Left, multiplier: 1, constant: 8))
+//                photoButton.setTranslatesAutoresizingMaskIntoConstraints(false)
+//                toolBar.addConstraint(NSLayoutConstraint(item: photoButton, attribute: .Left, relatedBy: .Equal, toItem: toolBar, attribute: .Left, multiplier: 1, constant: 2))
+//                toolBar.addConstraint(NSLayoutConstraint(item: photoButton, attribute: .Bottom, relatedBy: .Equal, toItem: toolBar, attribute: .Bottom, multiplier: 1, constant: -4.5))
+                toolBar.addConstraint(NSLayoutConstraint(item: textView, attribute: .Left, relatedBy: .Equal, toItem: toolBar, attribute: .Left, multiplier: 1, constant: 4))
                 toolBar.addConstraint(NSLayoutConstraint(item: textView, attribute: .Top, relatedBy: .Equal, toItem: toolBar, attribute: .Top, multiplier: 1, constant: 7.5))
                 toolBar.addConstraint(NSLayoutConstraint(item: textView, attribute: .Right, relatedBy: .Equal, toItem: sendButton, attribute: .Left, multiplier: 1, constant: -2))
                 toolBar.addConstraint(NSLayoutConstraint(item: textView, attribute: .Bottom, relatedBy: .Equal, toItem: toolBar, attribute: .Bottom, multiplier: 1, constant: -8))
@@ -97,7 +108,6 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         var backButton = UIButton(frame: CGRectMake(header.bounds.origin.x + 4, header.bounds.origin.y+24, buttonWidth, headerHeight - 8))
         backButton.setImage(UIImage(named: "icon-back.png"), forState: UIControlState.Normal)
         backButton.addTarget(self, action: "btnBack:", forControlEvents: UIControlEvents.TouchUpInside)
-        self.view.addSubview(backButton)
         header.addSubview(backButton)
         
         let profileButtonWidth: CGFloat = 36
@@ -147,16 +157,12 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         loadMessages()
         refreshControl.addTarget(self, action: Selector("refreshChat"), forControlEvents: UIControlEvents.ValueChanged)
         self.tableView.addSubview(refreshControl)
-        tableViewScrollToBottomAnimated(true) // doesn't work
         
         self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "dismissKeyboard"))
     }
     
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self)
-    }
-    
-    override func viewWillAppear(animated: Bool) {
     }
     
     override func viewDidAppear(animated: Bool)  {
@@ -552,6 +558,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     func textViewDidChange(textView: UITextView) {
         updateTextViewHeight()
+        tableViewScrollToBottomAnimated(true)
         sendButton.enabled = textView.hasText()
     }
     
@@ -614,6 +621,10 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
     }
     
+    func openPhoto() {
+        
+    }
+    
     func sendAction() {
         // Autocomplete text before sending #hack
         textView.resignFirstResponder()
@@ -631,7 +642,12 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     func tableViewScrollToBottomAnimated(animated: Bool) {
         let numberOfRows = tableView.numberOfRowsInSection(0)
         if numberOfRows > 0 {
-            //tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: numberOfRows-2, inSection: 0), atScrollPosition: .Bottom, animated: animated)
+            self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: numberOfRows-1, inSection: 0), atScrollPosition: .Bottom, animated: animated)
+            let delay = 0.1 * Double(NSEC_PER_SEC)
+            let time = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
+            dispatch_after(time, dispatch_get_main_queue(), {
+                self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: numberOfRows-1, inSection: 0), atScrollPosition: .Bottom, animated: animated)
+            })
         }
     }
     

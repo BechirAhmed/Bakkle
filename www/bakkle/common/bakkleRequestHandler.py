@@ -1,5 +1,4 @@
 from tornado import web
-import json
 from tornado.ioloop import IOLoop
 from account.models import Device
 from django.db import close_old_connections
@@ -56,7 +55,6 @@ class bakkleRequestHandler(web.RequestHandler):
         return authToken.split('_')[1]
 
     def writeJSON(self, response):
-        # print(json.dumps(response))
         self.write(response)
 
         close_old_connections()

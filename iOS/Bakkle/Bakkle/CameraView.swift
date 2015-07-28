@@ -16,12 +16,16 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     // and you need to add extra views to the array of image views
     private static let IMAGE_FREEZE_TIME = 0.5
     private static let FADE_IN_TIME = 0.5
+    private static let IMAGE_SLIDE_ANIMATION_TIME = 0.2
     private static let FLASH_TIME = 0.05
     private static let FOCUS_SQUARE_WIDTH_SCALE: CGFloat = 1.0 / 8.0
     private static let FOCUS_SQUARE_OFFSET: CGFloat = 2.0
     static let MAX_IMAGE_COUNT = 4
     var size: CGSize? = nil
-    var stopFocus = false
+    
+    /* ORIGIN IDENTIFIERS */
+    var isEditting: Bool = false
+    var item: NSDictionary!
     
     /* SEGUE NAVIGATION */
     @IBOutlet weak var closeButton: UIButton!
@@ -74,14 +78,20 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     @IBOutlet weak var fadeView: UIView!
     @IBOutlet weak var flashView: UIView!
     @IBOutlet weak var fadeViewLoadLogo: UIImageView!
+    @IBOutlet weak var listedLabel: UILabel!
+    @IBOutlet weak var willBeListedLabel: UILabel!
     
     /* HELPER VARIABLES */
     var displayingStill = false
     var addItem: AddItem?
+    var cameraCount: Int = 0
     var dragActivated = -1 // -1 = not activated, 0...3 = drag on image n
-    var draggedImage: UIButton?
+    var draggedImage: UIImageView?
     var imageViewY: CGFloat!
-    var imageViewX: [CGFloat!]!
+    var imageViewX: [CGFloat]!
+    var lockRelease: [Bool]!
+    var stopFocus = false
+    var animating: Int = 0 // image rearrangement
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -99,7 +109,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         
         images = [UIImage](count:CameraView.MAX_IMAGE_COUNT, repeatedValue:UIImage.alloc())
         
-        UIApplication.sharedApplication().statusBarHidden = true
+        UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: .Fade)
         UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent
         
         galleryButton.setImage(IconImage().gallery(), forState: .Normal)
@@ -113,7 +123,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        UIApplication.sharedApplication().statusBarHidden = true
+        UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: .Fade)
         
         setupAVFoundation()
         loadingCameraPreviewLabel.hidden = false
@@ -124,22 +134,27 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             var backgroundImage = UIImageView(frame: self.fadeView.frame)
             backgroundImage.image = UIImage(named:"LoginScreen-bkg.png")!
             self.fadeView.insertSubview(backgroundImage, belowSubview: self.fadeViewLoadLogo)
-            var successLabel = UILabel(frame: CGRectMake(0, 0, UIScreen.mainScreen().bounds.width * 0.90, self.fadeViewLoadLogo.frame.size.height))
-            successLabel.center = CGPointMake(UIScreen.mainScreen().bounds.width / 2, (self.fadeViewLoadLogo.bounds.maxY + UIScreen.mainScreen().bounds.maxY) / 2)
-            successLabel.numberOfLines = 0
-            successLabel.font = UIFont(name: "Avenir-Black", size: 36)
-            successLabel.text = self.addItem!.successfulAdd ? "Your item has been listed!" : "Enjoy browsing while we continue to list your item!"
-            successLabel.sizeToFit()
+            
+            // Text is set in storyboard to get a feel of orientation
+            var successLabel = self.addItem!.successfulAdd ? listedLabel : willBeListedLabel
+            if isEditting {
+                successLabel.text = self.addItem!.successfulAdd ? "Your changes were submitted successfully!" : "Don't worry, we're still updating your changes!"
+            }
             successLabel.layer.shadowColor = Theme.ColorGreen.CGColor
             successLabel.layer.shadowRadius = 5.0
             successLabel.layer.shadowOpacity = 1.0
-            successLabel.textColor = UIColor.whiteColor()
-            successLabel.textAlignment = .Center
-            self.fadeView.addSubview(successLabel)
+            successLabel.hidden = false
             
             self.dismissViewControllerAnimated(true, completion: nil)
         } else if self.addItem != nil {
             self.fadeView.alpha = 0.0
+        } else if isEditting {
+            let imageUrls = item.valueForKey("image_urls") as! Array<String>
+            for index in 0...imageUrls.count-1 {
+                var imageURL: NSURL = NSURL(string: imageUrls[index])!
+                var imageData: NSData = NSData(contentsOfURL: imageURL)!
+                images[index] = UIImage(data: imageData)!
+            }
         }
     }
     
@@ -148,16 +163,17 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         
         UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent
         
-        imageViewX = [0.0, 0.0, 0.0, 0.0]
+        imageViewX = [CGFloat](count: self.imageViews.count, repeatedValue: 0.0)
+        lockRelease = [Bool](count: self.imageViews.count, repeatedValue: false)
         
         var i = 0
         for imageView: UIImageView in imageViews {
+            imageViewY = imageView.convertPoint(imageView.frame.origin, toView: self.view).y
+            imageViewX[i++] = imageView.convertPoint(imageView.frame.origin, toView: self.view).x
             imageView.layer.cornerRadius = 15.0
             imageView.layer.masksToBounds = true
             imageView.layer.borderWidth = 1.0
             imageView.layer.borderColor = UIColor.whiteColor().CGColor
-            imageViewY = imageView.convertPoint(imageView.frame.origin, toView: self.view).y
-            imageViewX[i++] = imageView.convertPoint(imageView.frame.origin, toView: self.view).x
         }
         
         for removeButton: UIButton in removeImageButtons {
@@ -186,7 +202,6 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         
         flashSettings.userInteractionEnabled = false
         
-        
         stopFocus = false
         focusIndicator = UIImageView(frame: CGRectMake(0, 0, CameraView.FOCUS_SQUARE_WIDTH_SCALE * cameraView.frame.size.width, CameraView.FOCUS_SQUARE_WIDTH_SCALE * cameraView.frame.size.width))
         focusIndicator.image = UIImage(named:"FocusIndicator.png")!
@@ -194,6 +209,10 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         focusIndicator.userInteractionEnabled = false
         cameraView.clipsToBounds = true
         cameraView.addSubview(focusIndicator)
+        
+        populatePhotos()
+        
+        // Any code that doesn't need the fade view active after this point
         
         if self.addItem == nil {
             UIView.animateWithDuration(CameraView.FADE_IN_TIME, animations: {
@@ -216,6 +235,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         
         if backCam != nil && frontCam != nil {
             selectedDevice = AVCaptureDeviceInput(device: backCam!, error: &error)
+            cameraCount = 2
             return;
         }
         
@@ -224,8 +244,10 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         
         if backCam != nil {
             selectedDevice = AVCaptureDeviceInput(device: backCam!, error: &error)
+            cameraCount = 1
         } else if frontCam != nil {
             selectedDevice = AVCaptureDeviceInput(device: frontCam!, error: &error)
+            cameraCount = 1
         } else {
             // alert is called when previewing, this code is only run before an alert can be shown
         }
@@ -238,9 +260,16 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         loadingCameraPreviewLabel.hidden = true
-        UIApplication.sharedApplication().statusBarHidden = false
+        UIApplication.sharedApplication().setStatusBarHidden(false, withAnimation: .Fade)
         stopFocus = true
         capturePreview?.removeFromSuperlayer()
+    }
+    
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        self.listedLabel.hidden = true
+        self.willBeListedLabel.hidden = true
     }
     
     @IBAction func swapCamera(sender: AnyObject) {
@@ -251,6 +280,8 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         captureSession!.addInput(selectedDevice!)
         
         captureSession!.commitConfiguration()
+        
+        buttonEnabledHandler()
     }
     
     func findCameraWithPosition(position: AVCaptureDevicePosition) -> AVCaptureDevice? {
@@ -286,8 +317,6 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             return
         }
         
-        captureSession!.beginConfiguration()
-        
         if findCameraWithPosition(.Front) == nil &&  findCameraWithPosition(.Back) == nil {
             let alertController = UIAlertController(title: "No Camera Available", message:"Sorry, you need to have a camera to list an item.", preferredStyle: .Alert)
             let defaultAction = UIAlertAction(title: "OK", style: .Default, handler: { action in
@@ -297,6 +326,8 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             presentViewController(alertController, animated: true, completion: nil)
             return
         }
+        
+        captureSession!.beginConfiguration()
         
         if !contains(captureSession!.inputs, item: selectedDevice) {
             captureSession!.addInput(selectedDevice!)
@@ -351,7 +382,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             if CGRectContainsPoint(self.cameraView.frame, touchPoint.locationInView(nil)) {
                 if let device = self.selectedDevice!.device {
                     if(device.lockForConfiguration(nil)) {
-                        // focusIndicator removeAllAnimations (this is incase we have the image darken with exposure
+                        // focusIndicator removeAllAnimations incase we have the image darken with exposure
                         focusIndicator.hidden = true
                         device.focusPointOfInterest = focusPoint
                         device.focusMode = AVCaptureFocusMode.ContinuousAutoFocus
@@ -368,7 +399,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         var touchPoint = touches.first as! UITouch
         
         if dragActivated > -1 && dragActivated < imageViews.count {
-            
+            self.dragImage(touchPoint.locationInView(self.view))
         }
     }
     
@@ -379,7 +410,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         var touchPoint = touches.first as! UITouch
         
         if dragActivated > -1 && dragActivated < imageViews.count {
-            
+            self.released()
         }
     }
     
@@ -390,16 +421,20 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         var touchPoint = touches.first as! UITouch
         
         if dragActivated > -1 && dragActivated < imageViews.count {
-            
+            self.released()
         }
     }
     
     func drawFocusRect() {
+        if selectedDevice == nil {
+            return
+        }
+        
         // update frame of the indicator IF the device is previewing or displaying a still
         if (selectedDevice!.device.adjustingFocus || selectedDevice!.device.adjustingExposure || selectedDevice!.device.adjustingWhiteBalance) && !displayingStill {
             focusIndicator.removeFromSuperview()
-            var focusPoint = clampFocusRectInside(CGPointMake(selectedDevice!.device.focusPointOfInterest.x * cameraView.bounds.size.width, selectedDevice!.device.focusPointOfInterest.y * cameraView.bounds.size.height))
-            focusIndicator.frame = CGRectMake(focusPoint.x, focusPoint.y, focusIndicator.frame.size.width, focusIndicator.frame.size.height)
+            focusIndicator.frame.origin.x = selectedDevice!.device.focusPointOfInterest.x * cameraView.bounds.size.width - focusIndicator.frame.width / 2.0
+            focusIndicator.frame.origin.y = selectedDevice!.device.focusPointOfInterest.y * cameraView.bounds.size.height - focusIndicator.frame.height / 2.0
             cameraView.addSubview(focusIndicator)
             cameraView.bringSubviewToFront(focusIndicator)
             focusIndicator.hidden = false
@@ -412,30 +447,6 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
                 self.drawFocusRect()
             }
         }
-    }
-    
-    func clampFocusRectInside(focusPoint: CGPoint) -> CGPoint {
-        var modifiedX = focusPoint.x
-        var modifiedY = focusPoint.y
-        
-        // separated in the case that the width of the indicator is NOT the same as the height
-        var padX: CGFloat = focusIndicator.frame.width  / 2.0 + CameraView.FOCUS_SQUARE_OFFSET
-        var padY: CGFloat = focusIndicator.frame.height / 2.0 + CameraView.FOCUS_SQUARE_OFFSET
-        
-        if modifiedX + focusIndicator.frame.width + CameraView.FOCUS_SQUARE_OFFSET > cameraView.bounds.maxX {
-            modifiedX = cameraView.bounds.maxX - padX
-        } else if modifiedX - CameraView.FOCUS_SQUARE_OFFSET < cameraView.bounds.minX {
-            modifiedX = cameraView.bounds.minX + padX
-        }
-        
-        if modifiedY + focusIndicator.frame.height + CameraView.FOCUS_SQUARE_OFFSET > cameraView.bounds.maxY {
-            modifiedX = cameraView.bounds.maxY - (focusIndicator.frame.height + padY)
-        } else if modifiedY - padY < cameraView.bounds.minY {
-            modifiedY = cameraView.bounds.minY + padY
-        }
-        
-        // returns the point to draw, not the center point of the focus indicator
-        return CGPointMake(modifiedX, modifiedY)
     }
     
     @IBAction func pressedCaptureButton(sender: AnyObject) {
@@ -575,7 +586,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     }
     
     func animateSlide(fromIndex: Int, toIndex: Int) {
-        if fromIndex < self.imageViews.count && toIndex < self.imageViews.count && fromIndex != toIndex {
+        if fromIndex < self.imageViews.count && toIndex < self.imageViews.count && fromIndex != toIndex && self.imageViews[fromIndex].image != nil {
             var startPoint = self.imageViews[fromIndex].convertPoint(self.imageViews[fromIndex].frame.origin, toView: self.view)
             var slideView = UIImageView(frame: CGRectMake(startPoint.x, startPoint.y, self.imageViews[fromIndex].frame.width, self.imageViews[fromIndex].frame.height))
             slideView.image = self.imageViews[fromIndex].image
@@ -585,98 +596,164 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             slideView.layer.masksToBounds = true
             self.view.addSubview(slideView)
             self.imageViews[fromIndex].image = nil
+            self.lockRelease[toIndex] = true
             buttonEnabledHandler()
+            animating++
             
-            UIView.animateWithDuration(0.5, delay: 0.0, options: nil, animations: {
+            UIView.animateWithDuration(CameraView.IMAGE_SLIDE_ANIMATION_TIME, animations: {
                 slideView.frame = CGRectMake(self.imageViewX[toIndex], self.imageViewY, slideView.frame.width, slideView.frame.height)
-                }, completion: { Void in
+            }, completion: { Void in
                     self.imageViews[toIndex].image = slideView.image
                     slideView.image = nil
                     slideView.removeFromSuperview()
+                    self.lockRelease[toIndex] = false
                     self.buttonEnabledHandler()
+                    self.animating--
             })
         }
     }
     
     func buttonEnabledHandler() {
-        self.nextButton.enabled = imageCount > 0
-        self.nextButton.hidden = imageCount < 1
-        
+        var notDragging = self.dragActivated < 0
         var imageCountGreaterThanMaxCount = imageCount >= CameraView.MAX_IMAGE_COUNT
-        self.capButton.enabled = !imageCountGreaterThanMaxCount
-        self.galleryButton.enabled = !imageCountGreaterThanMaxCount
-        self.switchCamera.enabled = !imageCountGreaterThanMaxCount
-        self.flashSettings.enabled = !imageCountGreaterThanMaxCount && selectedDevice != nil && selectedDevice!.device.hasFlash
+        
+        self.closeButton.enabled = notDragging
+        self.closeButton.hidden = !self.closeButton.enabled
+        
+        self.nextButton.enabled = imageCount > 0 && notDragging
+        self.nextButton.hidden = !self.nextButton.enabled
+        
+        self.capButton.enabled = !imageCountGreaterThanMaxCount && notDragging
+        self.galleryButton.enabled = !imageCountGreaterThanMaxCount && notDragging
+        self.switchCamera.enabled = !imageCountGreaterThanMaxCount && self.cameraCount > 1 && notDragging
+        self.flashSettings.enabled = !imageCountGreaterThanMaxCount && selectedDevice != nil && selectedDevice!.device.hasFlash && notDragging
         
         self.capButton.hidden = !self.capButton.enabled
         self.galleryButton.hidden = !self.galleryButton.enabled
         self.switchCamera.hidden = !self.switchCamera.enabled
-        self.capButtonOutline.hidden = imageCountGreaterThanMaxCount
-        self.capButtonSpace.hidden = imageCountGreaterThanMaxCount
         self.flashSettings.hidden = !self.flashSettings.enabled
         
+        self.capButtonOutline.hidden = self.capButton.hidden
+        self.capButtonSpace.hidden = self.capButton.hidden
+        
         for i in 0...(self.imageViews.count - 1) {
-            self.removeImageButtons[i].hidden = self.imageViews[i].image == nil
-            self.removeImageButtons[i].enabled = self.imageViews[i].image != nil
+            self.removeImageButtons[i].hidden = self.imageViews[i].image == nil || !notDragging
+            self.removeImageButtons[i].enabled = self.imageViews[i].image != nil && notDragging
         }
     }
     
     // rename to long press
     @IBAction func photoHeld(sender: UILongPressGestureRecognizer) {
-//        if ((sender.view!) as! UIImageView).image != nil {
-//            var newW:CGFloat = sender.view!.frame.width * 1.1
-//            var newH:CGFloat = sender.view!.frame.height * 1.1
-//            var actualBeginPt = sender.view!.convertPoint(sender.view!.frame.origin, toView: self.view)
-//            
-//            draggedImage = UIButton(frame: CGRectMake(actualBeginPt.x, actualBeginPt.y, sender.view!.frame.width, sender.view!.frame.height))
-//            
-//            var x: CGFloat = actualBeginPt.x - (newW - sender.view!.frame.width)
-//            var y: CGFloat = actualBeginPt.y - (newH - sender.view!.frame.height)
-//            draggedImage!.layer.cornerRadius = 15.0
-//            draggedImage!.layer.borderColor = UIColor.whiteColor().CGColor
-//            draggedImage!.layer.borderWidth = 1.0
-//            draggedImage!.layer.masksToBounds = true
-//            draggedImage!.setImage((sender.view! as! UIImageView).image, forState: .Selected)
-//            draggedImage!.setImage((sender.view! as! UIImageView).image, forState: .Normal)
-//            draggedImage!.hidden = false
-//            draggedImage!.enabled = false
-//            (sender.view! as! UIImageView).image = nil
-//            buttonEnabledHandler()
-//            self.view.addSubview(draggedImage!)
-//            
-////            dragActivated = 
-//            
-//            UIView.animateWithDuration(1.0, animations: { Void in
-//                self.draggedImage!.frame = CGRectMake(x, y, newW, newH)
-//                self.draggedImage!.alpha = 0.875
-//            })
-//        }
+        if ((sender.view!) as! UIImageView).image != nil && self.dragActivated < 0 {
+            var newW:CGFloat = sender.view!.frame.width * 1.1
+            var newH:CGFloat = sender.view!.frame.height * 1.1
+            var actualBeginPt = sender.view!.convertPoint(sender.view!.frame.origin, toView: self.view)
+            
+            draggedImage = UIImageView(frame: CGRectMake(actualBeginPt.x, actualBeginPt.y, sender.view!.frame.width, sender.view!.frame.height))
+            
+            var x: CGFloat = actualBeginPt.x - (newW - sender.view!.frame.width)
+            var y: CGFloat = actualBeginPt.y - (newH - sender.view!.frame.height)
+            draggedImage!.layer.cornerRadius = 15.0
+            draggedImage!.layer.borderColor = UIColor.whiteColor().CGColor
+            draggedImage!.layer.borderWidth = 1.0
+            draggedImage!.layer.masksToBounds = true
+            draggedImage!.image = (sender.view! as! UIImageView).image
+            draggedImage!.hidden = false
+            
+            dragActivated = sender.view!.tag - 31
+            buttonEnabledHandler()
+            
+            (sender.view! as! UIImageView).image = nil
+            self.view.addSubview(draggedImage!)
+            
+            UIView.animateWithDuration(1.0, animations: { Void in
+                self.draggedImage!.frame = CGRectMake(x, y, newW, newH)
+                self.draggedImage!.alpha = 0.875
+            })
+        }
     }
     
     func dragImage(point: CGPoint) {
-        //        var point: CGPoint = (event.allTouches() as! AnyObject).locationInView(self.view)
-        //        sender.frame = CGRectMake(point.x - sender.frame.width / 2, point.y - sender.frame.width / 2, sender.frame.width, sender.frame.height)
-        //        UIView.animateWithDuration(0.05, animations: { Void in
-        //            sender.frame = CGRectMake(point.x - sender.frame.width / 2, point.y - sender.frame.width / 2, sender.frame.width, sender.frame.height)
-        //        })
+        if self.draggedImage != nil {
+            hoverOverPosition(point)
+            UIView.animateWithDuration(0.01, animations: { Void in
+                self.draggedImage!.frame.origin.x = point.x - self.draggedImage!.frame.width / 2
+                self.draggedImage!.frame.origin.y = point.y - self.draggedImage!.frame.height / 2
+            })
+        }
     }
     
     
     
     func hoverOverPosition(point: CGPoint) {
+        if animating > 0 {
+            return
+        }
         
+        var i = 0
+        for imageView in self.imageViews {
+            var relativePoint = imageView.convertPoint(point, fromCoordinateSpace: self.view)
+            if CGRectContainsPoint(imageView.frame, relativePoint) {
+                if self.dragActivated != i {
+                    if self.imageViews[i].image == nil {
+                        i = self.imageCount - 1
+                    }
+                    rearrangePhotos(i, previousSpace: self.dragActivated)
+                    self.dragActivated = i
+                }
+                return
+            }
+            i++
+        }
+    }
+    
+    func rearrangePhotos(blankSpace: Int, previousSpace: Int) {
+        var increment = previousSpace > blankSpace ? -1: 1
+        for i in stride(from: previousSpace, to: blankSpace, by: increment) {
+            animateSlide(i + increment, toIndex: i)
+        }
+        
+        buttonEnabledHandler()
     }
     
     
-    
-    func successfulRelease(point: CGPoint) {
-        
-    }
-    
-    
-    
-    func failedRelease(point: CGPoint) {
-        
+    func released() {
+        if self.draggedImage != nil {
+            var oldDragAct = self.dragActivated
+            self.dragActivated = -1
+            UIView.animateWithDuration(CameraView.IMAGE_SLIDE_ANIMATION_TIME, animations: { Void in
+                self.draggedImage!.frame = CGRectMake(self.imageViewX[oldDragAct], self.imageViewY, self.imageViews[oldDragAct].frame.width, self.imageViews[oldDragAct].frame.height)
+                self.draggedImage!.alpha = 1.0
+            }, completion: { Void in
+                self.imageViews[oldDragAct].image = self.draggedImage!.image
+                self.draggedImage!.removeFromSuperview()
+                self.draggedImage = nil
+                
+                // Ensure that all animations are done before we finish releasing
+                // this shouldn't need to run, though it is a failsafe
+                var wait = false
+                do {
+                    for var i = 0; i < self.lockRelease.count && !wait; i++ {
+                        wait = wait || self.lockRelease[i]
+                    }
+                } while(wait)
+                
+                // this is the same logic in populatePhotos, except it uses a different image source
+                var imagesNoSpace = [UIImage]()
+                for i in 0...(self.imageViews.count - 1) {
+                    if self.imageViews[i].image != nil {
+                        imagesNoSpace.append(self.imageViews[i].image!)
+                        self.images[i] = self.imageViews[i].image!
+                    } else {
+                        self.images[i] = UIImage.alloc()
+                    }
+                }
+                
+                self.imageCount = imagesNoSpace.count
+                self.buttonEnabledHandler()
+            })
+        }
+        self.dragActivated = -1
     }
     
     @IBAction func photoPreview(sender: UITapGestureRecognizer) {
@@ -687,8 +764,6 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         if imageViewIndex >= 0 && imageViewIndex < imageViews.count {
             if imageViews[imageViewIndex].image == nil && displayingStill && imageCount < CameraView.MAX_IMAGE_COUNT {
                 self.removeStillImage()
-//                self.stillImagePreview.image = nil
-//                displayImagePreview()
             } else if imageViews[imageViewIndex].image != nil { // safety check
                 self.displayStillImage(imageViews[imageViewIndex].image!)
             }
@@ -710,7 +785,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         // to right in the range of 0-3
         var removeImageIndex = sender.tag / 10 - 31
         
-        if removeImageIndex < 0 { // || removeImageIndex >= removeImageButtons.count
+        if removeImageIndex < 0 {
             NSLog("[CameraView] Error in removePhoto: Unknown Sender\n\(sender)")
         } else if imageViews[removeImageIndex].image != nil {
             let alertController = UIAlertController(title: "Remove Photo", message:"Are you sure that you want to remove image #\(removeImageIndex + 1)?", preferredStyle: .Alert)
@@ -743,6 +818,12 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             self.populatePhotos() // to be safe
             let destinationVC = segue.destinationViewController as! AddItem
             self.addItem = destinationVC
+            destinationVC.isEditting = isEditting
+            
+            if isEditting {
+                destinationVC.item = self.item
+            }
+            
             destinationVC.itemImages = [UIImage]()
             for image in self.images {
                 if !(image.CIImage == nil && image.CGImage == nil) {

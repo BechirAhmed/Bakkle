@@ -48,21 +48,27 @@ static CGFloat const MDCSwipeToChooseViewLabelHeight = 65.f;
 
 
 
-- (instancetype)initWithFrame:(CGRect)frame options:(MDCSwipeToChooseViewOptions *)options {
+- (instancetype)initWithFrame:(CGRect)frame options:(MDCSwipeToChooseViewOptions *)options  tutorial:(BOOL) tutorial{
     
     self = [super initWithFrame: frame];
     if (self) {
         _options = options ? options : [MDCSwipeToChooseViewOptions new];
+        self.tutorial = tutorial;
         [self setupView];
         [self constructBlurBackground];
-        [self constructImageView];
+        if (tutorial) {
+            [self constructInstructionImageView];
+        }else {
+            [self constructImageView];
+            [self constructTopUserInfoView];
+            [self constructInformationView];
+                    }
         [self constructLikedView];
         [self constructNopeImageView];
         [self constructHoldView];
         [self constructReportView];
-        [self constructTopUserInfoView];
-        [self constructInformationView];
         [self setupSwipeToChoose];
+
     }
     return self;
 }
@@ -86,6 +92,18 @@ static CGFloat const MDCSwipeToChooseViewLabelHeight = 65.f;
     _bottomBlurImg.clipsToBounds = YES;
     [_bottomBlurImg addSubview:effectView];
     [self addSubview:_bottomBlurImg];
+}
+
+- (void)constructInstructionImageView {
+    _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height)];
+    [_imageView setContentMode:UIViewContentModeScaleAspectFill];
+    _imageView.clipsToBounds = YES;
+    [self addSubview:_imageView];
+    
+    _transparentImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, _imageView.frame.size.width, _imageView.frame.size.height)];
+    _transparentImage.backgroundColor = [UIColor blackColor];
+    _transparentImage.alpha = 0.f;
+    [_imageView addSubview:_transparentImage];
 }
 
 - (void)constructImageView {
@@ -140,8 +158,9 @@ static CGFloat const MDCSwipeToChooseViewLabelHeight = 65.f;
 
 -(void)constructUserProfileImg {
     CGFloat leftPadding = 11.f;
-    CGRect frame = CGRectMake(leftPadding, 7, 40, 40);
+    CGRect frame = CGRectMake(leftPadding, 0, 40, 40);
     _profileImg = [[UIImageView alloc] initWithFrame:frame];
+    _profileImg.center = CGPointMake(leftPadding+20, CGRectGetHeight(_topUserInfoView.frame)/2);
     _profileImg.layer.cornerRadius = _profileImg.frame.size.width/2;
     _profileImg.layer.masksToBounds = YES;
     _profileImg.layer.borderWidth = 2.0;
@@ -176,11 +195,10 @@ static CGFloat const MDCSwipeToChooseViewLabelHeight = 65.f;
 //}
 
 - (void)constructNameLabel {
-    CGFloat topPadding = 10.f;
     CGRect frame = CGRectMake(10,
-                              topPadding,
+                              0,
                               self.frame.size.width/4*3-5,
-                              CGRectGetHeight(_informationView.frame)/2);
+                              CGRectGetHeight(_informationView.frame));
     _nameLabel = [[UILabel alloc] initWithFrame:frame];
     _nameLabel.text = [NSString stringWithFormat:@"%s", ""];
     _nameLabel.font = [UIFont fontWithName:@"Avenir-Black" size:24];
@@ -192,7 +210,7 @@ static CGFloat const MDCSwipeToChooseViewLabelHeight = 65.f;
 }
 
 - (void)constructPriceLabel {
-    CGRect frame = CGRectMake(self.frame.size.width/4*3+5, 10, self.frame.size.width/4-10, CGRectGetHeight(_informationView.frame)/2);
+    CGRect frame = CGRectMake(self.frame.size.width/4*3+5, 0, self.frame.size.width/4-10, CGRectGetHeight(_informationView.frame));
     _priceLabel = [[UILabel alloc] initWithFrame:frame];
     _priceLabel.font = [UIFont fontWithName:@"Avenir-Medium" size:22];
     _priceLabel.numberOfLines = 1;

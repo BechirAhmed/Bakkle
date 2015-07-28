@@ -36,17 +36,16 @@ class AnalyticsView: UIViewController, PNChartDelegate{
         header = UIView(frame: CGRectMake(view.bounds.origin.x, view.bounds.origin.y, view.bounds.size.width, headerHeight+topHeight))
         header.backgroundColor = Theme.ColorGreen
         
-        let buttonWidth: CGFloat = 96.0
-        var backButton = UIButton(frame: CGRectMake(header.bounds.origin.x, header.bounds.origin.y+20, buttonWidth, headerHeight))
+        let buttonWidth: CGFloat = 80.0
+        var backButton = UIButton(frame: CGRectMake(header.bounds.origin.x + 4, header.bounds.origin.y+24, buttonWidth, headerHeight - 8))
         backButton.setImage(UIImage(named: "icon-back.png"), forState: UIControlState.Normal)
         backButton.addTarget(self, action: "btnBack:", forControlEvents: UIControlEvents.TouchUpInside)
-        self.view.addSubview(backButton)
         header.addSubview(backButton)
         
         let editButtonWidth:CGFloat = 50
         var editButton = UIButton(frame: CGRectMake(header.bounds.origin.x+header.bounds.size.width-55
             ,header.bounds.origin.y + 25,editButtonWidth,headerHeight-10))
-        editButton.setImage(IconImage().edit(headerHeight-10), forState: UIControlState.Normal)
+        editButton.setImage(IconImage().edit(headerHeight-15), forState: UIControlState.Normal)
         editButton.addTarget(self, action: "editItem:", forControlEvents: UIControlEvents.TouchUpInside)
         header.addSubview(editButton)
         

@@ -108,8 +108,8 @@ class IconImage {
     
     func camera() -> UIImage {
         setup(CHAT_SIZE)
-        factory.colors = [UIColor.redColor()]
-        factory.strokeColor = UIColor.redColor()
+        factory.colors = [UIColor.blackColor()]
+        factory.strokeColor = UIColor.blackColor()
         factory.strokeWidth = 0.0
         return factory.createImageForIcon(NIKFontAwesomeIcon.Camera)
     }

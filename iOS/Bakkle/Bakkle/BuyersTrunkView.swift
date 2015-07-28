@@ -52,10 +52,7 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
         
         classifyData()
         
-        Bakkle.sharedInstance.populateTrunk({
-            self.classifyData()
-            self.tableView.reloadData()
-        });
+        Bakkle.sharedInstance.populateTrunk({});
     }
     
     deinit {

@@ -20,13 +20,13 @@ fi
 if [ `hostname` == 'ip-172-31-27-192' ]; then
    sudo ./bin/nginx_ensite com.bakkle.app
 fi
-if [ `hostname` == 'bakkle' ]; then
+if [ `hostname` == 'rhv-bakkle' ]; then
    sudo ./bin/nginx_ensite org.rhventures.bakkle
 fi
 if [ `hostname` == 'rhv-bakkle-bld' ]; then
    sudo ./bin/nginx_ensite org.rhventures.bakkle-bld
 fi
-if [ `hostname` == 'RHV-291SCS-Linux' ]; then
+if [ `hostname` == 'rhv-lnx-291scs' ]; then
    sudo ./bin/nginx_ensite org.rhventures.wongb
 fi
 

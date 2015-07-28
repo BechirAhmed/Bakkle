@@ -12,7 +12,7 @@ class MenuTableController: UITableViewController {
 
     let profileSegue = "PushToProfileView"
     var backView: UIView!
-    var segueNotifier: dispatch_semaphore_t = dispatch_semaphore_create(0)
+    var user: NSDictionary!
     
     @IBOutlet weak var profileImg: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
@@ -51,12 +51,17 @@ class MenuTableController: UITableViewController {
         }
     }
     override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
         UIApplication.sharedApplication().statusBarHidden = true
         setupProfileImg()
     }
     
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        UIApplication.sharedApplication().setStatusBarHidden(false, withAnimation: UIStatusBarAnimation.None)
+    }
+    
     override func viewDidDisappear(animated: Bool) {
-        UIApplication.sharedApplication().statusBarHidden = false
         super.viewDidDisappear(animated)
         
         if self.revealViewController() != nil {
@@ -103,13 +108,13 @@ class MenuTableController: UITableViewController {
     }
     
     @IBAction func btnContact(sender: AnyObject) {
-        UIApplication.sharedApplication().openURL(NSURL(string: "http://www.bakkle.com/")!)
+        UIApplication.sharedApplication().openURL(NSURL(string: (Bakkle.sharedInstance.flavor == 2 ? "http://www.goodwill.org/" : "http://www.bakkle.com/"))!)
     }
     
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         /* This fixes the small lines on the left hand side of the cell dividers */
         cell.backgroundColor = UIColor.clearColor()
-        if indexPath.row == 2 && Bakkle.sharedInstance.flavor == 2 {
+        if (indexPath.row == 2 && Bakkle.sharedInstance.flavor == 2) || (indexPath.row == 6 && !Bakkle.developerTools) {
             cell.hidden = true
         }
     }
@@ -118,23 +123,33 @@ class MenuTableController: UITableViewController {
         if indexPath.row == 0 {
             return 177
         }
-        if indexPath.row == 2 && Bakkle.sharedInstance.flavor == 2 {
+        if (indexPath.row == 2 && Bakkle.sharedInstance.flavor == 2) || (indexPath.row == 6 && !Bakkle.developerTools) {
             return 0
         }
         return 60
     }
     
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if indexPath.row == 0 {
+            self.view.userInteractionEnabled = false
+            Bakkle.sharedInstance.getAccount(Bakkle.sharedInstance.account_id, success: {
+                self.user = Bakkle.sharedInstance.responseDict
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.performSegueWithIdentifier(self.profileSegue, sender: self)
+                })
+            }, fail: {})
+            
+        }
+    }
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         self.view.userInteractionEnabled = false
+        UIApplication.sharedApplication().setStatusBarHidden(false, withAnimation: UIStatusBarAnimation.None)
         if segue.identifier == self.profileSegue {
             let destinationVC = segue.destinationViewController as! ProfileView
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
-                Bakkle.sharedInstance.getAccount(Bakkle.sharedInstance.account_id, success: {
-                    destinationVC.user = Bakkle.sharedInstance.responseDict
-                    dispatch_semaphore_signal(self.segueNotifier)
-                    }, fail: {})
-            })
-            dispatch_semaphore_wait(segueNotifier, DISPATCH_TIME_FOREVER)
+            if self.user != nil {
+                destinationVC.user = self.user
+            }
         }
     }
 }

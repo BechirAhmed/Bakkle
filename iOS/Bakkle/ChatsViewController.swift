@@ -41,7 +41,7 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
         let editButtonWidth:CGFloat = 50
         var editButton = UIButton(frame: CGRectMake(header.bounds.origin.x+header.bounds.size.width-55
             ,header.bounds.origin.y + 25,editButtonWidth,headerHeight-10))
-        editButton.setImage(IconImage().edit(headerHeight-10), forState: UIControlState.Normal)
+        editButton.setImage(IconImage().edit(headerHeight-15), forState: UIControlState.Normal)
         editButton.addTarget(self, action: "editItem:", forControlEvents: UIControlEvents.TouchUpInside)
         header.addSubview(editButton)
         
@@ -199,7 +199,7 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
     func editItem(sender:UIButton!)
     {
         let sb: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        let vc: AddItem = sb.instantiateViewControllerWithIdentifier("AddItem") as! AddItem
+        let vc: CameraView = sb.instantiateViewControllerWithIdentifier("CameraView") as! CameraView
         vc.modalTransitionStyle = UIModalTransitionStyle.FlipHorizontal
         vc.isEditting = true
         vc.item = Bakkle.sharedInstance.garageItems[self.garageIndex] as? NSDictionary

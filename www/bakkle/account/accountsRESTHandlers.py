@@ -165,8 +165,6 @@ class settingsHandler(bakkleRequestHandler):
 class loginFacebookHandler(bakkleRequestHandler):
 
     def post(self):
-
-        print("loginFacebook")
         # TODO: Handle location
         # Get the rest of the necessary params from the request
         try:
@@ -176,7 +174,7 @@ class loginFacebookHandler(bakkleRequestHandler):
             app_version = self.getArgument('app_version')
             is_ios = self.getArgument('is_ios', True)
             client_ip = self.getIP()
-            app_flavor = self.getArgument("flavor", 0)
+            app_flavor = self.getArgument("flavor", 1)
         except QueryArgumentError as error:
             return self.writeJSON({"status": 0, "message": error.message})
 
@@ -263,7 +261,7 @@ class facebookHandler(bakkleRequestHandler):
             display_name = self.getArgument('name')
             email = self.getArgument('email')
             device_uuid = self.getArgument('device_uuid')
-            app_flavor = self.getArgument('flavor', 0)
+            app_flavor = self.getArgument('flavor', 1)
         except QueryArgumentError as error:
             return self.writeJSON({"status": 0, "message": error.message})
 

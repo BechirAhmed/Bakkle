@@ -112,9 +112,7 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
 
         
         classifyData()
-        Bakkle.sharedInstance.populateHolding({
-            NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkHoldingUpdate, object: self)
-        });
+        Bakkle.sharedInstance.populateHolding({});
     }
     
     override func viewWillDisappear(animated: Bool) {

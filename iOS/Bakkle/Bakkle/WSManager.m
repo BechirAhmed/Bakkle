@@ -100,7 +100,7 @@ static BOOL debug = true;
     //NSString *urlString = @"ws://wongb.rhventures.org:8080/ws/";
     NSString *urlString;
     
-    NSInteger serverNum = [[NSUserDefaults standardUserDefaults]integerForKey:@"server"];//NSUserDefaults.standardUserDefaults().integerForKey("server")
+    NSInteger serverNum = [Bakkle developerTools] ? [[NSUserDefaults standardUserDefaults]integerForKey:@"server"] : [Bakkle defaultServerNum];//NSUserDefaults.standardUserDefaults().integerForKey("server")
     switch( serverNum )
     {
         case 0:
