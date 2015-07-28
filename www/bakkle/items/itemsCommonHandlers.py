@@ -520,7 +520,7 @@ def get_seller_transactions(seller_id):
 @time_method
 def get_buyers_trunk(buyer_id):
 
-    item_list = BuyerItem.objects.filter(Q(buyer=buyer_id, status=BuyerItem.WANT) | Q(buyer=buyer_id, status=BuyerItem.PENDING) | Q(buyer=buyer_id, status=BuyerItem.SOLD) | Q(buyer=buyer_id, status=BuyerItem.NEGOTIATING)).exclude(item__seller__pk = buyer_id).order_by('view_time')
+    item_list = BuyerItem.objects.filter(Q(buyer=buyer_id, status=BuyerItem.WANT) | Q(buyer=buyer_id, status=BuyerItem.PENDING) | Q(buyer=buyer_id, status=BuyerItem.SOLD) | Q(buyer=buyer_id, status=BuyerItem.NEGOTIATING)).exclude(item__seller__pk = buyer_id).order_by('-view_time')
 
     item_array = []
     # get json representaion of item array
@@ -534,7 +534,7 @@ def get_buyers_trunk(buyer_id):
 @time_method
 def get_holding_pattern(buyer_id):
 
-    item_list = BuyerItem.objects.filter(buyer=buyer_id, status=BuyerItem.HOLD).exclude(item__seller__pk = buyer_id).order_by('view_time')
+    item_list = BuyerItem.objects.filter(buyer=buyer_id, status=BuyerItem.HOLD).exclude(item__seller__pk = buyer_id).order_by('-view_time')
 
     item_array = []
     # get json representaion of item array
@@ -548,7 +548,7 @@ def get_holding_pattern(buyer_id):
 @time_method
 def get_buyer_transactions(buyer_id):
 
-    item_list = BuyerItem.objects.filter(buyer=buyer_id, status=BuyerItem.SOLD_TO).order_by('view_time')
+    item_list = BuyerItem.objects.filter(buyer=buyer_id, status=BuyerItem.SOLD_TO).order_by('-view_time')
 
     item_array = []
     # get json representaion of item array
