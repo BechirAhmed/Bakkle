@@ -145,6 +145,26 @@ public class AddItem extends AppCompatActivity{
         if(requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK)
         {
 
+            /*try {
+    Matrix matrix = new Matrix();
+    matrix.postRotate(90);
+
+    final BitmapFactory.Options options = new BitmapFactory.Options();
+    //options.inSampleSize = 8;
+    options.inJustDecodeBounds = true;
+    BitmapFactory.decodeStream(new FileInputStream(new File(mCurrentPhotoPath)), null, options);
+    int scale = calculateInSampleSize(options, dpToPx(250), dpToPx(250));
+
+    BitmapFactory.Options o2 = new BitmapFactory.Options();
+    o2.inSampleSize = scale;
+
+    temp = BitmapFactory.decodeStream(new FileInputStream(new File(mCurrentPhotoPath)), null, o2);
+
+//            Bitmap temp = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(mCurrentPhotoPath, options), dpToPx(250), dpToPx(250));
+    //temp = Bitmap.createBitmap(temp, 0, 0, temp.getWidth(), temp.getHeight(), matrix, true); //rotate picture 90 degrees
+
+}catch(Exception e){}*/
+
             Matrix matrix = new Matrix();
             matrix.postRotate(90);
 
@@ -158,8 +178,8 @@ public class AddItem extends AppCompatActivity{
 
             try {
                 fileOutputStream = new FileOutputStream(mCurrentPhotoPath);
-                Bitmap.createScaledBitmap(BitmapFactory.decodeFile(mCurrentPhotoPath), 640, 640, true)
-                        .compress(Bitmap.CompressFormat.JPEG, 70, fileOutputStream);
+                Bitmap.createScaledBitmap(temp, 640, 640, true)
+                        .compress(Bitmap.CompressFormat.JPEG, 90, fileOutputStream);
                 fileOutputStream.flush();
                 fileOutputStream.close();
             }
@@ -194,6 +214,29 @@ public class AddItem extends AppCompatActivity{
             picturePaths.add(mCurrentPhotoPath);
             temp = null;
         }
+    }
+
+    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            // Calculate ratios of height and width to requested height and
+            // width
+            final int heightRatio = Math.round((float)height / (float)reqHeight);
+            final int widthRatio = Math.round((float)width / (float)reqWidth);
+
+            // Choose the smallest ratio as inSampleSize value, this will
+            // guarantee
+            // a final image with both dimensions larger than or equal to the
+            // requested height and width.
+            inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
+        }
+
+        return inSampleSize;
     }
 
 

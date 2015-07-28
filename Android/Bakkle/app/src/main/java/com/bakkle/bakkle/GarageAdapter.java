@@ -1,12 +1,16 @@
 package com.bakkle.bakkle;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.daimajia.swipe.adapters.ArraySwipeAdapter;
 
@@ -19,6 +23,8 @@ public class GarageAdapter extends ArraySwipeAdapter<FeedItem> {
 
     Context c;
     ArrayList<FeedItem> items;
+    ServerCalls serverCalls;
+    SharedPreferences preferences;
 
     @Override
     public int getSwipeLayoutResourceId(int i) {
@@ -32,6 +38,7 @@ public class GarageAdapter extends ArraySwipeAdapter<FeedItem> {
         TextView want;
         TextView hold;
         TextView nope;
+        Button delete;
         //TextView total;
 
     }
@@ -43,11 +50,13 @@ public class GarageAdapter extends ArraySwipeAdapter<FeedItem> {
         this.c = context;
         this.items = items;
         asyncImageLoader = new AsyncImageLoader(context);
+        serverCalls = new ServerCalls(c);
+        preferences = PreferenceManager.getDefaultSharedPreferences(c);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
-        FeedItem item = (FeedItem) getItem(position);
+        final FeedItem item = (FeedItem) getItem(position);
         final ViewHolder viewHolder;
         if(convertView == null){
             viewHolder = new ViewHolder();
@@ -58,6 +67,7 @@ public class GarageAdapter extends ArraySwipeAdapter<FeedItem> {
             viewHolder.hold = (TextView) convertView.findViewById(R.id.hold_count);
             viewHolder.nope = (TextView) convertView.findViewById(R.id.nope_count);
             viewHolder.price = (TextView) convertView.findViewById(R.id.price);
+            viewHolder.delete = (Button) convertView.findViewById(R.id.delete);
             //viewHolder.total = (TextView) convertView.findViewById(R.id.total);
             convertView.setTag(viewHolder);
         }
@@ -76,13 +86,13 @@ public class GarageAdapter extends ArraySwipeAdapter<FeedItem> {
         viewHolder.want.setText(item.getNumWant());
         viewHolder.hold.setText(item.getNumHold());
         viewHolder.nope.setText(item.getNumMeh());
-
-//        viewHolder.icon.setImageDrawable(c.getDrawable(R.drawable.bakkle_icon));
-//        viewHolder.title.setText("Title");
-//        viewHolder.want.setText("3");
-//        viewHolder.hold.setText("3");
-//        viewHolder.nope.setText("3");
-//        viewHolder.price.setText("$5");
+        viewHolder.delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(c, "You are in the delete Item page", Toast.LENGTH_SHORT).show();
+                //serverCalls.deleteItem(preferences.getString("auth_token", "0"), preferences.getString("uuid", "0"), item.getPk());
+            }
+        });
 
         return convertView;
     }

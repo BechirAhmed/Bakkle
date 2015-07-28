@@ -121,7 +121,7 @@ public class ItemDetail extends AppCompatActivity {
         }
         imageView.setLayoutParams(layoutParams);
         imageView.setAdjustViewBounds(true);
-        imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
 
         relativeLayout.addView(imageView);
     }

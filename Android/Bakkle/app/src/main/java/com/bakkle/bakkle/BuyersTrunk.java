@@ -29,17 +29,9 @@ import java.util.Arrays;
  */
 public class BuyersTrunk extends ListFragment{
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     SharedPreferences preferences;
-    SharedPreferences.Editor editor;
 
     private OnFragmentInteractionListener mListener;
 
@@ -55,10 +47,10 @@ public class BuyersTrunk extends ListFragment{
     // TODO: Rename and change types of parameters
     public static BuyersTrunk newInstance(String param1, String param2) {
         BuyersTrunk fragment = new BuyersTrunk();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
+//        Bundle args = new Bundle();
+//        args.putString(ARG_PARAM1, param1);
+//        args.putString(ARG_PARAM2, param2);
+//        fragment.setArguments(args);
         return fragment;
     }
 

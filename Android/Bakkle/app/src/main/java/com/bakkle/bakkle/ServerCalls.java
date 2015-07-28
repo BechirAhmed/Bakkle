@@ -6,8 +6,6 @@ import android.util.Log;
 
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
-import com.koushikdutta.async.http.body.FilePart;
-import com.koushikdutta.async.http.body.Part;
 import com.koushikdutta.ion.Ion;
 import com.koushikdutta.ion.builder.Builders;
 
@@ -20,8 +18,8 @@ import java.util.ArrayList;
 public class ServerCalls{
 
     double apiVersion = 1.2;
-//    final static String url_base                 = "https://bakkle.rhventures.org/";
-    final static String url_base                 = "https://app.bakkle.com/";
+    final static String url_base                 = "https://bakkle.rhventures.org/";
+//    final static String url_base                 = "https://app.bakkle.com/";
     final static String url_login                = "account/login_facebook/";
     final static String url_logout               = "account/logout/";
     final static String url_facebook             = "account/facebook/";
@@ -313,40 +311,23 @@ public class ServerCalls{
     public JsonObject addItem(String name, String description, String price, String pickupMethod, String tags,
                               ArrayList<String> imageUri, String authToken, String uuid)
     {
+//
+//        FileOutputStream fileOutputStream = null;
+//        Bitmap temp;
+//
+//        try {
+//            fileOutputStream = new FileOutputStream(mCurrentPhotoPath);
+//            temp = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(mCurrentPhotoPath), 640, 640, true);
+//            temp.compress(Bitmap.CompressFormat.JPEG, 70, fileOutputStream);
+//            fileOutputStream.flush();
+//            fileOutputStream.close();
+//        }
+//        catch (Exception e){
+//            Log.v("Bitmap scaling error", e.getMessage());
+//        }
 
-        ArrayList<Part> fileParts = new ArrayList<>();
-        for(String uri : imageUri)
-        {
-            fileParts.add(new FilePart("image", new File(uri)));
-        }
-       /* MultipartBodyBuilder<?> request =*/
+
         try {
-            /*Ion.with(mContext)
-                    .load(url_base + url_add_item)
-                    .setMultipartParameter("auth_token", authToken)
-                    .setMultipartParameter("device_uuid", uuid)
-                    .setMultipartParameter("title", name)
-                    .setMultipartParameter("description", description)
-                    .setMultipartParameter("price", price)
-                    .setMultipartParameter("method", pickupMethod)
-                    .setMultipartParameter("tags", tags)
-                    .setMultipartParameter("location", "32,32") //TODO: GET REAL LOCATION
-                    .addMultipartParts(fileParts)
-                    .asJsonObject()
-                    .setCallback(new FutureCallback<JsonObject>() {
-                        @Override
-                        public void onCompleted(Exception e, JsonObject result) {
-                            e.printStackTrace();
-                            Log.v("the result is ", result.toString());
-                            jsonResponse = result;
-                        }
-                    });*/
-            //        for(String uri : imageUri)
-            //        {
-            //            request = request.setMultipartFile("image", new File(uri));
-            //        }
-
-
             Log.v("imageURI 0 is ", imageUri.get(0));
 
 
@@ -367,17 +348,15 @@ public class ServerCalls{
             }
 
 
-            body
-                .asJsonObject()
-                .setCallback(new FutureCallback<JsonObject>() {
+            body.asJsonObject().setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
-                        if (e != null)
-                            e.printStackTrace();
-                        Log.v("the result is ", result.toString());
-                        jsonResponse = result;
-                    }
-                });
+                if (e != null)
+                    e.printStackTrace();
+                Log.v("the result is ", result.toString());
+                jsonResponse = result;
+                }
+            });
         }
         catch (Exception e){
             Log.v("testing upload", e.getMessage());
@@ -387,6 +366,11 @@ public class ServerCalls{
         return jsonResponse;
 
 
+    }
+
+    public void deleteItem(String authToken, String uuid, String pk)
+    {
+        markItem("meh", authToken, uuid, pk, "42");
     }
 
     public void resetDemo(String authToken, String uuid){
