@@ -27,6 +27,8 @@ TEMPLATE_DEBUG = False
 
 ALLOWED_HOSTS = []
 
+CONN_MAX_AGE = 0
+
 # Application definition
 
 INSTALLED_APPS = (

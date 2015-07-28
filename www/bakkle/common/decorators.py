@@ -77,7 +77,7 @@ def time_method(function):
     return wrap
     
 
-EXECUTOR = ThreadPoolExecutor(max_workers=10)
+EXECUTOR = ThreadPoolExecutor(max_workers=14)
 
 # Decorator for login authentication
 def run_async(function):
