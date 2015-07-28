@@ -108,14 +108,14 @@ class AnalyticsView: UIViewController, PNChartDelegate{
         
         self.pieChartSetup()
         
-        var viewLabel: UILabel = UILabel(frame: CGRectMake(view.bounds.origin.x, 20+pieChartHeight, view.bounds.size.width, 20))
-        viewLabel.textAlignment = NSTextAlignment.Center
-        viewLabel.text = "Views Per Day".uppercaseString
-        viewLabel.textColor = Theme.ColorGreen
-        viewLabel.font = UIFont(name: "Avenir-Black", size: 20)
-        contentView.addSubview(viewLabel)
-        
-        self.lineChartSetup()
+//        var viewLabel: UILabel = UILabel(frame: CGRectMake(view.bounds.origin.x, 20+pieChartHeight, view.bounds.size.width, 20))
+//        viewLabel.textAlignment = NSTextAlignment.Center
+//        viewLabel.text = "Views Per Day".uppercaseString
+//        viewLabel.textColor = Theme.ColorGreen
+//        viewLabel.font = UIFont(name: "Avenir-Black", size: 20)
+//        contentView.addSubview(viewLabel)
+//        
+//        self.lineChartSetup()
         
     }
     
