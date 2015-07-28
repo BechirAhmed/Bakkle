@@ -150,11 +150,12 @@ def add_item(title, description, location, seller_id, price, tags, notifyFlag, i
         item.save()
         if(notifyFlag == None or notifyFlag == "" or int(notifyFlag) != 0):
             notify_all_new_item(u"New: ${} - {}".format(item.price, item.title))
+        logging.info("[AddItem] adding item: " + str(item.pk))
     else:
         # Else get the item
         try:
             item = Items.objects.get(pk=item_id)
-            logger.debug("[EditItem] editing item: " + str(item_id))
+            logging.info("[EditItem] editing item: " + str(item_id))
         except Items.DoesNotExist:
             item = None
             response_data = {"status":0, "error":"Item {} does not exist.".format(item_id)}
@@ -168,13 +169,16 @@ def add_item(title, description, location, seller_id, price, tags, notifyFlag, i
         #     handle_delete_file_s3(url)
 
         # Update item fields
+
         item.title = title
         item.description = description
         item.tags = tags
         item.price = price
-        item.method = method
         item.image_urls = image_urls
         item.save()
+
+
+    logging.info("[Add/EditItem] done with item: " + str(item_id))
 
     response_data = { "status":1, "item_id":item.id }
     return response_data
@@ -267,7 +271,7 @@ def feed(buyer_id, device_uuid, user_location, search_text, filter_distance, fil
         response_data = { "status":0, "error": "Latitude or Longitude was not a valid decimal." }
         return response_data
 
-    logger.debug('Time after %s: %0.2f ms' % ("parsing locations", (time.time()-startTime)*1000.0))
+    logging.debug('Time after %s: %0.2f ms' % ("parsing locations", (time.time()-startTime)*1000.0))
     startTime = time.time();
 
     #horizontal range
@@ -280,7 +284,7 @@ def feed(buyer_id, device_uuid, user_location, search_text, filter_distance, fil
     latMin = lat - latRange
     latMax = lat + latRange
 
-    logger.debug('Time after %s: %0.2f ms' % ("getting item range", (time.time()-startTime)*1000.0))
+    logging.debug('Time after %s: %0.2f ms' % ("getting item range", (time.time()-startTime)*1000.0))
     startTime = time.time();
 
     #filter(longitude__lte = lon + lonRange).filter(longitude__gte = lon - lonRange).filter(latitude__lte = lat + latRange).filter(latitude__gte = lat + latRange)
@@ -305,7 +309,7 @@ def feed(buyer_id, device_uuid, user_location, search_text, filter_distance, fil
         return response_data
 
 
-    logger.debug('Time after %s: %0.2f ms' % ("updating locations", (time.time()-startTime)*1000.0))
+    logging.debug('Time after %s: %0.2f ms' % ("updating locations", (time.time()-startTime)*1000.0))
     startTime = time.time();
 
     # get items
@@ -366,7 +370,7 @@ def feed(buyer_id, device_uuid, user_location, search_text, filter_distance, fil
         page += 1;
 
 
-    logger.debug('Time after %s: %0.2f ms' % ("adding feed items to return array", (time.time()-startTime)*1000.0))
+    logging.debug('Time after %s: %0.2f ms' % ("adding feed items to return array", (time.time()-startTime)*1000.0))
     startTime = time.time();
 
     response_data = { 'status': 1, 'feed': item_array }
@@ -573,7 +577,7 @@ def handle_file_s3(image_key, f):
     # http://boto.readthedocs.org/en/latest/s3_tut.html
     k.set_contents_from_string(image_string)
     k.set_acl('public-read')
-    logger.debug(config['S3_URL'] + image_key)
+    logging.debug(config['S3_URL'] + image_key)
     return config['S3_URL'] + image_key
 
 #TODO: Fix this
@@ -586,7 +590,7 @@ def handle_delete_file_s3(image_path):
     conn = S3Connection(config['AWS_ACCESS_KEY'], config['AWS_SECRET_KEY'])
     #bucket = conn.create_bucket('com.bakkle.prod')
     bucket = conn.get_bucket(bucket_name)
-    logger.debug(image_key)
+    logging.debug(image_key)
     k = bucket.get_key(image_key)
     k.delete()
 
@@ -1006,6 +1010,6 @@ def reset_items():
         times_reported = 0 )
     i.save()
 
-    logger.debug("Adding {}".format(i.title))
+    logging.info("Adding {}".format(i.title))
     return HttpResponse("resetting {}".format(i.title)) #change success value
 
