@@ -241,6 +241,17 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     * ever to be changed
     */
     func disableConfirmButtonHandler() -> Bool {
+        let model = UIDevice.currentDevice().model
+        if model == "iPad" {
+            if confirmHit || trimString(self.priceField.text) == "$" || self.titleField.text.isEmpty || self.priceField.text.isEmpty || itemImages?.count < 1 || itemImages?.count > CameraView.MAX_IMAGE_COUNT {
+                confirmButton.enabled = false
+                confirmButton.backgroundColor = AddItem.CONFIRM_BUTTON_DISABLED_COLOR
+            } else {
+                confirmButton.enabled = true
+                confirmButton.backgroundColor = AddItem.BAKKLE_GREEN_COLOR
+            }
+            return confirmButton.enabled
+        }
         if confirmHit || trimString(self.priceField.text) == "$" || descriptionField.textColor == AddItem.DESCRIPTION_PLACEHOLDER_COLOR || self.titleField.text.isEmpty || self.priceField.text.isEmpty || self.descriptionField.text.isEmpty || itemImages?.count < 1 || itemImages?.count > CameraView.MAX_IMAGE_COUNT {
             confirmButton.enabled = false
             confirmButton.backgroundColor = AddItem.CONFIRM_BUTTON_DISABLED_COLOR
