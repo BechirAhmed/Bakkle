@@ -157,7 +157,6 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         loadMessages()
         refreshControl.addTarget(self, action: Selector("refreshChat"), forControlEvents: UIControlEvents.ValueChanged)
         self.tableView.addSubview(refreshControl)
-        tableViewScrollToBottomAnimated(true) // doesn't work
         
         self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "dismissKeyboard"))
     }
@@ -169,7 +168,6 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     override func viewDidAppear(animated: Bool)  {
         super.viewDidAppear(animated)
         tableView.flashScrollIndicators()
-        tableViewScrollToBottomAnimated(false)
         
         if isBuyer {
             let seller_facebookid = seller.valueForKey("facebook_id") as! String
@@ -644,8 +642,8 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     func tableViewScrollToBottomAnimated(animated: Bool) {
         let numberOfRows = tableView.numberOfRowsInSection(0)
         if numberOfRows > 0 {
-            self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: numberOfRows-1, inSection: 0), atScrollPosition: .Bottom, animated: false)
-            let delay = 0.3 * Double(NSEC_PER_SEC)
+            self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: numberOfRows-1, inSection: 0), atScrollPosition: .Bottom, animated: animated)
+            let delay = 0.1 * Double(NSEC_PER_SEC)
             let time = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
             dispatch_after(time, dispatch_get_main_queue(), {
                 self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: numberOfRows-1, inSection: 0), atScrollPosition: .Bottom, animated: animated)
