@@ -22,7 +22,10 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     private static let FOCUS_SQUARE_OFFSET: CGFloat = 2.0
     static let MAX_IMAGE_COUNT = 4
     var size: CGSize? = nil
-    var stopFocus = false
+    
+    /* ORIGIN IDENTIFIERS */
+    var isEditting: Bool = false
+    var item: NSDictionary!
     
     /* SEGUE NAVIGATION */
     @IBOutlet weak var closeButton: UIButton!
@@ -87,8 +90,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     var imageViewY: CGFloat!
     var imageViewX: [CGFloat]!
     var lockRelease: [Bool]!
-    
-    /* TEMP VARIABLES (DELETE WHEN FEATURE IS FIXED */
+    var stopFocus = false
     var animating: Int = 0 // image rearrangement
     
     override func viewDidLoad() {
@@ -135,6 +137,9 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             
             // Text is set in storyboard to get a feel of orientation
             var successLabel = self.addItem!.successfulAdd ? listedLabel : willBeListedLabel
+            if isEditting {
+                successLabel.text = self.addItem!.successfulAdd ? "Your changes were submitted successfully!" : "Don't worry, we're still updating your changes!"
+            }
             successLabel.layer.shadowColor = Theme.ColorGreen.CGColor
             successLabel.layer.shadowRadius = 5.0
             successLabel.layer.shadowOpacity = 1.0
@@ -143,6 +148,13 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             self.dismissViewControllerAnimated(true, completion: nil)
         } else if self.addItem != nil {
             self.fadeView.alpha = 0.0
+        } else if isEditting {
+            let imageUrls = item.valueForKey("image_urls") as! Array<String>
+            for index in 0...imageUrls.count-1 {
+                var imageURL: NSURL = NSURL(string: imageUrls[index])!
+                var imageData: NSData = NSData(contentsOfURL: imageURL)!
+                images[index] = UIImage(data: imageData)!
+            }
         }
     }
     
@@ -197,6 +209,10 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         focusIndicator.userInteractionEnabled = false
         cameraView.clipsToBounds = true
         cameraView.addSubview(focusIndicator)
+        
+        populatePhotos()
+        
+        // Any code that doesn't need the fade view active after this point
         
         if self.addItem == nil {
             UIView.animateWithDuration(CameraView.FADE_IN_TIME, animations: {
@@ -802,6 +818,12 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             self.populatePhotos() // to be safe
             let destinationVC = segue.destinationViewController as! AddItem
             self.addItem = destinationVC
+            destinationVC.isEditting = isEditting
+            
+            if isEditting {
+                destinationVC.item = self.item
+            }
+            
             destinationVC.itemImages = [UIImage]()
             for image in self.images {
                 if !(image.CIImage == nil && image.CGImage == nil) {

@@ -39,6 +39,8 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     static let bkHoldingUpdate = "com.bakkle.holdingUpdate"
     static let bkFilterChanged = "com.bakkle.filterChanged"
     
+    static let developerTools  = false
+    
     /* 1 - ERROR
      * 2 - INFO
      * 3 - DEBUG

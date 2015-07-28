@@ -1058,26 +1058,26 @@
                                 <exclude reference="hIB-1F-QeM"/>
                             </mask>
                             <mask key="constraints">
-                                <exclude reference="uOa-j1-cE4"/>
-                                <exclude reference="yhc-2f-9tJ"/>
-                                <exclude reference="zrv-jk-miR"/>
-                                <exclude reference="2id-Yb-QJ6"/>
-                                <exclude reference="AXo-YC-WL3"/>
-                                <exclude reference="e0j-0a-P7X"/>
-                                <exclude reference="7uj-Dk-Hv4"/>
-                                <exclude reference="OeX-iW-tOP"/>
-                                <exclude reference="sp7-uH-Lfz"/>
-                                <exclude reference="Mk3-cw-GKj"/>
-                                <exclude reference="mYP-af-pxk"/>
-                                <exclude reference="uM2-sw-BPH"/>
-                                <exclude reference="I95-RO-JzV"/>
-                                <exclude reference="PSl-va-xUB"/>
-                                <exclude reference="4rl-f9-YYk"/>
-                                <exclude reference="CY3-Vs-nm3"/>
-                                <exclude reference="Yig-Ei-pHU"/>
                                 <exclude reference="LbH-fh-yZL"/>
                                 <exclude reference="lJB-uq-2Uz"/>
                                 <exclude reference="zEP-wK-YcO"/>
+                                <exclude reference="I95-RO-JzV"/>
+                                <exclude reference="PSl-va-xUB"/>
+                                <exclude reference="7uj-Dk-Hv4"/>
+                                <exclude reference="OeX-iW-tOP"/>
+                                <exclude reference="sp7-uH-Lfz"/>
+                                <exclude reference="2id-Yb-QJ6"/>
+                                <exclude reference="AXo-YC-WL3"/>
+                                <exclude reference="e0j-0a-P7X"/>
+                                <exclude reference="Mk3-cw-GKj"/>
+                                <exclude reference="mYP-af-pxk"/>
+                                <exclude reference="uM2-sw-BPH"/>
+                                <exclude reference="4rl-f9-YYk"/>
+                                <exclude reference="CY3-Vs-nm3"/>
+                                <exclude reference="Yig-Ei-pHU"/>
+                                <exclude reference="uOa-j1-cE4"/>
+                                <exclude reference="yhc-2f-9tJ"/>
+                                <exclude reference="zrv-jk-miR"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
@@ -1090,26 +1090,26 @@
                                 <include reference="hIB-1F-QeM"/>
                             </mask>
                             <mask key="constraints">
-                                <include reference="uOa-j1-cE4"/>
-                                <include reference="yhc-2f-9tJ"/>
-                                <include reference="zrv-jk-miR"/>
-                                <include reference="2id-Yb-QJ6"/>
-                                <include reference="AXo-YC-WL3"/>
-                                <include reference="e0j-0a-P7X"/>
-                                <include reference="7uj-Dk-Hv4"/>
-                                <include reference="OeX-iW-tOP"/>
-                                <include reference="sp7-uH-Lfz"/>
-                                <include reference="Mk3-cw-GKj"/>
-                                <include reference="mYP-af-pxk"/>
-                                <include reference="uM2-sw-BPH"/>
-                                <include reference="I95-RO-JzV"/>
-                                <include reference="PSl-va-xUB"/>
-                                <include reference="4rl-f9-YYk"/>
-                                <include reference="CY3-Vs-nm3"/>
-                                <include reference="Yig-Ei-pHU"/>
                                 <include reference="LbH-fh-yZL"/>
                                 <include reference="lJB-uq-2Uz"/>
                                 <include reference="zEP-wK-YcO"/>
+                                <include reference="I95-RO-JzV"/>
+                                <include reference="PSl-va-xUB"/>
+                                <include reference="7uj-Dk-Hv4"/>
+                                <include reference="OeX-iW-tOP"/>
+                                <include reference="sp7-uH-Lfz"/>
+                                <include reference="2id-Yb-QJ6"/>
+                                <include reference="AXo-YC-WL3"/>
+                                <include reference="e0j-0a-P7X"/>
+                                <include reference="Mk3-cw-GKj"/>
+                                <include reference="mYP-af-pxk"/>
+                                <include reference="uM2-sw-BPH"/>
+                                <include reference="4rl-f9-YYk"/>
+                                <include reference="CY3-Vs-nm3"/>
+                                <include reference="Yig-Ei-pHU"/>
+                                <include reference="uOa-j1-cE4"/>
+                                <include reference="yhc-2f-9tJ"/>
+                                <include reference="zrv-jk-miR"/>
                             </mask>
                         </variation>
                     </view>
@@ -2009,7 +2009,7 @@
         <!--Camera-->
         <scene sceneID="Tgd-3L-xYa">
             <objects>
-                <viewController title="Camera" id="Tk1-Fv-owu" customClass="CameraView" customModule="Bakkle" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CameraView" title="Camera" id="Tk1-Fv-owu" customClass="CameraView" customModule="Bakkle" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="09R-PF-LB7"/>
                         <viewControllerLayoutGuide type="bottom" id="15P-Kj-dPa"/>
@@ -6977,7 +6977,7 @@
         <image name="mock-rating-stars.png" width="1600" height="373"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Rco-rv-njI"/>
+        <segue reference="lk1-fc-YGc"/>
         <segue reference="zsR-Bp-dYb"/>
     </inferredMetricsTieBreakers>
 </document>

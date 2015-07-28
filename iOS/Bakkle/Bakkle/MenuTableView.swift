@@ -114,7 +114,7 @@ class MenuTableController: UITableViewController {
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         /* This fixes the small lines on the left hand side of the cell dividers */
         cell.backgroundColor = UIColor.clearColor()
-        if indexPath.row == 2 && Bakkle.sharedInstance.flavor == 2 {
+        if (indexPath.row == 2 && Bakkle.sharedInstance.flavor == 2) || (indexPath.row == 6 && Bakkle.developerTools) {
             cell.hidden = true
         }
     }
@@ -123,7 +123,7 @@ class MenuTableController: UITableViewController {
         if indexPath.row == 0 {
             return 177
         }
-        if indexPath.row == 2 && Bakkle.sharedInstance.flavor == 2 {
+        if (indexPath.row == 2 && Bakkle.sharedInstance.flavor == 2) || (indexPath.row == 6 && Bakkle.developerTools) {
             return 0
         }
         return 60

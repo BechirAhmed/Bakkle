@@ -209,12 +209,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
                 descriptionField.textColor = UIColor.blackColor()
             }
             confirmButton.setTitle("SAVE", forState: UIControlState.Normal)
-            let imageUrls = item.valueForKey("image_urls") as! Array<String>
-            for index in 0...imageUrls.count-1 {
-                var imageURL: NSURL = NSURL(string: imageUrls[index])!
-                var imageData: NSData = NSData(contentsOfURL: imageURL)!
-                itemImages?.append(UIImage(data: imageData)!)
-            }
+    
             isEditting = false
         }
         disableConfirmButtonHandler()

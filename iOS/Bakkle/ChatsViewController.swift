@@ -199,7 +199,7 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
     func editItem(sender:UIButton!)
     {
         let sb: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        let vc: AddItem = sb.instantiateViewControllerWithIdentifier("AddItem") as! AddItem
+        let vc: CameraView = sb.instantiateViewControllerWithIdentifier("CameraView") as! CameraView
         vc.modalTransitionStyle = UIModalTransitionStyle.FlipHorizontal
         vc.isEditting = true
         vc.item = Bakkle.sharedInstance.garageItems[self.garageIndex] as? NSDictionary
