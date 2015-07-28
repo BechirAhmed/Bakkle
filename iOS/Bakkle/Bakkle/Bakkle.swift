@@ -40,8 +40,16 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     static let bkFilterChanged  = "com.bakkle.filterChanged"
     
     // DO NOT ENABLE if there is no way to select servers from settings file.
-    static let developerTools   = false
-    static let defaultServerNum = 0 // 0 = prod, 1 = prod cluster
+    static let developerTools   = true
+    static let defaultServerNum = 0 // 0 = prod, 1 = prod cluster (sets default server in list below)
+    static let servers   =   ["https://app.bakkle.com/",            // 0
+                              "https://app-cluster.bakkle.com/",    // 1
+                              "http://bakkle.rhventures.org:8000/"] // 2
+//                              "http://wongb.rhventures.org:8000/"]  // 3 (Ben)
+    static let serverNames = ["Production Server Single",
+                              "Production Server Cluster",
+                              "Test Server (Developers Only)"]
+//                              "Ben (Developers Only)"]
     
     /* 1 - ERROR
      * 2 - INFO
@@ -201,17 +209,17 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         serverNum = Bakkle.developerTools ? NSUserDefaults.standardUserDefaults().integerForKey("server") : Bakkle.defaultServerNum
         switch( serverNum )
         {
-            case 0: self.url_base = "https://app.bakkle.com/"
+            case 0: self.url_base = Bakkle.servers[0]
             //case 0: self.url_base = "https://PRODCLUSTER-16628191.us-west-2.elb.amazonaws.com/"
-            case 1: self.url_base = "https://app-cluster.bakkle.com/"
-            case 2: self.url_base = "http://bakkle.rhventures.org:8000/"
-            case 3: self.url_base = "http://wongb.rhventures.org:8000/"
-            case 4: self.url_base = "http://10.0.0.118:8000/"
+            case 1: self.url_base = Bakkle.servers[1]
+            case 2: self.url_base = Bakkle.servers[2]
+            case 3: self.url_base = Bakkle.servers[3]
+            case 4: self.url_base = Bakkle.servers[4]
             //case 4: self.url_base = "http://137.112.57.140:8000/"
-            case 5: self.url_base = "" //Patrick
-            case 6: self.url_base = "" //Xinyu
-            case 7: self.url_base = "" //Joe
-            default: self.url_base = "https://app.bakkle.com/"
+            case 5: self.url_base = Bakkle.servers[5] //Patrick
+            case 6: self.url_base = Bakkle.servers[6] //Xinyu
+            case 7: self.url_base = Bakkle.servers[7] // Joe
+            default: self.url_base = Bakkle.servers[Bakkle.defaultServerNum]
         }
     }
 
