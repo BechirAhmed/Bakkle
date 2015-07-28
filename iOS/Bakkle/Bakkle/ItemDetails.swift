@@ -116,7 +116,7 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
             itemTagsTextView.text = descriptions
         }
         sellerName.text = sellersName
-        itemDistanceLabel.text = String(format: "%.2f miles", distance)
+        itemDistanceLabel.text = String(format: "%d miles", roundDist(distance))
         
         for index in 0...imgURLs.count-1{
             let firstURL = imgURLs[index] as! String
@@ -179,6 +179,10 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection: Int) -> Int {
 
         return self.itemImages!.count
+    }
+    
+    func roundDist(distance: Double) -> Int {
+        return Int((distance - floor(distance)) < 0.5 ? floor(distance) : ceil(distance))
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
