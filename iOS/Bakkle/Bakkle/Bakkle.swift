@@ -33,13 +33,15 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     let url_getaccount:String = "account/get_account/"
     let url_setdescription:String = "account/set_description/"
 
-    static let bkFeedUpdate    = "com.bakkle.feedUpdate"
-    static let bkGarageUpdate  = "com.bakkle.garageUpdate"
-    static let bkTrunkUpdate   = "com.bakkle.trunkUpdate"
-    static let bkHoldingUpdate = "com.bakkle.holdingUpdate"
-    static let bkFilterChanged = "com.bakkle.filterChanged"
+    static let bkFeedUpdate     = "com.bakkle.feedUpdate"
+    static let bkGarageUpdate   = "com.bakkle.garageUpdate"
+    static let bkTrunkUpdate    = "com.bakkle.trunkUpdate"
+    static let bkHoldingUpdate  = "com.bakkle.holdingUpdate"
+    static let bkFilterChanged  = "com.bakkle.filterChanged"
     
-    static let developerTools  = false
+    // DO NOT ENABLE if there is no way to select servers from settings file.
+    static let developerTools   = false
+    static let defaultServerNum = 0 // 0 = prod, 1 = prod cluster
     
     /* 1 - ERROR
      * 2 - INFO
@@ -196,7 +198,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     /* End location */
     
     func setServer() {
-        serverNum = NSUserDefaults.standardUserDefaults().integerForKey("server")
+        serverNum = Bakkle.developerTools ? NSUserDefaults.standardUserDefaults().integerForKey("server") : Bakkle.defaultServerNum
         switch( serverNum )
         {
             case 0: self.url_base = "https://app.bakkle.com/"
