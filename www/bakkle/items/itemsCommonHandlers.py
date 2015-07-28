@@ -63,7 +63,7 @@ config['S3_URL'] = 'https://s3-us-west-2.amazonaws.com/com.bakkle.prod/'
 @time_method
 def index():
     # List all items (this is for web viewing of data only)
-    item_list = Items.objects.all()
+    item_list = Items.objects.all().order_by('-post_date')
     context = {
         'item_list': item_list,
     }
@@ -452,7 +452,7 @@ def report(buyer_id, item_id, view_duration):
 @time_method
 def get_seller_items(seller_id):
 
-    item_list = Items.objects.filter(seller=seller_id).filter(Q(status=Items.ACTIVE) | Q(status=Items.PENDING) | Q(status=Items.SOLD)).prefetch_related('buyeritem_set')
+    item_list = Items.objects.filter(seller=seller_id).filter(Q(status=Items.ACTIVE) | Q(status=Items.PENDING) | Q(status=Items.SOLD)).order_by('-post_date').prefetch_related('buyeritem_set')
     #item_list_2 = Items.objects.filter(Q(seller=seller_id, status=Items.ACTIVE) | Q(seller=seller_id, status=Items.PENDING)).filter(buyeritem__pk__isnull=False)#.aggregate(Sum("buyeritem__number_of_views"))
 
     item_array = []
@@ -520,7 +520,7 @@ def get_seller_transactions(seller_id):
 @time_method
 def get_buyers_trunk(buyer_id):
 
-    item_list = BuyerItem.objects.filter(Q(buyer=buyer_id, status=BuyerItem.WANT) | Q(buyer=buyer_id, status=BuyerItem.PENDING) | Q(buyer=buyer_id, status=BuyerItem.SOLD) | Q(buyer=buyer_id, status=BuyerItem.NEGOTIATING)).exclude(item__seller__pk = buyer_id)
+    item_list = BuyerItem.objects.filter(Q(buyer=buyer_id, status=BuyerItem.WANT) | Q(buyer=buyer_id, status=BuyerItem.PENDING) | Q(buyer=buyer_id, status=BuyerItem.SOLD) | Q(buyer=buyer_id, status=BuyerItem.NEGOTIATING)).exclude(item__seller__pk = buyer_id).order_by('-view_time')
 
     item_array = []
     # get json representaion of item array
@@ -534,7 +534,7 @@ def get_buyers_trunk(buyer_id):
 @time_method
 def get_holding_pattern(buyer_id):
 
-    item_list = BuyerItem.objects.filter(buyer=buyer_id, status=BuyerItem.HOLD).exclude(item__seller__pk = buyer_id)
+    item_list = BuyerItem.objects.filter(buyer=buyer_id, status=BuyerItem.HOLD).exclude(item__seller__pk = buyer_id).order_by('-view_time')
 
     item_array = []
     # get json representaion of item array
@@ -548,7 +548,7 @@ def get_holding_pattern(buyer_id):
 @time_method
 def get_buyer_transactions(buyer_id):
 
-    item_list = BuyerItem.objects.filter(buyer=buyer_id, status=BuyerItem.SOLD_TO)
+    item_list = BuyerItem.objects.filter(buyer=buyer_id, status=BuyerItem.SOLD_TO).order_by('-view_time')
 
     item_array = []
     # get json representaion of item array
