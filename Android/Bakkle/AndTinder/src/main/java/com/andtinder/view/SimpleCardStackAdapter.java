@@ -1,19 +1,17 @@
 package com.andtinder.view;
 
 import android.content.Context;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.andtinder.FontFitTextView;
 import com.andtinder.R;
 import com.andtinder.model.CardModel;
-import com.enrique.stackblur.StackBlurManager;
+import com.koushikdutta.ion.Ion;
 
 public final class SimpleCardStackAdapter extends CardStackAdapter {
 
@@ -34,8 +32,12 @@ public final class SimpleCardStackAdapter extends CardStackAdapter {
 
 		Drawable image = model.getCardImageDrawable();
 
-		((ImageView) convertView.findViewById(R.id.image)).setImageDrawable(image);
-		((de.hdodenhof.circleimageview.CircleImageView) convertView.findViewById(R.id.sellerImage)).setImageDrawable(model.getSellerImageDrawable());
+		setCardImage((ImageView)(convertView.findViewById(R.id.image)), model.getCardImageURL());
+		//setCardImage((ImageView) (convertView.findViewById(R.id.sellerImage)), model.getSellerImageURL());
+
+		//((ImageView) convertView.findViewById(R.id.image)).setImageDrawable(model.getCardImageDrawable());
+		//((de.hdodenhof.circleimageview.CircleImageView) convertView.findViewById(R.id.sellerImage)).setImageDrawable(model.getSellerImageDrawable());
+		((de.hdodenhof.circleimageview.CircleImageView) convertView.findViewById(R.id.sellerImage)).setImageResource(R.drawable.loading); /*setImageDrawable(model.getSellerImageDrawable())*/
 		((FontFitTextView) convertView.findViewById(R.id.title)).setText(model.getTitle());
 		((TextView) convertView.findViewById(R.id.seller)).setText(model.getSeller());
 		((TextView) convertView.findViewById(R.id.price)).setText(model.getPrice());
@@ -48,5 +50,12 @@ public final class SimpleCardStackAdapter extends CardStackAdapter {
 //		relativeLayout.setBackground(new BitmapDrawable(context.getResources(), stackBlurManager.returnBlurredImage()));
 
 		return convertView;
+	}
+
+	public void setCardImage(ImageView imageView, String url)
+	{
+		Ion.with(imageView)
+				.placeholder(R.drawable.loading)
+				.load(url);
 	}
 }

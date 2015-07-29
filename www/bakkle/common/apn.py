@@ -31,7 +31,7 @@ def sendPushMessage(app_flavor, token, message, badge, sound):
 
     apns = APNs(use_sandbox=use_sandbox, cert_file=cert_file,
                 key_file=cert_file)
-    payload = Payload(alert=message, sound=soundname, badge=badge)
+    payload = Payload(alert=message, sound=sound, badge=badge)
     logging.debug("Sending notification " + str(payload) + " to " + str(token))
     apns.gateway_server.send_notification(token, payload)
 

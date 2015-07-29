@@ -14,7 +14,7 @@ upstream django {
 
 server {
         listen 80;
-        server_name app.bakkle.com;
+        server_name *.bakkle.com;
         root /bakkle/www;
 	charset	utf-8;
         index index.html;
@@ -24,7 +24,7 @@ server {
         }
 
         location /ws {
-                proxy_pass http://localhost:8888/ws;
+                proxy_pass http://localhost:8000/ws;
                 proxy_http_version 1.1;
                 proxy_set_header Upgrade $http_upgrade;
                 proxy_set_header Connection "upgrade";
@@ -37,7 +37,7 @@ server {
 
 server {
         listen 443;
-        server_name app.bakkle.com;
+        server_name *.bakkle.com;
         root /bakkle/www;
 	charset	utf-8;
         index index.html;
@@ -73,7 +73,7 @@ server {
         }
 
         location /ws {
-                proxy_pass http://localhost:8888/ws;
+                proxy_pass http://localhost:8000/ws;
                 proxy_http_version 1.1;
                 proxy_set_header Upgrade $http_upgrade;
                 proxy_set_header Connection "upgrade";

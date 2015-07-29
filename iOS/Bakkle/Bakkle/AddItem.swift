@@ -17,7 +17,7 @@ import Social
 
 class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UITextViewDelegate {
     
-    static let KEYBOARD_MOVE_VALUE: CGFloat = 250
+    static let KEYBOARD_MOVE_VALUE: CGFloat = 210
     static let NUMPAD_MOVE_VALUE:CGFloat = 260
     static let DESCRIPTION_PLACEHOLDER_COLOR = UIColor(red: CGFloat(AddItem.red)/255.0, green: CGFloat(AddItem.green)/255.0, blue: CGFloat(AddItem.blue)/255.0, alpha: CGFloat(1.0))
     static let BAKKLE_GREEN_COLOR = Theme.ColorGreen

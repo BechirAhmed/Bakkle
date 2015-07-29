@@ -11,15 +11,14 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.andtinder.view.SimpleCardStackAdapter;
-import com.bakkle.bakkle.dummy.DummyContent;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * A fragment representing a list of Items.
@@ -30,17 +29,9 @@ import java.util.ArrayList;
  */
 public class BuyersTrunk extends ListFragment{
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     SharedPreferences preferences;
-    SharedPreferences.Editor editor;
 
     private OnFragmentInteractionListener mListener;
 
@@ -56,10 +47,10 @@ public class BuyersTrunk extends ListFragment{
     // TODO: Rename and change types of parameters
     public static BuyersTrunk newInstance(String param1, String param2) {
         BuyersTrunk fragment = new BuyersTrunk();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
+//        Bundle args = new Bundle();
+//        args.putString(ARG_PARAM1, param1);
+//        args.putString(ARG_PARAM2, param2);
+//        fragment.setArguments(args);
         return fragment;
     }
 
@@ -105,10 +96,10 @@ public class BuyersTrunk extends ListFragment{
 //        mActionBar.setDisplayShowTitleEnabled(false);
         LayoutInflater mInflater = LayoutInflater.from(getActivity());
 
-        View mCustomView = mInflater.inflate(R.layout.action_bar_trunk, null);
+        //View mCustomView = mInflater.inflate(R.layout.action_bar_trunk, null);
 
-        mActionBar.setCustomView(mCustomView);
-        mActionBar.setDisplayShowCustomEnabled(true);
+//        mActionBar.setCustomView(mCustomView);
+//        mActionBar.setDisplayShowCustomEnabled(true);
     }
 
 
@@ -133,12 +124,11 @@ public class BuyersTrunk extends ListFragment{
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
 
-        Toast.makeText(getActivity(), "Test", Toast.LENGTH_SHORT).show();
 
         if (mListener != null) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
-            mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
+            //mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
         }
     }
 
@@ -159,8 +149,7 @@ public class BuyersTrunk extends ListFragment{
 
     public ArrayList<FeedItem> getItems(JsonObject json)
     {
-
-        JsonArray jsonArray = json.getAsJsonArray("buyers_trunk");
+        JsonArray jsonArray = json.get("buyers_trunk").getAsJsonArray();;
         SimpleCardStackAdapter adapter = new SimpleCardStackAdapter(getActivity());
         JsonObject temp, item;
         ArrayList<FeedItem> feedItems = new ArrayList<FeedItem>();
@@ -169,7 +158,7 @@ public class BuyersTrunk extends ListFragment{
         JsonArray imageUrlArray, tagArray;
         FeedItem feedItem;
         String pk, sellerFacebookId;
-
+        String tagsString;
 
         for(JsonElement element : jsonArray)
         {
@@ -196,13 +185,17 @@ public class BuyersTrunk extends ListFragment{
             }
             feedItem.setImageUrls(imageUrls);
 
-            tagArray = item.get("tags").getAsJsonArray();
-            tags = new ArrayList<String>();
-            for(JsonElement tagElement : tagArray)
-            {
-                tags.add(tagElement.getAsString());
-            }
+            tagsString = item.get("tags").getAsString();
+            tags = new ArrayList<String>(Arrays.asList(tagsString.split(",")));
             feedItem.setTags(tags);
+
+//            tagArray = item.get("tags").getAsJsonArray();
+//            tags = new ArrayList<String>();
+//            for(JsonElement tagElement : tagArray)
+//            {
+//                tags.add(tagElement.getAsString());
+//            }
+//            feedItem.setTags(tags);
             feedItems.add(feedItem);
 
 
