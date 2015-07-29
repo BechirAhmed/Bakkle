@@ -11,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.Toast;
 
 
 public class SignupActivity extends AppCompatActivity implements OnClickListener {
@@ -28,7 +27,6 @@ public class SignupActivity extends AppCompatActivity implements OnClickListener
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && !locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
 
-            Toast.makeText(this, "Test", Toast.LENGTH_SHORT).show();
 
         }
 

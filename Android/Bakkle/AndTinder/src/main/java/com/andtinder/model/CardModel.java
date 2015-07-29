@@ -18,8 +18,9 @@
 package com.andtinder.model;
 
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+
+import java.util.ArrayList;
 
 public class CardModel {
 
@@ -28,6 +29,10 @@ public class CardModel {
 	private String price;
 	private String distance;
 	private String method;
+	private String pk;
+	private String sellerImageURL;
+	private String description;
+	private ArrayList <String> imageURLs;
 
 	private Drawable cardImageDrawable;
 
@@ -48,43 +53,53 @@ public class CardModel {
     private OnClickListener mOnClickListener = null;
 
     public interface OnCardDismissedListener {
-        void onLike();
-        void onDislike();
-		void onUp();
-		void onDown();
+        void onLike(CardModel cardModel);
+        void onDislike(CardModel cardModel);
+		void onUp(CardModel cardModel);
+		void onDown(CardModel cardModel);
     }
 
     public interface OnClickListener {
-        void OnClickListener();
+        void OnClickListener(CardModel cardModel);
     }
 
 	public CardModel() {
-		this(null, null, null, null, null, (Drawable)null, (Drawable)null);
+		this(null, null, null, null, null, null, null, null, null/*, (Drawable)null, (Drawable)null*/);
 	}
 
-	public CardModel(String title, String seller, String price, String distance, String method, Drawable cardImage, Drawable sellerImage) {
+	public CardModel(String title, String seller, String price, String distance, String method,
+					 String pk, String description, ArrayList imageURLs, String sellerImageURL
+					 /*, Drawable cardImage, Drawable sellerImage*/) {
 		this.title = title;
 		this.seller = seller;
 		this.price = price;
 		this.distance = distance;
 		this.method = method;
-		this.cardImageDrawable = cardImage;
-		this.sellerImageDrawable = sellerImage;
-		this.sellerImageBitmap = ((BitmapDrawable) sellerImageDrawable).getBitmap();
-		this.cardImageBitmap = ((BitmapDrawable) cardImageDrawable).getBitmap();
+		this.pk = pk;
+		this.imageURLs = imageURLs;
+		this.sellerImageURL = sellerImageURL;
+		this.description = description;
+//		this.cardImageDrawable = cardImage;
+//		this.sellerImageDrawable = sellerImage;
+//		this.sellerImageBitmap = ((BitmapDrawable) sellerImageDrawable).getBitmap();
+//		this.cardImageBitmap = ((BitmapDrawable) cardImageDrawable).getBitmap();
 	}
 
-	public CardModel(String title, String seller, String price, String distance, String method, Bitmap cardImage, Bitmap sellerImage) {
+	/*public CardModel(String title, String seller, String price, String distance, String method, String pk, String cardImageURL, Bitmap cardImage, Bitmap sellerImage) {
 		this.title = title;
 		this.seller = seller;
 		this.price = price;
 		this.distance = distance;
 		this.method = method;
-		this.cardImageDrawable = new BitmapDrawable(null, cardImage);
-		this.sellerImageDrawable = new BitmapDrawable(null, sellerImage);
-		this.sellerImageBitmap = sellerImage;
-		this.cardImageBitmap = cardImage;
-	}
+		this.pk = pk;
+		this.cardImageURL = cardImageURL;
+//		this.cardImageDrawable = new BitmapDrawable(null, cardImage);
+//		this.sellerImageDrawable = new BitmapDrawable(null, sellerImage);
+//		this.sellerImageBitmap = sellerImage;
+//		this.cardImageBitmap = cardImage;
+	}*/
+
+
 
 	public String getTitle() {
 		return title;
@@ -132,6 +147,42 @@ public class CardModel {
 
 	public Drawable getCardImageDrawable() {
 		return cardImageDrawable;
+	}
+
+	public String getPk() {
+		return pk;
+	}
+
+	public void setPk(String pk) {
+		this.pk = pk;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public ArrayList<String> getImageURLs() {
+		return imageURLs;
+	}
+
+	public void setImageURLs(ArrayList<String> imageURLs) {
+		this.imageURLs = imageURLs;
+	}
+
+	public String getCardImageURL() {
+		return imageURLs.get(0);
+	}
+
+	public String getSellerImageURL() {
+		return sellerImageURL;
+	}
+
+	public void setSellerImageURL(String sellerImageURL) {
+		this.sellerImageURL = sellerImageURL;
 	}
 
 	public void setCardImageDrawable(Drawable cardImageDrawable) {

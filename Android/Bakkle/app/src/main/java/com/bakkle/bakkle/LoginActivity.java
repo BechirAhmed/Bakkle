@@ -5,14 +5,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
@@ -47,7 +46,7 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
         final Context mContext = this;
         FacebookSdk.sdkInitialize(getApplicationContext());
         preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        editor = preferences.edit();
+
 
         if(preferences.getBoolean("LoggedIn", false)) {
 
@@ -55,6 +54,10 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
             startActivity(intent);
             finish();
         }
+
+        editor = preferences.edit();
+        editor.putString("uuid", Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID));
+        editor.apply();
 
 
 
@@ -68,7 +71,6 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
             @Override
             public void onSuccess(LoginResult loginResult)
             {
-                Toast.makeText(getApplicationContext(), "2", Toast.LENGTH_SHORT).show();
                 AccessToken token = loginResult.getAccessToken();
                 mProfileTracker = new ProfileTracker() {
                     @Override
@@ -115,7 +117,7 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
 //        ((ImageButton) findViewById(R.id.action_bar_home)).setOnClickListener(this);
 
         // Add on click listeners to buttons
-        ((Button)findViewById(R.id.btnSignIn)).setOnClickListener(this);
+//        ((Button)findViewById(R.id.btnSignIn)).setOnClickListener(this);
         ((LoginButton)findViewById(R.id.btnSignInFacebook)).setOnClickListener(this);
     }
 

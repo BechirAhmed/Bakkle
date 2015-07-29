@@ -1,7 +1,13 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="@android:style/Theme.Holo.Light.DarkActionBar">
+
+    <style name="AppTheme" parent="MaterialDrawerTheme.Light.DarkToolbar">
+        <item name="material_drawer_background">@color/gray</item>
+        <item name="material_drawer_primary_text">@color/white</item>
+    </style>
+
+    <style name="AppThemeAlt" parent="@android:style/Theme.Holo.Light.DarkActionBar">
         <item name="android:windowContentOverlay">@null</item>
     </style>
 

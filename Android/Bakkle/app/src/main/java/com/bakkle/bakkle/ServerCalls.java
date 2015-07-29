@@ -6,9 +6,8 @@ import android.util.Log;
 
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
-import com.koushikdutta.async.http.body.FilePart;
-import com.koushikdutta.async.http.body.Part;
 import com.koushikdutta.ion.Ion;
+import com.koushikdutta.ion.builder.Builders;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -148,7 +147,7 @@ public class ServerCalls{
         catch (Exception e){
             Log.d("testing error", e.getMessage());
         }
-        //return "4a1238c09b1f4c926016891f417cb031_12";
+        //Log.v("auth_token is ", auth_token);
         return auth_token;
     }
 
@@ -183,6 +182,7 @@ public class ServerCalls{
 
                     }
                 });*/
+        Log.v("auth_token is ", authToken);
         try {
             jsonResponse = Ion.with(mContext)
                     .load(url_base + url_feed)
@@ -216,19 +216,30 @@ public class ServerCalls{
 
     public void markItem(String status, String authToken, String uuid, String item_id, String viewDuration){
 //TODO: defintely make these Async as soon as possible
-        try {
-            jsonResponse = Ion.with(mContext)
+            Ion.with(mContext)
                     .load(url_base + url_mark + status + "/")
                     .setBodyParameter("auth_token", authToken)
                     .setBodyParameter("device_uuid", uuid)
                     .setBodyParameter("item_id", item_id)
                     .setBodyParameter("view_duration", viewDuration)
                     .asJsonObject()
-                    .get();
-        }
-        catch (Exception e){
-            Log.d("testing error 00", e.getMessage());
-        }
+                    .setCallback(new FutureCallback<JsonObject>() {
+                        @Override
+                        public void onCompleted(Exception e, JsonObject result) {
+
+                            if(e == null) {
+                                jsonResponse = result;
+                                Log.v("response is ", jsonResponse.toString());
+                            }
+
+                            else{
+                                jsonResponse = null;
+                                Log.v("testing error 00", "json was null (there was an exception)");
+
+                            }
+                        }
+                    });
+            Log.v("auth token is ", authToken);
 
     }
 
@@ -298,46 +309,29 @@ public class ServerCalls{
     }
 
     public JsonObject addItem(String name, String description, String price, String pickupMethod, String tags,
-                              ArrayList<String> imageUri, boolean shareFB, String authToken, String uuid)
+                              ArrayList<String> imageUri, String authToken, String uuid)
     {
+//
+//        FileOutputStream fileOutputStream = null;
+//        Bitmap temp;
+//
+//        try {
+//            fileOutputStream = new FileOutputStream(mCurrentPhotoPath);
+//            temp = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(mCurrentPhotoPath), 640, 640, true);
+//            temp.compress(Bitmap.CompressFormat.JPEG, 70, fileOutputStream);
+//            fileOutputStream.flush();
+//            fileOutputStream.close();
+//        }
+//        catch (Exception e){
+//            Log.v("Bitmap scaling error", e.getMessage());
+//        }
 
-        ArrayList<Part> fileParts = new ArrayList<>();
-        for(String uri : imageUri)
-        {
-            fileParts.add(new FilePart("image", new File(uri)));
-        }
-       /* MultipartBodyBuilder<?> request =*/
+
         try {
-            /*Ion.with(mContext)
-                    .load(url_base + url_add_item)
-                    .setMultipartParameter("auth_token", authToken)
-                    .setMultipartParameter("device_uuid", uuid)
-                    .setMultipartParameter("title", name)
-                    .setMultipartParameter("description", description)
-                    .setMultipartParameter("price", price)
-                    .setMultipartParameter("method", pickupMethod)
-                    .setMultipartParameter("tags", tags)
-                    .setMultipartParameter("location", "32,32") //TODO: GET REAL LOCATION
-                    .addMultipartParts(fileParts)
-                    .asJsonObject()
-                    .setCallback(new FutureCallback<JsonObject>() {
-                        @Override
-                        public void onCompleted(Exception e, JsonObject result) {
-                            e.printStackTrace();
-                            Log.v("the result is ", result.toString());
-                            jsonResponse = result;
-                        }
-                    });*/
-            //        for(String uri : imageUri)
-            //        {
-            //            request = request.setMultipartFile("image", new File(uri));
-            //        }
-
-
             Log.v("imageURI 0 is ", imageUri.get(0));
 
 
-            Ion.with(mContext)
+            Builders.Any.M body = Ion.with(mContext)
                     .load("POST", url_base + url_add_item)
                     .setLogging("UPLOAD LOG ", Log.VERBOSE)
                     .setMultipartParameter("auth_token", authToken)
@@ -347,18 +341,22 @@ public class ServerCalls{
                     .setMultipartParameter("price", price)
                     .setMultipartParameter("method", pickupMethod)
                     .setMultipartParameter("tags", tags)
-                    .setMultipartParameter("location", "32,32") //TODO: GET REAL LOCATION
-                    .setMultipartFile("image", new File(imageUri.get(0)))
-                    .asJsonObject()
-                    .setCallback(new FutureCallback<JsonObject>() {
-                        @Override
-                        public void onCompleted(Exception e, JsonObject result) {
-                            if(e != null)
-                                e.printStackTrace();
-                            Log.v("the result is ", result.toString());
-                            jsonResponse = result;
-                        }
-                    });
+                    .setMultipartParameter("location", "32,32"); //TODO: GET REAL LOCATION
+
+            for(String uri : imageUri){
+                body.setMultipartFile("image", new File(uri));
+            }
+
+
+            body.asJsonObject().setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                if (e != null)
+                    e.printStackTrace();
+                Log.v("the result is ", result.toString());
+                jsonResponse = result;
+                }
+            });
         }
         catch (Exception e){
             Log.v("testing upload", e.getMessage());
@@ -370,14 +368,24 @@ public class ServerCalls{
 
     }
 
+    public void deleteItem(String authToken, String uuid, String pk)
+    {
+        markItem("meh", authToken, uuid, pk, "42");
+    }
+
     public void resetDemo(String authToken, String uuid){
         try {
-            jsonResponse = Ion.with(mContext)
+            Ion.with(mContext)
                     .load(url_base + url_reset)
                     .setBodyParameter("auth_token", authToken)
                     .setBodyParameter("device_uuid", uuid)
                     .asJsonObject()
-                    .get();
+                    .setCallback(new FutureCallback<JsonObject>() {
+                        @Override
+                        public void onCompleted(Exception e, JsonObject result) {
+                            jsonResponse = result;
+                        }
+                    });
         }
         catch (Exception e) {
             Log.d("testing error 00", e.getMessage());

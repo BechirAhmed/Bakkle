@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.andtinder.view.SimpleCardStackAdapter;
 import com.bakkle.bakkle.dummy.DummyContent;
@@ -16,6 +15,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * A fragment representing a list of Items.
@@ -107,7 +107,6 @@ public class HoldingPattern extends ListFragment {
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
 
-        Toast.makeText(getActivity(), "Test", Toast.LENGTH_SHORT).show();
 
         if (mListener != null) {
             // Notify the active callbacks interface (the activity, if the
@@ -142,7 +141,7 @@ public class HoldingPattern extends ListFragment {
         JsonObject seller;
         JsonArray imageUrlArray, tagArray;
         FeedItem feedItem;
-        String pk, sellerFacebookId;
+        String pk, sellerFacebookId, tagsString;
 
 
         for(JsonElement element : jsonArray)
@@ -170,13 +169,17 @@ public class HoldingPattern extends ListFragment {
             }
             feedItem.setImageUrls(imageUrls);
 
-            tagArray = item.get("tags").getAsJsonArray();
-            tags = new ArrayList<String>();
-            for(JsonElement tagElement : tagArray)
-            {
-                tags.add(tagElement.getAsString());
-            }
+            tagsString = item.get("tags").getAsString();
+            tags = new ArrayList<String>(Arrays.asList(tagsString.split(",")));
             feedItem.setTags(tags);
+
+//            tagArray = item.get("tags").getAsJsonArray();
+//            tags = new ArrayList<String>();
+//            for(JsonElement tagElement : tagArray)
+//            {
+//                tags.add(tagElement.getAsString());
+//            }
+//            feedItem.setTags(tags);
             feedItems.add(feedItem);
 
 
