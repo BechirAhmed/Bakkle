@@ -626,7 +626,8 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         self.capButton.enabled = !imageCountGreaterThanMaxCount && notDragging
         self.galleryButton.enabled = !imageCountGreaterThanMaxCount && notDragging
         self.switchCamera.enabled = !imageCountGreaterThanMaxCount && self.cameraCount > 1 && notDragging
-        self.flashSettings.enabled = !imageCountGreaterThanMaxCount && selectedDevice != nil && selectedDevice!.device.hasFlash && notDragging
+        //self.flashSettings.enabled = !imageCountGreaterThanMaxCount && selectedDevice != nil && selectedDevice!.device.hasFlash && notDragging
+        self.flashSettings.enabled = false
         
         self.capButton.hidden = !self.capButton.enabled
         self.galleryButton.hidden = !self.galleryButton.enabled
