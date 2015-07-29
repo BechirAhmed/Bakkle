@@ -7,6 +7,7 @@ sudo install -m 644 etc/ssl/com.bakkle/com.bakkle.key        /etc/ssl/com.bakkle
 sudo install -m 644 etc/ssl/com.bakkle/com.bakkle.pem        /etc/ssl/com.bakkle/
 
 sudo install -m 644 etc/nginx/sites-available/com.bakkle.app.conf /etc/nginx/sites-available/
+sudo install -m 644 etc/nginx/sites-available/com.bakkle.testcluster.conf /etc/nginx/sites-available/
 sudo install -m 644 etc/nginx/sites-available/org.rhventures.bakkle.conf /etc/nginx/sites-available/
 sudo install -m 644 etc/nginx/sites-available/org.rhventures.bakkle-bld.conf /etc/nginx/sites-available/
 sudo install -m 644 etc/nginx/sites-available/org.rhventures.wongb.conf /etc/nginx/sites-available/
@@ -20,7 +21,8 @@ if [ `hostname` == 'ip-172-31-21-18' ]; then
    sudo ./bin/nginx_ensite com.bakkle.app.conf
 fi
 if [ `hostname` == 'ip-172-31-27-192' ]; then
-   sudo ./bin/nginx_ensite com.bakkle.app.conf
+   echo "using testcluster"
+   sudo ./bin/nginx_ensite com.bakkle.testcluster.conf
 fi
 if [ `hostname` == 'rhv-bakkle' ]; then
    sudo ./bin/nginx_ensite org.rhventures.bakkle.conf
