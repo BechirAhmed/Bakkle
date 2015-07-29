@@ -6,6 +6,9 @@
         <item name="android:colorPrimaryDark">@color/dark_green</item>
         <item name="android:textColorPrimary">@color/white</item>
         <item name="android:colorAccent">@color/green</item>
+
+        <item name="material_drawer_background">@color/gray</item>
+        <item name="material_drawer_primary_text">@color/white</item>
     </style>
 
     <style name="AppCompatTheme" parent="Theme.AppCompat.Light.DarkActionBar">

@@ -13,7 +13,7 @@
 
     <string name="open_location_settings">Open location settings</string>
 
-    <string name="title_activity_sign_in">@string/sign_in</string>
+    <string name="title_activity_sign_in">@string/app_name</string>
     <string name="title_activity_login">@string/app_name</string>
     <string name="title_activity_home">FEED</string>
     <string name="title_activity_sellers_garage">SELLER\'S GARAGE</string>
