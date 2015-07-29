@@ -13,7 +13,8 @@ upstream django {
 }
 
 server {
-        listen 80 default_server;
+        listen 80;
+        server_name *.bakkle.com;
         root /bakkle/www;
 	charset	utf-8;
         index index.html;
@@ -35,7 +36,8 @@ server {
 }
 
 server {
-        listen 443 default_server;
+        listen 443;
+        server_name *.bakkle.com;
         root /bakkle/www;
 	charset	utf-8;
         index index.html;
