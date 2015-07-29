@@ -40,7 +40,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     static let bkFilterChanged  = "com.bakkle.filterChanged"
     
     // DO NOT ENABLE if there is no way to select servers from settings file.
-    static let developerTools   = true
+    static let developerTools   = false
     static let defaultServerNum = 0 // 0 = prod, 1 = prod cluster (sets default server in list below)
     static let servers   =   ["https://app.bakkle.com/",            // 0
                               "https://app-cluster.bakkle.com/",    // 1
@@ -447,60 +447,64 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         }
         task.resume()
     }
-   
+    
     /* mark feed item 'status' as MEH/WANT/HOLD/REPORT */
     func markItem(status: String, item_id: Int, success: ()->(), fail: ()->()) {
+        markItem(status, item_id: item_id, message: nil, success: {success()}, fail: {fail()})
+    }
+    
+    func markItem(status: String, item_id: Int,  message: String?, success: ()->(), fail: ()->()) {
         let url:NSURL? = NSURL(string: url_base + url_mark + "\(status)/")
         let request = NSMutableURLRequest(URL: url!)
         
         let view_duration = 42 //TODO: this needs to be accepted as a parm
         
         request.HTTPMethod = "POST"
-        let postString = "auth_token=\(self.auth_token)&device_uuid=\(self.deviceUUID)&item_id=\(item_id)&view_duration=\(view_duration)"
+        let postString = "auth_token=\(self.auth_token)&device_uuid=\(self.deviceUUID)&item_id=\(item_id)&view_duration=\(view_duration)&report_message=\(message)"
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
         
         println("[Bakkle] markItem")
         println("URL: \(url) METHOD: \(request.HTTPMethod) BODY: \(postString)")
         dispatch_async(dispatch_get_global_queue(
             Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
-            data, response, error in
-            
-            if let responseString = NSString(data: data, encoding: NSUTF8StringEncoding) {
-                self.debg("Response: \(responseString)")
-                
-                //TODO: Check error handling here.
-//                var err: NSError?
-//                var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &err) as NSDictionary!
-//                
-                //TODO: THIS IS WRONG
-                //if responseDict.valueForKey("status")?.integerValue == 1 {
-                    self.persistData()
-                
-                switch(status){
-                case "meh":
-                    break
-                case "want":
-                    self.populateTrunk({})
-                    NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkGarageUpdate, object: self)
-                    break
-                case "hold":
-                    self.populateHolding({})
-                    NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkHoldingUpdate, object: self)
-                    break
-                case "report":
-                    break
-                default:
-                    break;
+                let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
+                    data, response, error in
                     
+                    if let responseString = NSString(data: data, encoding: NSUTF8StringEncoding) {
+                        self.debg("Response: \(responseString)")
+                        
+                        //TODO: Check error handling here.
+                        //                var err: NSError?
+                        //                var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &err) as NSDictionary!
+                        //
+                        //TODO: THIS IS WRONG
+                        //if responseDict.valueForKey("status")?.integerValue == 1 {
+                        self.persistData()
+                        
+                        switch(status){
+                        case "meh":
+                            break
+                        case "want":
+                            self.populateTrunk({})
+                            NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkGarageUpdate, object: self)
+                            break
+                        case "hold":
+                            self.populateHolding({})
+                            NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkHoldingUpdate, object: self)
+                            break
+                        case "report":
+                            break
+                        default:
+                            break;
+                            
+                        }
+                        success()
+                        //  }
+                        
+                    }
+                    fail()
                 }
-                    success()
-              //  }
-
-            }
-            fail()
-        }
-        task.resume()
+                task.resume()
         }
     }
     
