@@ -14,20 +14,22 @@ sudo install -m 644 etc/nginx/sites-available/org.rhventures.wongb /etc/nginx/si
 sudo apt-get install nginx -y
 
 sudo ./bin/nginx_dissite 000-default
+sudo ./bin/nginx_dissite default
+
 if [ `hostname` == 'ip-172-31-21-18' ]; then
-   sudo ./bin/nginx_ensite com.bakkle.app
+   sudo ./bin/nginx_ensite com.bakkle.app.conf
 fi
 if [ `hostname` == 'ip-172-31-27-192' ]; then
-   sudo ./bin/nginx_ensite com.bakkle.app
+   sudo ./bin/nginx_ensite com.bakkle.app.conf
 fi
 if [ `hostname` == 'rhv-bakkle' ]; then
-   sudo ./bin/nginx_ensite org.rhventures.bakkle
+   sudo ./bin/nginx_ensite org.rhventures.bakkle.conf
 fi
 if [ `hostname` == 'rhv-bakkle-bld' ]; then
-   sudo ./bin/nginx_ensite org.rhventures.bakkle-bld
+   sudo ./bin/nginx_ensite org.rhventures.bakkle-bld.conf
 fi
 if [ `hostname` == 'rhv-lnx-291scs' ]; then
-   sudo ./bin/nginx_ensite org.rhventures.wongb
+   sudo ./bin/nginx_ensite org.rhventures.wongb.conf
 fi
 
 sudo service nginx restart
