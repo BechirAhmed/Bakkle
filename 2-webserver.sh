@@ -6,10 +6,10 @@ sudo mkdir   -m 755                                          /etc/ssl/com.bakkle
 sudo install -m 644 etc/ssl/com.bakkle/com.bakkle.key        /etc/ssl/com.bakkle/
 sudo install -m 644 etc/ssl/com.bakkle/com.bakkle.pem        /etc/ssl/com.bakkle/
 
-sudo install -m 644 etc/nginx/sites-available/com.bakkle.app /etc/nginx/sites-available/
-sudo install -m 644 etc/nginx/sites-available/org.rhventures.bakkle /etc/nginx/sites-available/
-sudo install -m 644 etc/nginx/sites-available/org.rhventures.bakkle-bld /etc/nginx/sites-available/
-sudo install -m 644 etc/nginx/sites-available/org.rhventures.wongb /etc/nginx/sites-available/
+sudo install -m 644 etc/nginx/sites-available/com.bakkle.app.conf /etc/nginx/sites-available/
+sudo install -m 644 etc/nginx/sites-available/org.rhventures.bakkle.conf /etc/nginx/sites-available/
+sudo install -m 644 etc/nginx/sites-available/org.rhventures.bakkle-bld.conf /etc/nginx/sites-available/
+sudo install -m 644 etc/nginx/sites-available/org.rhventures.wongb.conf /etc/nginx/sites-available/
 
 sudo apt-get install nginx -y
 
