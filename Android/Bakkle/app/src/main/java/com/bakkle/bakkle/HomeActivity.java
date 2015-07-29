@@ -10,7 +10,6 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -35,9 +34,6 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
 import com.koushikdutta.ion.Ion;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
@@ -56,7 +52,6 @@ import java.util.Arrays;
 
 public class HomeActivity extends AppCompatActivity implements SellersGarage.OnFragmentInteractionListener,
         BuyersTrunk.OnFragmentInteractionListener, HoldingPattern.OnFragmentInteractionListener,
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
         FeedFragment.OnCardSelected{
 
     private DrawerLayout mDrawerLayout;
@@ -81,9 +76,6 @@ public class HomeActivity extends AppCompatActivity implements SellersGarage.OnF
     SharedPreferences.Editor editor;
 
     ServerCalls serverCalls;
-
-    GoogleApiClient mGoogleApiClient;
-    Location mLastLocation;
 
     int result = 0;
 
@@ -329,9 +321,6 @@ public class HomeActivity extends AppCompatActivity implements SellersGarage.OnF
 //        mActionBar.setCustomView(mCustomView);
 //        mActionBar.setDisplayShowCustomEnabled(true);
         serverCalls = new ServerCalls(this);
-
-        buildGoogleApiClient();
-
     }
 
     @Override
@@ -394,50 +383,10 @@ public class HomeActivity extends AppCompatActivity implements SellersGarage.OnF
 
     }
 
-    protected synchronized void buildGoogleApiClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mGoogleApiClient.connect();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (mGoogleApiClient.isConnected()) {
-            mGoogleApiClient.disconnect();
-        }
-    }
 
     public String getLocation(){
-        if(mLastLocation != null)
-            return mLastLocation.getLatitude() + ", " + mLastLocation.getLongitude();
-        else
-            return "32, 32";
-    }
-
-    @Override
-    public void onConnected(Bundle bundle) {
-
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-
+        return preferences.getString("location", "0, 0");
     }
 
 

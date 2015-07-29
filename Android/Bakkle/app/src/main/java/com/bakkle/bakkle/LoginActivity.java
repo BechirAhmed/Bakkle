@@ -3,11 +3,13 @@ package com.bakkle.bakkle;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,6 +28,9 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
 import java.util.Arrays;
+
+import io.nlopez.smartlocation.OnLocationUpdatedListener;
+import io.nlopez.smartlocation.SmartLocation;
 
 
 public class LoginActivity extends AppCompatActivity implements OnClickListener {
@@ -47,11 +52,24 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
         FacebookSdk.sdkInitialize(getApplicationContext());
         preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
+        SmartLocation.with(this).location()
+                .oneFix()
+                .start(new OnLocationUpdatedListener() {
+                    @Override
+                    public void onLocationUpdated(Location location) {
+                        editor.putString("locationString", location.getLatitude() + ", " + location.getLongitude());
+                        editor.putString("latitude", String.valueOf(location.getLatitude()));
+                        editor.putString("longitude", String.valueOf(location.getLongitude()));
+                        editor.apply();
+                    }
+                });
+
 
         if(preferences.getBoolean("LoggedIn", false)) {
 
             Intent intent = new Intent(this, HomeActivity.class);
             startActivity(intent);
+            //SmartLocation.with(this).location().stop();
             finish();
         }
 

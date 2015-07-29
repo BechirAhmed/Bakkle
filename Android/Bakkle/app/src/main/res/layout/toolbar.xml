@@ -59,4 +59,17 @@
 
     </RelativeLayout>
 
+    <!--<RelativeLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content">-->
+
+        <!--<SearchView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content">-->
+
+        <!--</SearchView>-->
+
+
+    <!--</RelativeLayout>-->
+
 </android.support.v7.widget.Toolbar>
