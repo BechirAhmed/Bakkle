@@ -143,7 +143,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         self.revealViewController().panGestureRecognizer().enabled = false
         
         // set up image for tutorial
-        view.imageView.image = UIImage(named: "InstructionScreen.png")
+        view.imageView.image = UIImage(named: "InstructionScreen-new.png")
     }
         
     
