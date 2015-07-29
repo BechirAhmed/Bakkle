@@ -486,8 +486,10 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             let confirmAction = UIAlertAction(title: "Confirm", style: .Default, handler: { action in
                 if report != nil {
                     println(report.text)
+                    Bakkle.sharedInstance.markItem("report", item_id: self.item_id, message: report.text, success: {}, fail: {})
+                } else {
+                    Bakkle.sharedInstance.markItem("report", item_id: self.item_id, success: {}, fail: {})
                 }
-                Bakkle.sharedInstance.markItem("report", item_id: self.item_id, success: {}, fail: {})
                 self.loadNext()
             })
             let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Default, handler: { action in
@@ -497,7 +499,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             alertController.addAction(confirmAction)
             alertController.addTextFieldWithConfigurationHandler({ (textField: UITextField!) -> Void in
                 report = textField
-                })
+            })
             presentViewController(alertController, animated: true, completion: nil)
             break
         default: break

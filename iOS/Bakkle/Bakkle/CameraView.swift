@@ -382,7 +382,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             if CGRectContainsPoint(self.cameraView.frame, touchPoint.locationInView(nil)) {
                 if let device = self.selectedDevice!.device {
                     if(device.lockForConfiguration(nil)) {
-                        // focusIndicator removeAllAnimations incase we have the image darken with exposure
+                        // focusIndicator removeAllAnimations incase we have the indicator darken with exposure
                         focusIndicator.hidden = true
                         device.focusPointOfInterest = focusPoint
                         device.focusMode = AVCaptureFocusMode.ContinuousAutoFocus
