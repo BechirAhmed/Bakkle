@@ -638,6 +638,10 @@ def add_item_to_buyer_items(buyer_id, item_id, view_duration, status):
     try:
         account = Account.objects.get(pk=buyer_id)
         # Create or update the buyer item
+
+        if(account.pk == item.seller.pk):
+            status = BuyerItem.MY_ITEM
+
         try:
             buyer_item = BuyerItem.objects.get(item = item.pk, buyer = buyer_id)
         except BuyerItem.DoesNotExist:
@@ -649,6 +653,7 @@ def add_item_to_buyer_items(buyer_id, item_id, view_duration, status):
                 confirmed_price = item.price,
                 view_time = timezone.now(),
                 view_duration = 0)
+
 
 
         if (status == BuyerItem.SOLD):

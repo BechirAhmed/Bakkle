@@ -16,9 +16,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import com.bakkle.bakkle.dummy.DummyContent;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -34,34 +32,20 @@ import java.util.ArrayList;
  */
 public class SellersGarage extends ListFragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     SharedPreferences preferences;
-    SharedPreferences.Editor editor;
-
     private OnFragmentInteractionListener mListener;
-
     ServerCalls serverCalls;
-
     ArrayList<FeedItem> items = null;
-
     JsonObject json;
 
 
     // TODO: Rename and change types of parameters
-    public static SellersGarage newInstance(String param1, String param2) {
+    public static SellersGarage newInstance() {
         SellersGarage fragment = new SellersGarage();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
+//        Bundle args = new Bundle();
+//        args.putString(ARG_PARAM1, param1);
+//        args.putString(ARG_PARAM2, param2);
+//        fragment.setArguments(args);
         return fragment;
     }
 
@@ -69,8 +53,7 @@ public class SellersGarage extends ListFragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public SellersGarage() {
-    }
+    public SellersGarage() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -84,6 +67,7 @@ public class SellersGarage extends ListFragment {
 
         items = getItems(json);
         setListAdapter(new GarageAdapter(getActivity(), items));
+
 
         /*SwipeLayout swipeLayout =  (SwipeLayout) getListView().findViewById(R.id.swipe);
         swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut); //null pointer exception? need to set content layout first aka move this code somehwere else?
@@ -123,8 +107,6 @@ public class SellersGarage extends ListFragment {
 
     }
 
-
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -146,12 +128,11 @@ public class SellersGarage extends ListFragment {
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
 
-        Toast.makeText(getActivity(), "Test", Toast.LENGTH_SHORT).show();
 
         if (mListener != null) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
-            mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
+            //mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
         }
     }
 
@@ -215,11 +196,6 @@ public class SellersGarage extends ListFragment {
         }
 
         return feedItems;
-
-    }
-
-    public void deleteItem(){
-        Toast.makeText(getActivity(), "You are in the delete Item page", Toast.LENGTH_SHORT).show();
 
     }
 

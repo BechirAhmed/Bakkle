@@ -18,6 +18,7 @@
             android:layout_height="match_parent"
             android:id="@+id/delete"
             android:text="DELETE"
+            android:onClick="deleteItem"
             android:background="@color/red"
             android:textColor="@color/white"/>
     </LinearLayout>
@@ -36,16 +37,16 @@
             android:text="11"
             android:textColor="@color/white"/> -->
 
-        <FrameLayout
+        <!-- <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <!--put imageview and textview in here -->
+           put imageview and textview in here
 
-        </FrameLayout>
+        </FrameLayout>-->
 
         <ImageView
-            android:layout_width="0dip"
+            android:layout_width="0dp"
             android:layout_height="100dp"
             android:id="@+id/icon"
             android:src="@drawable/bakkle_icon"
@@ -54,7 +55,7 @@
 
         <LinearLayout
             android:orientation="vertical"
-            android:layout_width="0dip"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="2"
             android:layout_gravity="top"
@@ -138,12 +139,9 @@
                         android:id="@+id/nope_count"
                         android:textColor="@color/white"
                         android:text="3" />
+
                 </LinearLayout>
             </RelativeLayout>
-
-
         </LinearLayout>
-
-
     </LinearLayout>
 </com.daimajia.swipe.SwipeLayout>

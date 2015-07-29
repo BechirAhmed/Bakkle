@@ -1,6 +1,7 @@
 package com.bakkle.bakkle;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.CountDownTimer;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,8 +27,10 @@ public class HoldingAdapter extends ArrayAdapter<FeedItem>{
         TextView clock;
     }
 
+    AsyncImageLoader asyncImageLoader;
     public HoldingAdapter(Context context, ArrayList<FeedItem> items){
         super(context, R.layout.buyers_trunk_list_item, items);
+        asyncImageLoader = new AsyncImageLoader(context);
     }
 
     @Override
@@ -51,7 +54,12 @@ public class HoldingAdapter extends ArrayAdapter<FeedItem>{
         }
 
 
-        viewHolder.icon.setImageBitmap(item.getFirstImage());
+        Drawable cachedImage = asyncImageLoader.loadDrawable(item.getImageUrls().get(0), new AsyncImageLoader.ImageCallback() {
+            public void imageLoaded(Drawable imageDrawable, String imageUrl) {
+                viewHolder.icon.setImageDrawable(imageDrawable);
+            }
+        });
+        viewHolder.icon.setImageDrawable(cachedImage);
         viewHolder.title.setText(item.getTitle());
         viewHolder.method.setText(item.getMethod());
         viewHolder.tags.setText("Tags: " + item.getTagsString());
