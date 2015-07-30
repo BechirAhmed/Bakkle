@@ -80,7 +80,7 @@ public class GarageAdapter extends ArraySwipeAdapter<FeedItem> {
                 viewHolder.icon.setImageDrawable(imageDrawable);
             }
         });
-        viewHolder.icon.setImageDrawable(cachedImage);
+        //viewHolder.icon.setImageDrawable(cachedImage);
         viewHolder.title.setText(item.getTitle());
         viewHolder.price.setText("$" + item.getPrice());
         viewHolder.want.setText(item.getNumWant());

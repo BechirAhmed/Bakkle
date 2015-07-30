@@ -128,6 +128,7 @@ public class SellersGarage extends ListFragment {
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
 
+        getListAdapter().getItem(position);
 
         if (mListener != null) {
             // Notify the active callbacks interface (the activity, if the

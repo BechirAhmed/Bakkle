@@ -51,6 +51,7 @@
         <item>Meet</item>
         <item>Ship</item>
     </string-array>
+    <string name="title_activity_chat_list">ChatList</string>
 
 
 </resources>

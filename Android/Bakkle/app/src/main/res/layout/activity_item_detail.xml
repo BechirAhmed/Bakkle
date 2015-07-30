@@ -75,7 +75,7 @@
         android:layout_width="fill_parent"
         android:layout_height="40dp"
         android:layout_below="@+id/images"
-        android:id="@+id/sellerInfo"
+        android:id="@+id/buyerInfo"
         android:background="#d3d3d3">
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -112,7 +112,7 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/sellerInfo"
+        android:layout_below="@+id/buyerInfo"
         android:padding="10dp">
 
         <RelativeLayout
