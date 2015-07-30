@@ -26,6 +26,7 @@ import chat.chatWSHandlers as ChatWSHandlers
 
 app = web.Application([
 
+    web.url(r'^/items/test/$', itemsRESTHandlers.testHandler, name='test'),
 
     web.url(r'^/items/$', itemsRESTHandlers.indexHandler, name='itemIndex'),
     web.url(r'^/items/(?P<item_id>[0-9]+)/detail/$',
