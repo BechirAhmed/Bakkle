@@ -8,6 +8,11 @@
 
 import UIKit
 
+import Bolts
+import FBSDKCoreKit
+import FBSDKLoginKit
+import FBSDKShareKit
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -17,8 +22,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         
         /* Init Facebook module */
-        FBLoginView.self
-        FBProfilePictureView.self
+//        FBLoginView.self
+//        FBProfilePictureView.self
         
         UIApplication.sharedApplication().statusBarStyle = .LightContent
         
@@ -26,7 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject?) -> Bool {
-        var wasHandled:Bool = FBAppCall.handleOpenURL(url, sourceApplication: sourceApplication)
+//        var wasHandled:Bool = FBAppCall.handleOpenURL(url, sourceApplication: sourceApplication)
         
 //        // in this example, the URL from which the user came is http://example.com/profile/?12345
 //        // determine if the user was viewing a profile
@@ -38,7 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //            // pass profileID to profile view controller
 //            [profileViewController loadProfile:profileID];
         
-        return wasHandled
+        return true
     }
 
     func applicationWillResignActive(application: UIApplication) {
@@ -75,7 +80,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidBecomeActive(application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         
-        FBAppEvents.activateApp();
+//        FBAppEvents.activateApp();
+        
         Bakkle.sharedInstance.setServer() //Settings may have changed
         //Bakkle.sharedInstance.refresh()
     }

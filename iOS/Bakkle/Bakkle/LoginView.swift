@@ -8,11 +8,11 @@
 
 import UIKit
 
-class LoginView: UIViewController, FBLoginViewDelegate {
+class LoginView: UIViewController {
     
     let mainScreenSegueIdentifier = "PushToFeedSegue"
     
-    @IBOutlet weak var fbLoginView: FBLoginView!
+//    @IBOutlet weak var fbLoginView: FBLoginView!
     
     @IBOutlet weak var logoImageView: UIImageView!
     @IBOutlet weak var logoImageViewAspectRatio: NSLayoutConstraint!
@@ -32,7 +32,7 @@ class LoginView: UIViewController, FBLoginViewDelegate {
             self.loginScreenBkg.image = UIImage(named: "LoginScreen-bkg-blue.png")!
         }
         
-        self.fbLoginView.readPermissions = ["public_profile", "email", "user_friends", "publish_actions"]
+//        self.fbLoginView.readPermissions = ["public_profile", "email", "user_friends", "publish_actions"]
         
         // add the image, making the login view looks like the launch screen when user already logged in
         setBackgroundImg()
@@ -46,19 +46,19 @@ class LoginView: UIViewController, FBLoginViewDelegate {
         counter = 0
         
         // check if the user already logged in, if not, set the background image to transparent
-        if FBSession.activeSession().accessTokenData != nil {
-            background.hidden = false
-            view.userInteractionEnabled = false
-        }else{
-            background.hidden = true
-            view.userInteractionEnabled = true
-        }
+//        if FBSession.activeSession().accessTokenData != nil {
+//            background.hidden = false
+//            view.userInteractionEnabled = false
+//        }else{
+//            background.hidden = true
+//            view.userInteractionEnabled = true
+//        }
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
-        self.fbLoginView.sizeToFit()
+//        self.fbLoginView.sizeToFit()
     }
     
     // create the background image, which is the same as the launch screen background
@@ -90,60 +90,60 @@ class LoginView: UIViewController, FBLoginViewDelegate {
         background.addConstraint(NSLayoutConstraint(item: logo, attribute: NSLayoutAttribute.Left, relatedBy: NSLayoutRelation.Equal, toItem: background, attribute: NSLayoutAttribute.Left, multiplier: 1.0, constant: 36.0))
     }
     
-    func loginViewShowingLoggedInUser(loginView : FBLoginView!) {
-        
-    }
-    
-    func loginViewFetchedUserInfo(loginView : FBLoginView!, user: FBGraphUser) {
-        
-        // tricky way to force the function only run once when it called twice
-        if counter > 0 {
-            return
-        }
-        counter++;
-        
-        var email = user.objectForKey("email") as! String!
-        var gender = user.objectForKey("gender") as! String!
-        var username = "" //user.objectForKey("username") as String!
-        var name = user.name
-        var userid = user.objectID
-        var locale = "nil" //user.location.location.zip //ZIP for now
-        var first_name = user.first_name
-        var last_name = user.last_name
-        
-        // send the user information to Bakkle server
-        Bakkle.sharedInstance.facebook(email, gender: gender, username: username,
-            name: name, userid: userid, locale: locale,
-            first_name: first_name, last_name: last_name, success:
-            {
-                // Sucessfully logged in via FB
-                Bakkle.sharedInstance.login({
-                    
-                    // jump into the feedview if successfully logged in
-                    dispatch_async(dispatch_get_main_queue()) {
-                        self.performSegueWithIdentifier(self.mainScreenSegueIdentifier, sender: self)
-                    }
-                    
-                    dispatch_async(dispatch_get_main_queue()) {
-                        
-                        // Register for push notifications.
-                        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate!
-                        appDelegate.registerForPushNotifications(UIApplication.sharedApplication())
-                    }
-                    
-                    }, fail: {})
-        })
-        
-        //TODO: Display error on fail?
-    }
-    
-    func loginViewShowingLoggedOutUser(loginView : FBLoginView!) {
-        // Do nothing. Automatically segues back to login view.
-    }
-    
-    func loginView(loginView : FBLoginView!, handleError:NSError) {
-        println("Error: \(handleError.localizedDescription)")
-    }
+//    func loginViewShowingLoggedInUser(loginView : FBLoginView!) {
+//    
+//    }
+//    
+//    func loginViewFetchedUserInfo(loginView : FBLoginView!, user: FBGraphUser) {
+//        
+//        // tricky way to force the function only run once when it called twice
+//        if counter > 0 {
+//            return
+//        }
+//        counter++;
+//        
+//        var email = user.objectForKey("email") as! String!
+//        var gender = user.objectForKey("gender") as! String!
+//        var username = "" //user.objectForKey("username") as String!
+//        var name = user.name
+//        var userid = user.objectID
+//        var locale = "nil" //user.location.location.zip //ZIP for now
+//        var first_name = user.first_name
+//        var last_name = user.last_name
+//        
+//        // send the user information to Bakkle server
+//        Bakkle.sharedInstance.facebook(email, gender: gender, username: username,
+//            name: name, userid: userid, locale: locale,
+//            first_name: first_name, last_name: last_name, success:
+//            {
+//                // Sucessfully logged in via FB
+//                Bakkle.sharedInstance.login({
+//                    
+//                    // jump into the feedview if successfully logged in
+//                    dispatch_async(dispatch_get_main_queue()) {
+//                        self.performSegueWithIdentifier(self.mainScreenSegueIdentifier, sender: self)
+//                    }
+//                    
+//                    dispatch_async(dispatch_get_main_queue()) {
+//                        
+//                        // Register for push notifications.
+//                        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate!
+//                        appDelegate.registerForPushNotifications(UIApplication.sharedApplication())
+//                    }
+//                    
+//                    }, fail: {})
+//        })
+//        
+//        //TODO: Display error on fail?
+//    }
+//    
+//    func loginViewShowingLoggedOutUser(loginView : FBLoginView!) {
+//        // Do nothing. Automatically segues back to login view.
+//    }
+//    
+//    func loginView(loginView : FBLoginView!, handleError:NSError) {
+//        println("Error: \(handleError.localizedDescription)")
+//    }
     
 }
 

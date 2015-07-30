@@ -317,15 +317,15 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
 
                         let newImg = UIGraphicsGetImageFromCurrentImageContext()
                         UIGraphicsEndImageContext()
-
-                        var photo: FBSDKSharePhoto! = FBSDKSharePhoto()
-                        photo.image = newImg
-                        photo.userGenerated = true
-
-                        var cont: FBSDKSharePhotoContent! = FBSDKSharePhotoContent()
-                        cont.photos = [photo]
-
-                        var dialog: FBSDKShareDialog = FBSDKShareDialog.showFromViewController(self, withContent: cont, delegate: nil)
+//
+//                        var photo: FBSDKSharePhoto! = FBSDKSharePhoto()
+//                        photo.image = newImg
+//                        photo.userGenerated = true
+//
+//                        var cont: FBSDKSharePhotoContent! = FBSDKSharePhotoContent()
+//                        cont.photos = [photo]
+//
+//                        var dialog: FBSDKShareDialog = FBSDKShareDialog.showFromViewController(self, withContent: cont, delegate: nil)
                     }
                 
                 
@@ -367,7 +367,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     
     /* FACEBOOK */
     func postOnWall() {
-        var conn: FBRequestConnection = FBRequestConnection()
+//        var conn: FBRequestConnection = FBRequestConnection()
 //        var handler: FBRequestHandler = conn
         
         var postString: String = "\(titleField.text) \(descriptionField.text))"

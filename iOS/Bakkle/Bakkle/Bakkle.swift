@@ -390,7 +390,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                     success()
                 } else {
                     Bakkle.sharedInstance.logout()
-                    FBSession.activeSession().closeAndClearTokenInformation()
+//                    FBSession.activeSession().closeAndClearTokenInformation()
                     fail()
                 }
             }

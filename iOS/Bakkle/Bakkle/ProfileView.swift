@@ -99,7 +99,7 @@ class ProfileView: UIViewController, UITextViewDelegate {
     
     @IBAction func btnLogout(sender: AnyObject) {
         Bakkle.sharedInstance.logout()
-        FBSession.activeSession().closeAndClearTokenInformation()
+//        FBSession.activeSession().closeAndClearTokenInformation()
         self.revealViewController().dismissViewControllerAnimated(true, completion: { () -> Void in
             //
         })
