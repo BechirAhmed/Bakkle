@@ -284,6 +284,9 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
         let vc: ItemDetails = sb.instantiateViewControllerWithIdentifier("ItemDetails") as! ItemDetails
         vc.item = getItem(indexPath).valueForKey("item") as! NSDictionary
         vc.holding = true
+        if indexPath.row > activeItem.count+1 {
+            vc.available = false
+        }
         self.presentViewController(vc, animated: true, completion: {})
         self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }

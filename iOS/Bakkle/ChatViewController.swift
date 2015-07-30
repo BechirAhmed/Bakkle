@@ -365,6 +365,10 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         } else {
             vc.item = Bakkle.sharedInstance.garageItems[self.itemIndex] as! NSDictionary
         }
+        let status = vc.item.valueForKey("status") as! String
+        if status == "Sold" {
+            vc.available = false
+        }
         self.dismissKeyboard()
         self.presentViewController(vc, animated: true, completion: nil)
     }

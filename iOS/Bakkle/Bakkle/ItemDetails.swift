@@ -14,6 +14,7 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
     let itemDetailsCellIdentifier = "ItemDetailsCell"
     var wanted: Bool = false
     var holding: Bool = false
+    var available: Bool = true
     var itemImages: [NSData]? = [NSData]()
     
     @IBOutlet weak var sellerName: UILabel!
@@ -69,6 +70,11 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
     func setupButtons() {
         closeBtn.setImage(IconImage().close(), forState: .Normal)
         closeBtn.setTitle("", forState: .Normal)
+        
+        if !available {
+            wantBtn.enabled = available
+            wantBtn.backgroundColor = UIColor.lightGrayColor()
+        }
     }
     
     override func viewWillAppear(animated: Bool) {
