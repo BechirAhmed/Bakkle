@@ -38,7 +38,7 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
         super.viewDidLoad()
         
         self.loadingView.hidden = true
-        if(Bakkle.sharedInstance.flavor == 2){
+        if(Bakkle.sharedInstance.flavor == Bakkle.GOODWILL){
             self.detailBugHack.backgroundColor = Bakkle.sharedInstance.theme_base
             self.wantBtn.backgroundColor = Bakkle.sharedInstance.theme_base
         }

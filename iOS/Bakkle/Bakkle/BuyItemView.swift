@@ -27,7 +27,7 @@ class BuyItemView: UIViewController {
     override func viewDidLoad() {
         setupButtons()
         
-        if(Bakkle.sharedInstance.flavor == 2){
+        if(Bakkle.sharedInstance.flavor == Bakkle.GOODWILL){
             self.view.backgroundColor = Bakkle.sharedInstance.theme_base
         }
         

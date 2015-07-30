@@ -50,6 +50,8 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                               "Production Server Cluster",
                               "Test Server (Developers Only)"]
 //                              "Ben (Developers Only)"]
+    static let BAKKLE = 1
+    static let GOODWILL = 2
     
     /* 1 - ERROR
      * 2 - INFO

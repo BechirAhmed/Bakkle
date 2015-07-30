@@ -89,13 +89,16 @@
 // shows that if this view is a tutorial page or not
 @property BOOL tutorial;
 
+// shows that if this view is a goodwill card or not
+@property BOOL goodwill;
+
 
 /*!
  * The designated initializer takes a `frame` and a set of options to customize
  * the behavior of the view.
  */
 - (instancetype)initWithFrame:(CGRect)frame
-                      options:(MDCSwipeToChooseViewOptions *)options tutorial:(BOOL)tutorial;
+                      options:(MDCSwipeToChooseViewOptions *)options tutorial:(BOOL)tutorial goodwill:(BOOL)goodwill;
 
 @end
 
