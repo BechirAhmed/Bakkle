@@ -34,7 +34,7 @@ from chat.models import Message
 from common.decorators import authenticate
 from django.db.models import Avg, Max, Min, Sum
 
-# from common.decorators import get_number_conversations_with_new_messages
+from common.methods import getNumUnreadChatsForAccount
 from common.decorators import time_method
 from django.conf import settings
 import math;
@@ -219,15 +219,17 @@ def notify_all_new_item(message):
         response_data = { "status": 0, "error": "No message supplied" }
         return response_data
 
-    devices = Device.objects.filter() #todo: add active filter, add subscribed to notifications filter.
+    accounts = Account.objects.filter()
+    for account in accounts:
+        devices = Device.objects.filter(account_id = account)
 
-    # notify each device
-    for device in devices:
-        if device.auth_token != "":
-            account_id = device.auth_token.split('_')[1]
+        badge = getNumUnreadChatsForAccount(account.pk)
+
+        # notify each device
+        for device in devices:
             # lookup number of unread messages
-            # badge = get_number_conversations_with_new_messages(account_id)
-            device.send_notification(message, 1, "")
+
+            device.send_notification(message, badge)
 
     response_data = { "status": 1 }
     return response_data
@@ -397,11 +399,14 @@ def want(buyer_id, item_id, view_duration):
     except Items.DoesNotExist:
         return {"status":0, "error":"Item {} does not exist.".format(item_id)}
 
-    chat = Chat.objects.get_or_create(
-        item = item,
-        buyer = buyer)[0]
-    chat.start_time = timezone.now()
-    chat.save()
+
+    if (buyer != item.seller):
+        chat = Chat.objects.get_or_create(
+            item = item,
+            buyer = buyer)[0]
+        chat.start_time = timezone.now()
+        chat.save()
+    
 
     return add_item_to_buyer_items(buyer_id, item_id, view_duration, BuyerItem.WANT)
 
@@ -410,7 +415,7 @@ def hold(buyer_id, item_id, view_duration):
     return add_item_to_buyer_items(buyer_id, item_id, view_duration, BuyerItem.HOLD)
 
 @time_method
-def report(buyer_id, item_id, view_duration):
+def report(buyer_id, item_id, view_duration, message = None):
 
     # Get item and update the times reported
     try:
@@ -423,10 +428,9 @@ def report(buyer_id, item_id, view_duration):
 
     item.times_reported = item.times_reported + 1
     item.save()
-
     # send_mail('Item reported', 'Item has been reported by user ' + str(user.display_name), 'backend@app.bakkle.com', ['wongb@rose-hulman.edu'], fail_silently=False)
 
-    return add_item_to_buyer_items(buyer_id, item_id, view_duration, BuyerItem.REPORT)
+    return add_item_to_buyer_items(buyer_id, item_id, view_duration, BuyerItem.REPORT, message)
 
 
 #--------------------------------------------#
@@ -473,7 +477,9 @@ def get_seller_items(seller_id):
         number_of_report = 0
         number_of_holding = 0
         for buyer_item in item.buyeritem_set.all():
-            number_of_views = number_of_views + 1
+            if buyer_item.status != BuyerItem.MY_ITEM:
+                number_of_views = number_of_views + 1
+                
             if buyer_item.status == BuyerItem.MEH:
                 number_of_meh = number_of_meh + 1
             elif buyer_item.status == BuyerItem.REPORT:
@@ -614,7 +620,7 @@ def imgupload(images, seller_id):
     return image_urls
 
 # Helper for creating buyer items
-def add_item_to_buyer_items(buyer_id, item_id, view_duration, status):
+def add_item_to_buyer_items(buyer_id, item_id, view_duration, status, message = None):
 
     
     try:
@@ -636,8 +642,13 @@ def add_item_to_buyer_items(buyer_id, item_id, view_duration, status):
 
 
     try:
+
         account = Account.objects.get(pk=buyer_id)
         # Create or update the buyer item
+
+        if(account.pk == item.seller.pk):
+            status = BuyerItem.MY_ITEM
+
         try:
             buyer_item = BuyerItem.objects.get(item = item.pk, buyer = buyer_id)
         except BuyerItem.DoesNotExist:
@@ -648,7 +659,9 @@ def add_item_to_buyer_items(buyer_id, item_id, view_duration, status):
                 status = status, 
                 confirmed_price = item.price,
                 view_time = timezone.now(),
-                view_duration = 0)
+                view_duration = 0,
+                message = message)
+
 
 
         if (status == BuyerItem.SOLD):

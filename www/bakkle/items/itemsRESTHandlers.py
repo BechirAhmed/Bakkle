@@ -6,6 +6,15 @@ from tornado.web import asynchronous
 
 import itemsCommonHandlers
 
+from tornado import web
+
+
+class testHandler(web.RequestHandler):
+
+    def get(self):
+        itemsCommonHandlers.notify_all_new_item(
+                "Testing badge notifications")
+
 
 class indexHandler(bakkleRequestHandler):
 
@@ -23,6 +32,7 @@ class indexHandler(bakkleRequestHandler):
                     item_list=item_list
                     )
         return
+
 
 class itemDetailHandler(bakkleRequestHandler):
 
@@ -42,6 +52,7 @@ class itemDetailHandler(bakkleRequestHandler):
                     )
         return
 
+
 class markDeletedHandler(bakkleRequestHandler):
 
     @asynchronous
@@ -59,6 +70,7 @@ class markDeletedHandler(bakkleRequestHandler):
                     )
         return
 
+
 class markSpamHandler(bakkleRequestHandler):
 
     @asynchronous
@@ -75,23 +87,6 @@ class markSpamHandler(bakkleRequestHandler):
                     item_list=item_list
                     )
         return
-
-class testHandler(bakkleRequestHandler):
-
-    # @asynchronous
-    def get(self, param1):
-        self.write(param1)
-
-    # @run_async
-    # def asyncHelper(self):
-
-    #     item_list = itemsCommonHandlers.index()
-
-    #     self.render('templates/items/index.html',
-    #                 title="items",
-    #                 item_list=item_list
-    #                 )
-    #     return
 
 
 class addItemHandler(bakkleRequestHandler):
@@ -408,6 +403,7 @@ class reportHandler(bakkleRequestHandler):
 
             buyer_id = self.getUser()
             item_id = self.getArgument('item_id')
+            report_message = self.getArgument('report_message', "")
             view_duration = self.getArgument('view_duration', 0)
         except QueryArgumentError as error:
             self.writeJSON({"status": 0, "message": error.message})
@@ -416,7 +412,8 @@ class reportHandler(bakkleRequestHandler):
 
         self.writeJSON(itemsCommonHandlers.report(buyer_id,
                                                   item_id,
-                                                  view_duration))
+                                                  view_duration,
+                                                  report_message))
         self.finish()
 
 

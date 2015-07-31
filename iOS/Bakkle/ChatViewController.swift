@@ -124,7 +124,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         let infoButtonWidth:CGFloat = 50
         var infoButton = UIButton(frame: CGRectMake(header.bounds.origin.x+header.bounds.size.width-infoButtonWidth, header.bounds.origin.y+topHeight, infoButtonWidth, headerHeight))
-        infoButton.setImage(UIImage(named: Bakkle.sharedInstance.flavor == 2 ? "icon-i-blue.png" : "icon-i.png"), forState: UIControlState.Normal)
+        infoButton.setImage(UIImage(named: Bakkle.sharedInstance.flavor == Bakkle.GOODWILL ? "icon-i-blue.png" : "icon-i.png"), forState: UIControlState.Normal)
         infoButton.addTarget(self, action: "btnI:", forControlEvents: UIControlEvents.TouchUpInside)
         header.addSubview(infoButton)
         
@@ -174,7 +174,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             var facebookProfileImageUrlString = "http://graph.facebook.com/\(seller_facebookid)/picture?width=142&height=142"
             let imgURL = NSURL(string: facebookProfileImageUrlString)
             
-            if(Bakkle.sharedInstance.flavor == 2){
+            if(Bakkle.sharedInstance.flavor == Bakkle.GOODWILL){
                 profileButton.hnk_setImage(UIImage(named: "gwIcon@2x.png")!, state: UIControlState.Normal, animated: false, success: nil)
             }
             else{
@@ -364,6 +364,10 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             vc.item = Bakkle.sharedInstance.trunkItems[self.itemIndex].valueForKey("item") as! NSDictionary
         } else {
             vc.item = Bakkle.sharedInstance.garageItems[self.itemIndex] as! NSDictionary
+        }
+        let status = vc.item.valueForKey("status") as! String
+        if status == "Sold" {
+            vc.available = false
         }
         self.dismissKeyboard()
         self.presentViewController(vc, animated: true, completion: nil)

@@ -100,7 +100,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if application.applicationState == UIApplicationState.Active {
             var localNotification: UILocalNotification = UILocalNotification()
             localNotification.userInfo = userInfo
-            localNotification.soundName = "Bakkle-Notification.aif"
+            localNotification.soundName = "Bakkle_Notification_new.m4r"
             localNotification.fireDate = NSDate()
 
 //            application.applicationIconBadgeNumber = 0 //TODO: Set to unread message count.

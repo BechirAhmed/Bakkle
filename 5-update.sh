@@ -35,7 +35,7 @@ fi
 if [ `hostname` == 'ip-172-31-27-192' ]; then
    DATABASE=production
 fi
-if [ `hostname` == 'bakkle' ]; then
+if [ `hostname` == 'rhv-bakkle' ]; then
    DATABASE=testdb
 fi
 if [ `hostname` == 'rhv-bakkle-bld' ]; then

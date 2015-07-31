@@ -14,6 +14,7 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
     let itemDetailsCellIdentifier = "ItemDetailsCell"
     var wanted: Bool = false
     var holding: Bool = false
+    var available: Bool = true
     var itemImages: [NSData]? = [NSData]()
     
     @IBOutlet weak var sellerName: UILabel!
@@ -37,7 +38,7 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
         super.viewDidLoad()
         
         self.loadingView.hidden = true
-        if(Bakkle.sharedInstance.flavor == 2){
+        if(Bakkle.sharedInstance.flavor == Bakkle.GOODWILL){
             self.detailBugHack.backgroundColor = Bakkle.sharedInstance.theme_base
             self.wantBtn.backgroundColor = Bakkle.sharedInstance.theme_base
         }
@@ -69,6 +70,11 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
     func setupButtons() {
         closeBtn.setImage(IconImage().close(), forState: .Normal)
         closeBtn.setTitle("", forState: .Normal)
+        
+        if !available {
+            wantBtn.enabled = available
+            wantBtn.backgroundColor = UIColor.lightGrayColor()
+        }
     }
     
     override func viewWillAppear(animated: Bool) {

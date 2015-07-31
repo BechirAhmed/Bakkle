@@ -48,7 +48,8 @@ static CGFloat const MDCSwipeToChooseViewLabelHeight = 65.f;
 
 
 
-- (instancetype)initWithFrame:(CGRect)frame options:(MDCSwipeToChooseViewOptions *)options  tutorial:(BOOL) tutorial{
+- (instancetype)initWithFrame:(CGRect)frame
+                      options:(MDCSwipeToChooseViewOptions *)options tutorial:(BOOL)tutorial goodwill:(BOOL)goodwill {
     
     self = [super initWithFrame: frame];
     if (self) {
@@ -65,9 +66,15 @@ static CGFloat const MDCSwipeToChooseViewLabelHeight = 65.f;
                     }
         [self constructLikedView];
         [self constructNopeImageView];
-        [self constructHoldView];
-        [self constructReportView];
-        [self setupSwipeToChoose];
+        if (!goodwill) {
+            [self constructHoldView];
+            [self constructReportView];
+            [self setupSwipeToChoose];
+        }else {
+            [self setupSwipeToChooseGoodwill];
+        }
+        
+        
 
     }
     return self;
@@ -330,5 +337,45 @@ static CGFloat const MDCSwipeToChooseViewLabelHeight = 65.f;
     
     [self mdc_swipeToChooseSetup:options];
 }
+
+- (void)setupSwipeToChooseGoodwill {
+    MDCSwipeOptions *options = [MDCSwipeOptions new];
+    options.delegate = self.options.delegate;
+    options.threshold = self.options.threshold;
+    
+    __block UIView *likedImageView = self.likedView;
+    __block UIView *nopeImageView = self.nopeView;
+    __block UIView *holdImageView = self.holdView;
+    __block UIView *reportImageView = self.reportView;
+    __block UIView *transparentImageView = self.transparentImage;
+    __weak MDCSwipeToChooseView *weakself = self;
+    options.onPan = ^(MDCPanState *state) {
+        if (state.direction == MDCSwipeDirectionNone) {
+            likedImageView.alpha = 0.f;
+            nopeImageView.alpha = 0.f;
+            holdImageView.alpha = 0.f;
+            reportImageView.alpha = 0.f;
+        } else if (state.direction == MDCSwipeDirectionLeft) {
+            transparentImageView.alpha = state.thresholdRatio / 3 * 2;
+            likedImageView.alpha = 0.f;
+            reportImageView.alpha = 0.f;
+            holdImageView.alpha = 0.f;
+            nopeImageView.alpha = state.thresholdRatio;
+        } else if (state.direction == MDCSwipeDirectionRight) {
+            transparentImageView.alpha = state.thresholdRatio / 3 * 2;
+            likedImageView.alpha = state.thresholdRatio;
+            nopeImageView.alpha = 0.f;
+            holdImageView.alpha = 0.f;
+            reportImageView.alpha = 0.f;
+        }
+        
+        if (weakself.options.onPan) {
+            weakself.options.onPan(state);
+        }
+    };
+    
+    [self mdc_swipeToChooseSetup:options];
+}
+
 
 @end

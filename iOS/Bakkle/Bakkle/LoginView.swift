@@ -26,7 +26,7 @@ class LoginView: UIViewController, FBLoginViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if (Bakkle.sharedInstance.flavor == 2 ){
+        if (Bakkle.sharedInstance.flavor == Bakkle.GOODWILL ){
             self.logoImageView.image = UIImage(named: "GWLogo_Full@2x.png")!
             logoImageView.contentMode = UIViewContentMode.ScaleAspectFit
             self.loginScreenBkg.image = UIImage(named: "LoginScreen-bkg-blue.png")!
@@ -63,7 +63,7 @@ class LoginView: UIViewController, FBLoginViewDelegate {
     
     // create the background image, which is the same as the launch screen background
     func setBackgroundImg(){
-        if Bakkle.sharedInstance.flavor == 2 {
+        if Bakkle.sharedInstance.flavor == Bakkle.GOODWILL {
             background = UIImageView(image: UIImage(named: "SplashScreen-bkg-Blue.png"))
         }else{
             background = UIImageView(image: UIImage(named: "SplashScreen-bkg.png"))
@@ -74,7 +74,7 @@ class LoginView: UIViewController, FBLoginViewDelegate {
     
     // create the logo image, which is the same as the launch screen logo
     func setLogoImg(){
-        if Bakkle.sharedInstance.flavor == 2 {
+        if Bakkle.sharedInstance.flavor == Bakkle.GOODWILL {
             logo = UIImageView(image: UIImage(named: "GWLogo_Full@2x.png"))
             logo.contentMode = UIViewContentMode.ScaleAspectFit
             logo.addConstraint(NSLayoutConstraint(item: logo, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: logo, attribute: NSLayoutAttribute.Height, multiplier: 2, constant: 0.0))

@@ -79,7 +79,7 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if(Bakkle.sharedInstance.flavor == 2){
+        if(Bakkle.sharedInstance.flavor == Bakkle.GOODWILL){
             self.view.backgroundColor = Bakkle.sharedInstance.theme_base
         }
     
@@ -284,6 +284,9 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
         let vc: ItemDetails = sb.instantiateViewControllerWithIdentifier("ItemDetails") as! ItemDetails
         vc.item = getItem(indexPath).valueForKey("item") as! NSDictionary
         vc.holding = true
+        if indexPath.row > activeItem.count+1 {
+            vc.available = false
+        }
         self.presentViewController(vc, animated: true, completion: {})
         self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }

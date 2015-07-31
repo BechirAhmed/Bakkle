@@ -76,14 +76,17 @@
 		60F3BC111B5E90BC0033EF83 /* Goodwill-LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 60F3BC101B5E90BC0033EF83 /* Goodwill-LaunchScreen.xib */; };
 		60F3BC131B5E91710033EF83 /* Goodwill-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 60F3BC121B5E91710033EF83 /* Goodwill-Info.plist */; };
 		60F3BC141B5E921D0033EF83 /* Goodwill-LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 60F3BC101B5E90BC0033EF83 /* Goodwill-LaunchScreen.xib */; };
-		60F3BC161B66D1000033EF83 /* Bakkle-Notification.aif in Resources */ = {isa = PBXBuildFile; fileRef = 60F3BC151B66D1000033EF83 /* Bakkle-Notification.aif */; };
-		60F3BC171B66D1160033EF83 /* Bakkle-Notification.aif in Resources */ = {isa = PBXBuildFile; fileRef = 60F3BC151B66D1000033EF83 /* Bakkle-Notification.aif */; };
+		60F3BC221B694C5A0033EF83 /* Bakkle_Notification_new.m4r in Resources */ = {isa = PBXBuildFile; fileRef = 60F3BC211B694C5A0033EF83 /* Bakkle_Notification_new.m4r */; };
+		60F3BC231B694C5A0033EF83 /* Bakkle_Notification_new.m4r in Resources */ = {isa = PBXBuildFile; fileRef = 60F3BC211B694C5A0033EF83 /* Bakkle_Notification_new.m4r */; };
 		720510341B1F839B00D059AB /* ListItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720510331B1F839B00D059AB /* ListItemCell.swift */; };
 		723D532C1B25F42B0067A80A /* IconImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 723D532B1B25F42B0067A80A /* IconImage.swift */; };
 		723D532E1B2718590067A80A /* OffsetTextAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 723D532D1B2718590067A80A /* OffsetTextAttachment.swift */; };
 		726A38E31B39BE1E00CF5553 /* logo-white-design-clear.png in Resources */ = {isa = PBXBuildFile; fileRef = 726A38E21B39BE1E00CF5553 /* logo-white-design-clear.png */; };
 		727FA76D1B4C15750023C126 /* new-x.png in Resources */ = {isa = PBXBuildFile; fileRef = 727FA76C1B4C15750023C126 /* new-x.png */; };
 		727FA76E1B4C15790023C126 /* new-x.png in Resources */ = {isa = PBXBuildFile; fileRef = 727FA76C1B4C15750023C126 /* new-x.png */; };
+		728598C11B6A516900C2FE55 /* Goodwill Logo-White.png in Resources */ = {isa = PBXBuildFile; fileRef = 1BFAEC651B6659FF00E264A9 /* Goodwill Logo-White.png */; };
+		728598C31B6A52C300C2FE55 /* InstructionScreen-new.png in Resources */ = {isa = PBXBuildFile; fileRef = 728598C21B6A52C300C2FE55 /* InstructionScreen-new.png */; };
+		728598C41B6A52C900C2FE55 /* InstructionScreen-new.png in Resources */ = {isa = PBXBuildFile; fileRef = 728598C21B6A52C300C2FE55 /* InstructionScreen-new.png */; };
 		728647EB1B2F0E3F009A24C9 /* ChatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53BE1B0815CB000C406C /* ChatsViewController.swift */; };
 		728647EC1B2F0E46009A24C9 /* ChatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53BE1B0815CB000C406C /* ChatsViewController.swift */; };
 		728647EE1B309F6F009A24C9 /* NSDate+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 728647ED1B309F6F009A24C9 /* NSDate+String.swift */; };
@@ -469,13 +472,14 @@
 		60EEB9971B5546F100E87B8D /* switch-camera-outline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "switch-camera-outline.png"; sourceTree = "<group>"; };
 		60F3BC101B5E90BC0033EF83 /* Goodwill-LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "Goodwill-LaunchScreen.xib"; sourceTree = "<group>"; };
 		60F3BC121B5E91710033EF83 /* Goodwill-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Goodwill-Info.plist"; sourceTree = "<group>"; };
-		60F3BC151B66D1000033EF83 /* Bakkle-Notification.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Bakkle-Notification.aif"; sourceTree = "<group>"; };
+		60F3BC211B694C5A0033EF83 /* Bakkle_Notification_new.m4r */ = {isa = PBXFileReference; lastKnownFileType = file; path = Bakkle_Notification_new.m4r; sourceTree = "<group>"; };
 		698270E0C83AB2371F464BB2 /* Pods-Bakkle.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bakkle.release.xcconfig"; path = "Pods/Target Support Files/Pods-Bakkle/Pods-Bakkle.release.xcconfig"; sourceTree = "<group>"; };
 		720510331B1F839B00D059AB /* ListItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemCell.swift; sourceTree = "<group>"; };
 		723D532B1B25F42B0067A80A /* IconImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IconImage.swift; sourceTree = "<group>"; };
 		723D532D1B2718590067A80A /* OffsetTextAttachment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OffsetTextAttachment.swift; sourceTree = "<group>"; };
 		726A38E21B39BE1E00CF5553 /* logo-white-design-clear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-white-design-clear.png"; sourceTree = "<group>"; };
 		727FA76C1B4C15750023C126 /* new-x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "new-x.png"; sourceTree = "<group>"; };
+		728598C21B6A52C300C2FE55 /* InstructionScreen-new.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "InstructionScreen-new.png"; sourceTree = "<group>"; };
 		728647ED1B309F6F009A24C9 /* NSDate+String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSDate+String.swift"; sourceTree = "<group>"; };
 		72B5D8041B41E12D00E4B6EA /* BuyItemView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuyItemView.swift; sourceTree = "<group>"; };
 		72B5D8061B41E52300E4B6EA /* ChatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
@@ -706,7 +710,7 @@
 		5EBDD68E1AB211E600C7FBE7 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				60F3BC151B66D1000033EF83 /* Bakkle-Notification.aif */,
+				60F3BC211B694C5A0033EF83 /* Bakkle_Notification_new.m4r */,
 				60F3BC121B5E91710033EF83 /* Goodwill-Info.plist */,
 				60F3BC101B5E90BC0033EF83 /* Goodwill-LaunchScreen.xib */,
 				A0B765431B0E3A2700107F7E /* Bakkle.entitlements */,
@@ -874,6 +878,7 @@
 				602C389A1B38AF1E005CB493 /* x-image.png */,
 				602C38981B389A2E005CB493 /* WrongLocationForPhone.png */,
 				602C38961B389A1F005CB493 /* InstructionScreen.png */,
+				728598C21B6A52C300C2FE55 /* InstructionScreen-new.png */,
 				DB5DB3531B18E18100734692 /* icon-car75.png */,
 				DB5DB3541B18E18100734692 /* icon-marker75.png */,
 				DB5DB3551B18E18100734692 /* icon-tags75.png */,
@@ -1268,6 +1273,7 @@
 				A058A2A61AFD6024005E7432 /* btn-addItem@2x.png in Resources */,
 				DBEE0E991AF3C855005E60BD /* btb-want.png in Resources */,
 				A058A2B41AFDADA2005E7432 /* mask-buyer-grey.png in Resources */,
+				60F3BC221B694C5A0033EF83 /* Bakkle_Notification_new.m4r in Resources */,
 				A0A200011ACE2F7500A42CD8 /* btn-email40.png in Resources */,
 				F0D6F4051B5EA18700938A06 /* SplashScreen-bkg.png in Resources */,
 				A058A2B91AFDADA2005E7432 /* mask-buyer-white@3x.png in Resources */,
@@ -1318,11 +1324,11 @@
 				13AB6F9D1B0E3C520092EE61 /* btn-meh.png in Resources */,
 				A0D96F901AD7751E0046DA13 /* mock-settings.png in Resources */,
 				D0FCDFFA1B03B2E0006F76F7 /* btn-addCam.png in Resources */,
-				60F3BC161B66D1000033EF83 /* Bakkle-Notification.aif in Resources */,
 				A08D53D81B0825E7000C406C /* icon-back.png in Resources */,
 				DB6726EA1B178F250014A896 /* star_half.png in Resources */,
 				A058A2B51AFDADA2005E7432 /* mask-buyer-grey@2x.png in Resources */,
 				60F3BC131B5E91710033EF83 /* Goodwill-Info.plist in Resources */,
+				728598C31B6A52C300C2FE55 /* InstructionScreen-new.png in Resources */,
 				A0A200051ACE30C200A42CD8 /* btn-logout40.png in Resources */,
 				F0D6F40E1B5EC1A500938A06 /* gwIcon@2x.png in Resources */,
 				DB6726EB1B178F250014A896 /* star_none.png in Resources */,
@@ -1376,6 +1382,7 @@
 				A0E1EB961B2B5B2200662C08 /* cartoon_fast_whoosh_good_for_karate_chop_other_fast_movement_or_swipe_001.mp3 in Resources */,
 				A0E1EB971B2B5B2200662C08 /* btn-check.png in Resources */,
 				A0E1EB981B2B5B2200662C08 /* btn-add-disabled.png in Resources */,
+				728598C41B6A52C900C2FE55 /* InstructionScreen-new.png in Resources */,
 				A0E1EB991B2B5B2200662C08 /* dot.png in Resources */,
 				A0E1EB9A1B2B5B2200662C08 /* btn-cancel.png in Resources */,
 				A0E1EB9B1B2B5B2200662C08 /* logo-white-design-png-transp-100.png in Resources */,
@@ -1393,6 +1400,7 @@
 				A0E1EBA61B2B5B2200662C08 /* btn-menu.png in Resources */,
 				A0E1EBA71B2B5B2200662C08 /* btn-menu@3x.png in Resources */,
 				A0E1EBA81B2B5B2200662C08 /* icon-cart.png in Resources */,
+				728598C11B6A516900C2FE55 /* Goodwill Logo-White.png in Resources */,
 				A0E1EBA91B2B5B2200662C08 /* icon-gear.png in Resources */,
 				A0E1EBAA1B2B5B2200662C08 /* MessageOutgoing.aiff in Resources */,
 				A0E1EBAB1B2B5B2200662C08 /* btn-facebook40.png in Resources */,
@@ -1406,6 +1414,7 @@
 				A0E1EBAE1B2B5B2200662C08 /* btn-menu@2x.png in Resources */,
 				A0E1EBAF1B2B5B2200662C08 /* mock-rating-stars.png in Resources */,
 				A0E1EBB01B2B5B2200662C08 /* btn-addItem@3x.png in Resources */,
+				60F3BC231B694C5A0033EF83 /* Bakkle_Notification_new.m4r in Resources */,
 				A0E1EBB11B2B5B2200662C08 /* LaunchScreen.xib in Resources */,
 				A0E1EBB21B2B5B2200662C08 /* item-lawnmower.png in Resources */,
 				A0E1EBB31B2B5B2200662C08 /* star_full.png in Resources */,
@@ -1420,7 +1429,6 @@
 				A0E1EBBB1B2B5B2200662C08 /* star_half.png in Resources */,
 				A0E1EBBC1B2B5B2200662C08 /* mask-buyer-grey@2x.png in Resources */,
 				A0E1EBBD1B2B5B2200662C08 /* btn-logout40.png in Resources */,
-				60F3BC171B66D1160033EF83 /* Bakkle-Notification.aif in Resources */,
 				A0E1EBBE1B2B5B2200662C08 /* star_none.png in Resources */,
 				A0E1EBBF1B2B5B2200662C08 /* loading.png in Resources */,
 				A0E1EBC01B2B5B2200662C08 /* icon-down.png in Resources */,
