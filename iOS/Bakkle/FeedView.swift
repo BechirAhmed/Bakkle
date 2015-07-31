@@ -12,6 +12,7 @@ import Haneke
 
 class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDelegate, UINavigationControllerDelegate, MDCSwipeToChooseDelegate, UIAlertViewDelegate {
 
+    
     let menuSegue = "presentNav"
     let itemDetailSegue = "ItemDetailSegue"
     let refineSegue = "RefineSegue"
@@ -48,7 +49,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if(Bakkle.sharedInstance.flavor == 2){
+        if(Bakkle.sharedInstance.flavor == Bakkle.GOODWILL){
             self.view.backgroundColor = Bakkle.sharedInstance.theme_base
             self.titleBar.backgroundColor = Bakkle.sharedInstance.theme_baseDark
             
@@ -95,7 +96,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         searchBar.layer.borderColor = titleBar.backgroundColor?.CGColor
         searchBar.layer.borderWidth = 1
         
-        if Bakkle.sharedInstance.flavor == 2 {
+        if Bakkle.sharedInstance.flavor == Bakkle.GOODWILL {
             btnAddItem.hidden = true
         }
     }
@@ -103,7 +104,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(true)
     
-        if Bakkle.sharedInstance.flavor == 2 {
+        if Bakkle.sharedInstance.flavor == Bakkle.GOODWILL {
             var goodwillLogo: UIImageView = UIImageView(frame: CGRectMake(btnAddItem.frame.origin.x, logoImageView.frame.midY + 2.5, 35.0, 35.0))
             goodwillLogo.image = UIImage(named: "gwIcon@2x.png")!
             goodwillLogo.layer.cornerRadius = 7.0
@@ -269,14 +270,14 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                     self.swipeView = nil
                 }
                 var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
-                self.swipeView = MDCSwipeToChooseView(frame: CGRectMake(drawer.frame.origin.x, drawer.frame.origin.y+drawer.superview!.frame.origin.y, drawer.frame.size.width, drawer.frame.size.height), options: options, tutorial: userDefaults.boolForKey("instruction"))
+                self.swipeView = MDCSwipeToChooseView(frame: CGRectMake(drawer.frame.origin.x, drawer.frame.origin.y+drawer.superview!.frame.origin.y, drawer.frame.size.width, drawer.frame.size.height), options: options, tutorial: userDefaults.boolForKey("instruction"), goodwill: Bakkle.sharedInstance.flavor == Bakkle.GOODWILL)
                 self.swipeView.addGestureRecognizer(itemDetailTap)
                 if Bakkle.sharedInstance.feedItems.count > 1 {
                     if self.bottomView != nil {
                         self.bottomView.removeFromSuperview()
                         self.bottomView = nil
                     }
-                    self.bottomView = MDCSwipeToChooseView(frame: self.swipeView.frame, options: nil, tutorial: false)
+                    self.bottomView = MDCSwipeToChooseView(frame: self.swipeView.frame, options: nil, tutorial: false, goodwill: Bakkle.sharedInstance.flavor == Bakkle.GOODWILL)
                     self.view.insertSubview(self.bottomView, belowSubview: self.swipeView)
                 }
         }
@@ -295,7 +296,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             self.swipeView = self.bottomView
             
             //create new bottomView
-            self.bottomView = MDCSwipeToChooseView(frame: self.swipeView.frame, options: nil, tutorial: false)
+            self.bottomView = MDCSwipeToChooseView(frame: self.swipeView.frame, options: nil, tutorial: false, goodwill: Bakkle.sharedInstance.flavor == Bakkle.GOODWILL)
             
             //add gesture recognizer to top view (swipeView)
             self.swipeView.addGestureRecognizer(itemDetailTap)
@@ -363,7 +364,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             view.bottomBlurImg.hnk_setImageFromURL(imgURL!)
             view.imageView.hnk_setImageFromURL(imgURL!)
             view.imageView.contentMode = UIViewContentMode.ScaleAspectFill
-            view.profileImg.image = Bakkle.sharedInstance.flavor == 2 ? UIImage(named: "gwIcon@2x.png") : UIImage(data: NSData(contentsOfURL: profileImgURL!)!)
+            view.profileImg.image = Bakkle.sharedInstance.flavor == Bakkle.GOODWILL ? UIImage(named: "gwIcon@2x.png") : UIImage(data: NSData(contentsOfURL: profileImgURL!)!)
         }
         
         if view == self.swipeView {
@@ -442,16 +443,21 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     }
     
     func view(view: UIView!, shouldBeChosenWithDirection direction: MDCSwipeDirection) -> Bool {
-        if direction == MDCSwipeDirection.Left || direction == MDCSwipeDirection.Right || direction == MDCSwipeDirection.Up || direction == MDCSwipeDirection.Down {
-            return true
-        } else {
-            UIView.animateWithDuration(0.16, animations: { () -> Void in
-                view.transform = CGAffineTransformIdentity
-                var superView : UIView = self.view.superview!
-                self.view.center = superView.convertPoint(superView.center, fromView: superView.superview)
-            })
-            return false
+        if Bakkle.sharedInstance.flavor == Bakkle.GOODWILL {
+            if direction == MDCSwipeDirection.Left || direction == MDCSwipeDirection.Right {
+                return true
+            }
+        }else{
+            if direction == MDCSwipeDirection.Left || direction == MDCSwipeDirection.Right || direction == MDCSwipeDirection.Up || direction == MDCSwipeDirection.Down {
+                return true
+            }
         }
+        UIView.animateWithDuration(0.16, animations: { () -> Void in
+        view.transform = CGAffineTransformIdentity
+        var superView : UIView = self.view.superview!
+        self.view.center = superView.convertPoint(superView.center, fromView: superView.superview)
+        })
+        return false
     }
     
     func view(view: UIView!, wasChosenWithDirection direction: MDCSwipeDirection) {

@@ -27,7 +27,7 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if(Bakkle.sharedInstance.flavor == 2){
+        if(Bakkle.sharedInstance.flavor == Bakkle.GOODWILL){
             self.view.backgroundColor = Bakkle.sharedInstance.theme_base
         }
         

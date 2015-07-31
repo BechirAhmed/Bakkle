@@ -302,6 +302,12 @@ def device_register(ip, uuid, user, location, app_version):
 @time_method
 def device_register_push(account_id, device_uuid, device_token, client_ip):
 
+    prevDevices = Device.objects.filter(uuid=device_uuid)
+
+    for device in prevDevices:
+        device.apns_token = ""
+        device.save()
+
     try:
         account = Account.objects.get(pk=account_id)
     except Account.DoesNotExist:

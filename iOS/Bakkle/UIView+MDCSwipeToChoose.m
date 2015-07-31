@@ -196,7 +196,7 @@ const void * const MDCViewStateKey = &MDCViewStateKey;
         CGFloat absY = fabs(translation.y);
         
         // Scaling factor for x vs y priority (numerator > denom = prioritize x, vice versa for y, == means do not prioritize)
-        CGFloat xPriorityAdjustment = 5.f / 3.f;
+        CGFloat xPriorityAdjustment = 1.7;
         
         // Distance from origin to disregard
         CGFloat detectionCircleRadius = 10.f;

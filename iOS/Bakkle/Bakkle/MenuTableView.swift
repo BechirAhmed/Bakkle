@@ -108,13 +108,13 @@ class MenuTableController: UITableViewController {
     }
     
     @IBAction func btnContact(sender: AnyObject) {
-        UIApplication.sharedApplication().openURL(NSURL(string: (Bakkle.sharedInstance.flavor == 2 ? "http://www.goodwill.org/" : "http://www.bakkle.com/"))!)
+        UIApplication.sharedApplication().openURL(NSURL(string: (Bakkle.sharedInstance.flavor == Bakkle.GOODWILL ? "http://www.goodwill.org/" : "http://www.bakkle.com/"))!)
     }
     
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         /* This fixes the small lines on the left hand side of the cell dividers */
         cell.backgroundColor = UIColor.clearColor()
-        if (indexPath.row == 2 && Bakkle.sharedInstance.flavor == 2) || (indexPath.row == 6 && !Bakkle.developerTools) {
+        if (indexPath.row == 2 && Bakkle.sharedInstance.flavor == Bakkle.GOODWILL) || (indexPath.row == 6 && !Bakkle.developerTools) {
             cell.hidden = true
         }
     }
@@ -123,7 +123,7 @@ class MenuTableController: UITableViewController {
         if indexPath.row == 0 {
             return 177
         }
-        if (indexPath.row == 2 && Bakkle.sharedInstance.flavor == 2) || (indexPath.row == 6 && !Bakkle.developerTools) {
+        if (indexPath.row == 2 && Bakkle.sharedInstance.flavor == Bakkle.GOODWILL) || (indexPath.row == 6 && !Bakkle.developerTools) {
             return 0
         }
         return 60
