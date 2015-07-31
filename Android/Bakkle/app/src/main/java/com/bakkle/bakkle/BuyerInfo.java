@@ -5,7 +5,7 @@ package com.bakkle.bakkle;
  */
 public class BuyerInfo {
 
-    String name, FacebookURL;
+    private String name, FacebookURL;
 
     public BuyerInfo(String name, String FacebookURL){
         this.name = name;

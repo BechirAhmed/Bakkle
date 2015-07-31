@@ -2,6 +2,7 @@ package com.bakkle.bakkle;
 
 import android.app.Activity;
 import android.app.ListFragment;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -128,7 +129,11 @@ public class SellersGarage extends ListFragment {
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
 
-        getListAdapter().getItem(position);
+        FeedItem item = (FeedItem) getListAdapter().getItem(position);
+
+        Intent intent = new Intent(getActivity(), ChatList.class);
+        intent.putExtra("itemId", item.getPk());
+        startActivity(intent);
 
         if (mListener != null) {
             // Notify the active callbacks interface (the activity, if the

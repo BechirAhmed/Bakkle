@@ -43,7 +43,7 @@ public class ChatListAdapter extends ArrayAdapter<BuyerInfo> {
             viewHolder = new ViewHolder();
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.chat_list_item, parent, false);
             viewHolder.picture = (ImageView) convertView.findViewById(R.id.icon);
-            viewHolder.nameText = (TextView) convertView.findViewById(R.id.title);
+            viewHolder.nameText = (TextView) convertView.findViewById(R.id.buyer_name);
             convertView.setTag(viewHolder);
         }
         else {

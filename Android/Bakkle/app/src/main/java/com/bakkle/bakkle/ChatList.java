@@ -1,6 +1,7 @@
 package com.bakkle.bakkle;
 
 import android.app.ListActivity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -26,8 +27,10 @@ public class ChatList extends ListActivity {
         serverCalls = new ServerCalls(this);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         setContentView(R.layout.activity_chat_list);
-        json = serverCalls; //implement chat json call
-        buyerInfos = getItems(json);
+        //json = serverCalls; //implement chat json call
+        //buyerInfos = getItems(json);
+        buyerInfos = new ArrayList<>();
+        buyerInfos.add(new BuyerInfo("Vansh", "http://i.imgur.com/RotoKyk.jpg"));
         setListAdapter(new ChatListAdapter(this, buyerInfos));
     }
 
@@ -40,8 +43,10 @@ public class ChatList extends ListActivity {
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
 
-        getListAdapter().getItem(position);
-
+        BuyerInfo buyerInfo = (BuyerInfo) getListAdapter().getItem(position);
+        Intent intent = new Intent(this, Chat.class);
+        intent.putExtra("some form of id", "0"); //make sure to let the chat app window know if youre the buyer or seller somehow
+        startActivity(intent);
     }
 
     @Override
