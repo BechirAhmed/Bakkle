@@ -1,13 +1,13 @@
 from chat.models import Chat
-from account.models import Account
-from django.db.models import Q
 
 
-def getNumUnreadChatsForAccount(account):
+def getNumUnreadChatsForAccount(accountId):
 
-    chats = Chat.objects.filter(
-        Q(buyer__pk=account) |
-        Q(item__seller__pk=account)
-    ).filter(hasUnread=True)
+    buyerChats = Chat.objects.filter(
+        buyer__pk=accountId
+    ).filter(hasUnreadBuyer=True)
+    sellerChats = Chat.objects.filter(
+        item__seller__pk=accountId
+    ).filter(hasUnreadSeller=True)
 
-    return len(chats)
+    return len(buyerChats) + len(sellerChats)

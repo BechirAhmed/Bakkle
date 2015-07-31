@@ -399,6 +399,7 @@ def want(buyer_id, item_id, view_duration):
     except Items.DoesNotExist:
         return {"status":0, "error":"Item {} does not exist.".format(item_id)}
 
+
     if (buyer != item.seller):
         chat = Chat.objects.get_or_create(
             item = item,
@@ -427,8 +428,6 @@ def report(buyer_id, item_id, view_duration, message = None):
 
     item.times_reported = item.times_reported + 1
     item.save()
-
-    logging.info("Message: " + message)
     # send_mail('Item reported', 'Item has been reported by user ' + str(user.display_name), 'backend@app.bakkle.com', ['wongb@rose-hulman.edu'], fail_silently=False)
 
     return add_item_to_buyer_items(buyer_id, item_id, view_duration, BuyerItem.REPORT, message)
@@ -478,7 +477,9 @@ def get_seller_items(seller_id):
         number_of_report = 0
         number_of_holding = 0
         for buyer_item in item.buyeritem_set.all():
-            number_of_views = number_of_views + 1
+            if buyer_item.status != BuyerItem.MY_ITEM:
+                number_of_views = number_of_views + 1
+                
             if buyer_item.status == BuyerItem.MEH:
                 number_of_meh = number_of_meh + 1
             elif buyer_item.status == BuyerItem.REPORT:
@@ -627,8 +628,6 @@ def add_item_to_buyer_items(buyer_id, item_id, view_duration, status, message = 
     except ValueError:
         return { "status":0, "error": "View Duration was not a valid decimal." }
 
-
-    logging.info("Message: " + message)
     # get the item
     try:
         item = Items.objects.get(pk=item_id)
@@ -643,8 +642,6 @@ def add_item_to_buyer_items(buyer_id, item_id, view_duration, status, message = 
 
 
     try:
-
-        logging.info("Message: " + message)
 
         account = Account.objects.get(pk=buyer_id)
         # Create or update the buyer item
