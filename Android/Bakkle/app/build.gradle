@@ -18,6 +18,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    sourceSets { main { java.srcDirs = ['src/main/java', 'src/main/java/com/bakkle/bakkle/Chat'] } }
 }
 
 repositories {
@@ -28,6 +29,7 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:22.1.1'
     compile 'com.google.android.gms:play-services-location:7.5.0'
+    compile 'io.nlopez.smartlocation:library:3.0.11'
     compile 'com.facebook.android:facebook-android-sdk:4.1.0'
     compile project(':AndTinder')
     compile 'com.koushikdutta.ion:ion:2.+'
@@ -35,7 +37,6 @@ dependencies {
     compile 'com.android.support:support-v4:22.+'
     compile 'com.daimajia.swipelayout:library:1.2.0@aar'
     compile 'de.hdodenhof:circleimageview:1.2.1'
-    //compile 'com.android.support:multidex:1.0.0'
     compile('com.mikepenz:materialdrawer:3.1.2@aar') {
         transitive = true
     }

@@ -129,11 +129,12 @@ public class FeedFragment extends Fragment {
             for (JsonElement urlElement : imageUrlArray) {
                 imageUrls.add(urlElement.getAsString());
             }
+
             feedItem.setImageUrls(imageUrls);
 
 
             card = new CardModel(feedItem.getTitle(), feedItem.getSellerDisplayName(), "$" + feedItem.getPrice(),
-                    feedItem.getDistance(), feedItem.getMethod(), feedItem.getPk(), feedItem.getDescription(),
+                    feedItem.getDistance(preferences.getString("latitude", "0"), preferences.getString("longitude", "0")), feedItem.getMethod(), feedItem.getPk(), feedItem.getDescription(),
                     feedItem.getImageUrls(),
                     "http://graph.facebook.com/" + feedItem.getSellerFacebookId() + "/picture?type=square"/*, getCardImage(feedItem), getSellerImage(sellerFacebookId)*/);
 
@@ -178,7 +179,7 @@ public class FeedFragment extends Fragment {
 
                 @Override
                 public void onDown(CardModel cardModel) {
-                    Toast.makeText(getActivity(), "Comment", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Report", Toast.LENGTH_SHORT).show();
                     serverCalls.markItem("report",
                             preferences.getString("auth_token", "0"),
                             preferences.getString("uuid", "0"),
@@ -202,10 +203,11 @@ public class FeedFragment extends Fragment {
                     intent.putExtra("description", cardModel.getDescription());
                     intent.putExtra("pk", cardModel.getPk());
                     intent.putExtra("url1", cardModel.getCardImageURL());
-                    //intent.putStringArrayListExtra("imageUrls", cardModel.getImageURLs());
+                    intent.putStringArrayListExtra("imageURLs", cardModel.getImageURLs());
                     startActivity(intent);
 
-                    //TODO: bring up description page, with all pictures, description, etc
+                    //TODO: Load multiple pictures
+
                 }
             });
 
@@ -250,11 +252,13 @@ public class FeedFragment extends Fragment {
         }
         feedItem.setImageUrls(imageUrls);
 
+
+
         //mCardAdapter.add(feedItem);
         //mCardStack.setAdapter(mCardAdapter);
 
         card = new CardModel(feedItem.getTitle(), feedItem.getSellerDisplayName(), "$" + feedItem.getPrice(),
-                feedItem.getDistance(), feedItem.getMethod(), feedItem.getPk(), feedItem.getDescription(),
+                feedItem.getDistance(preferences.getString("latitude", "0"), preferences.getString("longitude", "0")), feedItem.getMethod(), feedItem.getPk(), feedItem.getDescription(),
                 feedItem.getImageUrls(),
                 "http://graph.facebook.com/" + feedItem.getSellerFacebookId() + "/picture?type=square"/*, getCardImage(feedItem), getSellerImage(sellerFacebookId)*/);
         card.setOnCardDismissedListener(new CardModel.OnCardDismissedListener() {
@@ -298,7 +302,7 @@ public class FeedFragment extends Fragment {
 
             @Override
             public void onDown(CardModel cardModel) {
-                Toast.makeText(getActivity(), "Comment", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Report", Toast.LENGTH_SHORT).show();
                 serverCalls.markItem("report",
                         preferences.getString("auth_token", "0"),
                         preferences.getString("uuid", "0"),
@@ -313,9 +317,20 @@ public class FeedFragment extends Fragment {
             public void OnClickListener(CardModel cardModel) {
                 //onCardSelected.OnCardSelected(feedItem);
                 //title, tags, img, method, price
+                Intent intent = new Intent(FeedFragment.this.getActivity(), ItemDetail.class);
+                intent.putExtra("title", cardModel.getTitle());
+                intent.putExtra("seller", cardModel.getSeller());
+                intent.putExtra("price", cardModel.getPrice());
+                intent.putExtra("distance", cardModel.getDistance());
+                intent.putExtra("sellerImageUrl", cardModel.getSellerImageURL());
+                intent.putExtra("description", cardModel.getDescription());
+                intent.putExtra("pk", cardModel.getPk());
+                intent.putExtra("url1", cardModel.getCardImageURL());
+                //intent.putStringArrayListExtra("imageUrls", cardModel.getImageURLs());
+                startActivity(intent);
 
+                //TODO: Load multiple pictures
 
-                //TODO: bring up description page, with all pictures, description, etc
             }
         });
 

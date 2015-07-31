@@ -73,7 +73,7 @@ public class TrunkAdapter extends ArrayAdapter<FeedItem>{
         viewHolder.title.setText(item.getTitle());
         viewHolder.method.setText(item.getMethod());
         viewHolder.tags.setText("Tags: " + item.getTagsString());
-        viewHolder.distance.setText(item.getDistance());
+        viewHolder.distance.setText(item.getDistance(preferences.getString("latitude", "0"), preferences.getString("longitude", "0")));
         viewHolder.price.setText("$" + item.getPrice());
         viewHolder.delete.setOnClickListener(new View.OnClickListener() {
             @Override

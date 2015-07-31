@@ -1,8 +1,10 @@
 package com.bakkle.bakkle;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.CountDownTimer;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,8 @@ import java.util.ArrayList;
  * Created by vanshgandhi on 6/26/15.
  */
 public class HoldingAdapter extends ArrayAdapter<FeedItem>{
+
+    SharedPreferences preferences;
 
     private static class ViewHolder{
         ImageView icon;
@@ -31,6 +35,7 @@ public class HoldingAdapter extends ArrayAdapter<FeedItem>{
     public HoldingAdapter(Context context, ArrayList<FeedItem> items){
         super(context, R.layout.buyers_trunk_list_item, items);
         asyncImageLoader = new AsyncImageLoader(context);
+        preferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     @Override
@@ -63,7 +68,7 @@ public class HoldingAdapter extends ArrayAdapter<FeedItem>{
         viewHolder.title.setText(item.getTitle());
         viewHolder.method.setText(item.getMethod());
         viewHolder.tags.setText("Tags: " + item.getTagsString());
-        viewHolder.distance.setText(item.getDistance());
+        viewHolder.distance.setText(item.getDistance(preferences.getString("latitude", "0"), preferences.getString("longitude", "0")));
         viewHolder.price.setText("$" + item.getPrice());
         new CountDownTimer(5400000, 1000){
             public void onTick(long millisUntilFinished){

@@ -12,6 +12,7 @@ import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.DragEvent;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.Gravity;
@@ -21,6 +22,7 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 
@@ -30,7 +32,7 @@ import com.andtinder.model.Orientations.Orientation;
 
 import java.util.Random;
 
-public class CardContainer extends AdapterView<ListAdapter> {
+public class CardContainer extends AdapterView<ListAdapter> implements View.OnDragListener{
     public static final int INVALID_POINTER_ID = -1;
     private int mActivePointerId = INVALID_POINTER_ID;
     private static final double DISORDERED_MAX_ROTATION_RADIANS = Math.PI / 64;
@@ -458,6 +460,12 @@ public class CardContainer extends AdapterView<ListAdapter> {
         mGravity = gravity;
     }
 
+    @Override
+    public boolean onDrag(View view, DragEvent dragEvent) {
+
+        return false;
+    }
+
     public static class LayoutParams extends ViewGroup.LayoutParams {
 
         int viewType;
@@ -483,12 +491,13 @@ public class CardContainer extends AdapterView<ListAdapter> {
     private class GestureListener extends SimpleOnGestureListener {
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            Log.d("Fling", "Fling with " + velocityX + ", " + velocityY);
             final View topCard = mTopCard;
             float dx = e2.getX() - e1.getX();
             float dy = e2.getY() - e1.getY();
-            if ((Math.abs(dx) > mTouchSlop || Math.abs(dy) > mTouchSlop) && //TODO: Maybe change the value mTouchSlop so that it doesnt fling as easily
-                    (Math.abs(velocityX) > mFlingSlop * 3 || Math.abs(velocityY) > mFlingSlop * 3))
+            Log.v("x and y are", mTopCard.getX() + ", " + mTopCard.getY());
+            if ((Math.abs(dx) > mTouchSlop * 4 || Math.abs(dy) > mTouchSlop * 4)  //TODO: Maybe change the value mTouchSlop so that it doesnt fling as easily
+                    && (Math.abs(mTopCard.getX()) > 350 || Math.abs(mTopCard.getY()) > 250)
+                    && (Math.abs(velocityX) > mFlingSlop * 3 || Math.abs(velocityY) > mFlingSlop * 3))
             {
                 float targetX = topCard.getX();
                 float targetY = topCard.getY();
@@ -526,14 +535,12 @@ public class CardContainer extends AdapterView<ListAdapter> {
                     else{
                         topCard.animate()
                                 .setDuration(duration)
-                                .setInterpolator(new AccelerateInterpolator())
+                                .setInterpolator(new DecelerateInterpolator())
                                 .translationX(0)
                                 .translationY(0)
                                 .rotation(0);
                         return true;
                     }
-                    Log.d("testing", "targetX is: " + targetX + " and targetY is: " + targetY);
-
                 }
 
                 topCard.animate()
