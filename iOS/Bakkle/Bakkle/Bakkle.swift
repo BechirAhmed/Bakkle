@@ -448,19 +448,25 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         task.resume()
     }
     
-    /* mark feed item 'status' as MEH/WANT/HOLD/REPORT */
-    func markItem(status: String, item_id: Int, success: ()->(), fail: ()->()) {
-        markItem(status, item_id: item_id, message: nil, success: {success()}, fail: {fail()})
-    }
-    
-    func markItem(status: String, item_id: Int,  message: String?, success: ()->(), fail: ()->()) {
+    /* mark feed item 'status' as MEH/WANT/HOLD/REPORT */    func markItem(status: String, item_id: Int,  message: String? = "", success: ()->(), fail: ()->()) {
         let url:NSURL? = NSURL(string: url_base + url_mark + "\(status)/")
         let request = NSMutableURLRequest(URL: url!)
         
         let view_duration = 42 //TODO: this needs to be accepted as a parm
         
         request.HTTPMethod = "POST"
-        let postString = "auth_token=\(self.auth_token)&device_uuid=\(self.deviceUUID)&item_id=\(item_id)&view_duration=\(view_duration)&report_message=\(message)"
+        
+        var postString : String
+        if(message != nil){
+            
+            postString = "auth_token=\(self.auth_token)&device_uuid=\(self.deviceUUID)&item_id=\(item_id)&view_duration=\(view_duration)&report_message=\(message!)"
+
+        }
+        else{
+            
+            postString = "auth_token=\(self.auth_token)&device_uuid=\(self.deviceUUID)&item_id=\(item_id)&view_duration=\(view_duration)"
+
+        }
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
         
         println("[Bakkle] markItem")
