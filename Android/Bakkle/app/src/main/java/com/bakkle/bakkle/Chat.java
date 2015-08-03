@@ -1,7 +1,9 @@
 package com.bakkle.bakkle;
 
+import android.content.SharedPreferences;
 import android.database.DataSetObserver;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -19,6 +21,10 @@ public class Chat extends AppCompatActivity {
     private EditText chatText;
     private Button send;
     private boolean left = false;
+    private String id;
+    private ServerCalls serverCalls;
+    private SharedPreferences preferences;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +35,9 @@ public class Chat extends AppCompatActivity {
         chatArrayAdapter = new ChatArrayAdapter(this, R.layout.right_message);
         listView.setAdapter(chatArrayAdapter);
         chatText = (EditText) findViewById(R.id.compose);
+        id = getIntent().getExtras().getString("id");
+        serverCalls = new ServerCalls(this);
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         getPreviousMessages();
 
@@ -64,6 +73,7 @@ public class Chat extends AppCompatActivity {
     }
 
     private boolean sendChatMessage(){
+        serverCalls.sendChat(preferences.getString("uuid", "0"), preferences.getString("auth_token", "0"), chatText.getText().toString(), id);
         chatArrayAdapter.add(new ChatMessage(left, chatText.getText().toString()));
         chatText.setText("");
         left = !left;
