@@ -28,6 +28,7 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var pageControl: UIPageControl!
     @IBOutlet weak var loadingView: UIView!
+    @IBOutlet weak var imageContainer: UIView!
     
     
     @IBOutlet weak var wantBtn: UIButton!
@@ -52,34 +53,19 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
         setupButtons()
     }
     
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        let sellerProfile: NSDictionary = item!.valueForKey("seller") as! NSDictionary
-        let sellerFBID: String = sellerProfile.valueForKey("facebook_id") as! String
-        let sellerFacebookProfileImgString = "http://graph.facebook.com/\(sellerFBID)/picture?width=142&height=142"
-        let profileImageURL = NSURL(string: sellerFacebookProfileImgString)
-        println("FACEBOOK PROFILE LINK IS: \(sellerFacebookProfileImgString)")
-        sellerAvatar.image = UIImage(data: NSData(contentsOfURL: profileImageURL!)!)
-        sellerAvatar.layer.borderWidth = 2.0
-        sellerAvatar.layer.borderColor = UIColor.whiteColor().CGColor
-        sellerAvatar.layer.cornerRadius = sellerAvatar.layer.frame.size.width / 2
-        sellerAvatar.layer.masksToBounds = true
-    }
-    
-    func setupButtons() {
-        closeBtn.setImage(IconImage().close(), forState: .Normal)
-        closeBtn.setTitle("", forState: .Normal)
-        
-        if !available {
-            wantBtn.enabled = available
-            wantBtn.backgroundColor = UIColor.lightGrayColor()
-        }
-    }
-    
     override func viewWillAppear(animated: Bool) {
         //TODO: This needs to load the item SENT to the view controller, not the top feed item.
         super.viewWillAppear(true)
+        
+        let model = UIDevice.currentDevice().model
+        if model == "iPad" {
+            imageContainer.addConstraint(NSLayoutConstraint(item: imageContainer, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: imageContainer, attribute: NSLayoutAttribute.Height, multiplier: 3/2, constant: 0.0))
+            self.collectionView.pagingEnabled = false
+        }else{
+            imageContainer.addConstraint(NSLayoutConstraint(item: imageContainer, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: imageContainer, attribute: NSLayoutAttribute.Height, multiplier: 1.0, constant: 0.0))
+        }
+        
+        
         if let index = Bakkle.sharedInstance.trunkItems {
             if (Bakkle.sharedInstance.trunkItems.count != 0) {
                 for index in 0...Bakkle.sharedInstance.trunkItems.count-1 {
@@ -138,9 +124,34 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
                     self.collectionView.insertItemsAtIndexPaths([index])
                 }
             }
-
+            
         }
         
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        let sellerProfile: NSDictionary = item!.valueForKey("seller") as! NSDictionary
+        let sellerFBID: String = sellerProfile.valueForKey("facebook_id") as! String
+        let sellerFacebookProfileImgString = "http://graph.facebook.com/\(sellerFBID)/picture?width=142&height=142"
+        let profileImageURL = NSURL(string: sellerFacebookProfileImgString)
+        println("FACEBOOK PROFILE LINK IS: \(sellerFacebookProfileImgString)")
+        sellerAvatar.image = UIImage(data: NSData(contentsOfURL: profileImageURL!)!)
+        sellerAvatar.layer.borderWidth = 2.0
+        sellerAvatar.layer.borderColor = UIColor.whiteColor().CGColor
+        sellerAvatar.layer.cornerRadius = sellerAvatar.layer.frame.size.width / 2
+        sellerAvatar.layer.masksToBounds = true
+    }
+    
+    func setupButtons() {
+        closeBtn.setImage(IconImage().close(), forState: .Normal)
+        closeBtn.setTitle("", forState: .Normal)
+        
+        if !available {
+            wantBtn.enabled = available
+            wantBtn.backgroundColor = UIColor.lightGrayColor()
+        }
     }
     
     @IBAction func wantBtn(sender: AnyObject) {
@@ -199,7 +210,12 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
     func collectionView(collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
         minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
-            return 0
+            let model = UIDevice.currentDevice().model
+            if model == "iPad" {
+                return 2
+            }else{
+                return 0
+            }
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
