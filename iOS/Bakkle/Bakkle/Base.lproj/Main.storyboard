@@ -293,18 +293,18 @@
                                 <constraints>
                                     <constraint firstAttribute="centerX" secondItem="gXy-mo-Jm8" secondAttribute="centerX" id="CY5-4l-SGX"/>
                                     <constraint firstAttribute="trailing" secondItem="TvW-JJ-Vqb" secondAttribute="trailing" constant="8" id="E6s-0F-7a8">
-                                        <variation key="heightClass=regular-widthClass=compact" constant="16"/>
+                                        <variation key="heightClass=regular-widthClass=compact" constant="15"/>
                                     </constraint>
                                     <constraint firstItem="TvW-JJ-Vqb" firstAttribute="leading" secondItem="XOT-Mj-wul" secondAttribute="leading" constant="8" id="Pfa-Av-az9">
-                                        <variation key="heightClass=regular-widthClass=compact" constant="16"/>
+                                        <variation key="heightClass=regular-widthClass=compact" constant="15"/>
                                     </constraint>
                                     <constraint firstItem="TvW-JJ-Vqb" firstAttribute="top" secondItem="XOT-Mj-wul" secondAttribute="top" constant="8" id="Xnm-HZ-6iD">
-                                        <variation key="heightClass=regular-widthClass=compact" constant="25"/>
+                                        <variation key="heightClass=regular-widthClass=compact" constant="15"/>
                                     </constraint>
                                     <constraint firstAttribute="centerX" secondItem="t37-H0-tA2" secondAttribute="centerX" id="Y37-My-uTT"/>
                                     <constraint firstAttribute="centerY" secondItem="t37-H0-tA2" secondAttribute="centerY" id="aLY-W5-gOJ"/>
                                     <constraint firstAttribute="bottom" secondItem="TvW-JJ-Vqb" secondAttribute="bottom" constant="44" id="p05-eO-z44">
-                                        <variation key="heightClass=regular-widthClass=compact" constant="25"/>
+                                        <variation key="heightClass=regular-widthClass=compact" constant="20"/>
                                     </constraint>
                                     <constraint firstAttribute="centerY" secondItem="gXy-mo-Jm8" secondAttribute="centerY" id="pSg-JS-mhC"/>
                                 </constraints>
@@ -689,6 +689,7 @@
                                 <subviews>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="VKL-bg-bJT">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="chY-Yr-5fa">
                                             <size key="itemSize" width="375" height="375"/>
                                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -755,7 +756,7 @@
                                 <constraints>
                                     <constraint firstItem="VKL-bg-bJT" firstAttribute="leading" secondItem="eb5-ux-7Vh" secondAttribute="leading" id="34j-5d-lsf"/>
                                     <constraint firstAttribute="bottom" secondItem="Zpk-N0-i3M" secondAttribute="bottom" constant="8" id="5os-JL-4t6"/>
-                                    <constraint firstAttribute="width" secondItem="eb5-ux-7Vh" secondAttribute="height" multiplier="1:1" id="8Cg-du-9Md"/>
+                                    <constraint firstAttribute="width" secondItem="eb5-ux-7Vh" secondAttribute="height" multiplier="1:1" placeholder="YES" id="8Cg-du-9Md"/>
                                     <constraint firstAttribute="bottom" secondItem="VKL-bg-bJT" secondAttribute="bottom" id="M89-GP-bqU"/>
                                     <constraint firstItem="VKL-bg-bJT" firstAttribute="top" secondItem="eb5-ux-7Vh" secondAttribute="top" id="X4C-gn-BHE"/>
                                     <constraint firstAttribute="trailing" secondItem="VKL-bg-bJT" secondAttribute="trailing" id="myO-7B-1qm"/>
@@ -1118,6 +1119,7 @@
                         <outlet property="closeBtn" destination="rHb-57-fRi" id="TU2-xm-Dz6"/>
                         <outlet property="collectionView" destination="VKL-bg-bJT" id="Yc7-xn-1gB"/>
                         <outlet property="detailBugHack" destination="xJ1-PN-RFp" id="1au-hr-k8E"/>
+                        <outlet property="imageContainer" destination="eb5-ux-7Vh" id="UMT-wH-Q1l"/>
                         <outlet property="itemDistanceLabel" destination="eFc-bD-LXQ" id="HMk-ww-zXK"/>
                         <outlet property="itemPriceLabel" destination="MQo-Ae-Dt8" id="ewC-Sb-8Xy"/>
                         <outlet property="itemTagsTextView" destination="28X-N0-gRm" id="5Oi-V8-C31"/>

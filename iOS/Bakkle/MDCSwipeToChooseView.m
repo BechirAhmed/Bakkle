@@ -49,11 +49,12 @@ static CGFloat const MDCSwipeToChooseViewLabelHeight = 65.f;
 
 
 - (instancetype)initWithFrame:(CGRect)frame
-                      options:(MDCSwipeToChooseViewOptions *)options tutorial:(BOOL)tutorial goodwill:(BOOL)goodwill {
+                      options:(MDCSwipeToChooseViewOptions *)options tutorial:(BOOL)tutorial goodwill:(BOOL)goodwill ipad:(BOOL)ipad{
     
     self = [super initWithFrame: frame];
     if (self) {
         _options = options ? options : [MDCSwipeToChooseViewOptions new];
+        self.ipad = ipad;
         self.tutorial = tutorial;
         [self setupView];
         [self constructBlurBackground];
@@ -114,7 +115,11 @@ static CGFloat const MDCSwipeToChooseViewLabelHeight = 65.f;
 }
 
 - (void)constructImageView {
-    _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, (self.bounds.size.height - self.bounds.size.width)/2, self.bounds.size.width, self.bounds.size.width)];
+    CGFloat yCoordinate = 0;
+    if (!_ipad) {
+        yCoordinate = (self.bounds.size.height - self.bounds.size.width)/2;
+    }
+    _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, yCoordinate, self.bounds.size.width, self.bounds.size.width)];
     [_imageView setContentMode:UIViewContentModeScaleAspectFill];
     _imageView.clipsToBounds = YES;
     [self addSubview:_imageView];
@@ -128,7 +133,10 @@ static CGFloat const MDCSwipeToChooseViewLabelHeight = 65.f;
 }
 
 - (void)constructInformationView {
-    CGFloat bottomHeight = (self.bounds.size.height - self.bounds.size.width)/2;
+    CGFloat bottomHeight = self.bounds.size.height - self.bounds.size.width;
+    if (!_ipad){
+        bottomHeight = (self.bounds.size.height - self.bounds.size.width)/2;
+    }
     CGRect bottomFrame = CGRectMake(0,
                                     CGRectGetHeight(self.bounds) - bottomHeight,
                                     CGRectGetWidth(self.bounds),
@@ -148,7 +156,11 @@ static CGFloat const MDCSwipeToChooseViewLabelHeight = 65.f;
 }
 
 -(void)constructTopUserInfoView {
-    CGFloat topHeight = (self.bounds.size.height - self.bounds.size.width)/2;
+    CGFloat topHeight = 0;
+    if (!_ipad){
+        topHeight = (self.bounds.size.height - self.bounds.size.width)/2;
+    }
+    
     CGRect topFrame = CGRectMake(0, 0, CGRectGetWidth(self.bounds), topHeight);
     _topUserInfoView = [[UIView alloc] initWithFrame:topFrame];
     _topUserInfoView.backgroundColor = [UIColor clearColor];

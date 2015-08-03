@@ -32,6 +32,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     
     var itemDetailTap: UITapGestureRecognizer!
     var item_id = 42 //TODO: unhardcode this
+    var model: String = ""
     
     @IBOutlet weak var menuBtn: UIButton!
     @IBOutlet weak var noNewItemsLabel: UILabel!
@@ -48,6 +49,8 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        model = UIDevice.currentDevice().model
         
         if(Bakkle.sharedInstance.flavor == Bakkle.GOODWILL){
             self.view.backgroundColor = Bakkle.sharedInstance.theme_base
@@ -270,14 +273,14 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                     self.swipeView = nil
                 }
                 var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
-                self.swipeView = MDCSwipeToChooseView(frame: CGRectMake(drawer.frame.origin.x, drawer.frame.origin.y+drawer.superview!.frame.origin.y, drawer.frame.size.width, drawer.frame.size.height), options: options, tutorial: userDefaults.boolForKey("instruction"), goodwill: Bakkle.sharedInstance.flavor == Bakkle.GOODWILL)
+                self.swipeView = MDCSwipeToChooseView(frame: CGRectMake(drawer.frame.origin.x, drawer.frame.origin.y+drawer.superview!.frame.origin.y, drawer.frame.size.width, drawer.frame.size.height), options: options, tutorial: userDefaults.boolForKey("instruction"), goodwill: Bakkle.sharedInstance.flavor == Bakkle.GOODWILL, ipad: model == "iPad")
                 self.swipeView.addGestureRecognizer(itemDetailTap)
                 if Bakkle.sharedInstance.feedItems.count > 1 {
                     if self.bottomView != nil {
                         self.bottomView.removeFromSuperview()
                         self.bottomView = nil
                     }
-                    self.bottomView = MDCSwipeToChooseView(frame: self.swipeView.frame, options: nil, tutorial: false, goodwill: Bakkle.sharedInstance.flavor == Bakkle.GOODWILL)
+                    self.bottomView = MDCSwipeToChooseView(frame: self.swipeView.frame, options: nil, tutorial: false, goodwill: Bakkle.sharedInstance.flavor == Bakkle.GOODWILL, ipad: model == "iPad")
                     self.view.insertSubview(self.bottomView, belowSubview: self.swipeView)
                 }
         }
@@ -296,7 +299,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             self.swipeView = self.bottomView
             
             //create new bottomView
-            self.bottomView = MDCSwipeToChooseView(frame: self.swipeView.frame, options: nil, tutorial: false, goodwill: Bakkle.sharedInstance.flavor == Bakkle.GOODWILL)
+            self.bottomView = MDCSwipeToChooseView(frame: self.swipeView.frame, options: nil, tutorial: false, goodwill: Bakkle.sharedInstance.flavor == Bakkle.GOODWILL, ipad: model == "iPad")
             
             //add gesture recognizer to top view (swipeView)
             self.swipeView.addGestureRecognizer(itemDetailTap)

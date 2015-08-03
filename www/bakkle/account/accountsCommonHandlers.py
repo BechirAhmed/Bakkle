@@ -10,6 +10,7 @@ from django.template import RequestContext, loader
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_POST
+from django.db.models import Q
 from decimal import *
 
 from .models import Account, Device
@@ -301,6 +302,12 @@ def device_register(ip, uuid, user, location, app_version):
 
 @time_method
 def device_register_push(account_id, device_uuid, device_token, client_ip):
+
+    prevDevices = Device.objects.filter(Q(uuid=device_uuid) | Q(apns_token=device_token))
+
+    for device in prevDevices:
+        device.apns_token = ""
+        device.save()
 
     try:
         account = Account.objects.get(pk=account_id)

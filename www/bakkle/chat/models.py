@@ -9,6 +9,8 @@ class Chat(models.Model):
     buyer = models.ForeignKey(Account)
     start_date = models.DateTimeField(auto_now_add=True)
     closed = models.BooleanField(default = False)
+    hasUnreadBuyer = models.BooleanField(default = False)
+    hasUnreadSeller = models.BooleanField(default = False)
 
     class Meta:
         unique_together = ("item", "buyer")
@@ -20,6 +22,8 @@ class Chat(models.Model):
             'buyer': self.buyer.toDictionary(),
             'seller': self.item.seller.toDictionary(),
             'closed': self.closed,
+            'hasUnreadBuyer': self.hasUnreadBuyer,
+            'hasUnreadSeller': self.hasUnreadSeller,
             # 'last_message' : self.last_message.toDictionary(),
             'start_date': self.start_date.strftime('%Y-%m-%d %H:%M:%S') }
 

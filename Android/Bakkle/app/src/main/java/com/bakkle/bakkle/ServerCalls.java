@@ -17,15 +17,14 @@ import java.util.ArrayList;
  */
 public class ServerCalls{
 
-    double apiVersion = 1.2;
-    final static String url_base                 = "https://bakkle.rhventures.org/";
-//    final static String url_base                 = "https://app.bakkle.com/";
+//    final static String url_base                 = "https://bakkle.rhventures.org/";
+    final static String url_base                 = "https://app.bakkle.com/";
     final static String url_login                = "account/login_facebook/";
     final static String url_logout               = "account/logout/";
     final static String url_facebook             = "account/facebook/";
     final static String url_register_push        = "account/device/register_push/";
     final static String url_reset                = "items/reset/";
-    final static String url_mark                 = "items/"; //+status/
+    final static String url_mark                 = "items/";
     final static String url_feed                 = "items/feed/";
     final static String url_garage               = "items/get_seller_items/";
     final static String url_add_item             = "items/add_item/";
@@ -235,6 +234,8 @@ public class ServerCalls{
                             else{
                                 jsonResponse = null;
                                 Log.v("testing error 00", "json was null (there was an exception)");
+                                Log.v("test", e.getMessage());
+                                Log.v("test", e.getStackTrace()[0].toString());
 
                             }
                         }

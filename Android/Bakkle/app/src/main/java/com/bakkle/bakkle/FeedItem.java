@@ -2,6 +2,7 @@ package com.bakkle.bakkle;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.location.Location;
 import android.util.Log;
 
 import com.google.gson.JsonObject;
@@ -203,9 +204,30 @@ public class FeedItem {
         this.numView = numView;
     }
 
-    public String getDistance(){
+    public String getDistance(String latitude, String longitude){
         //TODO: Use location services to figure out how far away item actually is
-        return "10 mi";
+        Location location1 = new Location("user location");
+        location1.setLatitude(Double.parseDouble(latitude));
+        location1.setLongitude(Double.parseDouble(longitude));
+
+        String[] latlong = location.split(",");
+
+        Location location2 = new Location("item location");
+        location2.setLatitude(Double.parseDouble(latlong[0]));
+        location2.setLongitude(Double.parseDouble(latlong[1]));
+
+        return String.valueOf(round(location1.distanceTo(location2) * 0.00062137)) + " miles";
+    }
+
+    private int round(double d){
+        double dAbs = Math.abs(d);
+        int i = (int) dAbs;
+        double result = dAbs - (double) i;
+        if(result<0.5){
+            return d<0 ? -i : i;
+        }else{
+            return d<0 ? -(i+1) : i+1;
+        }
     }
 
     public Bitmap getFirstImage()

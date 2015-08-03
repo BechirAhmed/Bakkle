@@ -17,7 +17,7 @@ import base64
 import random
 #import Image
 
-server_id = 0  # SET to change server
+server_id = 1  # SET to change server
 image_width = 660
 image_height = image_width
 
@@ -148,7 +148,7 @@ q.join()       # block until all tasks are done
 class Bakkle():
 
     def __init__(self):
-        self.location = "39.8661123,-86.1239327"
+        self.location = "39.97,-86.12"
         self.user_id = 0
         self.auth_token = None
         self.device_uuid = 42
