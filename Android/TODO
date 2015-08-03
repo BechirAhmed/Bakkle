@@ -1,8 +1,5 @@
-Make server calls asynchronously
-Get location
-Require location services to be enabled when first using the app
-Don't allow use of app unless location is enabled
 Fix Sellers garage bug of list items cutting off
+" " same with buyer's trunk
 Display total number on top of picture in sellers garage
 blur on the cards
 Fix image upload

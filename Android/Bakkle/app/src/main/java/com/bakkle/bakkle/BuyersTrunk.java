@@ -127,7 +127,7 @@ public class BuyersTrunk extends ListFragment{
 
         FeedItem item = (FeedItem) getListAdapter().getItem(position);
         Intent intent = new Intent(getActivity(), Chat.class);
-        intent.putExtra("some form of id", "0"); //make sure to let the chat app window know if youre the buyer or seller somehow
+        intent.putExtra("id", item.getPk()); //make sure to let the chat app window know if youre the buyer or seller somehow
         startActivity(intent);
 
 
