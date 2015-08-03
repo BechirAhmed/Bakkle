@@ -22,6 +22,7 @@
 		1B56D5D41B30709F009D81C6 /* UIDevice+ModelName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B56D5D31B30709F009D81C6 /* UIDevice+ModelName.swift */; };
 		1B754B251B4D4D960002C41D /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B754B241B4D4D960002C41D /* CameraView.swift */; };
 		1B876B161B57F65C00D79D82 /* camera-remove.png in Resources */ = {isa = PBXBuildFile; fileRef = 1B876B151B57F65C00D79D82 /* camera-remove.png */; };
+		1B99FD991B6C02E300D2D441 /* EmailRequiredView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B99FD981B6C02E300D2D441 /* EmailRequiredView.swift */; };
 		1BE43B5C1B6A9AEF00A6E6F8 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BE43B5B1B6A9AEF00A6E6F8 /* CoreLocation.framework */; };
 		1BE43B5D1B6A9AF800A6E6F8 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BE43B5B1B6A9AEF00A6E6F8 /* CoreLocation.framework */; };
 		1BF7D3631B592D7800EC7789 /* FocusIndicator.png in Resources */ = {isa = PBXBuildFile; fileRef = 1BF7D3611B592D7800EC7789 /* FocusIndicator.png */; };
@@ -386,6 +387,7 @@
 		1B56D5D31B30709F009D81C6 /* UIDevice+ModelName.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIDevice+ModelName.swift"; sourceTree = "<group>"; };
 		1B754B241B4D4D960002C41D /* CameraView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
 		1B876B151B57F65C00D79D82 /* camera-remove.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera-remove.png"; sourceTree = "<group>"; };
+		1B99FD981B6C02E300D2D441 /* EmailRequiredView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailRequiredView.swift; sourceTree = "<group>"; };
 		1BE43B5B1B6A9AEF00A6E6F8 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		1BF7D3611B592D7800EC7789 /* FocusIndicator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = FocusIndicator.png; sourceTree = "<group>"; };
 		1BF7D3621B592D7800EC7789 /* ios-flash-on-white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ios-flash-on-white.png"; sourceTree = "<group>"; };
@@ -846,6 +848,7 @@
 				72B5D8041B41E12D00E4B6EA /* BuyItemView.swift */,
 				72B5D8081B42DF7300E4B6EA /* RateUserView.swift */,
 				1B754B241B4D4D960002C41D /* CameraView.swift */,
+				1B99FD981B6C02E300D2D441 /* EmailRequiredView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1541,6 +1544,7 @@
 			files = (
 				5EE2C9B71AB9F0FB0031D8CD /* MDCPanState.m in Sources */,
 				A058A2AB1AFD8EAD005E7432 /* UIImage+Resize.swift in Sources */,
+				1B99FD991B6C02E300D2D441 /* EmailRequiredView.swift in Sources */,
 				A08D53CB1B0815CB000C406C /* ChatCell.swift in Sources */,
 				602C38F81B3C9105005CB493 /* PNColor.m in Sources */,
 				5EBDD6931AB211E600C7FBE7 /* LoginView.swift in Sources */,

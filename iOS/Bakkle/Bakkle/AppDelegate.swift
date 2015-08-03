@@ -18,6 +18,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
+    override class func initialize () {
+        FBSDKLoginButton.initialize()
+        FBSDKProfilePictureView.initialize()
+        FBSDKSendButton.initialize()
+        FBSDKShareButton.initialize()    }
+    
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         
@@ -27,7 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         UIApplication.sharedApplication().statusBarStyle = .LightContent
         
-        return true
+        return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
     }
     
     func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject?) -> Bool {
@@ -43,7 +49,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //            // pass profileID to profile view controller
 //            [profileViewController loadProfile:profileID];
         
-        return true
+        return FBSDKApplicationDelegate.sharedInstance().application(application, openURL: url, sourceApplication: sourceApplication, annotation: annotation)
     }
 
     func applicationWillResignActive(application: UIApplication) {
@@ -80,7 +86,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidBecomeActive(application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         
-//        FBAppEvents.activateApp();
+        FBSDKAppEvents.activateApp()
         
         Bakkle.sharedInstance.setServer() //Settings may have changed
         //Bakkle.sharedInstance.refresh()

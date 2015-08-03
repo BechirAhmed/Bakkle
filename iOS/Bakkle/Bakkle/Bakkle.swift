@@ -64,7 +64,6 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     
     var account_id: Int! = 0
     var auth_token: String!
-    var display_name: String!
     var email: String!
     var facebook_id: Int!
     var facebook_id_str: String!
@@ -296,8 +295,8 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
 
     
     /* register and login using facebook */
-    func facebook(email: String, gender: String, username: String,
-        name: String, userid: String, locale: String, first_name: String, last_name: String, success: ()->()) {
+    func facebook(email: String, gender: String,
+        name: String, userid: String, first_name: String, last_name: String, success: ()->()) {
         let url:NSURL? = NSURL(string: url_base + url_facebook)
         let request = NSMutableURLRequest(URL: url!)
         
@@ -305,7 +304,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         self.facebook_id = userid.toInt()
             
         request.HTTPMethod = "POST"
-        let postString = "email=\(email)&name=\(name)&user_name=\(username)&gender=\(gender)&user_id=\(userid)&locale=\(locale)&first_name=\(first_name)&last_name=\(last_name)&device_uuid=\(self.deviceUUID)&flavor=\(self.flavor)"
+        let postString = "email=\(email)&name=\(name)&gender=\(gender)&user_id=\(userid)&first_name=\(first_name)&last_name=\(last_name)&device_uuid=\(self.deviceUUID)&flavor=\(self.flavor)"
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
         
         info("facebook")
@@ -329,7 +328,6 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                 var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &error) as! NSDictionary
                 
                 if responseDict.valueForKey("status")?.integerValue == 1 {
-                    self.display_name = username
                     self.email = email
                     self.first_name = first_name
                     self.last_name = last_name
