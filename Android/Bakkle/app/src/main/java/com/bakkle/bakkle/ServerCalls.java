@@ -214,7 +214,6 @@ public class ServerCalls{
     }
 
     public void markItem(String status, String authToken, String uuid, String item_id, String viewDuration){
-//TODO: defintely make these Async as soon as possible
             Ion.with(mContext)
                     .load(url_base + url_mark + status + "/")
                     .setBodyParameter("auth_token", authToken)
@@ -301,7 +300,21 @@ public class ServerCalls{
 
     }
 
-    public void sendChat(){
+    public void sendChat(String uuid, String authToken, String message, String id){
+
+        Ion.with(mContext)
+                .load(url_base + url_send_chat)
+                .setBodyParameter("device_uuid", uuid)
+                .setBodyParameter("auth_token", authToken)
+                .setBodyParameter("message", message)
+                .setBodyParameter("conversation_id", id)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        Log.v("test", e.getMessage());
+                    }
+                });
 
     }
 
