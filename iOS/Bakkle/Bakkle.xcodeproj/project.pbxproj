@@ -27,6 +27,7 @@
 		1BE43B5D1B6A9AF800A6E6F8 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BE43B5B1B6A9AEF00A6E6F8 /* CoreLocation.framework */; };
 		1BF7D3631B592D7800EC7789 /* FocusIndicator.png in Resources */ = {isa = PBXBuildFile; fileRef = 1BF7D3611B592D7800EC7789 /* FocusIndicator.png */; };
 		1BF7D3641B592D7800EC7789 /* ios-flash-on-white.png in Resources */ = {isa = PBXBuildFile; fileRef = 1BF7D3621B592D7800EC7789 /* ios-flash-on-white.png */; };
+		1BF96FDA1B71537600588A9C /* EmailRequiredView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B99FD981B6C02E300D2D441 /* EmailRequiredView.swift */; };
 		1BFAEC661B6659FF00E264A9 /* Goodwill Logo-White.png in Resources */ = {isa = PBXBuildFile; fileRef = 1BFAEC651B6659FF00E264A9 /* Goodwill Logo-White.png */; };
 		5E023F861AD592B80002AFBC /* btn-addItem.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E023F851AD592B80002AFBC /* btn-addItem.png */; };
 		5E023F881AD59F200002AFBC /* logo-white-design-png-transp-100.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E023F871AD59F200002AFBC /* logo-white-design-png-transp-100.png */; };
@@ -1626,6 +1627,7 @@
 			files = (
 				A0E1EB4B1B2B5B2200662C08 /* MDCPanState.m in Sources */,
 				A0E1EB4C1B2B5B2200662C08 /* UIImage+Resize.swift in Sources */,
+				1BF96FDA1B71537600588A9C /* EmailRequiredView.swift in Sources */,
 				A0E1EB4D1B2B5B2200662C08 /* ChatCell.swift in Sources */,
 				A0E1EB4F1B2B5B2200662C08 /* LoginView.swift in Sources */,
 				A0E1EB501B2B5B2200662C08 /* FeedView.swift in Sources */,
