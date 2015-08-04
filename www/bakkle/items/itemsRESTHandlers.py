@@ -6,6 +6,8 @@ from tornado.web import asynchronous
 
 import itemsCommonHandlers
 
+from tornado import web
+
 
 class indexHandler(bakkleRequestHandler):
 
@@ -23,6 +25,24 @@ class indexHandler(bakkleRequestHandler):
                     item_list=item_list
                     )
         return
+
+
+class spamIndexHandler(bakkleRequestHandler):
+
+    @asynchronous
+    def get(self):
+        self.asyncHelper()
+
+    @run_async
+    def asyncHelper(self):
+        item_list = itemsCommonHandlers.spam_index()
+
+        self.render('templates/items/spam_index.html',
+                    title="spam items",
+                    item_list=item_list
+                    )
+        return
+
 
 class itemDetailHandler(bakkleRequestHandler):
 
@@ -42,7 +62,8 @@ class itemDetailHandler(bakkleRequestHandler):
                     )
         return
 
-class markDeletedHandler(bakkleRequestHandler):
+
+class itemPublicDetailHandler(bakkleRequestHandler):
 
     @asynchronous
     def get(self, item_id):
@@ -51,13 +72,33 @@ class markDeletedHandler(bakkleRequestHandler):
     @run_async
     def asyncHelper(self, item_id):
 
-        item_list = itemsCommonHandlers.mark_as_deleted(item_id)
+        context = itemsCommonHandlers.item_detail(item_id)
+
+        self.render('templates/items/public_detail.html',
+                    title="items",
+                    item=context['item'],
+                    urls=context['urls']
+                    )
+        return
+
+
+class markDeletedHandler(bakkleRequestHandler):
+
+    @asynchronous
+    def get(self, item_id, fromSpam):
+        self.asyncHelper(item_id, fromSpam)
+
+    @run_async
+    def asyncHelper(self, item_id, fromSpam):
+
+        item_list = itemsCommonHandlers.mark_as_deleted(item_id, False)
 
         self.render('templates/items/index.html',
                     title="items",
                     item_list=item_list
                     )
         return
+
 
 class markSpamHandler(bakkleRequestHandler):
 
@@ -68,7 +109,7 @@ class markSpamHandler(bakkleRequestHandler):
     @run_async
     def asyncHelper(self, item_id):
 
-        item_list = itemsCommonHandlers.mark_as_spam(item_id)
+        item_list = itemsCommonHandlers.mark_as_spam(item_id, False)
 
         self.render('templates/items/index.html',
                     title="items",
@@ -76,22 +117,41 @@ class markSpamHandler(bakkleRequestHandler):
                     )
         return
 
-class testHandler(bakkleRequestHandler):
 
-    # @asynchronous
-    def get(self, param1):
-        self.write(param1)
+class markDeletedHandlerFromSpam(bakkleRequestHandler):
 
-    # @run_async
-    # def asyncHelper(self):
+    @asynchronous
+    def get(self, item_id):
+        self.asyncHelper(item_id)
 
-    #     item_list = itemsCommonHandlers.index()
+    @run_async
+    def asyncHelper(self, item_id):
 
-    #     self.render('templates/items/index.html',
-    #                 title="items",
-    #                 item_list=item_list
-    #                 )
-    #     return
+        item_list = itemsCommonHandlers.mark_as_deleted(item_id, True)
+
+        self.render('templates/items/spam_index.html',
+                    title="items",
+                    item_list=item_list
+                    )
+        return
+
+
+class markSpamHandlerFromSpam(bakkleRequestHandler):
+
+    @asynchronous
+    def get(self, item_id):
+        self.asyncHelper(item_id)
+
+    @run_async
+    def asyncHelper(self, item_id):
+
+        item_list = itemsCommonHandlers.mark_as_spam(item_id, True)
+
+        self.render('templates/items/spam_index.html',
+                    title="items",
+                    item_list=item_list
+                    )
+        return
 
 
 class addItemHandler(bakkleRequestHandler):
@@ -408,6 +468,7 @@ class reportHandler(bakkleRequestHandler):
 
             buyer_id = self.getUser()
             item_id = self.getArgument('item_id')
+            report_message = self.getArgument('report_message', "")
             view_duration = self.getArgument('view_duration', 0)
         except QueryArgumentError as error:
             self.writeJSON({"status": 0, "message": error.message})
@@ -416,7 +477,8 @@ class reportHandler(bakkleRequestHandler):
 
         self.writeJSON(itemsCommonHandlers.report(buyer_id,
                                                   item_id,
-                                                  view_duration))
+                                                  view_duration,
+                                                  report_message))
         self.finish()
 
 
