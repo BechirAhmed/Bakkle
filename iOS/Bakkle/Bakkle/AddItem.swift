@@ -364,20 +364,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
      */
     func trimString(str: String) -> (String) {
         return str.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-    }
-    
-    
-    /* FACEBOOK */
-    func postOnWall() {
-//        var conn: FBRequestConnection = FBRequestConnection()
-//        var handler: FBRequestHandler = conn
-        
-        var postString: String = "\(titleField.text) \(descriptionField.text))"
-
-       // if FBSession
-        
-    }
-    
+    }    
     
     /**
     * collectionView delegate and collectionView data source

@@ -8,7 +8,6 @@
 
 import UIKit
 
-import Bolts
 import FBSDKCoreKit
 import FBSDKLoginKit
 import FBSDKShareKit
