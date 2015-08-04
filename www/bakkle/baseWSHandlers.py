@@ -56,16 +56,8 @@ class BaseWSHandler(websocket.WebSocketHandler):
         return self.write_message(json.dumps({'success': 1, 'message': 'Welcome'}))  
 
     #on receipt of message, respond accordingly.
-    # Example Request: 
-    # {"method": "registerChat", "auth_token": "asdfasdfasdfasdf_2", "uuid": "E6264D84-C395-4132-8C63-3EF051480191"}
-    # {"method": "registerChat", "auth_token": "4c708bda45351147d32b5c3f541b76ba_3", "uuid": "81FEEEDD-C99C-4E50-B671-4302F146441B"}
-    #
-    # {"method": "startChat", "auth_token": "4c708bda45351147d32b5c3f541b76ba_3", "uuid": "81FEEEDD-C99C-4E50-B671-4302F146441B", "itemId": 12}
-    # {"method": "sendChatMessage", "chatId": _____, "auth_token": "asdfasdfasdfasdf_2", "uuid": "E6264D84-C395-4132-8C63-3EF051480191", "message": "test"}
-    # {"method": "sendChatMessage", "chatId": _____, "auth_token": "4c708bda45351147d32b5c3f541b76ba_3", "uuid": "81FEEEDD-C99C-4E50-B671-4302F146441B", "message": "test2"}
     def on_message(self, message):
         # parse json message, throw error if invalid JSON
-        # print("Received message: " + str(message));
         try:
             request = json.loads(message);
         except ValueError:
