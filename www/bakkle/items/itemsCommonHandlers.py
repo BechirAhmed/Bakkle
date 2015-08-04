@@ -64,9 +64,22 @@ config['S3_URL'] = 'https://s3-us-west-2.amazonaws.com/com.bakkle.prod/'
 def index():
     # List all items (this is for web viewing of data only)
     item_list = Items.objects.all().order_by('post_date')
-    context = {
-        'item_list': item_list,
-    }
+
+    return item_list
+
+
+@time_method
+def spam_index():
+    # List all items marked by users as spam, but not actually listed as spam. (this is for web viewing of data only)
+    reportedItems = BuyerItem.objects.filter(status=BuyerItem.REPORT).filter(
+        Q(item__status=Items.ACTIVE) |
+        Q(item__status=Items.PENDING)
+        ).values('item__pk')
+
+    item_list = Items.objects.filter(
+        Q(status=Items.ACTIVE) |
+        Q(status=Items.PENDING)
+        ).filter(pk__in=reportedItems).order_by('-post_date')
 
     return item_list
 
@@ -93,20 +106,26 @@ def item_detail(item_id):
     return context
 
 @time_method
-def mark_as_spam(item_id):
+def mark_as_spam(item_id, fromSpam):
     # Get the item
     item = Items.objects.get(pk=item_id)
     item.status = Items.SPAM
     item.save()
 
+    if(fromSpam):
+        return spam_index()
+
     return index()
 
 @time_method
-def mark_as_deleted(item_id):
+def mark_as_deleted(item_id, fromSpam):
     # Get the item id
     item = Items.objects.get(pk=item_id)
     item.status = Items.DELETED
     item.save()
+
+    if(fromSpam):
+        return spam_index()
 
     return index()
 

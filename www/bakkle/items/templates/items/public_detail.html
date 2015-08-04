@@ -1,6 +1,6 @@
-{% extends "base.html" %}
+{% extends "../base.html" %}
 
-{% block title %}{{ item.title}} - ${{ item.price }}{% endblock %}
+{% block title %}{{ item.title}} - ${{ item.price }}{% end %}
 
 {% block content %}
 
@@ -15,22 +15,21 @@
 
     <p style="font-size:30px;"><b>{{ item.title }}</b></p>
     Price: {{ item.price }}
-    <br/>Tags: {{ item.tags }}
-    <br/>Method of Delivery: {{ item.method }}
+    <br/>Description: {{ item.description }}
 
     {% if urls %}
       <ul style="list-style-type:none; margin:0 auto; padding: 0; width: 75%;">
       {% for imageUrl in urls %}
         <li>
         <br /><img src= {{ imageUrl }} style="width:100%; "/></li>
-      {% endfor %}
+      {% end %}
       </ul>
-    {% endif %}
+    {% end %}
 
   {% else %}
     <p> No item with that id </p>
-  {% endif %}
+  {% end %}
 
   </div>
 </div>
-{% endblock %}
+{% end %}
