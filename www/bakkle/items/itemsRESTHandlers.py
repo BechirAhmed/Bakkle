@@ -9,13 +9,6 @@ import itemsCommonHandlers
 from tornado import web
 
 
-class testHandler(web.RequestHandler):
-
-    def get(self):
-        itemsCommonHandlers.notify_all_new_item(
-                "Testing badge notifications")
-
-
 class indexHandler(bakkleRequestHandler):
 
     @asynchronous
@@ -29,6 +22,23 @@ class indexHandler(bakkleRequestHandler):
 
         self.render('templates/items/index.html',
                     title="items",
+                    item_list=item_list
+                    )
+        return
+
+
+class spamIndexHandler(bakkleRequestHandler):
+
+    @asynchronous
+    def get(self):
+        self.asyncHelper()
+
+    @run_async
+    def asyncHelper(self):
+        item_list = itemsCommonHandlers.spam_index()
+
+        self.render('templates/items/spam_index.html',
+                    title="spam items",
                     item_list=item_list
                     )
         return
@@ -53,7 +63,7 @@ class itemDetailHandler(bakkleRequestHandler):
         return
 
 
-class markDeletedHandler(bakkleRequestHandler):
+class itemPublicDetailHandler(bakkleRequestHandler):
 
     @asynchronous
     def get(self, item_id):
@@ -62,7 +72,26 @@ class markDeletedHandler(bakkleRequestHandler):
     @run_async
     def asyncHelper(self, item_id):
 
-        item_list = itemsCommonHandlers.mark_as_deleted(item_id)
+        context = itemsCommonHandlers.item_detail(item_id)
+
+        self.render('templates/items/public_detail.html',
+                    title="items",
+                    item=context['item'],
+                    urls=context['urls']
+                    )
+        return
+
+
+class markDeletedHandler(bakkleRequestHandler):
+
+    @asynchronous
+    def get(self, item_id, fromSpam):
+        self.asyncHelper(item_id, fromSpam)
+
+    @run_async
+    def asyncHelper(self, item_id, fromSpam):
+
+        item_list = itemsCommonHandlers.mark_as_deleted(item_id, False)
 
         self.render('templates/items/index.html',
                     title="items",
@@ -80,9 +109,45 @@ class markSpamHandler(bakkleRequestHandler):
     @run_async
     def asyncHelper(self, item_id):
 
-        item_list = itemsCommonHandlers.mark_as_spam(item_id)
+        item_list = itemsCommonHandlers.mark_as_spam(item_id, False)
 
         self.render('templates/items/index.html',
+                    title="items",
+                    item_list=item_list
+                    )
+        return
+
+
+class markDeletedHandlerFromSpam(bakkleRequestHandler):
+
+    @asynchronous
+    def get(self, item_id):
+        self.asyncHelper(item_id)
+
+    @run_async
+    def asyncHelper(self, item_id):
+
+        item_list = itemsCommonHandlers.mark_as_deleted(item_id, True)
+
+        self.render('templates/items/spam_index.html',
+                    title="items",
+                    item_list=item_list
+                    )
+        return
+
+
+class markSpamHandlerFromSpam(bakkleRequestHandler):
+
+    @asynchronous
+    def get(self, item_id):
+        self.asyncHelper(item_id)
+
+    @run_async
+    def asyncHelper(self, item_id):
+
+        item_list = itemsCommonHandlers.mark_as_spam(item_id, True)
+
+        self.render('templates/items/spam_index.html',
                     title="items",
                     item_list=item_list
                     )
