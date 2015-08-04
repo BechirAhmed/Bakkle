@@ -278,12 +278,18 @@
                                 <subviews>
                                     <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="t37-H0-tA2">
                                         <rect key="frame" x="-10" y="-10" width="20" height="20"/>
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="191" y="331" width="20" height="20"/>
+                                        </variation>
                                     </activityIndicatorView>
                                     <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="There are no new items around you." lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gXy-mo-Jm8">
                                         <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
                                         <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="17"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="64" y="329" width="274" height="24"/>
+                                        </variation>
                                     </label>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TvW-JJ-Vqb" userLabel="Drawer">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
@@ -383,7 +389,8 @@
                                                 <exclude reference="vCz-Sl-o8e"/>
                                             </mask>
                                         </variation>
-                                        <variation key="heightClass=regular-widthClass=compact">
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="154" y="4" width="94" height="36"/>
                                             <mask key="constraints">
                                                 <include reference="7nC-uC-5Xx"/>
                                                 <include reference="vCz-Sl-o8e"/>
@@ -4705,9 +4712,6 @@
                                                     <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="15"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
-                                                    <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
-                                                        <rect key="frame" x="99" y="8" width="213" height="21"/>
-                                                    </variation>
                                                 </label>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ABU-0d-c2I">
                                                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
@@ -5017,6 +5021,8 @@
                     <connections>
                         <outlet property="menuBtn" destination="9J2-jl-t4F" id="TyM-WG-Uu0"/>
                         <outlet property="tableView" destination="0Qt-Ny-Opc" id="ZRq-yL-H09"/>
+                        <outlet property="titleBar" destination="uxj-sH-6r9" id="bD9-I6-th8"/>
+                        <segue destination="dzt-bR-uoN" kind="custom" identifier="PushToFeedView" customClass="SWRevealViewControllerSeguePushController" id="nLu-8f-h8F"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eyy-Yl-vYF" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -6112,6 +6118,8 @@
                     <connections>
                         <outlet property="menuBtn" destination="vmo-0r-UxV" id="eaB-II-haS"/>
                         <outlet property="tableView" destination="JO0-sA-6eK" id="uQg-ss-grj"/>
+                        <outlet property="titleBar" destination="fWd-Sh-hdA" id="bPD-6Z-KrF"/>
+                        <segue destination="dzt-bR-uoN" kind="custom" identifier="PushToFeedView" customClass="SWRevealViewControllerSeguePushController" id="aYV-tc-wHs"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kVT-zl-wiH" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -6357,6 +6365,8 @@
                     <connections>
                         <outlet property="menuBtn" destination="pxj-KC-84X" id="Sfm-9Z-pvb"/>
                         <outlet property="tableView" destination="ocJ-Nl-6f3" id="3PV-9T-Ke0"/>
+                        <outlet property="titleBar" destination="UrL-qh-dTs" id="rCv-cr-sPZ"/>
+                        <segue destination="dzt-bR-uoN" kind="custom" identifier="PushToFeedView" customClass="SWRevealViewControllerSeguePushController" id="gDn-pc-qEe"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DvR-ds-mev" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -7070,6 +7080,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="Rco-rv-njI"/>
-        <segue reference="zsR-Bp-dYb"/>
+        <segue reference="gDn-pc-qEe"/>
+        <segue reference="l07-Jc-m61"/>
     </inferredMetricsTieBreakers>
 </document>
