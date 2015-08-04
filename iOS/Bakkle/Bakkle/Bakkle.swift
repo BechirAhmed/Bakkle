@@ -8,6 +8,10 @@
 
 import Foundation
 
+import FBSDKCoreKit
+import FBSDKLoginKit
+import FBSDKShareKit
+
 class Bakkle : NSObject, CLLocationManagerDelegate {
     
     let apiVersion: Float = 1.2
@@ -397,6 +401,9 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     
     /* logout */
     func logout() {
+        FBSDKLoginManager().logOut()
+        FBSDKAccessToken.setCurrentAccessToken(nil)
+        
         let url:NSURL? = NSURL(string: url_base + url_logout)
         let request = NSMutableURLRequest(URL: url!)
         

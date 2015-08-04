@@ -22,6 +22,8 @@ class LoginView: UIViewController, FBSDKLoginButtonDelegate {
     
     @IBOutlet weak var loginScreenBkg: UIImageView!
     
+    @IBOutlet weak var signUpLabel: UILabel!
+    
     var background:UIImageView!
     var logo: UIImageView!
     
@@ -49,12 +51,18 @@ class LoginView: UIViewController, FBSDKLoginButtonDelegate {
         
         // check if the user already logged in, if not, set the background image to transparent
         if FBSDKAccessToken.currentAccessToken() != nil {
+            self.fbLoginView.hidden = true
             self.fbLoginView.userInteractionEnabled = false
+            self.signUpLabel.hidden = true
             
             background.hidden = false
             view.userInteractionEnabled = false
             bakkleLogin()
         } else {
+            self.fbLoginView.hidden = false
+            self.fbLoginView.userInteractionEnabled = true
+            self.signUpLabel.hidden = false
+            
             background.hidden = true
             view.userInteractionEnabled = true
         }
@@ -98,11 +106,14 @@ class LoginView: UIViewController, FBSDKLoginButtonDelegate {
     func bakkleLogin() {
         FBSDKGraphRequest(graphPath: "me", parameters: ["fields":"name, first_name, last_name, email, gender, verified"]).startWithCompletionHandler({ (connection, result2, error) -> Void in
             if error != nil {
-                
+                // Process error
+                var alert = UIAlertController(title: error.localizedDescription, message: error.localizedRecoverySuggestion, preferredStyle: UIAlertControllerStyle.Alert)
+                alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
+                self.presentViewController(alert, animated: true, completion: nil)
             } else {
-                var keyString = "verified"
-                NSLog("User verified = \(result2.objectForKey(keyString))")
-                if (result2.objectForKey("verified") as! Bool) {
+                var verifiedKey = "verified"
+                NSLog("User verified = \(result2.objectForKey(verifiedKey))")
+                if (result2.objectForKey("verified") as! Bool && result2.objectForKey("email") != nil) {
                     var userid = result2.objectForKey("id") as! String
                     var email = result2.objectForKey("email") as! String
                     var gender = result2.objectForKey("gender") as! String
@@ -126,94 +137,51 @@ class LoginView: UIViewController, FBSDKLoginButtonDelegate {
                             
                             }, fail: {})
                     }) // Bakkle.sharedInstance.facebook
-                } // if verified
+                } else if !(result2.objectForKey(verifiedKey) as! Bool) {
+                    // handle unverified log in
+                    
+                    /*
+                    ** NOTE: A verified account is one that has successfully completed Facebook's verification process here: https://developers.facebook.com/docs/graph-api/reference/user#Reading
+                    ** Then proceed to scroll down the page to find the verified variable.
+                    */
+                    
+                    FBSDKLoginManager().logOut()
+                    FBSDKAccessToken.setCurrentAccessToken(nil)
+                    var alert = UIAlertController(title: "Warning", message: "Your Facebook account has not been verified.", preferredStyle: UIAlertControllerStyle.Alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
+                    self.presentViewController(alert, animated: true, completion: nil)
+                } else {
+                    FBSDKLoginManager().logOut()
+                    FBSDKAccessToken.setCurrentAccessToken(nil)
+                    self.performSegueWithIdentifier("EmailRequiredSegue", sender: self)
+                }
             } // else
         }) // FBSDKGraphRequest completion handler
     }
     
-    
     /* FBSDKLoginButton Protocol Methods */
     
     func loginButton(loginButton: FBSDKLoginButton!, didCompleteWithResult result: FBSDKLoginManagerLoginResult!, error: NSError!) {
-        
         if error != nil {
             // Process error
+            var alert = UIAlertController(title: error.localizedDescription, message: error.localizedRecoverySuggestion, preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
+            self.presentViewController(alert, animated: true, completion: nil)
         } else if result.isCancelled {
-            // Handle cancellations
+            // Run code if the user cancelled the login process
         } else {
             self.fbLoginView.userInteractionEnabled = false
+            self.fbLoginView.hidden = true
+            self.signUpLabel.hidden = true
             
-            // If multiple permissions are asked for check which are missing
-            // List of parameters is given here: https://developers.facebook.com/docs/facebook-login/permissions/v2.4#reference
-            if result.grantedPermissions.contains("email") {
-                bakkleLogin()
-            } else { // If email is not given, then say no
-                // cancel
-                FBSDKLoginManager().logOut() // hopefully?
-                FBSDKAccessToken.setCurrentAccessToken(nil)
-                self.performSegueWithIdentifier("EmailRequiredSegue", sender: self)
-            }
+            // this handles checks for missing information
+            bakkleLogin()
         }
     }
     
     func loginButtonDidLogOut(loginButton: FBSDKLoginButton!) {
-        
+        // Should never be called, login page is inaccessible when logged in
     }
-    
-//    func loginViewShowingLoggedInUser(loginView : FBLoginView!) {
-//    
-//    }
-//    
-//    func loginViewFetchedUserInfo(loginView : FBLoginView!, user: FBGraphUser) {
-//        
-//        // tricky way to force the function only run once when it called twice
-//        if !counter {
-//            counter = true
-//        }
-//        counter++;
-//        
-//        var email = user.objectForKey("email") as! String!
-//        var gender = user.objectForKey("gender") as! String!
-//        var username = "" //user.objectForKey("username") as String!
-//        var name = user.name
-//        var userid = user.objectID
-//        var locale = "nil" //user.location.location.zip //ZIP for now
-//        var first_name = user.first_name
-//        var last_name = user.last_name
-//        
-//        // send the user information to Bakkle server
-//        Bakkle.sharedInstance.facebook(email, gender: gender, username: username,
-//            name: name, userid: userid, locale: locale,
-//            first_name: first_name, last_name: last_name, success:
-//            {
-//                // Sucessfully logged in via FB
-//                Bakkle.sharedInstance.login({
-//                    
-//                    // jump into the feedview if successfully logged in
-//                    dispatch_async(dispatch_get_main_queue()) {
-//                        self.performSegueWithIdentifier(self.mainScreenSegueIdentifier, sender: self)
-//                    }
-//                    
-//                    dispatch_async(dispatch_get_main_queue()) {
-//                        
-//                        // Register for push notifications.
-//                        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate!
-//                        appDelegate.registerForPushNotifications(UIApplication.sharedApplication())
-//                    }
-//                    
-//                    }, fail: {})
-//        })
-//        
-//        //TODO: Display error on fail?
-//    }
-//    
-//    func loginViewShowingLoggedOutUser(loginView : FBLoginView!) {
-//        // Do nothing. Automatically segues back to login view.
-//    }
-//    
-//    func loginView(loginView : FBLoginView!, handleError:NSError) {
-//        println("Error: \(handleError.localizedDescription)")
-//    }
     
 }
 
