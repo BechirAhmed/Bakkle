@@ -19,17 +19,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     override class func initialize () {
+        // Initialize Facebook buttons
         FBSDKLoginButton.initialize()
         FBSDKProfilePictureView.initialize()
         FBSDKSendButton.initialize()
-        FBSDKShareButton.initialize()    }
+        FBSDKLikeButton.initialize()
+        FBSDKShareButton.initialize()
+    }
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
-        
-        /* Init Facebook module */
-//        FBLoginView.self
-//        FBProfilePictureView.self
         
         UIApplication.sharedApplication().statusBarStyle = .LightContent
         
@@ -37,18 +36,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject?) -> Bool {
-//        var wasHandled:Bool = FBAppCall.handleOpenURL(url, sourceApplication: sourceApplication)
-        
-//        // in this example, the URL from which the user came is http://example.com/profile/?12345
-//        // determine if the user was viewing a profile
-//        if ([[url path] isEqualToString:@"/profile"]) {
-//            // switch to profile view controller
-//            [self.tabBarController setSelectedViewController:profileViewController];
-//            // pull the profile id number found in the query string
-//            NSString *profileID = [url query];
-//            // pass profileID to profile view controller
-//            [profileViewController loadProfile:profileID];
-        
         return FBSDKApplicationDelegate.sharedInstance().application(application, openURL: url, sourceApplication: sourceApplication, annotation: annotation)
     }
 

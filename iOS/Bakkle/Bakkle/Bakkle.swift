@@ -8,16 +8,14 @@
 
 import Foundation
 
-import FBSDKCoreKit
 import FBSDKLoginKit
-import FBSDKShareKit
 
 class Bakkle : NSObject, CLLocationManagerDelegate {
     
     let apiVersion: Float = 1.2
     var url_base: String          = "https://app.bakkle.com/"
     let url_login: String         = "account/login_facebook/"
-    let url_settings: String         = "account/settings/"
+    let url_settings: String      = "account/settings/"
     let url_logout: String        = "account/logout/"
     let url_facebook: String      = "account/facebook/"
     let url_register_push: String = "account/device/register_push/"
@@ -26,15 +24,15 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     let url_feed: String          = "items/feed/"
     let url_garage: String        = "items/get_seller_items/"
     let url_add_item: String      = "items/add_item/"
-    let url_add_item_no_image: String      = "items/add_item_no_image/"
-    let url_delete_item: String = "items/delete_item/"
+    let url_add_item_no_image: String = "items/add_item_no_image/"
+    let url_delete_item: String   = "items/delete_item/"
     let url_send_chat: String     = "conversation/send_message/"
     let url_view_item: String     = "items/"
     let url_buyers_trunk: String        = "items/get_buyers_trunk/"
     let url_get_holding_pattern: String = "items/get_holding_pattern/"
     let url_buyertransactions: String   = "items/get_buyer_transactions/"
     let url_sellertransactions: String  = "items/get_seller_transactions/"
-    let url_getaccount:String = "account/get_account/"
+    let url_getaccount:String     = "account/get_account/"
     let url_setdescription:String = "account/set_description/"
 
     static let bkFeedUpdate     = "com.bakkle.feedUpdate"
@@ -45,10 +43,10 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     
     // DO NOT ENABLE if there is no way to select servers from settings file.
     static let developerTools   = false
-    static let defaultServerNum = 0 // 0 = prod, 1 = prod cluster (sets default server in list below)
-    static let servers   =   ["https://app.bakkle.com/",            // 0
-                              "https://app-cluster.bakkle.com/",    // 1
-                              "http://bakkle.rhventures.org:8000/"] // 2
+    static let defaultServerNum = 2 // 0 = prod, 1 = prod cluster (sets default server in list below)
+    static let servers   =   ["https://app.bakkle.com/",            // 0 (Production Single)
+                              "https://app-cluster.bakkle.com/",    // 1 (Production Cluster)
+                              "http://bakkle.rhventures.org:8000/"] // 2 (Test)
 //                              "http://wongb.rhventures.org:8000/"]  // 3 (Ben)
     static let serverNames = ["Production Server Single",
                               "Production Server Cluster",
@@ -56,6 +54,8 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
 //                              "Ben (Developers Only)"]
     static let BAKKLE = 1
     static let GOODWILL = 2
+    
+    var testAccountIDs = Set<String>()
     
     /* 1 - ERROR
      * 2 - INFO
@@ -116,7 +116,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         self.getFilter()
         self.restoreData()
         self.initLocation()
-        
+        self.setTestAccountIDs()
         
         /* Set version of app for branding 1=Bakkle, 2=Goodwill */
         let appName = NSBundle.mainBundle().infoDictionary!["CFBundleName"] as! String;
@@ -131,10 +131,16 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         settings()
     }
     
+    /* Set the test account Facebook ID #'s to bypass verification check */
+    func setTestAccountIDs() {
+        self.testAccountIDs.insert("1389969691332367") // Bakkle Test Account
+        self.testAccountIDs.insert("1424606684535223") // Goodwill Test Account
+    }
+    
         
     /* Return a public URL to the item on the web */
     /* In future we hope to have a URL shortener */
-    func getImageURL( item_id: Int ) -> ( String ) {
+    func getItemURL( item_id: Int ) -> ( String ) {
         return url_base + url_view_item + "\(item_id)/"
     }
     
@@ -747,7 +753,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                 
 //            }&& Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 ){
     //                let item_id: Int = self.responseDict.valueForKey("item_id") as! Int
-    //                let item_url: String = self.getImageURL(item_id)
+    //                let image_url: String = self.getImageURL(item_id)
                     success()
             } else {
                 fail()
@@ -756,8 +762,19 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         task.resume()
     }
     
+    /* Returns true if the url is valid */
+    func urlIsValid(urlString: String?) -> Bool {
+        if urlString != nil {
+            if let url = NSURL(string: urlString!) {
+                return UIApplication.sharedApplication().canOpenURL(url)
+            }
+        }
+        
+        return false
+    }
+    
     // take out tags right now, but if needed, will add later
-    func addItem(title: String, description: String, location: String, price: String, images: [UIImage],item_id: NSInteger?, success: (item_id: Int?, item_url: String?)->(), fail: ()->() ) {
+    func addItem(title: String, description: String, location: String, price: String, images: [UIImage],item_id: NSInteger?, success: (item_id: Int?, image_url: String?)->(), fail: ()->() ) {
         // URL encode some vars.
         let escTitle = title.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         let escDescription = description.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
@@ -832,8 +849,8 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             
             if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
                 let item_id: Int = self.responseDict.valueForKey("item_id") as! Int
-                let item_url: String = self.getImageURL(item_id)
-                success(item_id: item_id, item_url: item_url)
+                let image_url: String = self.responseDict.valueForKey("image_url") as! String
+                success(item_id: item_id, image_url: image_url)
             } else {
                 fail()
             }

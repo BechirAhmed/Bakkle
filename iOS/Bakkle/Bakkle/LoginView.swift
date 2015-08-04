@@ -8,7 +8,6 @@
 
 import UIKit
 
-import FBSDKCoreKit
 import FBSDKLoginKit
 
 class LoginView: UIViewController, FBSDKLoginButtonDelegate {
@@ -57,6 +56,7 @@ class LoginView: UIViewController, FBSDKLoginButtonDelegate {
             
             background.hidden = false
             view.userInteractionEnabled = false
+            
             bakkleLogin()
         } else {
             self.fbLoginView.hidden = false
@@ -104,7 +104,7 @@ class LoginView: UIViewController, FBSDKLoginButtonDelegate {
     }
     
     func bakkleLogin() {
-        FBSDKGraphRequest(graphPath: "me", parameters: ["fields":"name, first_name, last_name, email, gender, verified"]).startWithCompletionHandler({ (connection, result2, error) -> Void in
+        FBSDKGraphRequest(graphPath: "me", parameters: ["fields":"id, name, first_name, last_name, email, gender, verified"]).startWithCompletionHandler({ (connection, result2, error) -> Void in
             if error != nil {
                 // Process error
                 var alert = UIAlertController(title: error.localizedDescription, message: error.localizedRecoverySuggestion, preferredStyle: UIAlertControllerStyle.Alert)
@@ -113,7 +113,7 @@ class LoginView: UIViewController, FBSDKLoginButtonDelegate {
             } else {
                 var verifiedKey = "verified"
                 NSLog("User verified = \(result2.objectForKey(verifiedKey))")
-                if (result2.objectForKey("verified") as! Bool && result2.objectForKey("email") != nil) {
+                if (result2.objectForKey("verified") as! Bool || Bakkle.sharedInstance.testAccountIDs.contains(result2.objectForKey("id") as! String)) && (result2.objectForKey("email") != nil) {
                     var userid = result2.objectForKey("id") as! String
                     var email = result2.objectForKey("email") as! String
                     var gender = result2.objectForKey("gender") as! String
@@ -137,7 +137,11 @@ class LoginView: UIViewController, FBSDKLoginButtonDelegate {
                             
                             }, fail: {})
                     }) // Bakkle.sharedInstance.facebook
-                } else if !(result2.objectForKey(verifiedKey) as! Bool) {
+                } else if result2.objectForKey("email") == nil {
+                    FBSDKLoginManager().logOut()
+                    FBSDKAccessToken.setCurrentAccessToken(nil)
+                    self.performSegueWithIdentifier("EmailRequiredSegue", sender: self)
+                } else {
                     // handle unverified log in
                     
                     /*
@@ -150,13 +154,17 @@ class LoginView: UIViewController, FBSDKLoginButtonDelegate {
                     var alert = UIAlertController(title: "Warning", message: "Your Facebook account has not been verified.", preferredStyle: UIAlertControllerStyle.Alert)
                     alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
                     self.presentViewController(alert, animated: true, completion: nil)
-                } else {
-                    FBSDKLoginManager().logOut()
-                    FBSDKAccessToken.setCurrentAccessToken(nil)
-                    self.performSegueWithIdentifier("EmailRequiredSegue", sender: self)
+                    
+                    self.fbLoginView.userInteractionEnabled = true
+                    self.fbLoginView.hidden = false
+                    self.signUpLabel.hidden = false
                 }
             } // else
         }) // FBSDKGraphRequest completion handler
+    }
+    
+    func containsTestAccountID(id: String) -> Bool {
+        return Bakkle.sharedInstance.testAccountIDs.contains(id)
     }
     
     /* FBSDKLoginButton Protocol Methods */

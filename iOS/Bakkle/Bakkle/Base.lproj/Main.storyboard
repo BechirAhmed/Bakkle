@@ -3939,7 +3939,9 @@
                                 <rect key="frame" x="-23" y="-15" width="46" height="30"/>
                                 <color key="backgroundColor" red="0.20000000000000001" green="0.80392156859999997" blue="0.37254901959999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="75" id="hVw-fh-JeP"/>
+                                    <constraint firstAttribute="height" constant="75" id="hVw-fh-JeP">
+                                        <variation key="heightClass=regular-widthClass=compact" constant="50"/>
+                                    </constraint>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="15"/>
                                 <state key="normal" title="Login Page">
@@ -3970,7 +3972,7 @@
                             </button>
                             <textView clipsSubviews="YES" contentMode="scaleToFill" editable="NO" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eex-wZ-0Z9">
                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
-                                <string key="text">We need you to grant us access to see your Facebook email address.
+                                <string key="text">We need you to grant us permission to see your Facebook email address.
 
 We promise that we will NEVER release your email or any personal information to anyone. Ever. 
 
