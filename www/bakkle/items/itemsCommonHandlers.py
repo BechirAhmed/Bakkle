@@ -200,6 +200,13 @@ def add_item(title, description, location, seller_id, price, tags, notifyFlag, i
     logging.info("[Add/EditItem] done with item: " + str(item_id))
 
     response_data = { "status":1, "item_id":item.id }
+
+    if(image_urls is not None and len(image_urls) != 0):
+        response_data['image_url'] = image_urls.split(',')[0]
+    else:
+        response_data['image_url'] = None
+    
+
     return response_data
 
 
