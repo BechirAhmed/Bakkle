@@ -689,7 +689,6 @@
                                 <subviews>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="VKL-bg-bJT">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="chY-Yr-5fa">
                                             <size key="itemSize" width="375" height="375"/>
                                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -752,7 +751,6 @@
                                         <rect key="frame" x="-19" y="-18" width="39" height="37"/>
                                     </pageControl>
                                 </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstItem="VKL-bg-bJT" firstAttribute="leading" secondItem="eb5-ux-7Vh" secondAttribute="leading" id="34j-5d-lsf"/>
                                     <constraint firstAttribute="bottom" secondItem="Zpk-N0-i3M" secondAttribute="bottom" constant="8" id="5os-JL-4t6"/>
@@ -1582,7 +1580,7 @@
                                         </subviews>
                                         <color key="backgroundColor" red="0.20000000000000001" green="0.80392156859999997" blue="0.37254901959999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" secondItem="NFP-z1-KDD" secondAttribute="height" multiplier="3:2" id="6Lz-4P-6zf"/>
+                                            <constraint firstAttribute="width" secondItem="NFP-z1-KDD" secondAttribute="height" multiplier="3:2" placeholder="YES" id="6Lz-4P-6zf"/>
                                             <constraint firstAttribute="bottom" secondItem="Gi9-cM-2n7" secondAttribute="bottom" id="Ckz-47-JSm"/>
                                             <constraint firstItem="Gi9-cM-2n7" firstAttribute="leading" secondItem="NFP-z1-KDD" secondAttribute="leading" id="DcE-YE-ilx"/>
                                             <constraint firstAttribute="trailing" secondItem="Gi9-cM-2n7" secondAttribute="trailing" id="Q4c-5O-bGF"/>
@@ -2085,6 +2083,7 @@
                         <outlet property="confirmButtonView" destination="UfO-2D-e7b" id="6wy-nt-KPh"/>
                         <outlet property="descriptionField" destination="V86-Gy-omu" id="SpK-TW-7mR"/>
                         <outlet property="descriptionView" destination="I8s-9b-w66" id="t1a-IP-Xfb"/>
+                        <outlet property="imageContainer" destination="NFP-z1-KDD" id="01K-yS-dgH"/>
                         <outlet property="loadingView" destination="1du-xW-Lzx" id="dDP-k9-vCo"/>
                         <outlet property="priceField" destination="sKB-EY-KoM" id="30W-du-qBk"/>
                         <outlet property="priceView" destination="b3T-0P-VFt" id="uYa-nH-UFi"/>
