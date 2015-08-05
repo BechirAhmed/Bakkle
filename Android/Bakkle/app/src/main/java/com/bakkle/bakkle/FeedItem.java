@@ -276,7 +276,7 @@ public class FeedItem {
         Bitmap bitmap = null;
         try{
             bitmap = Ion.with(c)
-                    .load("http://graph.facebook.com/" + getSellerFacebookId() + "/picture?type=square")
+                    .load("http://graph.facebook.com/" + getSellerFacebookId() + "/picture?width=142&height=142")
                     .withBitmap()
                     .asBitmap()
                     .get();
@@ -289,7 +289,7 @@ public class FeedItem {
         return bitmap;
 
         /*Bitmap bitmap=null;
-        final String nomimg = "https://graph.facebook.com/"+ getSellerFacebookId() +"/picture?type=large";
+        final String nomimg = "https://graph.facebook.com/"+ getSellerFacebookId() +"/picture?width=142&height=142";
         URL imageURL = null;
 
         try {

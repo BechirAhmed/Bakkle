@@ -3,37 +3,40 @@
  *
  * @Author: Enrique López Mañas <eenriquelopez@gmail.com>
  * http://www.lopez-manas.com
- *
+ * <p/>
  * TAndTinder is a native library for Android that provide a
  * Tinder card like effect. A card can be constructed using an
  * image and displayed with animation effects, dismiss-to-like
  * and dismiss-to-unlike, and use different sorting mechanisms.
- *
+ * <p/>
  * AndTinder is compatible with API Level 13 and upwards
- *
  * @copyright: Enrique López Mañas
  * @license: Apache License 2.0
  */
 
 package com.andtinder.model;
 
-public class Likes {
-	 public enum Like {
-	        None(0), Disliked(1), Liked(2), Up(3), Down(4);
+public class Likes
+{
+    public enum Like
+    {
+        None(0), Disliked(1), Liked(2), Up(3), Down(4);
 
-	        public final int value;
+        public final int value;
 
-	        private Like(int value) {
-	            this.value = value;
-	        }
+        private Like(int value)
+        {
+            this.value = value;
+        }
 
-	        public static Like fromValue(int value) {
-	            for (Like style : Like.values()) {
-	                if (style.value == value) {
-	                    return style;
-	                }
-	            }
-	            return null;
-	        }
-	    }
+        public static Like fromValue(int value)
+        {
+            for (Like style : Like.values()) {
+                if (style.value == value) {
+                    return style;
+                }
+            }
+            return null;
+        }
+    }
 }
