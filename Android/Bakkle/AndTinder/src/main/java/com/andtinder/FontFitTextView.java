@@ -10,19 +10,23 @@ import android.widget.TextView;
  * Created by vanshgandhi on 7/15/15.
  */
 
-public class FontFitTextView extends TextView {
+public class FontFitTextView extends TextView
+{
 
-    public FontFitTextView(Context context) {
+    public FontFitTextView(Context context)
+    {
         super(context);
         initialise();
     }
 
-    public FontFitTextView(Context context, AttributeSet attrs) {
+    public FontFitTextView(Context context, AttributeSet attrs)
+    {
         super(context, attrs);
         initialise();
     }
 
-    private void initialise() {
+    private void initialise()
+    {
         mTestPaint = new Paint();
         mTestPaint.set(this.getPaint());
         //max size defaults to the initially specified text size unless it is too small
@@ -42,10 +46,10 @@ public class FontFitTextView extends TextView {
 
         mTestPaint.set(this.getPaint());
 
-        while((hi - lo) > threshold) {
-            float size = (hi+lo)/2;
+        while ((hi - lo) > threshold) {
+            float size = (hi + lo) / 2;
             mTestPaint.setTextSize(size);
-            if(mTestPaint.measureText(text) >= targetWidth)
+            if (mTestPaint.measureText(text) >= targetWidth)
                 hi = size; // too big
             else
                 lo = size; // too small
@@ -65,12 +69,14 @@ public class FontFitTextView extends TextView {
     }
 
     @Override
-    protected void onTextChanged(final CharSequence text, final int start, final int before, final int after) {
+    protected void onTextChanged(final CharSequence text, final int start, final int before, final int after)
+    {
         refitText(text.toString(), this.getWidth());
     }
 
     @Override
-    protected void onSizeChanged (int w, int h, int oldw, int oldh) {
+    protected void onSizeChanged(int w, int h, int oldw, int oldh)
+    {
         if (w != oldw) {
             refitText(this.getText().toString(), w);
         }

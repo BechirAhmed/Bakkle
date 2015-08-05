@@ -48,11 +48,19 @@ code_sign() {
 
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
+  install_framework 'Bolts.framework'
+  install_framework 'FBSDKCoreKit.framework'
+  install_framework 'FBSDKLoginKit.framework'
+  install_framework 'FBSDKShareKit.framework'
   install_framework 'FontAwesomeIconFactory.framework'
   install_framework 'Haneke.framework'
   install_framework 'SocketRocket.framework'
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
+  install_framework 'Bolts.framework'
+  install_framework 'FBSDKCoreKit.framework'
+  install_framework 'FBSDKLoginKit.framework'
+  install_framework 'FBSDKShareKit.framework'
   install_framework 'FontAwesomeIconFactory.framework'
   install_framework 'Haneke.framework'
   install_framework 'SocketRocket.framework'
