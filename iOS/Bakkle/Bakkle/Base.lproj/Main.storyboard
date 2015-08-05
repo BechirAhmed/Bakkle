@@ -4025,27 +4025,27 @@ Thank You!</string>
                                 <exclude reference="eex-wZ-0Z9"/>
                             </mask>
                             <mask key="constraints">
-                                <exclude reference="PRf-VG-KF8"/>
-                                <exclude reference="pz4-U2-efP"/>
-                                <exclude reference="qa5-2q-ybu"/>
-                                <exclude reference="wdV-j6-M7Z"/>
-                                <exclude reference="N1d-Bx-IbL"/>
-                                <exclude reference="SNp-fT-ghd"/>
-                                <exclude reference="TsX-0s-oGL"/>
+                                <exclude reference="Rol-m9-Zh0"/>
                                 <exclude reference="3lg-JN-Ub6"/>
                                 <exclude reference="Dna-lQ-egj"/>
                                 <exclude reference="I4l-6z-ZJs"/>
-                                <exclude reference="31A-Ei-HNi"/>
-                                <exclude reference="Gox-EN-frL"/>
-                                <exclude reference="u5A-m2-fSl"/>
+                                <exclude reference="JdB-pc-Cnc"/>
+                                <exclude reference="YwQ-IW-nqR"/>
+                                <exclude reference="iGS-M6-wmt"/>
                                 <exclude reference="Nz4-Pa-DAG"/>
                                 <exclude reference="hlK-hy-Dz4"/>
                                 <exclude reference="mnw-mv-nCB"/>
                                 <exclude reference="rrK-Vg-2DW"/>
-                                <exclude reference="JdB-pc-Cnc"/>
-                                <exclude reference="YwQ-IW-nqR"/>
-                                <exclude reference="iGS-M6-wmt"/>
-                                <exclude reference="Rol-m9-Zh0"/>
+                                <exclude reference="PRf-VG-KF8"/>
+                                <exclude reference="pz4-U2-efP"/>
+                                <exclude reference="qa5-2q-ybu"/>
+                                <exclude reference="wdV-j6-M7Z"/>
+                                <exclude reference="31A-Ei-HNi"/>
+                                <exclude reference="Gox-EN-frL"/>
+                                <exclude reference="u5A-m2-fSl"/>
+                                <exclude reference="N1d-Bx-IbL"/>
+                                <exclude reference="SNp-fT-ghd"/>
+                                <exclude reference="TsX-0s-oGL"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
@@ -4058,27 +4058,27 @@ Thank You!</string>
                                 <include reference="eex-wZ-0Z9"/>
                             </mask>
                             <mask key="constraints">
-                                <include reference="PRf-VG-KF8"/>
-                                <include reference="pz4-U2-efP"/>
-                                <include reference="qa5-2q-ybu"/>
-                                <include reference="wdV-j6-M7Z"/>
-                                <include reference="N1d-Bx-IbL"/>
-                                <include reference="SNp-fT-ghd"/>
-                                <include reference="TsX-0s-oGL"/>
+                                <include reference="Rol-m9-Zh0"/>
                                 <include reference="3lg-JN-Ub6"/>
                                 <include reference="Dna-lQ-egj"/>
                                 <include reference="I4l-6z-ZJs"/>
-                                <include reference="31A-Ei-HNi"/>
-                                <include reference="Gox-EN-frL"/>
-                                <include reference="u5A-m2-fSl"/>
+                                <include reference="JdB-pc-Cnc"/>
+                                <include reference="YwQ-IW-nqR"/>
+                                <include reference="iGS-M6-wmt"/>
                                 <include reference="Nz4-Pa-DAG"/>
                                 <include reference="hlK-hy-Dz4"/>
                                 <include reference="mnw-mv-nCB"/>
                                 <include reference="rrK-Vg-2DW"/>
-                                <include reference="JdB-pc-Cnc"/>
-                                <include reference="YwQ-IW-nqR"/>
-                                <include reference="iGS-M6-wmt"/>
-                                <include reference="Rol-m9-Zh0"/>
+                                <include reference="PRf-VG-KF8"/>
+                                <include reference="pz4-U2-efP"/>
+                                <include reference="qa5-2q-ybu"/>
+                                <include reference="wdV-j6-M7Z"/>
+                                <include reference="31A-Ei-HNi"/>
+                                <include reference="Gox-EN-frL"/>
+                                <include reference="u5A-m2-fSl"/>
+                                <include reference="N1d-Bx-IbL"/>
+                                <include reference="SNp-fT-ghd"/>
+                                <include reference="TsX-0s-oGL"/>
                             </mask>
                         </variation>
                     </view>
@@ -4926,6 +4926,9 @@ Thank You!</string>
                                                     <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="15"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
+                                                    <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                                        <rect key="frame" x="99" y="8" width="213" height="21"/>
+                                                    </variation>
                                                 </label>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ABU-0d-c2I">
                                                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
@@ -6010,14 +6013,14 @@ Thank You!</string>
                                         <exclude reference="4FW-39-Xom"/>
                                     </mask>
                                     <mask key="constraints">
-                                        <exclude reference="Beg-v3-N97"/>
-                                        <exclude reference="iqL-BC-8PB"/>
-                                        <exclude reference="u9g-a7-xmP"/>
+                                        <exclude reference="0fT-gI-1a4"/>
+                                        <exclude reference="lpA-FK-BMP"/>
                                         <exclude reference="eVe-Ol-00y"/>
                                         <exclude reference="ofV-ai-45g"/>
                                         <exclude reference="qfN-aB-EyK"/>
-                                        <exclude reference="0fT-gI-1a4"/>
-                                        <exclude reference="lpA-FK-BMP"/>
+                                        <exclude reference="Beg-v3-N97"/>
+                                        <exclude reference="iqL-BC-8PB"/>
+                                        <exclude reference="u9g-a7-xmP"/>
                                     </mask>
                                 </variation>
                                 <variation key="heightClass=regular-widthClass=compact">
@@ -6027,14 +6030,14 @@ Thank You!</string>
                                         <include reference="4FW-39-Xom"/>
                                     </mask>
                                     <mask key="constraints">
-                                        <include reference="Beg-v3-N97"/>
-                                        <include reference="iqL-BC-8PB"/>
-                                        <include reference="u9g-a7-xmP"/>
+                                        <include reference="0fT-gI-1a4"/>
+                                        <include reference="lpA-FK-BMP"/>
                                         <include reference="eVe-Ol-00y"/>
                                         <include reference="ofV-ai-45g"/>
                                         <include reference="qfN-aB-EyK"/>
-                                        <include reference="0fT-gI-1a4"/>
-                                        <include reference="lpA-FK-BMP"/>
+                                        <include reference="Beg-v3-N97"/>
+                                        <include reference="iqL-BC-8PB"/>
+                                        <include reference="u9g-a7-xmP"/>
                                     </mask>
                                 </variation>
                             </view>
@@ -7312,9 +7315,8 @@ Thank You!</string>
         <image name="mock-rating-stars.png" width="1600" height="373"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Rco-rv-njI"/>
-        <segue reference="gDn-pc-qEe"/>
         <segue reference="lk1-fc-YGc"/>
+        <segue reference="qNE-kT-jWH"/>
         <segue reference="l07-Jc-m61"/>
     </inferredMetricsTieBreakers>
 </document>
