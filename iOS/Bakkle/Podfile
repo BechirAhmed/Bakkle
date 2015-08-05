@@ -4,4 +4,7 @@ target 'Bakkle' do
   pod 'HanekeSwift'
   pod 'FontAwesomeIconFactory'
   pod 'SocketRocket'
+  pod 'FBSDKCoreKit'
+  pod 'FBSDKLoginKit'
+  pod 'FBSDKShareKit'
 end

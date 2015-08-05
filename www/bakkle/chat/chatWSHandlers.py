@@ -1,11 +1,20 @@
 
+from django.db.models import Q
+from account.models import Account
+from account.models import Device
+from models import Chat
+from models import Message
+from items.models import Items
+from purchase.models import Offer
+from common.methods import totalUnreadMessagesForAccount
 
-import chatCommonHandlers
+import chatCommonHandlers;
 
 from decimal import *
 
 # import baseWSHandlers
 
+import datetime
 
 class ChatWSHandler():
 
@@ -59,8 +68,7 @@ class ChatWSHandler():
                 response = {
                     'success': 0, 'error': 'Invalid chat method provided'}
         except KeyError as e:
-            return {'success': 0, 'error': 'Missing parameter: ' +
-                    str(e) + ' for method: ' + method}
+            return {'success': 0, 'error': 'Missing parameter: ' + str(e) + ' for method: ' + method}
 
         return response
 

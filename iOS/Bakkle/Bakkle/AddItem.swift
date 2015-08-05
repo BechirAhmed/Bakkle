@@ -10,10 +10,7 @@ import UIKit
 import Photos
 import Social
 
-
-//import FBSDKCoreKit
-//import FBSDKShareKit
-//import FBSDKLoginKit
+import FBSDKShareKit
 
 class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UITextViewDelegate {
     
@@ -290,8 +287,6 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         self.loadingView.hidden = false
         self.view.bringSubviewToFront(self.loadingView)
         
-        //TODO: Get location from GPS
-        
         var time = NSDate.timeIntervalSinceReferenceDate()
         let item_id: NSInteger?
         if self.item != nil {
@@ -302,37 +297,44 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         Bakkle.sharedInstance.addItem(self.titleField.text, description: self.descriptionField.text, location: Bakkle.sharedInstance.user_location,
             price: self.priceField.text,
             images:self.itemImages!, item_id: item_id, success: {
-                (item_id:Int?, item_url: String?) -> () in
+                (item_id:Int?, image_url: String?) -> () in
                     time = NSDate.timeIntervalSinceReferenceDate() - time
                     println("Time taken to upload in sec: \(time)")
                     if self.shareToFacebookBtn.on {
-                        let topImg = UIImage(named: "pendant-tag660.png")
-                        let bottomImg = self.itemImages![0]
-                        let size = bottomImg.size
-                        UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
-                        bottomImg.drawInRect(CGRect(origin: CGPointZero, size: size))
-                        topImg!.drawInRect(CGRect(origin: CGPointZero, size: size))
-
-                        let newImg = UIGraphicsGetImageFromCurrentImageContext()
-                        UIGraphicsEndImageContext()
-
-                        var photo: FBSDKSharePhoto! = FBSDKSharePhoto()
-                        photo.image = newImg
-                        photo.userGenerated = true
-
-                        var cont: FBSDKSharePhotoContent! = FBSDKSharePhotoContent()
-                        cont.photos = [photo]
-
-                        var dialog: FBSDKShareDialog = FBSDKShareDialog.showFromViewController(self, withContent: cont, delegate: nil)
+//                        Adds the bakkle tag to the item, can't find anything about trying to use a local image for the url
+//                        let topImg = UIImage(named: "pendant-tag660.png")
+//                        let bottomImg = self.itemImages![0]
+//                        let size = bottomImg.size
+//                        UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
+//                        bottomImg.drawInRect(CGRect(origin: CGPointZero, size: size))
+//                        topImg!.drawInRect(CGRect(origin: CGPointZero, size: size))
+//
+//                        let newImg = UIGraphicsGetImageFromCurrentImageContext()
+//                        UIGraphicsEndImageContext()
+                        
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            var content = FBSDKShareLinkContent()
+                            content.contentDescription = self.descriptionField.text
+                            content.contentTitle = self.titleField.text
+                            
+                            NSLog("Image URL: \(image_url)")
+                            
+                            /* FBSDK will not do anything if the url is invalid (no errors, just goes to feed) */
+                            if Bakkle.sharedInstance.urlIsValid(image_url) {
+                                content.imageURL = NSURL(string: image_url!)
+                            }
+                            
+                            content.contentURL = NSURL(string: Bakkle.sharedInstance.getItemURL(item_id!))
+                            FBSDKShareDialog.showFromViewController(self, withContent: content, delegate: nil)
+                        })
                     }
-                
                 
                     // We just added one so schedule an update.
                     // TODO: Could just add this to the feed
                     // and hope we are fairly current.
                     Bakkle.sharedInstance.populateFeed({
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            println("item_id=\(item_id) item_url=\(item_url)")
+                            println("item_id=\(item_id) item_url=\(image_url)")
                             self.successfulAdd = true
                             self.dismissViewControllerAnimated(true, completion: nil)
                         })
@@ -360,20 +362,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
      */
     func trimString(str: String) -> (String) {
         return str.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-    }
-    
-    
-    /* FACEBOOK */
-    func postOnWall() {
-        var conn: FBRequestConnection = FBRequestConnection()
-//        var handler: FBRequestHandler = conn
-        
-        var postString: String = "\(titleField.text) \(descriptionField.text))"
-
-       // if FBSession
-        
-    }
-    
+    }    
     
     /**
     * collectionView delegate and collectionView data source

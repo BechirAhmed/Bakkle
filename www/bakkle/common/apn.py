@@ -7,10 +7,10 @@ from tornado.log import logging
 
 # Parms
 use_sandbox = True
-# token_hex = 'e69ffa8cb3299d2c3428641d4213be48ce37d373554ab18ce905dd2eab7c7655'
-# message = 'Test Payload'
-# soundname = "Bakkle_Notification_new.m4r"
-# badge = 1
+token_hex = 'e69ffa8cb3299d2c3428641d4213be48ce37d373554ab18ce905dd2eab7c7655'
+message = 'Test Payload'
+soundname = 'chord.m4r'
+badge = 1
 
 # Config
 bakkle_cert_file = 'account/apn-push-prod-2015-03-30.p12.pem'
@@ -29,12 +29,10 @@ def sendPushMessage(app_flavor, token, message, badge, sound):
     else:
         cert_file = bakkle_cert_file
 
-    message = message + " (" + str(badge) + " unread conversations)"
-
     apns = APNs(use_sandbox=use_sandbox, cert_file=cert_file,
                 key_file=cert_file)
-    payload = Payload(alert=message, sound=sound, badge=int(badge))
-    logging.info("Sending notification " + str(payload) + " to " + str(token))
+    payload = Payload(alert=message, sound=sound, badge=badge)
+    logging.debug("Sending notification " + str(payload) + " to " + str(token))
     apns.gateway_server.send_notification(token, payload)
 
 # Send multiple notifications in a single transmission
