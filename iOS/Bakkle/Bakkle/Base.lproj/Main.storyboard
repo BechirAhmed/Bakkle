@@ -174,7 +174,7 @@
                         <viewControllerLayoutGuide type="bottom" id="a0G-kd-82u"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Wzf-MH-BHC" userLabel="Container">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vny-1N-xvJ">
@@ -278,18 +278,12 @@
                                 <subviews>
                                     <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="t37-H0-tA2">
                                         <rect key="frame" x="-10" y="-10" width="20" height="20"/>
-                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
-                                            <rect key="frame" x="191" y="331" width="20" height="20"/>
-                                        </variation>
                                     </activityIndicatorView>
                                     <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="There are no new items around you." lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gXy-mo-Jm8">
                                         <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
                                         <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="17"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
-                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
-                                            <rect key="frame" x="64" y="329" width="274" height="24"/>
-                                        </variation>
                                     </label>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TvW-JJ-Vqb" userLabel="Drawer">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
@@ -389,8 +383,7 @@
                                                 <exclude reference="vCz-Sl-o8e"/>
                                             </mask>
                                         </variation>
-                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
-                                            <rect key="frame" x="154" y="4" width="94" height="36"/>
+                                        <variation key="heightClass=regular-widthClass=compact">
                                             <mask key="constraints">
                                                 <include reference="7nC-uC-5Xx"/>
                                                 <include reference="vCz-Sl-o8e"/>
@@ -5757,8 +5750,20 @@
                                             </mask>
                                         </variation>
                                     </view>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4FW-39-Xom">
+                                        <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                        <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="25"/>
+                                        <state key="normal" title="CONFIRM">
+                                            <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="confirmPressed:" destination="Ly4-7t-E63" eventType="touchUpInside" id="fRP-vz-v0k"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="4FW-39-Xom" secondAttribute="trailing" constant="8" id="0fT-gI-1a4"/>
                                     <constraint firstItem="oCc-nA-GXW" firstAttribute="top" secondItem="18T-OW-vOL" secondAttribute="top" id="Beg-v3-N97">
                                         <variation key="heightClass=regular-widthClass=compact" constant="8"/>
                                     </constraint>
@@ -5768,6 +5773,7 @@
                                     <constraint firstItem="oCc-nA-GXW" firstAttribute="leading" secondItem="18T-OW-vOL" secondAttribute="leading" id="iqL-BC-8PB">
                                         <variation key="heightClass=regular-widthClass=compact" constant="8"/>
                                     </constraint>
+                                    <constraint firstAttribute="bottom" secondItem="4FW-39-Xom" secondAttribute="bottom" constant="8" id="lpA-FK-BMP"/>
                                     <constraint firstItem="NXT-dO-SiE" firstAttribute="top" secondItem="oCc-nA-GXW" secondAttribute="bottom" constant="8" id="ofV-ai-45g"/>
                                     <constraint firstAttribute="trailing" secondItem="NXT-dO-SiE" secondAttribute="trailing" id="qfN-aB-EyK">
                                         <variation key="heightClass=regular-widthClass=compact" constant="8"/>
@@ -5780,28 +5786,34 @@
                                     <mask key="subviews">
                                         <exclude reference="oCc-nA-GXW"/>
                                         <exclude reference="NXT-dO-SiE"/>
+                                        <exclude reference="4FW-39-Xom"/>
                                     </mask>
                                     <mask key="constraints">
-                                        <exclude reference="eVe-Ol-00y"/>
-                                        <exclude reference="ofV-ai-45g"/>
-                                        <exclude reference="qfN-aB-EyK"/>
                                         <exclude reference="Beg-v3-N97"/>
                                         <exclude reference="iqL-BC-8PB"/>
                                         <exclude reference="u9g-a7-xmP"/>
+                                        <exclude reference="eVe-Ol-00y"/>
+                                        <exclude reference="ofV-ai-45g"/>
+                                        <exclude reference="qfN-aB-EyK"/>
+                                        <exclude reference="0fT-gI-1a4"/>
+                                        <exclude reference="lpA-FK-BMP"/>
                                     </mask>
                                 </variation>
                                 <variation key="heightClass=regular-widthClass=compact">
                                     <mask key="subviews">
                                         <include reference="oCc-nA-GXW"/>
                                         <include reference="NXT-dO-SiE"/>
+                                        <include reference="4FW-39-Xom"/>
                                     </mask>
                                     <mask key="constraints">
-                                        <include reference="eVe-Ol-00y"/>
-                                        <include reference="ofV-ai-45g"/>
-                                        <include reference="qfN-aB-EyK"/>
                                         <include reference="Beg-v3-N97"/>
                                         <include reference="iqL-BC-8PB"/>
                                         <include reference="u9g-a7-xmP"/>
+                                        <include reference="eVe-Ol-00y"/>
+                                        <include reference="ofV-ai-45g"/>
+                                        <include reference="qfN-aB-EyK"/>
+                                        <include reference="0fT-gI-1a4"/>
+                                        <include reference="lpA-FK-BMP"/>
                                     </mask>
                                 </variation>
                             </view>

@@ -72,6 +72,14 @@ class RefineView: UIViewController, UISearchBarDelegate {
         self.dismissKeyboard()
     }
     
+    @IBAction func confirmPressed(sender: AnyObject) {
+        Bakkle.sharedInstance.populateFeed({
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.dismissViewControllerAnimated(true, completion: nil)
+            })
+        })
+    }
+    
     func setupButtons() {
         menuBtn.setImage(IconImage().close(), forState: .Normal)
         menuBtn.setTitle("", forState: .Normal)
@@ -118,7 +126,6 @@ class RefineView: UIViewController, UISearchBarDelegate {
             priceLbl.text = "$\(Int(price.value))"
         }
         Bakkle.sharedInstance.setFilter(distance.value, ffilter_price:price.value)
-        self.parentView.requestUpdates()
     }
 
 }
