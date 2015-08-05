@@ -79,7 +79,7 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener
                         @Override
                         public void onLocationUpdated(Location location)
                         {
-                            editor.putString("locationString", location.getLatitude() + ", " + location.getLongitude());
+                            editor.putString("locationString", location.getLatitude() + "," + location.getLongitude());
                             editor.putString("latitude", String.valueOf(location.getLatitude()));
                             editor.putString("longitude", String.valueOf(location.getLongitude()));
                             editor.apply();

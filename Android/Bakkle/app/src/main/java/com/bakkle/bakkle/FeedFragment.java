@@ -39,7 +39,6 @@ public class FeedFragment extends Fragment
 
     CardModel card;
 
-    //CardStack mCardStack;
 
     String status, description, price, postDate, title, buyerRating, sellerDisplayName, sellerLocation, sellerFacebookId, sellerPk, sellerRating, location, pk, method;
 
@@ -53,7 +52,7 @@ public class FeedFragment extends Fragment
 
     public interface OnCardSelected
     {
-        public void OnCardSelected(FeedItem item);
+        void OnCardSelected(FeedItem item);
     }
 
     OnCardSelected onCardSelected;
@@ -96,9 +95,6 @@ public class FeedFragment extends Fragment
         mCardContainer = (CardContainer) view.findViewById(R.id.cardView);
         mCardContainer.setOrientation(Orientations.Orientation.Ordered);
 
-//        mCardStack = (CardStack) view.findViewById(R.id.container);
-//        mCardStack.setContentResource(R.layout.card_layout);
-//        mCardStack.setStackMargin(0);
 
         return view;
     }
@@ -429,7 +425,7 @@ public class FeedFragment extends Fragment
 
     private class bgTask extends AsyncTask<Void, Void, JsonObject>
     {
-        ProgressDialog dialog = new ProgressDialog(getActivity()); //TODO: Change from progress dialog to spinner
+        ProgressDialog dialog = new ProgressDialog(getActivity()); //TODO: Change from progress dialog to background spinner
 
         @Override
         protected void onPreExecute()
@@ -444,10 +440,10 @@ public class FeedFragment extends Fragment
 
             return serverCalls.getFeedItems(
                     preferences.getString("auth_token", "0"),
-                    "99999999",
-                    "100",
+                    preferences.getInt("price_filter", 100) + "",
+                    preferences.getInt("distance_filter", 100) + "",
                     "",
-                    "32,32",
+                    preferences.getString("locationString", "32,32"),
                     "",
                     preferences.getString("uuid", "0")
             );

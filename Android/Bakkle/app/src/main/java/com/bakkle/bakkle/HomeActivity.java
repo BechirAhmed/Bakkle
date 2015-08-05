@@ -1,6 +1,5 @@
 package com.bakkle.bakkle;
 
-import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -13,10 +12,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -51,20 +47,10 @@ import java.util.Arrays;
 
 public class HomeActivity extends AppCompatActivity implements SellersGarage.OnFragmentInteractionListener,
         BuyersTrunk.OnFragmentInteractionListener, HoldingPattern.OnFragmentInteractionListener,
-        FeedFragment.OnCardSelected
+        Refine.OnFragmentInteractionListener, FeedFragment.OnCardSelected
 {
-
-    private DrawerLayout mDrawerLayout;
-    private ListView mDrawerList;
-    private DrawerRowAdapter mDrawerAdapter;
     private ArrayList<String> mDrawerItems;
     private TypedArray mDrawerIcons;
-    private ActionBarDrawerToggle mDrawerToggle;
-    private ActionBar mActionBar;
-
-    RecyclerView mRecyclerView;
-    RecyclerView.Adapter mAdapter;
-    RecyclerView.LayoutManager mLayoutManager;
 
     private Toolbar toolbar;
 
@@ -76,8 +62,6 @@ public class HomeActivity extends AppCompatActivity implements SellersGarage.OnF
     SharedPreferences.Editor editor;
 
     ServerCalls serverCalls;
-
-    int result = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -93,38 +77,7 @@ public class HomeActivity extends AppCompatActivity implements SellersGarage.OnF
 
         mDrawerItems = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.drawer_items)));
         mDrawerIcons = getResources().obtainTypedArray(R.array.drawer_icons);
-//        mDrawerToggle = new ActionBarDrawerToggle(this, Drawer, /*toolbar,*/ R.string.openDrawer, R.string.closeDrawer) {
-//
-//            @Override
-//            public void onDrawerOpened(View drawerView) {
-//                super.onDrawerOpened(drawerView);
-//                // code here will execute once the drawer is opened( As I dont want anything happened whe drawer is
-//                // open I am not going to put anything here)
-//            }
-//
-//            @Override
-//            public void onDrawerClosed(View drawerView) {
-//                super.onDrawerClosed(drawerView);
-//                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-//                drawer.getActionBarDrawerToggle().setDrawerIndicatorEnabled(true);
-//            }
-//        };
 
-//        Bitmap profpic = null;
-//        Drawable prof;
-//
-//        try {
-//            profpic = Ion.with(this)
-//                    .load("http://graph.facebook.com/" + preferences.getString("userID", "0") + "/picture?width=142&height=142")
-//                    .withBitmap()
-//                    .asBitmap()
-//                    .get();
-//            prof = new BitmapDrawable(getResources(), profpic);
-//        }
-//        catch(Exception e){
-//            prof = getResources().getDrawable(R.drawable.loading);
-//        }
-        
 
         DrawerImageLoader.init(new DrawerImageLoader.IDrawerImageLoader()
         {
@@ -275,8 +228,6 @@ public class HomeActivity extends AppCompatActivity implements SellersGarage.OnF
 
         }
 
-        //while(preferences.getBoolean("done", true)){}
-
         Log.d("testing", preferences.getString("uuid", "0"));
         Log.d("testing", preferences.getString("userID", "0"));
         String auth_token = serverCalls.loginFacebook(
@@ -375,6 +326,12 @@ public class HomeActivity extends AppCompatActivity implements SellersGarage.OnF
 
     }
 
+    @Override
+    public void onFragmentInteraction(Uri uri)
+    {
+
+    }
+
     private class DrawerItemClickListener implements ListView.OnItemClickListener
     {
         @Override
@@ -429,7 +386,6 @@ public class HomeActivity extends AppCompatActivity implements SellersGarage.OnF
                             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
                     break;
                 case 7:
-                    //startActivity(new Intent(getApplicationContext(), Logout.class));
                     FacebookSdk.sdkInitialize(getApplicationContext());
                     LoginManager.getInstance().logOut();
                     editor.putBoolean("LoggedIn", false);
@@ -442,6 +398,14 @@ public class HomeActivity extends AppCompatActivity implements SellersGarage.OnF
                     break;
             }
         }
+    }
+
+    public void refineButtonClick(View view)
+    {
+        getFragmentManager().beginTransaction().replace(R.id.content_frame,
+                new Refine()).addToBackStack(null)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
+
     }
 
     public void addItem(View view)
@@ -472,6 +436,12 @@ public class HomeActivity extends AppCompatActivity implements SellersGarage.OnF
     public void reset(View view)
     {
         serverCalls.resetDemo(preferences.getString("auth_token", "0"), preferences.getString("uuid", "0"));
+    }
+
+    public void refineClose(View view){
+        getFragmentManager().beginTransaction().replace(R.id.content_frame, new FeedFragment())
+                .disallowAddToBackStack().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
+                .commit();
     }
 
 }
