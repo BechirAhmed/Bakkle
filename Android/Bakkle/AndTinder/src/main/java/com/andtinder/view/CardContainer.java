@@ -32,21 +32,25 @@ import com.andtinder.model.Orientations.Orientation;
 
 import java.util.Random;
 
-public class CardContainer extends AdapterView<ListAdapter> implements View.OnDragListener{
+public class CardContainer extends AdapterView<ListAdapter> implements View.OnDragListener
+{
     public static final int INVALID_POINTER_ID = -1;
     private int mActivePointerId = INVALID_POINTER_ID;
     private static final double DISORDERED_MAX_ROTATION_RADIANS = Math.PI / 64;
     private int mNumberOfCards = -1;
-    private final DataSetObserver mDataSetObserver = new DataSetObserver() {
+    private final DataSetObserver mDataSetObserver = new DataSetObserver()
+    {
         @Override
-        public void onChanged() {
+        public void onChanged()
+        {
             super.onChanged();
             clearStack();
             ensureFull();
         }
 
         @Override
-        public void onInvalidated() {
+        public void onInvalidated()
+        {
             super.onInvalidated();
             clearStack();
         }
@@ -71,7 +75,8 @@ public class CardContainer extends AdapterView<ListAdapter> implements View.OnDr
     private int mNextAdapterPosition;
     private boolean mDragging;
 
-    public CardContainer(Context context) {
+    public CardContainer(Context context)
+    {
         super(context);
 
         setOrientation(Orientation.Ordered);
@@ -80,27 +85,31 @@ public class CardContainer extends AdapterView<ListAdapter> implements View.OnDr
 
     }
 
-    public CardContainer(Context context, AttributeSet attrs) {
+    public CardContainer(Context context, AttributeSet attrs)
+    {
         super(context, attrs);
         initFromXml(attrs);
         init();
     }
 
 
-    public CardContainer(Context context, AttributeSet attrs, int defStyle) {
+    public CardContainer(Context context, AttributeSet attrs, int defStyle)
+    {
         super(context, attrs, defStyle);
         initFromXml(attrs);
         init();
     }
 
-    private void init() {
+    private void init()
+    {
         ViewConfiguration viewConfiguration = ViewConfiguration.get(getContext());
         mFlingSlop = viewConfiguration.getScaledMinimumFlingVelocity();
         mTouchSlop = viewConfiguration.getScaledTouchSlop();
         mGestureDetector = new GestureDetector(getContext(), new GestureListener());
     }
 
-    private void initFromXml(AttributeSet attr) {
+    private void initFromXml(AttributeSet attr)
+    {
         TypedArray a = getContext().obtainStyledAttributes(attr,
                 R.styleable.CardContainer);
 
@@ -112,12 +121,14 @@ public class CardContainer extends AdapterView<ListAdapter> implements View.OnDr
     }
 
     @Override
-    public ListAdapter getAdapter() {
+    public ListAdapter getAdapter()
+    {
         return mListAdapter;
     }
 
     @Override
-    public void setAdapter(ListAdapter adapter) {
+    public void setAdapter(ListAdapter adapter)
+    {
         if (mListAdapter != null)
             mListAdapter.unregisterDataSetObserver(mDataSetObserver);
 
@@ -137,11 +148,12 @@ public class CardContainer extends AdapterView<ListAdapter> implements View.OnDr
         requestLayout();
     }
 
-    private void ensureFull() {
+    private void ensureFull()
+    {
         while (mNextAdapterPosition < mListAdapter.getCount() && getChildCount() < mMaxVisible) {
             View view = mListAdapter.getView(mNextAdapterPosition, null, this);
             view.setLayerType(LAYER_TYPE_SOFTWARE, null);
-            if(mOrientation == Orientation.Disordered) {
+            if (mOrientation == Orientation.Disordered) {
                 view.setRotation(getDisorderedRotation());
             }
             addViewInLayout(view, 0, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT,
@@ -153,22 +165,25 @@ public class CardContainer extends AdapterView<ListAdapter> implements View.OnDr
         }
     }
 
-    private void clearStack() {
+    private void clearStack()
+    {
         removeAllViewsInLayout();
         mNextAdapterPosition = 0;
         mTopCard = null;
     }
 
-    public Orientation getOrientation() {
+    public Orientation getOrientation()
+    {
         return mOrientation;
     }
 
-    public void setOrientation(Orientation orientation) {
+    public void setOrientation(Orientation orientation)
+    {
         if (orientation == null)
             throw new NullPointerException("Orientation may not be null");
-        if(mOrientation != orientation) {
+        if (mOrientation != orientation) {
             this.mOrientation = orientation;
-            if(orientation == Orientation.Disordered) {
+            if (orientation == Orientation.Disordered) {
                 for (int i = 0; i < getChildCount(); i++) {
                     View child = getChildAt(i);
                     child.setRotation(getDisorderedRotation());
@@ -185,12 +200,14 @@ public class CardContainer extends AdapterView<ListAdapter> implements View.OnDr
 
     }
 
-    private float getDisorderedRotation() {
+    private float getDisorderedRotation()
+    {
         return (float) Math.toDegrees(mRandom.nextGaussian() * DISORDERED_MAX_ROTATION_RADIANS);
     }
 
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
+    {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
         int requestedWidth = getMeasuredWidth() - getPaddingLeft() - getPaddingRight();
@@ -202,13 +219,15 @@ public class CardContainer extends AdapterView<ListAdapter> implements View.OnDr
             if (requestedWidth >= requestedHeight) {
                 R1 = requestedHeight;
                 R2 = requestedWidth;
-            } else {
+            }
+            else {
                 R1 = requestedWidth;
                 R2 = requestedHeight;
             }
             childWidth = (int) ((R1 * Math.cos(DISORDERED_MAX_ROTATION_RADIANS) - R2 * Math.sin(DISORDERED_MAX_ROTATION_RADIANS)) / Math.cos(2 * DISORDERED_MAX_ROTATION_RADIANS));
             childHeight = (int) ((R2 * Math.cos(DISORDERED_MAX_ROTATION_RADIANS) - R1 * Math.sin(DISORDERED_MAX_ROTATION_RADIANS)) / Math.cos(2 * DISORDERED_MAX_ROTATION_RADIANS));
-        } else {
+        }
+        else {
             childWidth = requestedWidth;
             childHeight = requestedHeight;
         }
@@ -225,7 +244,8 @@ public class CardContainer extends AdapterView<ListAdapter> implements View.OnDr
     }
 
     @Override
-    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+    protected void onLayout(boolean changed, int l, int t, int r, int b)
+    {
         super.onLayout(changed, l, t, r, b);
 
         for (int i = 0; i < getChildCount(); i++) {
@@ -244,7 +264,8 @@ public class CardContainer extends AdapterView<ListAdapter> implements View.OnDr
     private VelocityTracker mVelocityTracker = null;
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public boolean onTouchEvent(MotionEvent event)
+    {
 
         if (mTopCard == null) {
             return false;
@@ -261,7 +282,8 @@ public class CardContainer extends AdapterView<ListAdapter> implements View.OnDr
 
                 if (mVelocityTracker == null) {
                     mVelocityTracker = VelocityTracker.obtain();
-                } else {
+                }
+                else {
                     mVelocityTracker.clear();
                 }
                 mVelocityTracker.addMovement(event);
@@ -303,7 +325,7 @@ public class CardContainer extends AdapterView<ListAdapter> implements View.OnDr
                     mDragging = true;
                 }
 
-                if(!mDragging) {
+                if (!mDragging) {
                     return true;
                 }
 
@@ -358,8 +380,6 @@ public class CardContainer extends AdapterView<ListAdapter> implements View.OnDr
 //                }
 
 
-
-
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
@@ -396,7 +416,8 @@ public class CardContainer extends AdapterView<ListAdapter> implements View.OnDr
     }
 
     @Override
-    public boolean onInterceptTouchEvent(MotionEvent event) {
+    public boolean onInterceptTouchEvent(MotionEvent event)
+    {
         if (mTopCard == null) {
             return false;
         }
@@ -410,7 +431,7 @@ public class CardContainer extends AdapterView<ListAdapter> implements View.OnDr
             case MotionEvent.ACTION_DOWN:
 //                mTopCard.getHitRect(childRect);
 
-                CardModel cardModel = (CardModel)getAdapter().getItem(getChildCount() - 1);
+                CardModel cardModel = (CardModel) getAdapter().getItem(getChildCount() - 1);
 
 //                pointerIndex = event.getActionIndex();
 //                x = event.getX(pointerIndex);
@@ -442,63 +463,74 @@ public class CardContainer extends AdapterView<ListAdapter> implements View.OnDr
     }
 
     @Override
-    public View getSelectedView() {
+    public View getSelectedView()
+    {
         return mTopCard;
         //throw new UnsupportedOperationException();
     }
 
     @Override
-    public void setSelection(int position) {
+    public void setSelection(int position)
+    {
         throw new UnsupportedOperationException();
     }
 
-    public int getGravity() {
+    public int getGravity()
+    {
         return mGravity;
     }
 
-    public void setGravity(int gravity) {
+    public void setGravity(int gravity)
+    {
         mGravity = gravity;
     }
 
     @Override
-    public boolean onDrag(View view, DragEvent dragEvent) {
+    public boolean onDrag(View view, DragEvent dragEvent)
+    {
 
         return false;
     }
 
-    public static class LayoutParams extends ViewGroup.LayoutParams {
+    public static class LayoutParams extends ViewGroup.LayoutParams
+    {
 
         int viewType;
 
-        public LayoutParams(Context c, AttributeSet attrs) {
+        public LayoutParams(Context c, AttributeSet attrs)
+        {
             super(c, attrs);
         }
 
-        public LayoutParams(int width, int height) {
+        public LayoutParams(int width, int height)
+        {
             super(width, height);
         }
 
-        public LayoutParams(ViewGroup.LayoutParams source) {
+        public LayoutParams(ViewGroup.LayoutParams source)
+        {
             super(source);
         }
 
-        public LayoutParams(int w, int h, int viewType) {
+        public LayoutParams(int w, int h, int viewType)
+        {
             super(w, h);
             this.viewType = viewType;
         }
     }
 
-    private class GestureListener extends SimpleOnGestureListener {
+    private class GestureListener extends SimpleOnGestureListener
+    {
         @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY)
+        {
             final View topCard = mTopCard;
             float dx = e2.getX() - e1.getX();
             float dy = e2.getY() - e1.getY();
             Log.v("x and y are", mTopCard.getX() + ", " + mTopCard.getY());
             if ((Math.abs(dx) > mTouchSlop * 4 || Math.abs(dy) > mTouchSlop * 4)  //TODO: Maybe change the value mTouchSlop so that it doesnt fling as easily
                     && (Math.abs(mTopCard.getX()) > 350 || Math.abs(mTopCard.getY()) > 250)
-                    && (Math.abs(velocityX) > mFlingSlop * 3 || Math.abs(velocityY) > mFlingSlop * 3))
-            {
+                    && (Math.abs(velocityX) > mFlingSlop * 3 || Math.abs(velocityY) > mFlingSlop * 3)) {
                 float targetX = topCard.getX();
                 float targetY = topCard.getY();
                 long duration = 0;
@@ -515,24 +547,25 @@ public class CardContainer extends AdapterView<ListAdapter> implements View.OnDr
                 duration = Math.min(150, duration);
 
                 mTopCard = getChildAt(getChildCount() - 2);
-                CardModel cardModel = (CardModel)getAdapter().getItem(/*getChildCount() - 1*/mNextAdapterPosition - 3);
+                CardModel cardModel = (CardModel) getAdapter().getItem(/*getChildCount() - 1*/mNextAdapterPosition - 3);
 
-                if(mTopCard != null)
+                if (mTopCard != null)
                     mTopCard.setLayerType(LAYER_TYPE_HARDWARE, null);
 
                 if (cardModel.getOnCardDismissedListener() != null) {
                     if (targetX > 0 && (targetY < 1500 && targetY > -1500)) {
                         cardModel.getOnCardDismissedListener().onLike(cardModel);
                     }
-                    else if(targetX < 0 && (targetY < 1500 && targetY > -1500)){
+                    else if (targetX < 0 && (targetY < 1500 && targetY > -1500)) {
                         cardModel.getOnCardDismissedListener().onDislike(cardModel);
                     }
-                    else if(targetY < 0 && (targetX < 1000 && targetX > -1000)){
+                    else if (targetY < 0 && (targetX < 1000 && targetX > -1000)) {
                         cardModel.getOnCardDismissedListener().onUp(cardModel);
-                    } else if(targetY > 0 && (targetX < 700 && targetX > -700)){
+                    }
+                    else if (targetY > 0 && (targetX < 700 && targetX > -700)) {
                         cardModel.getOnCardDismissedListener().onDown(cardModel);
                     }
-                    else{
+                    else {
                         topCard.animate()
                                 .setDuration(duration)
                                 .setInterpolator(new DecelerateInterpolator())
@@ -549,28 +582,33 @@ public class CardContainer extends AdapterView<ListAdapter> implements View.OnDr
                         .x(targetX)
                         .y(targetY)
                         .rotation(Math.copySign(25, velocityX)) //used to be 45, not 35
-                        .setListener(new AnimatorListenerAdapter() {
+                        .setListener(new AnimatorListenerAdapter()
+                        {
                             @Override
-                            public void onAnimationEnd(Animator animation) {
+                            public void onAnimationEnd(Animator animation)
+                            {
                                 removeViewInLayout(topCard);
                                 ensureFull();
                             }
 
                             @Override
-                            public void onAnimationCancel(Animator animation) {
+                            public void onAnimationCancel(Animator animation)
+                            {
                                 onAnimationEnd(animation);
                             }
                         });
 
 
                 return true;
-            } else
+            }
+            else
                 return false;
         }
 
         @Override
-        public boolean onSingleTapConfirmed(MotionEvent e){
-            CardModel cardModel = (CardModel)getAdapter().getItem(mNextAdapterPosition - 3);
+        public boolean onSingleTapConfirmed(MotionEvent e)
+        {
+            CardModel cardModel = (CardModel) getAdapter().getItem(mNextAdapterPosition - 3);
             cardModel.getOnClickListener().OnClickListener(cardModel);
             return true;
         }

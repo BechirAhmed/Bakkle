@@ -13,13 +13,16 @@ import android.renderscript.ScriptIntrinsicBlur;
 
 // Code borrowed from Nicolas Pomepuy
 // https://github.com/PomepuyN/BlurEffectForAndroidDesign
-public class BlurDarken {
+public class BlurDarken
+{
 
-    public static Bitmap apply(Context context, Bitmap sentBitmap) {
+    public static Bitmap apply(Context context, Bitmap sentBitmap)
+    {
         return apply(context, sentBitmap, 23);
     }
 
-    public static Bitmap apply(Context context, Bitmap sentBitmap, int radius) {
+    public static Bitmap apply(Context context, Bitmap sentBitmap, int radius)
+    {
 //        return sentBitmap;
 
         Bitmap bitmap = sentBitmap.copy(Bitmap.Config.ARGB_8888, true);
