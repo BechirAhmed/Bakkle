@@ -59,11 +59,9 @@ class RefineView: UIViewController, UISearchBarDelegate {
     }
     
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
-        self.parentView.requestUpdates()
         searchBar.resignFirstResponder()
     }
     func searchBarCancelButtonClicked(searchBar: UISearchBar) {
-        self.parentView.requestUpdates()
         searchBar.resignFirstResponder()
     }
     /* End search bar delegate */
@@ -73,6 +71,7 @@ class RefineView: UIViewController, UISearchBarDelegate {
     }
     
     @IBAction func confirmPressed(sender: AnyObject) {
+        Bakkle.sharedInstance.setFilter(distance.value, ffilter_price:price.value)
         Bakkle.sharedInstance.populateFeed({
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 self.dismissViewControllerAnimated(true, completion: nil)
@@ -125,7 +124,6 @@ class RefineView: UIViewController, UISearchBarDelegate {
         } else {
             priceLbl.text = "$\(Int(price.value))"
         }
-        Bakkle.sharedInstance.setFilter(distance.value, ffilter_price:price.value)
     }
 
 }
