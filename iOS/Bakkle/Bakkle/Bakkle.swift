@@ -95,6 +95,8 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     var image_width : Int = 660
     var image_quality : Float = 0.3
     var image_precache : Int = 10
+    var video_length_sec : Double = 15.0
+    var video_framerate : Int32 = 28
     
     var theme_base : UIColor = UIColor(red: 51.0/255.0, green: 205.0/255.0, blue: 95.0/255.0, alpha: 1.0);
     var theme_baseDark : UIColor = UIColor(red: 41.0/255.0, green: 170.0/255.0, blue: 66.0/255.0, alpha: 1.0);
@@ -293,6 +295,9 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                         }
                         if(settings_dict.valueForKey("image_precache") != nil){
                             self.image_precache = settings_dict.valueForKey("image_precache")!.integerValue!
+                        }
+                        if(settings_dict.valueForKey("video_length_sec") != nil){
+                            self.video_length_sec = settings_dict.valueForKey("video_length_sec")!.doubleValue!
                         }
                         
                     }

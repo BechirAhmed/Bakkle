@@ -9,7 +9,7 @@
 import AVFoundation
 import QuartzCore
 
-class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AVCaptureFileOutputRecordingDelegate {
     
     /* CONSTANTS */
     // if you change this you need to update storyboard with an extra image view
@@ -225,6 +225,30 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         drawFocusRect()
     }
     
+    //TEMP!! REMOVE SOON
+//    func getVideoAverageSize() {
+//        var avg: Double = 0.0
+//        
+//        for i in 0...(self.videoCount) {
+//            var error: NSError?
+//            var attr: NSDictionary? = NSFileManager.defaultManager().attributesOfFileSystemForPath("", error: &error)
+//            if let _attr = attr {
+//                avg += Double(_attr.fileSize())
+//            }
+//        }
+//        
+//        NSLog("Average file size for \(self.videoCount + 1) videos: \(avg / Double(self.videoCount + 1))")
+//    }
+
+    func calculateVideoSize() -> Double {
+        var fr = Bakkle.sharedInstance.video_framerate
+        var t = Bakkle.sharedInstance.video_length_sec
+        
+        
+        
+        return 0.0
+    }
+    
     func setupAVFoundation(){
         if captureSession != nil {
             return
@@ -265,7 +289,17 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     }
     
     @IBAction func cancel(sender: AnyObject) {
+        self.removeVideos()
         self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func removeVideos() {
+        for i in 0...videoCount {
+            var err: NSError?
+            if NSFileManager.defaultManager().fileExistsAtPath("\(NSTemporaryDirectory())video\(i).mov") {
+                NSFileManager.defaultManager().removeItemAtPath("\(NSTemporaryDirectory())video\(i).mov", error: &err)
+            }
+        }
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -367,11 +401,25 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             captureSession!.addOutput(stillImageOutput)
         }
         
+        if captureSession!.canAddOutput(videoOutput) && !contains(captureSession!.outputs, item: videoOutput) {
+            videoOutput.maxRecordedDuration = CMTimeMakeWithSeconds(Bakkle.sharedInstance.video_length_sec, Bakkle.sharedInstance.video_framerate)
+            videoOutput.minFreeDiskSpaceLimit = 1024 * 781250 // 100 MB
+            captureSession!.addOutput(videoOutput)
+        }
         captureSession!.commitConfiguration()
         
         if !captureSession!.running {
             captureSession!.startRunning()
         }
+    }
+    
+    func captureOutput(captureOutput: AVCaptureFileOutput!, didStartRecordingToOutputFileAtURL fileURL: NSURL!, fromConnections connections: [AnyObject]!) {
+        NSLog("Started Recording")
+    }
+    
+    func setVideoOutputProperties() {
+        var captureConnection: AVCaptureConnection = videoOutput.connectionWithMediaType(AVMediaTypeVideo)
+        
     }
     
     func contains(array: NSArray, item: AnyObject!) -> Bool {
@@ -470,47 +518,145 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         self.capButton.backgroundColor = UIColor.whiteColor()
     }
     
-    var stillRecording = false
-    @IBAction func takeVideo(sender: AnyObject) {
-        if !stillRecording {
-            stillRecording = true
-            var recordViewOutline = UIView(frame: CGRectMake(self.cameraView.frame.maxX - 60.0, self.cameraView.frame.maxY - 60.0, 50.0, 50.0))
-            recordViewOutline.backgroundColor = UIColor.darkGrayColor()
-            recordViewOutline.layer.cornerRadius = recordViewOutline.frame.width / 2.0
-            recordViewOutline.layer.masksToBounds = true
-            recordViewOutline.alpha = 0.65
-            recordViewOutline.userInteractionEnabled = false
-            self.view.addSubview(recordViewOutline)
+    var stillRecording: UInt8 = 0
+    var recordViewOutline: UIView?
+    var recordView: UIView?
+    var videoCount = 0
+    
+    @IBAction func takeVideo(sender: UILongPressGestureRecognizer) {
+        if stillRecording == 0 {
+            stillRecording = 2
+            
+            /* Start Video Recording */
+            var videoOutputPath = "\(NSTemporaryDirectory())video\(videoCount++).mov"
+            NSLog("Temp video path: \(videoOutputPath)")
+            var fileManager = NSFileManager.defaultManager()
+            var error: NSError?
+            fileManager.removeItemAtPath("\(NSTemporaryDirectory())video.mov", error: &error)
+            
+            if fileManager.fileExistsAtPath(videoOutputPath) {
+                var err: NSError?
+                if !fileManager.removeItemAtPath(videoOutputPath, error: &err) {
+                    // the video file is probably in use... uhh... uhh... panic. Just panic.
+                }
+            }
+            if self.selectedDevice!.device.flashActive {
+                self.selectedDevice!.device.flashMode = AVCaptureFlashMode.Off
+            }
+            videoOutput.startRecordingToOutputFileURL(NSURL(fileURLWithPath: videoOutputPath), recordingDelegate: self)
+            
+            
+            /* Record View Growth */
+            recordViewOutline = UIView(frame: CGRectMake(self.cameraView.frame.maxX - 60.0, self.cameraView.frame.maxY - 60.0, 50.0, 50.0))
+            recordViewOutline!.backgroundColor = UIColor.darkGrayColor()
+            recordViewOutline!.layer.cornerRadius = recordViewOutline!.frame.width / 2.0
+            recordViewOutline!.layer.masksToBounds = true
+            recordViewOutline!.alpha = 0.65
+            recordViewOutline!.userInteractionEnabled = false
+            self.view.addSubview(recordViewOutline!)
             
             var recordBeginWidth: CGFloat = 5.0
-            var recordView = UIView(frame: CGRectMake(recordViewOutline.frame.maxX - (recordViewOutline.frame.width / 2 + recordBeginWidth / 2.0), recordViewOutline.frame.maxY - (recordViewOutline.frame.width / 2  + recordBeginWidth / 2.0), recordBeginWidth, recordBeginWidth))
-            recordView.backgroundColor = UIColor.redColor()
-            recordView.layer.cornerRadius = recordView.frame.width / 2.0
-            recordView.layer.masksToBounds = true
-            recordView.alpha = 0.75
-            recordView.userInteractionEnabled = false
-            self.view.addSubview(recordView)
+            recordView = UIView(frame: CGRectMake(recordViewOutline!.frame.maxX - (recordViewOutline!.frame.width / 2 + recordBeginWidth / 2.0), recordViewOutline!.frame.maxY - (recordViewOutline!.frame.width / 2  + recordBeginWidth / 2.0), recordBeginWidth, recordBeginWidth))
+            recordView!.backgroundColor = UIColor.redColor()
+            recordView!.layer.cornerRadius = recordView!.frame.width / 2.0
+            recordView!.layer.masksToBounds = true
+            recordView!.alpha = 0.75
+            recordView!.userInteractionEnabled = false
+            self.view.addSubview(recordView!)
             
-            UIView.animateWithDuration(15.0, animations: {
-                recordView.transform = CGAffineTransformMakeScale(recordViewOutline.frame.width / recordView.frame.width, recordViewOutline.frame.height / recordView.frame.height)
+            UIView.animateWithDuration(Bakkle.sharedInstance.video_length_sec, animations: {
+                self.recordView!.transform = CGAffineTransformMakeScale(self.recordViewOutline!.frame.width / self.recordView!.frame.width, self.recordViewOutline!.frame.height / self.recordView!.frame.height)
+            }, completion: { Void in
+                if self.stillRecording > 0 {
+                    self.finishRecording()
+                }
             })
         }
     }
-    
-    func finishRecording(recordView: UIView, recordViewOutline: UIView) {
+
+    func finishRecording() {
+        stillRecording--
         
-        
+        self.videoOutput.stopRecording()
         
         UIView.animateWithDuration(0.05, animations: {
-            recordView.alpha = 0.0
-            recordViewOutline.alpha = 0.0
+            self.recordView!.alpha = 0.0
+            self.recordViewOutline!.alpha = 0.0
         }, completion: { Void in
-            recordView.removeFromSuperview()
-            recordViewOutline.removeFromSuperview()
+            self.recordView!.removeFromSuperview()
+            self.recordViewOutline!.removeFromSuperview()
+        })
+    }
+    
+    func captureOutput(captureOutput: AVCaptureFileOutput!, didFinishRecordingToOutputFileAtURL outputFileURL: NSURL!, fromConnections connections: [AnyObject]!, error: NSError!) {
+        NSLog("Recording Finished")
+        
+        var successfulRecord = true
+        
+        if error != nil {
+            if error!.code != 0 {
+                if error.userInfo != nil {
+                    var value: AnyObject? = error.userInfo![AVErrorRecordingSuccessfullyFinishedKey]
+                    if value != nil {
+                        successfulRecord = value!.boolValue
+                    }
+                }
+            }
+        }
+        
+        var outputURL = "\(NSTemporaryDirectory())sqvid\(videoCount - 1)"
+        
+        if NSFileManager.defaultManager().fileExistsAtPath(outputURL) {
+            var err: NSError?
+            NSFileManager.defaultManager().removeItemAtPath(outputURL, error: &err)
+        }
+        
+        // Pre-video editing setup
+        var asset: AVAsset = AVAsset.assetWithURL(outputFileURL) as! AVAsset
+        var composition = AVMutableComposition()
+        composition.addMutableTrackWithMediaType(AVMediaTypeVideo, preferredTrackID: CMPersistentTrackID(kCMPersistentTrackID_Invalid))
+        var clipVideoTrack: AVAssetTrack = asset.tracksWithMediaType(AVMediaTypeVideo)[0] as! AVAssetTrack
+        
+        // Crop to square
+        var videoComposition = AVMutableVideoComposition()
+        videoComposition.renderSize = CGSizeMake(CGFloat(Bakkle.sharedInstance.image_width), CGFloat(Bakkle.sharedInstance.image_width))
+        videoComposition.frameDuration = CMTimeMake(1, Bakkle.sharedInstance.video_framerate)
+        var instruction = AVMutableVideoCompositionInstruction()
+        instruction.timeRange = CMTimeRangeMake(kCMTimeZero, self.videoOutput.maxRecordedDuration)
+        videoComposition.instructions = [instruction]
+        
+        // Export
+        var exporter = AVAssetExportSession(asset: asset, presetName: AVAssetExportPresetLowQuality)
+        exporter.videoComposition = videoComposition
+        exporter.outputURL = NSURL(fileURLWithPath: outputURL)
+        exporter.outputFileType = AVFileTypeMPEG4
+        
+        NSLog("Pre-edited size: \(captureOutput.recordedFileSize)")
+        
+        exporter.exportAsynchronouslyWithCompletionHandler({
+            var err: NSError?
+            if NSFileManager.defaultManager().fileExistsAtPath(outputURL) {
+                NSLog("Square file size: \(NSFileManager.defaultManager().attributesOfFileSystemForPath(outputURL, error: &err)![NSFileSize])")
+                if err != nil {
+                    NSLog(err!.localizedDescription)
+                }
+            }
+            NSFileManager.defaultManager().removeItemAtPath(outputFileURL.lastPathComponent!, error: &err)
         })
     }
     
     @IBAction func takePhoto(sender: AnyObject) {
+        if stillRecording == 2 {
+            stillRecording--
+            self.capButton.backgroundColor = UIColor.whiteColor()
+            finishRecording()
+            return
+        } else if stillRecording == 1 {
+            stillRecording = 0
+            self.capButton.backgroundColor = UIColor.whiteColor()
+            return
+        }
+        
         self.releasedCaptureButton(self)
         var videoConnection = self.stillImageOutput.connectionWithMediaType(AVMediaTypeVideo)
         
@@ -667,17 +813,18 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     func buttonEnabledHandler() {
         var notDragging = self.dragActivated < 0
         var imageCountGreaterThanMaxCount = imageCount >= CameraView.MAX_IMAGE_COUNT
+        var recordButtonNotHeld =  self.stillRecording == 0
         
-        self.closeButton.enabled = notDragging
+        self.closeButton.enabled = notDragging && recordButtonNotHeld
         self.closeButton.hidden = !self.closeButton.enabled
         
-        self.nextButton.enabled = imageCount > 0 && notDragging
+        self.nextButton.enabled = imageCount > 0 && notDragging && recordButtonNotHeld
         self.nextButton.hidden = !self.nextButton.enabled
         
         self.capButton.enabled = !imageCountGreaterThanMaxCount && notDragging
-        self.galleryButton.enabled = !imageCountGreaterThanMaxCount && notDragging
-        self.switchCamera.enabled = !imageCountGreaterThanMaxCount && self.cameraCount > 1 && notDragging
-        //self.flashSettings.enabled = !imageCountGreaterThanMaxCount && selectedDevice != nil && selectedDevice!.device.hasFlash && notDragging
+        self.galleryButton.enabled = !imageCountGreaterThanMaxCount && notDragging && recordButtonNotHeld
+        self.switchCamera.enabled = !imageCountGreaterThanMaxCount && self.cameraCount > 1 && notDragging && recordButtonNotHeld
+        //self.flashSettings.enabled = !imageCountGreaterThanMaxCount && selectedDevice != nil && selectedDevice!.device.hasFlash && notDragging && recordButtonHeld
         self.flashSettings.enabled = false
         
         self.capButton.hidden = !self.capButton.enabled
@@ -689,8 +836,8 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         self.capButtonSpace.hidden = self.capButton.hidden
         
         for i in 0...(self.imageViews.count - 1) {
-            self.removeImageButtons[i].hidden = self.imageViews[i].image == nil || !notDragging
-            self.removeImageButtons[i].enabled = self.imageViews[i].image != nil && notDragging
+            self.removeImageButtons[i].hidden = self.imageViews[i].image == nil || !notDragging || recordButtonNotHeld
+            self.removeImageButtons[i].enabled = self.imageViews[i].image != nil && notDragging && recordButtonNotHeld
         }
     }
     

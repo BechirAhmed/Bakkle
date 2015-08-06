@@ -175,7 +175,7 @@
                         <viewControllerLayoutGuide type="bottom" id="a0G-kd-82u"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Wzf-MH-BHC" userLabel="Container">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vny-1N-xvJ">
@@ -2695,6 +2695,7 @@
                                                     <button tag="42111" contentMode="scaleToFill" selected="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="71j-6n-qvL" userLabel="Capture">
                                                         <rect key="frame" x="-23" y="-15" width="46" height="30"/>
                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <gestureRecognizers/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" secondItem="71j-6n-qvL" secondAttribute="height" multiplier="1:1" id="fqb-iL-Dzi"/>
                                                         </constraints>
@@ -2717,6 +2718,7 @@
                                                             <action selector="pressedCaptureButton:" destination="Tk1-Fv-owu" eventType="touchDown" id="V7W-de-Pae"/>
                                                             <action selector="releasedCaptureButton:" destination="Tk1-Fv-owu" eventType="touchUpOutside" id="R5X-Zt-8kq"/>
                                                             <action selector="takePhoto:" destination="Tk1-Fv-owu" eventType="touchUpInside" id="hRt-Vl-QTU"/>
+                                                            <outletCollection property="gestureRecognizers" destination="kty-4d-tlO" appends="YES" id="XPK-QT-0Wo"/>
                                                         </connections>
                                                     </button>
                                                 </subviews>
@@ -3275,6 +3277,11 @@
                     </connections>
                 </tapGestureRecognizer>
                 <tapGestureRecognizer id="9L1-Ar-kR0" userLabel="CamreaPreviewTap"/>
+                <pongPressGestureRecognizer cancelsTouchesInView="NO" allowableMovement="10" minimumPressDuration="0.5" id="kty-4d-tlO" userLabel="VideoLongPress">
+                    <connections>
+                        <action selector="takeVideo:" destination="Tk1-Fv-owu" id="CGK-Hm-lAs"/>
+                    </connections>
+                </pongPressGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="-1502.25" y="3548.625"/>
         </scene>
