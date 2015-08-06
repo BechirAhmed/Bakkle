@@ -5,7 +5,6 @@ package com.andtinder;
  */
 
 
-
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -24,7 +23,8 @@ import android.net.Uri;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
-public class CircleImageView extends ImageView {
+public class CircleImageView extends ImageView
+{
 
     private static final ScaleType SCALE_TYPE = ScaleType.CENTER_CROP;
 
@@ -59,17 +59,20 @@ public class CircleImageView extends ImageView {
     private boolean mSetupPending;
     private boolean mBorderOverlay;
 
-    public CircleImageView(Context context) {
+    public CircleImageView(Context context)
+    {
         super(context);
 
         init();
     }
 
-    public CircleImageView(Context context, AttributeSet attrs) {
+    public CircleImageView(Context context, AttributeSet attrs)
+    {
         this(context, attrs, 0);
     }
 
-    public CircleImageView(Context context, AttributeSet attrs, int defStyle) {
+    public CircleImageView(Context context, AttributeSet attrs, int defStyle)
+    {
         super(context, attrs, defStyle);
 
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CircleImageView, defStyle, 0);
@@ -83,7 +86,8 @@ public class CircleImageView extends ImageView {
         init();
     }
 
-    private void init() {
+    private void init()
+    {
         super.setScaleType(SCALE_TYPE);
         mReady = true;
 
@@ -94,26 +98,30 @@ public class CircleImageView extends ImageView {
     }
 
     @Override
-    public ScaleType getScaleType() {
+    public ScaleType getScaleType()
+    {
         return SCALE_TYPE;
     }
 
     @Override
-    public void setScaleType(ScaleType scaleType) {
+    public void setScaleType(ScaleType scaleType)
+    {
         if (scaleType != SCALE_TYPE) {
             throw new IllegalArgumentException(String.format("ScaleType %s not supported.", scaleType));
         }
     }
 
     @Override
-    public void setAdjustViewBounds(boolean adjustViewBounds) {
+    public void setAdjustViewBounds(boolean adjustViewBounds)
+    {
         if (adjustViewBounds) {
             throw new IllegalArgumentException("adjustViewBounds not supported.");
         }
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
+    protected void onDraw(Canvas canvas)
+    {
         if (getDrawable() == null) {
             return;
         }
@@ -125,16 +133,19 @@ public class CircleImageView extends ImageView {
     }
 
     @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+    protected void onSizeChanged(int w, int h, int oldw, int oldh)
+    {
         super.onSizeChanged(w, h, oldw, oldh);
         setup();
     }
 
-    public int getBorderColor() {
+    public int getBorderColor()
+    {
         return mBorderColor;
     }
 
-    public void setBorderColor(int borderColor) {
+    public void setBorderColor(int borderColor)
+    {
         if (borderColor == mBorderColor) {
             return;
         }
@@ -144,15 +155,18 @@ public class CircleImageView extends ImageView {
         invalidate();
     }
 
-    public void setBorderColorResource(int borderColorRes) {
+    public void setBorderColorResource(int borderColorRes)
+    {
         setBorderColor(getContext().getResources().getColor(borderColorRes));
     }
 
-    public int getBorderWidth() {
+    public int getBorderWidth()
+    {
         return mBorderWidth;
     }
 
-    public void setBorderWidth(int borderWidth) {
+    public void setBorderWidth(int borderWidth)
+    {
         if (borderWidth == mBorderWidth) {
             return;
         }
@@ -161,11 +175,13 @@ public class CircleImageView extends ImageView {
         setup();
     }
 
-    public boolean isBorderOverlay() {
+    public boolean isBorderOverlay()
+    {
         return mBorderOverlay;
     }
 
-    public void setBorderOverlay(boolean borderOverlay) {
+    public void setBorderOverlay(boolean borderOverlay)
+    {
         if (borderOverlay == mBorderOverlay) {
             return;
         }
@@ -175,35 +191,40 @@ public class CircleImageView extends ImageView {
     }
 
     @Override
-    public void setImageBitmap(Bitmap bm) {
+    public void setImageBitmap(Bitmap bm)
+    {
         super.setImageBitmap(bm);
         mBitmap = bm;
         setup();
     }
 
     @Override
-    public void setImageDrawable(Drawable drawable) {
+    public void setImageDrawable(Drawable drawable)
+    {
         super.setImageDrawable(drawable);
         mBitmap = getBitmapFromDrawable(drawable);
         setup();
     }
 
     @Override
-    public void setImageResource(int resId) {
+    public void setImageResource(int resId)
+    {
         super.setImageResource(resId);
         mBitmap = getBitmapFromDrawable(getDrawable());
         setup();
     }
 
     @Override
-    public void setImageURI(Uri uri) {
+    public void setImageURI(Uri uri)
+    {
         super.setImageURI(uri);
         mBitmap = getBitmapFromDrawable(getDrawable());
         setup();
     }
 
     @Override
-    public void setColorFilter(ColorFilter cf) {
+    public void setColorFilter(ColorFilter cf)
+    {
         if (cf == mColorFilter) {
             return;
         }
@@ -213,7 +234,8 @@ public class CircleImageView extends ImageView {
         invalidate();
     }
 
-    private Bitmap getBitmapFromDrawable(Drawable drawable) {
+    private Bitmap getBitmapFromDrawable(Drawable drawable)
+    {
         if (drawable == null) {
             return null;
         }
@@ -227,7 +249,8 @@ public class CircleImageView extends ImageView {
 
             if (drawable instanceof ColorDrawable) {
                 bitmap = Bitmap.createBitmap(COLORDRAWABLE_DIMENSION, COLORDRAWABLE_DIMENSION, BITMAP_CONFIG);
-            } else {
+            }
+            else {
                 bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), BITMAP_CONFIG);
             }
 
@@ -235,12 +258,14 @@ public class CircleImageView extends ImageView {
             drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
             drawable.draw(canvas);
             return bitmap;
-        } catch (OutOfMemoryError e) {
+        }
+        catch (OutOfMemoryError e) {
             return null;
         }
     }
 
-    private void setup() {
+    private void setup()
+    {
         if (!mReady) {
             mSetupPending = true;
             return;
@@ -276,7 +301,8 @@ public class CircleImageView extends ImageView {
         invalidate();
     }
 
-    private void updateShaderMatrix() {
+    private void updateShaderMatrix()
+    {
         float scale;
         float dx = 0;
         float dy = 0;
@@ -286,7 +312,8 @@ public class CircleImageView extends ImageView {
         if (mBitmapWidth * mDrawableRect.height() > mDrawableRect.width() * mBitmapHeight) {
             scale = mDrawableRect.height() / (float) mBitmapHeight;
             dx = (mDrawableRect.width() - mBitmapWidth * scale) * 0.5f;
-        } else {
+        }
+        else {
             scale = mDrawableRect.width() / (float) mBitmapWidth;
             dy = (mDrawableRect.height() - mBitmapHeight * scale) * 0.5f;
         }

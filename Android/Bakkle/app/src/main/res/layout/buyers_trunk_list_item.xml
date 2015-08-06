@@ -37,7 +37,6 @@
             android:layout_width="0dip"
             android:layout_height="100dp"
             android:id="@+id/icon"
-            android:src="@drawable/bakkle_icon"
             android:layout_weight="1"
             android:focusable="false"/>
 
