@@ -6,7 +6,7 @@
     android:id="@+id/swipe"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context="com.bakkle.bakkle.ChatList">
+    tools:context="com.bakkle.bakkle.Activities.ChatListActivity">
 
     <LinearLayout
         android:background="@color/red"
