@@ -38,6 +38,8 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     var captureSession: AVCaptureSession?
     var selectedDevice: AVCaptureDeviceInput?
     var stillImageOutput = AVCaptureStillImageOutput()
+    var videoOutput = AVCaptureMovieFileOutput()
+    var audioInput: AVCaptureDeviceInput?
     @IBOutlet weak var switchCamera: UIButton!
     var error: NSError? = nil
     
@@ -230,6 +232,15 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         
         captureSession = AVCaptureSession()
         
+        // Audio Input
+        var audioDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeAudio)
+        var err: NSError?
+        self.audioInput = AVCaptureDeviceInput(device: audioDevice, error: &err)
+        if audioInput != nil {
+            captureSession!.addInput(self.audioInput)
+        }
+        
+        // Video Input
         var frontCam = findCameraWithPosition(.Front)
         var backCam = findCameraWithPosition(.Back)
         
@@ -457,6 +468,46 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     @IBAction func releasedCaptureButton(sender: AnyObject) {
         // action event touchUpOutisde (also called by take photo which is up inside)
         self.capButton.backgroundColor = UIColor.whiteColor()
+    }
+    
+    var stillRecording = false
+    @IBAction func takeVideo(sender: AnyObject) {
+        if !stillRecording {
+            stillRecording = true
+            var recordViewOutline = UIView(frame: CGRectMake(self.cameraView.frame.maxX - 60.0, self.cameraView.frame.maxY - 60.0, 50.0, 50.0))
+            recordViewOutline.backgroundColor = UIColor.darkGrayColor()
+            recordViewOutline.layer.cornerRadius = recordViewOutline.frame.width / 2.0
+            recordViewOutline.layer.masksToBounds = true
+            recordViewOutline.alpha = 0.65
+            recordViewOutline.userInteractionEnabled = false
+            self.view.addSubview(recordViewOutline)
+            
+            var recordBeginWidth: CGFloat = 5.0
+            var recordView = UIView(frame: CGRectMake(recordViewOutline.frame.maxX - (recordViewOutline.frame.width / 2 + recordBeginWidth / 2.0), recordViewOutline.frame.maxY - (recordViewOutline.frame.width / 2  + recordBeginWidth / 2.0), recordBeginWidth, recordBeginWidth))
+            recordView.backgroundColor = UIColor.redColor()
+            recordView.layer.cornerRadius = recordView.frame.width / 2.0
+            recordView.layer.masksToBounds = true
+            recordView.alpha = 0.75
+            recordView.userInteractionEnabled = false
+            self.view.addSubview(recordView)
+            
+            UIView.animateWithDuration(15.0, animations: {
+                recordView.transform = CGAffineTransformMakeScale(recordViewOutline.frame.width / recordView.frame.width, recordViewOutline.frame.height / recordView.frame.height)
+            })
+        }
+    }
+    
+    func finishRecording(recordView: UIView, recordViewOutline: UIView) {
+        
+        
+        
+        UIView.animateWithDuration(0.05, animations: {
+            recordView.alpha = 0.0
+            recordViewOutline.alpha = 0.0
+        }, completion: { Void in
+            recordView.removeFromSuperview()
+            recordViewOutline.removeFromSuperview()
+        })
     }
     
     @IBAction func takePhoto(sender: AnyObject) {
