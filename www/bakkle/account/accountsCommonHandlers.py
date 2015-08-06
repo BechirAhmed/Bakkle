@@ -151,7 +151,7 @@ def settings():
     response_data = {"status": 1, "settings_dict":
                      {"image_width": 660, "image_height": 660,
                       "image_quality": 0.2, "feed_items_to_load": 20,
-                      "image_precache": 10}}
+                      "image_precache": 10, "video_length_sec": 15.0}}
     return response_data
 
 
