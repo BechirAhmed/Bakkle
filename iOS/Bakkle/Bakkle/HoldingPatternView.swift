@@ -71,6 +71,7 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
     let statusCellIdentifier = "StatusCell"
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var titleBar: UIView!
     @IBOutlet weak var menuBtn: UIButton!
     var activeItem: [Int]!
     var expiredItem: [Int]!
@@ -112,7 +113,9 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
 
         
         classifyData()
-        Bakkle.sharedInstance.populateHolding({});
+        Bakkle.sharedInstance.populateHolding({})
+        
+        self.titleBar.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "goToFeed"))
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -129,6 +132,10 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
     func setupButtons() {
         menuBtn.setImage(IconImage().menu(), forState: .Normal)
         menuBtn.setTitle("", forState: .Normal)
+    }
+    
+    func goToFeed() {
+        self.performSegueWithIdentifier("PushToFeedView", sender: self)
     }
     
     // helper function

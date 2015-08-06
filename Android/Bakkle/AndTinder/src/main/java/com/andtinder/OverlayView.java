@@ -11,31 +11,36 @@ import android.widget.ImageView;
 /**
  * Created by vanshgandhi on 6/30/15.
  */
-public class OverlayView extends ImageView {
+public class OverlayView extends ImageView
+{
 
     Context context;
     Animation inAnimation;
     Animation outAnimation;
 
-    public OverlayView(Context context) {
+    public OverlayView(Context context)
+    {
         super(context);
         this.context = context;
         initAnimations();
     }
 
-    public OverlayView(Context context, AttributeSet attrs) {
+    public OverlayView(Context context, AttributeSet attrs)
+    {
         super(context, attrs);
         this.context = context;
         initAnimations();
     }
 
-    public OverlayView(Context context, AttributeSet attrs, int defStyle) {
+    public OverlayView(Context context, AttributeSet attrs, int defStyle)
+    {
         super(context, attrs, defStyle);
         this.context = context;
         initAnimations();
     }
 
-    private void initAnimations(){
+    private void initAnimations()
+    {
         inAnimation = new AlphaAnimation(0, 1);
         inAnimation.setInterpolator(new DecelerateInterpolator());
         inAnimation.setDuration(1);
@@ -43,6 +48,7 @@ public class OverlayView extends ImageView {
         outAnimation.setInterpolator(new DecelerateInterpolator());
         outAnimation.setDuration(2);
     }
+
     public void show()
     {
         if (isVisible()) return;

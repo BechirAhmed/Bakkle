@@ -196,9 +196,7 @@ public class AddItem extends AppCompatActivity{
             RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.WRAP_CONTENT,
                     RelativeLayout.LayoutParams.MATCH_PARENT);
-            if(imageView.getId() == 1){
-            }
-            else{
+            if(imageView.getId() != 1){
                 ImageView previous = productPictureViews.get(productPictureViews.size() - 1);
                 layoutParams.addRule(RelativeLayout.RIGHT_OF, previous.getId());
                 imageView.setPadding(10, 0, 0, 0);

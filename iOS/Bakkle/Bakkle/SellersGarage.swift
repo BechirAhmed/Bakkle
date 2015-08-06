@@ -20,6 +20,7 @@ class SellersGarageView: UIViewController, UITableViewDelegate, UITableViewDataS
     let statusCellIdentifier = "StatusCell"
     
     @IBOutlet weak var menuBtn: UIButton!
+    @IBOutlet weak var titleBar: UIView!
     @IBOutlet weak var tableView: UITableView!
     var activeItem: [Int]!
     var soldItem: [Int]!
@@ -51,10 +52,16 @@ class SellersGarageView: UIViewController, UITableViewDelegate, UITableViewDataS
         
         classifyData()
         requestUpdates()
+        
+        self.titleBar.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "goToFeed"))
     }
     
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
+    func goToFeed() {
+        self.performSegueWithIdentifier("PushToFeedView", sender: self)
     }
     
     // helper function

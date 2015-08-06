@@ -364,6 +364,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             vc.item = Bakkle.sharedInstance.trunkItems[self.itemIndex].valueForKey("item") as! NSDictionary
         } else {
             vc.item = Bakkle.sharedInstance.garageItems[self.itemIndex] as! NSDictionary
+            vc.available = false
         }
         let status = vc.item.valueForKey("status") as! String
         if status == "Sold" {

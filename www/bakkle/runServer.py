@@ -26,15 +26,23 @@ import chat.chatWSHandlers as ChatWSHandlers
 
 app = web.Application([
 
-    web.url(r'^/items/test/$', itemsRESTHandlers.testHandler, name='test'),
-
     web.url(r'^/items/$', itemsRESTHandlers.indexHandler, name='itemIndex'),
+    web.url(r'^/items/spam/$', itemsRESTHandlers.spamIndexHandler,
+            name='spamItemsIndex'),
     web.url(r'^/items/(?P<item_id>[0-9]+)/detail/$',
             itemsRESTHandlers.itemDetailHandler, name='itemDetail'),
+    web.url(r'^/items/(?P<item_id>[0-9]+)/$',
+            itemsRESTHandlers.itemPublicDetailHandler, name='itemPublicDetail'),
     web.url(r'^/items/(?P<item_id>[0-9]+)/delete/$',
             itemsRESTHandlers.markDeletedHandler, name='itemMarkDelete'),
     web.url(r'^/items/(?P<item_id>[0-9]+)/spam/$',
             itemsRESTHandlers.markSpamHandler, name='itemMarkSpam'),
+    web.url(r'^/items/spam/(?P<item_id>[0-9]+)/delete/$',
+            itemsRESTHandlers.markDeletedHandlerFromSpam,
+            name='itemMarkDeleteFromSpam'),
+    web.url(r'^/items/spam/(?P<item_id>[0-9]+)/spam/$',
+            itemsRESTHandlers.markSpamHandlerFromSpam,
+            name='itemMarkSpamFromSpam'),
 
     web.url(r'^/items/reset/$', itemsRESTHandlers.resetHandler, name='reset'),
     web.url(r'^/items/reset_items/$',

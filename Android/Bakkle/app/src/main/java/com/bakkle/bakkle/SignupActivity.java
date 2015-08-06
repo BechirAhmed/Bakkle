@@ -1,9 +1,7 @@
 package com.bakkle.bakkle;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
@@ -15,8 +13,6 @@ import android.widget.Button;
 
 public class SignupActivity extends AppCompatActivity implements OnClickListener {
 
-    boolean locationEnabled = false;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,11 +20,6 @@ public class SignupActivity extends AppCompatActivity implements OnClickListener
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && !locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-
-
-        }
 
         if(preferences.getBoolean("LoggedIn", false)) {
             Intent intent = new Intent(this, LoginActivity.class);

@@ -17,15 +17,14 @@ import java.util.ArrayList;
  */
 public class ServerCalls{
 
-    double apiVersion = 1.2;
-    final static String url_base                 = "https://bakkle.rhventures.org/";
-//    final static String url_base                 = "https://app.bakkle.com/";
+//    final static String url_base                 = "https://bakkle.rhventures.org/";
+    final static String url_base                 = "https://app.bakkle.com/";
     final static String url_login                = "account/login_facebook/";
     final static String url_logout               = "account/logout/";
     final static String url_facebook             = "account/facebook/";
     final static String url_register_push        = "account/device/register_push/";
     final static String url_reset                = "items/reset/";
-    final static String url_mark                 = "items/"; //+status/
+    final static String url_mark                 = "items/";
     final static String url_feed                 = "items/feed/";
     final static String url_garage               = "items/get_seller_items/";
     final static String url_add_item             = "items/add_item/";
@@ -215,7 +214,6 @@ public class ServerCalls{
     }
 
     public void markItem(String status, String authToken, String uuid, String item_id, String viewDuration){
-//TODO: defintely make these Async as soon as possible
             Ion.with(mContext)
                     .load(url_base + url_mark + status + "/")
                     .setBodyParameter("auth_token", authToken)
@@ -235,6 +233,8 @@ public class ServerCalls{
                             else{
                                 jsonResponse = null;
                                 Log.v("testing error 00", "json was null (there was an exception)");
+                                Log.v("test", e.getMessage());
+                                Log.v("test", e.getStackTrace()[0].toString());
 
                             }
                         }
@@ -300,7 +300,21 @@ public class ServerCalls{
 
     }
 
-    public void sendChat(){
+    public void sendChat(String uuid, String authToken, String message, String id){
+
+        Ion.with(mContext)
+                .load(url_base + url_send_chat)
+                .setBodyParameter("device_uuid", uuid)
+                .setBodyParameter("auth_token", authToken)
+                .setBodyParameter("message", message)
+                .setBodyParameter("conversation_id", id)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        Log.v("test", e.getMessage());
+                    }
+                });
 
     }
 

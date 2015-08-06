@@ -29,7 +29,8 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FeedFragment extends Fragment {
+public class FeedFragment extends Fragment
+{
 
     ServerCalls serverCalls;
 
@@ -38,7 +39,6 @@ public class FeedFragment extends Fragment {
 
     CardModel card;
 
-    //CardStack mCardStack;
 
     String status, description, price, postDate, title, buyerRating, sellerDisplayName, sellerLocation, sellerFacebookId, sellerPk, sellerRating, location, pk, method;
 
@@ -50,14 +50,17 @@ public class FeedFragment extends Fragment {
     SharedPreferences.Editor editor;
     SharedPreferences preferences;
 
-    public interface OnCardSelected {
-        public void OnCardSelected(FeedItem item);
+    public interface OnCardSelected
+    {
+        void OnCardSelected(FeedItem item);
     }
 
     OnCardSelected onCardSelected;
 
 
-    public FeedFragment() {}
+    public FeedFragment()
+    {
+    }
 
     @Override
     public void onAttach(Activity activity)
@@ -65,7 +68,8 @@ public class FeedFragment extends Fragment {
         super.onAttach(activity);
         try {
             onCardSelected = (OnCardSelected) activity;
-        } catch (ClassCastException e) {
+        }
+        catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement OnCardSelected");
         }
     }
@@ -80,18 +84,17 @@ public class FeedFragment extends Fragment {
 
         serverCalls = new ServerCalls(getActivity().getApplicationContext());
 
-        try{
+        try {
             new bgTask().execute();
         }
-        catch (Exception e){Log.d("testing", e.getMessage());}
+        catch (Exception e) {
+            Log.d("testing", e.getMessage());
+        }
 
 
         mCardContainer = (CardContainer) view.findViewById(R.id.cardView);
         mCardContainer.setOrientation(Orientations.Orientation.Ordered);
 
-//        mCardStack = (CardStack) view.findViewById(R.id.container);
-//        mCardStack.setContentResource(R.layout.card_layout);
-//        mCardStack.setStackMargin(0);
 
         return view;
     }
@@ -107,7 +110,7 @@ public class FeedFragment extends Fragment {
         JsonArray imageUrlArray;
         JsonElement element;
 
-        for(int i = jsonArray.size() - 1; i >= 0; i--) {
+        for (int i = jsonArray.size() - 1; i >= 0; i--) {
             element = jsonArray.get(i);
             feedItem = new FeedItem(getActivity().getApplicationContext());
             temp = element.getAsJsonObject();
@@ -129,17 +132,28 @@ public class FeedFragment extends Fragment {
             for (JsonElement urlElement : imageUrlArray) {
                 imageUrls.add(urlElement.getAsString());
             }
+
             feedItem.setImageUrls(imageUrls);
 
 
-            card = new CardModel(feedItem.getTitle(), feedItem.getSellerDisplayName(), "$" + feedItem.getPrice(),
-                    feedItem.getDistance(), feedItem.getMethod(), feedItem.getPk(), feedItem.getDescription(),
+            card = new CardModel(
+                    feedItem.getTitle(),
+                    feedItem.getSellerDisplayName(),
+                    "$" + feedItem.getPrice(),
+                    feedItem.getDistance(
+                            preferences.getString("latitude", "0"),
+                            preferences.getString("longitude", "0")),
+                    feedItem.getMethod(),
+                    feedItem.getPk(),
+                    feedItem.getDescription(),
                     feedItem.getImageUrls(),
-                    "http://graph.facebook.com/" + feedItem.getSellerFacebookId() + "/picture?type=square"/*, getCardImage(feedItem), getSellerImage(sellerFacebookId)*/);
+                    "http://graph.facebook.com/" + feedItem.getSellerFacebookId() + "/picture?width=64&height=64"/*, getCardImage(feedItem), getSellerImage(sellerFacebookId)*/);
 
-            card.setOnCardDismissedListener(new CardModel.OnCardDismissedListener() {
+            card.setOnCardDismissedListener(new CardModel.OnCardDismissedListener()
+            {
                 @Override
-                public void onLike(CardModel cardModel) {
+                public void onLike(CardModel cardModel)
+                {
                     Toast.makeText(getActivity(), "Want", Toast.LENGTH_SHORT).show();
                     serverCalls.markItem("want",
                             preferences.getString("auth_token", "0"),
@@ -153,7 +167,8 @@ public class FeedFragment extends Fragment {
                 }
 
                 @Override
-                public void onDislike(CardModel cardModel) {
+                public void onDislike(CardModel cardModel)
+                {
                     Toast.makeText(getActivity(), "Nope", Toast.LENGTH_SHORT).show();
 
                     serverCalls.markItem("meh",
@@ -165,7 +180,8 @@ public class FeedFragment extends Fragment {
                 }
 
                 @Override
-                public void onUp(CardModel cardModel) {
+                public void onUp(CardModel cardModel)
+                {
                     Toast.makeText(getActivity(), "Holding", Toast.LENGTH_SHORT).show();
                     serverCalls.markItem("hold",
                             preferences.getString("auth_token", "0"),
@@ -177,8 +193,9 @@ public class FeedFragment extends Fragment {
                 }
 
                 @Override
-                public void onDown(CardModel cardModel) {
-                    Toast.makeText(getActivity(), "Comment", Toast.LENGTH_SHORT).show();
+                public void onDown(CardModel cardModel)
+                {
+                    Toast.makeText(getActivity(), "Report", Toast.LENGTH_SHORT).show();
                     serverCalls.markItem("report",
                             preferences.getString("auth_token", "0"),
                             preferences.getString("uuid", "0"),
@@ -188,11 +205,11 @@ public class FeedFragment extends Fragment {
 
                 }
             });
-            card.setOnClickListener(new CardModel.OnClickListener() {
+            card.setOnClickListener(new CardModel.OnClickListener()
+            {
                 @Override
-                public void OnClickListener(CardModel cardModel) {
-                    //onCardSelected.OnCardSelected(feedItem);
-                    //title, tags, img, method, price
+                public void OnClickListener(CardModel cardModel)
+                {
                     Intent intent = new Intent(FeedFragment.this.getActivity(), ItemDetail.class);
                     intent.putExtra("title", cardModel.getTitle());
                     intent.putExtra("seller", cardModel.getSeller());
@@ -202,10 +219,8 @@ public class FeedFragment extends Fragment {
                     intent.putExtra("description", cardModel.getDescription());
                     intent.putExtra("pk", cardModel.getPk());
                     intent.putExtra("url1", cardModel.getCardImageURL());
-                    //intent.putStringArrayListExtra("imageUrls", cardModel.getImageURLs());
+                    intent.putStringArrayListExtra("imageURLs", cardModel.getImageURLs());
                     startActivity(intent);
-
-                    //TODO: bring up description page, with all pictures, description, etc
                 }
             });
 
@@ -244,24 +259,35 @@ public class FeedFragment extends Fragment {
 
         imageUrlArray = temp.get("image_urls").getAsJsonArray();
         imageUrls = new ArrayList<>();
-        for(JsonElement urlElement : imageUrlArray)
-        {
+        for (JsonElement urlElement : imageUrlArray) {
             imageUrls.add(urlElement.getAsString());
         }
         feedItem.setImageUrls(imageUrls);
 
+
         //mCardAdapter.add(feedItem);
         //mCardStack.setAdapter(mCardAdapter);
 
-        card = new CardModel(feedItem.getTitle(), feedItem.getSellerDisplayName(), "$" + feedItem.getPrice(),
-                feedItem.getDistance(), feedItem.getMethod(), feedItem.getPk(), feedItem.getDescription(),
+        card = new CardModel(
+                feedItem.getTitle(),
+                feedItem.getSellerDisplayName(),
+                "$" + feedItem.getPrice(),
+                feedItem.getDistance(
+                        preferences.getString("latitude", "0"),
+                        preferences.getString("longitude", "0")),
+                feedItem.getMethod(), feedItem.getPk(),
+                feedItem.getDescription(),
                 feedItem.getImageUrls(),
-                "http://graph.facebook.com/" + feedItem.getSellerFacebookId() + "/picture?type=square"/*, getCardImage(feedItem), getSellerImage(sellerFacebookId)*/);
-        card.setOnCardDismissedListener(new CardModel.OnCardDismissedListener() {
+                "http://graph.facebook.com/" + feedItem.getSellerFacebookId() + "/picture?width=142&height=142"/*, getCardImage(feedItem), getSellerImage(sellerFacebookId)*/);
+
+        card.setOnCardDismissedListener(new CardModel.OnCardDismissedListener()
+        {
             @Override
-            public void onLike(CardModel cardModel) {
+            public void onLike(CardModel cardModel)
+            {
                 Toast.makeText(getActivity(), "Want", Toast.LENGTH_SHORT).show();
-                serverCalls.markItem("want",
+                serverCalls.markItem(
+                        "want",
                         preferences.getString("auth_token", "0"),
                         preferences.getString("uuid", "0"),
                         cardModel.getPk(),
@@ -273,7 +299,8 @@ public class FeedFragment extends Fragment {
             }
 
             @Override
-            public void onDislike(CardModel cardModel) {
+            public void onDislike(CardModel cardModel)
+            {
                 Toast.makeText(getActivity(), "Nope", Toast.LENGTH_SHORT).show();
 
                 serverCalls.markItem("meh",
@@ -285,7 +312,8 @@ public class FeedFragment extends Fragment {
             }
 
             @Override
-            public void onUp(CardModel cardModel) {
+            public void onUp(CardModel cardModel)
+            {
                 Toast.makeText(getActivity(), "Holding", Toast.LENGTH_SHORT).show();
                 serverCalls.markItem("hold",
                         preferences.getString("auth_token", "0"),
@@ -297,8 +325,9 @@ public class FeedFragment extends Fragment {
             }
 
             @Override
-            public void onDown(CardModel cardModel) {
-                Toast.makeText(getActivity(), "Comment", Toast.LENGTH_SHORT).show();
+            public void onDown(CardModel cardModel)
+            {
+                Toast.makeText(getActivity(), "Report", Toast.LENGTH_SHORT).show();
                 serverCalls.markItem("report",
                         preferences.getString("auth_token", "0"),
                         preferences.getString("uuid", "0"),
@@ -308,14 +337,27 @@ public class FeedFragment extends Fragment {
 
             }
         });
-        card.setOnClickListener(new CardModel.OnClickListener() {
+        card.setOnClickListener(new CardModel.OnClickListener()
+        {
             @Override
-            public void OnClickListener(CardModel cardModel) {
+            public void OnClickListener(CardModel cardModel)
+            {
                 //onCardSelected.OnCardSelected(feedItem);
                 //title, tags, img, method, price
+                Intent intent = new Intent(FeedFragment.this.getActivity(), ItemDetail.class);
+                intent.putExtra("title", cardModel.getTitle());
+                intent.putExtra("seller", cardModel.getSeller());
+                intent.putExtra("price", cardModel.getPrice());
+                intent.putExtra("distance", cardModel.getDistance());
+                intent.putExtra("sellerImageUrl", cardModel.getSellerImageURL());
+                intent.putExtra("description", cardModel.getDescription());
+                intent.putExtra("pk", cardModel.getPk());
+                intent.putExtra("url1", cardModel.getCardImageURL());
+                //intent.putStringArrayListExtra("imageUrls", cardModel.getImageURLs());
+                startActivity(intent);
 
+                //TODO: Load multiple pictures
 
-                //TODO: bring up description page, with all pictures, description, etc
             }
         });
 
@@ -339,15 +381,14 @@ public class FeedFragment extends Fragment {
                         bitmap = result;
                     }
                 });*/
-        try{
+        try {
             bitmap = Ion.with(this)
                     .load(item.getImageUrls().get(0))
                     .withBitmap()
                     .asBitmap()
                     .get();
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             Log.d("testing error 1122", e.getMessage());
         }
         //return bitmap[0];
@@ -368,15 +409,14 @@ public class FeedFragment extends Fragment {
                         bitmap = result;
                     }
                 });*/
-        try{
+        try {
             bitmap = Ion.with(this)
-                    .load("http://graph.facebook.com/" + id + "/picture?type=square")
+                    .load("http://graph.facebook.com/" + id + "/picture?width=142&height=142")
                     .withBitmap()
                     .asBitmap()
                     .get();
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             Log.d("testing error 11", e.getMessage());
         }
         //return bitmap[0];
@@ -385,35 +425,39 @@ public class FeedFragment extends Fragment {
 
     private class bgTask extends AsyncTask<Void, Void, JsonObject>
     {
-        ProgressDialog dialog = new ProgressDialog(getActivity()); //TODO: Change from progress dialog to spinner
+        ProgressDialog dialog = new ProgressDialog(getActivity()); //TODO: Change from progress dialog to background spinner
 
         @Override
-        protected void onPreExecute(){
+        protected void onPreExecute()
+        {
             this.dialog.setMessage("Loading Items");
             this.dialog.show();
         }
+
         @Override
-        protected JsonObject doInBackground(Void... voids) {
+        protected JsonObject doInBackground(Void... voids)
+        {
 
             return serverCalls.getFeedItems(
                     preferences.getString("auth_token", "0"),
-                    "99999999",
-                    "100",
+                    preferences.getInt("price_filter", 100) + "",
+                    preferences.getInt("distance_filter", 100) + "",
                     "",
-                    "32,32",
+                    preferences.getString("locationString", "32,32"),
                     "",
                     preferences.getString("uuid", "0")
             );
         }
 
         @Override
-        protected void onPostExecute(JsonObject jsonObject) {
+        protected void onPostExecute(JsonObject jsonObject)
+        {
             jsonResult = jsonObject;
             if (dialog.isShowing()) {
                 dialog.dismiss();
             }
 
-            if(jsonResult != null)
+            if (jsonResult != null)
                 populateFeed(jsonResult.getAsJsonArray("feed"));
             else
                 Log.d("umm", "what");

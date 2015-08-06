@@ -2,6 +2,7 @@ package com.bakkle.bakkle;
 
 import android.app.Activity;
 import android.app.ListFragment;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -30,7 +31,8 @@ import java.util.ArrayList;
  * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
  * interface.
  */
-public class SellersGarage extends ListFragment {
+public class SellersGarage extends ListFragment
+{
 
     SharedPreferences preferences;
     private OnFragmentInteractionListener mListener;
@@ -40,7 +42,8 @@ public class SellersGarage extends ListFragment {
 
 
     // TODO: Rename and change types of parameters
-    public static SellersGarage newInstance() {
+    public static SellersGarage newInstance()
+    {
         SellersGarage fragment = new SellersGarage();
 //        Bundle args = new Bundle();
 //        args.putString(ARG_PARAM1, param1);
@@ -53,10 +56,13 @@ public class SellersGarage extends ListFragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public SellersGarage() {}
+    public SellersGarage()
+    {
+    }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
 
         serverCalls = new ServerCalls(getActivity());
@@ -108,26 +114,35 @@ public class SellersGarage extends ListFragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
+    public void onAttach(Activity activity)
+    {
         super.onAttach(activity);
         try {
             mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
+        }
+        catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
         }
     }
 
     @Override
-    public void onDetach() {
+    public void onDetach()
+    {
         super.onDetach();
         mListener = null;
     }
 
     @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
+    public void onListItemClick(ListView l, View v, int position, long id)
+    {
         super.onListItemClick(l, v, position, id);
 
+        FeedItem item = (FeedItem) getListAdapter().getItem(position);
+
+        Intent intent = new Intent(getActivity(), ChatList.class);
+        intent.putExtra("itemId", item.getPk());
+        startActivity(intent);
 
         if (mListener != null) {
             // Notify the active callbacks interface (the activity, if the
@@ -146,7 +161,8 @@ public class SellersGarage extends ListFragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
+    public interface OnFragmentInteractionListener
+    {
         // TODO: Update argument type and name
         public void onFragmentInteraction(String id);
     }
@@ -164,8 +180,7 @@ public class SellersGarage extends ListFragment {
         String pk, sellerFacebookId;
 
 
-        for(JsonElement element : jsonArray)
-        {
+        for (JsonElement element : jsonArray) {
             item = element.getAsJsonObject();
             feedItem = new FeedItem(this.getActivity());
             //temp = element.getAsJsonObject();
@@ -179,8 +194,7 @@ public class SellersGarage extends ListFragment {
 
             imageUrlArray = item.get("image_urls").getAsJsonArray();
             imageUrls = new ArrayList<String>();
-            for(JsonElement urlElement : imageUrlArray)
-            {
+            for (JsonElement urlElement : imageUrlArray) {
                 imageUrls.add(urlElement.getAsString());
             }
             feedItem.setImageUrls(imageUrls);
@@ -200,7 +214,8 @@ public class SellersGarage extends ListFragment {
     }
 
 
-    public static Bitmap getRoundedCornerAndDarkenedBitmap(Bitmap bitmap) {
+    public static Bitmap getRoundedCornerAndDarkenedBitmap(Bitmap bitmap)
+    {
         Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
                 bitmap.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(output);

@@ -3,6 +3,7 @@ package com.bakkle.bakkle;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ListFragment;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -123,6 +124,11 @@ public class BuyersTrunk extends ListFragment{
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
+
+        FeedItem item = (FeedItem) getListAdapter().getItem(position);
+        Intent intent = new Intent(getActivity(), Chat.class);
+        intent.putExtra("id", item.getPk()); //make sure to let the chat app window know if youre the buyer or seller somehow
+        startActivity(intent);
 
 
         if (mListener != null) {

@@ -1,6 +1,5 @@
 package com.bakkle.bakkle;
 
-import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -10,15 +9,10 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -35,9 +29,6 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
 import com.koushikdutta.ion.Ion;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
@@ -56,20 +47,10 @@ import java.util.Arrays;
 
 public class HomeActivity extends AppCompatActivity implements SellersGarage.OnFragmentInteractionListener,
         BuyersTrunk.OnFragmentInteractionListener, HoldingPattern.OnFragmentInteractionListener,
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
-        FeedFragment.OnCardSelected{
-
-    private DrawerLayout mDrawerLayout;
-    private ListView mDrawerList;
-    private DrawerRowAdapter mDrawerAdapter;
+        Refine.OnFragmentInteractionListener, FeedFragment.OnCardSelected
+{
     private ArrayList<String> mDrawerItems;
     private TypedArray mDrawerIcons;
-    private ActionBarDrawerToggle mDrawerToggle;
-    private ActionBar mActionBar;
-
-    RecyclerView mRecyclerView;
-    RecyclerView.Adapter mAdapter;
-    RecyclerView.LayoutManager mLayoutManager;
 
     private Toolbar toolbar;
 
@@ -82,13 +63,9 @@ public class HomeActivity extends AppCompatActivity implements SellersGarage.OnF
 
     ServerCalls serverCalls;
 
-    GoogleApiClient mGoogleApiClient;
-    Location mLastLocation;
-
-    int result = 0;
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
@@ -100,54 +77,27 @@ public class HomeActivity extends AppCompatActivity implements SellersGarage.OnF
 
         mDrawerItems = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.drawer_items)));
         mDrawerIcons = getResources().obtainTypedArray(R.array.drawer_icons);
-//        mDrawerToggle = new ActionBarDrawerToggle(this, Drawer, /*toolbar,*/ R.string.openDrawer, R.string.closeDrawer) {
-//
-//            @Override
-//            public void onDrawerOpened(View drawerView) {
-//                super.onDrawerOpened(drawerView);
-//                // code here will execute once the drawer is opened( As I dont want anything happened whe drawer is
-//                // open I am not going to put anything here)
-//            }
-//
-//            @Override
-//            public void onDrawerClosed(View drawerView) {
-//                super.onDrawerClosed(drawerView);
-//                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-//                drawer.getActionBarDrawerToggle().setDrawerIndicatorEnabled(true);
-//            }
-//        };
 
-//        Bitmap profpic = null;
-//        Drawable prof;
-//
-//        try {
-//            profpic = Ion.with(this)
-//                    .load("http://graph.facebook.com/" + preferences.getString("userID", "0") + "/picture?type=square")
-//                    .withBitmap()
-//                    .asBitmap()
-//                    .get();
-//            prof = new BitmapDrawable(getResources(), profpic);
-//        }
-//        catch(Exception e){
-//            prof = getResources().getDrawable(R.drawable.loading);
-//        }
-        
 
-        DrawerImageLoader.init(new DrawerImageLoader.IDrawerImageLoader() {
+        DrawerImageLoader.init(new DrawerImageLoader.IDrawerImageLoader()
+        {
             @Override
-            public void set(ImageView imageView, Uri uri, Drawable placeholder) {
+            public void set(ImageView imageView, Uri uri, Drawable placeholder)
+            {
                 Ion.with(imageView)
                         .placeholder(R.drawable.loading)
                         .load(uri.toString());
             }
 
             @Override
-            public void cancel(ImageView imageView) {
+            public void cancel(ImageView imageView)
+            {
 
             }
 
             @Override
-            public Drawable placeholder(Context ctx) {
+            public Drawable placeholder(Context ctx)
+            {
                 return null;
             }
         });
@@ -158,7 +108,7 @@ public class HomeActivity extends AppCompatActivity implements SellersGarage.OnF
                 .withHeaderBackground(R.color.dark_green)
                 .withSelectionListEnabled(false)
                 .addProfiles(
-                        new ProfileDrawerItem().withName(preferences.getString("name", "Not Signed In")).withIcon("http://graph.facebook.com/" + preferences.getString("userID", "0") + "/picture?type=square")
+                        new ProfileDrawerItem().withName(preferences.getString("name", "Not Signed In")).withIcon("http://graph.facebook.com/" + preferences.getString("userID", "0") + "/picture?width=142&height=142")
                 )
                 .withProfileImagesClickable(true)
                 .withProfileImagesVisible(true)
@@ -182,14 +132,15 @@ public class HomeActivity extends AppCompatActivity implements SellersGarage.OnF
                         new PrimaryDrawerItem().withName(mDrawerItems.get(1)).withIcon(mDrawerIcons.getDrawable(1)),
                         new PrimaryDrawerItem().withName(mDrawerItems.get(2)).withIcon(mDrawerIcons.getDrawable(2)),
                         new PrimaryDrawerItem().withName(mDrawerItems.get(3)).withIcon(mDrawerIcons.getDrawable(3)),
-                        new PrimaryDrawerItem().withName(mDrawerItems.get(4)).withIcon(mDrawerIcons.getDrawable(4)),
-                        new PrimaryDrawerItem().withName(mDrawerItems.get(5)).withIcon(mDrawerIcons.getDrawable(5))
+                        new PrimaryDrawerItem().withName(mDrawerItems.get(4)).withIcon(mDrawerIcons.getDrawable(4))
                 )
                 .withTranslucentStatusBar(false)
                 /*.withAdapter(mDrawerAdapter)*/
-                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener()
+                {
                     @Override
-                    public boolean onItemClick(AdapterView<?> parent, View view, int position, long id, IDrawerItem drawerItem) {
+                    public boolean onItemClick(AdapterView<?> parent, View view, int position, long id, IDrawerItem drawerItem)
+                    {
                         switch (position) {
                             case 0:
                                 getFragmentManager().beginTransaction().replace(R.id.content_frame,
@@ -213,18 +164,6 @@ public class HomeActivity extends AppCompatActivity implements SellersGarage.OnF
                                         setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
                                 break;
                             case 4:
-//                              new ServerCalls(getApplicationContext()).getFeedItems(
-                                //                            preferences.getString("auth_token", "0"),
-                                //                            "999999999",
-                                //                            "100",
-                                //                            "",
-                                //                            "32,32",
-                                //                            "",
-                                //                            preferences.getString("uuid", "0")
-                                //                        );
-                                //startActivity(new Intent(getApplicationContext(), FeedFilter.class));
-                                break;
-                            case 5:
                                 //startActivity(new Intent(getApplicationContext(), DemoOptions.class));
                                 getFragmentManager().beginTransaction().replace(R.id.content_frame,
                                         new DemoOptions()).addToBackStack(null)
@@ -244,109 +183,25 @@ public class HomeActivity extends AppCompatActivity implements SellersGarage.OnF
 //        getSupportActionBar().setHomeButtonEnabled(false);
 
 
-
-
-
-
-//
-        mRecyclerView = (RecyclerView) findViewById(R.id.left_drawer);
-//        mRecyclerView.setHasFixedSize(true);
-        mAdapter = new DrawerRowAdapter(this, mDrawerItems, mDrawerIcons);
-        mRecyclerView.setAdapter(mAdapter);
-//
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-
-        // Setup drawer
-
-//        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-//        mDrawerList = (ListView) findViewById(R.id.left_drawer);
-
-        // Set the adapter for the list view
-        //mDrawerAdapter = new DrawerRowAdapter(this, mDrawerItems, mDrawerIcons);
-        //mDrawerList.setAdapter(mDrawerAdapter);
-
-
-        // Set the list's click listener
-        //mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-
-//        Drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-//
-//        mDrawerToggle = new ActionBarDrawerToggle(this, Drawer, /*toolbar,*/ R.string.openDrawer, R.string.closeDrawer){
-//
-//            @Override
-//            public void onDrawerOpened(View drawerView) {
-//                super.onDrawerOpened(drawerView);
-//                // code here will execute once the drawer is opened( As I dont want anything happened whe drawer is
-//                // open I am not going to put anything here)
-//            }
-//
-//            @Override
-//            public void onDrawerClosed(View drawerView) {
-//                super.onDrawerClosed(drawerView);
-//                // Code here will execute once drawer is closed
-//            }
-//
-//
-//
-//        }; // Drawer Toggle Object Made
-//        Drawer.setDrawerListener(mDrawerToggle); // Drawer Listener set to the Drawer toggle
-//        mDrawerToggle.syncState();               // Finally we set the drawer toggle sync State
-
-
-
-  /*      mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, *//*R.drawable.ic_drawer,*//*
-                R.string.drawer_open, R.string.drawer_close) {
-
-            *//** Called when a drawer has settled in a completely closed state. *//*
-            public void onDrawerClosed(View view) {
-                super.onDrawerClosed(view);
-                getActionBar().setTitle(getTitle());
-                getActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.green)));
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-            }
-
-            *//** Called when a drawer has settled in a completely open state. *//*
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                getActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.brown)));
-                getActionBar().setTitle(getString(R.string.drawer_title));
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-            }
-        };*/
-
-        // Set the drawer toggle as the DrawerListener
-        //mDrawerLayout.setDrawerListener(mDrawerToggle);
-
-        // Custom Action bar
-//        mActionBar = getActionBar();
-//        mActionBar.setDisplayShowHomeEnabled(false);
-//        mActionBar.setDisplayShowTitleEnabled(false);
-//        LayoutInflater mInflater = LayoutInflater.from(this);
-//
-//        View mCustomView = mInflater.inflate(R.layout.action_bar_image, null);
-//
-//        mActionBar.setCustomView(mCustomView);
-//        mActionBar.setDisplayShowCustomEnabled(true);
         serverCalls = new ServerCalls(this);
-
-        buildGoogleApiClient();
-
     }
 
     @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
+    protected void onPostCreate(Bundle savedInstanceState)
+    {
 
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
         //mDrawerToggle.syncState();
 
-        if(preferences.getBoolean("newuser", true)){
+        if (preferences.getBoolean("newuser", true)) {
             GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(),
-                    new GraphRequest.GraphJSONObjectCallback(){
-                @Override
-                public void onCompleted(JSONObject object, GraphResponse response) {
-                    addUserInfoToPreferences(object);
+                    new GraphRequest.GraphJSONObjectCallback()
+                    {
+                        @Override
+                        public void onCompleted(JSONObject object, GraphResponse response)
+                        {
+                            addUserInfoToPreferences(object);
 //                    result = serverCalls.registerFacebook(
 //                            preferences.getString("email", "null"),
 //                            preferences.getString("gender", "null"),
@@ -359,7 +214,7 @@ public class HomeActivity extends AppCompatActivity implements SellersGarage.OnF
 //                            preferences.getString("uuid", "0"));
 //                    editor.putBoolean("done", true);
 //                    editor.apply();
-                }
+                        }
                     });
 
             Bundle parameters = new Bundle();
@@ -372,8 +227,6 @@ public class HomeActivity extends AppCompatActivity implements SellersGarage.OnF
 //                Toast.makeText(this, "Login error!!", Toast.LENGTH_SHORT).show();
 
         }
-
-        //while(preferences.getBoolean("done", true)){}
 
         Log.d("testing", preferences.getString("uuid", "0"));
         Log.d("testing", preferences.getString("userID", "0"));
@@ -394,55 +247,16 @@ public class HomeActivity extends AppCompatActivity implements SellersGarage.OnF
 
     }
 
-    protected synchronized void buildGoogleApiClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mGoogleApiClient.connect();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (mGoogleApiClient.isConnected()) {
-            mGoogleApiClient.disconnect();
-        }
-    }
-
-    public String getLocation(){
-        if(mLastLocation != null)
-            return mLastLocation.getLatitude() + ", " + mLastLocation.getLongitude();
-        else
-            return "32, 32";
-    }
-
-    @Override
-    public void onConnected(Bundle bundle) {
-
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-
+    public String getLocation()
+    {
+        return preferences.getString("location", "0, 0");
     }
 
 
-    public void addUserInfoToPreferences(JSONObject object){
-        try{
+    public void addUserInfoToPreferences(JSONObject object)
+    {
+        try {
 
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             SharedPreferences.Editor editor = preferences.edit();
@@ -456,27 +270,30 @@ public class HomeActivity extends AppCompatActivity implements SellersGarage.OnF
             editor.putString("last_name", Profile.getCurrentProfile().getLastName());
             editor.apply();
         }
-        catch(Exception e){
+        catch (Exception e) {
             Log.v("testt", e.getMessage());
         }
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(Configuration newConfig)
+    {
         super.onConfigurationChanged(newConfig);
         //mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_home, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
@@ -492,12 +309,14 @@ public class HomeActivity extends AppCompatActivity implements SellersGarage.OnF
     }
 
     @Override
-    public void onFragmentInteraction(String id) {
+    public void onFragmentInteraction(String id)
+    {
 
     }
 
     @Override
-    public void OnCardSelected(FeedItem item) {
+    public void OnCardSelected(FeedItem item)
+    {
         this.item = item;
 //        getFragmentManager().beginTransaction().replace(R.id.content_frame,
 //                new ItemPage(), "frag").addToBackStack(null)
@@ -507,15 +326,23 @@ public class HomeActivity extends AppCompatActivity implements SellersGarage.OnF
 
     }
 
-    private class DrawerItemClickListener implements ListView.OnItemClickListener{
+    @Override
+    public void onFragmentInteraction(Uri uri)
+    {
+
+    }
+
+    private class DrawerItemClickListener implements ListView.OnItemClickListener
+    {
         @Override
-        public void onItemClick(AdapterView parent, View view, int position, long id){
+        public void onItemClick(AdapterView parent, View view, int position, long id)
+        {
 
 
             //TODO: put this code in a separate class so that it can be called from anywhere
             //TODO: don't re-launch home activity if already in there
 
-            switch(position){
+            switch (position) {
                 case 0:
                     getFragmentManager().beginTransaction().replace(R.id.content_frame,
                             new FeedFragment()).addToBackStack(null).
@@ -559,7 +386,6 @@ public class HomeActivity extends AppCompatActivity implements SellersGarage.OnF
                             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
                     break;
                 case 7:
-                    //startActivity(new Intent(getApplicationContext(), Logout.class));
                     FacebookSdk.sdkInitialize(getApplicationContext());
                     LoginManager.getInstance().logOut();
                     editor.putBoolean("LoggedIn", false);
@@ -574,6 +400,14 @@ public class HomeActivity extends AppCompatActivity implements SellersGarage.OnF
         }
     }
 
+    public void refineButtonClick(View view)
+    {
+        getFragmentManager().beginTransaction().replace(R.id.content_frame,
+                new Refine()).addToBackStack(null)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
+
+    }
+
     public void addItem(View view)
     {
         Intent intent = new Intent(this, AddItem.class);
@@ -586,10 +420,10 @@ public class HomeActivity extends AppCompatActivity implements SellersGarage.OnF
     }
 
 
-
     @Override
-    public void onBackPressed() {
-        if(getFragmentManager().getBackStackEntryCount() > 0)
+    public void onBackPressed()
+    {
+        if (getFragmentManager().getBackStackEntryCount() > 0)
             getFragmentManager().popBackStackImmediate();
         else {
             Intent intent = new Intent(Intent.ACTION_MAIN);
@@ -598,8 +432,16 @@ public class HomeActivity extends AppCompatActivity implements SellersGarage.OnF
             startActivity(intent);
         }
     }
-    public void reset(View view){
+
+    public void reset(View view)
+    {
         serverCalls.resetDemo(preferences.getString("auth_token", "0"), preferences.getString("uuid", "0"));
+    }
+
+    public void refineClose(View view){
+        getFragmentManager().beginTransaction().replace(R.id.content_frame, new FeedFragment())
+                .disallowAddToBackStack().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
+                .commit();
     }
 
 }

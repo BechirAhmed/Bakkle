@@ -1,12 +1,15 @@
 package com.bakkle.bakkle;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,8 +30,12 @@ import com.facebook.login.widget.LoginButton;
 
 import java.util.Arrays;
 
+import io.nlopez.smartlocation.OnLocationUpdatedListener;
+import io.nlopez.smartlocation.SmartLocation;
 
-public class LoginActivity extends AppCompatActivity implements OnClickListener {
+
+public class LoginActivity extends AppCompatActivity implements OnClickListener
+{
 
     private LoginButton loginButton;
     private CallbackManager callbackManager;
@@ -40,71 +47,106 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         callbackManager = CallbackManager.Factory.create();
         final Context mContext = this;
         FacebookSdk.sdkInitialize(getApplicationContext());
         preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-
-
-        if(preferences.getBoolean("LoggedIn", false)) {
-
-            Intent intent = new Intent(this, HomeActivity.class);
-            startActivity(intent);
-            finish();
-        }
-
-        editor = preferences.edit();
-        editor.putString("uuid", Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID));
-        editor.apply();
-
-
-
-
         setContentView(R.layout.activity_login);
-        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
 
 
-            private ProfileTracker mProfileTracker;
-
-            @Override
-            public void onSuccess(LoginResult loginResult)
+        if (!SmartLocation.with(this).location().state().locationServicesEnabled()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("GPS not found");  // GPS not found
+            builder.setMessage("In order for Bakkle to function properly, Location Services need to be enabled. Would like to enable them now?"); // Want to enable?
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener()
             {
-                AccessToken token = loginResult.getAccessToken();
-                mProfileTracker = new ProfileTracker() {
-                    @Override
-                    protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
-                        Profile.setCurrentProfile(currentProfile);
-                        mProfileTracker.stopTracking();
+                public void onClick(DialogInterface dialogInterface, int i)
+                {
+                    startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                }
+            });
+            builder.setNegativeButton("Not right now", null);
+            builder.create().show();
+        }
+        else {
+            SmartLocation.with(this).location()
+                    .oneFix()
+                    .start(new OnLocationUpdatedListener()
+                    {
+                        @Override
+                        public void onLocationUpdated(Location location)
+                        {
+                            editor.putString("locationString", location.getLatitude() + "," + location.getLongitude());
+                            editor.putString("latitude", String.valueOf(location.getLatitude()));
+                            editor.putString("longitude", String.valueOf(location.getLongitude()));
+                            editor.apply();
+                        }
+                    });
+
+
+            if (preferences.getBoolean("LoggedIn", false)) {
+
+                Intent intent = new Intent(this, HomeActivity.class);
+                startActivity(intent);
+                //SmartLocation.with(this).location().stop();
+                finish();
+            }
+
+            editor = preferences.edit();
+            editor.putString("uuid", Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID));
+            editor.apply();
+
+
+            LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>()
+            {
+
+
+                private ProfileTracker mProfileTracker;
+
+                @Override
+                public void onSuccess(LoginResult loginResult)
+                {
+                    AccessToken token = loginResult.getAccessToken();
+                    mProfileTracker = new ProfileTracker()
+                    {
+                        @Override
+                        protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile)
+                        {
+                            Profile.setCurrentProfile(currentProfile);
+                            mProfileTracker.stopTracking();
+                        }
+                    };
+
+                    mProfileTracker.startTracking();
+
+                    if (token != null) {
+                        editor.putBoolean("LoggedIn", true);
+                        editor.apply();
+                        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                        startActivity(intent);
+                        finish();
                     }
-                };
 
-                mProfileTracker.startTracking();
 
-                if(token != null) {
-                    editor.putBoolean("LoggedIn", true);
-                    editor.apply();
-                    Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-                    startActivity(intent);
-                    finish();
                 }
 
+                @Override
+                public void onCancel()
+                {
+                    System.out.println("Facebook Canceled");
+                }
 
-            }
+                @Override
+                public void onError(FacebookException e)
+                {
+                    System.out.println(e.getMessage());
+                }
+            });
 
-            @Override
-            public void onCancel() {
-                System.out.println("Facebook Canceled");
-            }
-
-            @Override
-            public void onError(FacebookException e) {
-                System.out.println(e.getMessage());
-            }
-        });
-
-        // Set up custom Action Bar and enable up navigation
+            // Set up custom Action Bar and enable up navigation
 //        getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
 //        getActionBar().setCustomView(R.layout.action_bar_title);
 //        getActionBar().setDisplayHomeAsUpEnabled(false);
@@ -116,21 +158,24 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
 //        ((ImageButton) findViewById(R.id.action_bar_home)).setImageResource(R.drawable.ic_action_cancel);
 //        ((ImageButton) findViewById(R.id.action_bar_home)).setOnClickListener(this);
 
-        // Add on click listeners to buttons
+            // Add on click listeners to buttons
 //        ((Button)findViewById(R.id.btnSignIn)).setOnClickListener(this);
-        ((LoginButton)findViewById(R.id.btnSignInFacebook)).setOnClickListener(this);
+            ((LoginButton) findViewById(R.id.btnSignInFacebook)).setOnClickListener(this);
+        }
     }
 
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_sign_in, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
@@ -138,13 +183,15 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(View v)
+    {
         int id = v.getId();
         switch (id) {
             case R.id.btnSignIn:
@@ -154,12 +201,12 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
                 finish();
                 break;
             case R.id.btnSignInFacebook:
-                if(preferences.getBoolean("LoggedIn", false)){
+                if (preferences.getBoolean("LoggedIn", false)) {
                     LoginManager.getInstance().logOut();
                     editor.putBoolean("LoggedIn", false);
                     editor.apply();
                 }
-                else{
+                else {
                     LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList
                             ("public_profile", "email", "user_friends"));
                     LoginManager.getInstance().logInWithPublishPermissions(
@@ -176,13 +223,9 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
     }
 
 
-
-
-
-
-
     @Override
-    public void onBackPressed() {
+    public void onBackPressed()
+    {
         startActivity(new Intent(this, SignupActivity.class));
         finish();
     }

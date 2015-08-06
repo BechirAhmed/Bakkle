@@ -1,8 +1,5 @@
-Make server calls asynchronously
-Get location
-Require location services to be enabled when first using the app
-Don't allow use of app unless location is enabled
 Fix Sellers garage bug of list items cutting off
+" " same with buyer's trunk
 Display total number on top of picture in sellers garage
 blur on the cards
 Fix image upload
@@ -15,4 +12,4 @@ Bring the app to Material design guidelines (or at least make it a little better
 Chatting functionality
 Check status codes when making server calls
 Make ServerCalls class non-instantiable
-Sign up via email
+Use ViewPager to look at images instead of HorizontalScrollView
