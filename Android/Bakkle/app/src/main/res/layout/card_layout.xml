@@ -31,7 +31,7 @@
             android:layout_alignBottom="@+id/rating"
             android:layout_toRightOf="@+id/sellerImage"/>
 
-        <com.andtinder.CircleImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:paddingTop="2dp"

@@ -21,15 +21,15 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".SplashActivity"
+            android:name=".Activities.SplashActivity"
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name=".SignupActivity"
+            android:name=".Activities.SignupActivity"
             android:label="@string/title_activity_login" >
         </activity>
         <activity
-            android:name=".LoginActivity"
+            android:name=".Activities.LoginActivity"
             android:label="@string/title_activity_sign_in" >
             <intent-filter android:label="@string/app_name" >
                 <action android:name="android.intent.action.MAIN" />
@@ -46,7 +46,7 @@
             -->
         </activity>
         <activity
-            android:name=".HomeActivity"
+            android:name=".Activities.HomeActivity"
             android:label="@string/title_activity_home" >
         </activity>
         <activity
@@ -69,31 +69,31 @@
             android:value="@string/facebook_app_id" />
 
         <activity
-            android:name=".ItemDetail"
+            android:name=".Activities.ItemDetailActivity"
             android:label="@string/title_activity_item_detail"
-            android:parentActivityName=".HomeActivity" >
+            android:parentActivityName=".Activities.HomeActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.bakkle.bakkle.HomeActivity" />
+                android:value=".Activities.HomeActivity" />
         </activity>
         <activity
-            android:name=".AddItem"
+            android:name=".Activities.AddItemActivity"
             android:label="@string/title_activity_add_item"
-            android:parentActivityName=".HomeActivity" >
+            android:parentActivityName=".Activities.HomeActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.bakkle.bakkle.HomeActivity" />
+                android:value=".Activities.HomeActivity" />
         </activity>
         <activity
-            android:name=".ChatList"
+            android:name=".Activities.ChatListActivity"
             android:label="@string/title_activity_chat_list"
-            android:parentActivityName=".HomeActivity" >
+            android:parentActivityName=".Activities.HomeActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.bakkle.bakkle.HomeActivity" />
+                android:value=".Activities.HomeActivity" />
         </activity>
         <activity
-            android:name=".Chat"
+            android:name=".Activities.ChatActivity"
             android:label="@string/title_activity_chat" >
         </activity>
     </application>
