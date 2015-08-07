@@ -39,8 +39,9 @@ public class ChatCalls
 
     public void connect()
     {
-        String url = ws_base + "?uuid=" + uuid + "&userId=" + userId;
-        client.websocket(url, "GET", new WebSocketCallBack(this));
+//        String url = ws_base + "?uuid=" + uuid + "&userId=" + userId;
+        String url = "ws://bakkle.rhventures.org:8000/ws/?userId=10&uuid=9D223CB7-6438-4699-A9CF-FBF393DD4597";
+        client.websocket(url, null, new WebSocketCallBack(this));
     }
 
     public class WebSocketCallBack implements AsyncHttpClient.WebSocketConnectCallback
@@ -65,8 +66,11 @@ public class ChatCalls
                 try {
                     json.put("method", "echo");
                     json.put("message", "testing the connection");
-                    json.put("uuid", uuid);
-                    json.put("auth_token", authToken);
+                    json.put("uuid", "E7F742EB-67EE-4738-ABEC-F0A3B62B45EB");
+                    json.put("auth_token", "f02dfb77e9615ae630753b37637abb31_10");
+                    Log.v("the json is ", json.toString());
+//                    json.put("uuid", uuid);
+//                    json.put("auth_token", authToken);
                 }
                 catch (Exception e) {
                 }
