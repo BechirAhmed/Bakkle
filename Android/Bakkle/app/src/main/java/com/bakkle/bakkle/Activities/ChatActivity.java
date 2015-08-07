@@ -19,7 +19,8 @@ import com.bakkle.bakkle.Helpers.ChatMessage;
 import com.bakkle.bakkle.R;
 import com.bakkle.bakkle.Helpers.ServerCalls;
 
-public class ChatActivity extends AppCompatActivity {
+public class ChatActivity extends AppCompatActivity
+{
 
     private ChatArrayAdapter chatArrayAdapter;
     private ListView listView;
@@ -32,7 +33,8 @@ public class ChatActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         send = (Button) findViewById(R.id.send);
@@ -46,17 +48,21 @@ public class ChatActivity extends AppCompatActivity {
 
         getPreviousMessages();
 
-        chatText.setOnKeyListener(new View.OnKeyListener() {
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
+        chatText.setOnKeyListener(new View.OnKeyListener()
+        {
+            public boolean onKey(View v, int keyCode, KeyEvent event)
+            {
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                     return sendChatMessage();
                 }
                 return false;
             }
         });
-        send.setOnClickListener(new View.OnClickListener() {
+        send.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View arg0) {
+            public void onClick(View arg0)
+            {
                 sendChatMessage();
             }
         });
@@ -64,36 +70,45 @@ public class ChatActivity extends AppCompatActivity {
         listView.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
         listView.setAdapter(chatArrayAdapter);
 
-        chatArrayAdapter.registerDataSetObserver(new DataSetObserver() {
+        chatArrayAdapter.registerDataSetObserver(new DataSetObserver()
+        {
             @Override
-            public void onChanged() {
+            public void onChanged()
+            {
                 super.onChanged();
                 listView.setSelection(chatArrayAdapter.getCount() - 1);
             }
         });
     }
 
-    private void getPreviousMessages() {
+    private void getPreviousMessages()
+    {
 
     }
 
-    private boolean sendChatMessage(){
-        serverCalls.sendChat(preferences.getString("uuid", "0"), preferences.getString("auth_token", "0"), chatText.getText().toString(), id);
-        chatArrayAdapter.add(new ChatMessage(left, chatText.getText().toString()));
-        chatText.setText("");
-        left = !left;
+    private boolean sendChatMessage()
+    {
+        String text = chatText.getText().toString();
+        if (text.equals("")) {
+            serverCalls.sendChat(preferences.getString("uuid", "0"), preferences.getString("auth_token", "0"), chatText.getText().toString(), id);
+            chatArrayAdapter.add(new ChatMessage(left, text));
+            chatText.setText("");
+            left = !left;
+        }
         return true;
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_chat, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.

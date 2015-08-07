@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,25 +25,37 @@ public class ChatListActivity extends ListActivity {
     ArrayList<BuyerInfo> buyerInfos = null;
     JsonObject json;
     SharedPreferences preferences;
-    ChatCalls chatCalls;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_list);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        chatCalls = new ChatCalls(preferences.getString("uuid", ""), preferences.getString("userID", ""), preferences.getString("auth_token", ""));
+        new Thread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+
+
+            }
+        });
+
+        preferences = PreferenceManager.getDefaultSharedPreferences(ChatListActivity.this);
+        ChatCalls chatCalls;
+        chatCalls = new ChatCalls(preferences.getString("uuid", ""), preferences.getString("sellerPk", ""), preferences.getString("auth_token", ""));
         chatCalls.connect();
-        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        Log.v("the url is:", "ws://app.bakkle.com/ws/" + "?uuid=" + preferences.getString("uuid", "") + "&userId=" + preferences.getString("sellerPk", ""));
         chatCalls.getChatList();
+
+
         buyerInfos = new ArrayList<>();
         buyerInfos.add(new BuyerInfo("Vansh", "http://i.imgur.com/RotoKyk.jpg"));
-        setListAdapter(new ChatListAdapter(this, buyerInfos));
-    }
+        buyerInfos.add(new BuyerInfo("John", "http://i.imgur.com/RotoKyk.jpg"));
+        setListAdapter(new ChatListAdapter(ChatListActivity.this, buyerInfos));
 
-    private ArrayList<BuyerInfo> getItems(JsonObject json) {
 
-        return null;
     }
 
     @Override
