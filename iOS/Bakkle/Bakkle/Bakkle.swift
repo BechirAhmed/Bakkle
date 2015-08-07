@@ -66,7 +66,6 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     
     var account_id: Int! = 0
     var auth_token: String!
-    var email: String!
     var facebook_id: Int!
     var facebook_id_str: String!
     var first_name: String!

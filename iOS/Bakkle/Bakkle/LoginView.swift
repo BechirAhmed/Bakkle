@@ -37,9 +37,6 @@ class LoginView: UIViewController, FBSDKLoginButtonDelegate {
             self.loginScreenBkg.image = UIImage(named: "LoginScreen-bkg-blue.png")!
         }
         
-        // FBSDK documentation specifically says to not place "publish_actions" in readPermissions... it WILL NOT run
-        self.fbLoginView.readPermissions = ["email"]
-        
         // add the image, making the login view looks like the launch screen when user already logged in
         setBackgroundImg()
         setLogoImg()
@@ -104,7 +101,7 @@ class LoginView: UIViewController, FBSDKLoginButtonDelegate {
     }
     
     func bakkleLogin() {
-        FBSDKGraphRequest(graphPath: "me", parameters: ["fields":"id, name, first_name, last_name, email, gender, verified"]).startWithCompletionHandler({ (connection, result2, error) -> Void in
+        FBSDKGraphRequest(graphPath: "me", parameters: ["fields":"id, name, first_name, last_name, gender, verified"]).startWithCompletionHandler({ (connection, result2, error) -> Void in
             if error != nil {
                 // Process error
                 var alert = UIAlertController(title: error.localizedDescription, message: error.localizedRecoverySuggestion, preferredStyle: UIAlertControllerStyle.Alert)
