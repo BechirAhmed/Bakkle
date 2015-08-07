@@ -12,7 +12,6 @@
 		130CBBAA1B0E238E004514CF /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB852E7B1B05748F00665CD4 /* NotificationController.swift */; };
 		130CBBAC1B0E2744004514CF /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DB852E8D1B05748F00665CD4 /* Images.xcassets */; };
 		139096881B0CD5C800C8BB33 /* Bakkle WatchKit App.app in Resources */ = {isa = PBXBuildFile; fileRef = 139096871B0CD5C800C8BB33 /* Bakkle WatchKit App.app */; };
-		139096951B0CD5C800C8BB33 /* Bakkle WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 139096781B0CD5C800C8BB33 /* Bakkle WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		13AB6F9D1B0E3C520092EE61 /* btn-meh.png in Resources */ = {isa = PBXBuildFile; fileRef = 13AB6F9C1B0E3C520092EE61 /* btn-meh.png */; };
 		13AB6FA21B0E404B0092EE61 /* btn-meh.png in Resources */ = {isa = PBXBuildFile; fileRef = 13AB6F9C1B0E3C520092EE61 /* btn-meh.png */; };
 		13AB6FA31B0E404F0092EE61 /* btb-want.png in Resources */ = {isa = PBXBuildFile; fileRef = DBEE0E981AF3C855005E60BD /* btb-want.png */; };
@@ -347,13 +346,6 @@
 			remoteGlobalIDString = 139096861B0CD5C800C8BB33;
 			remoteInfo = "Bakkle WatchKit App";
 		};
-		139096931B0CD5C800C8BB33 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5EBDD6831AB211E600C7FBE7 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 139096771B0CD5C800C8BB33;
-			remoteInfo = "Bakkle WatchKit Extension";
-		};
 		5EBDD6A11AB211E600C7FBE7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 5EBDD6831AB211E600C7FBE7 /* Project object */;
@@ -362,20 +354,6 @@
 			remoteInfo = Bakkle;
 		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		DB852E981B05748F00665CD4 /* Embed App Extensions */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 13;
-			files = (
-				139096951B0CD5C800C8BB33 /* Bakkle WatchKit Extension.appex in Embed App Extensions */,
-			);
-			name = "Embed App Extensions";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		136AB1E21B0835E200C76C71 /* ChatNotification.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = ChatNotification.apns; sourceTree = "<group>"; };
@@ -1105,12 +1083,10 @@
 				5EBDD6891AB211E600C7FBE7 /* Resources */,
 				DAC119B602F64538F899B059 /* Embed Pods Frameworks */,
 				1BBD5791D628CB2AC4F68D73 /* Copy Pods Resources */,
-				DB852E981B05748F00665CD4 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				139096941B0CD5C800C8BB33 /* PBXTargetDependency */,
 			);
 			name = Bakkle;
 			productName = Bakkle;
@@ -1703,11 +1679,6 @@
 			target = 139096861B0CD5C800C8BB33 /* Bakkle WatchKit App */;
 			targetProxy = 139096891B0CD5C800C8BB33 /* PBXContainerItemProxy */;
 		};
-		139096941B0CD5C800C8BB33 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 139096771B0CD5C800C8BB33 /* Bakkle WatchKit Extension */;
-			targetProxy = 139096931B0CD5C800C8BB33 /* PBXContainerItemProxy */;
-		};
 		5EBDD6A21AB211E600C7FBE7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 5EBDD68A1AB211E600C7FBE7 /* Bakkle */;
@@ -1911,7 +1882,6 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = YES;
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -1939,7 +1909,6 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = YES;
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
