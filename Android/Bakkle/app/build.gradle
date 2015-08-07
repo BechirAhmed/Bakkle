@@ -18,7 +18,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    sourceSets { main { java.srcDirs = ['src/main/java', 'src/main/java/com/bakkle/bakkle/Chat'] } }
+    sourceSets { main { java.srcDirs = ['src/main/java', 'src/main/java/com/bakkle/bakkle/ChatActivity'] } }
 }
 
 repositories {
