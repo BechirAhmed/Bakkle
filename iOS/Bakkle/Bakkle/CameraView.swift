@@ -94,6 +94,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     var lockRelease: [Bool]!
     var stopFocus = false
     var animating: Int = 0 // image rearrangement
+    private var recordingDidChange = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -200,6 +201,8 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             displayImagePreview()
         }
         
+        videoOutput.addObserver(self, forKeyPath: "recording", options: .New, context: &recordingDidChange)
+        
         buttonEnabledHandler()
         
         flashSettings.userInteractionEnabled = false
@@ -223,6 +226,14 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         }
         
         drawFocusRect()
+    }
+    
+    override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
+        if context == &recordingDidChange {
+            buttonEnabledHandler()
+        } else {
+            super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)
+        }
     }
     
     //TEMP!! REMOVE SOON
@@ -308,6 +319,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         UIApplication.sharedApplication().setStatusBarHidden(false, withAnimation: .Fade)
         stopFocus = true
         capturePreview?.removeFromSuperlayer()
+        videoOutput.removeObserver(self, forKeyPath: "recording", context: &recordingDidChange)
     }
     
     override func viewDidDisappear(animated: Bool) {
@@ -490,7 +502,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         }
         
         // update frame of the indicator IF the device is previewing or displaying a still
-        if (selectedDevice!.device.adjustingFocus || selectedDevice!.device.adjustingExposure || selectedDevice!.device.adjustingWhiteBalance) && !displayingStill {
+        if (selectedDevice!.device.adjustingFocus || selectedDevice!.device.adjustingExposure || selectedDevice!.device.adjustingWhiteBalance) && !displayingStill && selectedDevice!.device.isFocusModeSupported(.ContinuousAutoFocus) {
             focusIndicator.removeFromSuperview()
             focusIndicator.frame.origin.x = selectedDevice!.device.focusPointOfInterest.x * cameraView.bounds.size.width - focusIndicator.frame.width / 2.0
             focusIndicator.frame.origin.y = selectedDevice!.device.focusPointOfInterest.y * cameraView.bounds.size.height - focusIndicator.frame.height / 2.0
@@ -589,8 +601,6 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     }
     
     func captureOutput(captureOutput: AVCaptureFileOutput!, didFinishRecordingToOutputFileAtURL outputFileURL: NSURL!, fromConnections connections: [AnyObject]!, error: NSError!) {
-        NSLog("Recording Finished")
-        
         var successfulRecord = true
         
         if error != nil {
@@ -604,45 +614,22 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             }
         }
         
-        var outputURL = "\(NSTemporaryDirectory())sqvid\(videoCount - 1)"
+        var err: NSError?
         
-        if NSFileManager.defaultManager().fileExistsAtPath(outputURL) {
-            var err: NSError?
-            NSFileManager.defaultManager().removeItemAtPath(outputURL, error: &err)
+        if successfulRecord {
+            var fileSize: UInt64 = 0 // this is incase the user manages to record another video before this is processed
+            
+            var attr: NSDictionary? = NSFileManager.defaultManager().attributesOfItemAtPath(outputFileURL.path!, error: &err)
+            if let _attr = attr {
+                fileSize = _attr.fileSize()
+            }
+            
+            NSLog("Recording Finished, video\(videoCount - 1).mov size: %d bits", videoOutput.recordedFileSize)
+        } else {
+            NSLog("RECORDING FAILED")
         }
         
-        // Pre-video editing setup
-        var asset: AVAsset = AVAsset.assetWithURL(outputFileURL) as! AVAsset
-        var composition = AVMutableComposition()
-        composition.addMutableTrackWithMediaType(AVMediaTypeVideo, preferredTrackID: CMPersistentTrackID(kCMPersistentTrackID_Invalid))
-        var clipVideoTrack: AVAssetTrack = asset.tracksWithMediaType(AVMediaTypeVideo)[0] as! AVAssetTrack
-        
-        // Crop to square
-        var videoComposition = AVMutableVideoComposition()
-        videoComposition.renderSize = CGSizeMake(CGFloat(Bakkle.sharedInstance.image_width), CGFloat(Bakkle.sharedInstance.image_width))
-        videoComposition.frameDuration = CMTimeMake(1, Bakkle.sharedInstance.video_framerate)
-        var instruction = AVMutableVideoCompositionInstruction()
-        instruction.timeRange = CMTimeRangeMake(kCMTimeZero, self.videoOutput.maxRecordedDuration)
-        videoComposition.instructions = [instruction]
-        
-        // Export
-        var exporter = AVAssetExportSession(asset: asset, presetName: AVAssetExportPresetLowQuality)
-        exporter.videoComposition = videoComposition
-        exporter.outputURL = NSURL(fileURLWithPath: outputURL)
-        exporter.outputFileType = AVFileTypeMPEG4
-        
-        NSLog("Pre-edited size: \(captureOutput.recordedFileSize)")
-        
-        exporter.exportAsynchronouslyWithCompletionHandler({
-            var err: NSError?
-            if NSFileManager.defaultManager().fileExistsAtPath(outputURL) {
-                NSLog("Square file size: \(NSFileManager.defaultManager().attributesOfFileSystemForPath(outputURL, error: &err)![NSFileSize])")
-                if err != nil {
-                    NSLog(err!.localizedDescription)
-                }
-            }
-            NSFileManager.defaultManager().removeItemAtPath(outputFileURL.lastPathComponent!, error: &err)
-        })
+        // Possible square video link: http://www.netwalk.be/article/record-square-video-ios
     }
     
     @IBAction func takePhoto(sender: AnyObject) {
@@ -813,7 +800,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     func buttonEnabledHandler() {
         var notDragging = self.dragActivated < 0
         var imageCountGreaterThanMaxCount = imageCount >= CameraView.MAX_IMAGE_COUNT
-        var recordButtonNotHeld =  self.stillRecording == 0
+        var recordButtonNotHeld =  !self.videoOutput.recording
         
         self.closeButton.enabled = notDragging && recordButtonNotHeld
         self.closeButton.hidden = !self.closeButton.enabled
@@ -836,8 +823,8 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         self.capButtonSpace.hidden = self.capButton.hidden
         
         for i in 0...(self.imageViews.count - 1) {
-            self.removeImageButtons[i].hidden = self.imageViews[i].image == nil || !notDragging || recordButtonNotHeld
-            self.removeImageButtons[i].enabled = self.imageViews[i].image != nil && notDragging && recordButtonNotHeld
+            self.removeImageButtons[i].hidden = self.imageViews[i].image == nil || !notDragging || !recordButtonNotHeld
+            self.removeImageButtons[i].enabled = !self.removeImageButtons[i].hidden
         }
     }
     

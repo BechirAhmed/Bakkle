@@ -50,6 +50,11 @@ class DemoView: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate{
         NSUserDefaults.standardUserDefaults().setInteger(row, forKey: "server")
     }
 
+    @IBAction func a(sender: AnyObject) {
+        var vp: VideoPlayer = VideoPlayer(videoURL: "https://images.jet.com/videos/landing/v2/2purple.mp4", presentingController: self)
+        vp.play()
+    }
+    
     @IBAction func btnMenu(sender: AnyObject) {
         self.revealViewController().revealToggleAnimated(true)
     }
