@@ -22,14 +22,12 @@
 		1B56D5D41B30709F009D81C6 /* UIDevice+ModelName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B56D5D31B30709F009D81C6 /* UIDevice+ModelName.swift */; };
 		1B754B251B4D4D960002C41D /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B754B241B4D4D960002C41D /* CameraView.swift */; };
 		1B876B161B57F65C00D79D82 /* camera-remove.png in Resources */ = {isa = PBXBuildFile; fileRef = 1B876B151B57F65C00D79D82 /* camera-remove.png */; };
-		1B99FD991B6C02E300D2D441 /* EmailRequiredView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B99FD981B6C02E300D2D441 /* EmailRequiredView.swift */; };
 		1BE43B5C1B6A9AEF00A6E6F8 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BE43B5B1B6A9AEF00A6E6F8 /* CoreLocation.framework */; };
 		1BE43B5D1B6A9AF800A6E6F8 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BE43B5B1B6A9AEF00A6E6F8 /* CoreLocation.framework */; };
 		1BF70DC31B74F74900B9231A /* VideoPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF70DC21B74F74900B9231A /* VideoPlayer.swift */; };
 		1BF70DC41B74F74900B9231A /* VideoPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF70DC21B74F74900B9231A /* VideoPlayer.swift */; };
 		1BF7D3631B592D7800EC7789 /* FocusIndicator.png in Resources */ = {isa = PBXBuildFile; fileRef = 1BF7D3611B592D7800EC7789 /* FocusIndicator.png */; };
 		1BF7D3641B592D7800EC7789 /* ios-flash-on-white.png in Resources */ = {isa = PBXBuildFile; fileRef = 1BF7D3621B592D7800EC7789 /* ios-flash-on-white.png */; };
-		1BF96FDA1B71537600588A9C /* EmailRequiredView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B99FD981B6C02E300D2D441 /* EmailRequiredView.swift */; };
 		1BFAEC661B6659FF00E264A9 /* Goodwill Logo-White.png in Resources */ = {isa = PBXBuildFile; fileRef = 1BFAEC651B6659FF00E264A9 /* Goodwill Logo-White.png */; };
 		5E023F861AD592B80002AFBC /* btn-addItem.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E023F851AD592B80002AFBC /* btn-addItem.png */; };
 		5E023F881AD59F200002AFBC /* logo-white-design-png-transp-100.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E023F871AD59F200002AFBC /* logo-white-design-png-transp-100.png */; };
@@ -93,6 +91,9 @@
 		728598C11B6A516900C2FE55 /* Goodwill Logo-White.png in Resources */ = {isa = PBXBuildFile; fileRef = 1BFAEC651B6659FF00E264A9 /* Goodwill Logo-White.png */; };
 		728598C31B6A52C300C2FE55 /* InstructionScreen-new.png in Resources */ = {isa = PBXBuildFile; fileRef = 728598C21B6A52C300C2FE55 /* InstructionScreen-new.png */; };
 		728598C41B6A52C900C2FE55 /* InstructionScreen-new.png in Resources */ = {isa = PBXBuildFile; fileRef = 728598C21B6A52C300C2FE55 /* InstructionScreen-new.png */; };
+		728598C91B73B41000C2FE55 /* test-video.MOV in Resources */ = {isa = PBXBuildFile; fileRef = 728598C81B73B41000C2FE55 /* test-video.MOV */; };
+		728598CA1B73B41000C2FE55 /* test-video.MOV in Resources */ = {isa = PBXBuildFile; fileRef = 728598C81B73B41000C2FE55 /* test-video.MOV */; };
+		728598CB1B75073500C2FE55 /* SplashScreen-bkg.png in Resources */ = {isa = PBXBuildFile; fileRef = F0D6F4041B5EA18700938A06 /* SplashScreen-bkg.png */; };
 		728647EB1B2F0E3F009A24C9 /* ChatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53BE1B0815CB000C406C /* ChatsViewController.swift */; };
 		728647EC1B2F0E46009A24C9 /* ChatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53BE1B0815CB000C406C /* ChatsViewController.swift */; };
 		728647EE1B309F6F009A24C9 /* NSDate+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 728647ED1B309F6F009A24C9 /* NSDate+String.swift */; };
@@ -327,7 +328,6 @@
 		F0D6F4001B5EA06600938A06 /* icon-i-blue.png in Resources */ = {isa = PBXBuildFile; fileRef = F0D6F3FE1B5EA06600938A06 /* icon-i-blue.png */; };
 		F0D6F4021B5EA17100938A06 /* LoginScreen-bkg.png in Resources */ = {isa = PBXBuildFile; fileRef = F0D6F4011B5EA17100938A06 /* LoginScreen-bkg.png */; };
 		F0D6F4031B5EA17100938A06 /* LoginScreen-bkg.png in Resources */ = {isa = PBXBuildFile; fileRef = F0D6F4011B5EA17100938A06 /* LoginScreen-bkg.png */; };
-		F0D6F4051B5EA18700938A06 /* SplashScreen-bkg.png in Resources */ = {isa = PBXBuildFile; fileRef = F0D6F4041B5EA18700938A06 /* SplashScreen-bkg.png */; };
 		F0D6F4061B5EA18700938A06 /* SplashScreen-bkg.png in Resources */ = {isa = PBXBuildFile; fileRef = F0D6F4041B5EA18700938A06 /* SplashScreen-bkg.png */; };
 		F0D6F4081B5EA28900938A06 /* SplashScreen-bkg-Blue.png in Resources */ = {isa = PBXBuildFile; fileRef = F0D6F4071B5EA28900938A06 /* SplashScreen-bkg-Blue.png */; };
 		F0D6F4091B5EA28900938A06 /* SplashScreen-bkg-Blue.png in Resources */ = {isa = PBXBuildFile; fileRef = F0D6F4071B5EA28900938A06 /* SplashScreen-bkg-Blue.png */; };
@@ -390,7 +390,6 @@
 		1B56D5D31B30709F009D81C6 /* UIDevice+ModelName.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIDevice+ModelName.swift"; sourceTree = "<group>"; };
 		1B754B241B4D4D960002C41D /* CameraView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
 		1B876B151B57F65C00D79D82 /* camera-remove.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera-remove.png"; sourceTree = "<group>"; };
-		1B99FD981B6C02E300D2D441 /* EmailRequiredView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailRequiredView.swift; sourceTree = "<group>"; };
 		1BE43B5B1B6A9AEF00A6E6F8 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		1BF70DC21B74F74900B9231A /* VideoPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoPlayer.swift; sourceTree = "<group>"; };
 		1BF7D3611B592D7800EC7789 /* FocusIndicator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = FocusIndicator.png; sourceTree = "<group>"; };
@@ -482,6 +481,7 @@
 		726A38E21B39BE1E00CF5553 /* logo-white-design-clear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-white-design-clear.png"; sourceTree = "<group>"; };
 		727FA76C1B4C15750023C126 /* new-x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "new-x.png"; sourceTree = "<group>"; };
 		728598C21B6A52C300C2FE55 /* InstructionScreen-new.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "InstructionScreen-new.png"; sourceTree = "<group>"; };
+		728598C81B73B41000C2FE55 /* test-video.MOV */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = "test-video.MOV"; sourceTree = "<group>"; };
 		728647ED1B309F6F009A24C9 /* NSDate+String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSDate+String.swift"; sourceTree = "<group>"; };
 		72B5D8041B41E12D00E4B6EA /* BuyItemView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuyItemView.swift; sourceTree = "<group>"; };
 		72B5D8061B41E52300E4B6EA /* ChatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
@@ -714,6 +714,7 @@
 				5EE2C9B11AB9F0FB0031D8CD /* MDCSwipeToChoose-Prefix.pch */,
 				5EBDD6991AB211E600C7FBE7 /* LaunchScreen.xib */,
 				5EBDD68F1AB211E600C7FBE7 /* Info.plist */,
+				728598C81B73B41000C2FE55 /* test-video.MOV */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -852,7 +853,6 @@
 				72B5D8041B41E12D00E4B6EA /* BuyItemView.swift */,
 				72B5D8081B42DF7300E4B6EA /* RateUserView.swift */,
 				1B754B241B4D4D960002C41D /* CameraView.swift */,
-				1B99FD981B6C02E300D2D441 /* EmailRequiredView.swift */,
 				1BF70DC21B74F74900B9231A /* VideoPlayer.swift */,
 			);
 			name = Views;
@@ -1269,7 +1269,6 @@
 				A058A2B41AFDADA2005E7432 /* mask-buyer-grey.png in Resources */,
 				60F3BC221B694C5A0033EF83 /* Bakkle_Notification_new.m4r in Resources */,
 				A0A200011ACE2F7500A42CD8 /* btn-email40.png in Resources */,
-				F0D6F4051B5EA18700938A06 /* SplashScreen-bkg.png in Resources */,
 				A058A2B91AFDADA2005E7432 /* mask-buyer-white@3x.png in Resources */,
 				A0A8F8FE1B1F2BB70055BBC0 /* cartoon_fast_whoosh_good_for_karate_chop_other_fast_movement_or_swipe_001.mp3 in Resources */,
 				F0D6F40B1B5EA29600938A06 /* LoginScreen-bkg-blue.png in Resources */,
@@ -1294,7 +1293,9 @@
 				602C38991B389A2E005CB493 /* WrongLocationForPhone.png in Resources */,
 				A05DB7521AF1BC090076D97D /* btn-menu.png in Resources */,
 				F0D6F4081B5EA28900938A06 /* SplashScreen-bkg-Blue.png in Resources */,
+				728598C91B73B41000C2FE55 /* test-video.MOV in Resources */,
 				F0D6F4021B5EA17100938A06 /* LoginScreen-bkg.png in Resources */,
+				728598CB1B75073500C2FE55 /* SplashScreen-bkg.png in Resources */,
 				A058A2A91AFD6024005E7432 /* btn-menu@3x.png in Resources */,
 				1BF7D3631B592D7800EC7789 /* FocusIndicator.png in Resources */,
 				F0D6F3FF1B5EA06600938A06 /* icon-i-blue.png in Resources */,
@@ -1434,6 +1435,7 @@
 				A03E93C91B43755600F12733 /* InstructionScreen.png in Resources */,
 				A0E1EBC61B2B5B2200662C08 /* icon-pencil.png in Resources */,
 				A0E1EBC71B2B5B2200662C08 /* icon-house.png in Resources */,
+				728598CA1B73B41000C2FE55 /* test-video.MOV in Resources */,
 				A0E1EBC81B2B5B2200662C08 /* mask-buyer-white@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1549,7 +1551,6 @@
 			files = (
 				5EE2C9B71AB9F0FB0031D8CD /* MDCPanState.m in Sources */,
 				A058A2AB1AFD8EAD005E7432 /* UIImage+Resize.swift in Sources */,
-				1B99FD991B6C02E300D2D441 /* EmailRequiredView.swift in Sources */,
 				A08D53CB1B0815CB000C406C /* ChatCell.swift in Sources */,
 				602C38F81B3C9105005CB493 /* PNColor.m in Sources */,
 				5EBDD6931AB211E600C7FBE7 /* LoginView.swift in Sources */,
@@ -1632,7 +1633,6 @@
 			files = (
 				A0E1EB4B1B2B5B2200662C08 /* MDCPanState.m in Sources */,
 				A0E1EB4C1B2B5B2200662C08 /* UIImage+Resize.swift in Sources */,
-				1BF96FDA1B71537600588A9C /* EmailRequiredView.swift in Sources */,
 				A0E1EB4D1B2B5B2200662C08 /* ChatCell.swift in Sources */,
 				A0E1EB4F1B2B5B2200662C08 /* LoginView.swift in Sources */,
 				A0E1EB501B2B5B2200662C08 /* FeedView.swift in Sources */,

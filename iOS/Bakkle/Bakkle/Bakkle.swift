@@ -43,7 +43,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     
     // DO NOT ENABLE if there is no way to select servers from settings file.
     static let developerTools   = false
-    static let defaultServerNum = 0 // 0 = prod, 1 = prod cluster (sets default server in list below)
+    static let defaultServerNum = 2 // 0 = prod, 1 = prod cluster (sets default server in list below)
     static let servers   =   ["https://app.bakkle.com/",            // 0 (Production Single)
                               "https://app-cluster.bakkle.com/",    // 1 (Production Cluster)
                               "http://bakkle.rhventures.org:8000/"] // 2 (Test)
@@ -54,8 +54,6 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
 //                              "Ben (Developers Only)"]
     static let BAKKLE = 1
     static let GOODWILL = 2
-    
-    var testAccountIDs = Set<String>()
     
     /* 1 - ERROR
      * 2 - INFO
@@ -118,7 +116,6 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         self.getFilter()
         self.restoreData()
         self.initLocation()
-        self.setTestAccountIDs()
         
         /* Set version of app for branding 1=Bakkle, 2=Goodwill */
         let appName = NSBundle.mainBundle().infoDictionary!["CFBundleName"] as! String;
@@ -132,13 +129,6 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         
         settings()
     }
-    
-    /* Set the test account Facebook ID #'s to bypass verification check */
-    func setTestAccountIDs() {
-        self.testAccountIDs.insert("1389969691332367") // Bakkle Test Account
-        self.testAccountIDs.insert("1424606684535223") // Goodwill Test Account
-    }
-    
         
     /* Return a public URL to the item on the web */
     /* In future we hope to have a URL shortener */
@@ -310,8 +300,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
 
     
     /* register and login using facebook */
-    func facebook(email: String, gender: String,
-        name: String, userid: String, first_name: String, last_name: String, success: ()->()) {
+    func facebook(gender: String, name: String, userid: String, first_name: String, last_name: String, success: ()->()) {
         let url:NSURL? = NSURL(string: url_base + url_facebook)
         let request = NSMutableURLRequest(URL: url!)
         
@@ -319,7 +308,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         self.facebook_id = userid.toInt()
             
         request.HTTPMethod = "POST"
-        let postString = "email=\(email)&name=\(name)&gender=\(gender)&user_id=\(userid)&first_name=\(first_name)&last_name=\(last_name)&device_uuid=\(self.deviceUUID)&flavor=\(self.flavor)"
+        let postString = "name=\(name)&gender=\(gender)&user_id=\(userid)&first_name=\(first_name)&last_name=\(last_name)&device_uuid=\(self.deviceUUID)&flavor=\(self.flavor)"
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
         
         info("facebook")
@@ -343,7 +332,6 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                 var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &error) as! NSDictionary
                 
                 if responseDict.valueForKey("status")?.integerValue == 1 {
-                    self.email = email
                     self.first_name = first_name
                     self.last_name = last_name
                     let facebookProfileImageUrlString = "http://graph.facebook.com/\(Bakkle.sharedInstance.facebook_id_str)/picture?width=250&height=250"
