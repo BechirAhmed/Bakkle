@@ -12,7 +12,6 @@ sudo install -m 644 etc/nginx/sites-available/org.rhventures.bakkle.conf /etc/ng
 sudo install -m 644 etc/nginx/sites-available/org.rhventures.bakkle-bld.conf /etc/nginx/sites-available/
 sudo install -m 644 etc/nginx/sites-available/org.rhventures.wongb.conf /etc/nginx/sites-available/
 
-sudo add-apt-repository ppa:nginx/$nginx
 sudo apt-get install nginx -y
 
 sudo ./bin/nginx_dissite 000-default

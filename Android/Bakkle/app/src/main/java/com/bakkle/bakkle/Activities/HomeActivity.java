@@ -239,11 +239,14 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
 
         Log.d("testing", preferences.getString("uuid", "0"));
         Log.d("testing", preferences.getString("userID", "0"));
-        String auth_token = serverCalls.loginFacebook(
-                preferences.getString("uuid", "0"),
-                preferences.getString("userID", "0"),
-                getLocation()
-        );
+        String auth_token = "";
+//        if (preferences.getBoolean("newuser", true)) {
+            auth_token = serverCalls.loginFacebook(
+                    preferences.getString("uuid", "0"),
+                    preferences.getString("userID", "0"),
+                    getLocation()
+            ); //TODO: for production, need to enclose this in the if statement
+//        }
 
         editor.putString("auth_token", auth_token);
         editor.putBoolean("newuser", false);
@@ -447,7 +450,8 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
         serverCalls.resetDemo(preferences.getString("auth_token", "0"), preferences.getString("uuid", "0"));
     }
 
-    public void refineClose(View view){
+    public void refineClose(View view)
+    {
         getFragmentManager().beginTransaction().replace(R.id.content_frame, new FeedFragment())
                 .disallowAddToBackStack().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
                 .commit();

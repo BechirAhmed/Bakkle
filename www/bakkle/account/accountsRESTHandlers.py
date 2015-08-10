@@ -259,7 +259,6 @@ class facebookHandler(bakkleRequestHandler):
         try:
             facebook_id = self.getArgument('user_id')
             display_name = self.getArgument('name')
-            email = self.getArgument('email')
             device_uuid = self.getArgument('device_uuid')
             app_flavor = self.getArgument('flavor', 1)
         except QueryArgumentError as error:
@@ -267,7 +266,6 @@ class facebookHandler(bakkleRequestHandler):
 
         respObj = accountsCommonHandlers.facebook(facebook_id,
                                                   display_name,
-                                                  email,
                                                   device_uuid,
                                                   app_flavor)
 

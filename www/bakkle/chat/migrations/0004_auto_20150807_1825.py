@@ -7,14 +7,14 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('chat', '0004_chat_hasunread'),
+        ('chat', '0003_auto_20150625_1529'),
     ]
 
     operations = [
-        migrations.RenameField(
+        migrations.AddField(
             model_name='chat',
-            old_name='hasUnread',
-            new_name='hasUnreadBuyer',
+            name='hasUnreadBuyer',
+            field=models.BooleanField(default=False),
         ),
         migrations.AddField(
             model_name='chat',

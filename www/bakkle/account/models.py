@@ -21,7 +21,6 @@ if use_sandbox:
 
 # Create your models here.
 class Account(models.Model):
-    email = models.CharField(max_length=200)
     password = models.CharField(max_length=20)
     facebook_id = models.CharField(max_length=200)
     twitter_id = models.CharField(max_length=200)
@@ -43,11 +42,10 @@ class Account(models.Model):
     description = models.CharField(max_length=2000, default=None, null=True)
 
     class Meta:
-        unique_together = ("email", "app_flavor")
         unique_together = ("facebook_id", "app_flavor")
 
     def __str__(self):
-        return "ID={} email={} displayname={}".format(self.id, self.email, self.display_name)
+        return "ID={} displayname={}".format(self.id, self.display_name)
 
     def toDictionary(self):
         valuesDict = {

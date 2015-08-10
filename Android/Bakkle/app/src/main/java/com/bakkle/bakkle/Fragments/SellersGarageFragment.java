@@ -18,8 +18,8 @@ import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.ListView;
 
-import com.bakkle.bakkle.Adapters.GarageAdapter;
 import com.bakkle.bakkle.Activities.ChatListActivity;
+import com.bakkle.bakkle.Adapters.GarageAdapter;
 import com.bakkle.bakkle.Helpers.FeedItem;
 import com.bakkle.bakkle.Helpers.ServerCalls;
 import com.google.gson.JsonArray;
@@ -182,12 +182,14 @@ public class SellersGarageFragment extends ListFragment
         JsonArray imageUrlArray, tagArray;
         FeedItem feedItem;
         String pk, sellerFacebookId;
+        boolean firstRun = true;
 
 
         for (JsonElement element : jsonArray) {
             item = element.getAsJsonObject();
+            temp = item.getAsJsonObject("seller");
+
             feedItem = new FeedItem(this.getActivity());
-            //temp = element.getAsJsonObject();
 
             feedItem.setTitle(item.get("title").getAsString());
             feedItem.setPrice(item.get("price").getAsString());
@@ -196,8 +198,18 @@ public class SellersGarageFragment extends ListFragment
             feedItem.setNumWant(item.get("number_of_want").getAsString());
             feedItem.setNumHold(item.get("number_of_holding").getAsString());
 
+            if (firstRun) {
+                feedItem.setSellerPk(temp.get("pk").getAsString());
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString("sellerPk", feedItem.getSellerPk());
+                editor.apply();
+                assert (feedItem.getSellerPk().equals(preferences.getString("auth_token", "").substring(33, 35)));
+                firstRun = false;
+            }
+
+
             imageUrlArray = item.get("image_urls").getAsJsonArray();
-            imageUrls = new ArrayList<String>();
+            imageUrls = new ArrayList<>();
             for (JsonElement urlElement : imageUrlArray) {
                 imageUrls.add(urlElement.getAsString());
             }
@@ -205,12 +217,6 @@ public class SellersGarageFragment extends ListFragment
 
 
             feedItems.add(feedItem);
-
-
-            feedItem = null;
-            imageUrlArray = null;
-            imageUrls = null;
-            item = null;
         }
 
         return feedItems;
