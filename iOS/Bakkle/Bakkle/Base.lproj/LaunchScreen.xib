@@ -11,9 +11,6 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFill" image="SplashScreen-bkg.png" translatesAutoresizingMaskIntoConstraints="NO" id="Zf1-le-pxa">
-                    <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
-                </imageView>
                 <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" image="logo-white-design-clear.png" translatesAutoresizingMaskIntoConstraints="NO" id="E5Z-Ws-e3i">
                     <rect key="frame" x="36" y="49" width="342" height="138"/>
                     <constraints>
@@ -23,16 +20,19 @@
                         <rect key="frame" x="-293" y="100" width="1001" height="404"/>
                     </variation>
                 </imageView>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LoginScreen-bkg.png" translatesAutoresizingMaskIntoConstraints="NO" id="7RH-kg-tBO">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                </imageView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstItem="Zf1-le-pxa" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="0F1-gy-4zM"/>
-                <constraint firstAttribute="trailing" secondItem="Zf1-le-pxa" secondAttribute="trailing" id="8s0-t5-jBt"/>
-                <constraint firstItem="Zf1-le-pxa" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="MPb-8B-Z27"/>
+                <constraint firstItem="7RH-kg-tBO" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="E6X-Km-fn3"/>
                 <constraint firstItem="E5Z-Ws-e3i" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="49" id="Pia-5I-6CY"/>
-                <constraint firstAttribute="bottom" secondItem="Zf1-le-pxa" secondAttribute="bottom" id="PzU-5H-twV"/>
+                <constraint firstAttribute="trailing" secondItem="7RH-kg-tBO" secondAttribute="trailing" id="bwW-iK-uOS"/>
                 <constraint firstAttribute="trailing" secondItem="E5Z-Ws-e3i" secondAttribute="trailing" constant="36" id="fyV-B7-A98"/>
                 <constraint firstItem="E5Z-Ws-e3i" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="36" id="j96-Hl-t24"/>
+                <constraint firstAttribute="bottom" secondItem="7RH-kg-tBO" secondAttribute="bottom" id="lCl-m3-aBO"/>
+                <constraint firstItem="7RH-kg-tBO" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="v3H-eR-D0Z"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
@@ -40,7 +40,7 @@
         </view>
     </objects>
     <resources>
-        <image name="SplashScreen-bkg.png" width="1242" height="2208"/>
+        <image name="LoginScreen-bkg.png" width="1242" height="2208"/>
         <image name="logo-white-design-clear.png" width="1001" height="404"/>
     </resources>
 </document>

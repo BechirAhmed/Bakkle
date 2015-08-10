@@ -51,29 +51,6 @@
             android:textStyle="bold"
             tools:text="Seller"/>
 
-        <!-- <com.andtinder.CircleImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:paddingTop="2dp"
-            android:paddingBottom="2dp"
-            android:layout_alignTop="@+id/seller"
-            android:paddingLeft="10dp"
-            android:id="@+id/sellerImage"
-            android:src="@drawable/loading"/> -->
-
-        <!--<RatingBar
-            android:id="@+id/rating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="?android:attr/ratingBarStyleIndicator"
-            android:numStars="5"
-            android:rating="3.5"
-            android:stepSize="0.5"
-            android:isIndicator="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" /> -->
-
     </RelativeLayout>
 
     <RelativeLayout

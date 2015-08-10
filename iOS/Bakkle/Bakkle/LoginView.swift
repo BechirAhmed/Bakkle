@@ -37,9 +37,6 @@ class LoginView: UIViewController, FBSDKLoginButtonDelegate {
             self.loginScreenBkg.image = UIImage(named: "LoginScreen-bkg-blue.png")!
         }
         
-        // FBSDK documentation specifically says to not place "publish_actions" in readPermissions... it WILL NOT run
-        self.fbLoginView.readPermissions = ["email"]
-        
         // add the image, making the login view looks like the launch screen when user already logged in
         setBackgroundImg()
         setLogoImg()
@@ -77,9 +74,9 @@ class LoginView: UIViewController, FBSDKLoginButtonDelegate {
     // create the background image, which is the same as the launch screen background
     func setBackgroundImg(){
         if Bakkle.sharedInstance.flavor == Bakkle.GOODWILL {
-            background = UIImageView(image: UIImage(named: "SplashScreen-bkg-Blue.png"))
+            background = UIImageView(image: UIImage(named: "LoginScreen-bkg-Blue.png"))
         } else{
-            background = UIImageView(image: UIImage(named: "SplashScreen-bkg.png"))
+            background = UIImageView(image: UIImage(named: "LoginScreen-bkg.png"))
         }
         background.frame = CGRectMake(0, 0, self.view.bounds.width, self.view.bounds.height)
         self.view.addSubview(background)
@@ -104,7 +101,7 @@ class LoginView: UIViewController, FBSDKLoginButtonDelegate {
     }
     
     func bakkleLogin() {
-        FBSDKGraphRequest(graphPath: "me", parameters: ["fields":"id, name, first_name, last_name, email, gender, verified"]).startWithCompletionHandler({ (connection, result2, error) -> Void in
+        FBSDKGraphRequest(graphPath: "me", parameters: ["fields":"id, name, first_name, last_name, gender, verified"]).startWithCompletionHandler({ (connection, result2, error) -> Void in
             if error != nil {
                 // Process error
                 var alert = UIAlertController(title: error.localizedDescription, message: error.localizedRecoverySuggestion, preferredStyle: UIAlertControllerStyle.Alert)
@@ -113,58 +110,32 @@ class LoginView: UIViewController, FBSDKLoginButtonDelegate {
             } else {
                 var verifiedKey = "verified"
                 NSLog("User verified = \(result2.objectForKey(verifiedKey))")
-                if (result2.objectForKey("verified") as! Bool || Bakkle.sharedInstance.testAccountIDs.contains(result2.objectForKey("id") as! String)) && (result2.objectForKey("email") != nil) {
                     var userid = result2.objectForKey("id") as! String
-                    var email = result2.objectForKey("email") as! String
                     var gender = result2.objectForKey("gender") as! String
                     var name = result2.objectForKey("name") as! String
                     var first_name = result2.objectForKey("first_name") as! String
                     var last_name = result2.objectForKey("last_name") as! String
-                    Bakkle.sharedInstance.facebook(email, gender: gender, name: name, userid: userid, first_name: first_name, last_name: last_name, success: {
-                        // Sucessfully logged in via FB
-                        Bakkle.sharedInstance.login({
-                            
-                            // jump into the feedview if successfully logged in
-                            dispatch_async(dispatch_get_main_queue()) {
-                                self.performSegueWithIdentifier(self.mainScreenSegueIdentifier, sender: self)
-                            }
-                            
-                            dispatch_async(dispatch_get_main_queue()) {
-                                // Register for push notifications.
-                                let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate!
-                                appDelegate.registerForPushNotifications(UIApplication.sharedApplication())
-                            }
-                            
-                            }, fail: {})
+                    Bakkle.sharedInstance.facebook(gender, name: name, userid: userid, first_name: first_name, last_name: last_name, success: {
+                    // Sucessfully logged in via FB
+                    Bakkle.sharedInstance.login({
+                        
+                        // jump into the feedview if successfully logged in
+                        dispatch_async(dispatch_get_main_queue()) {
+                            self.performSegueWithIdentifier(self.mainScreenSegueIdentifier, sender: self)
+                        }
+                        
+                        dispatch_async(dispatch_get_main_queue()) {
+                            // Register for push notifications.
+                            let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate!
+                            appDelegate.registerForPushNotifications(UIApplication.sharedApplication())
+                        }
+                        
+                        }, fail: {
+                                NSLog("oops")
+                        })
                     }) // Bakkle.sharedInstance.facebook
-                } else if result2.objectForKey("email") == nil {
-                    FBSDKLoginManager().logOut()
-                    FBSDKAccessToken.setCurrentAccessToken(nil)
-                    self.performSegueWithIdentifier("EmailRequiredSegue", sender: self)
-                } else {
-                    // handle unverified log in
-                    
-                    /*
-                    ** NOTE: A verified account is one that has successfully completed Facebook's verification process here: https://developers.facebook.com/docs/graph-api/reference/user#Reading
-                    ** Then proceed to scroll down the page to find the verified variable.
-                    */
-                    
-                    FBSDKLoginManager().logOut()
-                    FBSDKAccessToken.setCurrentAccessToken(nil)
-                    var alert = UIAlertController(title: "Warning", message: "Your Facebook account has not been verified.", preferredStyle: UIAlertControllerStyle.Alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
-                    self.presentViewController(alert, animated: true, completion: nil)
-                    
-                    self.fbLoginView.userInteractionEnabled = true
-                    self.fbLoginView.hidden = false
-                    self.signUpLabel.hidden = false
-                }
-            } // else
+            }
         }) // FBSDKGraphRequest completion handler
-    }
-    
-    func containsTestAccountID(id: String) -> Bool {
-        return Bakkle.sharedInstance.testAccountIDs.contains(id)
     }
     
     /* FBSDKLoginButton Protocol Methods */
