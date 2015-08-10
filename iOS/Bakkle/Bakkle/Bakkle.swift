@@ -7,7 +7,6 @@
 //
 
 import Foundation
-
 import FBSDKLoginKit
 
 class Bakkle : NSObject, CLLocationManagerDelegate {
@@ -958,6 +957,24 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             }
         }
         task.resume()
+    }
+    
+    func previewImageForLocalVideo(url:NSURL) -> UIImage? {
+        let asset = AVURLAsset(URL: url, options: nil)
+        let imageGenerator = AVAssetImageGenerator(asset: asset)
+        imageGenerator.appliesPreferredTrackTransform = true
+        
+        var time = asset.duration
+        //If possible - take not the first frame (it could be completely black or white on camara's videos)
+        time.value = min(time.value, 2)
+
+        var error: NSError?
+        let imageRef = imageGenerator.copyCGImageAtTime(time, actualTime: nil, error: &error)
+        if error != nil {
+            NSLog("Image generation failed with error \(error)")
+            return nil
+        }
+        return UIImage(CGImage: imageRef)
     }
 
     

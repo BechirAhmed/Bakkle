@@ -27,6 +27,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     let albumName = "Bakkle"
     let listItemCellIdentifier = "ListItemCell"
     var itemImages: [UIImage]? = [UIImage]()
+    var videos: [String] = [String]()
     var fileSizes: UInt64 = 0
     var item: NSDictionary!
     var isEditting: Bool = false

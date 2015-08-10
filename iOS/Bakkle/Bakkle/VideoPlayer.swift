@@ -35,6 +35,8 @@ class VideoPlayer {
         self.playerController = VideoPlayerViewController()
         self.videoURL = videoURL
         self.presentingController = presentingController
+        
+        self.playerController.player = self.player
     }
     
     /**
@@ -48,16 +50,28 @@ class VideoPlayer {
         self.player = AVPlayer(URL: self.videoURL)
         self.playerController = VideoPlayerViewController()
         self.presentingController = presentingController
+        
+        self.playerController.player = self.player
     }
     
     /**
-     *  Presents an `AVPlayerViewController` with an `AVPlayer` and begins video playback.
+     *  Presents an `AVPlayerViewController` with an `AVPlayer` and begins video playback (WEB).
      *  
      *  :param: videoURL `String` used to set an `NSURL` that directs to the desired video for playback.
      *  :param: presentingController `UIViewController` that instantiated the object.
      */
-    static func play(videoURL: String, presentingController: UIViewController) {
+    static func playWeb(videoURL: String, presentingController: UIViewController) {
         VideoPlayer.play(NSURL(string: videoURL)!, presentingController: presentingController)
+    }
+    
+    /**
+     *  Presents an `AVPlayerViewController` with an `AVPlayer` and begins video playback (FILE).
+     *
+     *  :param: videoURL `String` used to set an `NSURL` that directs to the desired video for playback.
+     *  :param: presentingController `UIViewController` that instantiated the object.
+     */
+    static func playFile(videoURL: String, presentingController: UIViewController) {
+        VideoPlayer.play(NSURL(fileURLWithPath: videoURL)!, presentingController: presentingController)
     }
     
     /**
@@ -68,7 +82,9 @@ class VideoPlayer {
      */
     static func play(videoURL: NSURL, presentingController: UIViewController) {
         var player = AVPlayer(URL: videoURL)
-        var playerController = AVPlayerViewController()
+        var playerController = VideoPlayerViewController()
+        
+        playerController.player = player
         
         presentingController.presentViewController(playerController, animated: true, completion: {
             player.play()
@@ -130,19 +146,47 @@ class VideoPlayer {
     }
 }
 
-private class VideoPlayerViewController: AVPlayerViewController {
-    private var shouldRotate: Bool = false
+/// Private `AVPlayerViewController` to allow rotation only on itself (WIP, remove this parenthasee grouping when autorotation is complete)
+class VideoPlayerViewController: AVPlayerViewController {
     
-    override func viewWillDisappear(animated: Bool) {
-        super.viewWillDisappear(animated)
-        self.shouldRotate = false
-        
+    /// Used to specify if the view should rotate or not
+    private var shouldRotate: Bool = true
+    
+    /// Saves whether the status bar was hidden or visible from presenting controller
+    private var previousStatusBarState: Bool = false
+    
+    /**
+     *  Override method to stop autorotation after it disappears.
+     */
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        self.previousStatusBarState = UIApplication.sharedApplication().statusBarHidden
+        UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: .Fade)
     }
     
+    /**
+     *  Override method to stop autorotation after it disappears.
+     */
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.setShouldRotate(false)
+        UIApplication.sharedApplication().setStatusBarHidden(self.previousStatusBarState, withAnimation: .Fade)
+    }
+    
+    /**
+     *  Override method to tell the application to rotate.
+     *
+     *  :returns: `Bool` true if the application should autorotate.
+     */
     override func shouldAutorotate() -> Bool {
         return self.shouldRotate
     }
     
+    /**
+     *  Set whether the device should Autorotate.
+     * 
+     *  :param: allowRotation `Bool` true to allow autorotation.
+     */
     func setShouldRotate(allowRotation: Bool) {
         self.shouldRotate = allowRotation
     }
