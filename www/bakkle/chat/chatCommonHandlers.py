@@ -103,8 +103,8 @@ def sendChatMessage(clients, chatId, senderId, message, offerPrice, offerMethod)
         newMessage.offer = offer
     newMessage.save()
 
-    chat.hasUnreadBuyer = True
-    chat.hasUnreadSeller = True
+    chat.hasUnreadBuyer = not sentByBuyer
+    chat.hasUnreadSeller = sentByBuyer
     chat.save()
 
     devices = Device.objects.filter(account_id=chat.item.seller)

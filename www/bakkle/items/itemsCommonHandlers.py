@@ -685,8 +685,7 @@ def add_item_to_buyer_items(buyer_id, item_id, view_duration, status, message = 
                 status = status, 
                 confirmed_price = item.price,
                 view_time = timezone.now(),
-                view_duration = 0,
-                message = message)
+                view_duration = 0)
 
 
 
@@ -751,13 +750,11 @@ def reset_items():
     try:
         a = Account.objects.get_or_create(
             facebook_id="1020420",
-            display_name="Goodwill Industries",
-            email="testseller@bakkle.com" )
+            display_name="Goodwill Industries" )
     except Account.DoesNotExist:
         a = Account(
             facebook_id="1020420",
             display_name="Goodwill Industries",
-            email="testseller@bakkle.com",
             user_location="39.417672,-87.330438", )
         a.save()
 

@@ -268,15 +268,14 @@ def logout(auth_token, device_uuid, client_ip):
 
 
 @time_method
-def facebook(facebook_id, display_name, email, device_uuid, app_flavor):
+def facebook(facebook_id, display_name, device_uuid, app_flavor):
 
     # Update or create the account
     account = Account.objects.get_or_create(
         facebook_id=facebook_id,
         app_flavor=app_flavor,
-        defaults={'display_name': display_name, 'email': email, })[0]
+        defaults={'display_name': display_name, })[0]
     account.display_name = display_name
-    account.email = email
     account.save()
     return {"status": 1}
 
