@@ -74,16 +74,20 @@ public class ChatListActivity extends ListActivity
         @Override
         public void onCompleted(Exception ex, WebSocket webSocket)
         {
+            if(ex != null)
+            {
+                Log.v("callback exception", ex.getMessage());
+                return;
+            }
             JSONObject json = new JSONObject();
             try {
                 json.put("method", "chat_getChatIds");
-                json.put("itemId", "14");
+                json.put("itemId", "9261");
                 json.put("uuid", "E7F742EB-67EE-4738-ABEC-F0A3B62B45EB");
                 json.put("auth_token", "f02dfb77e9615ae630753b37637abb31_10");
                 Log.v("the json is ", json.toString());
             }
-            catch (Exception e) {
-            }
+            catch (Exception e) {}
 
             webSocket.send(json.toString());
             webSocket.setStringCallback(new WebSocket.StringCallback()

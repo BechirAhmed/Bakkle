@@ -26,19 +26,20 @@ import android.widget.Toast;
 import com.bakkle.bakkle.Fragments.BuyersTrunkFragment;
 import com.bakkle.bakkle.Fragments.DemoOptionsFragment;
 import com.bakkle.bakkle.Fragments.FeedFragment;
-import com.bakkle.bakkle.Helpers.FeedItem;
 import com.bakkle.bakkle.Fragments.HoldingPatternFragment;
-import com.bakkle.bakkle.R;
+import com.bakkle.bakkle.Fragments.ProfileFragment;
 import com.bakkle.bakkle.Fragments.RefineFragment;
 import com.bakkle.bakkle.Fragments.SellersGarageFragment;
+import com.bakkle.bakkle.Helpers.FeedItem;
 import com.bakkle.bakkle.Helpers.ServerCalls;
+import com.bakkle.bakkle.R;
+import com.bumptech.glide.Glide;
 import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
-import com.koushikdutta.ion.Ion;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.accountswitcher.AccountHeader;
@@ -46,6 +47,7 @@ import com.mikepenz.materialdrawer.accountswitcher.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.mikepenz.materialdrawer.util.DrawerImageLoader;
 
 import org.json.JSONObject;
@@ -93,16 +95,17 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
             @Override
             public void set(ImageView imageView, Uri uri, Drawable placeholder)
             {
-                Ion.with(imageView)
-                        .placeholder(R.drawable.loading)
-                        .load(uri.toString());
+                Glide.with(HomeActivity.this)
+                        .load(uri.toString())
+                        .into(imageView);
+//                Ion.with(imageView)
+//                        .placeholder(R.drawable.loading)
+//                        .load(uri.toString());
             }
 
             @Override
             public void cancel(ImageView imageView)
-            {
-
-            }
+            {}
 
             @Override
             public Drawable placeholder(Context ctx)
@@ -114,21 +117,22 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
         AccountHeader headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withCompactStyle(true)
-                .withHeaderBackground(R.color.dark_green)
+                .withHeaderBackground(R.color.gray)
                 .withSelectionListEnabled(false)
                 .addProfiles(
-                        new ProfileDrawerItem().withName(preferences.getString("name", "Not Signed In")).withIcon("http://graph.facebook.com/" + preferences.getString("userID", "0") + "/picture?width=142&height=142")
+                        new ProfileDrawerItem().withName(preferences.getString("name", "Not Signed In")).withIcon("http://graph.facebook.com/" + preferences.getString("userID", "0") + "/picture?width=300&height=300")
                 )
                 .withProfileImagesClickable(true)
                 .withProfileImagesVisible(true)
-                /*.withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
-                    @Override
-                    public boolean onProfileChanged(View view, IProfile profile, boolean currentProfile) {
-                        return false;
-                    }
-                })*/
+                .withOnAccountHeaderSelectionViewClickListener(new onAccountHeaderSelectionViewClickListener())
                 .withSavedInstance(savedInstanceState)
                 .build();
+
+//        headerResult.getHeaderBackgroundView().getLayoutParams().height += 50;
+//        headerResult.getHeaderBackgroundView().getLayoutParams().width += 50;
+
+        //TODO: make picture in nav drawer bigger
+
 
 
         drawer = new DrawerBuilder()
@@ -136,6 +140,8 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
                 .withToolbar(toolbar)
                 .withSavedInstance(savedInstanceState)
                 .withAccountHeader(headerResult)
+                .withActionBarDrawerToggle(true)
+                .withActionBarDrawerToggleAnimated(true)
                 .addDrawerItems(
                         new PrimaryDrawerItem().withName(mDrawerItems.get(0)).withIcon(mDrawerIcons.getDrawable(0)),
                         new PrimaryDrawerItem().withName(mDrawerItems.get(1)).withIcon(mDrawerIcons.getDrawable(1)),
@@ -144,7 +150,6 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
                         new PrimaryDrawerItem().withName(mDrawerItems.get(4)).withIcon(mDrawerIcons.getDrawable(4))
                 )
                 .withTranslucentStatusBar(false)
-                /*.withAdapter(mDrawerAdapter)*/
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener()
                 {
                     @Override
@@ -216,7 +221,7 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
 //                            preferences.getString("gender", "null"),
 //                            preferences.getString("username", "null"),
 //                            preferences.getString("name", "null"),
-//                            preferences.getString("userID", "null"),
+//                            preferences.getString("userId", "null"),
 //                            preferences.getString("locale", "null"),
 //                            preferences.getString("first_name", "null"),
 //                            preferences.getString("last_name", "null"),
@@ -457,4 +462,17 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
                 .commit();
     }
 
+    private class onAccountHeaderSelectionViewClickListener implements AccountHeader.OnAccountHeaderSelectionViewClickListener
+    {
+        @Override
+        public boolean onClick(View view, IProfile iProfile)
+        {
+            getFragmentManager().beginTransaction().replace(R.id.content_frame,
+                    new ProfileFragment()).addToBackStack(null).
+                    setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
+
+            drawer.closeDrawer();
+            return true;
+        }
+    }
 }

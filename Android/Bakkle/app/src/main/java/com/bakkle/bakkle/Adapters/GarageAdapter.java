@@ -2,7 +2,6 @@ package com.bakkle.bakkle.Adapters;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,10 +11,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bakkle.bakkle.Helpers.AsyncImageLoader;
 import com.bakkle.bakkle.Helpers.FeedItem;
-import com.bakkle.bakkle.R;
 import com.bakkle.bakkle.Helpers.ServerCalls;
+import com.bakkle.bakkle.R;
+import com.bumptech.glide.Glide;
 import com.daimajia.swipe.adapters.ArraySwipeAdapter;
 
 import java.util.ArrayList;
@@ -50,14 +49,14 @@ public class GarageAdapter extends ArraySwipeAdapter<FeedItem>
 
     }
 
-    AsyncImageLoader asyncImageLoader;
+    //AsyncImageLoader asyncImageLoader;
 
     public GarageAdapter(Context context, ArrayList<FeedItem> items)
     {
         super(context, R.layout.garage_list_item, items);
         this.c = context;
         this.items = items;
-        asyncImageLoader = new AsyncImageLoader(context);
+        //asyncImageLoader = new AsyncImageLoader(context);
         serverCalls = new ServerCalls(c);
         preferences = PreferenceManager.getDefaultSharedPreferences(c);
     }
@@ -84,14 +83,22 @@ public class GarageAdapter extends ArraySwipeAdapter<FeedItem>
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        Drawable cachedImage = asyncImageLoader.loadDrawable(item.getImageUrls().get(0), new AsyncImageLoader.ImageCallback()
-        {
-            public void imageLoaded(Drawable imageDrawable, String imageUrl)
-            {
-                viewHolder.icon.setImageDrawable(imageDrawable);
-            }
-        });
+//        Drawable cachedImage = asyncImageLoader.loadDrawable(item.getImageUrls().get(0), new AsyncImageLoader.ImageCallback()
+//        {
+//            public void imageLoaded(Drawable imageDrawable, String imageUrl)
+//            {
+//                viewHolder.icon.setImageDrawable(imageDrawable);
+//            }
+//        });
         //viewHolder.icon.setImageDrawable(cachedImage);
+
+        Glide.with(c)
+                .load(item.getImageUrls().get(0))
+                .centerCrop()
+                .placeholder(R.drawable.loading)
+                .crossFade()
+                .into(viewHolder.icon);
+
         viewHolder.title.setText(item.getTitle());
         viewHolder.price.setText("$" + item.getPrice());
         viewHolder.want.setText(item.getNumWant());

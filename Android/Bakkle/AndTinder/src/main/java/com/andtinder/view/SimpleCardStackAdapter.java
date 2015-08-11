@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.andtinder.FontFitTextView;
 import com.andtinder.R;
 import com.andtinder.model.CardModel;
-import com.koushikdutta.ion.Ion;
+import com.bumptech.glide.Glide;
 
 public final class SimpleCardStackAdapter extends CardStackAdapter
 {
@@ -59,16 +59,30 @@ public final class SimpleCardStackAdapter extends CardStackAdapter
 
     public void setCardImage(ImageView imageView, String url)
     {
-        Ion.with(imageView)
+        Glide.with(context)
+                .load(url)
+                .centerCrop()
                 .placeholder(R.drawable.loading)
-                .load(url);
+                .crossFade()
+                .into(imageView);
+
+//        Ion.with(imageView)
+//                .placeholder(R.drawable.loading)
+//                .load(url);
     }
 
     public void setSellerImage(ImageView imageView, String url)
     {
-        Ion.with(imageView)
-                .placeholder(R.drawable.loading)
-                .error(R.drawable.dislike)
-                .load(url);
+
+        Glide.with(context)
+                .load(url)
+                .centerCrop()
+                .crossFade()
+                .into(imageView);
+
+//        Ion.with(imageView)
+//                .placeholder(R.drawable.loading)
+//                .error(R.drawable.dislike)
+//                .load(url);
     }
 }

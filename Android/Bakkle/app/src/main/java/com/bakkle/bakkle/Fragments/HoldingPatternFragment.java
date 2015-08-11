@@ -2,6 +2,7 @@ package com.bakkle.bakkle.Fragments;
 
 import android.app.Activity;
 import android.app.ListFragment;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.andtinder.view.SimpleCardStackAdapter;
+import com.bakkle.bakkle.Activities.ItemDetailActivity;
 import com.bakkle.bakkle.Adapters.HoldingAdapter;
 import com.bakkle.bakkle.Helpers.FeedItem;
 import com.bakkle.bakkle.Helpers.ServerCalls;
@@ -28,17 +30,7 @@ import java.util.Arrays;
  */
 public class HoldingPatternFragment extends ListFragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     SharedPreferences preferences;
-    SharedPreferences.Editor editor;
 
     private OnFragmentInteractionListener mListener;
 
@@ -48,23 +40,11 @@ public class HoldingPatternFragment extends ListFragment {
 
     JsonObject json;
 
-
-    // TODO: Rename and change types of parameters
-    public static HoldingPatternFragment newInstance(String param1, String param2) {
-        HoldingPatternFragment fragment = new HoldingPatternFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public HoldingPatternFragment() {
-    }
+    public HoldingPatternFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -73,16 +53,10 @@ public class HoldingPatternFragment extends ListFragment {
         serverCalls = new ServerCalls(getActivity().getApplicationContext());
 
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        editor = preferences.edit();
 
         json = serverCalls.populateHolding(preferences.getString("auth_token", "0"), preferences.getString("uuid", "0"));
 
         items = getItems(json);
-
-        /*if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }*/
 
         setListAdapter(new HoldingAdapter(getActivity(), items));
     }
@@ -108,6 +82,24 @@ public class HoldingPatternFragment extends ListFragment {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
+
+        FeedItem item = (FeedItem) getListAdapter().getItem(position);
+
+        String url = "https://graph.facebook.com/" + item.getSellerFacebookId() + "/picture?width=142&height=142";
+
+        Intent intent = new Intent(getActivity(), ItemDetailActivity.class);
+        intent.putExtra("title", item.getTitle());
+        intent.putExtra("seller", item.getSellerDisplayName());
+        intent.putExtra("price", item.getPrice());
+        intent.putExtra("distance", item.getDistance(
+                preferences.getString("latitude", "0"),
+                preferences.getString("longitude", "0")));
+        intent.putExtra("sellerImageUrl", url);
+        intent.putExtra("description", item.getDescription());
+        intent.putExtra("pk", item.getPk());
+        intent.putExtra("url1", item.getImageUrls().get(0));
+        intent.putStringArrayListExtra("imageURLs", item.getImageUrls());
+        startActivity(intent);
 
 
         if (mListener != null) {
