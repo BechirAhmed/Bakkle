@@ -228,9 +228,9 @@ public class FeedFragment extends Fragment
                 }
             });
 
-
             adapter.add(card);
             mCardContainer.setAdapter(adapter);
+
         }
         //jsonArray = populateOneFeedItem(jsonArray);
     }
@@ -456,13 +456,17 @@ public class FeedFragment extends Fragment
         @Override
         protected void onPostExecute(JsonObject jsonObject)
         {
-            jsonResult = jsonObject;
             if (dialog.isShowing()) {
                 dialog.dismiss();
             }
+            jsonResult = jsonObject;
+//            if (dialog.isShowing()) {
+//                dialog.dismiss();
+//            }
 
-            if (jsonResult != null)
+            if (jsonResult != null) {
                 populateFeed(jsonResult.getAsJsonArray("feed"));
+            }
             else
                 Log.d("umm", "what");
         }

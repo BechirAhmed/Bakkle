@@ -14,8 +14,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bakkle.bakkle.R;
 import com.bakkle.bakkle.Helpers.ServerCalls;
+import com.bakkle.bakkle.R;
+import com.bumptech.glide.Glide;
 import com.koushikdutta.ion.Ion;
 
 import java.util.ArrayList;
@@ -75,9 +76,14 @@ public class ItemDetailActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.distance)).setText(distance);
         ((TextView) findViewById(R.id.price)).setText(price);
 
-        Ion.with((ImageView) findViewById(R.id.sellerImage))
+        Glide.with(this)
+                .load(sellerImageUrl)
                 .placeholder(R.drawable.loading)
-                .load(sellerImageUrl);
+                .into((ImageView) findViewById(R.id.sellerImage));
+
+//        Ion.with((ImageView) findViewById(R.id.sellerImage))
+//                .placeholder(R.drawable.loading)
+//                .load(sellerImageUrl);
     }
 
 
@@ -108,9 +114,13 @@ public class ItemDetailActivity extends AppCompatActivity {
         RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.imageCollection);
         ImageView imageView = new ImageView(this);
         imageView.setId(productPictureViews.size() + 1);
-        Ion.with(imageView)
+        Glide.with(this)
+                .load(url)
                 .placeholder(R.drawable.loading)
-                .load(url);
+                .into(imageView);
+//        Ion.with(imageView)
+//                .placeholder(R.drawable.loading)
+//                .load(url);
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.MATCH_PARENT,
                 RelativeLayout.LayoutParams.MATCH_PARENT);

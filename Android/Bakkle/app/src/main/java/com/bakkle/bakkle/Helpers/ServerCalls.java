@@ -18,8 +18,7 @@ import java.util.ArrayList;
  */
 public class ServerCalls
 {
-
-    //    final static String url_base                 = "https://bakkle.rhventures.org/";
+//    final static String url_base                 = "http://bakkle.rhventures.org:8000/";
     final static String url_base = "https://app.bakkle.com/";
     final static String url_login = "account/login_facebook/";
     final static String url_logout = "account/logout/";

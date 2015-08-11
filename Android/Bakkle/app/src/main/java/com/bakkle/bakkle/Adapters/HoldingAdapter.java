@@ -2,7 +2,6 @@ package com.bakkle.bakkle.Adapters;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
@@ -12,9 +11,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bakkle.bakkle.Helpers.AsyncImageLoader;
 import com.bakkle.bakkle.Helpers.FeedItem;
 import com.bakkle.bakkle.R;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
@@ -24,6 +23,7 @@ import java.util.ArrayList;
 public class HoldingAdapter extends ArrayAdapter<FeedItem>{
 
     SharedPreferences preferences;
+    Context context;
 
     private static class ViewHolder{
         ImageView icon;
@@ -35,10 +35,11 @@ public class HoldingAdapter extends ArrayAdapter<FeedItem>{
         TextView clock;
     }
 
-    AsyncImageLoader asyncImageLoader;
+    //AsyncImageLoader asyncImageLoader;
     public HoldingAdapter(Context context, ArrayList<FeedItem> items){
         super(context, R.layout.buyers_trunk_list_item, items);
-        asyncImageLoader = new AsyncImageLoader(context);
+        this.context = context;
+        //asyncImageLoader = new AsyncImageLoader(context);
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
@@ -63,12 +64,20 @@ public class HoldingAdapter extends ArrayAdapter<FeedItem>{
         }
 
 
-        Drawable cachedImage = asyncImageLoader.loadDrawable(item.getImageUrls().get(0), new AsyncImageLoader.ImageCallback() {
-            public void imageLoaded(Drawable imageDrawable, String imageUrl) {
-                viewHolder.icon.setImageDrawable(imageDrawable);
-            }
-        });
-        viewHolder.icon.setImageDrawable(cachedImage);
+//        Drawable cachedImage = asyncImageLoader.loadDrawable(item.getImageUrls().get(0), new AsyncImageLoader.ImageCallback() {
+//            public void imageLoaded(Drawable imageDrawable, String imageUrl) {
+//                viewHolder.icon.setImageDrawable(imageDrawable);
+//            }
+//        });
+//        viewHolder.icon.setImageDrawable(cachedImage);
+
+        Glide.with(context)
+                .load(item.getImageUrls().get(0))
+                .centerCrop()
+                .placeholder(R.drawable.loading)
+                .crossFade()
+                .into(viewHolder.icon);
+
         viewHolder.title.setText(item.getTitle());
         viewHolder.method.setText(item.getMethod());
         viewHolder.tags.setText("Tags: " + item.getTagsString());
