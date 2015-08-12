@@ -764,7 +764,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     }
     
     // take out tags right now, but if needed, will add later
-    func addItem(title: String, description: String, location: String, price: String, images: [UIImage],item_id: NSInteger?, success: (item_id: Int?, image_url: String?)->(), fail: ()->() ) {
+    func addItem(title: String, description: String, location: String, price: String, images: [NSData], videos: [NSData], item_id: NSInteger?, success: (item_id: Int?, image_url: String?)->(), fail: ()->() ) {
         // URL encode some vars.
         let escTitle = title.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         let escDescription = description.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
@@ -789,13 +789,8 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         let request = NSMutableURLRequest(URL: url!)
         request.HTTPMethod = "POST"
         
-        var imageDataArray = [NSData]()
-        for i in images {
-            imageDataArray.append(UIImageJPEGRepresentation(i, 1.0))
-        }
-        
         var imageDataLength = 0;
-        for i in imageDataArray {
+        for i in images {
             imageDataLength += i.length;
         }
         
@@ -809,13 +804,21 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         var body:NSMutableData = NSMutableData()
                 
         //add all images as neccessary.
-        for i in imageDataArray{
+        for i in images{
             body.appendData("\r\n--\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
             body.appendData("Content-Disposition: form-data; name=\"image\"; filename=\"image.jpg\"\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
             body.appendData("Content-Type: application/octet-stream\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
             body.appendData(i)
             body.appendData("\r\n--\(boundary)--\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
         }
+        for i in videos{
+            body.appendData("\r\n--\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
+            body.appendData("Content-Disposition: form-data; name=\"videos\"; filename=\"video.mp4\"\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
+            body.appendData("Content-Type: application/octet-stream\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
+            body.appendData(i)
+            body.appendData("\r\n--\(boundary)--\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
+        }
+        
         request.HTTPBody = body
         
         info("[Bakkle] addItem")
