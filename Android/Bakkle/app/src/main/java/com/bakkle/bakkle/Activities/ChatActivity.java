@@ -15,9 +15,10 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.bakkle.bakkle.Adapters.ChatArrayAdapter;
+import com.bakkle.bakkle.Helpers.ChatCalls;
 import com.bakkle.bakkle.Helpers.ChatMessage;
-import com.bakkle.bakkle.R;
 import com.bakkle.bakkle.Helpers.ServerCalls;
+import com.bakkle.bakkle.R;
 
 public class ChatActivity extends AppCompatActivity
 {
@@ -29,6 +30,7 @@ public class ChatActivity extends AppCompatActivity
     private boolean left = false;
     private String id;
     private ServerCalls serverCalls;
+    private ChatCalls chatCalls;
     private SharedPreferences preferences;
 
 
@@ -44,6 +46,7 @@ public class ChatActivity extends AppCompatActivity
         chatText = (EditText) findViewById(R.id.compose);
         id = getIntent().getExtras().getString("id");
         serverCalls = new ServerCalls(this);
+        //chatCalls = new ChatCalls()
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         getPreviousMessages();
@@ -89,7 +92,8 @@ public class ChatActivity extends AppCompatActivity
     private boolean sendChatMessage()
     {
         String text = chatText.getText().toString();
-        if (text.equals("")) {
+        if (!text.equals("")) {
+
             serverCalls.sendChat(preferences.getString("uuid", "0"), preferences.getString("auth_token", "0"), chatText.getText().toString(), id);
             chatArrayAdapter.add(new ChatMessage(left, text));
             chatText.setText("");
