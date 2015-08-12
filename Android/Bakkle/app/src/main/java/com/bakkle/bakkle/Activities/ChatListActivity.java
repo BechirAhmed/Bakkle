@@ -4,7 +4,6 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
@@ -43,23 +42,19 @@ public class ChatListActivity extends ListActivity
         setContentView(R.layout.activity_chat_list);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        Handler h = new Handler(getMainLooper());
-        Runnable r = new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                Log.v("testing this", "test 123 123");
-            }
-        };
-
         buyerInfos = new ArrayList<>();
         chatListAdapter = new ChatListAdapter(this, buyerInfos);
         setListAdapter(chatListAdapter);
 
-
         preferences = PreferenceManager.getDefaultSharedPreferences(ChatListActivity.this);
-        chatCalls = new ChatCalls(preferences.getString("uuid", ""), preferences.getString("sellerPk", ""), preferences.getString("auth_token", ""), h, r, new WebSocketCallBack());
+
+        Intent i = new Intent(this, ChatCalls.class);
+        i.putExtra("uuid", preferences.getString("uuid", ""));
+        i.putExtra("auth_token", preferences.getString("auth_token", ""));
+        i.putExtra("sellerPk", preferences.getString("sellerPk", ""));
+        startService(i);
+
+        chatCalls = new ChatCalls(preferences.getString("uuid", ""), preferences.getString("sellerPk", ""), preferences.getString("auth_token", ""), new WebSocketCallBack());
         chatCalls.connect();
 //        chatCalls.test();
 //        Log.v("the url is:", "ws://app.bakkle.com/ws/" + "?uuid=" + preferences.getString("uuid", "") + "&userId=" + preferences.getString("sellerPk", ""));

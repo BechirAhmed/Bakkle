@@ -1,6 +1,10 @@
 package com.bakkle.bakkle.Helpers;
 
-import android.os.Handler;
+import android.app.Service;
+import android.content.Intent;
+import android.os.Binder;
+import android.os.IBinder;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.koushikdutta.async.callback.CompletedCallback;
@@ -12,7 +16,7 @@ import org.json.JSONObject;
 /**
  * Created by vanshgandhi on 8/6/15.
  */
-public class ChatCalls
+public class ChatCalls extends Service
 {
     //    final static String ws_base = "ws://bakkle.rhventures.org/ws/";
     final static String ws_base = "ws://app.bakkle.com/ws/";
@@ -20,25 +24,37 @@ public class ChatCalls
     String response;
     AsyncHttpClient client;
     private WebSocket webSocket;
-    Handler handler;
-    Runnable runnable;
     AsyncHttpClient.WebSocketConnectCallback callback;
+    private final IBinder mBinder = new LocalBinder();
 
-    public ChatCalls(String uuid, String userId, String authToken, Handler h, Runnable r, AsyncHttpClient.WebSocketConnectCallback callback)
+    public class LocalBinder extends Binder
+    {
+        ChatCalls getService()
+        {
+            return ChatCalls.this;
+        }
+    }
+
+    public ChatCalls(String uuid, String userId, String authToken, AsyncHttpClient.WebSocketConnectCallback callback)
     {
         this.uuid = uuid;
         this.userId = userId;
         this.authToken = authToken;
-        this.handler = h;
-        this.runnable = r;
         this.callback = callback;
         webSocket = null;
         client = AsyncHttpClient.getDefaultInstance();
     }
 
+    public ChatCalls(){}
+
     public void setWebSocket(WebSocket webSocket)
     {
         this.webSocket = webSocket;
+    }
+
+    public void setCallback(AsyncHttpClient.WebSocketConnectCallback callback)
+    {
+        this.callback = callback;
     }
 
     public void connect()
@@ -47,6 +63,39 @@ public class ChatCalls
         String url = "ws://bakkle.rhventures.org:8000/ws/?uuid=E7F742EB-67EE-4738-ABEC-F0A3B62B45EB&userId=10";
         client.websocket(url, null, callback);
     }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent)
+    {
+        return mBinder;
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId)
+    {
+        Log.i("LocalService", "Received start id " + startId + ": " + intent);
+
+        connect();
+
+
+
+        return START_REDELIVER_INTENT;
+    }
+
+    @Override
+    public void onDestroy()
+    {
+
+    }
+
+
+    @Override
+    public void onCreate()
+    {
+
+    }
+
 
     public class WebSocketCallBack implements AsyncHttpClient.WebSocketConnectCallback
     {
@@ -75,8 +124,6 @@ public class ChatCalls
 
                     }
                 });
-
-                handler.post(runnable);
 
                 //idle time out or loss of network connectivity
                 webSocket.setClosedCallback(new CompletedCallback()

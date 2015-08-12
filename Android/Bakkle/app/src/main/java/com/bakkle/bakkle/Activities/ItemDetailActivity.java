@@ -61,10 +61,6 @@ public class ItemDetailActivity extends AppCompatActivity {
         sellerImageUrl = intent.getStringExtra("sellerImageUrl");
         imageURLs = intent.getStringArrayListExtra("imageURLs");
 
-        Log.v("test", title + price + description + seller + distance);
-
-
-//        loadPictureIntoView(url1);
         for(String url : imageURLs)
         {
             loadPictureIntoView(url);
