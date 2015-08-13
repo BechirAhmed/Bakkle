@@ -276,6 +276,25 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     }
     
     @IBAction func btnConfirm(sender: AnyObject) {
+        var imageData = [NSData]()
+        var videoData = [NSData]()
+        
+        for i in self.itemImages! {
+            imageData.append(UIImageJPEGRepresentation(i, 1.0))
+        }
+        
+        for i in 0..<self.videos.count {
+            while( self.videos[i].pathExtension == "mov" ) {
+                // Wait
+            }
+            
+            var data = NSData(contentsOfFile: self.videos[i])
+            
+            if let fileData = data {
+                videoData.append(fileData)
+            }
+        }
+        
         self.titleField.enabled = false
         self.priceField.enabled = false
         self.descriptionField.editable = false
@@ -295,9 +314,10 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         } else {
             item_id = nil
         }
+        
         Bakkle.sharedInstance.addItem(self.titleField.text, description: self.descriptionField.text, location: Bakkle.sharedInstance.user_location,
             price: self.priceField.text,
-            images:self.itemImages!, item_id: item_id, success: {
+            images:imageData, videos:videoData, item_id: item_id, success: {
                 (item_id:Int?, image_url: String?) -> () in
                     time = NSDate.timeIntervalSinceReferenceDate() - time
                     println("Time taken to upload in sec: \(time)")

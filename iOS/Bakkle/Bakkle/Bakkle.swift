@@ -764,7 +764,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     }
     
     // take out tags right now, but if needed, will add later
-    func addItem(title: String, description: String, location: String, price: String, images: [UIImage],item_id: NSInteger?, success: (item_id: Int?, image_url: String?)->(), fail: ()->() ) {
+    func addItem(title: String, description: String, location: String, price: String, images: [NSData], videos: [NSData], item_id: NSInteger?, success: (item_id: Int?, image_url: String?)->(), fail: ()->() ) {
         // URL encode some vars.
         let escTitle = title.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         let escDescription = description.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
@@ -789,13 +789,8 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         let request = NSMutableURLRequest(URL: url!)
         request.HTTPMethod = "POST"
         
-        var imageDataArray = [NSData]()
-        for i in images {
-            imageDataArray.append(UIImageJPEGRepresentation(i, 1.0))
-        }
-        
         var imageDataLength = 0;
-        for i in imageDataArray {
+        for i in images {
             imageDataLength += i.length;
         }
         
@@ -809,13 +804,21 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         var body:NSMutableData = NSMutableData()
                 
         //add all images as neccessary.
-        for i in imageDataArray{
+        for i in images{
             body.appendData("\r\n--\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
             body.appendData("Content-Disposition: form-data; name=\"image\"; filename=\"image.jpg\"\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
             body.appendData("Content-Type: application/octet-stream\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
             body.appendData(i)
             body.appendData("\r\n--\(boundary)--\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
         }
+        for i in videos{
+            body.appendData("\r\n--\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
+            body.appendData("Content-Disposition: form-data; name=\"videos\"; filename=\"video.mp4\"\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
+            body.appendData("Content-Type: application/octet-stream\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
+            body.appendData(i)
+            body.appendData("\r\n--\(boundary)--\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
+        }
+        
         request.HTTPBody = body
         
         info("[Bakkle] addItem")
@@ -967,14 +970,91 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         var time = asset.duration
         //If possible - take not the first frame (it could be completely black or white on camara's videos)
         time.value = min(time.value, 2)
-
+        
         var error: NSError?
         let imageRef = imageGenerator.copyCGImageAtTime(time, actualTime: nil, error: &error)
+        
         if error != nil {
             NSLog("Image generation failed with error \(error)")
             return nil
         }
-        return UIImage(CGImage: imageRef)
+        
+        // Side lengths are the ratio * smallest length (width or height)
+        var lengthRatio: CGFloat = 1.0 / 3.0
+        var length: CGFloat = min(CGFloat(self.image_width), CGFloat(self.image_height)) * lengthRatio
+        var distToSide: CGFloat = length / (2.0 * sqrt(3.0))
+        var distToVertex: CGFloat = length / sqrt(3.0)
+        
+        //  |\   Is the orientation of the play triangle, where:
+        //  | \           point1 = top most vertex
+        //  | /           point2 = rightmost vertex
+        //  |/           point3 = bottom most vertex
+        var point1: CGPoint = CGPointMake(CGFloat(self.image_width) / 2.0 - distToSide, CGFloat(self.image_height) / 2.0 - length / 2.0)
+        var point2: CGPoint = CGPointMake(CGFloat(self.image_width) / 2.0 + distToVertex, CGFloat(self.image_height) / 2.0)
+        var point3: CGPoint = CGPointMake(CGFloat(self.image_width) / 2.0 - distToSide, CGFloat(self.image_height) / 2.0 + length / 2.0)
+        
+        var imageWithTriangle = UIImage(CGImage: imageRef)!
+        
+        // Crop to Square (from UIImage+Resize, without the dispatch_async blocks)
+        let contextSize: CGSize = imageWithTriangle.size
+        let posX: CGFloat
+        let posY: CGFloat
+        let width: CGFloat
+        let height: CGFloat
+        if contextSize.width > contextSize.height {
+            posX = ((contextSize.width - contextSize.height) / 2)
+            posY = 0
+            width = contextSize.height
+            height = contextSize.height
+        } else {
+            posX = 0
+            posY = ((contextSize.height - contextSize.width) / 2)
+            width = contextSize.width
+            height = contextSize.width
+        }
+        imageWithTriangle = UIImage(CGImage: CGImageCreateWithImageInRect(imageWithTriangle.CGImage, CGRectMake(posX, posY, width, height)), scale: imageWithTriangle.scale, orientation: imageWithTriangle.imageOrientation)!
+        
+        // Resize (from UIImage+Resize, without the dispatch_async blocks)
+        var newSize:CGSize = CGSizeMake(CGFloat(self.image_width), CGFloat(self.image_height))
+        let rect = CGRectMake(0, 0, newSize.width, newSize.height)
+        UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)
+        imageWithTriangle.drawInRect(rect)
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        // Take the cropped and resized image, then average the rgb values with dark gray color to darken it
+        UIGraphicsBeginImageContextWithOptions(newImage.size, false, newImage.scale)
+        var context = UIGraphicsGetCurrentContext()
+        var area = CGRectMake(0, 0, newImage.size.width, newImage.size.height)
+        CGContextSaveGState(context)
+        CGContextClipToMask(context, area, newImage.CGImage)
+        UIColor.darkGrayColor().set()
+        CGContextFillRect(context, area)
+        CGContextRestoreGState(context)
+        CGContextSetBlendMode(context, kCGBlendModeMultiply)
+        CGContextDrawImage(context, area, newImage.CGImage)
+        var returnImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        // Take the darkened image and draw an equilateral triangle with a flat edge facing to the left in the center of the image
+        UIGraphicsBeginImageContext(newImage.size)
+        context = UIGraphicsGetCurrentContext()
+        CGContextDrawImage(context, CGRectMake(0, 0, returnImage.size.width, returnImage.size.height), returnImage.CGImage)
+        UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.65).setStroke()
+        UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.65).set()
+        CGContextSetLineJoin(context, kCGLineJoinRound)
+        CGContextSetLineWidth(context, 8.0)
+        var triangle = CGPathCreateMutable()
+        CGPathMoveToPoint(triangle, nil, point1.x, point1.y)
+        CGPathAddLineToPoint(triangle, nil, point2.x, point2.y)
+        CGPathAddLineToPoint(triangle, nil, point3.x, point3.y)
+        CGPathCloseSubpath(triangle)
+        CGContextAddPath(context, triangle)
+        CGContextFillPath(context)
+        returnImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return returnImage
     }
 
     

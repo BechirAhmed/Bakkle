@@ -16,7 +16,7 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
     var wanted: Bool = false
     var holding: Bool = false
     var available: Bool = true
-    var itemImages: [NSData]? = [NSData]()
+    var itemImages: [NSURL]? = [NSURL]()
     
     @IBOutlet weak var sellerName: UILabel!
     @IBOutlet weak var sellerAvatar: UIImageView!
@@ -113,19 +113,11 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
         
         for index in 0...imgURLs.count-1{
             let firstURL = imgURLs[index] as! String
+            NSLog(firstURL)
             let imgURL = NSURL(string: firstURL)
-            if imgURL == nil {
-                return
+            if imgURL != nil {
+                self.itemImages?.insert(imgURL!, atIndex: index)
             }
-            if let imgData = NSData(contentsOfURL: imgURL!) {
-                dispatch_async(dispatch_get_main_queue()) {
-                    println("[FeedScreen] displaying image (top)")
-                    self.itemImages?.insert(imgData, atIndex: index)
-                    var index: NSIndexPath = NSIndexPath(forRow: index, inSection: 0)
-                    self.collectionView.insertItemsAtIndexPaths([index])
-                }
-            }
-            
         }
         
     }
@@ -152,6 +144,18 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
         if !available {
             wantBtn.enabled = available
             wantBtn.backgroundColor = UIColor.lightGrayColor()
+        }
+    }
+    
+    func previewVideo(path: String) {
+        NSLog("Previewing Video at path: \(path)")
+        if path.pathExtension == "mov" {
+            let alertController = UIAlertController(title: "", message:"Preview unavailable at this time.\nYour video is still being processed.", preferredStyle: .Alert)
+            let defaultAction = UIAlertAction(title: "OK", style: .Default, handler: nil)
+            alertController.addAction(defaultAction)
+            presentViewController(alertController, animated: true, completion: nil)
+        } else {
+            VideoPlayer.playFile(path, presentingController: self)
         }
     }
     
@@ -195,7 +199,6 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
     
     /* collectionView display multiple pictures */
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection: Int) -> Int {
-
         return self.itemImages!.count
     }
     
@@ -224,10 +227,21 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
         cell.backgroundColor = UIColor.redColor()
         cell.imgView.contentMode = UIViewContentMode.ScaleAspectFill
         cell.imgView.clipsToBounds  = true
-        if let images = self.itemImages {
-            cell.imgView.image = UIImage(data: itemImages![indexPath.row])
+        let imageURL = self.itemImages![indexPath.row]
+        let fileExtension = imageURL.path?.pathExtension
+        if fileExtension == "mp4" {
+            cell.imgView!.image = Bakkle.sharedInstance.previewImageForLocalVideo(imageURL)
+            cell.userInteractionEnabled = true
+            var tapGestureRecognizer = UITapGestureRecognizer(target:self, action:Selector("videoTapped:"))
+             cell.imgView!.addGestureRecognizer(tapGestureRecognizer)
+        } else {
+            cell.imgView!.hnk_setImageFromURL(imageURL)
         }
         return cell
+    }
+    
+    func videoTapped() {
+        NSLog("Video should play")
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
