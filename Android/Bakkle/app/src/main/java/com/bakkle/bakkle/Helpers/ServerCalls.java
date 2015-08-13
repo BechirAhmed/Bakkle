@@ -147,7 +147,7 @@ public class ServerCalls
                     .getAsString();
         }
         catch (Exception e) {
-            Log.d("testing error", e.getMessage());
+            Log.d("testing error", "" + e.getMessage());
         }
         //Log.v("auth_token is ", auth_token);
         return auth_token;

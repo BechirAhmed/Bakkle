@@ -10,14 +10,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bakkle.bakkle.Activities.LoginActivity;
+import com.bakkle.bakkle.Helpers.ServerCalls;
 import com.bakkle.bakkle.R;
 import com.bumptech.glide.Glide;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
+import com.google.gson.JsonObject;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,6 +30,8 @@ public class ProfileFragment extends Fragment
 
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
+    ServerCalls serverCalls;
+    JsonObject json;
     
     public ProfileFragment()
     {}
@@ -37,6 +42,8 @@ public class ProfileFragment extends Fragment
         super.onCreate(savedInstanceState);
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         editor = preferences.edit();
+        serverCalls = new ServerCalls(getActivity());
+        json = serverCalls.populateGarage(preferences.getString("auth_token", ""), preferences.getString("uuid", ""));
     }
     
     
@@ -77,11 +84,14 @@ public class ProfileFragment extends Fragment
             }
         });
 
+        EditText editText = (EditText) view.findViewById(R.id.aboutMeText);
+
+        editText.setText(json.get("seller_garage").getAsJsonArray().get(0).getAsJsonObject().get("seller").getAsJsonObject().get("description").getAsString());
+
         String url = "http://graph.facebook.com/" + preferences.getString("userID", "0") + "/picture?width=300&height=300";
 
         Glide.with(getActivity())
                 .load(url)
-                .placeholder(R.drawable.loading)
                 .into((ImageView) view.findViewById(R.id.profilePicture));
 
 

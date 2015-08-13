@@ -1,15 +1,20 @@
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:weightSum="10"
     tools:context="com.bakkle.bakkle.Fragments.ProfileFragment">
 
     <RelativeLayout
         android:id="@+id/profileImage"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="20dp">
+        android:layout_height="250dp"
+        android:paddingBottom="20dp"
+        android:layout_weight="5"
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/aboutMe">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profilePicture"
@@ -35,20 +40,22 @@
         android:id="@+id/aboutMe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/buttons"
-        android:layout_below="@id/profileImage">
+        android:layout_weight="5"
+        android:layout_above="@+id/buttons">
 
         <EditText
             android:id="@+id/aboutMeText"
+            style="@style/AppTheme"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:editable="false"
-            android:gravity="top|left"
-            android:inputType="textMultiLine"
-            android:lines="6"
-            android:maxLines="8"
-            android:scrollbars="vertical"/>
+            android:gravity="top|start"
+            android:hint="@string/description_hint"
+            android:inputType="textMultiLine|textLongMessage"
+            android:scrollbars="vertical"
+            android:textColor="@color/black"
+            android:theme="@style/AppCompatTheme"/>
 
     </RelativeLayout>
 
@@ -56,6 +63,7 @@
         android:id="@+id/buttons"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:layout_weight="2"
         android:layout_alignParentBottom="true">
 
         <LinearLayout
@@ -85,4 +93,4 @@
     </RelativeLayout>
 
 
-</RelativeLayout>
+</LinearLayout>

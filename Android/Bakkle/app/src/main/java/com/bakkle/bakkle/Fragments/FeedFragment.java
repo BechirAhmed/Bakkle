@@ -465,6 +465,9 @@ public class FeedFragment extends Fragment
 //            }
 
             if (jsonResult != null) {
+                Log.v("emulator testing", jsonResult.toString());
+                Log.v("emulator uuid", preferences.getString("uuid", ""));
+                Log.v("emulator auth", preferences.getString("auth_token", ""));
                 populateFeed(jsonResult.getAsJsonArray("feed"));
             }
             else
