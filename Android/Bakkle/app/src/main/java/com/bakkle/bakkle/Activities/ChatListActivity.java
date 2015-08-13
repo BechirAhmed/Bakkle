@@ -35,6 +35,7 @@ public class ChatListActivity extends ListActivity
     SharedPreferences preferences;
     ChatCalls chatCalls;
     ChatListAdapter chatListAdapter;
+    String response;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,8 +55,8 @@ public class ChatListActivity extends ListActivity
         i.putExtra("sellerPk", preferences.getString("sellerPk", ""));
         startService(i);
 
-//        chatCalls = new ChatCalls(preferences.getString("uuid", ""), preferences.getString("sellerPk", ""), preferences.getString("auth_token", ""), new WebSocketCallBack());
-//        chatCalls.connect();
+        chatCalls = new ChatCalls(preferences.getString("uuid", ""), preferences.getString("sellerPk", ""), preferences.getString("auth_token", ""), new WebSocketCallBack());
+        chatCalls.connect();
 //        chatCalls.test();
 //        Log.v("the url is:", "ws://app.bakkle.com/ws/" + "?uuid=" + preferences.getString("uuid", "") + "&userId=" + preferences.getString("sellerPk", ""));
 //        chatCalls.getChatList();
@@ -80,9 +81,10 @@ public class ChatListActivity extends ListActivity
                 json.put("itemId", "9261");
                 json.put("uuid", "E7F742EB-67EE-4738-ABEC-F0A3B62B45EB");
                 json.put("auth_token", "f02dfb77e9615ae630753b37637abb31_10");
-                Log.v("the json is ", json.toString());
             }
-            catch (Exception e) {}
+            catch (Exception e) {
+                Log.v("Websocket callback", e.getMessage());
+            }
 
             webSocket.send(json.toString());
             webSocket.setStringCallback(new WebSocket.StringCallback()
@@ -90,7 +92,8 @@ public class ChatListActivity extends ListActivity
                 @Override
                 public void onStringAvailable(String s)
                 {
-                    populateList(s);
+                    response = s;
+                    populateList(response);
                 }
             });
 
@@ -112,7 +115,7 @@ public class ChatListActivity extends ListActivity
             JsonObject temp = element.getAsJsonObject();
             JsonObject buyer = temp.getAsJsonObject("buyer");
             String url = "https://graph.facebook.com/"+ buyer.get("facebook_id").getAsString() +"/picture?width=142&height=142";
-            buyerInfos.add(new BuyerInfo(buyer.get("display_name").getAsString(), url));
+            buyerInfos.add(new BuyerInfo(buyer.get("display_name").getAsString(), url, temp.get("pk").getAsInt()));
         }
         runOnUiThread(new Runnable()
         {
@@ -132,7 +135,7 @@ public class ChatListActivity extends ListActivity
 
         BuyerInfo buyerInfo = (BuyerInfo) getListAdapter().getItem(position);
         Intent intent = new Intent(this, ChatActivity.class);
-        intent.putExtra("some form of id", "0"); //make sure to let the chat app window know if youre the buyer or seller somehow
+        intent.putExtra("chatId", buyerInfo.getChatPk()); //make sure to let the chat app window know if youre the buyer or seller somehow
         startActivity(intent);
     }
 

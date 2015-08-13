@@ -55,6 +55,7 @@ public class ChatCalls extends Service
     public void setCallback(AsyncHttpClient.WebSocketConnectCallback callback)
     {
         this.callback = callback;
+        connect();
     }
 
     public void connect()

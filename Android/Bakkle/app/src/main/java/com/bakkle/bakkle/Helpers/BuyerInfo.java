@@ -6,10 +6,12 @@ package com.bakkle.bakkle.Helpers;
 public class BuyerInfo {
 
     private String name, FacebookURL;
+    private int chatPk;
 
-    public BuyerInfo(String name, String FacebookURL){
+    public BuyerInfo(String name, String FacebookURL, int chatPk){
         this.name = name;
         this.FacebookURL = FacebookURL;
+        this.chatPk = chatPk;
     }
 
     public String getName() {
@@ -27,5 +29,16 @@ public class BuyerInfo {
     public void setFacebookURL(String facebookURL) {
         FacebookURL = facebookURL;
     }
+
+    public int getChatPk()
+    {
+        return chatPk;
+    }
+
+    public void setChatPk(int chatPk)
+    {
+        this.chatPk = chatPk;
+    }
+
 
 }
