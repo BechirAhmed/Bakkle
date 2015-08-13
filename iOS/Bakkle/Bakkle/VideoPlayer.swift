@@ -60,8 +60,8 @@ class VideoPlayer {
      *  :param: videoURL `String` used to set an `NSURL` that directs to the desired video for playback.
      *  :param: presentingController `UIViewController` that instantiated the object.
      */
-    static func playWeb(videoURL: String, presentingController: UIViewController) {
-        VideoPlayer.play(NSURL(string: videoURL)!, presentingController: presentingController)
+    static func playWeb(videoURL: String, presentingController: UIViewController) -> VideoPlayerViewController {
+        return VideoPlayer.play(NSURL(string: videoURL)!, presentingController: presentingController)
     }
     
     /**
@@ -70,8 +70,8 @@ class VideoPlayer {
      *  :param: videoURL `String` used to set an `NSURL` that directs to the desired video for playback.
      *  :param: presentingController `UIViewController` that instantiated the object.
      */
-    static func playFile(videoURL: String, presentingController: UIViewController) {
-        VideoPlayer.play(NSURL(fileURLWithPath: videoURL)!, presentingController: presentingController)
+    static func playFile(videoURL: String, presentingController: UIViewController) -> VideoPlayerViewController {
+        return VideoPlayer.play(NSURL(fileURLWithPath: videoURL)!, presentingController: presentingController)
     }
     
     /**
@@ -80,7 +80,7 @@ class VideoPlayer {
      *  :param: videoURL `NSURL` that directs to the desired video for playback.
      *  :param: presentingController `UIViewController` that instantiated the object.
      */
-    static func play(videoURL: NSURL, presentingController: UIViewController) {
+    static func play(videoURL: NSURL, presentingController: UIViewController) -> VideoPlayerViewController {
         var player = AVPlayer(URL: videoURL)
         var playerController = VideoPlayerViewController()
         
@@ -89,6 +89,8 @@ class VideoPlayer {
         presentingController.presentViewController(playerController, animated: true, completion: {
             player.play()
         })
+        
+        return playerController
     }
     
     /**
@@ -146,7 +148,7 @@ class VideoPlayer {
     }
 }
 
-/// Private `AVPlayerViewController` to allow rotation only on itself (WIP, remove this parenthasee grouping when autorotation is complete)
+/// Custom `AVPlayerViewController` to allow rotation only on itself (WIP, remove this parenthasee grouping when autorotation is complete)
 class VideoPlayerViewController: AVPlayerViewController {
     
     /// Used to specify if the view should rotate or not

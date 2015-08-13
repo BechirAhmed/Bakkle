@@ -98,6 +98,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     var animating: Int = 0 // image rearrangement
     private var recordingDidChange = 0
     
+    // Initialize all variables
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -128,6 +129,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         switchCamera.setTitle("", forState: .Normal)
     }
     
+    // Check if the view is new, came back from add item for editing, came back during upload, or came back after successful upload
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: .Fade)
@@ -135,8 +137,10 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         setupAVFoundation()
         loadingCameraPreviewLabel.hidden = false
         
+        // FadeView is used to hide all the corner rounding on the views, as well as waiting for AVFoundation to setup
         self.fadeView.alpha = 1.0
         if self.addItem != nil && (self.addItem!.successfulAdd || self.addItem!.confirmHit) {
+            // If the view became active after the confirm button was hit, then display the Bakkle Item added slash
             self.fadeViewLoadLogo.image = UIImage(named: "logo-white-design-clear.png")!
             var backgroundImage = UIImageView(frame: self.fadeView.frame)
             backgroundImage.image = UIImage(named:"LoginScreen-bkg.png")!
@@ -145,6 +149,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             // Text is set in storyboard to get a feel of orientation
             var successLabel = self.addItem!.successfulAdd ? listedLabel : willBeListedLabel
             if isEditting {
+                // set the text of the label accordingly with uploading an item and while it is being uploaded
                 successLabel.text = self.addItem!.successfulAdd ? "Your changes were submitted successfully!" : "Don't worry, we're still updating your changes!"
             }
             successLabel.layer.shadowColor = Theme.ColorGreen.CGColor
@@ -169,6 +174,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         }
     }
     
+    // Make any aesthetic UI changes (corner rounding, etc) and setup AVFoundation
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
@@ -221,6 +227,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         cameraView.clipsToBounds = true
         cameraView.addSubview(focusIndicator)
         
+        // If the CameraView came into view with images, show them
         populatePhotos()
         
         // Any code that doesn't need the fade view active after this point
@@ -231,9 +238,11 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             })
         }
         
+        // Call function that updates 32 times a second to draw a focus indicator
         drawFocusRect()
     }
     
+    // Specific observer to update the UI when recording either begins or finishes
     override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
         if context == &recordingDidChange {
             buttonEnabledHandler()
@@ -241,17 +250,8 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)
         }
     }
-
-    /// :TODO: To see if user has enough space to take video
-    func calculateVideoSize() -> Double {
-        var fr = Bakkle.sharedInstance.video_framerate
-        var t = Bakkle.sharedInstance.video_length_sec
-        
-        
-        
-        return 0.0
-    }
     
+    // Does any initial AVFoundation setup, should only need to be called when view appears
     func setupAVFoundation(){
         if captureSession != nil {
             return
@@ -291,24 +291,20 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         }
     }
     
+    // Cancel button was pressed, remove any unwanted video files
     @IBAction func cancel(sender: AnyObject) {
         self.removeVideos()
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
+    // Iterates through all the types of files saved for movies and removes them
     func removeVideos() {
         for i in 0...videoCount {
-            var err: NSError?
-            if NSFileManager.defaultManager().fileExistsAtPath("\(NSTemporaryDirectory())video\(i).mov") {
-                NSFileManager.defaultManager().removeItemAtPath("\(NSTemporaryDirectory())video\(i).mov", error: &err)
-            }
-            
-            if NSFileManager.defaultManager().fileExistsAtPath("\(NSTemporaryDirectory())video\(i).mp4") {
-                NSFileManager.defaultManager().removeItemAtPath("\(NSTemporaryDirectory())video\(i).mp4", error: &err)
-            }
+            self.removeVideos(i)
         }
     }
     
+    // Removes the specified video
     func removeVideos(index: Int) {
         var err: NSError?
         if NSFileManager.defaultManager().fileExistsAtPath("\(NSTemporaryDirectory())video\(index).mov") {
@@ -320,6 +316,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         }
     }
     
+    // When a segue out happend, remove anything that we can to save space and cpu
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         loadingCameraPreviewLabel.hidden = true
@@ -337,7 +334,9 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         self.willBeListedLabel.hidden = true
     }
     
+    // Change camera position, and animate with a "flip"
     @IBAction func swapCamera(sender: AnyObject) {
+        // Remember to begin and commit configuration so all changes happen at once
         captureSession!.beginConfiguration()
         
         captureSession!.removeInput(selectedDevice)
@@ -356,6 +355,9 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         })
     }
     
+    /**
+     *  Returns the `AVCaptureDevice` at the given position, `nil` if it is not available
+     */
     func findCameraWithPosition(position: AVCaptureDevicePosition) -> AVCaptureDevice? {
         let devices = AVCaptureDevice.devicesWithMediaType(AVMediaTypeVideo)
         for device in devices as! [AVCaptureDevice] {
@@ -367,18 +369,22 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         return nil
     }
     
-    func previewVideo(path: String) {
-        NSLog("Previewing Video at path: \(path)")
+    /**
+     *  Plays the specified video, it takes an NSURL to ensure the user creates the NSURL for either web or file accordingly
+     */
+    func previewVideo(path: NSURL) {
+        NSLog("Previewing Video at path: \(path.path!)")
         if path.pathExtension == "mov" {
             let alertController = UIAlertController(title: "", message:"Preview unavailable at this time.\nYour video is still being processed.", preferredStyle: .Alert)
             let defaultAction = UIAlertAction(title: "OK", style: .Default, handler: nil)
             alertController.addAction(defaultAction)
             presentViewController(alertController, animated: true, completion: nil)
         } else {
-            VideoPlayer.playFile(path, presentingController: self)
+            VideoPlayer.play(path, presentingController: self)
         }
     }
     
+    /// Displays an image over the AVFoundation preview
     func displayStillImage(image: UIImage) {
         displayingStill = true
         cameraView.contentMode = .ScaleAspectFill
@@ -386,6 +392,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         stillImagePreview.image = image
     }
     
+    /// Removes the still image from view
     func removeStillImage() {
         displayingStill = false
         stillImagePreview.image = nil
@@ -401,6 +408,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             return
         }
         
+        // If there aren't any available cameras, leave the ViewController (must have a picture of the item to post an item)
         if findCameraWithPosition(.Front) == nil &&  findCameraWithPosition(.Back) == nil {
             let alertController = UIAlertController(title: "No Camera Available", message:"Sorry, you need to have a camera to list an item.", preferredStyle: .Alert)
             let defaultAction = UIAlertAction(title: "OK", style: .Default, handler: { action in
@@ -413,13 +421,15 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         
         captureSession!.beginConfiguration()
         
+        // If the AVFoundation capture session doesn't have the selected device as an input, add a new one
         if !contains(captureSession!.inputs, item: selectedDevice) {
             captureSession!.addInput(selectedDevice!)
             
+            // Check to see if the capture session supports 720p, if not, go with a preset that still supports video
             if captureSession!.canSetSessionPreset(AVCaptureSessionPreset1280x720) {
                 captureSession!.sessionPreset = AVCaptureSessionPreset1280x720
             } else {
-                captureSession!.sessionPreset = AVCaptureSessionPresetPhoto
+                captureSession!.sessionPreset = AVCaptureSessionPresetHigh
             }
         }
         
@@ -430,16 +440,19 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         
         displayingStill = false
         
+        // Create the preview layer, and add it to the screen
         capturePreview = AVCaptureVideoPreviewLayer(session: captureSession!)
         capturePreview?.frame = CGRectMake(0, 0, cameraView.layer.frame.width, cameraView.layer.frame.height)
         capturePreview?.videoGravity = AVLayerVideoGravityResizeAspectFill
         self.cameraView.layer.insertSublayer(capturePreview, below: self.flashView.layer)
         
+        // If the capture session can add the stillImageOutput and it doesn't have one already, add a new output
         if captureSession!.canAddOutput(stillImageOutput) && !contains(captureSession!.outputs, item: stillImageOutput) {
             stillImageOutput.outputSettings = [AVVideoCodecKey: AVVideoCodecJPEG]
             captureSession!.addOutput(stillImageOutput)
         }
         
+        // Same as still image output, but for video, minimum free disk space is just a magic number currently
         if captureSession!.canAddOutput(videoOutput) && !contains(captureSession!.outputs, item: videoOutput) {
             videoOutput.maxRecordedDuration = CMTimeMakeWithSeconds(Bakkle.sharedInstance.video_length_sec, Bakkle.sharedInstance.video_framerate)
             videoOutput.minFreeDiskSpaceLimit = 1024 * 781250 // 100 MB
@@ -452,15 +465,12 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         }
     }
     
+    // Called when recording begins
     func captureOutput(captureOutput: AVCaptureFileOutput!, didStartRecordingToOutputFileAtURL fileURL: NSURL!, fromConnections connections: [AnyObject]!) {
         NSLog("Started Recording")
     }
     
-    func setVideoOutputProperties() {
-        var captureConnection: AVCaptureConnection = videoOutput.connectionWithMediaType(AVMediaTypeVideo)
-        
-    }
-    
+    // A method to check if an array contains an item
     func contains(array: NSArray, item: AnyObject!) -> Bool {
         for items in array {
             if items.isEqual(item) {
@@ -493,6 +503,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         }
     }
     
+    // Called when the UI detects a touch that has moved, used with image dragging
     override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
         var touchPoint = touches.first as! UITouch
         
@@ -523,6 +534,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         }
     }
     
+    /// Draws a focus indicator on the focus point of the camera (if focus is available) and updates itself 32 times a second
     func drawFocusRect() {
         if selectedDevice == nil {
             return
@@ -541,6 +553,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             focusIndicator.removeFromSuperview()
         }
         
+        // Ensure there is only one loop running, and ends the loop when view disappears
         if !stopFocus {
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64((1.0/32.0) * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
                 self.drawFocusRect()
@@ -548,11 +561,13 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         }
     }
     
+    // Color fix on long press for capture button
     @IBAction func pressedCaptureButton(sender: AnyObject) {
         // action event: touchDown
         self.capButton.backgroundColor = UIColor.lightGrayColor()
     }
     
+    // If the capture button was released, fix the color
     @IBAction func releasedCaptureButton(sender: AnyObject) {
         // action event touchUpOutisde (also called by take photo which is up inside)
         self.capButton.backgroundColor = UIColor.whiteColor()
@@ -563,6 +578,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     var recordView: UIView?
     var videoCount = 0
     
+    // Take video after the long press was activated (can't be called more than
     @IBAction func takeVideo(sender: UILongPressGestureRecognizer) {
         if stillRecording == 0 && self.videoCount < CameraView.MAX_VIDEO_COUNT {
             stillRecording = 2
@@ -613,6 +629,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         }
     }
 
+    // Called if the length of the video is 15 second
     func finishRecording() {
         stillRecording--
         
@@ -675,6 +692,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
                 }
             }
             
+            // Compress the video and save it as an HTML5 compatible format (.mp4)
             exportSession.shouldOptimizeForNetworkUse = true
             exportSession.outputFileType = AVFileTypeMPEG4
             NSLog("MP4 url location: \(exportSession.outputURL.path)")
@@ -731,7 +749,12 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         // Possible square video link: http://www.netwalk.be/article/record-square-video-ios
     }
     
+    // Capture a still image with AVFoundation
     @IBAction func takePhoto(sender: AnyObject) {
+        // Logic used to determine whether the recording button was released
+        // 2 == held and recording
+        // 1 == done recording but held
+        // 0 == done recording, not held
         if stillRecording == 2 {
             stillRecording--
             self.capButton.backgroundColor = UIColor.whiteColor()
@@ -746,6 +769,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         self.releasedCaptureButton(self)
         var videoConnection = self.stillImageOutput.connectionWithMediaType(AVMediaTypeVideo)
         
+        // Ensure that there is still a media connection to take a picture
         if videoConnection != nil {
             self.capButton.enabled = false
             self.nextButton.enabled = false
@@ -762,7 +786,9 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
                 println(err)
             }
             
+            // Take the picture
             stillImageOutput.captureStillImageAsynchronouslyFromConnection(videoConnection, completionHandler: { (imageDataSampleBuffer, error) -> Void in
+                // If the capture was successful crop the picture to the desired square and compress the image to a .jpg
                 if imageDataSampleBuffer != nil {
                     var recentImage = UIImage(data: (AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageDataSampleBuffer)))
                     
@@ -804,6 +830,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         }
     }
     
+    // Take an image from the gallery (UIImagePickerController)
     @IBAction func getFromGallery(sender: AnyObject) {
         // set sourcetype to the proper saved photos in load
         UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.Default
@@ -815,9 +842,11 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         self.presentViewController(self.galleryPicker!, animated: true, completion: nil)
     }
     
+    // UIImagePickerController finished
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
         var itemIndex = self.imageCount++ // set the index to imageCount then increment the total count by 1
         var image = info[UIImagePickerControllerOriginalImage] as! UIImage
+        // Crop to the desired size and compress to a .jpg
         image.cropAndResize(self.size!, completionHandler: { (resizedImage:UIImage, data:NSData) -> () in
             var compressedImage = UIImageJPEGRepresentation(resizedImage, CGFloat(Bakkle.sharedInstance.image_quality))
             self.images[itemIndex] = UIImage(data: compressedImage)!
@@ -843,6 +872,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         picker.dismissViewControllerAnimated(true, completion: nil)
     }
     
+    // Consolidates photos to the left side, ignores videos
     func populatePhotos() {
         var imagesNoSpace = [UIImage]()
         for i in 0...(self.images.count - 1) {
@@ -871,7 +901,9 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         buttonEnabledHandler()
     }
     
+    // Animates an image moving from one position to another and then sets the image of the new position to the image that slid
     func animateSlide(fromIndex: Int, toIndex: Int) {
+        // If the index is valid and the image isn't nil
         if fromIndex < self.imageViews.count && toIndex < self.imageViews.count && fromIndex != toIndex && self.imageViews[fromIndex].image != nil {
             var startPoint = self.imageViews[fromIndex].convertPoint(self.imageViews[fromIndex].frame.origin, toView: self.view)
             var slideView = UIImageView(frame: CGRectMake(startPoint.x, startPoint.y, self.imageViews[fromIndex].frame.width, self.imageViews[fromIndex].frame.height))
@@ -899,6 +931,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         }
     }
     
+    // Hides and disables buttons when needed throughout the app
     func buttonEnabledHandler() {
         var notDragging = self.dragActivated < 0
         var imageCountGreaterThanMaxCount = (imageCount + self.videoCount) >= CameraView.MAX_IMAGE_COUNT
@@ -930,7 +963,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         }
     }
     
-    // rename to long press
+    // If the user holds a photo, set it up for rearrangement and dragging
     @IBAction func photoHeld(sender: UILongPressGestureRecognizer) {
         if ((sender.view!) as! UIImageView).image != nil && self.dragActivated < 0 && !self.isVideo[sender.view!.tag - 31] {
             var newW:CGFloat = sender.view!.frame.width * 1.1
@@ -961,6 +994,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         }
     }
     
+    // Moves the selected image to drag around the screen to the finger's position
     func dragImage(point: CGPoint) {
         if self.draggedImage != nil {
             hoverOverPosition(point)
@@ -971,6 +1005,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         }
     }
     
+    // If the finger has entered a valid position to move the image, all other images move to fix it
     func hoverOverPosition(point: CGPoint) {
         if animating > 0 {
             return
@@ -998,6 +1033,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         }
     }
     
+    // Moves images to accomadate the given "blank" space
     func rearrangePhotos(blankSpace: Int, previousSpace: Int) {
         var increment = previousSpace > blankSpace ? -1: 1
         for i in stride(from: previousSpace, to: blankSpace, by: increment) {
@@ -1007,7 +1043,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         buttonEnabledHandler()
     }
     
-    
+    // Animate the dragged image to "drop" on the selected position
     func released() {
         if self.draggedImage != nil {
             var oldDragAct = self.dragActivated
@@ -1051,7 +1087,10 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         self.dragActivated = -1
     }
     
+    // Figure out which image to display after the user taps on an image
     @IBAction func photoPreview(sender: UITapGestureRecognizer) {
+        // Image view tags should all be 31 higher than their position in the image view array
+        // 30 represents their superview's level on the ui they are (3rd row down) 1 represents the array offset
         var imageViewIndex = sender.view!.tag - 31
         
         let validTags = [1, 10, 20, 21, 30, 31, 32, 33, 34, 40, 41, 42, 43]
@@ -1061,7 +1100,11 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
                 self.removeStillImage()
             } else if imageViews[imageViewIndex].image != nil { // safety check
                 if self.isVideo[imageViewIndex] {
-                    self.previewVideo(self.videos[CameraView.MAX_IMAGE_COUNT - 1 - imageViewIndex])
+                    if isEditting {
+                        self.previewVideo(NSURL(string: self.videos[CameraView.MAX_IMAGE_COUNT - 1 - imageViewIndex])!)
+                    } else {
+                        self.previewVideo(NSURL(fileURLWithPath: self.videos[CameraView.MAX_IMAGE_COUNT - 1 - imageViewIndex])!)
+                    }
                 } else {
                     self.displayStillImage(imageViews[imageViewIndex].image!)
                 }
@@ -1073,6 +1116,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         }
     }
     
+    // Remove the photo at the tapped position
     @IBAction func removePhoto(sender: UIButton) {
         // the format for tags of remove buttons should be as follows:
         // 321 = removeImage2 where:
@@ -1091,6 +1135,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             var defaultAction = UIAlertAction(title: "NO", style: .Default, handler: nil)
             var acceptAction: UIAlertAction?
             
+            // Ensure the user wants to remove the video or photo, then if they tap "YES" remove it
             if self.isVideo[removeImageIndex] {
                 alertController = UIAlertController(title: "Remove Video", message: "Are you sure that you want to remove video #\(CameraView.MAX_IMAGE_COUNT - removeImageIndex)?", preferredStyle: .Alert)
                 acceptAction = UIAlertAction(title: "YES", style: .Destructive, handler: { (action: UIAlertAction!) in
@@ -1128,6 +1173,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         }
     }
     
+    // Set the proper variables in AddItem before the segue
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "AddItemSegue" {
             self.populatePhotos() // to be safe
