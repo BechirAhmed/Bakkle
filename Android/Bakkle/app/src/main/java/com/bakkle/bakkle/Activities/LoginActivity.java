@@ -1,6 +1,5 @@
 package com.bakkle.bakkle.Activities;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -52,9 +51,8 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener
     {
         super.onCreate(savedInstanceState);
         callbackManager = CallbackManager.Factory.create();
-        final Context mContext = this;
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        FacebookSdk.sdkInitialize(this);
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
         setContentView(R.layout.activity_login);
 
 
@@ -213,6 +211,7 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener
                     LoginManager.getInstance().logInWithPublishPermissions(
                             this, Arrays.asList("publish_actions"));
                     editor.putBoolean("LoggedIn", true);
+                    editor.putBoolean("newuser", true);
                     editor.apply();
 
                 }

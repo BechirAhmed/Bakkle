@@ -54,8 +54,8 @@ public class ChatListActivity extends ListActivity
         i.putExtra("sellerPk", preferences.getString("sellerPk", ""));
         startService(i);
 
-        chatCalls = new ChatCalls(preferences.getString("uuid", ""), preferences.getString("sellerPk", ""), preferences.getString("auth_token", ""), new WebSocketCallBack());
-        chatCalls.connect();
+//        chatCalls = new ChatCalls(preferences.getString("uuid", ""), preferences.getString("sellerPk", ""), preferences.getString("auth_token", ""), new WebSocketCallBack());
+//        chatCalls.connect();
 //        chatCalls.test();
 //        Log.v("the url is:", "ws://app.bakkle.com/ws/" + "?uuid=" + preferences.getString("uuid", "") + "&userId=" + preferences.getString("sellerPk", ""));
 //        chatCalls.getChatList();

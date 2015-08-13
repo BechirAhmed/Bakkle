@@ -43,16 +43,29 @@
         android:layout_weight="5"
         android:layout_above="@+id/buttons">
 
-        <EditText
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
             android:id="@+id/aboutMeText"
-            style="@style/AppTheme"
+            android:editable="false"
+            android:gravity="top|start"
+            android:hint="@string/description_hint"
+            android:inputType="textMultiLine"
+            android:scrollbars="vertical"
+            android:textColor="@color/black"
+            android:theme="@style/AppCompatTheme"/>
+
+        <EditText
+            android:id="@+id/aboutMeTextEdit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:editable="false"
+            android:visibility="invisible"
             android:gravity="top|start"
             android:hint="@string/description_hint"
-            android:inputType="textMultiLine|textLongMessage"
+            android:inputType="textMultiLine"
             android:scrollbars="vertical"
             android:textColor="@color/black"
             android:theme="@style/AppCompatTheme"/>
@@ -63,13 +76,22 @@
         android:id="@+id/buttons"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_weight="2"
+        android:gravity="bottom"
         android:layout_alignParentBottom="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:orientation="horizontal"
             android:weightSum="2">
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:visibility="gone"
+                android:id="@+id/saveButton"
+                android:background="@color/green"
+                android:text="Save"/>
 
             <Button
                 android:id="@+id/edit"
@@ -88,6 +110,9 @@
                 android:layout_weight="1"
                 android:background="@color/green"
                 android:text="Log Out"/>
+
+
+
         </LinearLayout>
 
     </RelativeLayout>
