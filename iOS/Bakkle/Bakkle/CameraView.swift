@@ -12,7 +12,7 @@ import QuartzCore
 class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AVCaptureFileOutputRecordingDelegate {
     
     /* CONSTANTS */
-    // if you change this you need to update storyboard with an extra image view
+    // if you change MAX_IMAGE_COUNT you need to update storyboard with an extra image view
     // and you need to add extra views to the array of image views
     private static let IMAGE_FREEZE_TIME = 0.5
     private static let FADE_IN_TIME = 0.5
@@ -104,7 +104,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         size = CGSize(width: Bakkle.sharedInstance.image_width, height: Bakkle.sharedInstance.image_height)
         stopFocus = false
         
-        // consider auto-generating these based on the static CameraView.MAX_IMAGE_COUNT
+        // consider auto-generating views based on the static CameraView.MAX_IMAGE_COUNT
         imageViews = [imageView1, imageView2, imageView3, imageView4]
         removeImageButtons = [removeImage1, removeImage2, removeImage3, removeImage4]
         
@@ -151,6 +151,10 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             successLabel.layer.shadowRadius = 5.0
             successLabel.layer.shadowOpacity = 1.0
             successLabel.hidden = false
+            
+            if self.addItem!.successfulAdd {
+                self.removeVideos()
+            }
             
             self.dismissViewControllerAnimated(true, completion: nil)
         } else if self.addItem != nil {
@@ -343,6 +347,13 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         captureSession!.commitConfiguration()
         
         buttonEnabledHandler()
+        
+        UIView.animateWithDuration(0.5, animations: { Void in
+            // If the camera is defaulted as .Back (main camera) this will always "flip" the view when the camera swaps
+            self.cameraView.transform = CGAffineTransformScale(self.cameraView.transform, -1, 1)
+        }, completion: { Void in
+                
+        })
     }
     
     func findCameraWithPosition(position: AVCaptureDevicePosition) -> AVCaptureDevice? {
@@ -686,6 +697,15 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
                         NSLog("\(exportSession.error)")
                     }
                     self.videos[self.videoCount - 1] = exportSession.outputURL.path!
+                    
+                    if self.addItem != nil {
+                        if self.addItem!.videos.count >= self.videoCount {
+                            self.addItem!.videos[self.videoCount - 1] = exportSession.outputURL.path!
+                        } else {
+                            self.addItem!.videos.append(exportSession.outputURL.path!)
+                        }
+                    }
+                    
                     break
                     
                 default:
