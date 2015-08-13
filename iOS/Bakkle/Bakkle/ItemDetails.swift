@@ -227,11 +227,21 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
         cell.backgroundColor = UIColor.redColor()
         cell.imgView.contentMode = UIViewContentMode.ScaleAspectFill
         cell.imgView.clipsToBounds  = true
-//        if let images = self.itemImages {
-//            cell.imgView.image = UIImage(data: self.itemImages![indexPath.row])
-//        }
-        cell.imgView!.hnk_setImageFromURL(self.itemImages![indexPath.row])
+        let imageURL = self.itemImages![indexPath.row]
+        let fileExtension = imageURL.path?.pathExtension
+        if fileExtension == "mp4" {
+            cell.imgView!.image = Bakkle.sharedInstance.previewImageForLocalVideo(imageURL)
+            cell.userInteractionEnabled = true
+            var tapGestureRecognizer = UITapGestureRecognizer(target:self, action:Selector("videoTapped:"))
+             cell.imgView!.addGestureRecognizer(tapGestureRecognizer)
+        } else {
+            cell.imgView!.hnk_setImageFromURL(imageURL)
+        }
         return cell
+    }
+    
+    func videoTapped() {
+        NSLog("Video should play")
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
