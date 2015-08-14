@@ -45,8 +45,6 @@ app = web.Application([
             name='itemMarkSpamFromSpam'),
 
     web.url(r'^/items/reset/$', itemsRESTHandlers.resetHandler, name='reset'),
-    web.url(r'^/items/reset_items/$',
-            itemsRESTHandlers.resetItemsHandler, name='reset_items'),
     web.url(r'^/items/feed/$', itemsRESTHandlers.feedHandler, name='feed'),
     web.url(r'^/items/meh/$', itemsRESTHandlers.mehHandler, name='meh'),
     web.url(r'^/items/want/$', itemsRESTHandlers.wantHandler, name='want'),
@@ -56,8 +54,6 @@ app = web.Application([
         r'^/items/report/$', itemsRESTHandlers.reportHandler, name='report'),
     web.url(r'^/items/add_item/$',
             itemsRESTHandlers.addItemHandler, name='add_item'),
-    web.url(r'^/items/add_item_no_image/$',
-            itemsRESTHandlers.addItemNoImageHandler, name='add_item_no_image'),
     web.url(r'^/items/delete_item/$',
             itemsRESTHandlers.deleteItemHandler, name='delete_item'),
     #url(r'^sell_item/$', views.sell_item, name='sell_item'),

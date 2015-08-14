@@ -6,8 +6,6 @@ from tornado.web import asynchronous
 
 import itemsCommonHandlers
 
-from tornado import web
-
 
 class indexHandler(bakkleRequestHandler):
 
@@ -85,11 +83,11 @@ class itemPublicDetailHandler(bakkleRequestHandler):
 class markDeletedHandler(bakkleRequestHandler):
 
     @asynchronous
-    def get(self, item_id, fromSpam):
-        self.asyncHelper(item_id, fromSpam)
+    def get(self, item_id):
+        self.asyncHelper(item_id)
 
     @run_async
-    def asyncHelper(self, item_id, fromSpam):
+    def asyncHelper(self, item_id):
 
         item_list = itemsCommonHandlers.mark_as_deleted(item_id, False)
 
@@ -156,11 +154,9 @@ class markSpamHandlerFromSpam(bakkleRequestHandler):
 
 class addItemHandler(bakkleRequestHandler):
 
-    @asynchronous
     def post(self):
         self.asyncHelper()
 
-    @run_async
     def asyncHelper(self):
         try:
 
@@ -185,57 +181,16 @@ class addItemHandler(bakkleRequestHandler):
             item_id = self.getArgument('item_id', "")
 
             images = self.request.files['image']
+            videos = self.request.files['videos']
         except QueryArgumentError as error:
             self.writeJSON({"status": 0, "message": error.message})
             self.finish()
 
         self.writeJSON(itemsCommonHandlers.add_item(
             title, description, location, seller_id, price,
-            tags, notifyFlag, item_id, images))
+            tags, notifyFlag, item_id, images, videos))
         self.finish()
         return
-
-
-class addItemNoImageHandler(bakkleRequestHandler):
-
-    @asynchronous
-    def post(self):
-        self.asyncHelper()
-
-    @run_async
-    def asyncHelper(self):
-        try:
-
-            if(not self.authenticate()):
-                self.writeJSON(
-                    {'success': 0, 'error': 'Device not authenticated'})
-                self.finish()
-                return
-
-            # TODO: Handle location
-            # Get the rest of the necessary params from the request
-            title = self.getArgument('title')
-            description = self.getArgument('description')
-            location = self.getArgument('location')
-            seller_id = self.getUser()
-            price = self.getArgument('price')
-            tags = self.getArgument('tags')
-            method = self.getArgument('method')
-            notifyFlag = self.getArgument('notify', "")
-
-            # Get the item id if present (If it is present an item will be edited
-            # not added)
-            item_id = self.getArgument('item_id', "")
-
-        except QueryArgumentError as error:
-            self.writeJSON({"status": 0, "message": error.message})
-            self.finish()
-            return
-
-        self.writeJSON(itemsCommonHandlers.add_item_no_image(
-            title, description, location, seller_id, price,
-            tags, method, notifyFlag, item_id))
-        self.finish()
 
 
 class feedHandler(bakkleRequestHandler):

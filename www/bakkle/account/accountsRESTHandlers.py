@@ -147,6 +147,7 @@ class accountResetHandler(bakkleRequestHandler):
                     )
         return
 
+
 class settingsHandler(bakkleRequestHandler):
 
     @asynchronous
@@ -161,6 +162,7 @@ class settingsHandler(bakkleRequestHandler):
         self.writeJSON(respObj)
         self.finish()
         return
+
 
 class loginFacebookHandler(bakkleRequestHandler):
 

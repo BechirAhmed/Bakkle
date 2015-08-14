@@ -35,6 +35,7 @@ def startChat(itemId, buyerId):
 
     return {'success': 1, 'chatId': chat.pk}
 
+
 def getChatIds(itemId, sellerId):
 
     try:
@@ -59,8 +60,8 @@ def getChatIds(itemId, sellerId):
 
     return {'success': 1, 'chats': openChats}
 
-def sendChatMessage(clients, chatId, senderId, message, offerPrice, offerMethod):
 
+def sendChatMessage(clients, chatId, senderId, message, offerPrice, offerMethod):
 
     try:
         message = message.strip()
@@ -121,7 +122,6 @@ def sendChatMessage(clients, chatId, senderId, message, offerPrice, offerMethod)
         device.send_notification(
             message,
             buyerNumUnreadChats)
-
 
     if(message is not None and message != ""):
         if(chat.item.seller.pk in clients):
