@@ -20,7 +20,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.bakkle.bakkle.Fragments.BuyersTrunkFragment;
@@ -35,11 +34,9 @@ import com.bakkle.bakkle.Helpers.ServerCalls;
 import com.bakkle.bakkle.R;
 import com.bumptech.glide.Glide;
 import com.facebook.AccessToken;
-import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.Profile;
-import com.facebook.login.LoginManager;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.accountswitcher.AccountHeader;
@@ -244,18 +241,16 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
 
         Log.d("testing", preferences.getString("uuid", "0"));
         Log.d("testing", preferences.getString("userID", "0"));
-        String auth_token = "";
-//        if (preferences.getBoolean("newuser", true)) {
-            auth_token = serverCalls.loginFacebook(
+        if (preferences.getBoolean("newuser", true)) {
+            String auth_token = serverCalls.loginFacebook(
                     preferences.getString("uuid", "0"),
                     preferences.getString("userID", "0"),
                     getLocation()
-            ); //TODO: for production, need to enclose this in the if statement
-//        }
-
-        editor.putString("auth_token", auth_token);
-        editor.putBoolean("newuser", false);
-        editor.apply();
+            );
+            editor.putString("auth_token", auth_token);
+            editor.putBoolean("newuser", false);
+            editor.apply();
+        }
 
         Fragment fragment = new FeedFragment();
 
@@ -349,74 +344,6 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
 
     }
 
-    private class DrawerItemClickListener implements ListView.OnItemClickListener
-    {
-        @Override
-        public void onItemClick(AdapterView parent, View view, int position, long id)
-        {
-
-
-            //TODO: put this code in a separate class so that it can be called from anywhere
-            //TODO: don't re-launch home activity if already in there
-
-            switch (position) {
-                case 0:
-                    getFragmentManager().beginTransaction().replace(R.id.content_frame,
-                            new FeedFragment()).addToBackStack(null).
-                            setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
-                    break;
-                case 1:
-                    getFragmentManager().beginTransaction().replace(R.id.content_frame,
-                            new SellersGarageFragment()).addToBackStack(null).
-                            setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
-                    break;
-                case 2:
-                    getFragmentManager().beginTransaction().replace(R.id.content_frame,
-                            new BuyersTrunkFragment()).addToBackStack(null).
-                            setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
-                    invalidateOptionsMenu();
-                    break;
-                case 3:
-                    getFragmentManager().beginTransaction().replace(R.id.content_frame,
-                            new HoldingPatternFragment()).addToBackStack(null).
-                            setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
-                    break;
-                case 4:
-//                    new ServerCalls(getApplicationContext()).getFeedItems(
-//                            preferences.getString("auth_token", "0"),
-//                            "999999999",
-//                            "100",
-//                            "",
-//                            "32,32",
-//                            "",
-//                            preferences.getString("uuid", "0")
-//                        );
-                    //startActivity(new Intent(getApplicationContext(), FeedFilter.class));
-                    break;
-                case 5:
-                    //startActivity(new Intent(getApplicationContext(), BakkleSettings.class));
-                    break;
-                case 6:
-                    //startActivity(new Intent(getApplicationContext(), DemoOptionsFragment.class));
-                    getFragmentManager().beginTransaction().replace(R.id.content_frame,
-                            new DemoOptionsFragment()).addToBackStack(null)
-                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
-                    break;
-                case 7:
-                    FacebookSdk.sdkInitialize(getApplicationContext());
-                    LoginManager.getInstance().logOut();
-                    editor.putBoolean("LoggedIn", false);
-                    editor.putBoolean("newuser", true);
-                    editor.apply();
-                    startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-                    finish();
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-
     public void refineButtonClick(View view)
     {
         getFragmentManager().beginTransaction().replace(R.id.content_frame,
@@ -452,7 +379,7 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
 
     public void reset(View view)
     {
-        serverCalls.resetDemo(preferences.getString("auth_token", "0"), preferences.getString("uuid", "0"));
+        serverCalls.resetDemo(preferences.getString("auth_token", ""), preferences.getString("uuid", ""));
     }
 
     public void refineClose(View view)

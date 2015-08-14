@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,32 +33,85 @@ public class ProfileFragment extends Fragment
     SharedPreferences.Editor editor;
     ServerCalls serverCalls;
     JsonObject json;
+    String description;
+    String url;
     
     public ProfileFragment()
-    {}
+    {
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        description = null;
         editor = preferences.edit();
         serverCalls = new ServerCalls(getActivity());
-        json = serverCalls.populateGarage(preferences.getString("auth_token", ""), preferences.getString("uuid", ""));
+        json = serverCalls.getAccount(preferences.getString("auth_token", ""), preferences.getString("uuid", ""));
+        url = "http://graph.facebook.com/" + preferences.getString("userID", "0") + "/picture?width=300&height=300";
     }
     
     
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState)
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_profile, container, false);
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         ((TextView) view.findViewById(R.id.name)).setText(preferences.getString("name", "Not Signed In"));
+        final EditText editText = (EditText) view.findViewById(R.id.aboutMeTextEdit);
+        final TextView textView = (TextView) view.findViewById(R.id.aboutMeText);
+        final Button logout = (Button) (view.findViewById(R.id.logout));
+        final Button edit = (Button) view.findViewById(R.id.edit);
+        final Button save = (Button) view.findViewById(R.id.saveButton);
+        description = json.get("account").getAsJsonObject().get("description").getAsString();
+        textView.setText(description);
 
-        Button logout = (Button) (view.findViewById(R.id.logout));
-        Button edit = (Button) view.findViewById(R.id.edit);
+        Glide.with(getActivity())
+                .load(url)
+                .into((ImageView) view.findViewById(R.id.profilePicture));
+
+        edit.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                //((EditText) view.findViewById(R.id.aboutMeText)).setEnabled();
+                //TODO: make the edit button bring focus to the edit text box
+                editText.setText(description);
+                textView.setVisibility(View.INVISIBLE);
+                editText.setVisibility(View.VISIBLE);
+                edit.setVisibility(View.GONE);
+                logout.setVisibility(View.GONE);
+                save.setVisibility(View.VISIBLE);
+
+            }
+        });
+
+        save.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                description = editText.getText().toString();
+
+                Log.v("description is now", description);
+
+                textView.setVisibility(View.VISIBLE);
+                textView.setText(description);
+                editText.setVisibility(View.INVISIBLE);
+                edit.setVisibility(View.VISIBLE);
+                logout.setVisibility(View.VISIBLE);
+                save.setVisibility(View.GONE);
+
+
+                serverCalls.setDescription(
+                        preferences.getString("auth_token", ""),
+                        preferences.getString("uuid", ""),
+                        description);
+            }
+        });
+
 
         logout.setOnClickListener(new View.OnClickListener()
         {
@@ -73,28 +127,6 @@ public class ProfileFragment extends Fragment
                 getActivity().finish();
             }
         });
-
-        edit.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                //((EditText) view.findViewById(R.id.aboutMeText)).setEnabled();
-                //TODO: make the edit button bring focus to the edit text box
-            }
-        });
-
-        EditText editText = (EditText) view.findViewById(R.id.aboutMeText);
-
-        editText.setText(json.get("seller_garage").getAsJsonArray().get(0).getAsJsonObject().get("seller").getAsJsonObject().get("description").getAsString());
-
-        String url = "http://graph.facebook.com/" + preferences.getString("userID", "0") + "/picture?width=300&height=300";
-
-        Glide.with(getActivity())
-                .load(url)
-                .into((ImageView) view.findViewById(R.id.profilePicture));
-
-
 
 
         return view;

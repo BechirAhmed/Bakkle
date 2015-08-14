@@ -35,6 +35,8 @@ public class ServerCalls
     final static String url_get_holding_pattern = "items/get_holding_pattern/";
     final static String url_buyertransactions = "items/get_buyer_transactions/";
     final static String url_sellertransactions = "items/get_seller_transactions/";
+    final static String url_getaccount = "account/get_account/";
+    final static String url_setdescription = "account/set_description/";
 
     Context mContext;
     int response;
@@ -403,6 +405,52 @@ public class ServerCalls
     public void deleteItem(String authToken, String uuid, String pk)
     {
         markItem("meh", authToken, uuid, pk, "42");
+    }
+
+    public JsonObject getAccount(String authToken, String uuid)
+    {
+        try {
+            Log.v("link is ", url_base+url_getaccount);
+            Log.v("uuid is ", uuid);
+            Log.v("auth token is ", authToken);
+            Log.v("accountId is ", authToken.substring(33, 35));
+
+            jsonResponse = Ion.with(mContext)
+                    .load(url_base + url_getaccount)
+                    .setBodyParameter("device_uuid", uuid)
+                    .setBodyParameter("auth_token", authToken)
+                    .setBodyParameter("accountId", authToken.substring(33, 35))
+                    .asJsonObject()
+                    .get();
+        }
+        catch (Exception e){
+            Log.v("Exception", e.getMessage());
+        }
+
+        return jsonResponse;
+    }
+
+    public void setDescription(String authToken, String uuid, String description)
+    {
+        Ion.with(mContext)
+                .load(url_base + url_setdescription)
+                .setBodyParameter("auth_token", authToken)
+                .setBodyParameter("device_uuid", uuid)
+                .setBodyParameter("description", description)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>()
+                {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result)
+                    {
+                        if(e != null) {
+                            Log.v("description exception", e.getMessage());
+                        }
+
+                        Log.v("the json is", result.toString());
+                        jsonResponse = result;
+                    }
+                });
     }
 
     public void resetDemo(String authToken, String uuid)

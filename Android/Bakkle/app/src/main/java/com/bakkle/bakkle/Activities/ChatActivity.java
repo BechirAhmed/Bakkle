@@ -5,6 +5,7 @@ import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,6 +20,16 @@ import com.bakkle.bakkle.Helpers.ChatCalls;
 import com.bakkle.bakkle.Helpers.ChatMessage;
 import com.bakkle.bakkle.Helpers.ServerCalls;
 import com.bakkle.bakkle.R;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.koushikdutta.async.http.AsyncHttpClient;
+import com.koushikdutta.async.http.WebSocket;
+
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class ChatActivity extends AppCompatActivity
 {
@@ -28,10 +39,12 @@ public class ChatActivity extends AppCompatActivity
     private EditText chatText;
     private Button send;
     private boolean left = false;
-    private String id;
     private ServerCalls serverCalls;
     private ChatCalls chatCalls;
     private SharedPreferences preferences;
+    private int chatId;
+    private String response;
+    private ArrayList<ChatMessage> chatMessages;
 
 
     @Override
@@ -39,17 +52,24 @@ public class ChatActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
+        chatId = getIntent().getExtras().getInt("chatId");
         send = (Button) findViewById(R.id.send);
         listView = (ListView) findViewById(R.id.list);
+        chatText = (EditText) findViewById(R.id.compose);
+
         chatArrayAdapter = new ChatArrayAdapter(this, R.layout.right_message);
         listView.setAdapter(chatArrayAdapter);
-        chatText = (EditText) findViewById(R.id.compose);
-        id = getIntent().getExtras().getString("id");
-        serverCalls = new ServerCalls(this);
-        //chatCalls = new ChatCalls()
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        getPreviousMessages();
+
+        serverCalls = new ServerCalls(this);
+        chatCalls = new ChatCalls(preferences.getString("uuid", ""), preferences.getString("auth_token", "").substring(33, 35),
+                preferences.getString("auth_token", ""), new WebSocketCallBack());
+
+        chatMessages = new ArrayList<>();
+
+        populateChat();
 
         chatText.setOnKeyListener(new View.OnKeyListener()
         {
@@ -82,10 +102,6 @@ public class ChatActivity extends AppCompatActivity
                 listView.setSelection(chatArrayAdapter.getCount() - 1);
             }
         });
-    }
-
-    private void getPreviousMessages()
-    {
 
     }
 
@@ -94,12 +110,85 @@ public class ChatActivity extends AppCompatActivity
         String text = chatText.getText().toString();
         if (!text.equals("")) {
 
-            serverCalls.sendChat(preferences.getString("uuid", "0"), preferences.getString("auth_token", "0"), chatText.getText().toString(), id);
             chatArrayAdapter.add(new ChatMessage(left, text));
             chatText.setText("");
             left = !left;
         }
         return true;
+    }
+
+    public void populateChat()
+    {
+        JsonParser jsonParser = new JsonParser();
+        JsonElement jsonElement = jsonParser.parse(response);
+        JsonObject jsonResponse = jsonElement.getAsJsonObject();
+        if (jsonResponse == null || jsonResponse.get("success").getAsInt() != 1)
+            return;
+        JsonArray messages = jsonResponse.get("messages").getAsJsonArray();
+        for (JsonElement temp : messages) {
+            JsonObject message = temp.getAsJsonObject();
+            if (message.get("message").getAsString().equals("")) //if message field is empty, then it must be an offer
+                populateOffer(message.get("offer").getAsJsonObject(), message.get("sent_by_buyer").getAsBoolean());
+            else
+                populateMessage(message.get("message").getAsString(), message.get("sent_by_buyer").getAsBoolean());
+        }
+
+        runOnUiThread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                chatArrayAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    public void populateMessage(String message, boolean sentByBuyer)
+    {
+        //chatMessages.add(new ChatMessage(!sentByBuyer, message));
+        chatArrayAdapter.add(new ChatMessage(!sentByBuyer, message));
+    }
+
+    public void populateOffer(JsonObject offer, boolean sentByBuyer)
+    {
+
+    }
+
+    private class WebSocketCallBack implements AsyncHttpClient.WebSocketConnectCallback
+    {
+
+        @Override
+        public void onCompleted(Exception ex, WebSocket webSocket)
+        {
+            if (ex != null) {
+                Log.v("Callback exception", ex.getMessage());
+                return;
+            }
+            JSONObject json = new JSONObject();
+            try {
+                json.put("method", "chat_getMessagesForChat");
+                json.put("chatId", String.valueOf(chatId));
+                json.put("uuid", "E7F742EB-67EE-4738-ABEC-F0A3B62B45EB");
+                json.put("auth_token", "f02dfb77e9615ae630753b37637abb31_10");
+            }
+            catch (Exception e) {
+                Log.v("Websocket callback", e.getMessage());
+            }
+
+            webSocket.send(json.toString());
+
+            webSocket.setStringCallback(new WebSocket.StringCallback()
+            {
+                @Override
+                public void onStringAvailable(String s)
+                {
+                    response = s;
+                    Log.v("response is ", "" + response);
+                    populateChat();
+                }
+            });
+
+        }
     }
 
     @Override
@@ -125,4 +214,5 @@ public class ChatActivity extends AppCompatActivity
 
         return super.onOptionsItemSelected(item);
     }
+
 }

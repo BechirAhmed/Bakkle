@@ -55,6 +55,7 @@ public class ChatCalls extends Service
     public void setCallback(AsyncHttpClient.WebSocketConnectCallback callback)
     {
         this.callback = callback;
+        connect();
     }
 
     public void connect()
@@ -72,9 +73,12 @@ public class ChatCalls extends Service
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId)
+    public int onStartCommand(Intent i, int flags, int startId)
     {
-        Log.i("LocalService", "Received start id " + startId + ": " + intent);
+        Log.v("LocalService", "Received start id " + startId + ": " + i);
+        uuid = i.getExtras().getString("uuid");
+        userId = i.getExtras().getString("sellerPk");
+        authToken = i.getExtras().getString("auth_token");
 
         connect();
 
