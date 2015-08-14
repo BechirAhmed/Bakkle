@@ -49,11 +49,11 @@ public class ChatListActivity extends ListActivity
 
         preferences = PreferenceManager.getDefaultSharedPreferences(ChatListActivity.this);
 
-        Intent i = new Intent(this, ChatCalls.class);
-        i.putExtra("uuid", preferences.getString("uuid", ""));
-        i.putExtra("auth_token", preferences.getString("auth_token", ""));
-        i.putExtra("sellerPk", preferences.getString("sellerPk", ""));
-        startService(i);
+//        Intent i = new Intent(this, ChatCalls.class);
+//        i.putExtra("uuid", preferences.getString("uuid", ""));
+//        i.putExtra("auth_token", preferences.getString("auth_token", ""));
+//        i.putExtra("sellerPk", preferences.getString("sellerPk", ""));
+//        startService(i);
 
         chatCalls = new ChatCalls(preferences.getString("uuid", ""), preferences.getString("sellerPk", ""), preferences.getString("auth_token", ""), new WebSocketCallBack());
         chatCalls.connect();
