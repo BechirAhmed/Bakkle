@@ -47,6 +47,16 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     @IBOutlet weak var logoImageViewHeight: NSLayoutConstraint!
     @IBOutlet weak var logoImageViewWidth: NSLayoutConstraint!
     
+    // For start a chat view
+    @IBOutlet weak var startChatView: UIView!
+    @IBOutlet weak var sendMessageButton: UIButton!
+    @IBOutlet weak var keepBrowsingButton: UIButton!
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var viewDescriptionLabel: UILabel!
+    @IBOutlet weak var startChatItemImage: UIImageView!
+    @IBOutlet weak var startChatViewOriginX: NSLayoutConstraint!
+    @IBOutlet weak var startChatViewOriginY: NSLayoutConstraint!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -116,6 +126,14 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             goodwillLogo.layer.masksToBounds = true
             self.view.addSubview(goodwillLogo)
         }
+        
+        self.sendMessageButton.layer.borderColor = self.sendMessageButton.titleLabel!.textColor.CGColor
+        self.keepBrowsingButton.layer.borderColor = self.keepBrowsingButton.titleLabel!.textColor.CGColor
+        self.sendMessageButton.layer.cornerRadius = CGFloat(15.0)
+        self.keepBrowsingButton.layer.cornerRadius = self.sendMessageButton.layer.cornerRadius
+        self.startChatViewOriginX.constant = self.startChatView.frame.width * -1.5
+        self.startChatViewOriginY.constant = 50
+//        self.startChatView.transform = CGAffineTransformRotate(CGAffineTransformIdentity, CGFloat(-30 * (M_PI / 180)))
         
         // Always look for updates
         requestUpdates()
@@ -317,16 +335,18 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     
     /* Called when new data is available to display.*/
     func refreshData() {
-        dispatch_async(dispatch_get_main_queue()) {
-            //TODO: Check items 0 and 1, if they are the same, do nothing
-            var revealViewController: SWRevealViewController! = self.revealViewController()
-            if revealViewController == nil {
-                self.resetSwipeView()
-                self.updateView()
-            }else{
-                if self.revealViewController().frontViewPosition == FrontViewPosition.Left{
+        if self.startChatView.hidden {
+            dispatch_async(dispatch_get_main_queue()) {
+                //TODO: Check items 0 and 1, if they are the same, do nothing
+                var revealViewController: SWRevealViewController! = self.revealViewController()
+                if revealViewController == nil {
                     self.resetSwipeView()
                     self.updateView()
+                }else{
+                    if self.revealViewController().frontViewPosition == FrontViewPosition.Left{
+                        self.resetSwipeView()
+                        self.updateView()
+                    }
                 }
             }
         }
@@ -456,9 +476,9 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             }
         }
         UIView.animateWithDuration(0.16, animations: { () -> Void in
-        view.transform = CGAffineTransformIdentity
-        var superView : UIView = self.view.superview!
-        self.view.center = superView.convertPoint(superView.center, fromView: superView.superview)
+            view.transform = CGAffineTransformIdentity
+            var superView : UIView = self.view.superview!
+            self.view.center = superView.convertPoint(superView.center, fromView: superView.superview)
         })
         return false
     }
@@ -483,7 +503,8 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             break
         case MDCSwipeDirection.Right:
             Bakkle.sharedInstance.markItem("want", item_id: self.item_id, success: {}, fail: {})
-            loadNext()
+            self.itemData = Bakkle.sharedInstance.feedItems[0] as? NSDictionary
+            self.displayStartAChat(self.swipeView.imageView.image)
             break
         case MDCSwipeDirection.Up:
             Bakkle.sharedInstance.markItem("hold", item_id: self.item_id, success: {}, fail: {})
@@ -514,6 +535,85 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         default: break
         }
         
+    }
+    
+    func displayStartAChat(image: UIImage?) {
+        // Set the image, only request more data if we have to
+        if image != nil {
+            self.startChatItemImage.image = image
+        } else {
+            let imgURL = NSURL(string: (itemData!.valueForKey("image_urls") as! NSArray)[0] as! String)
+            if imgURL != nil {
+                let request: NSURLRequest = NSURLRequest(URL: imgURL!)
+                NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue(), completionHandler: {(response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
+                    if error == nil {
+                        self.startChatItemImage.image = UIImage(data: data)
+                    } else {
+                        NSLog("%@", error)
+                    }
+                })
+            }
+        }
+        
+        if let x: AnyObject = itemData!.valueForKey("pk") {
+            self.sendMessageButton.tag = Int(x.intValue)
+        }
+        
+        self.view.bringSubviewToFront(self.startChatView)
+        self.startChatView.hidden = false
+        
+        UIView.animateWithDuration(2.5, animations: { Void in
+//            self.startChatView.transform = CGAffineTransformRotate(CGAffineTransformIdentity, 0)
+            // this is the left side for some reason
+            self.startChatViewOriginX.constant = -16
+            self.startChatViewOriginY.constant = 0
+        }, completion: {Void in
+        
+        })
+    }
+    
+    var itemData: NSDictionary?
+    
+    func closeStartAChat() {
+        self.sendMessageButton.tag = 0
+        self.startChatView.hidden = true
+        
+        UIView.animateWithDuration(1.0, animations: { Void in
+            //            self.startChatView.transform = CGAffineTransformRotate(CGAffineTransformIdentity, 0)
+            self.startChatViewOriginX.constant = self.startChatView.frame.width
+            self.startChatViewOriginY.constant = 50
+        }, completion: {Void in
+            //            self.startChatView.transform = CGAffineTransformRotate(CGAffineTransformIdentity, 0)
+            self.startChatViewOriginX.constant = self.startChatView.frame.width * -1
+            self.loadNext()
+        })
+    }
+    
+    @IBAction func sendMessage (sender: UIButton) {
+        let buyer = User(facebookID: Bakkle.sharedInstance.facebook_id_str,accountID: Bakkle.sharedInstance.account_id,
+            firstName: Bakkle.sharedInstance.first_name, lastName: Bakkle.sharedInstance.last_name)
+        let account = Account(user: buyer)
+        let chatItem = self.itemData!
+        let chatItemId = String(sender.tag)
+        var chatId: Int = 0
+        var chatPayload: WSRequest = WSStartChatRequest(itemId: chatItemId)
+        chatPayload.successHandler = {
+            (var success: NSDictionary) in
+            chatId = success.valueForKey("chatId") as! Int
+            var buyerChat = Chat(user: buyer, lastMessageText: "", lastMessageSentDate: NSDate(), chatId: chatId)
+            let chatViewController = ChatViewController(chat: buyerChat)
+            chatViewController.itemData = chatItem
+            chatViewController.seller = chatItem.valueForKey("seller") as! NSDictionary
+            chatViewController.isBuyer = true
+            self.navigationController?.pushViewController(chatViewController, animated: true)
+        }
+        WSManager.enqueueWorkPayload(chatPayload)
+        
+        self.closeStartAChat()
+    }
+    
+    @IBAction func keepBrowsing(sender: AnyObject) {
+        self.closeStartAChat()
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {

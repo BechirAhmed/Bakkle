@@ -27,6 +27,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     var offerTF: UITextField!
     var offerSent: Bool = false
     var offerReceived: Bool = false
+    var itemData: NSDictionary?
     
     override var inputAccessoryView: UIView! {
         get {
@@ -360,7 +361,10 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let sb: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let vc: ItemDetails = sb.instantiateViewControllerWithIdentifier("ItemDetails") as! ItemDetails
         vc.modalTransitionStyle = UIModalTransitionStyle.FlipHorizontal
-        if isBuyer {
+        if let item = self.itemData {
+            // Assumes the itemData was passed as an Item, not BuyerItem
+            vc.item = item
+        } else if isBuyer {
             vc.item = Bakkle.sharedInstance.trunkItems[self.itemIndex].valueForKey("item") as! NSDictionary
         } else {
             vc.item = Bakkle.sharedInstance.garageItems[self.itemIndex] as! NSDictionary
@@ -469,6 +473,8 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         return chat.loadedMessages.count * 2 // for sent-date cell
     }
     
+    // If this code is used, it might not be compatible with the chat directly from 
+    // the feed view
     func acceptButton(){
         // Code to support ratings
 //        let sb: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
