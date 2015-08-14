@@ -45,6 +45,8 @@ public class ChatActivity extends AppCompatActivity
     private int chatId;
     private String response;
     private ArrayList<ChatMessage> chatMessages;
+    private String messageText;
+    protected ChatMessage tempMessage;
 
 
     @Override
@@ -61,15 +63,14 @@ public class ChatActivity extends AppCompatActivity
         chatArrayAdapter = new ChatArrayAdapter(this, R.layout.right_message);
         listView.setAdapter(chatArrayAdapter);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        chatCalls = new ChatCalls(preferences.getString("uuid", ""), preferences.getString("auth_token", "").substring(33, 35),
+                preferences.getString("auth_token", ""), new GetMessagesWebSocketConnectCallback());
 
 
         serverCalls = new ServerCalls(this);
-        chatCalls = new ChatCalls(preferences.getString("uuid", ""), preferences.getString("auth_token", "").substring(33, 35),
-                preferences.getString("auth_token", ""), new WebSocketCallBack());
+
 
         chatMessages = new ArrayList<>();
-
-        populateChat();
 
         chatText.setOnKeyListener(new View.OnKeyListener()
         {
@@ -103,14 +104,16 @@ public class ChatActivity extends AppCompatActivity
             }
         });
 
+        chatCalls.connect();
+
     }
 
     private boolean sendChatMessage()
     {
-        String text = chatText.getText().toString();
-        if (!text.equals("")) {
-
-            chatArrayAdapter.add(new ChatMessage(left, text));
+        messageText = chatText.getText().toString();
+        if (!messageText.equals("")) {
+            chatCalls.setCallback(new SendMessageWebSocketCallback());
+            chatArrayAdapter.add(new ChatMessage(left, messageText));
             chatText.setText("");
             left = !left;
         }
@@ -122,7 +125,7 @@ public class ChatActivity extends AppCompatActivity
         JsonParser jsonParser = new JsonParser();
         JsonElement jsonElement = jsonParser.parse(response);
         JsonObject jsonResponse = jsonElement.getAsJsonObject();
-        if (jsonResponse == null || jsonResponse.get("success").getAsInt() != 1)
+        if (jsonResponse == null || jsonResponse.get("success").getAsInt() != 1 || !jsonResponse.has("messages"))
             return;
         JsonArray messages = jsonResponse.get("messages").getAsJsonArray();
         for (JsonElement temp : messages) {
@@ -133,20 +136,28 @@ public class ChatActivity extends AppCompatActivity
                 populateMessage(message.get("message").getAsString(), message.get("sent_by_buyer").getAsBoolean());
         }
 
+//        runOnUiThread(new Runnable()
+//        {
+//            @Override
+//            public void run()
+//            {
+//                chatArrayAdapter.notifyDataSetChanged();
+//            }
+//        });
+    }
+
+    public void populateMessage(String message, boolean sentByBuyer)
+    {
+        tempMessage = new ChatMessage(!sentByBuyer, message);
+        chatMessages.add(tempMessage);
         runOnUiThread(new Runnable()
         {
             @Override
             public void run()
             {
-                chatArrayAdapter.notifyDataSetChanged();
+                chatArrayAdapter.add(tempMessage);
             }
         });
-    }
-
-    public void populateMessage(String message, boolean sentByBuyer)
-    {
-        //chatMessages.add(new ChatMessage(!sentByBuyer, message));
-        chatArrayAdapter.add(new ChatMessage(!sentByBuyer, message));
     }
 
     public void populateOffer(JsonObject offer, boolean sentByBuyer)
@@ -154,7 +165,7 @@ public class ChatActivity extends AppCompatActivity
 
     }
 
-    private class WebSocketCallBack implements AsyncHttpClient.WebSocketConnectCallback
+    private class GetMessagesWebSocketConnectCallback implements AsyncHttpClient.WebSocketConnectCallback
     {
 
         @Override
@@ -167,7 +178,8 @@ public class ChatActivity extends AppCompatActivity
             JSONObject json = new JSONObject();
             try {
                 json.put("method", "chat_getMessagesForChat");
-                json.put("chatId", String.valueOf(chatId));
+                //json.put("chatId", String.valueOf(chatId)); //TODO:add into production code
+                json.put("chatId", 58);
                 json.put("uuid", "E7F742EB-67EE-4738-ABEC-F0A3B62B45EB");
                 json.put("auth_token", "f02dfb77e9615ae630753b37637abb31_10");
             }
@@ -188,6 +200,46 @@ public class ChatActivity extends AppCompatActivity
                 }
             });
 
+        }
+    }
+
+
+    private class SendMessageWebSocketCallback implements AsyncHttpClient.WebSocketConnectCallback
+    {
+
+        @Override
+        public void onCompleted(Exception ex, WebSocket webSocket)
+        {
+            if (ex != null) {
+                Log.v("Callback exception", ex.getMessage());
+                return;
+            }
+            JSONObject json = new JSONObject();
+            try {
+                json.put("method", "chat_sendChatMessage");
+                //json.put("chatId", String.valueOf(chatId)); //TODO:add into production code
+                json.put("chatId", 58);
+                json.put("message", messageText);
+                json.put("offerPrice", "");
+                json.put("offerMethod", "");
+                json.put("uuid", "E7F742EB-67EE-4738-ABEC-F0A3B62B45EB");
+                json.put("auth_token", "f02dfb77e9615ae630753b37637abb31_10");
+            }
+            catch (Exception e) {
+                Log.v("Websocket callback", e.getMessage());
+            }
+
+            webSocket.send(json.toString());
+
+            webSocket.setStringCallback(new WebSocket.StringCallback()
+            {
+                @Override
+                public void onStringAvailable(String s)
+                {
+                    response = s;
+                    Log.v("send string", response);
+                }
+            });
         }
     }
 
