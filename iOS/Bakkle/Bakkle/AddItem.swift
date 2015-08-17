@@ -27,13 +27,16 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     let albumName = "Bakkle"
     let listItemCellIdentifier = "ListItemCell"
     var itemImages: [UIImage]? = [UIImage]()
-    var videos: [String] = [String]()
+    var videos: [NSURL] = [NSURL]()
     var fileSizes: UInt64 = 0
     var item: NSDictionary!
     var isEditting: Bool = false
     var initRun = true
     var confirmHit = false
     var successfulAdd = false
+    var videoImages: [NSURL : UIImage] = [NSURL : UIImage]()
+    var videoURL: NSURL?
+    var videosChanged: Bool?
     
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var closeBtn: UIButton!
@@ -86,6 +89,10 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         
         titleField.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
         priceField.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
+        
+        for url: NSURL in videos {
+            self.videoImages[url] = Bakkle.sharedInstance.previewImageForLocalVideo(url)
+        }
         
         setupButtons()
         
@@ -284,11 +291,28 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         }
         
         for i in 0..<self.videos.count {
+            
+            // NOTE: The reason we are downloading then immediately reuploading a video is
+            // because there would be large amount of backend work to be able to support 
+            // the change of simply keeping the reference to the video. By the time we ran
+            // into this issue, we would not be able to finish the changes by the time we
+            // stop working.
+            
+            // TODO: Fix backend and don't download and reupload every video
+            if !self.videos[i].fileURL {
+                var data = NSData(contentsOfURL: self.videos[i])
+                
+                if let fileData = data {
+                    videoData.append(fileData)
+                }
+                continue
+            }
+            
             while( self.videos[i].pathExtension == "mov" ) {
                 // Wait
             }
             
-            var data = NSData(contentsOfFile: self.videos[i])
+            var data = NSData(contentsOfFile: self.videos[i].path!)
             
             if let fileData = data {
                 videoData.append(fileData)
@@ -389,7 +413,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     * collectionView delegate and collectionView data source
     */
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection: Int) -> Int {
-        return self.itemImages!.count
+        return self.itemImages!.count + self.videos.count
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
@@ -398,26 +422,42 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         return CGSize(width: screenHeight, height: screenHeight)
     }
     
-    func collectionView(collectionView: UICollectionView,
-        layout collectionViewLayout: UICollectionViewLayout,
-        minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
-            return 5
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
+        return 5
     }
    
-    func collectionView(collectionView: UICollectionView,
-        layout collectionViewLayout: UICollectionViewLayout,
-        minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
-            return 2
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
+        return 2
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell : ListItemCell = collectionView.dequeueReusableCellWithReuseIdentifier(listItemCellIdentifier, forIndexPath: indexPath) as! ListItemCell
         cell.imgView.contentMode = UIViewContentMode.ScaleAspectFill
         cell.imgView.clipsToBounds  = true
-        if let images = self.itemImages {
-            cell.imgView.image = images[indexPath.row]
+        if indexPath.row >= self.itemImages?.count {
+            var imageURL = self.videos[indexPath.row - self.itemImages!.count]
+            if self.videoImages[imageURL] == nil {
+                self.videoImages[imageURL] = Bakkle.sharedInstance.previewImageForLocalVideo(imageURL)
+            }
+            
+            cell.imgView!.image = self.videoImages[imageURL]
+            var tapGestureRecognizer = UITapGestureRecognizer(target:self, action:Selector("videoTapped:"))
+            cell.imgView!.addGestureRecognizer(tapGestureRecognizer)
+        } else {
+            if let images = self.itemImages {
+                cell.imgView.image = images[indexPath.row]
+            }
         }
         return cell
+    }
+    
+    func videoTapped(sender: UITapGestureRecognizer) {
+        for url in self.videoImages {
+            if (sender.view as! UIImageView).image == url.1 {
+                VideoPlayer.play(url.0, presentingController: self)
+                break
+            }
+        }
     }
 
 }

@@ -52,7 +52,8 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     var imageViews = [UIImageView]()
     var imageCount = 0
     var images = [UIImage]()
-    var videos = [String]()
+    var videos = [NSURL]()
+    var videoImages = [UIImage]()
     
     /* REMOVE IMAGE BUTTONS */
     @IBOutlet weak var removeImage1: UIButton!
@@ -96,6 +97,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     var isVideo: [Bool]!
     var stopFocus = false
     var animating: Int = 0 // image rearrangement
+    var notPopulated = false // true if is editing and has already populated
     private var recordingDidChange = 0
     
     // Initialize all variables
@@ -115,7 +117,8 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         
         images = [UIImage](count:CameraView.MAX_IMAGE_COUNT, repeatedValue:UIImage.alloc())
         isVideo = [Bool](count:CameraView.MAX_IMAGE_COUNT, repeatedValue:false)
-        videos = [String](count:CameraView.MAX_VIDEO_COUNT, repeatedValue:"")
+        videos = [NSURL](count:CameraView.MAX_VIDEO_COUNT, repeatedValue:NSURL())
+        videoImages = [UIImage](count:CameraView.MAX_VIDEO_COUNT, repeatedValue:UIImage.alloc())
         
         UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: .Fade)
         UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent
@@ -164,12 +167,22 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             self.dismissViewControllerAnimated(true, completion: nil)
         } else if self.addItem != nil {
             self.fadeView.alpha = 0.0
-        } else if isEditting {
+        } else if isEditting && !self.notPopulated {
             let imageUrls = item.valueForKey("image_urls") as! Array<String>
+            self.videoCount = 0
+            self.notPopulated = true
+            
             for index in 0...imageUrls.count-1 {
                 var imageURL: NSURL = NSURL(string: imageUrls[index])!
-                var imageData: NSData = NSData(contentsOfURL: imageURL)!
-                images[index] = UIImage(data: imageData)!
+                
+                if imageURL.pathExtension != "mp4" {
+                    var imageData: NSData = NSData(contentsOfURL: imageURL)!
+                    images[index] = UIImage(data: imageData)!
+                } else {
+                    videos[self.videoCount] = imageURL
+                    videoImages[self.videoCount++] = Bakkle.sharedInstance.previewImageForLocalVideo(imageURL)!
+                    self.isVideo[images.count - self.videoCount] = true
+                }
             }
         }
     }
@@ -714,13 +727,13 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
                     if movieData == nil {
                         NSLog("\(exportSession.error)")
                     }
-                    self.videos[self.videoCount - 1] = exportSession.outputURL.path!
+                    self.videos[self.videoCount - 1] = exportSession.outputURL
                     
                     if self.addItem != nil {
                         if self.addItem!.videos.count >= self.videoCount {
-                            self.addItem!.videos[self.videoCount - 1] = exportSession.outputURL.path!
+                            self.addItem!.videos[self.videoCount - 1] = exportSession.outputURL
                         } else {
-                            self.addItem!.videos.append(exportSession.outputURL.path!)
+                            self.addItem!.videos.append(exportSession.outputURL)
                         }
                     }
                     
@@ -733,14 +746,15 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             
             
             // Get video Image
-            self.imageViews[self.imageViews.count - self.videoCount].image = Bakkle.sharedInstance.previewImageForLocalVideo(outputFileURL)
+//            self.imageViews[self.imageViews.count - self.videoCount].image = Bakkle.sharedInstance.previewImageForLocalVideo(outputFileURL)
+            self.videoImages[self.videoCount - 1] = Bakkle.sharedInstance.previewImageForLocalVideo(outputFileURL)!
             self.isVideo[self.imageViews.count - self.videoCount] = true
             
-            if NSString(string: self.videos[self.videoCount - 1]).pathExtension != "mp4" {
-                self.videos[self.videoCount - 1] = outputFileURL.path!
+            if self.videos[self.videoCount - 1].pathExtension != "mp4" {
+                self.videos[self.videoCount - 1] = outputFileURL
             }
             
-            
+            self.populatePhotos()
         } else {
             NSLog("RECORDING FAILED")
             self.videoCount--
@@ -891,9 +905,25 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             }
         }
         
+        var videoImagesNoSpace = [UIImage]()
+        for i in (self.videoImages.count - 1)...0 {
+            if !(self.videoImages[i].CIImage == nil && self.videoImages[i].CGImage == nil) {
+                videoImagesNoSpace.append(self.videoImages[i])
+            }
+        }
+        
+        for i in (videoImagesNoSpace.count - 1)...0 {
+            if i < 0 {
+                break
+            }
+            
+            self.imageViews[self.imageViews.count - 1 - i].image = videoImagesNoSpace[i]
+        }
+
+        
         // This is needed to stop any concurrent modification for the first for loop
         for i in 0...(self.images.count - 1) {
-            self.images[i] = i >= imagesNoSpace.count ? UIImage.alloc() : imagesNoSpace[i];
+            self.images[i] = i >= imagesNoSpace.count ? (self.isVideo[i] ? self.images[i] : UIImage.alloc()) : imagesNoSpace[i];
         }
         
         imageCount = imagesNoSpace.count
@@ -1100,11 +1130,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
                 self.removeStillImage()
             } else if imageViews[imageViewIndex].image != nil { // safety check
                 if self.isVideo[imageViewIndex] {
-                    if isEditting {
-                        self.previewVideo(NSURL(string: self.videos[CameraView.MAX_IMAGE_COUNT - 1 - imageViewIndex])!)
-                    } else {
-                        self.previewVideo(NSURL(fileURLWithPath: self.videos[CameraView.MAX_IMAGE_COUNT - 1 - imageViewIndex])!)
-                    }
+                    self.previewVideo(self.videos[CameraView.MAX_IMAGE_COUNT - 1 - imageViewIndex])
                 } else {
                     self.displayStillImage(imageViews[imageViewIndex].image!)
                 }
@@ -1141,7 +1167,8 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
                 acceptAction = UIAlertAction(title: "YES", style: .Destructive, handler: { (action: UIAlertAction!) in
                     self.isVideo[removeImageIndex] = false
                     self.videoCount--
-                    self.videos[CameraView.MAX_IMAGE_COUNT - removeImageIndex - 1] = ""
+                    self.videos[CameraView.MAX_IMAGE_COUNT - removeImageIndex - 1] = NSURL()
+                    self.videoImages[self.videoCount] = UIImage()
                     self.imageViews[removeImageIndex].image = nil
                     
                     self.removeVideos(CameraView.MAX_IMAGE_COUNT - removeImageIndex - 1)
@@ -1187,9 +1214,9 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             
             var i = 0
             destinationVC.itemImages = [UIImage]()
-            destinationVC.videos = [String]()
+            destinationVC.videos = [NSURL]()
             for image in self.images {
-                if !(image.CIImage == nil && image.CGImage == nil) {
+                if !(image.CIImage == nil && image.CGImage == nil) && !self.isVideo[i] {
                     destinationVC.itemImages?.append(image)
                 }
                 
