@@ -7,13 +7,13 @@
     tools:context="com.bakkle.bakkle.Activities.ChatActivity">
 
     <ListView
+        android:id="@+id/list"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:id="@+id/list"
         android:layout_weight="1"
-        android:padding="5dp"
         android:background="@null"
         android:divider="@null"
+        android:padding="5dp"
         android:stackFromBottom="true"
         android:transcriptMode="alwaysScroll">
 
@@ -26,17 +26,18 @@
         android:weightSum="5">
 
         <EditText
+            android:id="@+id/compose"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:layout_weight="4"
-            android:id="@+id/compose"
             android:hint="Compose Message"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black"
+            android:theme="@style/AppCompatTheme"/>
 
         <Button
+            android:id="@+id/send"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
-            android:id="@+id/send"
             android:layout_weight="1"
             android:text="Send"
             android:textColor="@color/black"/>

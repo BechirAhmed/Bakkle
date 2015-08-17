@@ -114,7 +114,7 @@ public class ChatListActivity extends ListActivity
         {
             JsonObject temp = element.getAsJsonObject();
             JsonObject buyer = temp.getAsJsonObject("buyer");
-            String url = "https://graph.facebook.com/"+ buyer.get("facebook_id").getAsString() +"/picture?width=142&height=142";
+            String url = "https://graph.facebook.com/" + buyer.get("facebook_id").getAsString() + "/picture?width=142&height=142";
             buyerInfos.add(new BuyerInfo(buyer.get("display_name").getAsString(), url, temp.get("pk").getAsInt()));
         }
         runOnUiThread(new Runnable()
