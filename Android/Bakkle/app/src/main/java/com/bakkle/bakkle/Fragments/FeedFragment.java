@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,8 +22,8 @@ import com.andtinder.view.CardContainer;
 import com.andtinder.view.SimpleCardStackAdapter;
 import com.bakkle.bakkle.Activities.ItemDetailActivity;
 import com.bakkle.bakkle.Helpers.FeedItem;
-import com.bakkle.bakkle.R;
 import com.bakkle.bakkle.Helpers.ServerCalls;
+import com.bakkle.bakkle.R;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -37,7 +38,7 @@ public class FeedFragment extends Fragment
 {
 
     ServerCalls serverCalls;
-
+    Activity mActivity;
     FeedItem feedItem = null;
     CardContainer mCardContainer;
 
@@ -70,6 +71,7 @@ public class FeedFragment extends Fragment
     public void onAttach(Activity activity)
     {
         super.onAttach(activity);
+        mActivity = activity;
         try {
             onCardSelected = (OnCardSelected) activity;
         }
@@ -116,7 +118,7 @@ public class FeedFragment extends Fragment
 
         for (int i = jsonArray.size() - 1; i >= 0; i--) {
             element = jsonArray.get(i);
-            feedItem = new FeedItem(getActivity().getApplicationContext());
+            feedItem = new FeedItem(mActivity);
             temp = element.getAsJsonObject();
 
             feedItem.setTitle(temp.get("title").getAsString());
@@ -164,6 +166,9 @@ public class FeedFragment extends Fragment
                             preferences.getString("uuid", "0"),
                             cardModel.getPk(),
                             "42");
+
+                    showSplashScreen(cardModel.getPk(), cardModel.getCardImageURL());
+
                     //populateOneFeedItem(jsonArray);
 
 
@@ -298,6 +303,8 @@ public class FeedFragment extends Fragment
                         "42");
                 populateOneFeedItem(jsonArray);
 
+                showSplashScreen(cardModel.getPk(), cardModel.getCardImageURL());
+
 
                 Log.v("pk is ", card.getPk());
             }
@@ -369,6 +376,13 @@ public class FeedFragment extends Fragment
         mCardContainer.setAdapter(adapter);
 
         return jsonArray;
+    }
+
+    private void showSplashScreen(String pk, String url)
+    {
+        getFragmentManager().beginTransaction().replace(R.id.content_frame,
+                SplashFragment.newInstance(pk, url)).addToBackStack(null).
+                setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
     }
 
     public Bitmap getCardImage(FeedItem item)

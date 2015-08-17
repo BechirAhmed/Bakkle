@@ -29,6 +29,7 @@ import com.bakkle.bakkle.Fragments.HoldingPatternFragment;
 import com.bakkle.bakkle.Fragments.ProfileFragment;
 import com.bakkle.bakkle.Fragments.RefineFragment;
 import com.bakkle.bakkle.Fragments.SellersGarageFragment;
+import com.bakkle.bakkle.Fragments.SplashFragment;
 import com.bakkle.bakkle.Helpers.FeedItem;
 import com.bakkle.bakkle.Helpers.ServerCalls;
 import com.bakkle.bakkle.R;
@@ -55,7 +56,8 @@ import java.util.Arrays;
 
 public class HomeActivity extends AppCompatActivity implements SellersGarageFragment.OnFragmentInteractionListener,
         BuyersTrunkFragment.OnFragmentInteractionListener, HoldingPatternFragment.OnFragmentInteractionListener,
-        RefineFragment.OnFragmentInteractionListener, FeedFragment.OnCardSelected
+        RefineFragment.OnFragmentInteractionListener, SplashFragment.OnFragmentInteractionListener,
+        FeedFragment.OnCardSelected
 {
     private ArrayList<String> mDrawerItems;
     private TypedArray mDrawerIcons;

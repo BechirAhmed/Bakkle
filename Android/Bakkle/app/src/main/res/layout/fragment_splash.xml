@@ -1,0 +1,57 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray"
+    tools:context="com.bakkle.bakkle.Fragments.SplashFragment">
+
+    <TextView
+        android:id="@+id/startChatText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="20dp"
+        android:text="Start a Chat!"
+        android:textColor="@color/white"
+        android:textSize="48sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/askSellerMoreText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/startChatText"
+        android:layout_centerHorizontal="true"
+        android:text="Ask the seller more about the item"
+        android:textColor="@color/white"
+        android:textSize="20sp"/>
+
+    <ImageView
+        android:id="@+id/productImage"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_below="@+id/askSellerMoreText"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="30dp"/>
+
+    <Button
+        android:id="@+id/sendMessageButton"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/productImage"
+        android:layout_centerHorizontal="true"
+        android:text="Send Message"
+        android:textColor="@color/black"/>
+
+    <Button
+        android:id="@+id/keepBrowsingButton"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/sendMessageButton"
+        android:layout_centerHorizontal="true"
+        android:text="Keep Browsing"
+        android:textColor="@color/black"/>
+
+
+</RelativeLayout>

@@ -129,11 +129,14 @@ public class ChatActivity extends AppCompatActivity
             return;
         JsonArray messages = jsonResponse.get("messages").getAsJsonArray();
         for (JsonElement temp : messages) {
+            Log.v("temp value", temp.toString());
             JsonObject message = temp.getAsJsonObject();
-            if (message.get("message").getAsString().equals("")) //if message field is empty, then it must be an offer
+            if (message.get("message").getAsString().equals("")) { //if message field is empty, then it must be an offer
                 populateOffer(message.get("offer").getAsJsonObject(), message.get("sent_by_buyer").getAsBoolean());
-            else
+            }
+            else {
                 populateMessage(message.get("message").getAsString(), message.get("sent_by_buyer").getAsBoolean());
+            }
         }
 
 //        runOnUiThread(new Runnable()
@@ -146,16 +149,18 @@ public class ChatActivity extends AppCompatActivity
 //        });
     }
 
-    public void populateMessage(String message, boolean sentByBuyer)
+    public void populateMessage(final String message, final boolean sentByBuyer)
     {
-        tempMessage = new ChatMessage(!sentByBuyer, message);
-        chatMessages.add(tempMessage);
+        //tempMessage = new ChatMessage(!sentByBuyer, message);
+        //chatMessages.add(tempMessage);
+        Log.v("Before UI thread", message);
         runOnUiThread(new Runnable()
         {
             @Override
             public void run()
             {
-                chatArrayAdapter.add(tempMessage);
+                Log.v("ChatMessage is", message);
+                chatArrayAdapter.add(new ChatMessage(!sentByBuyer, message));
             }
         });
     }
