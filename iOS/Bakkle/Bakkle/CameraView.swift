@@ -417,7 +417,8 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     */
     func displayImagePreview() {
         if (self.imageCount + self.videoCount) >= CameraView.MAX_IMAGE_COUNT {
-            // no more images
+            // no more images, display a still to be safe
+            self.displayStillImage(self.imageViews[0].image!)
             return
         }
         
