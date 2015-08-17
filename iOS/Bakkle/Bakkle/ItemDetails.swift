@@ -16,7 +16,10 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
     var wanted: Bool = false
     var holding: Bool = false
     var available: Bool = true
+    var videoURL: NSURL?
+    var defaultPage: NSIndexPath?
     var itemImages: [NSURL]? = [NSURL]()
+    var videoImages: [NSURL : UIImage] = [NSURL : UIImage]()
     
     @IBOutlet weak var sellerName: UILabel!
     @IBOutlet weak var sellerAvatar: UIImageView!
@@ -85,9 +88,16 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
             pageControl.numberOfPages = 0
         }
         
-        pageControl.currentPage = 0
+        pageControl.currentPage = self.defaultPage != nil ? self.defaultPage!.row : 0
         
-        //TOOD: Load all images into an array and UIScrollView.
+        //DONE (for videos): Load all images into an array and UIScrollView.
+        if let images = itemImages {
+            for url: NSURL in images {
+                if url.pathExtension! == "mp4" {
+                    self.videoImages[url] = Bakkle.sharedInstance.previewImageForLocalVideo(url)
+                }
+            }
+        }
         
         let sellerProfile: NSDictionary = item!.valueForKey("seller") as! NSDictionary
         // get the first name of the seller (split seller name by " " and get first element)
@@ -147,18 +157,6 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
         }
     }
     
-    func previewVideo(path: String) {
-        NSLog("Previewing Video at path: \(path)")
-        if path.pathExtension == "mov" {
-            let alertController = UIAlertController(title: "", message:"Preview unavailable at this time.\nYour video is still being processed.", preferredStyle: .Alert)
-            let defaultAction = UIAlertAction(title: "OK", style: .Default, handler: nil)
-            alertController.addAction(defaultAction)
-            presentViewController(alertController, animated: true, completion: nil)
-        } else {
-            VideoPlayer.playFile(path, presentingController: self)
-        }
-    }
-    
     @IBAction func wantBtn(sender: AnyObject) {
         loadingView.hidden = false
         self.view.bringSubviewToFront(loadingView)
@@ -184,6 +182,7 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
         }
         //TODO: refresh feed screen to get rid of the top card.
     }
+    
     @IBAction func goback(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
@@ -230,18 +229,30 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
         let imageURL = self.itemImages![indexPath.row]
         let fileExtension = imageURL.path?.pathExtension
         if fileExtension == "mp4" {
-            cell.imgView!.image = Bakkle.sharedInstance.previewImageForLocalVideo(imageURL)
-            cell.userInteractionEnabled = true
+            if self.videoImages[imageURL] == nil {
+                self.videoImages[imageURL] = Bakkle.sharedInstance.previewImageForLocalVideo(imageURL)
+            }
+            
+            cell.imgView!.image = self.videoImages[imageURL]
             var tapGestureRecognizer = UITapGestureRecognizer(target:self, action:Selector("videoTapped:"))
-             cell.imgView!.addGestureRecognizer(tapGestureRecognizer)
+            self.videoURL = imageURL
+            cell.imgView!.addGestureRecognizer(tapGestureRecognizer)
         } else {
             cell.imgView!.hnk_setImageFromURL(imageURL)
         }
+        
+        defaultPage = indexPath
+        
         return cell
     }
     
-    func videoTapped() {
-        NSLog("Video should play")
+    func videoTapped(sender: UITapGestureRecognizer) {
+        for url in self.videoImages {
+            if (sender.view as! UIImageView).image == url.1 {
+                VideoPlayer.play(url.0, presentingController: self)
+                break
+            }
+        }
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {

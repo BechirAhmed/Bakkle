@@ -42,7 +42,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     
     // DO NOT ENABLE if there is no way to select servers from settings file.
     static let developerTools   = false
-    static let defaultServerNum = 0 // 0 = prod, 1 = prod cluster (sets default server in list below)
+    static let defaultServerNum = 2 // 0 = prod, 1 = prod cluster (sets default server in list below)
     static let servers   =   ["https://app.bakkle.com/",            // 0 (Production Single)
                               "https://app-cluster.bakkle.com/",    // 1 (Production Cluster)
                               "http://bakkle.rhventures.org:8000/"] // 2 (Test)
