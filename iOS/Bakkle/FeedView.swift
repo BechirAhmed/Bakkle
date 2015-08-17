@@ -56,6 +56,9 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     @IBOutlet weak var startChatItemImage: UIImageView!
     @IBOutlet weak var startChatViewOriginX: NSLayoutConstraint!
     @IBOutlet weak var startChatViewOriginY: NSLayoutConstraint!
+    var itemData: NSDictionary?
+    var sendMessageContext = 0
+    var keepBrowsingContext = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -112,6 +115,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         if Bakkle.sharedInstance.flavor == Bakkle.GOODWILL {
             btnAddItem.hidden = true
         }
+        
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -127,13 +131,13 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             self.view.addSubview(goodwillLogo)
         }
         
-        self.sendMessageButton.layer.borderColor = self.sendMessageButton.titleLabel!.textColor.CGColor
-        self.keepBrowsingButton.layer.borderColor = self.keepBrowsingButton.titleLabel!.textColor.CGColor
-        self.sendMessageButton.layer.cornerRadius = CGFloat(15.0)
-        self.keepBrowsingButton.layer.cornerRadius = self.sendMessageButton.layer.cornerRadius
+        self.keepBrowsingButton.layer.borderColor = UIColor.whiteColor().CGColor
+        self.sendMessageButton.layer.borderColor = UIColor.whiteColor().CGColor
         self.startChatViewOriginX.constant = self.startChatView.frame.width * -1.5
         self.startChatViewOriginY.constant = 50
-//        self.startChatView.transform = CGAffineTransformRotate(CGAffineTransformIdentity, CGFloat(-30 * (M_PI / 180)))
+        self.startChatView.layoutIfNeeded()
+        
+        self.revealViewController().panGestureRecognizer().enabled = true
         
         // Always look for updates
         requestUpdates()
@@ -152,7 +156,6 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         }
 
         fromCamera = false
-
     }
     
     func displayInstruction(view: MDCSwipeToChooseView!) {
@@ -496,6 +499,11 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             loadNext()
             return
         }
+        
+        if view == self.startChatView {
+            self.closeStartAChat()
+        }
+        
         switch direction {
         case MDCSwipeDirection.Left:
             Bakkle.sharedInstance.markItem("meh", item_id: self.item_id, success: {}, fail: {})
@@ -537,7 +545,34 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         
     }
     
+    @IBAction func highlightBorder(sender: UIButton) {
+        sender.layer.borderColor = UIColor.darkGrayColor().CGColor
+    }
+    
+    @IBAction func unhighlightBorder(sender: UIButton) {
+        sender.layer.borderColor = UIColor.whiteColor().CGColor
+    }
+    
+    // These are needed for drag in and out
+    @IBAction func animateHighlightBorder(sender: UIButton) {
+        UIView.animateWithDuration(0.75, animations: {
+            sender.layer.borderColor = UIColor.darkGrayColor().CGColor
+        })
+    }
+    
+    @IBAction func animateUnhighlightBorder(sender: UIButton) {
+        UIView.animateWithDuration(0.75, animations: {
+            sender.layer.borderColor = UIColor.whiteColor().CGColor
+        })
+    }
+    
     func displayStartAChat(image: UIImage?) {
+        self.revealViewController().panGestureRecognizer().enabled = false
+        self.btnAddItem.enabled = false
+        self.searchBar.userInteractionEnabled = false
+        self.refineButton.enabled = false
+        self.menuBtn.enabled = false
+        
         // Set the image, only request more data if we have to
         if image != nil {
             self.startChatItemImage.image = image
@@ -561,35 +596,45 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         
         self.view.bringSubviewToFront(self.startChatView)
         self.startChatView.hidden = false
+        self.startChatView.transform = CGAffineTransformRotate(CGAffineTransformIdentity, CGFloat(-M_PI_4))
+        // this is the left side for some reason
+        self.startChatViewOriginX.constant = -16
+        self.startChatViewOriginY.constant = 0
         
-        UIView.animateWithDuration(2.5, animations: { Void in
-//            self.startChatView.transform = CGAffineTransformRotate(CGAffineTransformIdentity, 0)
-            // this is the left side for some reason
-            self.startChatViewOriginX.constant = -16
-            self.startChatViewOriginY.constant = 0
+        UIView.animateWithDuration(0.75, animations: { Void in
+            self.startChatView.transform = CGAffineTransformRotate(CGAffineTransformIdentity, 0)
+            self.startChatView.layoutIfNeeded()
         }, completion: {Void in
         
         })
     }
     
-    var itemData: NSDictionary?
-    
     func closeStartAChat() {
         self.sendMessageButton.tag = 0
-        self.startChatView.hidden = true
         
-        UIView.animateWithDuration(1.0, animations: { Void in
-            //            self.startChatView.transform = CGAffineTransformRotate(CGAffineTransformIdentity, 0)
-            self.startChatViewOriginX.constant = self.startChatView.frame.width
-            self.startChatViewOriginY.constant = 50
+        self.startChatViewOriginX.constant = self.startChatView.frame.width * 2
+        self.startChatViewOriginY.constant = 50
+        
+        UIView.animateWithDuration(0.75, animations: { Void in
+            self.startChatView.transform = CGAffineTransformRotate(CGAffineTransformIdentity, CGFloat(M_PI_4))
+            self.startChatView.layoutIfNeeded()
         }, completion: {Void in
-            //            self.startChatView.transform = CGAffineTransformRotate(CGAffineTransformIdentity, 0)
+            self.revealViewController().panGestureRecognizer().enabled = true
+            self.btnAddItem.enabled = true
+            self.searchBar.userInteractionEnabled = true
+            self.refineButton.enabled = true
+            self.menuBtn.enabled = true
+            
+            self.startChatView.transform = CGAffineTransformRotate(CGAffineTransformIdentity, CGFloat(-M_PI_4))
             self.startChatViewOriginX.constant = self.startChatView.frame.width * -1
+            self.startChatView.hidden = true
             self.loadNext()
         })
     }
     
     @IBAction func sendMessage (sender: UIButton) {
+        sender.layer.borderColor = UIColor.whiteColor().CGColor
+        
         let buyer = User(facebookID: Bakkle.sharedInstance.facebook_id_str,accountID: Bakkle.sharedInstance.account_id,
             firstName: Bakkle.sharedInstance.first_name, lastName: Bakkle.sharedInstance.last_name)
         let account = Account(user: buyer)
@@ -612,7 +657,8 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         self.closeStartAChat()
     }
     
-    @IBAction func keepBrowsing(sender: AnyObject) {
+    @IBAction func keepBrowsing(sender: UIButton) {
+        sender.layer.borderColor = UIColor.whiteColor().CGColor
         self.closeStartAChat()
     }
     

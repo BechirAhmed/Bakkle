@@ -467,7 +467,7 @@
                                     </mask>
                                 </variation>
                             </view>
-                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jew-OF-ngH" userLabel="Start a Chat View">
+                            <view hidden="YES" alpha="0.89999999999999991" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jew-OF-ngH" userLabel="Start a Chat View">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Jyn-b5-1rp" userLabel="Content to center">
@@ -510,17 +510,18 @@
                                                 </state>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
-                                                        <integer key="value" value="3"/>
+                                                        <real key="value" value="1.5"/>
                                                     </userDefinedRuntimeAttribute>
                                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                                         <integer key="value" value="15"/>
                                                     </userDefinedRuntimeAttribute>
-                                                    <userDefinedRuntimeAttribute type="color" keyPath="layer.borderColor">
-                                                        <color key="value" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                    </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
+                                                    <action selector="animateHighlightBorder:" destination="dzt-bR-uoN" eventType="touchDragInside" id="GXa-zE-skq"/>
+                                                    <action selector="animateUnhighlightBorder:" destination="dzt-bR-uoN" eventType="touchDragOutside" id="g0U-AE-cEj"/>
+                                                    <action selector="highlightBorder:" destination="dzt-bR-uoN" eventType="touchDown" id="cUX-5w-lNT"/>
                                                     <action selector="sendMessage:" destination="dzt-bR-uoN" eventType="touchUpInside" id="lwq-bT-8Pd"/>
+                                                    <action selector="unhighlightBorder:" destination="dzt-bR-uoN" eventType="touchUpOutside" id="1RK-19-s0n"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="csT-TU-XOh">
@@ -532,17 +533,18 @@
                                                 </state>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
-                                                        <integer key="value" value="3"/>
+                                                        <real key="value" value="1.5"/>
                                                     </userDefinedRuntimeAttribute>
                                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                                         <integer key="value" value="15"/>
                                                     </userDefinedRuntimeAttribute>
-                                                    <userDefinedRuntimeAttribute type="color" keyPath="layer.borderColor">
-                                                        <color key="value" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                    </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
+                                                    <action selector="animateHighlightBorder:" destination="dzt-bR-uoN" eventType="touchDragInside" id="Rwz-pH-o0f"/>
+                                                    <action selector="animateUnhighlightBorder:" destination="dzt-bR-uoN" eventType="touchDragOutside" id="zh0-Dd-c87"/>
+                                                    <action selector="highlightBorder:" destination="dzt-bR-uoN" eventType="touchDown" id="jeJ-kH-V6y"/>
                                                     <action selector="keepBrowsing:" destination="dzt-bR-uoN" eventType="touchUpInside" id="Z8H-QI-0TZ"/>
+                                                    <action selector="unhighlightBorder:" destination="dzt-bR-uoN" eventType="touchUpOutside" id="hWu-8U-NIB"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -576,24 +578,24 @@
                                                 <exclude reference="csT-TU-XOh"/>
                                             </mask>
                                             <mask key="constraints">
-                                                <exclude reference="bam-sj-0gp"/>
-                                                <exclude reference="iPe-8i-p8O"/>
-                                                <exclude reference="lPm-Vq-AtB"/>
                                                 <exclude reference="M6v-6y-Yxf"/>
                                                 <exclude reference="WV4-kG-FRN"/>
                                                 <exclude reference="nS8-Mw-feC"/>
-                                                <exclude reference="fxU-tq-f2i"/>
-                                                <exclude reference="jKL-AS-Rvk"/>
-                                                <exclude reference="jyp-mC-Tiv"/>
+                                                <exclude reference="bam-sj-0gp"/>
+                                                <exclude reference="iPe-8i-p8O"/>
+                                                <exclude reference="lPm-Vq-AtB"/>
+                                                <exclude reference="4vW-qR-ckz"/>
+                                                <exclude reference="724-QZ-P2H"/>
+                                                <exclude reference="EN1-0S-bae"/>
+                                                <exclude reference="Rlb-GT-WLY"/>
                                                 <exclude reference="5jt-xa-feM"/>
                                                 <exclude reference="AEO-tb-g4r"/>
                                                 <exclude reference="GJO-2I-eQM"/>
                                                 <exclude reference="U8E-QB-0nj"/>
                                                 <exclude reference="ug2-A1-6F3"/>
-                                                <exclude reference="4vW-qR-ckz"/>
-                                                <exclude reference="724-QZ-P2H"/>
-                                                <exclude reference="EN1-0S-bae"/>
-                                                <exclude reference="Rlb-GT-WLY"/>
+                                                <exclude reference="fxU-tq-f2i"/>
+                                                <exclude reference="jKL-AS-Rvk"/>
+                                                <exclude reference="jyp-mC-Tiv"/>
                                             </mask>
                                         </variation>
                                         <variation key="heightClass=regular-widthClass=compact">
@@ -605,24 +607,24 @@
                                                 <include reference="csT-TU-XOh"/>
                                             </mask>
                                             <mask key="constraints">
-                                                <include reference="bam-sj-0gp"/>
-                                                <include reference="iPe-8i-p8O"/>
-                                                <include reference="lPm-Vq-AtB"/>
                                                 <include reference="M6v-6y-Yxf"/>
                                                 <include reference="WV4-kG-FRN"/>
                                                 <include reference="nS8-Mw-feC"/>
-                                                <include reference="fxU-tq-f2i"/>
-                                                <include reference="jKL-AS-Rvk"/>
-                                                <include reference="jyp-mC-Tiv"/>
+                                                <include reference="bam-sj-0gp"/>
+                                                <include reference="iPe-8i-p8O"/>
+                                                <include reference="lPm-Vq-AtB"/>
+                                                <include reference="4vW-qR-ckz"/>
+                                                <include reference="724-QZ-P2H"/>
+                                                <include reference="EN1-0S-bae"/>
+                                                <include reference="Rlb-GT-WLY"/>
                                                 <include reference="5jt-xa-feM"/>
                                                 <include reference="AEO-tb-g4r"/>
                                                 <include reference="GJO-2I-eQM"/>
                                                 <include reference="U8E-QB-0nj"/>
                                                 <include reference="ug2-A1-6F3"/>
-                                                <include reference="4vW-qR-ckz"/>
-                                                <include reference="724-QZ-P2H"/>
-                                                <include reference="EN1-0S-bae"/>
-                                                <include reference="Rlb-GT-WLY"/>
+                                                <include reference="fxU-tq-f2i"/>
+                                                <include reference="jKL-AS-Rvk"/>
+                                                <include reference="jyp-mC-Tiv"/>
                                             </mask>
                                         </variation>
                                     </view>
@@ -686,20 +688,20 @@
                                 <exclude reference="jew-OF-ngH"/>
                             </mask>
                             <mask key="constraints">
+                                <exclude reference="hUM-yP-9Qc"/>
+                                <exclude reference="Lro-Zo-Ll2"/>
+                                <exclude reference="h84-M1-IO7"/>
+                                <exclude reference="zRb-7V-qyt"/>
+                                <exclude reference="V6g-sa-YkN"/>
+                                <exclude reference="eIp-60-GoW"/>
+                                <exclude reference="p7c-KX-dyg"/>
                                 <exclude reference="21O-5c-fII"/>
                                 <exclude reference="NQv-EL-JDt"/>
                                 <exclude reference="dwi-FC-2IQ"/>
                                 <exclude reference="zit-vm-yX2"/>
-                                <exclude reference="V6g-sa-YkN"/>
-                                <exclude reference="eIp-60-GoW"/>
-                                <exclude reference="p7c-KX-dyg"/>
                                 <exclude reference="Gsv-oP-seH"/>
                                 <exclude reference="IFz-Jb-ydh"/>
                                 <exclude reference="aeN-eF-dOc"/>
-                                <exclude reference="Lro-Zo-Ll2"/>
-                                <exclude reference="h84-M1-IO7"/>
-                                <exclude reference="zRb-7V-qyt"/>
-                                <exclude reference="hUM-yP-9Qc"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
@@ -710,20 +712,20 @@
                                 <include reference="jew-OF-ngH"/>
                             </mask>
                             <mask key="constraints">
+                                <include reference="hUM-yP-9Qc"/>
+                                <include reference="Lro-Zo-Ll2"/>
+                                <include reference="h84-M1-IO7"/>
+                                <include reference="zRb-7V-qyt"/>
+                                <include reference="V6g-sa-YkN"/>
+                                <include reference="eIp-60-GoW"/>
+                                <include reference="p7c-KX-dyg"/>
                                 <include reference="21O-5c-fII"/>
                                 <include reference="NQv-EL-JDt"/>
                                 <include reference="dwi-FC-2IQ"/>
                                 <include reference="zit-vm-yX2"/>
-                                <include reference="V6g-sa-YkN"/>
-                                <include reference="eIp-60-GoW"/>
-                                <include reference="p7c-KX-dyg"/>
                                 <include reference="Gsv-oP-seH"/>
                                 <include reference="IFz-Jb-ydh"/>
                                 <include reference="aeN-eF-dOc"/>
-                                <include reference="Lro-Zo-Ll2"/>
-                                <include reference="h84-M1-IO7"/>
-                                <include reference="zRb-7V-qyt"/>
-                                <include reference="hUM-yP-9Qc"/>
                             </mask>
                         </variation>
                     </view>
