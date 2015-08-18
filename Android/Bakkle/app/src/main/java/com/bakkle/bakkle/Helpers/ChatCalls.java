@@ -18,8 +18,8 @@ import org.json.JSONObject;
  */
 public class ChatCalls extends Service
 {
-    //    final static String ws_base = "ws://bakkle.rhventures.org/ws/";
-    final static String ws_base = "ws://app.bakkle.com/ws/";
+    //    final static String ws_base = "ws://bakkle.rhventures.org:8000/ws/";
+    final static String ws_base = "ws://app.bakkle.com:8000/ws/";
     String uuid, userId, authToken;
     String response;
     AsyncHttpClient client;
@@ -60,8 +60,8 @@ public class ChatCalls extends Service
 
     public void connect()
     {
-//        String url = ws_base + "?uuid=" + uuid + "&userId=" + userId;
-        String url = "ws://bakkle.rhventures.org:8000/ws/?uuid=E7F742EB-67EE-4738-ABEC-F0A3B62B45EB&userId=10";
+        String url = ws_base + "?uuid=" + uuid + "&userId=" + userId;
+//        String url = "ws://bakkle.rhventures.org:8000/ws/?uuid=E7F742EB-67EE-4738-ABEC-F0A3B62B45EB&userId=10";
         client.websocket(url, null, callback);
     }
 
@@ -159,8 +159,10 @@ public class ChatCalls extends Service
         try {
             json.put("method", "echo");
             json.put("message", "testing the connection");
-            json.put("uuid", "E7F742EB-67EE-4738-ABEC-F0A3B62B45EB");
-            json.put("auth_token", "f02dfb77e9615ae630753b37637abb31_10");
+            json.put("uuid", uuid);
+            json.put("auth_token", authToken);
+//            json.put("uuid", "E7F742EB-67EE-4738-ABEC-F0A3B62B45EB");
+//            json.put("auth_token", "f02dfb77e9615ae630753b37637abb31_10");
             Log.v("the json is ", json.toString());
 //                    json.put("uuid", uuid);
 //                    json.put("auth_token", authToken);
@@ -177,8 +179,10 @@ public class ChatCalls extends Service
         try {
             json.put("method", "chat_getChatIds");
             json.put("itemId", "14");
-            json.put("uuid", "E7F742EB-67EE-4738-ABEC-F0A3B62B45EB");
-            json.put("auth_token", "f02dfb77e9615ae630753b37637abb31_10");
+            json.put("uuid", uuid);
+            json.put("auth_token", authToken);
+//            json.put("uuid", "E7F742EB-67EE-4738-ABEC-F0A3B62B45EB");
+//            json.put("auth_token", "f02dfb77e9615ae630753b37637abb31_10");
             Log.v("the json is ", json.toString());
         }
         catch (Exception e) {

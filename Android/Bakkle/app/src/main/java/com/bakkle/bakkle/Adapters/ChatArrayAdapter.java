@@ -34,14 +34,24 @@ public class ChatArrayAdapter extends ArrayAdapter<ChatMessage> {
     public View getView(int position, View convertView, ViewGroup parent){
         final ChatMessage item = (ChatMessage) getItem(position);
         final ViewHolder viewHolder;
-        if(convertView == null){
+        if(convertView == null)
+        {
             viewHolder = new ViewHolder();
-            if(item.left)
-                convertView = LayoutInflater.from(getContext()).inflate(R.layout.left_message, parent, false);
-            else
-                convertView = LayoutInflater.from(getContext()).inflate(R.layout.right_message, parent, false);
 
-            viewHolder.message = (TextView) convertView.findViewById(R.id.message_text);
+            if (!item.isOffer()) {
+                if(item.left)
+                    convertView = LayoutInflater.from(getContext()).inflate(R.layout.left_message, parent, false);
+                else
+                    convertView = LayoutInflater.from(getContext()).inflate(R.layout.right_message, parent, false);
+
+                viewHolder.message = (TextView) convertView.findViewById(R.id.message_text);
+            }
+            else {
+                if (item.isSelfOffer())
+                    convertView = LayoutInflater.from(getContext()).inflate(R.layout.self_offer, parent, false);
+                else
+                    convertView = LayoutInflater.from(getContext()).inflate(R.layout.not_self_offer, parent, false);
+            }
             convertView.setTag(viewHolder);
         }
         else {
@@ -51,6 +61,12 @@ public class ChatArrayAdapter extends ArrayAdapter<ChatMessage> {
         viewHolder.message.setText(item.message);
 
         return convertView;
+    }
+
+    @Override
+    public ChatMessage getItem(int position)
+    {
+        return super.getItem(getCount() - position - 1);
     }
 
 }

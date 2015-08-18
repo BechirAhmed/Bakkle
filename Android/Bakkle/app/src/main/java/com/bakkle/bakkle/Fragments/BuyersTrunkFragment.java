@@ -25,13 +25,7 @@ import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-/**
- * A fragment representing a list of Items.
- * <p/>
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
- * interface.
- */
+
 public class BuyersTrunkFragment extends ListFragment{
 
 
@@ -41,7 +35,7 @@ public class BuyersTrunkFragment extends ListFragment{
     private OnFragmentInteractionListener mListener;
 
     ServerCalls serverCalls;
-
+    Activity mActivity;
     ArrayList<FeedItem> items;
 
     JsonObject json;
@@ -72,11 +66,11 @@ public class BuyersTrunkFragment extends ListFragment{
 
         setHasOptionsMenu(true);
 
-        serverCalls = new ServerCalls(getActivity().getApplicationContext());
+        serverCalls = new ServerCalls(mActivity);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
-        json = serverCalls.populateTrunk(preferences.getString("auth_token", "0"), preferences.getString("uuid", "0"));
+        json = serverCalls.populateTrunk(preferences.getString("auth_token", ""), preferences.getString("uuid", ""));
 
         items = getItems(json);
 
@@ -111,6 +105,7 @@ public class BuyersTrunkFragment extends ListFragment{
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        mActivity = activity;
         try {
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
@@ -131,7 +126,8 @@ public class BuyersTrunkFragment extends ListFragment{
 
         FeedItem item = (FeedItem) getListAdapter().getItem(position);
         Intent intent = new Intent(getActivity(), ChatActivity.class);
-        intent.putExtra("id", item.getPk()); //make sure to let the chat app window know if youre the buyer or seller somehow
+        intent.putExtra("itemId", item.getPk()); //make sure to let the chat app window know if youre the buyer or seller somehow
+        intent.putExtra("selfBuyer", true);
         startActivity(intent);
 
 

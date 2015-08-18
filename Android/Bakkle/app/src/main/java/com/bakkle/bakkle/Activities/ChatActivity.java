@@ -1,5 +1,6 @@
 package com.bakkle.bakkle.Activities;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.DataSetObserver;
 import android.os.Bundle;
@@ -47,6 +48,9 @@ public class ChatActivity extends AppCompatActivity
     private ArrayList<ChatMessage> chatMessages;
     private String messageText;
     protected ChatMessage tempMessage;
+    protected String authToken;
+    protected String uuid;
+    public boolean selfBuyer;
 
 
     @Override
@@ -54,17 +58,19 @@ public class ChatActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-
-        chatId = getIntent().getExtras().getInt("chatId");
+        Intent i = getIntent();
+        chatId = i.getExtras().getInt("chatId");
+        selfBuyer = i.getExtras().getBoolean("selfBuyer");
         send = (Button) findViewById(R.id.send);
         listView = (ListView) findViewById(R.id.list);
         chatText = (EditText) findViewById(R.id.compose);
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        authToken = preferences.getString("auth_token", "");
+        uuid = preferences.getString("uuid", "");
 
         chatArrayAdapter = new ChatArrayAdapter(this, R.layout.right_message);
         listView.setAdapter(chatArrayAdapter);
-        preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        chatCalls = new ChatCalls(preferences.getString("uuid", ""), preferences.getString("auth_token", "").substring(33, 35),
-                preferences.getString("auth_token", ""), new GetMessagesWebSocketConnectCallback());
+        chatCalls = new ChatCalls(uuid, authToken.substring(33, 35), authToken, new GetMessagesWebSocketConnectCallback());
 
 
         serverCalls = new ServerCalls(this);
@@ -138,29 +144,16 @@ public class ChatActivity extends AppCompatActivity
                 populateMessage(message.get("message").getAsString(), message.get("sent_by_buyer").getAsBoolean());
             }
         }
-
-//        runOnUiThread(new Runnable()
-//        {
-//            @Override
-//            public void run()
-//            {
-//                chatArrayAdapter.notifyDataSetChanged();
-//            }
-//        });
     }
 
     public void populateMessage(final String message, final boolean sentByBuyer)
     {
-        //tempMessage = new ChatMessage(!sentByBuyer, message);
-        //chatMessages.add(tempMessage);
-        Log.v("Before UI thread", message);
         runOnUiThread(new Runnable()
         {
             @Override
             public void run()
             {
-                Log.v("ChatMessage is", message);
-                chatArrayAdapter.add(new ChatMessage(!sentByBuyer, message));
+                chatArrayAdapter.add(new ChatMessage(selfBuyer ? !sentByBuyer : sentByBuyer, message));
             }
         });
     }
@@ -183,10 +176,11 @@ public class ChatActivity extends AppCompatActivity
             JSONObject json = new JSONObject();
             try {
                 json.put("method", "chat_getMessagesForChat");
-                //json.put("chatId", String.valueOf(chatId)); //TODO:add into production code
-                json.put("chatId", 58);
-                json.put("uuid", "E7F742EB-67EE-4738-ABEC-F0A3B62B45EB");
-                json.put("auth_token", "f02dfb77e9615ae630753b37637abb31_10");
+                json.put("chatId", chatId);
+                json.put("uuid", uuid);
+                json.put("auth_token", authToken);
+//                json.put("uuid", "E7F742EB-67EE-4738-ABEC-F0A3B62B45EB");
+//                json.put("auth_token", "f02dfb77e9615ae630753b37637abb31_10");
             }
             catch (Exception e) {
                 Log.v("Websocket callback", e.getMessage());
@@ -222,13 +216,14 @@ public class ChatActivity extends AppCompatActivity
             JSONObject json = new JSONObject();
             try {
                 json.put("method", "chat_sendChatMessage");
-                //json.put("chatId", String.valueOf(chatId)); //TODO:add into production code
-                json.put("chatId", 58);
+                json.put("chatId", chatId);
                 json.put("message", messageText);
                 json.put("offerPrice", "");
                 json.put("offerMethod", "");
-                json.put("uuid", "E7F742EB-67EE-4738-ABEC-F0A3B62B45EB");
-                json.put("auth_token", "f02dfb77e9615ae630753b37637abb31_10");
+                json.put("uuid", uuid);
+                json.put("auth_token", authToken);
+//                json.put("uuid", "E7F742EB-67EE-4738-ABEC-F0A3B62B45EB");
+//                json.put("auth_token", "f02dfb77e9615ae630753b37637abb31_10");
             }
             catch (Exception e) {
                 Log.v("Websocket callback", e.getMessage());
