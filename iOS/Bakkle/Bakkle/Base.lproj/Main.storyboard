@@ -467,9 +467,17 @@
                                     </mask>
                                 </variation>
                             </view>
-                            <view hidden="YES" alpha="0.89999999999999991" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jew-OF-ngH" userLabel="Start a Chat View">
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jew-OF-ngH" userLabel="Start a Chat View">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <subviews>
+                                    <visualEffectView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g13-hk-e6n" userLabel="Blur View">
+                                        <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="xiE-Ny-2C2">
+                                            <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        </view>
+                                        <blurEffect style="dark"/>
+                                    </visualEffectView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Jyn-b5-1rp" userLabel="Content to center">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                         <subviews>
@@ -490,6 +498,14 @@
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="qh6-Fo-6mQ" secondAttribute="height" multiplier="1:1" id="EKZ-ew-DVw"/>
                                                 </constraints>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                        <integer key="value" value="15"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
+                                                        <real key="value" value="1.5"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
                                                 <variation key="default">
                                                     <mask key="constraints">
                                                         <exclude reference="EKZ-ew-DVw"/>
@@ -628,31 +644,62 @@
                                             </mask>
                                         </variation>
                                     </view>
+                                    <view userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HW5-kf-R7E" userLabel="Darken View">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                    </view>
                                 </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="HW5-kf-R7E" secondAttribute="trailing" id="2UF-ST-H8d"/>
                                     <constraint firstAttribute="centerY" secondItem="Jyn-b5-1rp" secondAttribute="centerY" id="DCR-tg-pHd"/>
+                                    <constraint firstAttribute="trailing" secondItem="g13-hk-e6n" secondAttribute="trailing" id="Nh0-ob-H8a"/>
                                     <constraint firstItem="Jyn-b5-1rp" firstAttribute="leading" secondItem="jew-OF-ngH" secondAttribute="leading" constant="24" id="RXt-rj-kiB"/>
+                                    <constraint firstItem="HW5-kf-R7E" firstAttribute="leading" secondItem="jew-OF-ngH" secondAttribute="leading" id="XgK-Ng-Htc"/>
+                                    <constraint firstItem="g13-hk-e6n" firstAttribute="top" secondItem="jew-OF-ngH" secondAttribute="top" id="ZpT-aW-9V0"/>
+                                    <constraint firstItem="g13-hk-e6n" firstAttribute="leading" secondItem="jew-OF-ngH" secondAttribute="leading" id="bte-by-GNf"/>
+                                    <constraint firstAttribute="bottom" secondItem="g13-hk-e6n" secondAttribute="bottom" id="jtM-wN-URo"/>
+                                    <constraint firstAttribute="bottom" secondItem="HW5-kf-R7E" secondAttribute="bottom" id="k0b-gT-TDW"/>
+                                    <constraint firstItem="HW5-kf-R7E" firstAttribute="top" secondItem="jew-OF-ngH" secondAttribute="top" id="ld5-Hc-XqL"/>
                                     <constraint firstAttribute="trailing" secondItem="Jyn-b5-1rp" secondAttribute="trailing" constant="24" id="sOK-kn-cVF"/>
                                 </constraints>
                                 <variation key="default">
                                     <mask key="subviews">
+                                        <exclude reference="g13-hk-e6n"/>
                                         <exclude reference="Jyn-b5-1rp"/>
+                                        <exclude reference="HW5-kf-R7E"/>
                                     </mask>
                                     <mask key="constraints">
                                         <exclude reference="DCR-tg-pHd"/>
                                         <exclude reference="RXt-rj-kiB"/>
                                         <exclude reference="sOK-kn-cVF"/>
+                                        <exclude reference="2UF-ST-H8d"/>
+                                        <exclude reference="XgK-Ng-Htc"/>
+                                        <exclude reference="k0b-gT-TDW"/>
+                                        <exclude reference="ld5-Hc-XqL"/>
+                                        <exclude reference="Nh0-ob-H8a"/>
+                                        <exclude reference="ZpT-aW-9V0"/>
+                                        <exclude reference="bte-by-GNf"/>
+                                        <exclude reference="jtM-wN-URo"/>
                                     </mask>
                                 </variation>
                                 <variation key="heightClass=regular-widthClass=compact">
                                     <mask key="subviews">
+                                        <include reference="g13-hk-e6n"/>
                                         <include reference="Jyn-b5-1rp"/>
+                                        <include reference="HW5-kf-R7E"/>
                                     </mask>
                                     <mask key="constraints">
                                         <include reference="DCR-tg-pHd"/>
                                         <include reference="RXt-rj-kiB"/>
                                         <include reference="sOK-kn-cVF"/>
+                                        <include reference="2UF-ST-H8d"/>
+                                        <include reference="XgK-Ng-Htc"/>
+                                        <include reference="k0b-gT-TDW"/>
+                                        <include reference="ld5-Hc-XqL"/>
+                                        <include reference="Nh0-ob-H8a"/>
+                                        <include reference="ZpT-aW-9V0"/>
+                                        <include reference="bte-by-GNf"/>
+                                        <include reference="jtM-wN-URo"/>
                                     </mask>
                                 </variation>
                             </view>
@@ -734,6 +781,7 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
                         <outlet property="btnAddItem" destination="tls-6h-cM3" id="BLj-fb-VSS"/>
+                        <outlet property="darkenStartAChat" destination="HW5-kf-R7E" id="vXV-E4-jYD"/>
                         <outlet property="drawer" destination="TvW-JJ-Vqb" id="L0b-bd-0hM"/>
                         <outlet property="keepBrowsingButton" destination="csT-TU-XOh" id="qxj-Dc-0ZF"/>
                         <outlet property="logoImageView" destination="SVO-SE-GJf" id="2Vi-iP-Gaw"/>

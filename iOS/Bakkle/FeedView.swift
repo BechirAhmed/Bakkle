@@ -56,6 +56,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     @IBOutlet weak var startChatItemImage: UIImageView!
     @IBOutlet weak var startChatViewOriginX: NSLayoutConstraint!
     @IBOutlet weak var startChatViewOriginY: NSLayoutConstraint!
+    @IBOutlet weak var darkenStartAChat: UIView!
     var itemData: NSDictionary?
     var sendMessageContext = 0
     var keepBrowsingContext = 0
@@ -116,6 +117,31 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             btnAddItem.hidden = true
         }
         
+        // Start a Chat Swiping
+        var startChatViewOptions: MDCSwipeOptions = MDCSwipeOptions.new()
+        startChatViewOptions.delegate = self
+        startChatViewOptions.threshold = self.view.frame.width / 4
+        
+        startChatViewOptions.onPan = { state -> Void in
+            self.darkenStartAChat.alpha = state.thresholdRatio / 3 * 2
+            
+            var rotation = CGFloat(-M_PI_4)
+            // Rotation multiplier is the distance moved (x) / total distance (according to what the position it ends on after close)
+            var rotationMultiplier = (self.view.frame.midX - self.startChatView.frame.midX) / (self.startChatView.frame.width * 2)
+            self.startChatView.transform = CGAffineTransformRotate(CGAffineTransformIdentity,  rotation * rotationMultiplier)
+            
+            if state.thresholdRatio == 0.0 {
+                self.keepBrowsingButton.sendActionsForControlEvents(.TouchUpOutside)
+                self.sendMessageButton.sendActionsForControlEvents(.TouchUpOutside)
+            }
+        }
+        
+        startChatViewOptions.onChosen = { state -> Void in
+            self.closeStartAChat(state)
+        }
+        
+        self.startChatView.mdc_swipeToChooseSetup(startChatViewOptions)
+        
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -133,6 +159,8 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         
         self.keepBrowsingButton.layer.borderColor = UIColor.whiteColor().CGColor
         self.sendMessageButton.layer.borderColor = UIColor.whiteColor().CGColor
+        self.startChatItemImage.layer.borderColor = UIColor.whiteColor().CGColor
+        self.startChatItemImage.layer.masksToBounds = true
         self.startChatViewOriginX.constant = self.startChatView.frame.width * -1.5
         self.startChatViewOriginY.constant = 50
         self.startChatView.layoutIfNeeded()
@@ -500,10 +528,6 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             return
         }
         
-        if view == self.startChatView {
-            self.closeStartAChat()
-        }
-        
         switch direction {
         case MDCSwipeDirection.Left:
             Bakkle.sharedInstance.markItem("meh", item_id: self.item_id, success: {}, fail: {})
@@ -609,25 +633,48 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         })
     }
     
-    func closeStartAChat() {
+    func closeStartAChat(state: MDCSwipeResult?) {
         self.sendMessageButton.tag = 0
         
-        self.startChatViewOriginX.constant = self.startChatView.frame.width * 2
-        self.startChatViewOriginY.constant = 50
+        self.keepBrowsingButton.sendActionsForControlEvents(.TouchUpOutside)
+        self.sendMessageButton.sendActionsForControlEvents(.TouchUpOutside)
         
-        UIView.animateWithDuration(0.75, animations: { Void in
-            self.startChatView.transform = CGAffineTransformRotate(CGAffineTransformIdentity, CGFloat(M_PI_4))
+        var destination = self.startChatView.frame
+        var transformAngle: CGFloat = 0
+        
+        if let swipeResult = state {
+            // This is used to find the direction that the user was swiping
+            // Logic from: MDCSwipeOptions.m, MDCCGRectExtendedOutOfBounds
+            while (!CGRectIsNull(CGRectIntersection(self.view.frame, destination))) {
+                destination = CGRectMake(CGRectGetMinX(destination) + swipeResult.translation.x,
+                    CGRectGetMinY(destination) + swipeResult.translation.y,
+                    CGRectGetWidth(destination),
+                    CGRectGetHeight(destination))
+            }
+        } else {
+            destination.origin.x = self.startChatView.frame.width * 2
+            destination.origin.y = 50
+            transformAngle = CGFloat(M_PI_4)
+        }
+        
+        self.startChatViewOriginX.constant = destination.origin.x
+        self.startChatViewOriginY.constant = destination.origin.y
+        
+        self.btnAddItem.enabled = true
+        self.searchBar.userInteractionEnabled = true
+        self.refineButton.enabled = true
+        self.menuBtn.enabled = true
+        
+        UIView.animateWithDuration(0.16, animations: { Void in
+            self.startChatView.transform = CGAffineTransformRotate(CGAffineTransformIdentity, transformAngle)
             self.startChatView.layoutIfNeeded()
         }, completion: {Void in
             self.revealViewController().panGestureRecognizer().enabled = true
-            self.btnAddItem.enabled = true
-            self.searchBar.userInteractionEnabled = true
-            self.refineButton.enabled = true
-            self.menuBtn.enabled = true
             
             self.startChatView.transform = CGAffineTransformRotate(CGAffineTransformIdentity, CGFloat(-M_PI_4))
             self.startChatViewOriginX.constant = self.startChatView.frame.width * -1
             self.startChatView.hidden = true
+            self.darkenStartAChat.alpha = 0.0
             self.loadNext()
         })
     }
@@ -654,12 +701,12 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         }
         WSManager.enqueueWorkPayload(chatPayload)
         
-        self.closeStartAChat()
+        self.closeStartAChat(nil)
     }
     
     @IBAction func keepBrowsing(sender: UIButton) {
         sender.layer.borderColor = UIColor.whiteColor().CGColor
-        self.closeStartAChat()
+        self.closeStartAChat(nil)
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {

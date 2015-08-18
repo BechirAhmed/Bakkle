@@ -416,6 +416,10 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     ** Starts the camera preview. NOT to be confused with displayStillImage
     */
     func displayImagePreview() {
+        
+        // Sometimes the camera shows "Loading Camera Preview..." indefinitely, we couldn't replicate it so we're assuming
+        // that it was fixed. Though, if it comes up again, we think the problem might be that the app segue'd out of the camera view
+        // before the preview had a chance to load (and remove properly on view will disappear)
         if (self.imageCount + self.videoCount) >= CameraView.MAX_IMAGE_COUNT {
             // no more images, display a still to be safe
             self.displayStillImage(self.imageViews[0].image!)
