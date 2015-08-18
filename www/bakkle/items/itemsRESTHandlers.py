@@ -185,6 +185,9 @@ class addItemHandler(bakkleRequestHandler):
         except QueryArgumentError as error:
             self.writeJSON({"status": 0, "message": error.message})
             self.finish()
+            return
+        except KeyError:
+            videos = []
 
         self.writeJSON(itemsCommonHandlers.add_item(
             title, description, location, seller_id, price,

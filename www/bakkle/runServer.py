@@ -23,6 +23,7 @@ import baseWSHandlers as baseWSHandlers
 import items.itemsRESTHandlers as itemsRESTHandlers
 import account.accountsRESTHandlers as accountsRESTHandlers
 import chat.chatWSHandlers as ChatWSHandlers
+import purchase.purchaseRESTHandlers as PurchaseRESTHandlers
 
 app = web.Application([
 
@@ -105,6 +106,9 @@ app = web.Application([
             accountsRESTHandlers.setDescriptionHandler, name='set_description'),
     web.url(r'^/account/get_account/$',
             accountsRESTHandlers.getAccountHandler, name='get_account'),
+
+    web.url(r'^/purchase/purchase/$',
+            PurchaseRESTHandlers.stripeChargeHandler, name='stripeCharge'),
 
 
     web.url(r"/ws.*", baseWSHandlers.BaseWSHandler),
