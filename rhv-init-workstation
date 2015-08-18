@@ -1,0 +1,354 @@
+#!/bin/bash
+# From information received from EIT (Bill Boatman) 3/13/2015
+# Information from https://access.redhat.com/site/articles/704743 used as a basis to configure sssd
+#
+# NB: This script is intended to be run on a freshly installed system, do not run on existing 
+# system as it may erase configurations in some of these files.
+
+if test "$#" -ne 1; then
+    echo "Please specify user with domain-join rights."
+    echo "Usage: $0 <username>"
+    exit 1
+fi
+
+# Make sure only root can run our script
+if [ "$(id -u)" != "0" ]; then
+   echo "This script must be run as root" 1>&2
+   exit 1
+fi
+
+# Install dependencies for connecting to RHIT AD
+apt-get -y install samba nfs-common openssh-server sssd libpam-sss libnss-sss libpam-krb5 sssd-tools tcsh samba krb5-user
+
+# Make a backup of existing config
+export BACKUP_LOC=/tmp/rh_domain_config_backup`date +'%Y-%m-%d_%H%M%S'`
+mkdir -p $BACKUP_LOC
+cp /etc/krb5.conf      $BACKUP_LOC
+cp /etc/krb5.keytab    $BACKUP_LOC
+cp /etc/samba/smb.conf $BACKUP_LOC
+cp /etc/sssd/sssd.conf $BACKUP_LOC
+cp /etc/hosts          $BACKUP_LOC
+cp /etc/fstab          $BACKUP_LOC
+
+# Configure ROSE-HULMAN.EDU realm in krb5.conf
+cat << EOF > /etc/krb5.conf
+[libdefaults]
+	default_realm = ROSE-HULMAN.EDU
+        dns_lookup_realm = false
+        dns_lookup_kdc = false
+        ticket_lifetime = 24h
+        rewnew_lifetime = 7d
+        forwardable = true
+
+# The following krb5.conf variables are only for MIT Kerberos.
+	krb4_config = /etc/krb.conf
+	krb4_realms = /etc/krb.realms
+	kdc_timesync = 1
+	ccache_type = 4
+	forwardable = true
+	proxiable = true
+
+# The following encryption type specification will be used by MIT Kerberos
+# if uncommented.  In general, the defaults in the MIT Kerberos code are
+# correct and overriding these specifications only serves to disable new
+# encryption types as they are added, creating interoperability problems.
+#
+# Thie only time when you might need to uncomment these lines and change
+# the enctypes is if you have local software that will break on ticket
+# caches containing ticket encryption types it doesn't know about (such as
+# old versions of Sun Java).
+
+#	default_tgs_enctypes = des3-hmac-sha1
+#	default_tkt_enctypes = des3-hmac-sha1
+#	permitted_enctypes = des3-hmac-sha1
+
+# The following libdefaults parameters are only for Heimdal Kerberos.
+	v4_instance_resolve = false
+	v4_name_convert = {
+		host = {
+			rcmd = host
+			ftp = ftp
+		}
+		plain = {
+			something = something-else
+		}
+	}
+	fcc-mit-ticketflags = true
+
+[realms]
+	ATHENA.MIT.EDU = {
+		kdc = kerberos.mit.edu:88
+		kdc = kerberos-1.mit.edu:88
+		kdc = kerberos-2.mit.edu:88
+		admin_server = kerberos.mit.edu
+		default_domain = mit.edu
+	}
+	MEDIA-LAB.MIT.EDU = {
+		kdc = kerberos.media.mit.edu
+		admin_server = kerberos.media.mit.edu
+	}
+	ZONE.MIT.EDU = {
+		kdc = casio.mit.edu
+		kdc = seiko.mit.edu
+		admin_server = casio.mit.edu
+	}
+	MOOF.MIT.EDU = {
+		kdc = three-headed-dogcow.mit.edu:88
+		kdc = three-headed-dogcow-1.mit.edu:88
+		admin_server = three-headed-dogcow.mit.edu
+	}
+	CSAIL.MIT.EDU = {
+		kdc = kerberos-1.csail.mit.edu
+		kdc = kerberos-2.csail.mit.edu
+		admin_server = kerberos.csail.mit.edu
+		default_domain = csail.mit.edu
+		krb524_server = krb524.csail.mit.edu
+	}
+	IHTFP.ORG = {
+		kdc = kerberos.ihtfp.org
+		admin_server = kerberos.ihtfp.org
+	}
+	GNU.ORG = {
+		kdc = kerberos.gnu.org
+		kdc = kerberos-2.gnu.org
+		kdc = kerberos-3.gnu.org
+		admin_server = kerberos.gnu.org
+	}
+	1TS.ORG = {
+		kdc = kerberos.1ts.org
+		admin_server = kerberos.1ts.org
+	}
+	GRATUITOUS.ORG = {
+		kdc = kerberos.gratuitous.org
+		admin_server = kerberos.gratuitous.org
+	}
+	DOOMCOM.ORG = {
+		kdc = kerberos.doomcom.org
+		admin_server = kerberos.doomcom.org
+	}
+	ANDREW.CMU.EDU = {
+		kdc = kerberos.andrew.cmu.edu
+		kdc = kerberos2.andrew.cmu.edu
+		kdc = kerberos3.andrew.cmu.edu
+		admin_server = kerberos.andrew.cmu.edu
+		default_domain = andrew.cmu.edu
+	}
+	CS.CMU.EDU = {
+		kdc = kerberos.cs.cmu.edu
+		kdc = kerberos-2.srv.cs.cmu.edu
+		admin_server = kerberos.cs.cmu.edu
+	}
+	DEMENTIA.ORG = {
+		kdc = kerberos.dementix.org
+		kdc = kerberos2.dementix.org
+		admin_server = kerberos.dementix.org
+	}
+	stanford.edu = {
+		kdc = krb5auth1.stanford.edu
+		kdc = krb5auth2.stanford.edu
+		kdc = krb5auth3.stanford.edu
+		master_kdc = krb5auth1.stanford.edu
+		admin_server = krb5-admin.stanford.edu
+		default_domain = stanford.edu
+	}
+        UTORONTO.CA = {
+                kdc = kerberos1.utoronto.ca
+                kdc = kerberos2.utoronto.ca
+                kdc = kerberos3.utoronto.ca
+                admin_server = kerberos1.utoronto.ca
+                default_domain = utoronto.ca
+	}
+	ROSE-HULMAN.EDU = {
+		kdc = rose-hulman.edu
+		admin_server = rose-hulman.edu
+	}
+
+
+[domain_realm]
+	.mit.edu = ATHENA.MIT.EDU
+	mit.edu = ATHENA.MIT.EDU
+	.media.mit.edu = MEDIA-LAB.MIT.EDU
+	media.mit.edu = MEDIA-LAB.MIT.EDU
+	.csail.mit.edu = CSAIL.MIT.EDU
+	csail.mit.edu = CSAIL.MIT.EDU
+	.whoi.edu = ATHENA.MIT.EDU
+	whoi.edu = ATHENA.MIT.EDU
+	.stanford.edu = stanford.edu
+	.slac.stanford.edu = SLAC.STANFORD.EDU
+        .toronto.edu = UTORONTO.CA
+        .utoronto.ca = UTORONTO.CA
+	rose-hulman.edu = ROSE-HULMAN.EDU
+	.rose-hulman.edu = ROSE-HULMAN.EDU
+
+[login]
+	krb4_convert = true
+	krb4_get_tickets = false
+EOF
+
+# Comment out everything in global section then add ROSE-HULMAN config
+cat << EOF > /etc/samba/smb.conf
+[global]
+   server string = %h server
+   workgroup = ROSE-HULMAN
+   client signing = yes
+   client use spnego = yes
+   kerberos method = secrets and keytab
+   log file = /var/log/samba/%m.log
+   max log size = 50
+   realm = ROSE-HULMAN.EDU
+   security = ads
+   password server = rose-hulman.edu
+EOF
+
+# Replaced sssd.conf with the ROSE-HULMAN configuration
+cat << EOF > /etc/sssd/sssd.conf
+[domain/rose-hulman.edu]
+ad_domain = rose-hulman.edu
+dns_discovery_domain = rose-hulman.edu
+ 
+ad_server = dc-cra.rose-hulman.edu,dc-tel.rose-hulman.edu,dc-mye.rose-hulman.edu
+ 
+id_provider = ad
+auth_provider = ad
+ 
+ldap_id_mapping = false
+ldap_use_tokengroups = False
+ldap_schema = ad
+ 
+cache_credentials = true
+ 
+[sssd]
+services = nss,pam
+config_file_version = 2
+domains = rose-hulman.edu
+ 
+[nss]
+ 
+[pam]
+ 
+[sudo]
+ 
+[autofs]
+ 
+[ssh]
+ 
+[pac]
+EOF
+chmod 0600 /etc/sssd/sssd.conf
+chown root.root /etc/sssd/sssd.conf
+
+export SHRT_HOSTNAME=`hostname -s`
+export FQDN_HOSTNAME=`hostname`
+cat << EOF > /etc/hosts
+127.0.0.1 $FQDN_HOSTNAME $SHRT_HOSTNAME localhost
+::1 $FQDN_HOSTNAME $SHRT_HOSTNAME localhost ip6-localhost ip6-loopback
+
+# The following lines are desirable for IPv6 capable hosts
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+EOF
+
+echo "Set default firewall config"
+ echo "0" > /proc/sys/net/ipv4/ip_forward
+ iptables -F
+ iptables -F -t nat
+
+ iptables -A INPUT -p tcp -s 137.112.0.0/16 --dport 22    -j ACCEPT
+ iptables -A INPUT -p tcp -s 137.112.0.0/16 --dport 80    -j ACCEPT
+ iptables -A INPUT -p tcp -s 137.112.0.0/16 --dport 443   -j ACCEPT
+
+ iptables -P INPUT DROP
+ iptables -P FORWARD DROP
+ iptables -P OUTPUT ACCEPT
+
+ iptables -A INPUT -i lo -j ACCEPT
+ iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+ iptables -L -v
+
+
+echo "Get a kerberos ticket"
+kinit $1@ROSE-HULMAN.EDU
+
+echo "Verify that you have a krbtgt ticket"
+klist
+
+echo "Add the system to the domain"
+rm /etc/krb5.keytab
+net ads join -k
+
+echo "NOTE: 'Unable to perform DNS Update' and 'DNS update failed' are not domain-join errors" 
+
+echo "Restart the sssd service"
+service sssd restart
+
+echo "Verify that everything is working correctly"
+id $1
+
+echo "Adding SE admins to sudoers"
+if grep --quiet rhv-se-admins /etc/sudoers; then
+        echo "sudoers.conf already modified"
+else
+cat << EOF >> /etc/sudoers
+%rhv-se-admins ALL=(ALL:ALL) NOPASSWD: ALL
+EOF
+fi
+
+### OTHER RHV STUFF
+
+# Add common drive mappings
+#if grep --quiet '/Users' /etc/fstab; then
+#	echo ""
+#else
+#        echo "Adding RHV User NFS mount to /etc/fstab"
+#        echo "tom.rhventures.org:/home	/Users	nfs	vers=2	1	1" >> /etc/fstab
+#fi
+#if grep --quiet 'tom.rhventures.org:/rhv' /etc/fstab; then
+#	echo ""
+#else
+#        echo "Adding RHV Shared NFS mount to /etc/fstab"
+#        echo "tom.rhventures.org:/rhv	/rhv	nfs	vers=2	1	1" >> /etc/fstab
+#fi
+mkdir /Users    >&/dev/null
+#mkdir /rhv      >&/dev/null
+#mount -a        >&/dev/null
+
+# Add Greeter username/password box
+if grep --quiet manual /usr/share/lightdm/lightdm.conf.d/50-ubuntu.conf; then
+        echo "Lightdm already modified"
+else
+        echo "Adding greeter-show-manual-login=true to lightdm config"
+        mkdir -p /usr/share/lightdm/lightdm.conf.d/
+        cat /usr/share/lightdm/lightdm.conf.d/50-rhv.conf >> /usr/share/lightdm/lightdm.conf.d/50-ubuntu.conf
+fi
+
+# Allow kerberos ticket auth on ssh
+if grep --quiet 'AllowGroups' /etc/ssh/sshd_config; then
+	echo "sshd_config already modified"
+else
+	echo "Adding GSSAPI auth to sshd_config"
+	echo "GSSAPIAuthentication yes" >> /etc/ssh/sshd_config
+	echo "# For project servers, change the line below to: AllowGroups rhv-se-admins rhv-<PROJECT>" >> /etc/ssh/sshd_config
+	echo "AllowGroups rhv-se-admins rhv-se " >> /etc/ssh/sshd_config
+fi
+
+service sssd restart
+service ssh restart
+
+
+echo " "
+echo " "
+echo " "
+NAME=`net ads status | grep name`
+echo "Joined as computer object $NAME"
+echo " "
+echo " "
+echo " To test domain-join succeeded:"
+echo "   use: id <USERNAME> "
+echo " "
+echo " For project-server installations:"
+echo "   edit /etc/ssh/sshd_config and change 'rhv-se' to 'rhv-<PROJECT>'"
+echo "   edit /etc/sudoers and add '%rhv-<PROJECT> ALL=(ALL:ALL) ALL"
+echo " "
+echo " "
+VER=`dpkg-query -s 'rhv-rhit' | grep Version`
+echo " rhv-rhit script version: $VER"

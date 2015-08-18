@@ -1,1 +1,1 @@
-../../../FontAwesomeIconFactory/iOS/NIKFontAwesomeTabBarItem.h
+../../../FontAwesomeIconFactory/FontAwesomeIconFactory/iOS/NIKFontAwesomeTabBarItem.h

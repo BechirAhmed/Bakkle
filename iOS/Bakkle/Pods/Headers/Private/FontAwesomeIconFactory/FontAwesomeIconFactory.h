@@ -1,1 +1,1 @@
-../../../FontAwesomeIconFactory/FontAwesomeIconFactory.h
+../../../FontAwesomeIconFactory/FontAwesomeIconFactory/FontAwesomeIconFactory.h

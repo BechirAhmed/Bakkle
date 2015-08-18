@@ -1,1 +1,1 @@
-../../../FontAwesomeIconFactory/iOS/NIKFontAwesomeButton.h
+../../../FontAwesomeIconFactory/FontAwesomeIconFactory/iOS/NIKFontAwesomeButton.h

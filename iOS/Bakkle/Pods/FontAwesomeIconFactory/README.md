@@ -9,7 +9,7 @@ http://fortawesome.github.com/Font-Awesome
 
 FontAwesomeIconFactory was created by Nikolaj Schumacher.
 
-[![Build Status](https://travis-ci.org/nschum/FontAwesomeIconFactory.png?branch=master)](https://travis-ci.org/nschum/FontAwesomeIconFactory)
+[![Build Status](https://travis-ci.org/nschum/FontAwesomeIconFactory.png?branch=master)](https://travis-ci.org/nschum/FontAwesomeIconFactory) [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 
 ![screenshot Interface Builder](https://nschum.github.io/FontAwesomeIconFactory/screenshot-IB@2x.png)
 ![screenshot OS X](https://nschum.github.io/FontAwesomeIconFactory/screenshot-OSX@2x.png)
@@ -28,6 +28,15 @@ Then run `pod install` as usual.
 
 Changes
 -------
+
+### 2.0.2 ###
+
+- FontAwesome is now a proper framework and supports Carthage.
+
+### 2.0.1 ###
+
+- [Fix clipped icons](https://github.com/nschum/FontAwesomeIconFactory/issues/9)
+- Annotated generic collection types for Swift 2.
 
 ### 2.0 ###
 

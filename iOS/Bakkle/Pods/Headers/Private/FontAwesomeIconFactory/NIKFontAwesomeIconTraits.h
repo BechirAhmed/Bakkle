@@ -1,1 +1,1 @@
-../../../FontAwesomeIconFactory/NIKFontAwesomeIconTraits.h
+../../../FontAwesomeIconFactory/FontAwesomeIconFactory/NIKFontAwesomeIconTraits.h
