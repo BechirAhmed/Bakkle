@@ -37,6 +37,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     var videoImages: [NSURL : UIImage] = [NSURL : UIImage]()
     var videoURL: NSURL?
     var videosChanged: Bool?
+    var allowPlayback = true
     
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var closeBtn: UIButton!
@@ -125,6 +126,8 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
      * *******************************************************************************
      */
     func textViewDidBeginEditing(textView: UITextView) {
+        self.allowPlayback = false
+        
         animateViewMoving(true, moveValue: AddItem.KEYBOARD_MOVE_VALUE)
         if textView.textColor == AddItem.DESCRIPTION_PLACEHOLDER_COLOR {
             textView.textColor = UIColor.blackColor()
@@ -133,6 +136,8 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     }
     
     func textViewDidEndEditing(textView: UITextView) {
+        self.allowPlayback = true
+        
         if textView.text.isEmpty {
             textView.textColor = AddItem.DESCRIPTION_PLACEHOLDER_COLOR
             textView.text = AddItem.TAG_PLACEHOLDER_STR
@@ -170,6 +175,8 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
 
     
     func textFieldDidBeginEditing(textField: UITextField) {
+        self.allowPlayback = false
+        
         if textField == priceField {
             animateViewMoving(true, moveValue: AddItem.NUMPAD_MOVE_VALUE)
             if priceField.text == "take it!" {
@@ -184,6 +191,8 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
      * Handles disable / tag / formatting checks after user taps off of the field
      */
     func textFieldDidEndEditing(textField: UITextField) {
+        self.allowPlayback = true
+        
         if textField == priceField {
             animateViewMoving(false, moveValue: AddItem.NUMPAD_MOVE_VALUE)
         }else{
@@ -232,6 +241,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     func dismissKeyboard() {
         self.titleField.resignFirstResponder() || self.priceField.resignFirstResponder() || self.descriptionField.resignFirstResponder()
         disableConfirmButtonHandler()
+        self.allowPlayback = true
     }
 
     @IBAction func cancelAdd(sender: AnyObject) {
@@ -365,9 +375,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
                             NSLog("Image URL: \(image_url)")
                             
                             /* FBSDK will not do anything if the url is invalid (no errors, just goes to feed) */
-                            if Bakkle.sharedInstance.urlIsValid(image_url) {
-                                content.imageURL = NSURL(string: image_url!)
-                            }
+                            content.imageURL = NSURL(string: image_url!)
                             
                             content.contentURL = NSURL(string: Bakkle.sharedInstance.getItemURL(item_id!))
                             FBSDKShareDialog.showFromViewController(self, withContent: content, delegate: nil)
@@ -452,11 +460,15 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     }
     
     func videoTapped(sender: UITapGestureRecognizer) {
-        for url in self.videoImages {
-            if (sender.view as! UIImageView).image == url.1 {
-                VideoPlayer.play(url.0, presentingController: self)
-                break
+        if allowPlayback {
+            for url in self.videoImages {
+                if (sender.view as! UIImageView).image == url.1 {
+                    VideoPlayer.play(url.0, presentingController: self)
+                    break
+                }
             }
+        } else {
+            self.dismissKeyboard()
         }
     }
 

@@ -536,7 +536,14 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         case MDCSwipeDirection.Right:
             Bakkle.sharedInstance.markItem("want", item_id: self.item_id, success: {}, fail: {})
             self.itemData = Bakkle.sharedInstance.feedItems[0] as? NSDictionary
-            self.displayStartAChat(self.swipeView.imageView.image)
+            
+            // Ensure that the item isn't your own
+            if ((self.itemData!.valueForKey("seller") as! NSDictionary).valueForKey("facebook_id") as! String) != Bakkle.sharedInstance.facebook_id_str {
+                self.displayStartAChat(self.swipeView.imageView.image)
+            } else {
+                loadNext()
+            }
+            
             break
         case MDCSwipeDirection.Up:
             Bakkle.sharedInstance.markItem("hold", item_id: self.item_id, success: {}, fail: {})

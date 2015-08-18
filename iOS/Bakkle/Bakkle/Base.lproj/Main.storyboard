@@ -555,6 +555,9 @@
                                                         <integer key="value" value="15"/>
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
+                                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                                    <rect key="frame" x="0.0" y="458" width="327" height="51"/>
+                                                </variation>
                                                 <connections>
                                                     <action selector="animateHighlightBorder:" destination="dzt-bR-uoN" eventType="touchDragInside" id="Rwz-pH-o0f"/>
                                                     <action selector="animateUnhighlightBorder:" destination="dzt-bR-uoN" eventType="touchDragOutside" id="zh0-Dd-c87"/>
@@ -614,7 +617,8 @@
                                                 <exclude reference="jyp-mC-Tiv"/>
                                             </mask>
                                         </variation>
-                                        <variation key="heightClass=regular-widthClass=compact">
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="24" y="79" width="327" height="509"/>
                                             <mask key="subviews">
                                                 <include reference="q3X-lx-mRO"/>
                                                 <include reference="Eg1-4P-CuV"/>
@@ -669,17 +673,17 @@
                                         <exclude reference="HW5-kf-R7E"/>
                                     </mask>
                                     <mask key="constraints">
-                                        <exclude reference="DCR-tg-pHd"/>
-                                        <exclude reference="RXt-rj-kiB"/>
-                                        <exclude reference="sOK-kn-cVF"/>
-                                        <exclude reference="2UF-ST-H8d"/>
-                                        <exclude reference="XgK-Ng-Htc"/>
-                                        <exclude reference="k0b-gT-TDW"/>
-                                        <exclude reference="ld5-Hc-XqL"/>
                                         <exclude reference="Nh0-ob-H8a"/>
                                         <exclude reference="ZpT-aW-9V0"/>
                                         <exclude reference="bte-by-GNf"/>
                                         <exclude reference="jtM-wN-URo"/>
+                                        <exclude reference="2UF-ST-H8d"/>
+                                        <exclude reference="XgK-Ng-Htc"/>
+                                        <exclude reference="k0b-gT-TDW"/>
+                                        <exclude reference="ld5-Hc-XqL"/>
+                                        <exclude reference="DCR-tg-pHd"/>
+                                        <exclude reference="RXt-rj-kiB"/>
+                                        <exclude reference="sOK-kn-cVF"/>
                                     </mask>
                                 </variation>
                                 <variation key="heightClass=regular-widthClass=compact">
@@ -689,17 +693,17 @@
                                         <include reference="HW5-kf-R7E"/>
                                     </mask>
                                     <mask key="constraints">
-                                        <include reference="DCR-tg-pHd"/>
-                                        <include reference="RXt-rj-kiB"/>
-                                        <include reference="sOK-kn-cVF"/>
-                                        <include reference="2UF-ST-H8d"/>
-                                        <include reference="XgK-Ng-Htc"/>
-                                        <include reference="k0b-gT-TDW"/>
-                                        <include reference="ld5-Hc-XqL"/>
                                         <include reference="Nh0-ob-H8a"/>
                                         <include reference="ZpT-aW-9V0"/>
                                         <include reference="bte-by-GNf"/>
                                         <include reference="jtM-wN-URo"/>
+                                        <include reference="2UF-ST-H8d"/>
+                                        <include reference="XgK-Ng-Htc"/>
+                                        <include reference="k0b-gT-TDW"/>
+                                        <include reference="ld5-Hc-XqL"/>
+                                        <include reference="DCR-tg-pHd"/>
+                                        <include reference="RXt-rj-kiB"/>
+                                        <include reference="sOK-kn-cVF"/>
                                     </mask>
                                 </variation>
                             </view>
