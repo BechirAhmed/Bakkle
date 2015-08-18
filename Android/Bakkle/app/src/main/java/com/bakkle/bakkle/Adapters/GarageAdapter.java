@@ -2,6 +2,7 @@ package com.bakkle.bakkle.Adapters;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,18 +46,15 @@ public class GarageAdapter extends ArraySwipeAdapter<FeedItem>
         TextView hold;
         TextView nope;
         Button delete;
-        //TextView total;
+        TextView total;
 
     }
-
-    //AsyncImageLoader asyncImageLoader;
 
     public GarageAdapter(Context context, ArrayList<FeedItem> items)
     {
         super(context, R.layout.garage_list_item, items);
         this.c = context;
         this.items = items;
-        //asyncImageLoader = new AsyncImageLoader(context);
         serverCalls = new ServerCalls(c);
         preferences = PreferenceManager.getDefaultSharedPreferences(c);
     }
@@ -76,34 +74,28 @@ public class GarageAdapter extends ArraySwipeAdapter<FeedItem>
             viewHolder.nope = (TextView) convertView.findViewById(R.id.nope_count);
             viewHolder.price = (TextView) convertView.findViewById(R.id.price);
             viewHolder.delete = (Button) convertView.findViewById(R.id.delete);
-            //viewHolder.total = (TextView) convertView.findViewById(R.id.total);
+            viewHolder.total = (TextView) convertView.findViewById(R.id.total_count);
             convertView.setTag(viewHolder);
         }
         else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-//        Drawable cachedImage = asyncImageLoader.loadDrawable(item.getImageUrls().get(0), new AsyncImageLoader.ImageCallback()
-//        {
-//            public void imageLoaded(Drawable imageDrawable, String imageUrl)
-//            {
-//                viewHolder.icon.setImageDrawable(imageDrawable);
-//            }
-//        });
-        //viewHolder.icon.setImageDrawable(cachedImage);
-
         Glide.with(c)
                 .load(item.getImageUrls().get(0))
                 .centerCrop()
-                .placeholder(R.drawable.loading)
+                //.placeholder(R.drawable.loading)
                 .crossFade()
                 .into(viewHolder.icon);
+
+        viewHolder.icon.setColorFilter(Color.rgb(123, 123, 123), android.graphics.PorterDuff.Mode.MULTIPLY);
 
         viewHolder.title.setText(item.getTitle());
         viewHolder.price.setText("$" + item.getPrice());
         viewHolder.want.setText(item.getNumWant());
         viewHolder.hold.setText(item.getNumHold());
         viewHolder.nope.setText(item.getNumMeh());
+        viewHolder.total.setText(item.getNumView());
         viewHolder.delete.setOnClickListener(new View.OnClickListener()
         {
             @Override

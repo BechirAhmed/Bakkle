@@ -41,7 +41,6 @@ public class ServerCalls
     Context mContext;
     int response;
     String auth_token;
-    ArrayList items;
     JsonObject jsonResponse;
 
     //TODO: make this entire class non-instantiable. aka, make the class final, make the constructor private, and pass the context to each method individually

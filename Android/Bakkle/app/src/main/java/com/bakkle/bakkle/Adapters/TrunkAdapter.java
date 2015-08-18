@@ -38,12 +38,9 @@ public class TrunkAdapter extends ArrayAdapter<FeedItem>{
 
     }
 
-    //AsyncImageLoader asyncImageLoader;
-
     public TrunkAdapter(Context context, ArrayList<FeedItem> items){
         super(context, R.layout.buyers_trunk_list_item, items);
         this.context = context;
-        //asyncImageLoader = new AsyncImageLoader(context);
         serverCalls = new ServerCalls(context);
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
@@ -68,22 +65,12 @@ public class TrunkAdapter extends ArrayAdapter<FeedItem>{
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-
-        //viewHolder.icon.setImageBitmap(item.getFirstImage());
-//        Drawable cachedImage = asyncImageLoader.loadDrawable(item.getImageUrls().get(0), new AsyncImageLoader.ImageCallback() {
-//            public void imageLoaded(Drawable imageDrawable, String imageUrl) {
-//                viewHolder.icon.setImageDrawable(imageDrawable);
-//            }
-//        });
-
         Glide.with(context)
                 .load(item.getImageUrls().get(0))
                 .centerCrop()
-                .placeholder(R.drawable.loading)
                 .crossFade()
                 .into(viewHolder.icon);
 
-        //viewHolder.icon.setImageDrawable(cachedImage);
         viewHolder.title.setText(item.getTitle());
         viewHolder.method.setText(item.getMethod());
         viewHolder.tags.setText("Tags: " + item.getTagsString());
@@ -92,9 +79,8 @@ public class TrunkAdapter extends ArrayAdapter<FeedItem>{
         viewHolder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                serverCalls.deleteItem(preferences.getString("auth_token", "0"), preferences.getString("uuid", "0"), item.getPk());
+                serverCalls.deleteItem(preferences.getString("auth_token", ""), preferences.getString("uuid", ""), item.getPk());
                 remove(item);
-//                notifyDataSetChanged();
             }
         });
 

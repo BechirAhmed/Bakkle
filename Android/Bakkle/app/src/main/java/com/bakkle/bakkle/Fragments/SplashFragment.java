@@ -39,7 +39,9 @@ public class SplashFragment extends Fragment
     
     private OnFragmentInteractionListener mListener;
     Activity mActivity;
-
+    SharedPreferences preferences;
+    protected String authToken;
+    String uuid;
 
     public static SplashFragment newInstance(String pk, String url)
     {
@@ -66,6 +68,9 @@ public class SplashFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.fragment_splash, container, false);
+        preferences = PreferenceManager.getDefaultSharedPreferences(mActivity);
+        authToken = preferences.getString("auth_token", "");
+        uuid = preferences.getString("uuid", "");
         Glide.with(mActivity)
                 .load(getArguments().getString("url"))
                 .crossFade()
@@ -78,7 +83,11 @@ public class SplashFragment extends Fragment
             @Override
             public void onClick(View view)
             {
-                getFragmentManager().beginTransaction().detach(SplashFragment.this).commit();
+                //getFragmentManager().beginTransaction().remove(SplashFragment.this).commit();
+                getFragmentManager().popBackStack();
+//                getFragmentManager().beginTransaction().replace(R.id.content_frame,
+//                        new FeedFragment()).addToBackStack(null).
+//                        setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
             }
         });
         sendMessage.setOnClickListener(new View.OnClickListener()
@@ -96,58 +105,61 @@ public class SplashFragment extends Fragment
 
     private class StartChatIntermediary
     {
-        String pk;
         ChatCalls chatCalls;
-        SharedPreferences preferences;
 
         public StartChatIntermediary(String pk)
         {
-            this.pk = pk;
-            preferences = PreferenceManager.getDefaultSharedPreferences(mActivity);
-            chatCalls = new ChatCalls(preferences.getString("uuid", ""), preferences.getString("sellerPk", ""), preferences.getString("auth_token", ""), new WebSocketCallBack());
+            chatCalls = new ChatCalls(uuid, authToken.substring(33, 35), authToken, new WebSocketCallBack(pk));
+            chatCalls.connect();
         }
 
-        private class WebSocketCallBack implements AsyncHttpClient.WebSocketConnectCallback
+
+    }
+
+    private class WebSocketCallBack implements AsyncHttpClient.WebSocketConnectCallback
+    {
+        String pk;
+        public WebSocketCallBack(String pk) {this.pk = pk;}
+
+        @Override
+        public void onCompleted(Exception ex, WebSocket webSocket)
         {
-
-
-            @Override
-            public void onCompleted(Exception ex, WebSocket webSocket)
+            if(ex != null)
             {
-                if(ex != null)
-                {
-                    Log.v("callback exception", ex.getMessage());
-                    return;
-                }
-                JSONObject json = new JSONObject();
-                try {
-                    json.put("method", "chat_startChat");
-                    json.put("itemId", pk);
-                    json.put("uuid", "E7F742EB-67EE-4738-ABEC-F0A3B62B45EB");
-                    json.put("auth_token", "f02dfb77e9615ae630753b37637abb31_10");
-                }
-                catch (Exception e) {
-                    Log.v("Websocket callback", e.getMessage());
-                }
-
-                webSocket.send(json.toString());
-                webSocket.setStringCallback(new WebSocket.StringCallback()
-                {
-                    @Override
-                    public void onStringAvailable(String s)
-                    {
-                        JsonParser jsonParser = new JsonParser();
-                        JsonElement jsonElement = jsonParser.parse(s);
-                        JsonObject jsonObject = jsonElement.getAsJsonObject();
-                        Intent i = new Intent(mActivity, ChatActivity.class);
-                        i.putExtra("chatId", jsonObject.get("chatId").getAsInt());
-                        startActivity(i);
-                    }
-                });
+                Log.e("callback exception", ex.getMessage());
+                return;
             }
+            JSONObject json = new JSONObject();
+            try {
+                json.put("method", "chat_startChat");
+                json.put("itemId", pk);
+                json.put("uuid", uuid);
+                json.put("auth_token", authToken);
+//                json.put("uuid", "E7F742EB-67EE-4738-ABEC-F0A3B62B45EB");
+//                json.put("auth_token", "f02dfb77e9615ae630753b37637abb31_10");
+            }
+            catch (Exception e) {
+                Log.e("Websocket callback", e.getMessage());
+            }
+
+            webSocket.send(json.toString());
+            webSocket.setStringCallback(new WebSocket.StringCallback()
+            {
+                @Override
+                public void onStringAvailable(String s)
+                {
+                    JsonParser jsonParser = new JsonParser();
+                    JsonElement jsonElement = jsonParser.parse(s);
+                    JsonObject jsonObject = jsonElement.getAsJsonObject();
+                    if(!jsonObject.has("chatId"))
+                        return;
+                    Intent i = new Intent(mActivity, ChatActivity.class);
+                    i.putExtra("chatId", Integer.parseInt(jsonObject.get("chatId").getAsString()));
+                    i.putExtra("selfBuyer", true);
+                    startActivity(i);
+                }
+            });
         }
-
-
     }
     
     // TODO: Rename method, update argument and hook method into UI event

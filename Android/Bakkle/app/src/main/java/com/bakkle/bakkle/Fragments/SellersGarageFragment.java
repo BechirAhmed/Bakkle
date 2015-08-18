@@ -15,6 +15,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 
@@ -73,7 +74,7 @@ public class SellersGarageFragment extends ListFragment
 
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
-        json = serverCalls.populateGarage(preferences.getString("auth_token", "0"), preferences.getString("uuid", "0"));
+        json = serverCalls.populateGarage(preferences.getString("auth_token", ""), preferences.getString("uuid", ""));
 
         items = getItems(json);
         setListAdapter(new GarageAdapter(getActivity(), items));
@@ -143,7 +144,7 @@ public class SellersGarageFragment extends ListFragment
         super.onListItemClick(l, v, position, id);
 
         FeedItem item = (FeedItem) getListAdapter().getItem(position);
-
+        Log.v("Intent start", "value of itemId is " + item.getPk());
         Intent intent = new Intent(getActivity(), ChatListActivity.class);
         intent.putExtra("itemId", item.getPk());
         startActivity(intent);
@@ -182,7 +183,6 @@ public class SellersGarageFragment extends ListFragment
         JsonArray imageUrlArray, tagArray;
         FeedItem feedItem;
         String pk, sellerFacebookId;
-        boolean firstRun = true;
 
 
         for (JsonElement element : jsonArray) {
@@ -197,15 +197,8 @@ public class SellersGarageFragment extends ListFragment
             feedItem.setNumMeh(item.get("number_of_meh").getAsString());
             feedItem.setNumWant(item.get("number_of_want").getAsString());
             feedItem.setNumHold(item.get("number_of_holding").getAsString());
-
-            if (firstRun) {
-                feedItem.setSellerPk(temp.get("pk").getAsString());
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putString("sellerPk", feedItem.getSellerPk());
-                editor.apply();
-                assert (feedItem.getSellerPk().equals(preferences.getString("auth_token", "").substring(33, 35)));
-                firstRun = false;
-            }
+            pk = item.get("pk").getAsString();
+            feedItem.setPk(pk);
 
 
             imageUrlArray = item.get("image_urls").getAsJsonArray();

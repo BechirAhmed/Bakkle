@@ -36,12 +36,17 @@ public class ChatListActivity extends ListActivity
     ChatCalls chatCalls;
     ChatListAdapter chatListAdapter;
     String response;
+    protected String authToken;
+    String uuid;
+    String itemId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_list);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        uuid = preferences.getString("uuid", "");
+        authToken = preferences.getString("auth_token", "");
 
         buyerInfos = new ArrayList<>();
         chatListAdapter = new ChatListAdapter(this, buyerInfos);
@@ -51,14 +56,15 @@ public class ChatListActivity extends ListActivity
 
 //        Intent i = new Intent(this, ChatCalls.class);
 //        i.putExtra("uuid", preferences.getString("uuid", ""));
-//        i.putExtra("auth_token", preferences.getString("auth_token", ""));
-//        i.putExtra("sellerPk", preferences.getString("sellerPk", ""));
+//        i.putExtra("auth_token", authToken);
+//        i.putExtra("sellerPk", authToken.substring(33, 35));
 //        startService(i);
 
-        chatCalls = new ChatCalls(preferences.getString("uuid", ""), preferences.getString("sellerPk", ""), preferences.getString("auth_token", ""), new WebSocketCallBack());
+        itemId = getIntent().getExtras().getString("itemId");
+
+        chatCalls = new ChatCalls(uuid, authToken.substring(33, 35), authToken, new WebSocketCallBack());
         chatCalls.connect();
 //        chatCalls.test();
-//        Log.v("the url is:", "ws://app.bakkle.com/ws/" + "?uuid=" + preferences.getString("uuid", "") + "&userId=" + preferences.getString("sellerPk", ""));
 //        chatCalls.getChatList();
 
     }
@@ -76,11 +82,14 @@ public class ChatListActivity extends ListActivity
                 return;
             }
             JSONObject json = new JSONObject();
+            Log.v("itemId is", itemId);
             try {
                 json.put("method", "chat_getChatIds");
-                json.put("itemId", "9261");
-                json.put("uuid", "E7F742EB-67EE-4738-ABEC-F0A3B62B45EB");
-                json.put("auth_token", "f02dfb77e9615ae630753b37637abb31_10");
+                json.put("itemId", itemId);
+                json.put("uuid", uuid);
+                json.put("auth_token", authToken);
+//                json.put("uuid", "E7F742EB-67EE-4738-ABEC-F0A3B62B45EB");
+//                json.put("auth_token", "f02dfb77e9615ae630753b37637abb31_10");
             }
             catch (Exception e) {
                 Log.v("Websocket callback", e.getMessage());
@@ -93,6 +102,7 @@ public class ChatListActivity extends ListActivity
                 public void onStringAvailable(String s)
                 {
                     response = s;
+                    Log.v("response is", response);
                     populateList(response);
                 }
             });
@@ -135,7 +145,9 @@ public class ChatListActivity extends ListActivity
 
         BuyerInfo buyerInfo = (BuyerInfo) getListAdapter().getItem(position);
         Intent intent = new Intent(this, ChatActivity.class);
+//        intent.putExtra("chatId", 58);
         intent.putExtra("chatId", buyerInfo.getChatPk()); //make sure to let the chat app window know if youre the buyer or seller somehow
+        intent.putExtra("selfBuyer", false);
         startActivity(intent);
     }
 

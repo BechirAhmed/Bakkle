@@ -35,11 +35,9 @@ public class HoldingAdapter extends ArrayAdapter<FeedItem>{
         TextView clock;
     }
 
-    //AsyncImageLoader asyncImageLoader;
     public HoldingAdapter(Context context, ArrayList<FeedItem> items){
         super(context, R.layout.buyers_trunk_list_item, items);
         this.context = context;
-        //asyncImageLoader = new AsyncImageLoader(context);
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
@@ -63,18 +61,10 @@ public class HoldingAdapter extends ArrayAdapter<FeedItem>{
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-
-//        Drawable cachedImage = asyncImageLoader.loadDrawable(item.getImageUrls().get(0), new AsyncImageLoader.ImageCallback() {
-//            public void imageLoaded(Drawable imageDrawable, String imageUrl) {
-//                viewHolder.icon.setImageDrawable(imageDrawable);
-//            }
-//        });
-//        viewHolder.icon.setImageDrawable(cachedImage);
-
         Glide.with(context)
                 .load(item.getImageUrls().get(0))
                 .centerCrop()
-                .placeholder(R.drawable.loading)
+                //.placeholder(R.drawable.loading)
                 .crossFade()
                 .into(viewHolder.icon);
 
