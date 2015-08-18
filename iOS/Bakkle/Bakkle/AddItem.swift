@@ -442,15 +442,17 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         let cell : ListItemCell = collectionView.dequeueReusableCellWithReuseIdentifier(listItemCellIdentifier, forIndexPath: indexPath) as! ListItemCell
         cell.imgView.contentMode = UIViewContentMode.ScaleAspectFill
         cell.imgView.clipsToBounds  = true
-        if indexPath.row >= self.itemImages?.count {
+        if indexPath.row >= self.itemImages?.count && self.videos.count > 0 {
             var imageURL = self.videos[indexPath.row - self.itemImages!.count]
-            if self.videoImages[imageURL] == nil {
-                self.videoImages[imageURL] = Bakkle.sharedInstance.previewImageForLocalVideo(imageURL)
+            if imageURL.absoluteString != nil && count(imageURL.absoluteString!) != 0 {
+                if self.videoImages[imageURL] == nil {
+                    self.videoImages[imageURL] = Bakkle.sharedInstance.previewImageForLocalVideo(imageURL)
+                }
+                
+                cell.imgView!.image = self.videoImages[imageURL]
+                var tapGestureRecognizer = UITapGestureRecognizer(target:self, action:Selector("videoTapped:"))
+                cell.imgView!.addGestureRecognizer(tapGestureRecognizer)
             }
-            
-            cell.imgView!.image = self.videoImages[imageURL]
-            var tapGestureRecognizer = UITapGestureRecognizer(target:self, action:Selector("videoTapped:"))
-            cell.imgView!.addGestureRecognizer(tapGestureRecognizer)
         } else {
             if let images = self.itemImages {
                 cell.imgView.image = images[indexPath.row]
