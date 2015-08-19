@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,18 +17,24 @@ import android.widget.ListView;
 import com.andtinder.view.SimpleCardStackAdapter;
 import com.bakkle.bakkle.Activities.ChatActivity;
 import com.bakkle.bakkle.Adapters.TrunkAdapter;
+import com.bakkle.bakkle.Helpers.ChatCalls;
 import com.bakkle.bakkle.Helpers.FeedItem;
 import com.bakkle.bakkle.Helpers.ServerCalls;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.koushikdutta.async.http.AsyncHttpClient;
+import com.koushikdutta.async.http.WebSocket;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 
-public class BuyersTrunkFragment extends ListFragment{
-
+public class BuyersTrunkFragment extends ListFragment
+{
 
 
     SharedPreferences preferences;
@@ -37,14 +44,16 @@ public class BuyersTrunkFragment extends ListFragment{
     ServerCalls serverCalls;
     Activity mActivity;
     ArrayList<FeedItem> items;
-
+    String uuid;
+    String authToken;
     JsonObject json;
 
     private ActionBar mActionBar;
 
 
     // TODO: Rename and change types of parameters
-    public static BuyersTrunkFragment newInstance(String param1, String param2) {
+    public static BuyersTrunkFragment newInstance(String param1, String param2)
+    {
         BuyersTrunkFragment fragment = new BuyersTrunkFragment();
 //        Bundle args = new Bundle();
 //        args.putString(ARG_PARAM1, param1);
@@ -57,11 +66,13 @@ public class BuyersTrunkFragment extends ListFragment{
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public BuyersTrunkFragment() {
+    public BuyersTrunkFragment()
+    {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
 
         setHasOptionsMenu(true);
@@ -69,8 +80,9 @@ public class BuyersTrunkFragment extends ListFragment{
         serverCalls = new ServerCalls(mActivity);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-
-        json = serverCalls.populateTrunk(preferences.getString("auth_token", ""), preferences.getString("uuid", ""));
+        uuid = preferences.getString("uuid", "");
+        authToken = preferences.getString("auth_token", "");
+        json = serverCalls.populateTrunk(authToken, uuid);
 
         items = getItems(json);
 
@@ -85,7 +97,8 @@ public class BuyersTrunkFragment extends ListFragment{
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+    {
 
         //super.onCreateOptionsMenu(menu, inflater);
         menu.clear();
@@ -103,38 +116,94 @@ public class BuyersTrunkFragment extends ListFragment{
 
 
     @Override
-    public void onAttach(Activity activity) {
+    public void onAttach(Activity activity)
+    {
         super.onAttach(activity);
         mActivity = activity;
         try {
             mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
+        }
+        catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
         }
     }
 
     @Override
-    public void onDetach() {
+    public void onDetach()
+    {
         super.onDetach();
         mListener = null;
     }
 
     @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
+    public void onListItemClick(ListView l, View v, int position, long id)
+    {
         super.onListItemClick(l, v, position, id);
 
         FeedItem item = (FeedItem) getListAdapter().getItem(position);
-        Intent intent = new Intent(getActivity(), ChatActivity.class);
-        intent.putExtra("itemId", item.getPk()); //make sure to let the chat app window know if youre the buyer or seller somehow
-        intent.putExtra("selfBuyer", true);
-        startActivity(intent);
+        new StartChatIntermediary(item.getPk());
 
 
         if (mListener != null) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
             //mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
+        }
+    }
+
+    private class StartChatIntermediary
+    {
+        public StartChatIntermediary(String pk)
+        {
+            ChatCalls chatCalls = new ChatCalls(uuid, authToken.substring(33, 35), authToken, new WebSocketCallBack(pk));
+            chatCalls.connect();
+        }
+    }
+
+    private class WebSocketCallBack implements AsyncHttpClient.WebSocketConnectCallback
+    {
+        String pk;
+        public WebSocketCallBack(String pk) {this.pk = pk;}
+
+        @Override
+        public void onCompleted(Exception ex, WebSocket webSocket)
+        {
+            if(ex != null)
+            {
+                Log.e("callback exception", ex.getMessage());
+                return;
+            }
+            JSONObject json = new JSONObject();
+            try {
+                json.put("method", "chat_startChat");
+                json.put("itemId", pk);
+                json.put("uuid", uuid);
+                json.put("auth_token", authToken);
+//                json.put("uuid", "E7F742EB-67EE-4738-ABEC-F0A3B62B45EB");
+//                json.put("auth_token", "f02dfb77e9615ae630753b37637abb31_10");
+            }
+            catch (Exception e) {
+                Log.e("Websocket callback", e.getMessage());
+            }
+
+            webSocket.send(json.toString());
+            webSocket.setStringCallback(new WebSocket.StringCallback()
+            {
+                @Override
+                public void onStringAvailable(String s)
+                {
+                    JsonParser jsonParser = new JsonParser();
+                    JsonElement jsonElement = jsonParser.parse(s);
+                    JsonObject jsonObject = jsonElement.getAsJsonObject();
+                    if(!jsonObject.has("chatId"))
+                        return;
+                    Intent i = new Intent(mActivity, ChatActivity.class);
+                    i.putExtra("chatId", Integer.parseInt(jsonObject.get("chatId").getAsString()));
+                    i.putExtra("selfBuyer", true);
+                    startActivity(i);
+                }
+            });
         }
     }
 
@@ -148,14 +217,16 @@ public class BuyersTrunkFragment extends ListFragment{
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
+    public interface OnFragmentInteractionListener
+    {
         // TODO: Update argument type and name
         public void onFragmentInteraction(String id);
     }
 
     public ArrayList<FeedItem> getItems(JsonObject json)
     {
-        JsonArray jsonArray = json.get("buyers_trunk").getAsJsonArray();;
+        JsonArray jsonArray = json.get("buyers_trunk").getAsJsonArray();
+        ;
         SimpleCardStackAdapter adapter = new SimpleCardStackAdapter(getActivity());
         JsonObject temp, item;
         ArrayList<FeedItem> feedItems = new ArrayList<FeedItem>();
@@ -166,8 +237,7 @@ public class BuyersTrunkFragment extends ListFragment{
         String pk, sellerFacebookId;
         String tagsString;
 
-        for(JsonElement element : jsonArray)
-        {
+        for (JsonElement element : jsonArray) {
             item = element.getAsJsonObject().getAsJsonObject("item");
             feedItem = new FeedItem(this.getActivity().getApplicationContext());
             temp = element.getAsJsonObject();
@@ -185,8 +255,7 @@ public class BuyersTrunkFragment extends ListFragment{
 
             imageUrlArray = item.get("image_urls").getAsJsonArray();
             imageUrls = new ArrayList<String>();
-            for(JsonElement urlElement : imageUrlArray)
-            {
+            for (JsonElement urlElement : imageUrlArray) {
                 imageUrls.add(urlElement.getAsString());
             }
             feedItem.setImageUrls(imageUrls);
@@ -215,7 +284,6 @@ public class BuyersTrunkFragment extends ListFragment{
         return feedItems;
 
     }
-
 
 
 }

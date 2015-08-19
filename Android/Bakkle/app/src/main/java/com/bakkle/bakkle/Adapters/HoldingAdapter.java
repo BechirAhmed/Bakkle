@@ -64,6 +64,7 @@ public class HoldingAdapter extends ArrayAdapter<FeedItem>{
         Glide.with(context)
                 .load(item.getImageUrls().get(0))
                 .centerCrop()
+                .thumbnail(0.1f)
                 //.placeholder(R.drawable.loading)
                 .crossFade()
                 .into(viewHolder.icon);

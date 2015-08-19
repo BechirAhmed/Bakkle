@@ -69,6 +69,7 @@ public class ProfileFragment extends Fragment
 
         Glide.with(getActivity())
                 .load(url)
+                .thumbnail(0.1f)
                 .into((ImageView) view.findViewById(R.id.profilePicture));
 
         edit.setOnClickListener(new View.OnClickListener()

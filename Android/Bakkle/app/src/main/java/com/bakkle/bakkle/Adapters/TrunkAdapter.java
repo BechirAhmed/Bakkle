@@ -68,6 +68,7 @@ public class TrunkAdapter extends ArrayAdapter<FeedItem>{
         Glide.with(context)
                 .load(item.getImageUrls().get(0))
                 .centerCrop()
+                .thumbnail(0.1f)
                 .crossFade()
                 .into(viewHolder.icon);
 
