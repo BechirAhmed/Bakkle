@@ -96,6 +96,7 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
             {
                 Glide.with(HomeActivity.this)
                         .load(uri.toString())
+                        .thumbnail(0.1f)
                         .into(imageView);
 //                Ion.with(imageView)
 //                        .placeholder(R.drawable.loading)
@@ -208,6 +209,7 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
         //mDrawerToggle.syncState();
 
         if (preferences.getBoolean("newuser", true)) {
+            Log.v("new user", "true");
             GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(),
                     new GraphRequest.GraphJSONObjectCallback()
                     {
@@ -243,7 +245,7 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
 
         Log.d("testing", preferences.getString("uuid", "0"));
         Log.d("testing", preferences.getString("userID", "0"));
-        if (preferences.getBoolean("newuser", true)) {
+        if (preferences.getBoolean("newuser", true) || preferences.getString("auth_token", "0").equals("0") || preferences.getString("userID", "0").equals("0")) {
             String auth_token = serverCalls.loginFacebook(
                     preferences.getString("uuid", "0"),
                     preferences.getString("userID", "0"),
@@ -271,17 +273,15 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
     public void addUserInfoToPreferences(JSONObject object)
     {
         try {
-
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            SharedPreferences.Editor editor = preferences.edit();
+            Log.v("the fb object is", object.toString());
             editor.putString("email", object.getString("email"));
             editor.putString("gender", object.getString("gender"));
             editor.putString("username", "");
             editor.putString("name", Profile.getCurrentProfile().getName());
-            editor.putString("userID", Profile.getCurrentProfile().getId());
+            editor.putString("userID", object.getString("id"));
             editor.putString("locale", object.getString("locale"));
-            editor.putString("first_name", Profile.getCurrentProfile().getFirstName());
-            editor.putString("last_name", Profile.getCurrentProfile().getLastName());
+            editor.putString("first_name", object.getString("first_name"));
+            editor.putString("last_name", object.getString("last_name"));
             editor.apply();
         }
         catch (Exception e) {

@@ -86,9 +86,9 @@ public class FeedFragment extends Fragment
     {
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
 
-        preferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        preferences = PreferenceManager.getDefaultSharedPreferences(mActivity);
 
-        serverCalls = new ServerCalls(getActivity().getApplicationContext());
+        serverCalls = new ServerCalls(mActivity);
 
         try {
             new bgTask().execute();
@@ -455,13 +455,12 @@ public class FeedFragment extends Fragment
         @Override
         protected JsonObject doInBackground(Void... voids)
         {
-
             return serverCalls.getFeedItems(
                     preferences.getString("auth_token", "0"),
                     preferences.getInt("price_filter", 100) + "",
                     preferences.getInt("distance_filter", 100) + "",
-                    "",
-                    preferences.getString("locationString", "32,32"),
+                    preferences.getString("search_text", ""),
+                    preferences.getString("locationString", "0, 0"),
                     "",
                     preferences.getString("uuid", "0")
             );
@@ -482,6 +481,7 @@ public class FeedFragment extends Fragment
 //                Log.v("emulator testing", jsonResult.toString());
 //                Log.v("emulator uuid", preferences.getString("uuid", ""));
 //                Log.v("emulator auth", preferences.getString("auth_token", ""));
+                Log.v("result is", jsonResult.toString());
                 populateFeed(jsonResult.getAsJsonArray("feed"));
             }
             else

@@ -73,6 +73,7 @@ public class SplashFragment extends Fragment
         uuid = preferences.getString("uuid", "");
         Glide.with(mActivity)
                 .load(getArguments().getString("url"))
+                .thumbnail(0.1f)
                 .crossFade()
                 .into((ImageView) view.findViewById(R.id.productImage));
 
@@ -105,15 +106,11 @@ public class SplashFragment extends Fragment
 
     private class StartChatIntermediary
     {
-        ChatCalls chatCalls;
-
         public StartChatIntermediary(String pk)
         {
-            chatCalls = new ChatCalls(uuid, authToken.substring(33, 35), authToken, new WebSocketCallBack(pk));
+            ChatCalls chatCalls = new ChatCalls(uuid, authToken.substring(33, 35), authToken, new WebSocketCallBack(pk));
             chatCalls.connect();
         }
-
-
     }
 
     private class WebSocketCallBack implements AsyncHttpClient.WebSocketConnectCallback

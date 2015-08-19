@@ -13,8 +13,10 @@ public class ChatMessage {
     public Date timestamp;
 
     float price;
-    boolean selfOffer;
+    boolean sentByBuyer;
+    boolean accepted;
     boolean rejected;
+
 
     boolean offer;
 
@@ -29,10 +31,11 @@ public class ChatMessage {
 //        this.timestamp = timestamp;
     }
 
-    public ChatMessage(boolean selfOffer, boolean rejected, float price)
+    public ChatMessage(boolean sentByBuyer, boolean accepted, boolean rejected, float price)
     {
-        this.selfOffer = selfOffer;
+        this.sentByBuyer = sentByBuyer;
         this.price = price;
+        this.accepted = accepted;
         this.rejected = rejected;
         offer = true;
     }
@@ -42,8 +45,22 @@ public class ChatMessage {
         return offer;
     }
 
-    public boolean isSelfOffer()
+    public boolean isSentByBuyer()
     {
-        return selfOffer;
+        return sentByBuyer;
+    }
+
+    public boolean isTextOnly(){
+        return accepted || rejected;
+    }
+
+    public boolean isAccepted()
+    {
+        return accepted;
+    }
+
+    public boolean isRejected()
+    {
+        return rejected;
     }
 }

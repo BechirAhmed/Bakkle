@@ -108,7 +108,7 @@ public class ServerCalls
         return response;
     }
 
-    public String loginFacebook(String device_uuid, String userid, String location)
+    public String loginFacebook(final String device_uuid, final String userid, String location)
     {
 
         /*Ion.with(mContext)
@@ -146,11 +146,15 @@ public class ServerCalls
                     .get()
                     .get("auth_token")
                     .getAsString();
+
+            Log.v("auth token-server call ", auth_token);
         }
         catch (Exception e) {
             Log.d("testing error", "" + e.getMessage());
         }
         //Log.v("auth_token is ", auth_token);
+
+
         return auth_token;
     }
 
