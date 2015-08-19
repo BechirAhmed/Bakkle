@@ -227,7 +227,25 @@ class SellersGarageView: UIViewController, UITableViewDelegate, UITableViewDataS
         cell.numNope.text = (item.valueForKey("number_of_meh") as! NSNumber).stringValue
         cell.nopeView.layer.cornerRadius = 15.0
         cell.numViews.text = (item.valueForKey("number_of_views") as! NSNumber).stringValue
+        
+        cell.selectorView.userInteractionEnabled = true
+        var tapGestureRecognizer = UITapGestureRecognizer(target:self, action:Selector("imageTapped:"))
+        cell.selectorView.addGestureRecognizer(tapGestureRecognizer)
+        cell.selectorView.tag = indexPath.row
         return cell
+    }
+    
+    func imageTapped(sender: UITapGestureRecognizer){
+        let sb: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc: ItemDetails = sb.instantiateViewControllerWithIdentifier("ItemDetails") as! ItemDetails
+        vc.modalTransitionStyle = UIModalTransitionStyle.FlipHorizontal
+        vc.item = Bakkle.sharedInstance.garageItems[sender.view!.tag] as! NSDictionary
+        vc.available = false
+        let status = vc.item.valueForKey("status") as! String
+        if status == "Sold" {
+            vc.available = false
+        }
+        self.presentViewController(vc, animated: true, completion: nil)
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {

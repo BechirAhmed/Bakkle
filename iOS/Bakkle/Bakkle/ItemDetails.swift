@@ -223,7 +223,6 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell :ItemDetailsCell = collectionView.dequeueReusableCellWithReuseIdentifier(itemDetailsCellIdentifier, forIndexPath: indexPath) as! ItemDetailsCell
-        cell.backgroundColor = UIColor.redColor()
         cell.imgView.contentMode = UIViewContentMode.ScaleAspectFill
         cell.imgView.clipsToBounds  = true
         let imageURL = self.itemImages![indexPath.row]

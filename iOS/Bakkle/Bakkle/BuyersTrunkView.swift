@@ -120,7 +120,7 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
             case "Active":
                 self.activeItem.append(index)
                 break
-            case "Sold":
+            case "Expired":
                 if Bakkle.sharedInstance.trunkItems[index].valueForKey("sale") != nil {
                     self.boughtItem.append(index)
                 }else {
@@ -185,7 +185,7 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
         }
         if indexPath.row == activeItem.count + boughtItem.count + 2 {
             let cell : StatusCell = tableView.dequeueReusableCellWithIdentifier(self.statusCellIdentifier, forIndexPath: indexPath) as! StatusCell
-            cell.statusLabel.text = "Sold (\(soldItem.count))"
+            cell.statusLabel.text = "Expired (\(soldItem.count))"
             cell.statusLabel.textColor = UIColor(red: 0.3, green: 0.3, blue: 0.3, alpha: 1.0)
             cell.selectionStyle = UITableViewCellSelectionStyle.None
             return cell
@@ -210,10 +210,26 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
         let imgURL = NSURL(string: firstURL)
             
         cell.itemImage!.hnk_setImageFromURL(imgURL!)
+        cell.itemImage!.userInteractionEnabled = true
+        var tapGestureRecognizer = UITapGestureRecognizer(target:self, action:Selector("imageTapped:"))
+        cell.itemImage!.addGestureRecognizer(tapGestureRecognizer)
+        cell.itemImage!.tag = indexPath.row
         cell.titleLabel!.text = title.uppercaseString
         cell.priceLabel!.text = "$" + price
       
         return cell
+    }
+    
+    func imageTapped(sender: UITapGestureRecognizer){
+        let sb: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc: ItemDetails = sb.instantiateViewControllerWithIdentifier("ItemDetails") as! ItemDetails
+        vc.modalTransitionStyle = UIModalTransitionStyle.FlipHorizontal
+        vc.item = Bakkle.sharedInstance.trunkItems[sender.view!.tag].valueForKey("item") as! NSDictionary
+        let status = vc.item.valueForKey("status") as! String
+        if status == "Sold" {
+            vc.available = false
+        }
+        self.presentViewController(vc, animated: true, completion: nil)
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
