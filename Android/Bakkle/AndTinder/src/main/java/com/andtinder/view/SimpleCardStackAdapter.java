@@ -63,6 +63,7 @@ public final class SimpleCardStackAdapter extends CardStackAdapter
                 .load(url)
                 .centerCrop()
                 .placeholder(R.drawable.loading)
+                .thumbnail(0.1f)
                 .crossFade()
                 .into(imageView);
 
@@ -78,6 +79,7 @@ public final class SimpleCardStackAdapter extends CardStackAdapter
                 .load(url)
                 .centerCrop()
                 .crossFade()
+                .thumbnail(0.1f)
                 .into(imageView);
 
 //        Ion.with(imageView)

@@ -10,6 +10,7 @@ import android.provider.Settings;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -98,7 +99,7 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener
             editor.putString("uuid", Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID));
             editor.apply();
 
-
+            Log.v("uuid is", preferences.getString("uuid", "0"));
             LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>()
             {
 
@@ -213,7 +214,6 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener
                     editor.putBoolean("LoggedIn", true);
                     editor.putBoolean("newuser", true);
                     editor.apply();
-
                 }
                 break;
             case R.id.action_bar_home:
@@ -226,7 +226,7 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener
     @Override
     public void onBackPressed()
     {
-        startActivity(new Intent(this, SignupActivity.class));
+        //startActivity(new Intent(this, SignupActivity.class));
         finish();
     }
 

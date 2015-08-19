@@ -74,6 +74,7 @@ public class ItemDetailActivity extends AppCompatActivity {
 
         Glide.with(this)
                 .load(sellerImageUrl)
+                .thumbnail(0.1f)
                 .placeholder(R.drawable.loading)
                 .into((ImageView) findViewById(R.id.sellerImage));
 
@@ -113,6 +114,7 @@ public class ItemDetailActivity extends AppCompatActivity {
         Glide.with(this)
                 .load(url)
                 .placeholder(R.drawable.loading)
+                .thumbnail(0.1f)
                 .into(imageView);
 //        Ion.with(imageView)
 //                .placeholder(R.drawable.loading)

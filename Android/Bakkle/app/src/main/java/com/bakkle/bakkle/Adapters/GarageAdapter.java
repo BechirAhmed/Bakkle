@@ -84,7 +84,7 @@ public class GarageAdapter extends ArraySwipeAdapter<FeedItem>
         Glide.with(c)
                 .load(item.getImageUrls().get(0))
                 .centerCrop()
-                //.placeholder(R.drawable.loading)
+                .thumbnail(0.1f)
                 .crossFade()
                 .into(viewHolder.icon);
 
