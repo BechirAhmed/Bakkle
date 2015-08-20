@@ -613,8 +613,9 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
                     
                 }
             }
-            if self.selectedDevice!.device.flashActive {
+            if self.selectedDevice!.device.flashActive && self.selectedDevice!.device.lockForConfiguration(&error) {
                 self.selectedDevice!.device.flashMode = AVCaptureFlashMode.Off
+                self.selectedDevice!.device.unlockForConfiguration()
             }
             videoOutput.startRecordingToOutputFileURL(NSURL(fileURLWithPath: videoOutputPath), recordingDelegate: self)
             
@@ -726,22 +727,28 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
                     break
                     
                 case AVAssetExportSessionStatus.Completed:
-                    NSLog("Conversion Completed Successfully")
-                    var movieData = NSMutableData(contentsOfFile: exportSession.outputURL.path!)
-                    NSLog("MP4 Size: \(movieData?.length) bits")
-                    if movieData == nil {
-                        NSLog("\(exportSession.error)")
-                    }
-                    self.videos[self.videoCount - 1] = exportSession.outputURL
-                    
-                    if self.addItem != nil {
-                        if self.addItem!.videos.count >= self.videoCount {
-                            self.addItem!.videos[self.videoCount - 1] = exportSession.outputURL
-                        } else {
-                            self.addItem!.videos.append(exportSession.outputURL)
+                    if NSFileManager.defaultManager().fileExistsAtPath(outputFileURL.path!) {
+                        NSLog("Conversion Completed Successfully")
+                        var movieData = NSMutableData(contentsOfFile: exportSession.outputURL.path!)
+                        NSLog("MP4 Size: \(movieData?.length) bits")
+                        if movieData == nil {
+                            NSLog("\(exportSession.error)")
                         }
+                        self.videos[self.videoCount - 1] = exportSession.outputURL
+                        
+                        if self.addItem != nil {
+                            if self.addItem!.videos.count >= self.videoCount {
+                                self.addItem!.videos[self.videoCount - 1] = exportSession.outputURL
+                            }
+    //                        else {
+    //                            self.addItem!.videos.append(exportSession.outputURL)
+    //                        }
+                        }
+                    } else {
+                        NSLog("Video deleted while processing.")
+                        var err: NSError?
+                        NSFileManager.defaultManager().removeItemAtPath(exportSession.outputURL.path!, error: &err)
                     }
-                    
                     break
                     
                 default:
@@ -751,7 +758,6 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             
             
             // Get video Image
-//            self.imageViews[self.imageViews.count - self.videoCount].image = Bakkle.sharedInstance.previewImageForLocalVideo(outputFileURL)
             self.videoImages[self.videoCount - 1] = Bakkle.sharedInstance.previewImageForLocalVideo(outputFileURL)!
             self.isVideo[self.imageViews.count - self.videoCount] = true
             
@@ -1226,7 +1232,11 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
                 }
                 
                 if i < videos.count {
-                    destinationVC.videos.append(self.videos[i++])
+                    if self.videos[i].absoluteString != nil && count(self.videos[i].absoluteString!) > 0 {
+                        destinationVC.videos.append(self.videos[i])
+                    }
+                    
+                    i++
                 }
             }
         }
