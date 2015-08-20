@@ -55,8 +55,8 @@ public class ChatListAdapter extends ArrayAdapter<BuyerInfo> {
         viewHolder.nameText.setText(item.getName());
         Glide.with(c)
                 .load(item.getFacebookURL())
-                .thumbnail(0.1f)
                 .crossFade()
+                .fitCenter()
                 .into(viewHolder.picture);
 
         return convertView;

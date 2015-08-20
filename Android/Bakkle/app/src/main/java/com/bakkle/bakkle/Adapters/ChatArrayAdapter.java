@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bakkle.bakkle.Helpers.ChatMessage;
 import com.bakkle.bakkle.R;
@@ -41,7 +42,7 @@ public class ChatArrayAdapter extends ArrayAdapter<ChatMessage>
     @Override
     public View getView(int position, View convertView, ViewGroup parent)
     {
-        final ChatMessage item = (ChatMessage) getItem(position);
+        final ChatMessage item = getItem(position);
         final ViewHolder viewHolder;
         if (convertView == null) {
             viewHolder = new ViewHolder();
@@ -57,7 +58,7 @@ public class ChatArrayAdapter extends ArrayAdapter<ChatMessage>
 
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.offer_text, parent, false);
             }
-            else if (item.isSentByBuyer()) {
+            else if (item.isSentByBuyer() == isSelfBuyer) {
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.offer_self_propose, parent, false);
                 viewHolder.reject = (Button) convertView.findViewById(R.id.reject_offer);
             }
@@ -75,42 +76,52 @@ public class ChatArrayAdapter extends ArrayAdapter<ChatMessage>
         }
 
         viewHolder.message.setText(getMessageString(item));
-        viewHolder.reject.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
 
-            }
-        });
-        viewHolder.accept.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
+        if (viewHolder.reject != null) {
+            viewHolder.reject.setOnClickListener(new View.OnClickListener()
             {
-
-            }
-        });
+                @Override
+                public void onClick(View view)
+                {
+                    Toast.makeText(context, "Reject", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+        if (viewHolder.accept != null) {
+            viewHolder.accept.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    Toast.makeText(context, "Accept", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
 
         return convertView;
     }
 
     private String getMessageString(ChatMessage item)
     {
-//        if (!item.isOffer()) {
-//            return item.message;
-//        }
-//        else if (item.isTextOnly()) {
-//
-//        }
-//        else if (item.isSentByBuyer()) {
-//
-//        }
-//        else {
-//
-//        }
-
-        return item.message;
+        if (!item.isOffer()) {
+            return item.message;
+        }
+        else if (item.isTextOnly()) {
+            if (item.isSentByBuyer() == isSelfBuyer && item.isRejected())
+                return "Your offer of $" + item.getPrice() + " was rejected";
+            else if (item.isSentByBuyer() == isSelfBuyer && item.isAccepted())
+                return "Your offer of $" + item.getPrice() + " was accepted";
+            else if (item.isRejected())
+                return "You rejected an offer of $" + item.getPrice();
+            else
+                return "You accepted an offer of $" + item.getPrice();
+        }
+        else if (item.isSentByBuyer() == isSelfBuyer) {
+            return "You proposed an offer of $" + item.getPrice();
+        }
+        else {
+            return "An offer of $" + item.getPrice() + " has been made";
+        }
     }
 
     @Override

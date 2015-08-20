@@ -148,6 +148,7 @@ public class ChatListActivity extends ListActivity
 //        intent.putExtra("chatId", 58);
         intent.putExtra("chatId", buyerInfo.getChatPk()); //make sure to let the chat app window know if youre the buyer or seller somehow
         intent.putExtra("selfBuyer", false);
+        intent.putExtra("url", buyerInfo.getFacebookURL());
         startActivity(intent);
     }
 

@@ -1,11 +1,15 @@
 package com.bakkle.bakkle.Activities;
 
-import android.content.Intent;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.text.InputType;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -14,6 +18,7 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.bakkle.bakkle.Adapters.ChatArrayAdapter;
@@ -21,6 +26,7 @@ import com.bakkle.bakkle.Helpers.ChatCalls;
 import com.bakkle.bakkle.Helpers.ChatMessage;
 import com.bakkle.bakkle.Helpers.ServerCalls;
 import com.bakkle.bakkle.R;
+import com.bumptech.glide.Glide;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -51,6 +57,7 @@ public class ChatActivity extends AppCompatActivity
     protected String authToken;
     protected String uuid;
     public boolean selfBuyer;
+    String fbUrl;
 
 
 
@@ -59,17 +66,35 @@ public class ChatActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        Intent i = getIntent();
-        chatId = i.getExtras().getInt("chatId");
-        selfBuyer = i.getExtras().getBoolean("selfBuyer");
+        Bundle b = getIntent().getExtras();
+        chatId = b.getInt("chatId");
+        selfBuyer = b.getBoolean("selfBuyer");
+        fbUrl = b.getString("url");
         send = (Button) findViewById(R.id.send);
         listView = (ListView) findViewById(R.id.list);
         chatText = (EditText) findViewById(R.id.compose);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha));
+        toolbar.setNavigationOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                onBackPressed();
+            }
+        });
+
+        Glide.with(this)
+                .load(fbUrl)
+                .crossFade()
+                .fitCenter()
+                .into((ImageView) findViewById(R.id.profilePicture));
+
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         authToken = preferences.getString("auth_token", "");
         uuid = preferences.getString("uuid", "");
 
-        chatArrayAdapter = new ChatArrayAdapter(this, R.layout.right_message);
+        chatArrayAdapter = new ChatArrayAdapter(this, R.layout.right_message, selfBuyer);
         listView.setAdapter(chatArrayAdapter);
         chatCalls = new ChatCalls(uuid, authToken.substring(33, 35), authToken, new GetMessagesWebSocketConnectCallback());
 
@@ -126,9 +151,44 @@ public class ChatActivity extends AppCompatActivity
             chatCalls.setCallback(new SendMessageWebSocketCallback());
             chatArrayAdapter.add(new ChatMessage(left, messageText));
             chatText.setText("");
-            left = !left;
         }
         return true;
+    }
+
+    public void makeOffer(View view)
+    {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("Offer Proposal");
+        alert.setMessage("Enter a dollar amount to propose an offer");
+
+        // Set an EditText view to get user input
+        final EditText input = (EditText) getLayoutInflater().inflate(R.layout.offer_edittext, null);
+        input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+
+        alert.setView(input);
+        alert.setPositiveButton("Propose",
+                new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int whichButton)
+                    {
+                        String price = input.getText().toString();
+                        chatCalls.setCallback(new SendOfferWebSocketCallback(price));
+                        chatArrayAdapter.add(new ChatMessage(selfBuyer, false, false, price));
+                    }
+                });
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
+        {
+            public void onClick(DialogInterface dialog, int whichButton)
+            {
+                // do nothing
+            }
+        });
+        alert.show();
+    }
+
+    public int dpToPx(int dp) {
+        DisplayMetrics displayMetrics = this.getResources().getDisplayMetrics();
+        return Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
     }
 
     public void populateChat()
@@ -163,7 +223,19 @@ public class ChatActivity extends AppCompatActivity
         });
     }
 
-    public void populateOffer(JsonObject offer, boolean sentByBuyer)
+    public void populateOffer(final JsonObject offer, final boolean sentByBuyer)
+    {
+        final String status = offer.get("status").getAsString();
+        runOnUiThread(new Runnable()
+        {
+            public void run()
+            {
+                chatArrayAdapter.add(new ChatMessage(sentByBuyer, status.equals("Accepted"), status.equals("Retracted"), offer.get("proposed_price").getAsString()));
+            }
+        });
+    }
+
+    public void viewItem(View view)
     {
 
     }
@@ -248,6 +320,58 @@ public class ChatActivity extends AppCompatActivity
             });
         }
     }
+
+
+
+    private class SendOfferWebSocketCallback implements AsyncHttpClient.WebSocketConnectCallback
+    {
+        String price;
+
+        public SendOfferWebSocketCallback(String price)
+        {
+            this.price = price;
+        }
+
+        @Override
+        public void onCompleted(Exception ex, WebSocket webSocket)
+        {
+            if (ex != null) {
+                Log.v("Callback exception", ex.getMessage());
+                return;
+            }
+            JSONObject json = new JSONObject();
+            try {
+                json.put("method", "chat_sendChatMessage");
+                json.put("chatId", chatId);
+                json.put("message", "");
+                json.put("offerPrice", price);
+                json.put("offerMethod", "Meet");
+                json.put("uuid", uuid);
+                json.put("auth_token", authToken);
+//                json.put("uuid", "E7F742EB-67EE-4738-ABEC-F0A3B62B45EB");
+//                json.put("auth_token", "f02dfb77e9615ae630753b37637abb31_10");
+            }
+            catch (Exception e) {
+                Log.v("Websocket callback", e.getMessage());
+            }
+
+            webSocket.send(json.toString());
+
+            webSocket.setStringCallback(new WebSocket.StringCallback()
+            {
+                @Override
+                public void onStringAvailable(String s)
+                {
+                    response = s;
+                    Log.v("send string", response);
+                }
+            });
+        }
+    }
+
+
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
