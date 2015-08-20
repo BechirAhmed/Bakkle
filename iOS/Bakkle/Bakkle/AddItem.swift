@@ -38,6 +38,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     var videoURL: NSURL?
     var videosChanged: Bool?
     var allowPlayback = true
+    var animationDuration: Double = 0.25
     
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var closeBtn: UIButton!
@@ -91,6 +92,8 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         titleField.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
         priceField.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
         
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "revealKeyboard:", name: UIKeyboardWillChangeFrameNotification, object: nil)
+        
         for url: NSURL in videos {
             self.videoImages[url] = Bakkle.sharedInstance.previewImageForLocalVideo(url)
         }
@@ -116,6 +119,35 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         descriptionField.becomeFirstResponder()
     }
     
+    func revealKeyboard(notification: NSNotification) {
+        // userInfo will not be nil
+        if let info = notification.userInfo {
+            // should not matter whether duration is nil or not, though this will update the variable
+            if let duration = info[UIKeyboardAnimationDurationUserInfoKey]?.doubleValue {
+                self.animationDuration = duration
+            }
+            
+            // Should never be nil, though 0 is assumed to be the height
+            var height: CGFloat = 0
+            if let keyboardHeight = info[UIKeyboardFrameEndUserInfoKey]?.CGRectValue() {
+                height = keyboardHeight.origin.y
+            }
+            
+            var animationCurve = 0
+            if let curve = info[UIKeyboardAnimationCurveUserInfoKey]?.integerValue {
+                animationCurve = curve
+            }
+            
+            UIView.beginAnimations(nil, context: nil)
+            UIView.setAnimationDuration(self.animationDuration)
+            UIView.setAnimationCurve(UIViewAnimationCurve(rawValue: animationCurve)!)
+            UIView.setAnimationBeginsFromCurrentState(true)
+            self.view.frame.origin.y = height - self.view.frame.size.height
+            self.view.layoutIfNeeded()
+            UIView.commitAnimations()
+        }
+    }
+    
     /**
      * UITextView does not have placeholder text, the next 2 functions implement a placeholder
      *
@@ -128,7 +160,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     func textViewDidBeginEditing(textView: UITextView) {
         self.allowPlayback = false
         
-        animateViewMoving(true, moveValue: AddItem.KEYBOARD_MOVE_VALUE)
+//        animateViewMoving(true, moveValue: AddItem.KEYBOARD_MOVE_VALUE)
         if textView.textColor == AddItem.DESCRIPTION_PLACEHOLDER_COLOR {
             textView.textColor = UIColor.blackColor()
             textView.text = ""
@@ -143,7 +175,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
             textView.text = AddItem.TAG_PLACEHOLDER_STR
         }
         
-        animateViewMoving(false, moveValue: AddItem.KEYBOARD_MOVE_VALUE)
+//        animateViewMoving(false, moveValue: AddItem.KEYBOARD_MOVE_VALUE)
         
         // There is an odd bug with button text on this call, see
         // disableConfirmButtonHandler() documentation for more information
@@ -178,12 +210,12 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         self.allowPlayback = false
         
         if textField == priceField {
-            animateViewMoving(true, moveValue: AddItem.NUMPAD_MOVE_VALUE)
+//            animateViewMoving(true, moveValue: AddItem.NUMPAD_MOVE_VALUE)
             if priceField.text == "take it!" {
                 priceField.text = "0"
             }
         }else{
-            animateViewMoving(true, moveValue: AddItem.KEYBOARD_MOVE_VALUE)
+//            animateViewMoving(true, moveValue: AddItem.KEYBOARD_MOVE_VALUE)
         }
     }
     
@@ -194,9 +226,9 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         self.allowPlayback = true
         
         if textField == priceField {
-            animateViewMoving(false, moveValue: AddItem.NUMPAD_MOVE_VALUE)
+//            animateViewMoving(false, moveValue: AddItem.NUMPAD_MOVE_VALUE)
         }else{
-            animateViewMoving(false, moveValue: AddItem.KEYBOARD_MOVE_VALUE)
+//            animateViewMoving(false, moveValue: AddItem.KEYBOARD_MOVE_VALUE)
         }
         formatPrice()
         disableConfirmButtonHandler()
@@ -204,13 +236,13 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     
     // helper function to help screen move up or down
     func animateViewMoving(up: Bool, moveValue: CGFloat) {
-        let movementDuration = 0.5
-        let movement = up ? -moveValue : moveValue
-        UIView.beginAnimations("animateView", context: nil)
-        UIView.setAnimationBeginsFromCurrentState(true)
-        UIView.setAnimationDuration(movementDuration)
-        self.view.frame = CGRectOffset(self.view.frame, 0, movement)
-        UIView.commitAnimations()
+//        let movementDuration = 0.5
+//        let movement = up ? -moveValue : moveValue
+//        UIView.beginAnimations("animateView", context: nil)
+//        UIView.setAnimationBeginsFromCurrentState(true)
+//        UIView.setAnimationDuration(movementDuration)
+//        self.view.frame = CGRectOffset(self.view.frame, 0, movement)
+//        UIView.commitAnimations()
     }
     
     override func viewWillAppear(animated: Bool) {
