@@ -8,7 +8,7 @@
 
 
     <include
-        layout="@layout/toolbar" />
+        layout="@layout/toolbar_chat" />
 
     <ListView
         android:id="@+id/list"

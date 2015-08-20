@@ -12,7 +12,8 @@ public class ChatMessage {
     public String name;
     public Date timestamp;
 
-    float price;
+
+    String price;
     boolean sentByBuyer;
     boolean accepted;
     boolean rejected;
@@ -31,7 +32,7 @@ public class ChatMessage {
 //        this.timestamp = timestamp;
     }
 
-    public ChatMessage(boolean sentByBuyer, boolean accepted, boolean rejected, float price)
+    public ChatMessage(boolean sentByBuyer, boolean accepted, boolean rejected, String price)
     {
         this.sentByBuyer = sentByBuyer;
         this.price = price;
@@ -62,5 +63,10 @@ public class ChatMessage {
     public boolean isRejected()
     {
         return rejected;
+    }
+
+    public String getPrice()
+    {
+        return price;
     }
 }

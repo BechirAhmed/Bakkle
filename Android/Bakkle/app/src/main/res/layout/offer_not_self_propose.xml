@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <include
-        android:id="@+id/message_text"
+        android:id="@+id/text"
         layout="@layout/offer_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -14,23 +15,24 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/message_text"
-        android:layout_centerHorizontal="true">
+        android:layout_below="@id/text"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp">
 
         <Button
             android:id="@+id/reject_offer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Reject Offer"
+            android:text="@string/reject_offer"
             android:textColor="@color/black"/>
 
         <Button
             android:id="@+id/accept_offer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_toRightOf="@id/reject_offer"
-            android:text="Accept Offer"
+            android:layout_marginStart="15dp"
+            android:layout_toEndOf="@id/reject_offer"
+            android:text="@string/accept_offer"
             android:textColor="@color/black"/>
     </RelativeLayout>
 
