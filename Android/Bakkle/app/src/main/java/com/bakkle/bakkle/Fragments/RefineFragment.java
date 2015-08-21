@@ -2,16 +2,20 @@ package com.bakkle.bakkle.Fragments;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.bakkle.bakkle.Activities.HomeActivity;
 import com.bakkle.bakkle.R;
 
 
@@ -29,7 +33,8 @@ public class RefineFragment extends Fragment
     private OnFragmentInteractionListener mListener;
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
-
+    Activity mActivity;
+    SearchView searchView;
 
     // TODO: Rename and change types and number of parameters
     public static RefineFragment newInstance()
@@ -37,7 +42,7 @@ public class RefineFragment extends Fragment
         RefineFragment fragment = new RefineFragment();
         return fragment;
     }
-    
+
     public RefineFragment()
     {
         // Required empty public constructor
@@ -47,7 +52,7 @@ public class RefineFragment extends Fragment
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        preferences = PreferenceManager.getDefaultSharedPreferences(mActivity);
         editor = preferences.edit();
 
     }
@@ -57,20 +62,60 @@ public class RefineFragment extends Fragment
                              Bundle savedInstanceState)
     {
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_refine, container, false);
+        View view = inflater.inflate(R.layout.fragment_refine, container, false);
         SeekBar distanceBar = (SeekBar) view.findViewById(R.id.distanceBar);
         SeekBar priceBar = (SeekBar) view.findViewById(R.id.priceBar);
         final TextView distanceValue = (TextView) view.findViewById(R.id.distanceValue);
         final TextView priceValue = (TextView) view.findViewById(R.id.priceValue);
+        searchView = (SearchView) view.findViewById(R.id.searchField);
+        ImageButton close = (ImageButton) view.findViewById(R.id.imageButton);
         distanceBar.setProgress(preferences.getInt("distance_filter", 100));
         priceBar.setProgress(preferences.getInt("price_filter", 100));
+        searchView.setQuery(preferences.getString("search_text", ""), false);
+        close.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                editor.putString("search_text", searchView.getQuery().toString());
+                editor.apply();
+                ((HomeActivity) mActivity).hideSoftKeyBoard();
+                getFragmentManager().beginTransaction().replace(R.id.content_frame, new FeedFragment())
+                        .disallowAddToBackStack().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
+                        .commit();
+            }
+        });
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener()
+        {
+            @Override
+            public boolean onQueryTextSubmit(String s)
+            {
+                editor.putString("search_text", s);
+                editor.apply();
+                ((HomeActivity) mActivity).hideSoftKeyBoard();
+                getFragmentManager().beginTransaction().replace(R.id.content_frame, new FeedFragment())
+                        .disallowAddToBackStack().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
+                        .commit();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s)
+            {
+                editor.putString("search_text", s);
+                editor.apply();
+                return false;
+            }
+        });
+
         int distanceBarValue = distanceBar.getProgress();
         int priceBarValue = priceBar.getProgress();
-        if(distanceBarValue != 100)
+        if (distanceBarValue != 100)
             distanceValue.setText(distanceBarValue + " mi");
         else
             distanceValue.setText("100+ mi");
-        if(priceBarValue != 100)
+        if (priceBarValue != 100)
             priceValue.setText("$" + priceBarValue);
         else
             priceValue.setText("$100+");
@@ -82,7 +127,7 @@ public class RefineFragment extends Fragment
             public void onProgressChanged(SeekBar seekBar, int i, boolean b)
             {
                 progress = i;
-                if(progress != 100)
+                if (progress != 100)
                     distanceValue.setText(progress + " mi");
                 else
                     distanceValue.setText("∞ mi");
@@ -97,7 +142,7 @@ public class RefineFragment extends Fragment
             @Override
             public void onStopTrackingTouch(SeekBar seekBar)
             {
-                if(progress != 100)
+                if (progress != 100)
                     distanceValue.setText(progress + " mi");
                 else
                     distanceValue.setText("∞ mi");
@@ -115,7 +160,7 @@ public class RefineFragment extends Fragment
             public void onProgressChanged(SeekBar seekBar, int i, boolean b)
             {
                 progress = i;
-                if(progress != 100)
+                if (progress != 100)
                     priceValue.setText("$" + progress);
                 else
                     priceValue.setText("$∞");
@@ -130,7 +175,7 @@ public class RefineFragment extends Fragment
             @Override
             public void onStopTrackingTouch(SeekBar seekBar)
             {
-                if(progress != 100)
+                if (progress != 100)
                     priceValue.setText("$" + progress);
                 else
                     priceValue.setText("$∞");
@@ -154,6 +199,7 @@ public class RefineFragment extends Fragment
     public void onAttach(Activity activity)
     {
         super.onAttach(activity);
+        mActivity = activity;
         try {
             mListener = (OnFragmentInteractionListener) activity;
         }
@@ -169,8 +215,6 @@ public class RefineFragment extends Fragment
         super.onDetach();
         mListener = null;
     }
-
-
     
     /**
      * This interface must be implemented by activities that contain this
@@ -187,5 +231,4 @@ public class RefineFragment extends Fragment
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
     }
-    
 }

@@ -13,11 +13,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -61,7 +63,7 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
 {
     private ArrayList<String> mDrawerItems;
     private TypedArray mDrawerIcons;
-
+    private SearchView searchView;
     private Toolbar toolbar;
 
     FeedItem item;
@@ -84,10 +86,32 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        searchView = (SearchView) findViewById(R.id.searchField);
         mDrawerItems = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.drawer_items)));
         mDrawerIcons = getResources().obtainTypedArray(R.array.drawer_icons);
+        searchView.setQuery(preferences.getString("search_text", ""), false);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener()
+        {
+            @Override
+            public boolean onQueryTextSubmit(String s)
+            {
+                editor.putString("search_text", s);
+                editor.apply();
+                hideSoftKeyBoard();
+                getFragmentManager().beginTransaction().replace(R.id.content_frame, new FeedFragment())
+                        .disallowAddToBackStack().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
+                        .commit();
+                return true;
+            }
 
+            @Override
+            public boolean onQueryTextChange(String s)
+            {
+                editor.putString("search_text", s);
+                editor.apply();
+                return false;
+            }
+        });
 
         DrawerImageLoader.init(new DrawerImageLoader.IDrawerImageLoader()
         {
@@ -384,11 +408,13 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
         serverCalls.resetDemo(preferences.getString("auth_token", ""), preferences.getString("uuid", ""));
     }
 
-    public void refineClose(View view)
+    public void hideSoftKeyBoard()
     {
-        getFragmentManager().beginTransaction().replace(R.id.content_frame, new FeedFragment())
-                .disallowAddToBackStack().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
-                .commit();
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        if (imm.isAcceptingText()) { // verify if the soft keyboard is open
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
     }
 
     private class onAccountHeaderSelectionViewClickListener implements AccountHeader.OnAccountHeaderSelectionViewClickListener

@@ -108,7 +108,7 @@ public class FeedFragment extends Fragment
     public void populateFeed(JsonArray jsonArray)
     {
 
-        final SimpleCardStackAdapter adapter = new SimpleCardStackAdapter(getActivity());
+        final SimpleCardStackAdapter adapter = new SimpleCardStackAdapter(mActivity);
         JsonObject temp;
         ArrayList<FeedItem> feedItems = new ArrayList<>();
         ArrayList<String> tags, imageUrls;
@@ -160,7 +160,7 @@ public class FeedFragment extends Fragment
                 @Override
                 public void onLike(CardModel cardModel)
                 {
-                    Toast.makeText(getActivity(), "Want", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mActivity, "Want", Toast.LENGTH_SHORT).show();
                     serverCalls.markItem("want",
                             preferences.getString("auth_token", "0"),
                             preferences.getString("uuid", "0"),
@@ -178,7 +178,7 @@ public class FeedFragment extends Fragment
                 @Override
                 public void onDislike(CardModel cardModel)
                 {
-                    Toast.makeText(getActivity(), "Nope", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mActivity, "Nope", Toast.LENGTH_SHORT).show();
 
                     serverCalls.markItem("meh",
                             preferences.getString("auth_token", "0"),
@@ -191,7 +191,7 @@ public class FeedFragment extends Fragment
                 @Override
                 public void onUp(CardModel cardModel)
                 {
-                    Toast.makeText(getActivity(), "Holding", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mActivity, "Holding", Toast.LENGTH_SHORT).show();
                     serverCalls.markItem("hold",
                             preferences.getString("auth_token", "0"),
                             preferences.getString("uuid", "0"),
@@ -204,7 +204,7 @@ public class FeedFragment extends Fragment
                 @Override
                 public void onDown(CardModel cardModel)
                 {
-                    Toast.makeText(getActivity(), "Report", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mActivity, "Report", Toast.LENGTH_SHORT).show();
                     serverCalls.markItem("report",
                             preferences.getString("auth_token", "0"),
                             preferences.getString("uuid", "0"),
@@ -219,7 +219,7 @@ public class FeedFragment extends Fragment
                 @Override
                 public void OnClickListener(CardModel cardModel)
                 {
-                    Intent intent = new Intent(FeedFragment.this.getActivity(), ItemDetailActivity.class);
+                    Intent intent = new Intent(mActivity, ItemDetailActivity.class);
                     intent.putExtra("title", cardModel.getTitle());
                     intent.putExtra("seller", cardModel.getSeller());
                     intent.putExtra("price", cardModel.getPrice());
@@ -242,8 +242,8 @@ public class FeedFragment extends Fragment
 
     public JsonArray populateOneFeedItem(final JsonArray jsonArray)
     {
-        final SimpleCardStackAdapter adapter = new SimpleCardStackAdapter(getActivity());
-        //CardAdapter mCardAdapter = new CardAdapter(getActivity().getApplicationContext());
+        final SimpleCardStackAdapter adapter = new SimpleCardStackAdapter(mActivity);
+        //CardAdapter mCardAdapter = new CardAdapter(mActivity);
         JsonObject temp;
         ArrayList<FeedItem> feedItems = new ArrayList<>();
         ArrayList<String> tags, imageUrls;
@@ -253,7 +253,7 @@ public class FeedFragment extends Fragment
 
         element = jsonArray.remove(jsonArray.size() - 1);
 
-        feedItem = new FeedItem(this.getActivity().getApplicationContext());
+        feedItem = new FeedItem(mActivity);
         temp = element.getAsJsonObject();
 
         feedItem.setTitle(temp.get("title").getAsString());
@@ -294,7 +294,7 @@ public class FeedFragment extends Fragment
             @Override
             public void onLike(CardModel cardModel)
             {
-                Toast.makeText(getActivity(), "Want", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mActivity, "Want", Toast.LENGTH_SHORT).show();
                 serverCalls.markItem(
                         "want",
                         preferences.getString("auth_token", "0"),
@@ -312,7 +312,7 @@ public class FeedFragment extends Fragment
             @Override
             public void onDislike(CardModel cardModel)
             {
-                Toast.makeText(getActivity(), "Nope", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mActivity, "Nope", Toast.LENGTH_SHORT).show();
 
                 serverCalls.markItem("meh",
                         preferences.getString("auth_token", "0"),
@@ -325,7 +325,7 @@ public class FeedFragment extends Fragment
             @Override
             public void onUp(CardModel cardModel)
             {
-                Toast.makeText(getActivity(), "Holding", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mActivity, "Holding", Toast.LENGTH_SHORT).show();
                 serverCalls.markItem("hold",
                         preferences.getString("auth_token", "0"),
                         preferences.getString("uuid", "0"),
@@ -338,7 +338,7 @@ public class FeedFragment extends Fragment
             @Override
             public void onDown(CardModel cardModel)
             {
-                Toast.makeText(getActivity(), "Report", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mActivity, "Report", Toast.LENGTH_SHORT).show();
                 serverCalls.markItem("report",
                         preferences.getString("auth_token", "0"),
                         preferences.getString("uuid", "0"),
@@ -355,7 +355,7 @@ public class FeedFragment extends Fragment
             {
                 //onCardSelected.OnCardSelected(feedItem);
                 //title, tags, img, method, price
-                Intent intent = new Intent(FeedFragment.this.getActivity(), ItemDetailActivity.class);
+                Intent intent = new Intent(mActivity, ItemDetailActivity.class);
                 intent.putExtra("title", cardModel.getTitle());
                 intent.putExtra("seller", cardModel.getSeller());
                 intent.putExtra("price", cardModel.getPrice());
@@ -443,7 +443,7 @@ public class FeedFragment extends Fragment
 
     private class bgTask extends AsyncTask<Void, Void, JsonObject>
     {
-        ProgressDialog dialog = new ProgressDialog(getActivity()); //TODO: Change from progress dialog to background spinner
+        ProgressDialog dialog = new ProgressDialog(mActivity); //TODO: Change from progress dialog to background spinner
 
         @Override
         protected void onPreExecute()

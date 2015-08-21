@@ -1,6 +1,9 @@
 package com.bakkle.bakkle.Adapters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,10 +12,13 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bakkle.bakkle.Helpers.ChatCalls;
 import com.bakkle.bakkle.Helpers.ChatMessage;
 import com.bakkle.bakkle.R;
+import com.koushikdutta.async.http.AsyncHttpClient;
+import com.koushikdutta.async.http.WebSocket;
 
-import java.util.ArrayList;
+import org.json.JSONObject;
 
 /**
  * Created by vanshgandhi on 7/31/15.
@@ -21,9 +27,12 @@ public class ChatArrayAdapter extends ArrayAdapter<ChatMessage>
 {
 
     private Context context;
-    private ArrayList<ChatMessage> chatMessageList = new ArrayList<>();
-    private TextView chatText;
+    //private ArrayList<ChatMessage> chatMessageList = new ArrayList<>();
     boolean isSelfBuyer;
+    String uuid;
+    protected String authToken;
+    SharedPreferences preferences;
+    ChatCalls chatCalls;
 
     private static class ViewHolder
     {
@@ -32,11 +41,15 @@ public class ChatArrayAdapter extends ArrayAdapter<ChatMessage>
         Button reject;
     }
 
-    public ChatArrayAdapter(Context context, int textViewResourceId, boolean isSelfBuyer)
+    public ChatArrayAdapter(Context context, int textViewResourceId, boolean isSelfBuyer, ChatCalls chatCalls)
     {
         super(context, textViewResourceId);
         this.context = context;
         this.isSelfBuyer = isSelfBuyer;
+        preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        uuid = preferences.getString("uuid", "");
+        authToken = preferences.getString("auth_token", "");
+        this.chatCalls = chatCalls;
     }
 
     @Override
@@ -83,6 +96,7 @@ public class ChatArrayAdapter extends ArrayAdapter<ChatMessage>
                 @Override
                 public void onClick(View view)
                 {
+                    chatCalls.setCallback(new RetractOfferWebSocketCallback(item.getOfferId()));
                     Toast.makeText(context, "Reject", Toast.LENGTH_SHORT).show();
                 }
             });
@@ -93,6 +107,7 @@ public class ChatArrayAdapter extends ArrayAdapter<ChatMessage>
                 @Override
                 public void onClick(View view)
                 {
+                    chatCalls.setCallback(new AcceptOfferWebSocketCallback(item.getOfferId()));
                     Toast.makeText(context, "Accept", Toast.LENGTH_SHORT).show();
                 }
             });
@@ -128,6 +143,89 @@ public class ChatArrayAdapter extends ArrayAdapter<ChatMessage>
     public ChatMessage getItem(int position)
     {
         return super.getItem(getCount() - position - 1);
+    }
+
+
+
+
+    private class RetractOfferWebSocketCallback implements AsyncHttpClient.WebSocketConnectCallback
+    {
+        String offerId;
+
+        public RetractOfferWebSocketCallback(String offerId)
+        {
+            this.offerId = offerId;
+        }
+
+        @Override
+        public void onCompleted(Exception ex, WebSocket webSocket)
+        {
+            if (ex != null) {
+                Log.v("Callback exception", ex.getMessage());
+                return;
+            }
+            JSONObject json = new JSONObject();
+            try {
+                json.put("method", "purchase_retractOffer");
+                json.put("offerId", offerId);
+                json.put("uuid", uuid);
+                json.put("auth_token", authToken);
+            }
+            catch (Exception e) {
+                Log.v("Websocket callback", e.getMessage());
+            }
+
+            webSocket.send(json.toString());
+
+            webSocket.setStringCallback(new WebSocket.StringCallback()
+            {
+                @Override
+                public void onStringAvailable(String s)
+                {
+                    Log.v("send string", s);
+                }
+            });
+        }
+    }
+
+    private class AcceptOfferWebSocketCallback implements AsyncHttpClient.WebSocketConnectCallback
+    {
+        String offerId;
+
+        public AcceptOfferWebSocketCallback(String offerId)
+        {
+            this.offerId = offerId;
+        }
+
+        @Override
+        public void onCompleted(Exception ex, WebSocket webSocket)
+        {
+            if (ex != null) {
+                Log.v("Callback exception", ex.getMessage());
+                return;
+            }
+            JSONObject json = new JSONObject();
+            try {
+                json.put("method", "purchase_acceptOffer");
+                json.put("offerId", offerId);
+                json.put("uuid", uuid);
+                json.put("auth_token", authToken);
+            }
+            catch (Exception e) {
+                Log.v("Websocket callback", e.getMessage());
+            }
+
+            webSocket.send(json.toString());
+
+            webSocket.setStringCallback(new WebSocket.StringCallback()
+            {
+                @Override
+                public void onStringAvailable(String s)
+                {
+                    Log.v("send string", s);
+                }
+            });
+        }
     }
 
 }

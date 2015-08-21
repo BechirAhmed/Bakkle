@@ -79,7 +79,7 @@ public class BuyersTrunkFragment extends ListFragment
 
         serverCalls = new ServerCalls(mActivity);
 
-        preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        preferences = PreferenceManager.getDefaultSharedPreferences(mActivity);
         uuid = preferences.getString("uuid", "");
         authToken = preferences.getString("auth_token", "");
         json = serverCalls.populateTrunk(authToken, uuid);
@@ -91,7 +91,7 @@ public class BuyersTrunkFragment extends ListFragment
             mParam2 = getArguments().getString(ARG_PARAM2);
         }*/
 
-        setListAdapter(new TrunkAdapter(getActivity(), items));
+        setListAdapter(new TrunkAdapter(mActivity, items));
 
 
     }
@@ -103,10 +103,10 @@ public class BuyersTrunkFragment extends ListFragment
         //super.onCreateOptionsMenu(menu, inflater);
         menu.clear();
 
-//        mActionBar = getActivity().getActionBar();
+//        mActionBar = mActivity.getActionBar();
 //        mActionBar.setDisplayShowHomeEnabled(false);
 //        mActionBar.setDisplayShowTitleEnabled(false);
-        LayoutInflater mInflater = LayoutInflater.from(getActivity());
+        LayoutInflater mInflater = LayoutInflater.from(mActivity);
 
         //View mCustomView = mInflater.inflate(R.layout.action_bar_trunk, null);
 
@@ -227,7 +227,7 @@ public class BuyersTrunkFragment extends ListFragment
     {
         JsonArray jsonArray = json.get("buyers_trunk").getAsJsonArray();
         ;
-        SimpleCardStackAdapter adapter = new SimpleCardStackAdapter(getActivity());
+        SimpleCardStackAdapter adapter = new SimpleCardStackAdapter(mActivity);
         JsonObject temp, item;
         ArrayList<FeedItem> feedItems = new ArrayList<FeedItem>();
         ArrayList<String> tags, imageUrls;
@@ -239,7 +239,7 @@ public class BuyersTrunkFragment extends ListFragment
 
         for (JsonElement element : jsonArray) {
             item = element.getAsJsonObject().getAsJsonObject("item");
-            feedItem = new FeedItem(this.getActivity().getApplicationContext());
+            feedItem = new FeedItem(mActivity);
             temp = element.getAsJsonObject();
 
             feedItem.setTitle(item.get("title").getAsString());

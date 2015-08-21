@@ -31,7 +31,7 @@ import java.util.Arrays;
 public class HoldingPatternFragment extends ListFragment {
 
     SharedPreferences preferences;
-
+    Activity mActivity;
     private OnFragmentInteractionListener mListener;
 
     ServerCalls serverCalls;
@@ -50,21 +50,22 @@ public class HoldingPatternFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        serverCalls = new ServerCalls(getActivity().getApplicationContext());
+        serverCalls = new ServerCalls(mActivity);
 
-        preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        preferences = PreferenceManager.getDefaultSharedPreferences(mActivity);
 
         json = serverCalls.populateHolding(preferences.getString("auth_token", "0"), preferences.getString("uuid", "0"));
 
         items = getItems(json);
 
-        setListAdapter(new HoldingAdapter(getActivity(), items));
+        setListAdapter(new HoldingAdapter(mActivity, items));
     }
 
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        mActivity = activity;
         try {
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
@@ -87,7 +88,7 @@ public class HoldingPatternFragment extends ListFragment {
 
         String url = "https://graph.facebook.com/" + item.getSellerFacebookId() + "/picture?width=142&height=142";
 
-        Intent intent = new Intent(getActivity(), ItemDetailActivity.class);
+        Intent intent = new Intent(mActivity, ItemDetailActivity.class);
         intent.putExtra("title", item.getTitle());
         intent.putExtra("seller", item.getSellerDisplayName());
         intent.putExtra("price", item.getPrice());
@@ -128,7 +129,7 @@ public class HoldingPatternFragment extends ListFragment {
     {
 
         JsonArray jsonArray = json.getAsJsonArray("holding_pattern");
-        SimpleCardStackAdapter adapter = new SimpleCardStackAdapter(getActivity());
+        SimpleCardStackAdapter adapter = new SimpleCardStackAdapter(mActivity);
         JsonObject temp, item;
         ArrayList<FeedItem> feedItems = new ArrayList<FeedItem>();
         ArrayList<String> tags, imageUrls;
@@ -141,7 +142,7 @@ public class HoldingPatternFragment extends ListFragment {
         for(JsonElement element : jsonArray)
         {
             item = element.getAsJsonObject().getAsJsonObject("item");
-            feedItem = new FeedItem(this.getActivity().getApplicationContext());
+            feedItem = new FeedItem(mActivity);
             //temp = element.getAsJsonObject();
 
             feedItem.setTitle(item.get("title").getAsString());
