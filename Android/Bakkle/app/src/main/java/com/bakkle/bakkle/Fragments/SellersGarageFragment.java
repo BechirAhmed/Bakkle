@@ -44,6 +44,7 @@ public class SellersGarageFragment extends ListFragment
     ServerCalls serverCalls;
     ArrayList<FeedItem> items = null;
     JsonObject json;
+    Activity mActivity;
 
 
     // TODO: Rename and change types of parameters
@@ -70,19 +71,19 @@ public class SellersGarageFragment extends ListFragment
     {
         super.onCreate(savedInstanceState);
 
-        serverCalls = new ServerCalls(getActivity());
+        serverCalls = new ServerCalls(mActivity);
 
-        preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        preferences = PreferenceManager.getDefaultSharedPreferences(mActivity);
 
         json = serverCalls.populateGarage(preferences.getString("auth_token", ""), preferences.getString("uuid", ""));
 
         items = getItems(json);
-        setListAdapter(new GarageAdapter(getActivity(), items));
+        setListAdapter(new GarageAdapter(mActivity, items));
 
 
         /*SwipeLayout swipeLayout =  (SwipeLayout) getListView().findViewById(R.id.swipe);
         swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut); //null pointer exception? need to set content layout first aka move this code somehwere else?
-        swipeLayout.addDrag(SwipeLayout.DragEdge.Right, getActivity().findViewById(R.id.bottom_wrapper));
+        swipeLayout.addDrag(SwipeLayout.DragEdge.Right, mActivity.findViewById(R.id.bottom_wrapper));
 
         swipeLayout.addSwipeListener(new SwipeLayout.SwipeListener() {
             @Override
@@ -122,6 +123,7 @@ public class SellersGarageFragment extends ListFragment
     public void onAttach(Activity activity)
     {
         super.onAttach(activity);
+        mActivity = activity;
         try {
             mListener = (OnFragmentInteractionListener) activity;
         }
@@ -145,7 +147,7 @@ public class SellersGarageFragment extends ListFragment
 
         FeedItem item = (FeedItem) getListAdapter().getItem(position);
         Log.v("Intent start", "value of itemId is " + item.getPk());
-        Intent intent = new Intent(getActivity(), ChatListActivity.class);
+        Intent intent = new Intent(mActivity, ChatListActivity.class);
         intent.putExtra("itemId", item.getPk());
         startActivity(intent);
 
@@ -189,7 +191,7 @@ public class SellersGarageFragment extends ListFragment
             item = element.getAsJsonObject();
             temp = item.getAsJsonObject("seller");
 
-            feedItem = new FeedItem(this.getActivity());
+            feedItem = new FeedItem(mActivity);
 
             feedItem.setTitle(item.get("title").getAsString());
             feedItem.setPrice(item.get("price").getAsString());

@@ -1,6 +1,7 @@
 package com.bakkle.bakkle;
 
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -18,10 +19,17 @@ import com.bakkle.bakkle.Helpers.FeedItem;
 public class ItemPage extends Fragment {
 
     FeedItem item;
-
+    Activity mActivity;
 
     public ItemPage() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onAttach(Activity activity)
+    {
+        super.onAttach(activity);
+        mActivity = activity;
     }
 
 
@@ -37,10 +45,10 @@ public class ItemPage extends Fragment {
     }
 
     public void setupPage(){
-        ImageView picture = (ImageView) getActivity().findViewById(R.id.itempic);
-        TextView price = (TextView) getActivity().findViewById(R.id.price);
-        TextView method = (TextView) getActivity().findViewById(R.id.method);
-        TextView tags = (TextView) getActivity().findViewById(R.id.tags);
+        ImageView picture = (ImageView) mActivity.findViewById(R.id.itempic);
+        TextView price = (TextView) mActivity.findViewById(R.id.price);
+        TextView method = (TextView) mActivity.findViewById(R.id.method);
+        TextView tags = (TextView) mActivity.findViewById(R.id.tags);
 
         picture.setImageBitmap(item.getFirstImage());
         price.setText("$" + item.getPrice());

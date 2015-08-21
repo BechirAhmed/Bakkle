@@ -50,6 +50,7 @@ public class ChatActivity extends AppCompatActivity
     private ChatCalls chatCalls;
     private SharedPreferences preferences;
     private int chatId;
+    private String offerId;
     private String response;
     private ArrayList<ChatMessage> chatMessages;
     private String messageText;
@@ -57,7 +58,7 @@ public class ChatActivity extends AppCompatActivity
     protected String authToken;
     protected String uuid;
     public boolean selfBuyer;
-    String fbUrl;
+    private String fbUrl;
 
 
 
@@ -93,10 +94,9 @@ public class ChatActivity extends AppCompatActivity
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         authToken = preferences.getString("auth_token", "");
         uuid = preferences.getString("uuid", "");
-
-        chatArrayAdapter = new ChatArrayAdapter(this, R.layout.right_message, selfBuyer);
-        listView.setAdapter(chatArrayAdapter);
         chatCalls = new ChatCalls(uuid, authToken.substring(33, 35), authToken, new GetMessagesWebSocketConnectCallback());
+        chatArrayAdapter = new ChatArrayAdapter(this, R.layout.right_message, selfBuyer, chatCalls);
+        listView.setAdapter(chatArrayAdapter);
 
 
         serverCalls = new ServerCalls(this);
@@ -173,7 +173,7 @@ public class ChatActivity extends AppCompatActivity
                     {
                         String price = input.getText().toString();
                         chatCalls.setCallback(new SendOfferWebSocketCallback(price));
-                        chatArrayAdapter.add(new ChatMessage(selfBuyer, false, false, price));
+                        chatArrayAdapter.add(new ChatMessage(selfBuyer, false, false, price, null));
                     }
                 });
         alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
@@ -185,6 +185,18 @@ public class ChatActivity extends AppCompatActivity
         });
         alert.show();
     }
+
+//    public void retractOffer(View view)
+//    {
+//        Log.v("retract test", "test");
+//        chatCalls.setCallback(new RetractOfferWebSocketCallback(offerId));
+//    }
+//
+//    public void acceptOffer(View view)
+//    {
+//        Log.v("accept test", "accept");
+//        chatCalls.setCallback(new AcceptOfferWebSocketCallback(offerId));
+//    }
 
     public int dpToPx(int dp) {
         DisplayMetrics displayMetrics = this.getResources().getDisplayMetrics();
@@ -226,11 +238,12 @@ public class ChatActivity extends AppCompatActivity
     public void populateOffer(final JsonObject offer, final boolean sentByBuyer)
     {
         final String status = offer.get("status").getAsString();
+        offerId = offer.get("pk").getAsString();
         runOnUiThread(new Runnable()
         {
             public void run()
             {
-                chatArrayAdapter.add(new ChatMessage(sentByBuyer, status.equals("Accepted"), status.equals("Retracted"), offer.get("proposed_price").getAsString()));
+                chatArrayAdapter.add(new ChatMessage(sentByBuyer, status.equals("Accepted"), status.equals("Retracted"), offer.get("proposed_price").getAsString(), offerId));
             }
         });
     }
@@ -368,7 +381,6 @@ public class ChatActivity extends AppCompatActivity
             });
         }
     }
-
 
 
 

@@ -14,6 +14,7 @@ public class ChatMessage {
 
 
     String price;
+    String offerId;
     boolean sentByBuyer;
     boolean accepted;
     boolean rejected;
@@ -32,12 +33,13 @@ public class ChatMessage {
 //        this.timestamp = timestamp;
     }
 
-    public ChatMessage(boolean sentByBuyer, boolean accepted, boolean rejected, String price)
+    public ChatMessage(boolean sentByBuyer, boolean accepted, boolean rejected, String price, String offerId)
     {
         this.sentByBuyer = sentByBuyer;
         this.price = price;
         this.accepted = accepted;
         this.rejected = rejected;
+        this.offerId = offerId;
         offer = true;
     }
 
@@ -68,5 +70,10 @@ public class ChatMessage {
     public String getPrice()
     {
         return price;
+    }
+
+    public String getOfferId()
+    {
+        return offerId;
     }
 }

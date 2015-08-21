@@ -1,6 +1,7 @@
 package com.bakkle.bakkle.Fragments;
 
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -35,19 +36,27 @@ public class ProfileFragment extends Fragment
     JsonObject json;
     String description;
     String url;
+    Activity mActivity;
     
     public ProfileFragment()
     {
     }
 
     @Override
+    public void onAttach(Activity activity)
+    {
+        super.onAttach(activity);
+        mActivity = activity;
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        preferences = PreferenceManager.getDefaultSharedPreferences(mActivity);
         description = null;
         editor = preferences.edit();
-        serverCalls = new ServerCalls(getActivity());
+        serverCalls = new ServerCalls(mActivity);
         json = serverCalls.getAccount(preferences.getString("auth_token", ""), preferences.getString("uuid", ""));
         url = "http://graph.facebook.com/" + preferences.getString("userID", "0") + "/picture?width=300&height=300";
     }
@@ -67,7 +76,7 @@ public class ProfileFragment extends Fragment
         description = json.get("account").getAsJsonObject().get("description").getAsString();
         textView.setText(description);
 
-        Glide.with(getActivity())
+        Glide.with(mActivity)
                 .load(url)
                 .thumbnail(0.1f)
                 .into((ImageView) view.findViewById(R.id.profilePicture));
@@ -119,13 +128,13 @@ public class ProfileFragment extends Fragment
             @Override
             public void onClick(View view)
             {
-                FacebookSdk.sdkInitialize(getActivity());
+                FacebookSdk.sdkInitialize(mActivity);
                 LoginManager.getInstance().logOut();
                 editor.putBoolean("LoggedIn", false);
                 editor.putBoolean("newuser", true);
                 editor.apply();
-                startActivity(new Intent(getActivity(), LoginActivity.class));
-                getActivity().finish();
+                startActivity(new Intent(mActivity, LoginActivity.class));
+                mActivity.finish();
             }
         });
 

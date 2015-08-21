@@ -21,7 +21,6 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:background="@null"
-            android:onClick="refineClose"
             android:src="@drawable/ic_action_cancel"/>
 
         <TextView
