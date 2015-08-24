@@ -44,8 +44,8 @@ public class ItemDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_detail);
-  //      toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
+  //      toolbar_home = (Toolbar) findViewById(R.id.toolbar_home);
+//        setSupportActionBar(toolbar_home);
 
         Intent intent = getIntent();
         serverCalls = new ServerCalls(this);
@@ -56,7 +56,6 @@ public class ItemDetailActivity extends AppCompatActivity {
         description = intent.getStringExtra("description");
         seller = intent.getStringExtra("seller");
         distance = intent.getStringExtra("distance");
-        //url1 = intent.getStringExtra("url1");
         pk = intent.getStringExtra("pk");
         sellerImageUrl = intent.getStringExtra("sellerImageUrl");
         imageURLs = intent.getStringArrayListExtra("imageURLs");
@@ -74,13 +73,7 @@ public class ItemDetailActivity extends AppCompatActivity {
 
         Glide.with(this)
                 .load(sellerImageUrl)
-                .thumbnail(0.1f)
-                .placeholder(R.drawable.loading)
                 .into((ImageView) findViewById(R.id.sellerImage));
-
-//        Ion.with((ImageView) findViewById(R.id.sellerImage))
-//                .placeholder(R.drawable.loading)
-//                .load(sellerImageUrl);
     }
 
 
@@ -113,12 +106,10 @@ public class ItemDetailActivity extends AppCompatActivity {
         imageView.setId(productPictureViews.size() + 1);
         Glide.with(this)
                 .load(url)
-                .placeholder(R.drawable.loading)
-                .thumbnail(0.1f)
+                .fitCenter()
+                .crossFade()
                 .into(imageView);
-//        Ion.with(imageView)
-//                .placeholder(R.drawable.loading)
-//                .load(url);
+
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.MATCH_PARENT,
                 RelativeLayout.LayoutParams.MATCH_PARENT);

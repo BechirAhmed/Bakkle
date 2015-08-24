@@ -4,25 +4,20 @@ import android.app.Activity;
 import android.app.ListFragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.ColorFilter;
-import android.graphics.LightingColorFilter;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
-import android.graphics.RectF;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
-import com.bakkle.bakkle.Activities.ChatListActivity;
+import com.bakkle.bakkle.Activities.GarageItem;
 import com.bakkle.bakkle.Adapters.GarageAdapter;
 import com.bakkle.bakkle.Helpers.FeedItem;
 import com.bakkle.bakkle.Helpers.ServerCalls;
+import com.bakkle.bakkle.R;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -62,9 +57,7 @@ public class SellersGarageFragment extends ListFragment
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public SellersGarageFragment()
-    {
-    }
+    public SellersGarageFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -72,52 +65,34 @@ public class SellersGarageFragment extends ListFragment
         super.onCreate(savedInstanceState);
 
         serverCalls = new ServerCalls(mActivity);
-
         preferences = PreferenceManager.getDefaultSharedPreferences(mActivity);
+
+        Toolbar toolbar = (Toolbar) mActivity.findViewById(R.id.toolbar);
+
+        for(int i = 0; i < toolbar.getChildCount(); i++)
+        {
+            View v = toolbar.getChildAt(i);
+            if(v instanceof ImageView)
+            {
+                Log.v("this", "this");
+                v.setVisibility(View.GONE);
+            }
+            else if(v instanceof TextView)
+            {
+                Log.v("that", "that");
+                v.setVisibility(View.VISIBLE);
+                ((TextView) v).setText("Seller's Garage");
+            }
+        }
+
 
         json = serverCalls.populateGarage(preferences.getString("auth_token", ""), preferences.getString("uuid", ""));
 
         items = getItems(json);
         setListAdapter(new GarageAdapter(mActivity, items));
 
-
-        /*SwipeLayout swipeLayout =  (SwipeLayout) getListView().findViewById(R.id.swipe);
-        swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut); //null pointer exception? need to set content layout first aka move this code somehwere else?
-        swipeLayout.addDrag(SwipeLayout.DragEdge.Right, mActivity.findViewById(R.id.bottom_wrapper));
-
-        swipeLayout.addSwipeListener(new SwipeLayout.SwipeListener() {
-            @Override
-            public void onClose(SwipeLayout layout) {
-                //when the SurfaceView totally cover the BottomView.
-            }
-
-            @Override
-            public void onUpdate(SwipeLayout layout, int leftOffset, int topOffset) {
-                //you are swiping.
-            }
-
-            @Override
-            public void onStartOpen(SwipeLayout layout) {
-
-            }
-
-            @Override
-            public void onOpen(SwipeLayout layout) {
-                deleteItem();
-            }
-
-            @Override
-            public void onStartClose(SwipeLayout layout) {
-
-            }
-
-            @Override
-            public void onHandRelease(SwipeLayout layout, float xvel, float yvel) {
-                //when user's hand released.
-            }
-        }); */
-
     }
+
 
     @Override
     public void onAttach(Activity activity)
@@ -133,6 +108,12 @@ public class SellersGarageFragment extends ListFragment
         }
     }
 
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+//    {
+//        return inflater.inflate(R.layout.fragment_sellersgarage, null, false);
+//    }
+
     @Override
     public void onDetach()
     {
@@ -146,9 +127,10 @@ public class SellersGarageFragment extends ListFragment
         super.onListItemClick(l, v, position, id);
 
         FeedItem item = (FeedItem) getListAdapter().getItem(position);
-        Log.v("Intent start", "value of itemId is " + item.getPk());
-        Intent intent = new Intent(mActivity, ChatListActivity.class);
+        Intent intent = new Intent(mActivity, GarageItem.class);
         intent.putExtra("itemId", item.getPk());
+//        Intent intent = new Intent(mActivity, ChatListActivity.class);
+//        intent.putExtra("itemId", item.getPk());
         startActivity(intent);
 
         if (mListener != null) {
@@ -216,32 +198,6 @@ public class SellersGarageFragment extends ListFragment
 
         return feedItems;
 
-    }
-
-
-    public static Bitmap getRoundedCornerAndDarkenedBitmap(Bitmap bitmap)
-    {
-        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
-                bitmap.getHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(output);
-
-        final int color = 0xff424242;
-        final Paint paint = new Paint();
-        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
-        final RectF rectF = new RectF(rect);
-        final float roundPx = 12;
-        final ColorFilter filter = new LightingColorFilter(0xFF222222, 0x00000000);
-
-        paint.setAntiAlias(true);
-        canvas.drawARGB(0, 0, 0, 0);
-        paint.setColor(color);
-        paint.setColorFilter(filter);
-        canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
-
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-        canvas.drawBitmap(bitmap, rect, rect, paint);
-
-        return output;
     }
 
 }

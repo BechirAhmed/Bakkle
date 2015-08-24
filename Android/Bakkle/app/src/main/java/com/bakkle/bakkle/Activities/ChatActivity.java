@@ -3,13 +3,14 @@ package com.bakkle.bakkle.Activities;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.DataSetObserver;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -74,7 +75,13 @@ public class ChatActivity extends AppCompatActivity
         listView = (ListView) findViewById(R.id.list);
         chatText = (EditText) findViewById(R.id.compose);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha));
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+        upArrow.setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        //toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha));
+        //toolbar.setLogo();
         toolbar.setNavigationOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -179,23 +186,6 @@ public class ChatActivity extends AppCompatActivity
             }
         });
         alert.show();
-    }
-
-//    public void retractOffer(View view)
-//    {
-//        Log.v("retract test", "test");
-//        chatCalls.setCallback(new RetractOfferWebSocketCallback(offerId));
-//    }
-//
-//    public void acceptOffer(View view)
-//    {
-//        Log.v("accept test", "accept");
-//        chatCalls.setCallback(new AcceptOfferWebSocketCallback(offerId));
-//    }
-
-    public int dpToPx(int dp) {
-        DisplayMetrics displayMetrics = this.getResources().getDisplayMetrics();
-        return Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
     }
 
     public void populateChat()
@@ -383,7 +373,7 @@ public class ChatActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu)
     {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_chat, menu);
+        //getMenuInflater().inflate(R.menu.menu_chat, menu);
         return true;
     }
 
@@ -396,9 +386,9 @@ public class ChatActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
 
         return super.onOptionsItemSelected(item);
     }

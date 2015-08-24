@@ -1,15 +1,44 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<FrameLayout
+    android:id="@+id/feed"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:id="@+id/feed" >
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/dark_green">
+
+        <android.support.v7.widget.SearchView
+            android:id="@+id/searchField"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@id/action_bar_image"
+            android:layout_toLeftOf="@+id/refine"
+            android:iconifiedByDefault="true"
+            android:queryHint="Search for Items"
+            android:theme="@style/AppCompatTheme"/>
+
+        <Button
+            android:id="@+id/refine"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:onClick="refineButtonClick"
+            android:text="Refine"
+            android:textColor="@color/black"/>
+
+    </RelativeLayout>
 
     <com.andtinder.view.CardContainer
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/cardView"
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
-
+        android:layout_height="fill_parent"/>
 
 
     <!--<com.wenchao.cardstack.CardStack

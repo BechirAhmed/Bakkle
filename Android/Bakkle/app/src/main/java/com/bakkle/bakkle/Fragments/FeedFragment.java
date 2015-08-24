@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import com.andtinder.model.CardModel;
 import com.andtinder.model.Orientations;
 import com.andtinder.view.CardContainer;
 import com.andtinder.view.SimpleCardStackAdapter;
+import com.bakkle.bakkle.Activities.HomeActivity;
 import com.bakkle.bakkle.Activities.ItemDetailActivity;
 import com.bakkle.bakkle.Helpers.FeedItem;
 import com.bakkle.bakkle.Helpers.ServerCalls;
@@ -41,6 +43,7 @@ public class FeedFragment extends Fragment
     Activity mActivity;
     FeedItem feedItem = null;
     CardContainer mCardContainer;
+    private SearchView searchView;
 
     CardModel card;
 
@@ -89,6 +92,31 @@ public class FeedFragment extends Fragment
         preferences = PreferenceManager.getDefaultSharedPreferences(mActivity);
 
         serverCalls = new ServerCalls(mActivity);
+
+        searchView = (SearchView) view.findViewById(R.id.searchField);
+        searchView.setQuery(preferences.getString("search_text", ""), false);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener()
+        {
+            @Override
+            public boolean onQueryTextSubmit(String s)
+            {
+                editor.putString("search_text", s);
+                editor.apply();
+                ((HomeActivity) mActivity).hideSoftKeyBoard();
+                getFragmentManager().beginTransaction().replace(R.id.content_frame, new FeedFragment())
+                        .disallowAddToBackStack().setTransition(android.app.FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
+                        .commit();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s)
+            {
+                editor.putString("search_text", s);
+                editor.apply();
+                return false;
+            }
+        });
 
         try {
             new bgTask().execute();
@@ -227,7 +255,6 @@ public class FeedFragment extends Fragment
                     intent.putExtra("sellerImageUrl", cardModel.getSellerImageURL());
                     intent.putExtra("description", cardModel.getDescription());
                     intent.putExtra("pk", cardModel.getPk());
-                    intent.putExtra("url1", cardModel.getCardImageURL());
                     intent.putStringArrayListExtra("imageURLs", cardModel.getImageURLs());
                     startActivity(intent);
                 }

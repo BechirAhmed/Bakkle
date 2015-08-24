@@ -62,29 +62,16 @@ public final class SimpleCardStackAdapter extends CardStackAdapter
         Glide.with(context)
                 .load(url)
                 .centerCrop()
-                .placeholder(R.drawable.loading)
-                .thumbnail(0.1f)
                 .crossFade()
                 .into(imageView);
-
-//        Ion.with(imageView)
-//                .placeholder(R.drawable.loading)
-//                .load(url);
     }
 
     public void setSellerImage(ImageView imageView, String url)
     {
-
         Glide.with(context)
                 .load(url)
                 .centerCrop()
                 .crossFade()
-                .thumbnail(0.1f)
                 .into(imageView);
-
-//        Ion.with(imageView)
-//                .placeholder(R.drawable.loading)
-//                .error(R.drawable.dislike)
-//                .load(url);
     }
 }
