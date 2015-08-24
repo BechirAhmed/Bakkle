@@ -1,16 +1,19 @@
-package com.bakkle.bakkle.Activities;
+package com.bakkle.bakkle.Fragments;
 
-import android.app.ListActivity;
+
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ListFragment;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.bakkle.bakkle.Activities.ChatActivity;
 import com.bakkle.bakkle.Adapters.ChatListAdapter;
 import com.bakkle.bakkle.Helpers.BuyerInfo;
 import com.bakkle.bakkle.Helpers.ChatCalls;
@@ -27,9 +30,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 
-public class ChatListActivity extends ListActivity
+public class ChatListFragment extends ListFragment
 {
-
+    private String itemId;
     ArrayList<BuyerInfo> buyerInfos = null;
     JsonObject json;
     SharedPreferences preferences;
@@ -37,36 +40,58 @@ public class ChatListActivity extends ListActivity
     ChatListAdapter chatListAdapter;
     String response;
     protected String authToken;
+    Activity mActivity;
     String uuid;
-    String itemId;
+
+    public static ChatListFragment newInstance(String itemId)
+    {
+        ChatListFragment fragment = new ChatListFragment();
+        Bundle args = new Bundle();
+        args.putString("itemId", itemId);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onAttach(Activity activity)
+    {
+        super.onAttach(activity);
+        mActivity = activity;
+    }
+    
+    public ChatListFragment() {}
+    
+    @Override
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chat_list);
-        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        if (getArguments() != null) {
+            itemId = getArguments().getString("itemId");
+        }
+        preferences = PreferenceManager.getDefaultSharedPreferences(mActivity);
         uuid = preferences.getString("uuid", "");
         authToken = preferences.getString("auth_token", "");
 
         buyerInfos = new ArrayList<>();
-        chatListAdapter = new ChatListAdapter(this, buyerInfos);
+        chatListAdapter = new ChatListAdapter(mActivity, buyerInfos);
         setListAdapter(chatListAdapter);
 
-        preferences = PreferenceManager.getDefaultSharedPreferences(ChatListActivity.this);
+        preferences = PreferenceManager.getDefaultSharedPreferences(mActivity);
+        chatCalls = new ChatCalls(uuid, authToken.substring(33, 35), authToken, new WebSocketCallBack());
+        chatCalls.connect();
 
 //        Intent i = new Intent(this, ChatCalls.class);
 //        i.putExtra("uuid", preferences.getString("uuid", ""));
 //        i.putExtra("auth_token", authToken);
 //        i.putExtra("sellerPk", authToken.substring(33, 35));
 //        startService(i);
-
-        itemId = getIntent().getExtras().getString("itemId");
-
-        chatCalls = new ChatCalls(uuid, authToken.substring(33, 35), authToken, new WebSocketCallBack());
-        chatCalls.connect();
-//        chatCalls.test();
-//        chatCalls.getChatList();
-
+    }
+    
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState)
+    {
+        return inflater.inflate(R.layout.fragment_chat_list, null, false);
     }
 
 
@@ -88,8 +113,6 @@ public class ChatListActivity extends ListActivity
                 json.put("itemId", itemId);
                 json.put("uuid", uuid);
                 json.put("auth_token", authToken);
-//                json.put("uuid", "E7F742EB-67EE-4738-ABEC-F0A3B62B45EB");
-//                json.put("auth_token", "f02dfb77e9615ae630753b37637abb31_10");
             }
             catch (Exception e) {
                 Log.v("Websocket callback", e.getMessage());
@@ -127,7 +150,7 @@ public class ChatListActivity extends ListActivity
             String url = "https://graph.facebook.com/" + buyer.get("facebook_id").getAsString() + "/picture?width=142&height=142";
             buyerInfos.add(new BuyerInfo(buyer.get("display_name").getAsString(), url, temp.get("pk").getAsInt()));
         }
-        runOnUiThread(new Runnable()
+        mActivity.runOnUiThread(new Runnable()
         {
             @Override
             public void run()
@@ -144,33 +167,13 @@ public class ChatListActivity extends ListActivity
         super.onListItemClick(l, v, position, id);
 
         BuyerInfo buyerInfo = (BuyerInfo) getListAdapter().getItem(position);
-        Intent intent = new Intent(this, ChatActivity.class);
+        Intent intent = new Intent(mActivity, ChatActivity.class);
 //        intent.putExtra("chatId", 58);
         intent.putExtra("chatId", buyerInfo.getChatPk()); //make sure to let the chat app window know if youre the buyer or seller somehow
         intent.putExtra("selfBuyer", false);
         intent.putExtra("url", buyerInfo.getFacebookURL());
         startActivity(intent);
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_chat_list, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
+    
+    
 }

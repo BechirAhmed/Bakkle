@@ -13,7 +13,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -22,6 +21,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.bakkle.bakkle.Fragments.BuyersTrunkFragment;
@@ -63,7 +63,6 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
 {
     private ArrayList<String> mDrawerItems;
     private TypedArray mDrawerIcons;
-    private SearchView searchView;
     private Toolbar toolbar;
 
     FeedItem item;
@@ -72,7 +71,7 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
 
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
-
+    LinearLayout linearLayout;
     ServerCalls serverCalls;
 
     @Override
@@ -80,38 +79,13 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
+        linearLayout = (LinearLayout) findViewById(R.id.content_frame_holder);
         preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         editor = preferences.edit();
-
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        searchView = (SearchView) findViewById(R.id.searchField);
         mDrawerItems = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.drawer_items)));
         mDrawerIcons = getResources().obtainTypedArray(R.array.drawer_icons);
-        searchView.setQuery(preferences.getString("search_text", ""), false);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener()
-        {
-            @Override
-            public boolean onQueryTextSubmit(String s)
-            {
-                editor.putString("search_text", s);
-                editor.apply();
-                hideSoftKeyBoard();
-                getFragmentManager().beginTransaction().replace(R.id.content_frame, new FeedFragment())
-                        .disallowAddToBackStack().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
-                        .commit();
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s)
-            {
-                editor.putString("search_text", s);
-                editor.apply();
-                return false;
-            }
-        });
 
         DrawerImageLoader.init(new DrawerImageLoader.IDrawerImageLoader()
         {
@@ -120,11 +94,7 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
             {
                 Glide.with(HomeActivity.this)
                         .load(uri.toString())
-                        .thumbnail(0.1f)
                         .into(imageView);
-//                Ion.with(imageView)
-//                        .placeholder(R.drawable.loading)
-//                        .load(uri.toString());
             }
 
             @Override

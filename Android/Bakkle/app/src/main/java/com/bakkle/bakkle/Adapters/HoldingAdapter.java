@@ -65,7 +65,6 @@ public class HoldingAdapter extends ArrayAdapter<FeedItem>{
                 .load(item.getImageUrls().get(0))
                 .centerCrop()
                 .thumbnail(0.1f)
-                //.placeholder(R.drawable.loading)
                 .crossFade()
                 .into(viewHolder.icon);
 
