@@ -6,18 +6,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.bakkle.bakkle.Activities.GarageItem;
 import com.bakkle.bakkle.Adapters.GarageAdapter;
 import com.bakkle.bakkle.Helpers.FeedItem;
 import com.bakkle.bakkle.Helpers.ServerCalls;
-import com.bakkle.bakkle.R;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -67,24 +62,24 @@ public class SellersGarageFragment extends ListFragment
         serverCalls = new ServerCalls(mActivity);
         preferences = PreferenceManager.getDefaultSharedPreferences(mActivity);
 
-        Toolbar toolbar = (Toolbar) mActivity.findViewById(R.id.toolbar);
-
-        for(int i = 0; i < toolbar.getChildCount(); i++)
-        {
-            View v = toolbar.getChildAt(i);
-            if(v instanceof ImageView)
-            {
-                Log.v("this", "this");
-                v.setVisibility(View.GONE);
-            }
-            else if(v instanceof TextView)
-            {
-                Log.v("that", "that");
-                v.setVisibility(View.VISIBLE);
-                ((TextView) v).setText("Seller's Garage");
-            }
-        }
-
+//        Toolbar toolbar = (Toolbar) mActivity.findViewById(R.id.toolbar);
+//
+//        for(int i = 0; i < toolbar.getChildCount(); i++)
+//        {
+//            View v = toolbar.getChildAt(i);
+//            if(v instanceof ImageView)
+//            {
+//                Log.v("this", "this");
+//                v.setVisibility(View.GONE);
+//            }
+//            else if(v instanceof TextView)
+//            {
+//                Log.v("that", "that");
+//                v.setVisibility(View.VISIBLE);
+//                ((TextView) v).setText("Seller's Garage");
+//            }
+//        }
+//
 
         json = serverCalls.populateGarage(preferences.getString("auth_token", ""), preferences.getString("uuid", ""));
 
@@ -129,6 +124,10 @@ public class SellersGarageFragment extends ListFragment
         FeedItem item = (FeedItem) getListAdapter().getItem(position);
         Intent intent = new Intent(mActivity, GarageItem.class);
         intent.putExtra("itemId", item.getPk());
+        intent.putExtra("numWant", item.getNumWant());
+        intent.putExtra("numHold", item.getNumHold());
+        intent.putExtra("numMeh", item.getNumMeh());
+        intent.putExtra("numView", item.getNumView());
 //        Intent intent = new Intent(mActivity, ChatListActivity.class);
 //        intent.putExtra("itemId", item.getPk());
         startActivity(intent);
