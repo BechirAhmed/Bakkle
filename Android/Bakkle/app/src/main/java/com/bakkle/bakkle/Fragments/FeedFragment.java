@@ -508,11 +508,11 @@ public class FeedFragment extends Fragment
 //                Log.v("emulator testing", jsonResult.toString());
 //                Log.v("emulator uuid", preferences.getString("uuid", ""));
 //                Log.v("emulator auth", preferences.getString("auth_token", ""));
-                Log.v("result is", jsonResult.toString());
+                //Log.v("result is", jsonResult.toString());
                 populateFeed(jsonResult.getAsJsonArray("feed"));
             }
             else
-                Log.d("umm", "what");
+                Log.d("Error", "error");
         }
     }
 }

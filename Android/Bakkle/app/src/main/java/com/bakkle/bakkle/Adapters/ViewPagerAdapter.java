@@ -14,17 +14,26 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter
 {
 
     CharSequence Titles[]; // This will Store the Titles of the Tabs which are Going to be passed when ViewPagerAdapter is created
-    int NumbOfTabs; // Store the number of tabs, this will also be passed when the ViewPagerAdapter is created
+    int numTabs; // Store the number of tabs, this will also be passed when the ViewPagerAdapter is created
     private String itemId;
+    private String numWant;
+    private String numHold;
+    private String numMeh;
+    private String numView;
 
 
     // Build a Constructor and assign the passed Values to appropriate values in the class
-    public ViewPagerAdapter(FragmentManager fm,CharSequence mTitles[], int mNumbOfTabsumb, String itemId) {
+    public ViewPagerAdapter(FragmentManager fm,CharSequence mTitles[], int numTabs,
+                            String itemId, String numView, String numWant, String numHold, String numMeh) {
         super(fm);
 
         this.Titles = mTitles;
-        this.NumbOfTabs = mNumbOfTabsumb;
+        this.numTabs = numTabs;
         this.itemId = itemId;
+        this.numView = numView;
+        this.numWant = numWant;
+        this.numMeh = numMeh;
+        this.numHold = numHold;
 
     }
 
@@ -38,7 +47,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter
         }
         else             // As we are having 2 tabs if the position is now 0 it must be 1 so we are returning second tab
         {
-            AnalyticsFragment analyticsFragment = AnalyticsFragment.newInstance(itemId);
+            AnalyticsFragment analyticsFragment = AnalyticsFragment.newInstance(numView, numWant, numHold, numMeh);
             return analyticsFragment;
         }
 
@@ -55,6 +64,6 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter
 
     @Override
     public int getCount() {
-        return NumbOfTabs;
+        return numTabs;
     }
 }

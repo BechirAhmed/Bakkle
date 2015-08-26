@@ -14,24 +14,33 @@ import com.bakkle.bakkle.Views.SlidingTabLayout;
 
 public class GarageItem extends AppCompatActivity
 {
-    private String itemId;
     Toolbar toolbar;
     ViewPager pager;
     ViewPagerAdapter adapter;
     SlidingTabLayout tabs;
-    CharSequence Titles[]={"Messages","Analytics"};
-    int Numboftabs = 2;
+    CharSequence Titles[] = {"Messages", "Analytics"};
+    int numTabs = 2;
     
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        String itemId;
+        String numWant;
+        String numHold;
+        String numMeh;
+        String numView;
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_garage_item);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Intent i = getIntent();
         itemId = i.getStringExtra("itemId");
-        adapter =  new ViewPagerAdapter(getSupportFragmentManager(), Titles, Numboftabs, itemId);
+        numWant = i.getStringExtra("numWant");
+        numHold = i.getStringExtra("numHold");
+        numMeh = i.getStringExtra("numMeh");
+        numView = i.getStringExtra("numView");
+        adapter = new ViewPagerAdapter(getSupportFragmentManager(), Titles, numTabs, itemId, numView, numWant, numHold, numMeh);
         pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(adapter);
         tabs = (SlidingTabLayout) findViewById(R.id.tabs);

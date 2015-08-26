@@ -202,7 +202,6 @@ public class ChatActivity extends AppCompatActivity
             return;
         JsonArray messages = jsonResponse.get("messages").getAsJsonArray();
         for (JsonElement temp : messages) {
-            Log.v("temp value", temp.toString());
             JsonObject message = temp.getAsJsonObject();
             if (message.get("message").getAsString().equals("")) { //if message field is empty, then it must be an offer
                 populateOffer(message.get("offer").getAsJsonObject(), message.get("sent_by_buyer").getAsBoolean());
@@ -274,7 +273,6 @@ public class ChatActivity extends AppCompatActivity
                 public void onStringAvailable(String s)
                 {
                     response = s;
-                    Log.v("response is ", "" + response);
                     populateChat();
                 }
             });
@@ -318,7 +316,6 @@ public class ChatActivity extends AppCompatActivity
                 public void onStringAvailable(String s)
                 {
                     response = s;
-                    Log.v("send string", response);
                 }
             });
         }
@@ -366,7 +363,6 @@ public class ChatActivity extends AppCompatActivity
                 public void onStringAvailable(String s)
                 {
                     response = s;
-                    Log.v("send string", response);
                 }
             });
         }
