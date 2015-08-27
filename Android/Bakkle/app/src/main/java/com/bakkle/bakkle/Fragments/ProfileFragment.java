@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,7 +77,7 @@ public class ProfileFragment extends Fragment
 
         Glide.with(mActivity)
                 .load(url)
-                .thumbnail(0.1f)
+                .placeholder(R.drawable.loading)
                 .into((ImageView) view.findViewById(R.id.profilePicture));
 
         edit.setOnClickListener(new View.OnClickListener()
@@ -104,8 +103,6 @@ public class ProfileFragment extends Fragment
             public void onClick(View view)
             {
                 description = editText.getText().toString();
-
-                Log.v("description is now", description);
 
                 textView.setVisibility(View.VISIBLE);
                 textView.setText(description);

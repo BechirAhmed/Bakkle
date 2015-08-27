@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -17,7 +18,6 @@ import android.widget.TextView;
 import com.bakkle.bakkle.Helpers.ServerCalls;
 import com.bakkle.bakkle.R;
 import com.bumptech.glide.Glide;
-import com.koushikdutta.ion.Ion;
 
 import java.util.ArrayList;
 
@@ -32,11 +32,10 @@ public class ItemDetailActivity extends AppCompatActivity {
     String description;
     String sellerImageUrl;
     ArrayList <String> imageURLs;
-    String url1;
     String seller;
     String distance;
     String pk;
-
+    boolean garage;
     ServerCalls serverCalls;
     SharedPreferences preferences;
 
@@ -50,7 +49,7 @@ public class ItemDetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         serverCalls = new ServerCalls(this);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-
+        garage = intent.getBooleanExtra("garage", false);
         title = intent.getStringExtra("title");
         price = intent.getStringExtra("price");
         description = intent.getStringExtra("description");
@@ -60,16 +59,23 @@ public class ItemDetailActivity extends AppCompatActivity {
         sellerImageUrl = intent.getStringExtra("sellerImageUrl");
         imageURLs = intent.getStringArrayListExtra("imageURLs");
 
-        for(String url : imageURLs)
-        {
-            loadPictureIntoView(url);
+        if (imageURLs != null) {
+            for(String url : imageURLs)
+            {
+                Log.v("test", "url is " + url);
+                loadPictureIntoView(url);
+            }
         }
+        else{Log.v("test", "imageURLs was null");}
 
         ((TextView) findViewById(R.id.seller)).setText(seller);
         ((TextView) findViewById(R.id.title)).setText(title);
         ((TextView) findViewById(R.id.description)).setText(description);
         ((TextView) findViewById(R.id.distance)).setText(distance);
         ((TextView) findViewById(R.id.price)).setText(price);
+        if(garage) {
+            findViewById(R.id.wantButton).setVisibility(View.GONE);
+        }
 
         Glide.with(this)
                 .load(sellerImageUrl)
@@ -104,11 +110,6 @@ public class ItemDetailActivity extends AppCompatActivity {
         RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.imageCollection);
         ImageView imageView = new ImageView(this);
         imageView.setId(productPictureViews.size() + 1);
-        Glide.with(this)
-                .load(url)
-                .fitCenter()
-                .crossFade()
-                .into(imageView);
 
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.MATCH_PARENT,
@@ -124,6 +125,15 @@ public class ItemDetailActivity extends AppCompatActivity {
         imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
         relativeLayout.addView(imageView);
+
+        Glide.with(this)
+                .load(url)
+                .fitCenter()
+                .crossFade()
+                .placeholder(R.drawable.loading)
+                .into(imageView);
+
+
         productPictureViews.add(imageView);
     }
 

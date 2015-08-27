@@ -1,6 +1,7 @@
 package com.bakkle.bakkle.Activities;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.DataSetObserver;
 import android.graphics.PorterDuff;
@@ -60,7 +61,13 @@ public class ChatActivity extends AppCompatActivity
     protected String uuid;
     public boolean selfBuyer;
     private String fbUrl;
-
+    private String title;
+    private String sellerName;
+    private String price;
+    private String distance;
+    private String description;
+    private String pk;
+    private ArrayList<String> imageUrls;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -71,6 +78,14 @@ public class ChatActivity extends AppCompatActivity
         chatId = b.getInt("chatId");
         selfBuyer = b.getBoolean("selfBuyer");
         fbUrl = b.getString("url");
+        title = b.getString("title");
+        sellerName = b.getString("seller");
+        price = b.getString("price");
+        distance = b.getString("distance");
+        description = b.getString("description");
+        pk = b.getString("pk");
+        imageUrls = b.getStringArrayList("imageUrls");
+
         send = (Button) findViewById(R.id.send);
         listView = (ListView) findViewById(R.id.list);
         chatText = (EditText) findViewById(R.id.compose);
@@ -157,7 +172,7 @@ public class ChatActivity extends AppCompatActivity
         return true;
     }
 
-    public void makeOffer(View view)
+    public void makeOffer(MenuItem item)
     {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setTitle("Offer Proposal");
@@ -232,11 +247,19 @@ public class ChatActivity extends AppCompatActivity
         });
     }
 
-    public void viewItem(View view)
+    public void viewItem(MenuItem item)
     {
-
+        Intent intent = new Intent(this, ItemDetailActivity.class);
+        intent.putExtra("title", title);
+        intent.putExtra("seller", sellerName);
+        intent.putExtra("price", price);
+        intent.putExtra("distance", distance);
+        intent.putExtra("sellerImageUrl", fbUrl);
+        intent.putExtra("description", description);
+        intent.putExtra("pk", pk);
+        intent.putStringArrayListExtra("imageURLs", imageUrls);
+        startActivity(intent);
     }
-
     private class GetMessagesWebSocketConnectCallback implements AsyncHttpClient.WebSocketConnectCallback
     {
 
@@ -369,7 +392,7 @@ public class ChatActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu)
     {
         // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.menu_chat, menu);
+        getMenuInflater().inflate(R.menu.menu_chat, menu);
         return true;
     }
 

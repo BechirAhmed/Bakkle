@@ -2,7 +2,6 @@ package com.bakkle.bakkle.Fragments;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -15,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.andtinder.model.CardModel;
@@ -44,6 +44,7 @@ public class FeedFragment extends Fragment
     FeedItem feedItem = null;
     CardContainer mCardContainer;
     private SearchView searchView;
+    private ProgressBar bar;
 
     CardModel card;
 
@@ -52,8 +53,6 @@ public class FeedFragment extends Fragment
 
 
     Bitmap bitmap;
-
-    JsonObject jsonResult;
 
     SharedPreferences.Editor editor;
     SharedPreferences preferences;
@@ -75,12 +74,6 @@ public class FeedFragment extends Fragment
     {
         super.onAttach(activity);
         mActivity = activity;
-        try {
-            onCardSelected = (OnCardSelected) activity;
-        }
-        catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement OnCardSelected");
-        }
     }
 
 
@@ -92,7 +85,9 @@ public class FeedFragment extends Fragment
         preferences = PreferenceManager.getDefaultSharedPreferences(mActivity);
 
         serverCalls = new ServerCalls(mActivity);
-
+        mCardContainer = (CardContainer) view.findViewById(R.id.cardView);
+        mCardContainer.setOrientation(Orientations.Orientation.Ordered);
+        bar = (ProgressBar) view.findViewById(R.id.spinner);
         searchView = (SearchView) view.findViewById(R.id.searchField);
         searchView.setQuery(preferences.getString("search_text", ""), false);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener()
@@ -124,12 +119,6 @@ public class FeedFragment extends Fragment
         catch (Exception e) {
             Log.d("testing", e.getMessage());
         }
-
-
-        mCardContainer = (CardContainer) view.findViewById(R.id.cardView);
-        mCardContainer.setOrientation(Orientations.Orientation.Ordered);
-
-
         return view;
     }
 
@@ -414,18 +403,6 @@ public class FeedFragment extends Fragment
 
     public Bitmap getCardImage(FeedItem item)
     {
-        //final Bitmap[] bitmap = new Bitmap[1];
-        /*Ion.with(this)
-                .load(item.getImageUrls().get(0))
-                .withBitmap()
-                .asBitmap()
-                .setCallback(new FutureCallback<Bitmap>() {
-                    @Override
-                    public void onCompleted(Exception e, Bitmap result) {
-                        //bitmap[0] = result;
-                        bitmap = result;
-                    }
-                });*/
         try {
             bitmap = Ion.with(this)
                     .load(item.getImageUrls().get(0))
@@ -442,18 +419,6 @@ public class FeedFragment extends Fragment
 
     public Bitmap getSellerImage(String id)
     {
-        //final Bitmap[] bitmap = new Bitmap[1];
-        /*Ion.with(this)
-                .load(item.getImageUrls().get(0))
-                .withBitmap()
-                .asBitmap()
-                .setCallback(new FutureCallback<Bitmap>() {
-                    @Override
-                    public void onCompleted(Exception e, Bitmap result) {
-                        //bitmap[0] = result;
-                        bitmap = result;
-                    }
-                });*/
         try {
             bitmap = Ion.with(this)
                     .load("http://graph.facebook.com/" + id + "/picture?width=142&height=142")
@@ -470,13 +435,10 @@ public class FeedFragment extends Fragment
 
     private class bgTask extends AsyncTask<Void, Void, JsonObject>
     {
-        ProgressDialog dialog = new ProgressDialog(mActivity); //TODO: Change from progress dialog to background spinner
-
         @Override
         protected void onPreExecute()
         {
-            this.dialog.setMessage("Loading Items");
-            this.dialog.show();
+            bar.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -496,20 +458,12 @@ public class FeedFragment extends Fragment
         @Override
         protected void onPostExecute(JsonObject jsonObject)
         {
-            if (dialog.isShowing()) {
-                dialog.dismiss();
-            }
-            jsonResult = jsonObject;
-//            if (dialog.isShowing()) {
-//                dialog.dismiss();
-//            }
+            bar.setVisibility(View.GONE);
 
-            if (jsonResult != null) {
-//                Log.v("emulator testing", jsonResult.toString());
-//                Log.v("emulator uuid", preferences.getString("uuid", ""));
-//                Log.v("emulator auth", preferences.getString("auth_token", ""));
-                //Log.v("result is", jsonResult.toString());
-                populateFeed(jsonResult.getAsJsonArray("feed"));
+            Log.v("jsonObject is", jsonObject.toString());
+
+            if (jsonObject != null) {
+                populateFeed(jsonObject.getAsJsonArray("feed"));
             }
             else
                 Log.d("Error", "error");

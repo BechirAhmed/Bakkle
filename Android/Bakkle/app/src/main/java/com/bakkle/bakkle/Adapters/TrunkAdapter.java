@@ -1,6 +1,7 @@
 package com.bakkle.bakkle.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bakkle.bakkle.Activities.ItemDetailActivity;
 import com.bakkle.bakkle.Helpers.FeedItem;
 import com.bakkle.bakkle.Helpers.ServerCalls;
 import com.bakkle.bakkle.R;
@@ -71,6 +73,26 @@ public class TrunkAdapter extends ArrayAdapter<FeedItem>{
                 .thumbnail(0.1f)
                 .crossFade()
                 .into(viewHolder.icon);
+
+        viewHolder.icon.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                Intent intent = new Intent(context, ItemDetailActivity.class);
+                intent.putExtra("title", item.getTitle());
+                intent.putExtra("seller", item.getSellerDisplayName());
+                intent.putExtra("price", item.getPrice());
+                intent.putExtra("distance", item.getDistance(
+                        preferences.getString("latitude", "0"),
+                        preferences.getString("longitude", "0")));
+                intent.putExtra("sellerImageUrl", "http://graph.facebook.com/" + item.getSellerFacebookId() + "/picture?width=142&height=142");
+                intent.putExtra("description", item.getDescription());
+                intent.putExtra("pk", item.getPk());
+                intent.putStringArrayListExtra("imageURLs", item.getImageUrls());
+                context.startActivity(intent);
+            }
+        });
 
         viewHolder.title.setText(item.getTitle());
         viewHolder.method.setText(item.getMethod());

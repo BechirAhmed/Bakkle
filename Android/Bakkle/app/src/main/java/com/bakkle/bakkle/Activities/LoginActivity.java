@@ -96,14 +96,12 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener
             }
 
             editor = preferences.edit();
-            editor.putString("uuid", Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID));
+            editor.putString("uuid", Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
             editor.apply();
 
             Log.v("uuid is", preferences.getString("uuid", "0"));
             LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>()
             {
-
-
                 private ProfileTracker mProfileTracker;
 
                 @Override

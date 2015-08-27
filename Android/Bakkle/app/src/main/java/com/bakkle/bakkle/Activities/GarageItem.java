@@ -9,8 +9,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.bakkle.bakkle.Adapters.ViewPagerAdapter;
+import com.bakkle.bakkle.Helpers.FeedItem;
 import com.bakkle.bakkle.R;
 import com.bakkle.bakkle.Views.SlidingTabLayout;
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
 
 public class GarageItem extends AppCompatActivity
 {
@@ -18,6 +22,7 @@ public class GarageItem extends AppCompatActivity
     ViewPager pager;
     ViewPagerAdapter adapter;
     SlidingTabLayout tabs;
+    FeedItem item;
     CharSequence Titles[] = {"Messages", "Analytics"};
     int numTabs = 2;
     
@@ -29,6 +34,8 @@ public class GarageItem extends AppCompatActivity
         String numHold;
         String numMeh;
         String numView;
+        String title, price, description, seller, distance, pk, sellerImageUrl;
+        ArrayList<String> imageURLs;
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_garage_item);
@@ -40,7 +47,18 @@ public class GarageItem extends AppCompatActivity
         numHold = i.getStringExtra("numHold");
         numMeh = i.getStringExtra("numMeh");
         numView = i.getStringExtra("numView");
-        adapter = new ViewPagerAdapter(getSupportFragmentManager(), Titles, numTabs, itemId, numView, numWant, numHold, numMeh);
+        title = i.getStringExtra("title");
+        price = i.getStringExtra("price");
+        description = i.getStringExtra("description");
+        seller = i.getStringExtra("seller");
+        distance = i.getStringExtra("distance");
+        pk = i.getStringExtra("pk");
+        sellerImageUrl = i.getStringExtra("sellerImageUrl");
+        imageURLs = i.getStringArrayListExtra("imageURLs");
+        item = new Gson().fromJson(i.getStringExtra("item"), FeedItem.class);
+        adapter = new ViewPagerAdapter(getSupportFragmentManager(), Titles, numTabs, itemId,
+                numView, numWant, numHold, numMeh, title, price, description, seller, distance,
+                pk, sellerImageUrl, imageURLs);
         pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(adapter);
         tabs = (SlidingTabLayout) findViewById(R.id.tabs);

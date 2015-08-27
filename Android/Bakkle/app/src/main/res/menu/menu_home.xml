@@ -1,11 +1,14 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto"
-      xmlns:tools="http://schemas.android.com/tools"
-      tools:context="com.bakkle.bakkle.Activities.HomeActivity">
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.bakkle.bakkle.Activities.HomeActivity">
 
-    <!--<item android:id="@+id/search"-->
-    <!--android:title="Search"-->
-    <!--android:icon="@drawable/ic_search"-->
-    <!--android:actionViewClass="android.widget.SearchView" />-->
+    <item
+        android:id="@+id/addItem"
+        android:icon="@drawable/ic_action_camera"
+        app:showAsAction="always"
+        android:onClick="addItem"
+        android:title="Add Item"/>
 
 </menu>

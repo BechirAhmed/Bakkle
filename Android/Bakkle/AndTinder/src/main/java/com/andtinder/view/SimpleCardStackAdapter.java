@@ -63,6 +63,7 @@ public final class SimpleCardStackAdapter extends CardStackAdapter
                 .load(url)
                 .centerCrop()
                 .crossFade()
+                .placeholder(R.drawable.loading)
                 .into(imageView);
     }
 
