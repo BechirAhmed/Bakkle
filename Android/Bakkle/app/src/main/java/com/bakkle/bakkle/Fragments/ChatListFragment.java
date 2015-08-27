@@ -42,12 +42,25 @@ public class ChatListFragment extends ListFragment
     protected String authToken;
     Activity mActivity;
     String uuid;
+    String title, price, description, seller, distance, pk, sellerImageUrl;
+    ArrayList<String> imageURLs;
 
-    public static ChatListFragment newInstance(String itemId)
+    public static ChatListFragment newInstance(String itemId, String title, String price, String description,
+                                               String seller, String distance, String pk, String sellerImageUrl,
+                                               ArrayList<String> imageURLs)
     {
         ChatListFragment fragment = new ChatListFragment();
         Bundle args = new Bundle();
         args.putString("itemId", itemId);
+        args.putString("title", title);
+        args.putString("seller", seller);
+        args.putString("price", price);
+        args.putString("distance", distance);
+        args.putString("sellerImageUrl", sellerImageUrl);
+        args.putString("description", description);
+        args.putString("pk", pk);
+        args.putStringArrayList("imageUrls", imageURLs);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -65,8 +78,17 @@ public class ChatListFragment extends ListFragment
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        Bundle b = getArguments();
         if (getArguments() != null) {
-            itemId = getArguments().getString("itemId");
+            itemId = b.getString("itemId");
+            title = b.getString("title");
+            seller = b.getString("seller");
+            price = b.getString("price");
+            distance = b.getString("distance");
+            sellerImageUrl = b.getString("sellerImageUrl");
+            description = b.getString("description");
+            pk = b.getString("pk");
+            imageURLs = b.getStringArrayList("imageURLs");
         }
         preferences = PreferenceManager.getDefaultSharedPreferences(mActivity);
         uuid = preferences.getString("uuid", "");
@@ -103,7 +125,7 @@ public class ChatListFragment extends ListFragment
         {
             if(ex != null)
             {
-                Log.v("callback exception", ex.getMessage());
+                Log.v("callback exception", "" + ex.getMessage());
                 return;
             }
             JSONObject json = new JSONObject();
@@ -165,13 +187,19 @@ public class ChatListFragment extends ListFragment
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-
         BuyerInfo buyerInfo = (BuyerInfo) getListAdapter().getItem(position);
         Intent intent = new Intent(mActivity, ChatActivity.class);
-//        intent.putExtra("chatId", 58);
-        intent.putExtra("chatId", buyerInfo.getChatPk()); //make sure to let the chat app window know if youre the buyer or seller somehow
+        intent.putExtra("chatId", buyerInfo.getChatPk());
         intent.putExtra("selfBuyer", false);
         intent.putExtra("url", buyerInfo.getFacebookURL());
+        intent.putExtra("title", title);
+        intent.putExtra("seller", seller);
+        intent.putExtra("price", price);
+        intent.putExtra("distance", distance);
+        intent.putExtra("description", description);
+        intent.putExtra("pk", pk);
+        intent.putExtra("urls", imageURLs);
+
         startActivity(intent);
     }
     

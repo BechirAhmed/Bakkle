@@ -14,7 +14,6 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.widget.ListView;
 
-import com.andtinder.view.SimpleCardStackAdapter;
 import com.bakkle.bakkle.Activities.ChatActivity;
 import com.bakkle.bakkle.Adapters.TrunkAdapter;
 import com.bakkle.bakkle.Helpers.ChatCalls;
@@ -142,7 +141,7 @@ public class BuyersTrunkFragment extends ListFragment
         super.onListItemClick(l, v, position, id);
 
         FeedItem item = (FeedItem) getListAdapter().getItem(position);
-        new StartChatIntermediary(item.getPk());
+        new StartChatIntermediary(item);
 
 
         if (mListener != null) {
@@ -154,34 +153,32 @@ public class BuyersTrunkFragment extends ListFragment
 
     private class StartChatIntermediary
     {
-        public StartChatIntermediary(String pk)
+        public StartChatIntermediary(FeedItem item)
         {
-            ChatCalls chatCalls = new ChatCalls(uuid, authToken.substring(33, 35), authToken, new WebSocketCallBack(pk));
+            ChatCalls chatCalls = new ChatCalls(uuid, authToken.substring(33, 35), authToken, new WebSocketCallBack(item));
             chatCalls.connect();
         }
     }
 
     private class WebSocketCallBack implements AsyncHttpClient.WebSocketConnectCallback
     {
-        String pk;
-        public WebSocketCallBack(String pk) {this.pk = pk;}
+        FeedItem item;
+        public WebSocketCallBack(FeedItem item) {this.item = item;}
 
         @Override
         public void onCompleted(Exception ex, WebSocket webSocket)
         {
             if(ex != null)
             {
-                Log.e("callback exception", ex.getMessage());
+                Log.e("Callback Exception", ""+ex.getMessage());
                 return;
             }
             JSONObject json = new JSONObject();
             try {
                 json.put("method", "chat_startChat");
-                json.put("itemId", pk);
+                json.put("itemId", item.getPk());
                 json.put("uuid", uuid);
                 json.put("auth_token", authToken);
-//                json.put("uuid", "E7F742EB-67EE-4738-ABEC-F0A3B62B45EB");
-//                json.put("auth_token", "f02dfb77e9615ae630753b37637abb31_10");
             }
             catch (Exception e) {
                 Log.e("Websocket callback", e.getMessage());
@@ -201,6 +198,14 @@ public class BuyersTrunkFragment extends ListFragment
                     Intent i = new Intent(mActivity, ChatActivity.class);
                     i.putExtra("chatId", Integer.parseInt(jsonObject.get("chatId").getAsString()));
                     i.putExtra("selfBuyer", true);
+                    i.putExtra("url", "http://graph.facebook.com/" + item.getSellerFacebookId() + "/picture?width=142&height=142");
+                    i.putExtra("title", item.getTitle());
+                    i.putExtra("seller", item.getSellerDisplayName());
+                    i.putExtra("price", item.getPrice());
+                    i.putExtra("distance", item.getDistance(preferences.getString("latitude", "0"), preferences.getString("longitude", "0")));
+                    i.putExtra("description", item.getDescription());
+                    i.putExtra("pk", item.getPk());
+                    i.putExtra("urls", item.getImageUrls());
                     startActivity(i);
                 }
             });
@@ -226,21 +231,20 @@ public class BuyersTrunkFragment extends ListFragment
     public ArrayList<FeedItem> getItems(JsonObject json)
     {
         JsonArray jsonArray = json.get("buyers_trunk").getAsJsonArray();
-        ;
-        SimpleCardStackAdapter adapter = new SimpleCardStackAdapter(mActivity);
+
         JsonObject temp, item;
-        ArrayList<FeedItem> feedItems = new ArrayList<FeedItem>();
+        ArrayList<FeedItem> feedItems = new ArrayList<>();
         ArrayList<String> tags, imageUrls;
-        JsonObject seller;
+        //JsonObject seller;
         JsonArray imageUrlArray, tagArray;
         FeedItem feedItem;
-        String pk, sellerFacebookId;
+        //String pk, sellerFacebookId;
         String tagsString;
 
         for (JsonElement element : jsonArray) {
             item = element.getAsJsonObject().getAsJsonObject("item");
             feedItem = new FeedItem(mActivity);
-            temp = element.getAsJsonObject();
+            //temp = element.getAsJsonObject();
 
             feedItem.setTitle(item.get("title").getAsString());
             feedItem.setDescription(item.get("description").getAsString());
@@ -248,9 +252,8 @@ public class BuyersTrunkFragment extends ListFragment
             feedItem.setPrice(item.get("price").getAsString());
             feedItem.setLocation(item.get("location").getAsString()); //TODO: difference between location and sellerlocation??
             feedItem.setMethod(item.get("method").getAsString());
-            sellerFacebookId = item.get("seller").getAsJsonObject().get("facebook_id").getAsString();
-            pk = item.get("pk").getAsString();
-            feedItem.setPk(pk);
+            feedItem.setSellerFacebookId(item.get("seller").getAsJsonObject().get("facebook_id").getAsString());
+            feedItem.setPk(item.get("pk").getAsString());
 
 
             imageUrlArray = item.get("image_urls").getAsJsonArray();
@@ -261,16 +264,9 @@ public class BuyersTrunkFragment extends ListFragment
             feedItem.setImageUrls(imageUrls);
 
             tagsString = item.get("tags").getAsString();
-            tags = new ArrayList<String>(Arrays.asList(tagsString.split(",")));
+            tags = new ArrayList<>(Arrays.asList(tagsString.split(",")));
             feedItem.setTags(tags);
 
-//            tagArray = item.get("tags").getAsJsonArray();
-//            tags = new ArrayList<String>();
-//            for(JsonElement tagElement : tagArray)
-//            {
-//                tags.add(tagElement.getAsString());
-//            }
-//            feedItem.setTags(tags);
             feedItems.add(feedItem);
 
 

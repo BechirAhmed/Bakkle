@@ -9,7 +9,6 @@ import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.ListView;
 
-import com.andtinder.view.SimpleCardStackAdapter;
 import com.bakkle.bakkle.Activities.ItemDetailActivity;
 import com.bakkle.bakkle.Adapters.HoldingAdapter;
 import com.bakkle.bakkle.Helpers.FeedItem;
@@ -36,8 +35,6 @@ public class HoldingPatternFragment extends ListFragment {
 
     ServerCalls serverCalls;
 
-    ArrayList<FeedItem> items;
-
     JsonObject json;
 
     /**
@@ -56,9 +53,7 @@ public class HoldingPatternFragment extends ListFragment {
 
         json = serverCalls.populateHolding(preferences.getString("auth_token", "0"), preferences.getString("uuid", "0"));
 
-        items = getItems(json);
-
-        setListAdapter(new HoldingAdapter(mActivity, items));
+        setListAdapter(new HoldingAdapter(mActivity, getItems(json)));
     }
 
 
@@ -98,7 +93,6 @@ public class HoldingPatternFragment extends ListFragment {
         intent.putExtra("sellerImageUrl", url);
         intent.putExtra("description", item.getDescription());
         intent.putExtra("pk", item.getPk());
-        intent.putExtra("url1", item.getImageUrls().get(0));
         intent.putStringArrayListExtra("imageURLs", item.getImageUrls());
         startActivity(intent);
 
@@ -129,14 +123,12 @@ public class HoldingPatternFragment extends ListFragment {
     {
 
         JsonArray jsonArray = json.getAsJsonArray("holding_pattern");
-        SimpleCardStackAdapter adapter = new SimpleCardStackAdapter(mActivity);
-        JsonObject temp, item;
+        JsonObject item;
         ArrayList<FeedItem> feedItems = new ArrayList<FeedItem>();
         ArrayList<String> tags, imageUrls;
-        JsonObject seller;
-        JsonArray imageUrlArray, tagArray;
+        JsonArray imageUrlArray;
         FeedItem feedItem;
-        String pk, sellerFacebookId, tagsString;
+        String tagsString;
 
 
         for(JsonElement element : jsonArray)
@@ -151,13 +143,12 @@ public class HoldingPatternFragment extends ListFragment {
             feedItem.setPrice(item.get("price").getAsString());
             feedItem.setLocation(item.get("location").getAsString()); //TODO: difference between location and sellerlocation??
             feedItem.setMethod(item.get("method").getAsString());
-            //sellerFacebookId = item.get("seller").getAsJsonObject().get("facebook_id").getAsString();
-            pk = item.get("pk").getAsString();
-            feedItem.setPk(pk);
+            feedItem.setSellerFacebookId(item.get("seller").getAsJsonObject().get("facebook_id").getAsString());
+            feedItem.setPk(item.get("pk").getAsString());
 
 
             imageUrlArray = item.get("image_urls").getAsJsonArray();
-            imageUrls = new ArrayList<String>();
+            imageUrls = new ArrayList<>();
             for(JsonElement urlElement : imageUrlArray)
             {
                 imageUrls.add(urlElement.getAsString());
@@ -176,13 +167,6 @@ public class HoldingPatternFragment extends ListFragment {
 //            }
 //            feedItem.setTags(tags);
             feedItems.add(feedItem);
-
-
-            feedItem = null;
-            temp = null;
-            imageUrlArray = null;
-            imageUrls = null;
-            item = null;
         }
 
         return feedItems;

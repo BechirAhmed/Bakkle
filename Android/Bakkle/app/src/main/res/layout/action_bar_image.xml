@@ -25,28 +25,17 @@
         android:background="@null"
         android:src="@drawable/ic_drawer" />
 
-    <ImageButton
-        android:id="@+id/action_bar_rightImage"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="8dp"
-        android:background="@null"
-        android:onClick="addItem"
-        android:src="@drawable/ic_action_camera"
-        android:longClickable="true" />
-
-    <!--<ImageButton
-        android:id="@+id/search_button"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="0dp"
-        android:layout_toLeftOf="@+id/action_bar_rightImage"
-        android:background="@null"
-        android:src="@drawable/ic_search"
-        /> -->
+    <!--<ImageButton-->
+        <!--android:id="@+id/action_bar_rightImage"-->
+        <!--android:layout_width="45dp"-->
+        <!--android:layout_height="45dp"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:layout_marginRight="8dp"-->
+        <!--android:background="@null"-->
+        <!--android:onClick="addItem"-->
+        <!--android:src="@drawable/ic_action_camera"-->
+        <!--android:longClickable="true" />-->
 
 
 </RelativeLayout>

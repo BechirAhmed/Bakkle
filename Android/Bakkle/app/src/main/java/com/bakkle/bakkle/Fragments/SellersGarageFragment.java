@@ -19,34 +19,15 @@ import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 
-/**
- * A fragment representing a list of Items.
- * <p/>
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
- * interface.
- */
+
 public class SellersGarageFragment extends ListFragment
 {
 
     SharedPreferences preferences;
     private OnFragmentInteractionListener mListener;
     ServerCalls serverCalls;
-    ArrayList<FeedItem> items = null;
     JsonObject json;
     Activity mActivity;
-
-
-    // TODO: Rename and change types of parameters
-    public static SellersGarageFragment newInstance()
-    {
-        SellersGarageFragment fragment = new SellersGarageFragment();
-//        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
-//        fragment.setArguments(args);
-        return fragment;
-    }
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -82,10 +63,7 @@ public class SellersGarageFragment extends ListFragment
 //
 
         json = serverCalls.populateGarage(preferences.getString("auth_token", ""), preferences.getString("uuid", ""));
-
-        items = getItems(json);
-        setListAdapter(new GarageAdapter(mActivity, items));
-
+        setListAdapter(new GarageAdapter(mActivity, getItems(json)));
     }
 
 
@@ -102,12 +80,6 @@ public class SellersGarageFragment extends ListFragment
                     + " must implement OnFragmentInteractionListener");
         }
     }
-
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-//    {
-//        return inflater.inflate(R.layout.fragment_sellersgarage, null, false);
-//    }
 
     @Override
     public void onDetach()
@@ -128,15 +100,16 @@ public class SellersGarageFragment extends ListFragment
         intent.putExtra("numHold", item.getNumHold());
         intent.putExtra("numMeh", item.getNumMeh());
         intent.putExtra("numView", item.getNumView());
-//        Intent intent = new Intent(mActivity, ChatListActivity.class);
-//        intent.putExtra("itemId", item.getPk());
-        startActivity(intent);
+        intent.putExtra("title", item.getTitle());
+        intent.putExtra("seller", item.getSellerDisplayName());
+        intent.putExtra("price", item.getPrice());
+        intent.putExtra("distance", item.getDistance(preferences.getString("latitude", ""), preferences.getString("longitude", "")));
+        intent.putExtra("sellerImageUrl", "http://graph.facebook.com/" + item.getSellerFacebookId() + "/picture?width=142&height=142");
+        intent.putExtra("description", item.getDescription());
+        intent.putExtra("pk", item.getPk());
+        intent.putStringArrayListExtra("imageURLs", item.getImageUrls());
 
-        if (mListener != null) {
-            // Notify the active callbacks interface (the activity, if the
-            // fragment is attached to one) that an item has been selected.
-            //mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
-        }
+        startActivity(intent);
     }
 
     /**
@@ -165,8 +138,6 @@ public class SellersGarageFragment extends ListFragment
         JsonObject seller;
         JsonArray imageUrlArray, tagArray;
         FeedItem feedItem;
-        String pk, sellerFacebookId;
-
 
         for (JsonElement element : jsonArray) {
             item = element.getAsJsonObject();
@@ -180,9 +151,8 @@ public class SellersGarageFragment extends ListFragment
             feedItem.setNumMeh(item.get("number_of_meh").getAsString());
             feedItem.setNumWant(item.get("number_of_want").getAsString());
             feedItem.setNumHold(item.get("number_of_holding").getAsString());
-            pk = item.get("pk").getAsString();
-            feedItem.setPk(pk);
-
+            feedItem.setLocation(item.get("location").getAsString());
+            feedItem.setPk(item.get("pk").getAsString());
 
             imageUrlArray = item.get("image_urls").getAsJsonArray();
             imageUrls = new ArrayList<>();
@@ -191,12 +161,8 @@ public class SellersGarageFragment extends ListFragment
             }
             feedItem.setImageUrls(imageUrls);
 
-
             feedItems.add(feedItem);
         }
-
         return feedItems;
-
     }
-
 }

@@ -1,12 +1,9 @@
 package com.bakkle.bakkle.Helpers;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.location.Location;
-import android.util.Log;
 
 import com.google.gson.JsonObject;
-import com.koushikdutta.ion.Ion;
 
 import java.util.ArrayList;
 
@@ -205,7 +202,6 @@ public class FeedItem {
     }
 
     public String getDistance(String latitude, String longitude){
-        //TODO: Use location services to figure out how far away item actually is
         Location location1 = new Location("user location");
         location1.setLatitude(Double.parseDouble(latitude));
         location1.setLongitude(Double.parseDouble(longitude));
@@ -228,91 +224,6 @@ public class FeedItem {
         }else{
             return d<0 ? -(i+1) : i+1;
         }
-    }
-
-    public Bitmap getFirstImage()
-    {
-        Bitmap bitmap = null;
-        //final Bitmap[] bitmap = new Bitmap[1];
-        /*Ion.with(this)
-                .load(item.getImageUrls().get(0))
-                .withBitmap()
-                .asBitmap()
-                .setCallback(new FutureCallback<Bitmap>() {
-                    @Override
-                    public void onCompleted(Exception e, Bitmap result) {
-                        //bitmap[0] = result;
-                        bitmap = result;
-                    }
-                });*/
-        try{
-            bitmap = Ion.with(c)
-                    .load(getImageUrls().get(0))
-                    .withBitmap()
-                    .asBitmap()
-                    .get();
-        }
-        catch (Exception e)
-        {
-            Log.d("testing error 22", e.getMessage());
-        }
-        //return bitmap[0];
-        return bitmap;
-    }
-
-    public Bitmap getSellerImage(){
-        //final Bitmap[] bitmap = new Bitmap[1];
-        /*Ion.with(this)
-                .load(item.getImageUrls().get(0))
-                .withBitmap()
-                .asBitmap()
-                .setCallback(new FutureCallback<Bitmap>() {
-                    @Override
-                    public void onCompleted(Exception e, Bitmap result) {
-                        //bitmap[0] = result;
-                        bitmap = result;
-                    }
-                });*/
-        Bitmap bitmap = null;
-        try{
-            bitmap = Ion.with(c)
-                    .load("http://graph.facebook.com/" + getSellerFacebookId() + "/picture?width=142&height=142")
-                    .withBitmap()
-                    .asBitmap()
-                    .get();
-        }
-        catch (Exception e)
-        {
-            Log.d("testing error 11", e.getMessage());
-        }
-        //return bitmap[0];
-        return bitmap;
-
-        /*Bitmap bitmap=null;
-        final String nomimg = "https://graph.facebook.com/"+ getSellerFacebookId() +"/picture?width=142&height=142";
-        URL imageURL = null;
-
-        try {
-            imageURL = new URL(nomimg);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            HttpURLConnection connection = (HttpURLConnection) imageURL.openConnection();
-            connection.setDoInput(true);
-            connection.setInstanceFollowRedirects(true);
-            connection.connect();
-            InputStream inputStream = connection.getInputStream();
-            //img_value.openConnection().setInstanceFollowRedirects(true).getInputStream()
-            bitmap = BitmapFactory.decodeStream(inputStream);
-
-        } catch (IOException e) {
-
-            e.printStackTrace();
-        }
-        return bitmap;*/
-
     }
 
 }
