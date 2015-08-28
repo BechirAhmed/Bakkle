@@ -81,7 +81,7 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
         editor = preferences.edit();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        mDrawerItems = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.drawer_items)));
+        mDrawerItems = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.drawer_items)));
         mDrawerIcons = getResources().obtainTypedArray(R.array.drawer_icons);
 
         DrawerImageLoader.init(new DrawerImageLoader.IDrawerImageLoader()

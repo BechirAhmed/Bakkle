@@ -1,13 +1,19 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:context="com.bakkle.bakkle.Activities.AddItemActivity">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.bakkle.bakkle.Activities.AddItemActivity">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar_title"/>
 
     <HorizontalScrollView
         android:id="@+id/images"
         android:layout_width="fill_parent"
         android:layout_height="250dp"
+        android:layout_below="@id/toolbar"
         android:background="@color/black">
 
         <RelativeLayout
@@ -63,7 +69,7 @@
             android:backgroundTint="@color/green"
             android:editable="false"
             android:hint="Title"
-            android:inputType="text"
+            android:inputType="textCapSentences"
             android:lines="1"
             android:textColor="@color/black"
             android:theme="@style/AppCompatTheme"/>
@@ -108,50 +114,53 @@
         android:paddingRight="16dp">
 
         <TextView
-            android:id="@+id/tagsPrompt"
+            android:id="@+id/descriptionPrompt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingRight="10dp"
-            android:text="Tags"
+            android:text="Description"
             android:textStyle="bold"/>
 
         <EditText
-            android:id="@+id/tagsField"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/tagsPrompt"
-            android:layout_toRightOf="@+id/tagsPrompt"
-            android:backgroundTint="@color/green"
-            android:hint="5 words to describe item"
-            android:inputType="textCapWords"
+            android:id="@+id/descriptionField"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/share"
+            android:layout_alignBaseline="@+id/descriptionPrompt"
+            android:layout_alignTop="@+id/descriptionPrompt"
+            android:layout_below="@+id/priceField"
+            android:layout_toEndOf="@+id/descriptionPrompt"
+            android:hint="@string/description_text_add_item"
+            android:inputType="textCapSentences|textMultiLine"
+            android:lines="7"
             android:textColor="@color/black"
             android:theme="@style/AppCompatTheme"/>
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/method"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/confirm"
-        android:layout_below="@+id/tags"
-        android:paddingBottom="25dp"
-        android:paddingLeft="16dp"
-        android:text="Method"
-        android:textStyle="bold"/>
+    <!--<TextView-->
+    <!--android:id="@+id/method"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignLeft="@+id/confirm"-->
+    <!--android:layout_below="@+id/tags"-->
+    <!--android:paddingBottom="25dp"-->
+    <!--android:paddingLeft="16dp"-->
+    <!--android:text="Method"-->
+    <!--android:textStyle="bold"/>-->
 
-    <Spinner
-        android:id="@+id/methodPicker"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignTop="@+id/method"
-        android:backgroundTint="@color/green"
-        android:entries="@array/Methods"
-        android:paddingBottom="25dp"
-        android:paddingRight="16dp"
-        android:prompt="@string/choose"
-        android:textColor="@color/black"
-        android:theme="@style/AppCompatTheme"/>
+    <!--<Spinner-->
+    <!--android:id="@+id/methodPicker"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignParentEnd="true"-->
+    <!--android:layout_alignTop="@+id/method"-->
+    <!--android:backgroundTint="@color/green"-->
+    <!--android:entries="@array/Methods"-->
+    <!--android:paddingBottom="25dp"-->
+    <!--android:paddingRight="16dp"-->
+    <!--android:prompt="@string/choose"-->
+    <!--android:textColor="@color/black"-->
+    <!--android:theme="@style/AppCompatTheme"/>-->
 
     <TextView
         android:layout_width="wrap_content"
