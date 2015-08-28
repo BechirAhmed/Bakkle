@@ -232,13 +232,10 @@ public class ServerCalls
 
     }
 
-    public JsonObject addItem(String name, String description, String price, String pickupMethod, String tags,
-                              ArrayList<String> imageUri, String authToken, String uuid)
+    public JsonObject addItem(String name, String description, String price, String pickupMethod,
+                              String tags, ArrayList<String> imageUri, String authToken, String uuid, String location)
     {
         try {
-            Log.v("imageURI 0 is ", imageUri.get(0));
-
-
             Builders.Any.M body = Ion.with(mContext)
                     .load("POST", url_base + url_add_item)
                     .setLogging("UPLOAD LOG ", Log.VERBOSE)
@@ -249,24 +246,26 @@ public class ServerCalls
                     .setMultipartParameter("price", price)
                     .setMultipartParameter("method", pickupMethod)
                     .setMultipartParameter("tags", tags)
-                    .setMultipartParameter("location", "32,32"); //TODO: GET REAL LOCATION
+                    .setMultipartParameter("location", location); //TODO: GET REAL LOCATION
 
             for (String uri : imageUri) {
                 body.setMultipartFile("image", new File(uri));
             }
 
+            jsonResponse = body.asJsonObject().get();
+            return jsonResponse;
 
-            body.asJsonObject().setCallback(new FutureCallback<JsonObject>()
-            {
-                @Override
-                public void onCompleted(Exception e, JsonObject result)
-                {
-                    if (e != null)
-                        e.printStackTrace();
-                    Log.v("the result is ", result.toString());
-                    jsonResponse = result;
-                }
-            });
+//            body.asJsonObject().setCallback(new FutureCallback<JsonObject>()
+//            {
+//                @Override
+//                public void onCompleted(Exception e, JsonObject result)
+//                {
+//                    if (e != null)
+//                        e.printStackTrace();
+//                    Log.v("the result is ", result.toString());
+//                    jsonResponse = result;
+//                }
+//            });
         }
         catch (Exception e) {
             Log.v("testing upload", e.getMessage());
