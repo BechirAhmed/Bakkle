@@ -1,6 +1,7 @@
 package com.bakkle.bakkle.Fragments;
 
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -22,7 +23,7 @@ public class AnalyticsFragment extends Fragment
     private String numHold;
     private String numMeh;
     private String numView;
-
+    public Activity mActivity;
 
     public static AnalyticsFragment newInstance(String numView, String numWant, String numHold, String numMeh)
     {
@@ -50,6 +51,13 @@ public class AnalyticsFragment extends Fragment
             numMeh = args.getString("numMeh");
         }
     }
+
+    @Override
+    public void onAttach(Activity activity)
+    {
+        super.onAttach(activity);
+        mActivity = activity;
+    }
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,7 +65,6 @@ public class AnalyticsFragment extends Fragment
     {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_analytics, container, false);
-
         PieChartView pieChartView = (PieChartView) view.findViewById(R.id.piechart);
         pieChartView.setInteractive(false);
         ArrayList<SliceValue> values = new ArrayList<>();

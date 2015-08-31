@@ -9,7 +9,7 @@ import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.ListView;
 
-import com.bakkle.bakkle.Activities.GarageItem;
+import com.bakkle.bakkle.Activities.GarageItemActivity;
 import com.bakkle.bakkle.Adapters.GarageAdapter;
 import com.bakkle.bakkle.Helpers.FeedItem;
 import com.bakkle.bakkle.Helpers.ServerCalls;
@@ -94,7 +94,7 @@ public class SellersGarageFragment extends ListFragment
         super.onListItemClick(l, v, position, id);
 
         FeedItem item = (FeedItem) getListAdapter().getItem(position);
-        Intent intent = new Intent(mActivity, GarageItem.class);
+        Intent intent = new Intent(mActivity, GarageItemActivity.class);
         intent.putExtra("itemId", item.getPk());
         intent.putExtra("numWant", item.getNumWant());
         intent.putExtra("numHold", item.getNumHold());

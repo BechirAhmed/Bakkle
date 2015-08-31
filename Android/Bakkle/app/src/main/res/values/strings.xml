@@ -58,6 +58,7 @@
     <string name="reject_offer">Reject Offer</string>
     <string name="title_activity_garage_item">GarageItem</string>
     <string name="description_text_add_item">Words to describe item</string>
+    <string name="title_activity_camera">CameraActivity</string>
 
 
 </resources>

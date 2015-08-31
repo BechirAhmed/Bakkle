@@ -40,7 +40,7 @@ public class ChatListFragment extends ListFragment
     ChatListAdapter chatListAdapter;
     String response;
     protected String authToken;
-    Activity mActivity;
+    public Activity mActivity;
     String uuid;
     String title, price, description, seller, distance, pk, sellerImageUrl;
     ArrayList<String> imageURLs;
@@ -113,7 +113,8 @@ public class ChatListFragment extends ListFragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        return inflater.inflate(R.layout.fragment_chat_list, null, false);
+        View view = inflater.inflate(R.layout.fragment_chat_list, null, false);
+        return view;
     }
 
 
