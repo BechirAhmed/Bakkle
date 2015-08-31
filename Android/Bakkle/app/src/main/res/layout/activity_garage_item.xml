@@ -4,11 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.bakkle.bakkle.Activities.GarageItem">
+    tools:context="com.bakkle.bakkle.Activities.GarageItemActivity">
 
     <include
         android:id="@+id/toolbar"
-        layout="@layout/toolbar_home"/>
+        layout="@layout/toolbar_title"/>
 
     <com.bakkle.bakkle.Views.SlidingTabLayout
         android:id="@+id/tabs"

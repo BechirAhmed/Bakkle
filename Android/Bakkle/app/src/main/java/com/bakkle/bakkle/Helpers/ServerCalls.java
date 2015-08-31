@@ -238,7 +238,6 @@ public class ServerCalls
         try {
             Builders.Any.M body = Ion.with(mContext)
                     .load("POST", url_base + url_add_item)
-                    .setLogging("UPLOAD LOG ", Log.VERBOSE)
                     .setMultipartParameter("auth_token", authToken)
                     .setMultipartParameter("device_uuid", uuid)
                     .setMultipartParameter("title", name)
@@ -246,7 +245,7 @@ public class ServerCalls
                     .setMultipartParameter("price", price)
                     .setMultipartParameter("method", pickupMethod)
                     .setMultipartParameter("tags", tags)
-                    .setMultipartParameter("location", location); //TODO: GET REAL LOCATION
+                    .setMultipartParameter("location", location);
 
             for (String uri : imageUri) {
                 body.setMultipartFile("image", new File(uri));

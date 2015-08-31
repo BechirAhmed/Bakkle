@@ -1,12 +1,15 @@
 package com.bakkle.bakkle.Activities;
 
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.bakkle.bakkle.Adapters.ViewPagerAdapter;
 import com.bakkle.bakkle.Helpers.FeedItem;
@@ -16,7 +19,7 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
-public class GarageItem extends AppCompatActivity
+public class GarageItemActivity extends AppCompatActivity
 {
     Toolbar toolbar;
     ViewPager pager;
@@ -41,6 +44,18 @@ public class GarageItem extends AppCompatActivity
         setContentView(R.layout.activity_garage_item);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+        upArrow.setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                onBackPressed();
+            }
+        });
         Intent i = getIntent();
         itemId = i.getStringExtra("itemId");
         numWant = i.getStringExtra("numWant");
@@ -71,6 +86,7 @@ public class GarageItem extends AppCompatActivity
                 return getResources().getColor(R.color.white);
             }
         });
+
         tabs.setViewPager(pager);
     }
     
@@ -96,5 +112,10 @@ public class GarageItem extends AppCompatActivity
 //        }
         
         return super.onOptionsItemSelected(item);
+    }
+
+    public Toolbar getToolbar()
+    {
+        return toolbar;
     }
 }

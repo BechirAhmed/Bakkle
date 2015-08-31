@@ -152,6 +152,7 @@ public class AddItemActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
+        startActivity(new Intent(this, CameraActivity.class));
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
 
             Matrix matrix = new Matrix();
@@ -275,8 +276,6 @@ public class AddItemActivity extends AppCompatActivity
                     preferences.getString("auth_token", ""), preferences.getString("uuid", ""),
                     preferences.getString("locationString", "0,0"));
             dialog.dismiss();
-
-            Log.v("json is", json.toString());
         }
 
         if (shareFB && json != null && json.has("status") && json.get("status").getAsInt() == 1) {
