@@ -78,7 +78,7 @@ public class AddItemActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (intent.resolveActivity(getPackageManager()) != null)  //TODO: Add my own camera interface so that only square pictures are taken
+        if (intent.resolveActivity(getPackageManager()) != null)  //TODO: Add my own mCamera interface so that only square pictures are taken
         //TODO: add video
         {
             File photoFile = null;
@@ -241,7 +241,7 @@ public class AddItemActivity extends AppCompatActivity
         }
 
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (intent.resolveActivity(getPackageManager()) != null)  //TODO: Add my own camera interface so that only square pictures are taken
+        if (intent.resolveActivity(getPackageManager()) != null)  //TODO: Add my own mCamera interface so that only square pictures are taken
         {
             File photoFile = null;
             try {

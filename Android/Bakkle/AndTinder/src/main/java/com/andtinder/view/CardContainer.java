@@ -23,6 +23,7 @@ import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.view.animation.LinearInterpolator;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 
@@ -34,11 +35,11 @@ import java.util.Random;
 
 public class CardContainer extends AdapterView<ListAdapter> implements View.OnDragListener
 {
-    public static final int INVALID_POINTER_ID = -1;
-    private int mActivePointerId = INVALID_POINTER_ID;
-    private static final double DISORDERED_MAX_ROTATION_RADIANS = Math.PI / 64;
-    private int mNumberOfCards = -1;
-    private final DataSetObserver mDataSetObserver = new DataSetObserver()
+    public static final  int             INVALID_POINTER_ID              = -1;
+    private              int             mActivePointerId                = INVALID_POINTER_ID;
+    private static final double          DISORDERED_MAX_ROTATION_RADIANS = Math.PI / 64;
+    private              int             mNumberOfCards                  = -1;
+    private final        DataSetObserver mDataSetObserver                = new DataSetObserver()
     {
         @Override
         public void onChanged()
@@ -55,25 +56,25 @@ public class CardContainer extends AdapterView<ListAdapter> implements View.OnDr
             clearStack();
         }
     };
-    private final Random mRandom = new Random();
-    private final Rect boundsRect = new Rect();
-    private final Rect childRect = new Rect();
-    private final Matrix mMatrix = new Matrix();
+    private final        Random          mRandom                         = new Random();
+    private final        Rect            boundsRect                      = new Rect();
+    private final        Rect            childRect                       = new Rect();
+    private final        Matrix          mMatrix                         = new Matrix();
 
 
     //TODO: determine max dynamically based on device speed
     private int mMaxVisible = 3;
     private GestureDetector mGestureDetector;
-    private int mFlingSlop;
-    private Orientation mOrientation;
-    private ListAdapter mListAdapter;
-    private float mLastTouchX;
-    private float mLastTouchY;
-    private View mTopCard;
-    private int mTouchSlop;
-    private int mGravity;
-    private int mNextAdapterPosition;
-    private boolean mDragging;
+    private int             mFlingSlop;
+    private Orientation     mOrientation;
+    private ListAdapter     mListAdapter;
+    private float           mLastTouchX;
+    private float           mLastTouchY;
+    private View            mTopCard;
+    private int             mTouchSlop;
+    private int             mGravity;
+    private int             mNextAdapterPosition;
+    private boolean         mDragging;
 
     public CardContainer(Context context)
     {
@@ -613,4 +614,43 @@ public class CardContainer extends AdapterView<ListAdapter> implements View.OnDr
             return true;
         }
     }
+
+    public void like() //used to animate swiping a view off TODO: call this method when you click like on item detail page
+    {
+        final View topCard = mTopCard;
+
+        mTopCard = getChildAt(getChildCount() - 2);
+        CardModel cardModel = (CardModel) getAdapter().getItem(0);
+
+        if (mTopCard != null)
+            mTopCard.setLayerType(LAYER_TYPE_HARDWARE, null);
+
+        topCard.animate()
+                .setDuration(500)
+                .alpha(.75f)
+                .setInterpolator(new LinearInterpolator())
+                .x(topCard.getWidth())
+                .y(topCard.getY())
+                .rotation(45)
+                .setListener(new AnimatorListenerAdapter()
+                {
+                    @Override
+                    public void onAnimationEnd(Animator animation)
+                    {
+                        removeViewInLayout(topCard);
+                        ensureFull();
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation)
+                    {
+                        onAnimationEnd(animation);
+                    }
+                });
+
+        if (cardModel.getOnCardDismissedListener() != null) {
+            cardModel.getOnCardDismissedListener().onLike(cardModel);
+        }
+    }
+
 }

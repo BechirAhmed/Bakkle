@@ -3,11 +3,156 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black"
     tools:context="com.bakkle.bakkle.Activities.CameraActivity">
 
-    <SurfaceView
+    <RelativeLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp">
+
+        <ImageView
+            android:id="@+id/cancel"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentStart="true"
+            android:src="@drawable/ic_action_close"/>
+
+        <ImageView
+            android:id="@+id/switchCamera"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/ic_action_switch_camera"/>
+
+    </RelativeLayout>
+
+    <com.bakkle.bakkle.Views.SquareSurfaceView
         android:id="@+id/camera_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_below="@+id/topBar"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/camera_view">
+
+        <RelativeLayout
+            android:id="@+id/images"
+            android:layout_width="wrap_content"
+            android:layout_height="108dp"
+            android:layout_centerHorizontal="true">
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/frame1">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/x1"
+                    android:src="@drawable/ic_action_close"
+                    android:visibility="invisible"/>
+
+                <ImageView
+                    android:id="@+id/image1"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:paddingEnd="7dp"
+                    android:paddingStart="5dp"/>
+            </FrameLayout>
+
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/frame1"
+                android:id="@+id/frame2">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/x2"
+                    android:src="@drawable/ic_action_close"
+                    android:visibility="invisible"/>
+
+                <ImageView
+                    android:id="@+id/image2"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:paddingStart="5dp"/>
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/frame2"
+                android:id="@+id/frame3">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/x3"
+                    android:src="@drawable/ic_action_close"
+                    android:visibility="invisible"/>
+
+                <ImageView
+                    android:id="@+id/image3"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:paddingStart="5dp"/>
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/frame3"
+                android:id="@+id/frame4">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:id="@+id/x4"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_action_close"
+                    android:visibility="invisible"/>
+
+                <ImageView
+                    android:id="@+id/image4"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:paddingStart="5dp"/>
+            </FrameLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/cameraBar"
+            android:layout_width="match_parent"
+            android:layout_height="108dp"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@id/images">
+
+            <ImageView
+                android:id="@+id/pickFromGallery"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_action_image"/>
+
+            <ImageView
+                android:id="@+id/capture"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_action_capture"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
 
 </RelativeLayout>
