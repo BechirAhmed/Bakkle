@@ -50,16 +50,14 @@ public class AddItemActivity extends AppCompatActivity
 
     String mCurrentPhotoPath;
     static final int REQUEST_TAKE_PHOTO = 1;
-    static final int MAX_IMAGE_COUNT = 5;
+    static final int MAX_IMAGE_COUNT = 4;
     EditText titleEditText, priceEditText, descriptionEditText;
     SwitchCompat facebookSwitch;
     CallbackManager callbackManager;
     String title;
     String price;
     String description;
-    //Bitmap firstPhoto;
-    //ImageView firstImageView;
-    //ArrayList <Bitmap> productPictures = new ArrayList<>();
+
     ArrayList<ImageView> productPictureViews = new ArrayList<>();
     ArrayList<String> picturePaths = new ArrayList<>();
 //    final String[] commonWords = {"the", "of", "and", "a", "to", "in", "is", "you",
@@ -77,22 +75,23 @@ public class AddItemActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (intent.resolveActivity(getPackageManager()) != null)  //TODO: Add my own mCamera interface so that only square pictures are taken
-        //TODO: add video
-        {
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            }
-            catch (Exception e) {
-                Log.v("create image file error", e.getMessage());
-            }
-            if (photoFile != null) {
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
-                startActivityForResult(intent, REQUEST_TAKE_PHOTO);
-            }
-        }
+        startActivityForResult((new Intent(this, CameraActivity.class)), 1);
+//        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        if (intent.resolveActivity(getPackageManager()) != null)  //TODO: Add my own mCamera interface so that only square pictures are taken
+//        //TODO: add video
+//        {
+//            File photoFile = null;
+//            try {
+//                photoFile = createImageFile();
+//            }
+//            catch (Exception e) {
+//                Log.v("create image file error", e.getMessage());
+//            }
+//            if (photoFile != null) {
+//                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+//                startActivityForResult(intent, REQUEST_TAKE_PHOTO);
+//            }
+//        }
         setContentView(R.layout.activity_add_item);
         FacebookSdk.sdkInitialize(getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
@@ -126,7 +125,7 @@ public class AddItemActivity extends AppCompatActivity
 
     private File createImageFile() throws IOException
     {
-        // Create an image file name
+        // Create an imageViews file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "Bakkle_" + timeStamp + "_";
         File storageDir = Environment.getExternalStoragePublicDirectory(
@@ -152,53 +151,61 @@ public class AddItemActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        startActivity(new Intent(this, CameraActivity.class));
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
+            ArrayList<String> paths = new ArrayList<>();
+            for(int i = 0; i < data.getIntExtra("num", 0); i++)
+                paths.add(data.getStringExtra("pic" + i));
 
-            Matrix matrix = new Matrix();
-            matrix.postRotate(90);
+            for (String path : paths) {
 
-            final BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inSampleSize = 8;
-            Bitmap temp = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(mCurrentPhotoPath, options), dpToPx(250), dpToPx(250));
-            temp = Bitmap.createBitmap(temp, 0, 0, temp.getWidth(), temp.getHeight(), matrix, true); //rotate picture 90 degrees
+                Matrix matrix = new Matrix();
+                matrix.postRotate(90);
+                RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.imageCollection);
+                RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
+                        RelativeLayout.LayoutParams.WRAP_CONTENT,
+                        RelativeLayout.LayoutParams.MATCH_PARENT);
+                final BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize = 8;
 
 
-            FileOutputStream fileOutputStream;
+                Log.v("path is ", path);
+                Bitmap temp = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(path, options), dpToPx(250), dpToPx(250));
+                temp = Bitmap.createBitmap(temp, 0, 0, temp.getWidth(), temp.getHeight(), matrix, true); //rotate picture 90 degrees
 
-            try {
-                fileOutputStream = new FileOutputStream(mCurrentPhotoPath);
-                Bitmap.createScaledBitmap(temp, 640, 640, true)
-                        .compress(Bitmap.CompressFormat.JPEG, 90, fileOutputStream);
-                fileOutputStream.flush();
-                fileOutputStream.close();
+
+                FileOutputStream fileOutputStream;
+
+                try {
+                    fileOutputStream = new FileOutputStream(path);
+                    Bitmap.createScaledBitmap(temp, 640, 640, true)
+                            .compress(Bitmap.CompressFormat.JPEG, 80, fileOutputStream);
+                    fileOutputStream.flush();
+                    fileOutputStream.close();
+                }
+                catch (Exception e) {
+                    Log.v("Bitmap scaling error", ""+e.getMessage());
+                }
+
+                ImageView imageView = new ImageView(this);
+                imageView.setId(productPictureViews.size() + 1);
+                //imageView.setImageBitmap(temp);
+
+                if (imageView.getId() != 1) {
+                    ImageView previous = productPictureViews.get(productPictureViews.size() - 1);
+                    layoutParams.addRule(RelativeLayout.RIGHT_OF, previous.getId());
+                    imageView.setPadding(10, 0, 0, 0);
+                }
+                imageView.setLayoutParams(layoutParams);
+                imageView.setAdjustViewBounds(true);
+                imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+
+                relativeLayout.addView(imageView);
+                Glide.with(this).load(new File(path)).
+                        fitCenter().crossFade().into(imageView);
+                //productPictures.add(temp);
+                productPictureViews.add(imageView);
+                picturePaths.add(path);
             }
-            catch (Exception e) {
-                Log.v("Bitmap scaling error", e.getMessage());
-            }
-
-            RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.imageCollection);
-            ImageView imageView = new ImageView(this);
-            imageView.setId(productPictureViews.size() + 1);
-            Glide.with(this).load(new File(mCurrentPhotoPath)).
-                    fitCenter().crossFade().override(dpToPx(250), dpToPx(250)).into(imageView);
-            //imageView.setImageBitmap(temp);
-            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.WRAP_CONTENT,
-                    RelativeLayout.LayoutParams.MATCH_PARENT);
-            if (imageView.getId() != 1) {
-                ImageView previous = productPictureViews.get(productPictureViews.size() - 1);
-                layoutParams.addRule(RelativeLayout.RIGHT_OF, previous.getId());
-                imageView.setPadding(10, 0, 0, 0);
-            }
-            imageView.setLayoutParams(layoutParams);
-            imageView.setAdjustViewBounds(true);
-            imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-
-            relativeLayout.addView(imageView);
-            //productPictures.add(temp);
-            productPictureViews.add(imageView);
-            picturePaths.add(mCurrentPhotoPath);
         }
 
         else {

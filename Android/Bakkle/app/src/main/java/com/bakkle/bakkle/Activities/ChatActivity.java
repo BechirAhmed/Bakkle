@@ -257,6 +257,7 @@ public class ChatActivity extends AppCompatActivity
         intent.putExtra("sellerImageUrl", fbUrl);
         intent.putExtra("description", description);
         intent.putExtra("pk", pk);
+        intent.putExtra("parent", "chat");
         intent.putStringArrayListExtra("imageURLs", imageUrls);
         startActivity(intent);
     }

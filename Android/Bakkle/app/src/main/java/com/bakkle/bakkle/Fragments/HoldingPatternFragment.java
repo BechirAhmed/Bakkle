@@ -93,6 +93,7 @@ public class HoldingPatternFragment extends ListFragment {
         intent.putExtra("sellerImageUrl", url);
         intent.putExtra("description", item.getDescription());
         intent.putExtra("pk", item.getPk());
+        intent.putExtra("parent", "holding");
         intent.putStringArrayListExtra("imageURLs", item.getImageUrls());
         startActivity(intent);
 

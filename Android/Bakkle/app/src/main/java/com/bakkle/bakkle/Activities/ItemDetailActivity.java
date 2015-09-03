@@ -34,9 +34,9 @@ import java.util.Date;
 public class ItemDetailActivity extends AppCompatActivity
 {
 
-    private Toolbar toolbar;
+//    private Toolbar toolbar;
     private ArrayList<ImageView> productPictureViews = new ArrayList<>();
-
+    String parent;
     String title;
     String price;
     String description;
@@ -69,7 +69,7 @@ public class ItemDetailActivity extends AppCompatActivity
         pk = intent.getStringExtra("pk");
         sellerImageUrl = intent.getStringExtra("sellerImageUrl");
         imageURLs = intent.getStringArrayListExtra("imageURLs");
-
+        parent = intent.getStringExtra("parent");
         if (imageURLs != null) {
             for (String url : imageURLs) {
                 Log.v("test", "url is " + url);
@@ -166,6 +166,12 @@ public class ItemDetailActivity extends AppCompatActivity
                 preferences.getString("uuid", "0"),
                 pk,
                 "42");
+        Intent intent = new Intent();
+        intent.putExtra("markWant", true);
+        if(parent.equals("feed"))
+        {
+            setResult(1, intent);
+        }
         finish();
     }
 

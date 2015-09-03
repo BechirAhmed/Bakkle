@@ -89,6 +89,7 @@ public class TrunkAdapter extends ArrayAdapter<FeedItem>{
                 intent.putExtra("sellerImageUrl", "http://graph.facebook.com/" + item.getSellerFacebookId() + "/picture?width=142&height=142");
                 intent.putExtra("description", item.getDescription());
                 intent.putExtra("pk", item.getPk());
+                intent.putExtra("parent", "trunk");
                 intent.putStringArrayListExtra("imageURLs", item.getImageUrls());
                 context.startActivity(intent);
             }

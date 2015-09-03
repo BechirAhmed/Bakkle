@@ -29,16 +29,34 @@
 
     </RelativeLayout>
 
-    <com.bakkle.bakkle.Views.SquareSurfaceView
-        android:id="@+id/camera_view"
+    <FrameLayout
+        android:id="@+id/frameView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/topBar"/>
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/topBar">
+
+        <com.bakkle.bakkle.Views.SquareSurfaceView
+            android:id="@+id/camera_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="2dp"
+            android:layout_marginRight="2dp"
+            android:visibility="gone"
+            style="?android:attr/progressBarStyleHorizontal"/>
+
+    </FrameLayout>
+
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/camera_view">
+        android:layout_below="@+id/frameView">
 
         <RelativeLayout
             android:id="@+id/images"
@@ -47,84 +65,93 @@
             android:layout_centerHorizontal="true">
 
             <FrameLayout
+                android:id="@+id/frame1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/frame1">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/x1"
-                    android:src="@drawable/ic_action_close"
-                    android:visibility="invisible"/>
+                android:layout_height="wrap_content">
 
                 <ImageView
                     android:id="@+id/image1"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
+                    android:background="@drawable/image_border"
                     android:paddingEnd="7dp"
                     android:paddingStart="5dp"/>
+
+                <ImageView
+                    android:id="@+id/x1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_action_close"
+                    android:visibility="invisible"/>
+
+
             </FrameLayout>
 
 
             <FrameLayout
+                android:id="@+id/frame2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toEndOf="@id/frame1"
-                android:id="@+id/frame2">
+                android:layout_toEndOf="@id/frame1">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/x2"
-                    android:src="@drawable/ic_action_close"
-                    android:visibility="invisible"/>
 
                 <ImageView
                     android:id="@+id/image2"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
+                    android:background="@drawable/image_border"
                     android:paddingStart="5dp"/>
+
+                <ImageView
+                    android:id="@+id/x2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_action_close"
+                    android:visibility="invisible"/>
             </FrameLayout>
 
             <FrameLayout
+                android:id="@+id/frame3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toEndOf="@id/frame2"
-                android:id="@+id/frame3">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/x3"
-                    android:src="@drawable/ic_action_close"
-                    android:visibility="invisible"/>
+                android:layout_toEndOf="@id/frame2">
 
                 <ImageView
                     android:id="@+id/image3"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
+                    android:background="@drawable/image_border"
                     android:paddingStart="5dp"/>
-            </FrameLayout>
-
-            <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toEndOf="@id/frame3"
-                android:id="@+id/frame4">
 
                 <ImageView
+                    android:id="@+id/x3"
                     android:layout_width="wrap_content"
-                    android:id="@+id/x4"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_action_close"
                     android:visibility="invisible"/>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/frame4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/frame3">
 
                 <ImageView
                     android:id="@+id/image4"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
+                    android:background="@drawable/image_border"
                     android:paddingStart="5dp"/>
+
+                <ImageView
+                    android:id="@+id/x4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_action_close"
+                    android:visibility="invisible"/>
+
             </FrameLayout>
 
         </RelativeLayout>
@@ -146,10 +173,22 @@
 
             <ImageView
                 android:id="@+id/capture"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="85dp"
+                android:layout_height="85dp"
                 android:layout_centerInParent="true"
                 android:src="@drawable/ic_action_capture"/>
+
+            <TextView
+                android:id="@+id/next"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:text="@string/next"
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:visibility="invisible"/>
 
         </RelativeLayout>
 

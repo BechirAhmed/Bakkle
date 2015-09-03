@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -29,33 +28,21 @@ import com.bakkle.bakkle.R;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.koushikdutta.ion.Ion;
 
 import java.util.ArrayList;
 
-/**
- * A simple {@link Fragment} subclass.
- */
+
 public class FeedFragment extends Fragment
 {
-
     ServerCalls serverCalls;
-    Activity mActivity;
+    Activity    mActivity;
     FeedItem feedItem = null;
     CardContainer mCardContainer;
-    private SearchView searchView;
+    private SearchView  searchView;
     private ProgressBar bar;
-
-    CardModel card;
-
-
-    String status, description, price, postDate, title, buyerRating, sellerDisplayName, sellerLocation, sellerFacebookId, sellerPk, sellerRating, location, pk, method;
-
-
-    Bitmap bitmap;
-
+    CardModel                card;
     SharedPreferences.Editor editor;
-    SharedPreferences preferences;
+    SharedPreferences        preferences;
 
     public interface OnCardSelected
     {
@@ -65,9 +52,7 @@ public class FeedFragment extends Fragment
     OnCardSelected onCardSelected;
 
 
-    public FeedFragment()
-    {
-    }
+    public FeedFragment() {}
 
     @Override
     public void onAttach(Activity activity)
@@ -117,7 +102,7 @@ public class FeedFragment extends Fragment
             new bgTask().execute();
         }
         catch (Exception e) {
-            Log.d("testing", e.getMessage());
+            Log.d("Error", e.getMessage());
         }
         return view;
     }
@@ -128,7 +113,7 @@ public class FeedFragment extends Fragment
         final SimpleCardStackAdapter adapter = new SimpleCardStackAdapter(mActivity);
         JsonObject temp;
         ArrayList<FeedItem> feedItems = new ArrayList<>();
-        ArrayList<String> tags, imageUrls;
+        ArrayList<String> imageUrls;
         JsonObject seller;
         JsonArray imageUrlArray;
         JsonElement element;
@@ -146,9 +131,7 @@ public class FeedFragment extends Fragment
             feedItem.setMethod(temp.get("method").getAsString());
             feedItem.setDescription(temp.get("description").getAsString());
             feedItem.setSellerFacebookId(temp.get("seller").getAsJsonObject().get("facebook_id").getAsString());
-            pk = temp.get("pk").getAsString();
-            feedItem.setPk(pk);
-
+            feedItem.setPk(temp.get("pk").getAsString());
 
             imageUrlArray = temp.get("image_urls").getAsJsonArray();
             imageUrls = new ArrayList<>();
@@ -157,7 +140,6 @@ public class FeedFragment extends Fragment
             }
 
             feedItem.setImageUrls(imageUrls);
-
 
             card = new CardModel(
                     feedItem.getTitle(),
@@ -183,13 +165,7 @@ public class FeedFragment extends Fragment
                             preferences.getString("uuid", "0"),
                             cardModel.getPk(),
                             "42");
-
                     showSplashScreen(cardModel.getPk(), cardModel.getCardImageURL());
-
-                    //populateOneFeedItem(jsonArray);
-
-
-                    Log.v("pk is ", cardModel.getPk());
                 }
 
                 @Override
@@ -202,7 +178,6 @@ public class FeedFragment extends Fragment
                             preferences.getString("uuid", "0"),
                             cardModel.getPk(),
                             "42");
-                    //populateOneFeedItem(jsonArray);
                 }
 
                 @Override
@@ -214,8 +189,6 @@ public class FeedFragment extends Fragment
                             preferences.getString("uuid", "0"),
                             cardModel.getPk(),
                             "42");
-                    //populateOneFeedItem(jsonArray);
-
                 }
 
                 @Override
@@ -227,8 +200,6 @@ public class FeedFragment extends Fragment
                             preferences.getString("uuid", "0"),
                             cardModel.getPk(),
                             "42");
-                    //populateOneFeedItem(jsonArray);
-
                 }
             });
             card.setOnClickListener(new CardModel.OnClickListener()
@@ -245,153 +216,21 @@ public class FeedFragment extends Fragment
                     intent.putExtra("description", cardModel.getDescription());
                     intent.putExtra("pk", cardModel.getPk());
                     intent.putStringArrayListExtra("imageURLs", cardModel.getImageURLs());
-                    startActivity(intent);
+                    intent.putExtra("parent", "feed");
+                    startActivityForResult(intent, 1);
                 }
             });
 
             adapter.add(card);
             mCardContainer.setAdapter(adapter);
-
         }
-        //jsonArray = populateOneFeedItem(jsonArray);
     }
 
-    public JsonArray populateOneFeedItem(final JsonArray jsonArray)
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        final SimpleCardStackAdapter adapter = new SimpleCardStackAdapter(mActivity);
-        //CardAdapter mCardAdapter = new CardAdapter(mActivity);
-        JsonObject temp;
-        ArrayList<FeedItem> feedItems = new ArrayList<>();
-        ArrayList<String> tags, imageUrls;
-        JsonObject seller;
-        JsonArray imageUrlArray;
-        JsonElement element;
-
-        element = jsonArray.remove(jsonArray.size() - 1);
-
-        feedItem = new FeedItem(mActivity);
-        temp = element.getAsJsonObject();
-
-        feedItem.setTitle(temp.get("title").getAsString());
-        feedItem.setSellerDisplayName(temp.get("seller").getAsJsonObject().get("display_name").getAsString());
-        feedItem.setPrice(temp.get("price").getAsString());
-        feedItem.setLocation(temp.get("location").getAsString()); //TODO: difference between location and sellerlocation??
-        feedItem.setMethod(temp.get("method").getAsString());
-        feedItem.setSellerFacebookId(temp.get("seller").getAsJsonObject().get("facebook_id").getAsString());
-        pk = temp.get("pk").getAsString();
-        feedItem.setPk(pk);
-
-
-        imageUrlArray = temp.get("image_urls").getAsJsonArray();
-        imageUrls = new ArrayList<>();
-        for (JsonElement urlElement : imageUrlArray) {
-            imageUrls.add(urlElement.getAsString());
-        }
-        feedItem.setImageUrls(imageUrls);
-
-
-        //mCardAdapter.add(feedItem);
-        //mCardStack.setAdapter(mCardAdapter);
-
-        card = new CardModel(
-                feedItem.getTitle(),
-                feedItem.getSellerDisplayName(),
-                "$" + feedItem.getPrice(),
-                feedItem.getDistance(
-                        preferences.getString("latitude", "0"),
-                        preferences.getString("longitude", "0")),
-                feedItem.getMethod(), feedItem.getPk(),
-                feedItem.getDescription(),
-                feedItem.getImageUrls(),
-                "http://graph.facebook.com/" + feedItem.getSellerFacebookId() + "/picture?width=142&height=142"/*, getCardImage(feedItem), getSellerImage(sellerFacebookId)*/);
-
-        card.setOnCardDismissedListener(new CardModel.OnCardDismissedListener()
-        {
-            @Override
-            public void onLike(CardModel cardModel)
-            {
-                Toast.makeText(mActivity, "Want", Toast.LENGTH_SHORT).show();
-                serverCalls.markItem(
-                        "want",
-                        preferences.getString("auth_token", "0"),
-                        preferences.getString("uuid", "0"),
-                        cardModel.getPk(),
-                        "42");
-                populateOneFeedItem(jsonArray);
-
-                showSplashScreen(cardModel.getPk(), cardModel.getCardImageURL());
-
-
-                Log.v("pk is ", card.getPk());
-            }
-
-            @Override
-            public void onDislike(CardModel cardModel)
-            {
-                Toast.makeText(mActivity, "Nope", Toast.LENGTH_SHORT).show();
-
-                serverCalls.markItem("meh",
-                        preferences.getString("auth_token", "0"),
-                        preferences.getString("uuid", "0"),
-                        cardModel.getPk(),
-                        "42");
-                populateOneFeedItem(jsonArray);
-            }
-
-            @Override
-            public void onUp(CardModel cardModel)
-            {
-                Toast.makeText(mActivity, "Holding", Toast.LENGTH_SHORT).show();
-                serverCalls.markItem("hold",
-                        preferences.getString("auth_token", "0"),
-                        preferences.getString("uuid", "0"),
-                        cardModel.getPk(),
-                        "42");
-                populateOneFeedItem(jsonArray);
-
-            }
-
-            @Override
-            public void onDown(CardModel cardModel)
-            {
-                Toast.makeText(mActivity, "Report", Toast.LENGTH_SHORT).show();
-                serverCalls.markItem("report",
-                        preferences.getString("auth_token", "0"),
-                        preferences.getString("uuid", "0"),
-                        cardModel.getPk(),
-                        "42");
-                populateOneFeedItem(jsonArray);
-
-            }
-        });
-        card.setOnClickListener(new CardModel.OnClickListener()
-        {
-            @Override
-            public void OnClickListener(CardModel cardModel)
-            {
-                //onCardSelected.OnCardSelected(feedItem);
-                //title, tags, img, method, price
-                Intent intent = new Intent(mActivity, ItemDetailActivity.class);
-                intent.putExtra("title", cardModel.getTitle());
-                intent.putExtra("seller", cardModel.getSeller());
-                intent.putExtra("price", cardModel.getPrice());
-                intent.putExtra("distance", cardModel.getDistance());
-                intent.putExtra("sellerImageUrl", cardModel.getSellerImageURL());
-                intent.putExtra("description", cardModel.getDescription());
-                intent.putExtra("pk", cardModel.getPk());
-                intent.putExtra("url1", cardModel.getCardImageURL());
-                //intent.putStringArrayListExtra("imageUrls", cardModel.getImageURLs());
-                startActivity(intent);
-
-                //TODO: Load multiple pictures
-
-            }
-        });
-
-        adapter.add(card);
-        mCardContainer.setAdapter(adapter);
-
-        return jsonArray;
+        if (data.getBooleanExtra("markWant", false))
+            mCardContainer.like();
     }
 
     private void showSplashScreen(String pk, String url)
@@ -401,37 +240,6 @@ public class FeedFragment extends Fragment
                 setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
     }
 
-    public Bitmap getCardImage(FeedItem item)
-    {
-        try {
-            bitmap = Ion.with(this)
-                    .load(item.getImageUrls().get(0))
-                    .withBitmap()
-                    .asBitmap()
-                    .get();
-        }
-        catch (Exception e) {
-            Log.d("testing error 1122", e.getMessage());
-        }
-        //return bitmap[0];
-        return bitmap;
-    }
-
-    public Bitmap getSellerImage(String id)
-    {
-        try {
-            bitmap = Ion.with(this)
-                    .load("http://graph.facebook.com/" + id + "/picture?width=142&height=142")
-                    .withBitmap()
-                    .asBitmap()
-                    .get();
-        }
-        catch (Exception e) {
-            Log.d("testing error 11", e.getMessage());
-        }
-        //return bitmap[0];
-        return bitmap;
-    }
 
     private class bgTask extends AsyncTask<Void, Void, JsonObject>
     {
@@ -459,14 +267,8 @@ public class FeedFragment extends Fragment
         protected void onPostExecute(JsonObject jsonObject)
         {
             bar.setVisibility(View.GONE);
-
+            populateFeed(jsonObject.getAsJsonArray("feed"));
             Log.v("jsonObject is", jsonObject.toString());
-
-            if (jsonObject != null) {
-                populateFeed(jsonObject.getAsJsonArray("feed"));
-            }
-            else
-                Log.d("Error", "error");
         }
     }
 }

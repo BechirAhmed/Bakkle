@@ -127,6 +127,7 @@ public class GarageAdapter extends ArraySwipeAdapter<FeedItem>
                 intent.putExtra("description", item.getDescription());
                 intent.putExtra("pk", item.getPk());
                 intent.putExtra("garage", true);
+                intent.putExtra("parent", "garage");
                 intent.putStringArrayListExtra("imageURLs", item.getImageUrls());
                 c.startActivity(intent);
             }
