@@ -149,7 +149,7 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
             @Override
             public void onClick(View view)
             {
-g                mCamera.takePicture(CameraActivity.this, null, null, CameraActivity.this);
+                mCamera.takePicture(CameraActivity.this, null, null, CameraActivity.this);
             }
         });
         capture.setOnLongClickListener(new View.OnLongClickListener()
