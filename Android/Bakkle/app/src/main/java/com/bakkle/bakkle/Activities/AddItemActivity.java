@@ -93,7 +93,7 @@ public class AddItemActivity extends AppCompatActivity
 //            }
 //        }
         setContentView(R.layout.activity_add_item);
-        FacebookSdk.sdkInitialize(getApplicationContext());
+        FacebookSdk.sdkInitialize(this);
         callbackManager = CallbackManager.Factory.create();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -108,7 +108,14 @@ public class AddItemActivity extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
-                onBackPressed();
+                Intent intent = new Intent(AddItemActivity.this, CameraActivity.class);
+                int i;
+                for(i = 0; i < picturePaths.size(); i++)
+                {
+                    intent.putExtra("pic" + i, picturePaths.get(i));
+                }
+                intent.putExtra("num", i);
+                startActivityForResult(intent, 1);
             }
         });
 
@@ -153,13 +160,13 @@ public class AddItemActivity extends AppCompatActivity
     {
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
             ArrayList<String> paths = new ArrayList<>();
-            for(int i = 0; i < data.getIntExtra("num", 0); i++)
+            int i = 0;
+            while(i < data.getIntExtra("num", 0)) {
                 paths.add(data.getStringExtra("pic" + i));
+                i++;
+            }
 
             for (String path : paths) {
-
-                Matrix matrix = new Matrix();
-                matrix.postRotate(90);
                 RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.imageCollection);
                 RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
                         RelativeLayout.LayoutParams.WRAP_CONTENT,
@@ -170,7 +177,6 @@ public class AddItemActivity extends AppCompatActivity
 
                 Log.v("path is ", path);
                 Bitmap temp = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(path, options), dpToPx(250), dpToPx(250));
-                temp = Bitmap.createBitmap(temp, 0, 0, temp.getWidth(), temp.getHeight(), matrix, true); //rotate picture 90 degrees
 
 
                 FileOutputStream fileOutputStream;
@@ -178,7 +184,7 @@ public class AddItemActivity extends AppCompatActivity
                 try {
                     fileOutputStream = new FileOutputStream(path);
                     Bitmap.createScaledBitmap(temp, 640, 640, true)
-                            .compress(Bitmap.CompressFormat.JPEG, 80, fileOutputStream);
+                            .compress(Bitmap.CompressFormat.JPEG, 85, fileOutputStream);
                     fileOutputStream.flush();
                     fileOutputStream.close();
                 }
@@ -240,30 +246,30 @@ public class AddItemActivity extends AppCompatActivity
     }
 
 
-    public void addAnotherImage(View view)
-    {
-        if (picturePaths.size() == MAX_IMAGE_COUNT) {
-            Toast.makeText(this, "5 Pictures Max!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (intent.resolveActivity(getPackageManager()) != null)  //TODO: Add my own mCamera interface so that only square pictures are taken
-        {
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            }
-            catch (Exception e) {
-
-            }
-            if (photoFile != null) {
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
-                startActivityForResult(intent, REQUEST_TAKE_PHOTO);
-            }
-        }
-
-    }
+//    public void addAnotherImage(View view)
+//    {
+//        if (picturePaths.size() == MAX_IMAGE_COUNT) {
+//            Toast.makeText(this, "5 Pictures Max!", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//
+//        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        if (intent.resolveActivity(getPackageManager()) != null)  //TODO: Add my own mCamera interface so that only square pictures are taken
+//        {
+//            File photoFile = null;
+//            try {
+//                photoFile = createImageFile();
+//            }
+//            catch (Exception e) {
+//
+//            }
+//            if (photoFile != null) {
+//                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+//                startActivityForResult(intent, REQUEST_TAKE_PHOTO);
+//            }
+//        }
+//
+//    }
 
     public void uploadItem(View view)
     {
@@ -296,5 +302,18 @@ public class AddItemActivity extends AppCompatActivity
 
         finish();
 
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        Intent intent = new Intent(AddItemActivity.this, CameraActivity.class);
+        int i;
+        for(i = 0; i < picturePaths.size(); i++)
+        {
+            intent.putExtra("pic" + i, picturePaths.get(i));
+        }
+        intent.putExtra("num", i);
+        startActivityForResult(intent, 1);
     }
 }

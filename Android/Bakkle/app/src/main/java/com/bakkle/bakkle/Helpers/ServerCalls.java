@@ -94,8 +94,6 @@ public class ServerCalls
                     .get()
                     .get("auth_token")
                     .getAsString();
-
-            Log.v("auth token-server call ", auth_token);
         }
         catch (Exception e) {
             Log.d("testing error", "" + e.getMessage());

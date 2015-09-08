@@ -3,11 +3,14 @@ package com.bakkle.bakkle.Activities;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.PorterDuff;
 import android.hardware.Camera;
 import android.media.MediaRecorder;
 import android.media.ThumbnailUtils;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
@@ -30,6 +33,7 @@ import com.bakkle.bakkle.R;
 import com.bumptech.glide.Glide;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -43,8 +47,9 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
 {
     private static final int PICTURE_SIZE_MAX_WIDTH = 1280;
     private static final int PREVIEW_SIZE_MAX_WIDTH = 640;
+    private static final int SELECT_PHOTO           = 100;
 
-    Camera        mCamera;
+    Camera mCamera = null;
     MediaRecorder mRecorder;
     SurfaceView   surfaceView;
     SurfaceHolder surfaceHolder;
@@ -72,8 +77,12 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_camera);
-        imageCount = 0;
+        final Intent intent = getIntent();
         pics = new ArrayList<>();
+        for (int i = 0; i < intent.getIntExtra("num", 0); i++) {
+            pics.add(new ImageTaken(new File(intent.getStringExtra("pic"+i)), true, i));
+        }
+        imageCount = 0;
         mCameraID = getBackCameraID();
         occupied = new boolean[4]; //all automatically initialized to false
         deletePictureViews = new ImageView[4];
@@ -96,6 +105,17 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
         capture = (ImageView) findViewById(R.id.capture);
         surfaceHolder = surfaceView.getHolder();
         surfaceHolder.addCallback(this);
+        if(pics.size() > 0){
+            for(int i = 0; i < pics.size(); i++){
+                Glide.with(this)
+                        .load(pics.get(i).getFile())
+                        .crossFade()
+                        .fitCenter()
+                        .into(imageViews[i]);
+                occupied[i] = true;
+                deletePictureViews[i].setVisibility(View.VISIBLE);
+            }
+        }
         next.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -105,7 +125,8 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
                 int y = 0;
                 for (ImageTaken taken : pics) {
                     if (taken.isBeingUsed()) {
-                        intent.putExtra("pic" + y++, taken.getFile().getAbsolutePath());
+                        intent.putExtra("pic" + y, taken.getFile().getAbsolutePath());
+                        y++;
                     }
                 }
                 intent.putExtra("num", y);
@@ -118,6 +139,10 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
             @Override
             public void onClick(View view)
             {
+                Intent intent1 = new Intent(CameraActivity.this, HomeActivity.class);
+                intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent1.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent1);
                 finish();
             }
         });
@@ -136,14 +161,7 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
 
             }
         });
-        pickFromGallery.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
 
-            }
-        });
         capture.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -157,6 +175,7 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
             @Override
             public boolean onLongClick(View view)
             {
+                initRecorder();
                 isLongPressed = true;
                 currentlyRecording = true;
                 initRecorder();
@@ -208,9 +227,8 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
                 return false;
             }
         });
+
         mCamera = getCameraInstance(mCameraID);
-
-
     }
 
     private void addVideoToList()
@@ -404,7 +422,7 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
     /**
      * A safe way to get an instance of the Camera object.
      */
-    public static Camera getCameraInstance(int cameraId)
+    public Camera getCameraInstance(int cameraId)
     {
         Camera c = null;
         try {
@@ -421,7 +439,6 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
     {
         try {
             startCameraPreview();
-            initRecorder();
         }
         catch (Exception e) {
             Log.d("error", "Error setting mCamera preview: " + e.getMessage());
@@ -431,29 +448,37 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
     @Override
     public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2)
     {
-
     }
 
     @Override
     public void surfaceDestroyed(SurfaceHolder surfaceHolder)
     {
-
     }
 
     @Override
     public void onPause()
     {
-        super.onPause();
-        //mCamera.release();
         mCamera.stopPreview();
+
+        //mCamera.release();
+        super.onPause();
+
     }
+
+//    @Override
+//    public void onResume()
+//    {
+//        super.onResume();
+//        mCamera.stopPreview();
+//        //determineDisplayOrientation();
+//        mCamera.startPreview();
+//    }
 
     @Override
     public void onDestroy()
     {
         super.onDestroy();
         mCamera.release();
-        Log.d("CAMERA", "Destroy");
     }
 
     @Override
@@ -470,7 +495,11 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
                     storageDir      /* directory */
             );
             FileOutputStream out = new FileOutputStream(image);
-            out.write(bytes);
+            Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            Matrix matrix = new Matrix();
+            matrix.postRotate(90);
+            bmp = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), matrix, true);
+            bmp.compress(Bitmap.CompressFormat.JPEG, 100, out);
             out.flush();
             out.close();
             ImageTaken taken = new ImageTaken(image, true, imageCount++);
@@ -486,6 +515,7 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
                 pickFromGallery.setVisibility(View.INVISIBLE);
                 switchCamera.setVisibility(View.INVISIBLE);
                 capture.setVisibility(View.INVISIBLE);
+                next.setVisibility(View.VISIBLE);
             }
             else if (j > 0)
                 next.setVisibility(View.VISIBLE);
@@ -531,12 +561,11 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
             mRecorder.setVideoFrameRate(15);
             mRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.MPEG_4_SP);
             mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-            mRecorder.setMaxDuration(15000); // limit to 7 seconds
+            mRecorder.setMaxDuration(15000);
             mRecorder.setPreviewDisplay(surfaceHolder.getSurface());
             mRecorder.setOutputFile(mOutputFileName);
 
             mRecorder.prepare();
-            Log.v("Error", "MediaRecorder initialized");
         }
         catch (Exception e) {
             Log.v("Error", "MediaRecorder failed to initialize");
@@ -611,9 +640,6 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
     }
 
 
-
-
-
     private void releaseRecorder()
     {
         if (mRecorder != null) {
@@ -630,6 +656,89 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
     @Override
     public void onShutter()
     {
+    }
+
+    public void selectFromGallery(View view)
+    {
+        Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        getIntent.setType("image/*");
+
+        Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        pickIntent.setType("image/*");
+
+        Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{pickIntent});
+        Log.v("Test", "test");
+        startActivityForResult(chooserIntent, SELECT_PHOTO);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent)
+    {
+        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+
+        if (resultCode == RESULT_OK) {
+            Uri selectedImage = imageReturnedIntent.getData();
+            Bitmap yourSelectedImage = null;
+            try {
+                yourSelectedImage = decodeUri(selectedImage);
+            }
+            catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            String imageFileName = "BakkleTN_" + timeStamp + "_";
+            File storageDir = Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_PICTURES);
+            File image = null;
+            try {
+                image = File.createTempFile(
+                        imageFileName,  /* prefix */
+                        ".jpg",         /* suffix */
+                        storageDir      /* directory */
+                );
+                FileOutputStream out = new FileOutputStream(image);
+                yourSelectedImage.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                out.flush();
+                out.close();
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+            loadPicIntoView(new ImageTaken(image, true, imageCount++));
+        }
+    }
+
+    private Bitmap decodeUri(Uri selectedImage) throws FileNotFoundException
+    {
+
+        // Decode image size
+        BitmapFactory.Options o = new BitmapFactory.Options();
+        o.inJustDecodeBounds = true;
+        BitmapFactory.decodeStream(getContentResolver().openInputStream(selectedImage), null, o);
+
+        // The new size we want to scale to
+        final int REQUIRED_SIZE = 140;
+
+        // Find the correct scale value. It should be the power of 2.
+        int width_tmp = o.outWidth, height_tmp = o.outHeight;
+        int scale = 1;
+        while (true) {
+            if (width_tmp / 2 < REQUIRED_SIZE
+                    || height_tmp / 2 < REQUIRED_SIZE) {
+                break;
+            }
+            width_tmp /= 2;
+            height_tmp /= 2;
+            scale *= 2;
+        }
+
+        // Decode with inSampleSize
+        BitmapFactory.Options o2 = new BitmapFactory.Options();
+        o2.inSampleSize = scale;
+        return BitmapFactory.decodeStream(getContentResolver().openInputStream(selectedImage), null, o2);
+
     }
 
     private class ImageTaken

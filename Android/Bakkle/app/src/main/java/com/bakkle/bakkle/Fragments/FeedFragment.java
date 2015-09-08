@@ -229,7 +229,7 @@ public class FeedFragment extends Fragment
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        if (data.getBooleanExtra("markWant", false))
+        if (data != null && data.getBooleanExtra("markWant", false))
             mCardContainer.like();
     }
 
