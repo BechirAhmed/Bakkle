@@ -18,13 +18,19 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    sourceSets { main { java.srcDirs = ['src/main/java', 'src/main/java/com/bakkle/bakkle/ChatActivity'] } }
+    sourceSets {
+        main { java.srcDirs = ['src/main/java', 'src/main/java/com/bakkle/bakkle/ChatActivity'] }
+    }
 }
 
 repositories {
     mavenCentral()
     maven {
         url "https://oss.sonatype.org/content/repositories/snapshots"
+    }
+
+    maven {
+        url "https://jitpack.io"
     }
 }
 
@@ -43,6 +49,7 @@ dependencies {
     compile 'com.daimajia.swipelayout:library:1.2.0@aar'
     compile 'de.hdodenhof:circleimageview:1.2.1'
     compile 'com.quinny898.library.persistentsearch:library:1.0.0-SNAPSHOT'
+    compile 'com.github.lecho:hellocharts-library:1.5.5@aar'
     compile('com.mikepenz:materialdrawer:3.1.2@aar') {
         transitive = true
     }

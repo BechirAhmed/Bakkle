@@ -2,8 +2,11 @@ package com.bakkle.bakkle.Activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.ThumbnailUtils;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -19,10 +22,17 @@ import com.bakkle.bakkle.R;
 import com.bumptech.glide.Glide;
 import com.koushikdutta.ion.Ion;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 
-public class ItemDetailActivity extends AppCompatActivity {
+public class ItemDetailActivity extends AppCompatActivity
+{
 
     private Toolbar toolbar;
     private ArrayList<ImageView> productPictureViews = new ArrayList<>();
@@ -31,39 +41,43 @@ public class ItemDetailActivity extends AppCompatActivity {
     String price;
     String description;
     String sellerImageUrl;
-    ArrayList <String> imageURLs;
-    String url1;
+    ArrayList<String> imageURLs;
     String seller;
     String distance;
     String pk;
-
+    boolean garage;
     ServerCalls serverCalls;
     SharedPreferences preferences;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_detail);
-  //      toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
+        //      toolbar_home = (Toolbar) findViewById(R.id.toolbar_home);
+//        setSupportActionBar(toolbar_home);
 
         Intent intent = getIntent();
         serverCalls = new ServerCalls(this);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-
+        garage = intent.getBooleanExtra("garage", false);
         title = intent.getStringExtra("title");
         price = intent.getStringExtra("price");
         description = intent.getStringExtra("description");
         seller = intent.getStringExtra("seller");
         distance = intent.getStringExtra("distance");
-        //url1 = intent.getStringExtra("url1");
         pk = intent.getStringExtra("pk");
         sellerImageUrl = intent.getStringExtra("sellerImageUrl");
         imageURLs = intent.getStringArrayListExtra("imageURLs");
 
-        for(String url : imageURLs)
-        {
-            loadPictureIntoView(url);
+        if (imageURLs != null) {
+            for (String url : imageURLs) {
+                Log.v("test", "url is " + url);
+                loadPictureIntoView(url);
+            }
+        }
+        else {
+            Log.v("test", "imageURLs was null");
         }
 
         ((TextView) findViewById(R.id.seller)).setText(seller);
@@ -71,28 +85,27 @@ public class ItemDetailActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.description)).setText(description);
         ((TextView) findViewById(R.id.distance)).setText(distance);
         ((TextView) findViewById(R.id.price)).setText(price);
+        if (garage) {
+            findViewById(R.id.wantButton).setVisibility(View.GONE);
+        }
 
         Glide.with(this)
                 .load(sellerImageUrl)
-                .thumbnail(0.1f)
-                .placeholder(R.drawable.loading)
                 .into((ImageView) findViewById(R.id.sellerImage));
-
-//        Ion.with((ImageView) findViewById(R.id.sellerImage))
-//                .placeholder(R.drawable.loading)
-//                .load(sellerImageUrl);
     }
 
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_item_detail, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
@@ -111,18 +124,11 @@ public class ItemDetailActivity extends AppCompatActivity {
         RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.imageCollection);
         ImageView imageView = new ImageView(this);
         imageView.setId(productPictureViews.size() + 1);
-        Glide.with(this)
-                .load(url)
-                .placeholder(R.drawable.loading)
-                .thumbnail(0.1f)
-                .into(imageView);
-//        Ion.with(imageView)
-//                .placeholder(R.drawable.loading)
-//                .load(url);
+
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.MATCH_PARENT,
                 RelativeLayout.LayoutParams.MATCH_PARENT);
-        if(imageView.getId() != 1){
+        if (imageView.getId() != 1) {
             ImageView previous = productPictureViews.get(productPictureViews.size() - 1);
             layoutParams.addRule(RelativeLayout.RIGHT_OF, previous.getId());
             imageView.setPadding(10, 0, 0, 0);
@@ -133,10 +139,28 @@ public class ItemDetailActivity extends AppCompatActivity {
         imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
         relativeLayout.addView(imageView);
+
+        if (!url.endsWith("mp4")) {
+            Glide.with(this)
+                    .load(url)
+                    .fitCenter()
+                    .crossFade()
+                    .placeholder(R.drawable.loading)
+                    .into(imageView);
+        }
+        else { //TODO: Download and display video
+            try {
+
+            }
+            catch (Exception e){}
+        }
+
+
         productPictureViews.add(imageView);
     }
 
-    public void markWant(View view){
+    public void markWant(View view)
+    {
         serverCalls.markItem("want",
                 preferences.getString("auth_token", "0"),
                 preferences.getString("uuid", "0"),
@@ -145,7 +169,8 @@ public class ItemDetailActivity extends AppCompatActivity {
         finish();
     }
 
-    public void end(View view){
+    public void end(View view)
+    {
         finish();
     }
 }

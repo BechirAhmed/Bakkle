@@ -1,7 +1,6 @@
 package com.bakkle.bakkle.Helpers;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.util.Log;
 
 import com.bakkle.bakkle.BuildConfig;
@@ -18,7 +17,7 @@ import java.util.ArrayList;
  */
 public class ServerCalls
 {
-//    final static String url_base                 = "http://bakkle.rhventures.org:8000/";
+    //    final static String url_base                 = "http://bakkle.rhventures.org:8000/";
     final static String url_base = "https://app.bakkle.com/";
     final static String url_login = "account/login_facebook/";
     final static String url_logout = "account/logout/";
@@ -58,32 +57,6 @@ public class ServerCalls
     {
 
         response = 0;
-        /*Ion.with(mContext)
-                .load(URL)
-                .setBodyParameter("email", email)
-                .setBodyParameter("name", name)
-                .setBodyParameter("user_name", username)
-                .setBodyParameter("gender", gender)
-                .setBodyParameter("user_id", userid)
-                .setBodyParameter("locale", locale)
-                .setBodyParameter("first_name", first_name)
-                .setBodyParameter("last_name", last_name)
-                .setBodyParameter("device_uuid", id)
-                .asJsonObject()
-                .setCallback(new FutureCallback<JsonObject>() {
-                    @Override
-                    public void onCompleted(Exception e, JsonObject result) {
-                        if (result != null) {
-                            Log.d("testing 1234", result.toString());
-                            Toast.makeText(mContext, result.toString(), Toast.LENGTH_SHORT).show();
-                            response = result.get("status").getAsInt();
-                            Toast.makeText(mContext, "The value of response is: " + response, Toast.LENGTH_SHORT).show();
-                        } else {
-                            Log.d("testing 1234", "did not work");
-                            Toast.makeText(mContext, "did not work", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });*/
         try {
             response = Ion.with(mContext)
                     .load(url_base + url_facebook)
@@ -104,36 +77,11 @@ public class ServerCalls
         catch (Exception e) {
             Log.d("testing error 1", e.getMessage());
         }
-        //Toast.makeText(mContext, "The value of response is: " + response, Toast.LENGTH_SHORT).show();
         return response;
     }
 
     public String loginFacebook(final String device_uuid, final String userid, String location)
     {
-
-        /*Ion.with(mContext)
-                .load(url_base + url_login)
-                .setBodyParameter("device_uuid", device_uuid)
-                .setBodyParameter("user_id", userid)
-                .setBodyParameter("app_version", BuildConfig.VERSION_NAME)
-                .setBodyParameter("user_location", location)
-                .setBodyParameter("is_ios", "false")
-                .asJsonObject()
-                .setCallback(new FutureCallback<JsonObject>() {
-                    @Override
-                    public void onCompleted(Exception e, JsonObject result) {
-                        if (result != null) {
-                            Log.d("testing 2234", result.toString());
-                            Toast.makeText(mContext, result.toString(), Toast.LENGTH_SHORT).show();
-                            response = result.get("status").getAsInt();
-                            auth_token = result.get("auth_token").getAsString();
-                            Toast.makeText(mContext, "The value of response is: " + response, Toast.LENGTH_SHORT).show();
-                        } else {
-                            Log.d("testing 2234", "did not work");
-                            Toast.makeText(mContext, "did not work", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });*/
         try {
             auth_token = Ion.with(mContext)
                     .load(url_base + url_login)
@@ -152,8 +100,6 @@ public class ServerCalls
         catch (Exception e) {
             Log.d("testing error", "" + e.getMessage());
         }
-        //Log.v("auth_token is ", auth_token);
-
 
         return auth_token;
     }
@@ -161,35 +107,6 @@ public class ServerCalls
     public JsonObject getFeedItems(String authToken, String filterPrice, String filterDistance,
                                    String search, String location, String filterNumber, String uuid)
     {
-
-        /*Ion.with(mContext)
-                .load(url_base + url_feed)
-                .setBodyParameter("auth_token", authToken)
-                .setBodyParameter("device_uuid", uuid)
-                .setBodyParameter("search_text", search)
-                .setBodyParameter("filter_distance", filterDistance)
-                .setBodyParameter("filter_price", filterPrice)
-                .setBodyParameter("filter_number", filterNumber)
-                .setBodyParameter("user_location", location)
-                .asJsonObject()
-                .setCallback(new FutureCallback<JsonObject>() {
-                    @Override
-                    public void onCompleted(Exception e, JsonObject result) {
-                        if (result != null) {
-                            Log.d("testing 3234", result.toString());
-                            Toast.makeText(mContext, result.toString(), Toast.LENGTH_SHORT).show();
-                            response = result.get("status").getAsInt();
-                            jsonResponse = result;
-                            Toast.makeText(mContext, "The value of response is: " + response, Toast.LENGTH_SHORT).show();
-                        } else {
-                            Log.d("testing 3234", "did not work");
-                            Toast.makeText(mContext, "did not work", Toast.LENGTH_SHORT).show();
-                        }
-
-
-
-                    }
-                });*/
         Log.v("auth_token is ", authToken);
         try {
             jsonResponse = Ion.with(mContext)
@@ -207,8 +124,6 @@ public class ServerCalls
         catch (Exception e) {
             Log.d("testing error 00", e.getMessage());
         }
-
-        //Toast.makeText(mContext, jsonResponse.toString(), Toast.LENGTH_SHORT).show();
 
         return jsonResponse;
     }
@@ -317,58 +232,12 @@ public class ServerCalls
 
     }
 
-    public void sendChat(String uuid, String authToken, String message, String id)
+    public JsonObject addItem(String name, String description, String price, String pickupMethod,
+                              String tags, ArrayList<String> imageUri, String authToken, String uuid, String location)
     {
-
-        Ion.with(mContext)
-                .load(url_base + url_send_chat)
-                .setBodyParameter("device_uuid", uuid)
-                .setBodyParameter("auth_token", authToken)
-                .setBodyParameter("message", message)
-                .setBodyParameter("conversation_id", id)
-                .asJsonObject()
-                .setCallback(new FutureCallback<JsonObject>()
-                {
-                    @Override
-                    public void onCompleted(Exception e, JsonObject result)
-                    {
-                        Log.v("test", e.getMessage());
-                    }
-                });
-
-    }
-
-    public void onNewChat()
-    {
-
-    }
-
-    public JsonObject addItem(String name, String description, String price, String pickupMethod, String tags,
-                              ArrayList<String> imageUri, String authToken, String uuid)
-    {
-//
-//        FileOutputStream fileOutputStream = null;
-//        Bitmap temp;
-//
-//        try {
-//            fileOutputStream = new FileOutputStream(mCurrentPhotoPath);
-//            temp = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(mCurrentPhotoPath), 640, 640, true);
-//            temp.compress(Bitmap.CompressFormat.JPEG, 70, fileOutputStream);
-//            fileOutputStream.flush();
-//            fileOutputStream.close();
-//        }
-//        catch (Exception e){
-//            Log.v("Bitmap scaling error", e.getMessage());
-//        }
-
-
         try {
-            Log.v("imageURI 0 is ", imageUri.get(0));
-
-
             Builders.Any.M body = Ion.with(mContext)
                     .load("POST", url_base + url_add_item)
-                    .setLogging("UPLOAD LOG ", Log.VERBOSE)
                     .setMultipartParameter("auth_token", authToken)
                     .setMultipartParameter("device_uuid", uuid)
                     .setMultipartParameter("title", name)
@@ -376,24 +245,26 @@ public class ServerCalls
                     .setMultipartParameter("price", price)
                     .setMultipartParameter("method", pickupMethod)
                     .setMultipartParameter("tags", tags)
-                    .setMultipartParameter("location", "32,32"); //TODO: GET REAL LOCATION
+                    .setMultipartParameter("location", location);
 
             for (String uri : imageUri) {
                 body.setMultipartFile("image", new File(uri));
             }
 
+            jsonResponse = body.asJsonObject().get();
+            return jsonResponse;
 
-            body.asJsonObject().setCallback(new FutureCallback<JsonObject>()
-            {
-                @Override
-                public void onCompleted(Exception e, JsonObject result)
-                {
-                    if (e != null)
-                        e.printStackTrace();
-                    Log.v("the result is ", result.toString());
-                    jsonResponse = result;
-                }
-            });
+//            body.asJsonObject().setCallback(new FutureCallback<JsonObject>()
+//            {
+//                @Override
+//                public void onCompleted(Exception e, JsonObject result)
+//                {
+//                    if (e != null)
+//                        e.printStackTrace();
+//                    Log.v("the result is ", result.toString());
+//                    jsonResponse = result;
+//                }
+//            });
         }
         catch (Exception e) {
             Log.v("testing upload", e.getMessage());
@@ -401,7 +272,6 @@ public class ServerCalls
         }
 
         return jsonResponse;
-
 
     }
 
@@ -413,11 +283,6 @@ public class ServerCalls
     public JsonObject getAccount(String authToken, String uuid)
     {
         try {
-            Log.v("link is ", url_base+url_getaccount);
-            Log.v("uuid is ", uuid);
-            Log.v("auth token is ", authToken);
-            Log.v("accountId is ", authToken.substring(33, 35));
-
             jsonResponse = Ion.with(mContext)
                     .load(url_base + url_getaccount)
                     .setBodyParameter("device_uuid", uuid)
@@ -426,10 +291,9 @@ public class ServerCalls
                     .asJsonObject()
                     .get();
         }
-        catch (Exception e){
+        catch (Exception e) {
             Log.v("Exception", e.getMessage());
         }
-
         return jsonResponse;
     }
 
@@ -446,11 +310,9 @@ public class ServerCalls
                     @Override
                     public void onCompleted(Exception e, JsonObject result)
                     {
-                        if(e != null) {
+                        if (e != null) {
                             Log.v("description exception", e.getMessage());
                         }
-
-                        Log.v("the json is", result.toString());
                         jsonResponse = result;
                     }
                 });
@@ -478,29 +340,4 @@ public class ServerCalls
         }
 
     }
-
-    public void getFilter()
-    {
-
-    }
-
-    private class backgroundTask extends AsyncTask<String, String, String>
-    {
-
-        @Override
-        protected String doInBackground(String... urls)
-        {
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String result)
-        {
-
-        }
-
-
-    }
-
 }

@@ -1,6 +1,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" tools:context="com.bakkle.bakkle.Activities.ChatActivity">
-    <item android:id="@+id/action_settings" android:title="@string/action_settings"
-        android:orderInCategory="100" app:showAsAction="never" />
+
+    <item
+        android:id="@+id/offer_button"
+        android:icon="@drawable/ic_action_attach_money"
+        app:showAsAction="always"
+        android:onClick="makeOffer"
+        android:title="Make Offer"/>
+
+    <item
+        android:id="@+id/view_item_details"
+        android:icon="@drawable/ic_action_info"
+        app:showAsAction="always"
+        android:onClick="viewItem"
+        android:title="View Item Details"/>
+
 </menu>

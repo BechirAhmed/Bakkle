@@ -1,15 +1,13 @@
-Fix Sellers garage bug of list items cutting off
-" " same with buyer's trunk
-Display total number on top of picture in sellers garage
 blur on the cards
-Fix image upload
-Fix getting pictures from facebook
 Make flicking cards easier
-Make the chat window when you click on an item in the buyers trunk
 Make action bar change dynamically
-Fix broken navigation drawer button
 Bring the app to Material design guidelines (or at least make it a little better)
-Chatting functionality
 Check status codes when making server calls
+Make Constants class
 Make ServerCalls class non-instantiable
 Use ViewPager to look at images instead of HorizontalScrollView
+Custom camera view
+View video
+upload video
+Remove pictures
+Edit item

@@ -1,0 +1,27 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.bakkle.bakkle.Fragments.AnalyticsFragment">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:padding="30dp"
+        android:text="User Interaction"
+        android:textColor="@color/green"
+        android:textSize="24sp"
+        android:textStyle="bold"/>
+
+    <lecho.lib.hellocharts.view.PieChartView
+        android:id="@+id/piechart"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_below="@id/title"
+        android:layout_centerHorizontal="true"
+        android:padding="8dp"/>
+
+</RelativeLayout>

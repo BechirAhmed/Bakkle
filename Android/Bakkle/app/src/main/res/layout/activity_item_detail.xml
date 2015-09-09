@@ -30,14 +30,14 @@
                 />
 
             <ImageButton
-                android:id="@+id/cancel"
+                android:id="@+id/close"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_alignParentLeft="true"
                 android:background="@null"
                 android:onClick="end"
                 android:layout_centerVertical="true"
-                android:src="@drawable/ic_action_cancel" />
+                android:src="@drawable/ic_action_close" />
 
             <!--<ImageButton
                 android:id="@+id/search_button"
@@ -162,6 +162,8 @@
         android:layout_width="fill_parent"
         android:layout_height="50dp"
         android:background="@color/green"
+        android:textColor="@color/white"
+        android:id="@+id/wantButton"
         android:layout_alignParentBottom="true"
         android:text="WANT"
         android:onClick="markWant"

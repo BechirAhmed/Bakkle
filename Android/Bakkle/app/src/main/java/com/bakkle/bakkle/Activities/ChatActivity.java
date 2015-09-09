@@ -1,15 +1,17 @@
 package com.bakkle.bakkle.Activities;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.DataSetObserver;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -59,7 +61,13 @@ public class ChatActivity extends AppCompatActivity
     protected String uuid;
     public boolean selfBuyer;
     private String fbUrl;
-
+    private String title;
+    private String sellerName;
+    private String price;
+    private String distance;
+    private String description;
+    private String pk;
+    private ArrayList<String> imageUrls;
 
 
     @Override
@@ -71,11 +79,25 @@ public class ChatActivity extends AppCompatActivity
         chatId = b.getInt("chatId");
         selfBuyer = b.getBoolean("selfBuyer");
         fbUrl = b.getString("url");
+        title = b.getString("title");
+        sellerName = b.getString("seller");
+        price = b.getString("price");
+        distance = b.getString("distance");
+        description = b.getString("description");
+        pk = b.getString("pk");
+        imageUrls = b.getStringArrayList("imageUrls");
+
         send = (Button) findViewById(R.id.send);
         listView = (ListView) findViewById(R.id.list);
         chatText = (EditText) findViewById(R.id.compose);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha));
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+        upArrow.setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        //toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha));
+        //toolbar.setLogo();
         toolbar.setNavigationOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -155,7 +177,7 @@ public class ChatActivity extends AppCompatActivity
         return true;
     }
 
-    public void makeOffer(View view)
+    public void makeOffer(MenuItem item)
     {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setTitle("Offer Proposal");
@@ -186,23 +208,6 @@ public class ChatActivity extends AppCompatActivity
         alert.show();
     }
 
-//    public void retractOffer(View view)
-//    {
-//        Log.v("retract test", "test");
-//        chatCalls.setCallback(new RetractOfferWebSocketCallback(offerId));
-//    }
-//
-//    public void acceptOffer(View view)
-//    {
-//        Log.v("accept test", "accept");
-//        chatCalls.setCallback(new AcceptOfferWebSocketCallback(offerId));
-//    }
-
-    public int dpToPx(int dp) {
-        DisplayMetrics displayMetrics = this.getResources().getDisplayMetrics();
-        return Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
-    }
-
     public void populateChat()
     {
         JsonParser jsonParser = new JsonParser();
@@ -212,7 +217,6 @@ public class ChatActivity extends AppCompatActivity
             return;
         JsonArray messages = jsonResponse.get("messages").getAsJsonArray();
         for (JsonElement temp : messages) {
-            Log.v("temp value", temp.toString());
             JsonObject message = temp.getAsJsonObject();
             if (message.get("message").getAsString().equals("")) { //if message field is empty, then it must be an offer
                 populateOffer(message.get("offer").getAsJsonObject(), message.get("sent_by_buyer").getAsBoolean());
@@ -248,11 +252,19 @@ public class ChatActivity extends AppCompatActivity
         });
     }
 
-    public void viewItem(View view)
+    public void viewItem(MenuItem item)
     {
-
+        Intent intent = new Intent(this, ItemDetailActivity.class);
+        intent.putExtra("title", title);
+        intent.putExtra("seller", sellerName);
+        intent.putExtra("price", price);
+        intent.putExtra("distance", distance);
+        intent.putExtra("sellerImageUrl", fbUrl);
+        intent.putExtra("description", description);
+        intent.putExtra("pk", pk);
+        intent.putStringArrayListExtra("imageURLs", imageUrls);
+        startActivity(intent);
     }
-
     private class GetMessagesWebSocketConnectCallback implements AsyncHttpClient.WebSocketConnectCallback
     {
 
@@ -284,7 +296,6 @@ public class ChatActivity extends AppCompatActivity
                 public void onStringAvailable(String s)
                 {
                     response = s;
-                    Log.v("response is ", "" + response);
                     populateChat();
                 }
             });
@@ -328,7 +339,6 @@ public class ChatActivity extends AppCompatActivity
                 public void onStringAvailable(String s)
                 {
                     response = s;
-                    Log.v("send string", response);
                 }
             });
         }
@@ -376,7 +386,6 @@ public class ChatActivity extends AppCompatActivity
                 public void onStringAvailable(String s)
                 {
                     response = s;
-                    Log.v("send string", response);
                 }
             });
         }
@@ -402,9 +411,9 @@ public class ChatActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
 
         return super.onOptionsItemSelected(item);
     }

@@ -1,6 +1,7 @@
 package com.bakkle.bakkle.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.preference.PreferenceManager;
@@ -8,10 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bakkle.bakkle.Activities.ItemDetailActivity;
 import com.bakkle.bakkle.Helpers.FeedItem;
 import com.bakkle.bakkle.Helpers.ServerCalls;
 import com.bakkle.bakkle.R;
@@ -47,6 +50,7 @@ public class GarageAdapter extends ArraySwipeAdapter<FeedItem>
         TextView nope;
         Button delete;
         TextView total;
+        FrameLayout frameLayout;
 
     }
 
@@ -75,6 +79,7 @@ public class GarageAdapter extends ArraySwipeAdapter<FeedItem>
             viewHolder.price = (TextView) convertView.findViewById(R.id.price);
             viewHolder.delete = (Button) convertView.findViewById(R.id.delete);
             viewHolder.total = (TextView) convertView.findViewById(R.id.total_count);
+            viewHolder.frameLayout = (FrameLayout) convertView.findViewById(R.id.frame_layout);
             convertView.setTag(viewHolder);
         }
         else {
@@ -103,6 +108,27 @@ public class GarageAdapter extends ArraySwipeAdapter<FeedItem>
             {
                 Toast.makeText(c, "You are in the delete Item page", Toast.LENGTH_SHORT).show();
                 //serverCalls.deleteItem(preferences.getString("auth_token", "0"), preferences.getString("uuid", "0"), item.getPk());
+            }
+        });
+
+        viewHolder.frameLayout.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                Intent intent = new Intent(c, ItemDetailActivity.class);
+                intent.putExtra("title", item.getTitle());
+                intent.putExtra("seller", item.getSellerDisplayName());
+                intent.putExtra("price", item.getPrice());
+                intent.putExtra("distance", item.getDistance(
+                        preferences.getString("latitude", "0"),
+                        preferences.getString("longitude", "0")));
+                intent.putExtra("sellerImageUrl", "http://graph.facebook.com/" + item.getSellerFacebookId() + "/picture?width=142&height=142");
+                intent.putExtra("description", item.getDescription());
+                intent.putExtra("pk", item.getPk());
+                intent.putExtra("garage", true);
+                intent.putStringArrayListExtra("imageURLs", item.getImageUrls());
+                c.startActivity(intent);
             }
         });
 
