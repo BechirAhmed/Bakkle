@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bakkle.bakkle.Helpers.Constants;
 import com.bakkle.bakkle.R;
 
 import java.util.ArrayList;
@@ -45,10 +46,10 @@ public class AnalyticsFragment extends Fragment
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             Bundle args = getArguments();
-            numView = args.getString("numView");
-            numWant = args.getString("numWant");
-            numHold = args.getString("numHold");
-            numMeh = args.getString("numMeh");
+            numView = args.getString(Constants.NUM_VIEW);
+            numWant = args.getString(Constants.NUM_HOLD);
+            numHold = args.getString(Constants.NUM_HOLD);
+            numMeh = args.getString(Constants.NUM_MEH);
         }
     }
 

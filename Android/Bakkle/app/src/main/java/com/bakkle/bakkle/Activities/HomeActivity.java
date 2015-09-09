@@ -31,6 +31,7 @@ import com.bakkle.bakkle.Fragments.ProfileFragment;
 import com.bakkle.bakkle.Fragments.RefineFragment;
 import com.bakkle.bakkle.Fragments.SellersGarageFragment;
 import com.bakkle.bakkle.Fragments.SplashFragment;
+import com.bakkle.bakkle.Helpers.Constants;
 import com.bakkle.bakkle.Helpers.FeedItem;
 import com.bakkle.bakkle.Helpers.ServerCalls;
 import com.bakkle.bakkle.R;
@@ -112,7 +113,7 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
                 .withHeaderBackground(R.color.gray)
                 .withSelectionListEnabled(false)
                 .addProfiles(
-                        new ProfileDrawerItem().withName(preferences.getString("name", "Not Signed In")).withIcon("http://graph.facebook.com/" + preferences.getString("userID", "0") + "/picture?width=300&height=300")
+                        new ProfileDrawerItem().withName(preferences.getString(Constants.NAME, "Not Signed In")).withIcon("http://graph.facebook.com/" + preferences.getString("userID", "0") + "/picture?width=300&height=300")
                 )
                 .withProfileImagesClickable(true)
                 .withProfileImagesVisible(true)
@@ -190,7 +191,7 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
 
         serverCalls = new ServerCalls(this);
 
-        if (preferences.getBoolean("newuser", true)) {
+        if (preferences.getBoolean(Constants.NEW_USER, true)) {
             Log.v("new user", "true");
             GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(),
                     new GraphRequest.GraphJSONObjectCallback()
@@ -200,8 +201,8 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
                         {
                             addUserInfoToPreferences(object);
                             Log.v("testing 123", "testing 123");
-                            Log.d("testing", preferences.getString("uuid", "0"));
-                            Log.d("testing", preferences.getString("userID", "0"));
+                            Log.d("testing", preferences.getString(Constants.UUID, "0"));
+                            Log.d("testing", preferences.getString(Constants.USER_ID, "0"));
 
 //                            String auth_token = serverCalls.loginFacebook(
 //                                    preferences.getString("uuid", "0"),
@@ -213,24 +214,24 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
 //                            editor.apply();
 
                             serverCalls.registerFacebook(
-                                    preferences.getString("email", ""),
-                                    preferences.getString("gender", ""),
-                                    preferences.getString("username", ""),
-                                    preferences.getString("name", ""),
-                                    preferences.getString("userID", ""),
-                                    preferences.getString("locale", ""),
-                                    preferences.getString("first_name", ""),
-                                    preferences.getString("last_name", ""),
-                                    preferences.getString("uuid", ""));
+                                    preferences.getString(Constants.EMAIL, ""),
+                                    preferences.getString(Constants.GENDER, ""),
+                                    preferences.getString(Constants.USERNAME, ""),
+                                    preferences.getString(Constants.NAME, ""),
+                                    preferences.getString(Constants.USER_ID, ""),
+                                    preferences.getString(Constants.LOCALE, ""),
+                                    preferences.getString(Constants.FIRST_NAME, ""),
+                                    preferences.getString(Constants.LAST_NAME, ""),
+                                    preferences.getString(Constants.UUID, ""));
 
                             String auth_token = serverCalls.loginFacebook(
-                                    preferences.getString("uuid", "0"),
-                                    preferences.getString("userID", "0"),
+                                    preferences.getString(Constants.UUID, "0"),
+                                    preferences.getString(Constants.USER_ID, "0"),
                                     getLocation()
                             );
                             Log.v("auth", "just did the server call");
-                            editor.putString("auth_token", auth_token);
-                            editor.putBoolean("newuser", false);
+                            editor.putString(Constants.AUTH_TOKEN, auth_token);
+                            editor.putBoolean(Constants.NEW_USER, false);
                             editor.apply();
 
                             getFragmentManager().beginTransaction().replace(R.id.content_frame,
@@ -266,7 +267,7 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
 
     public String getLocation()
     {
-        return preferences.getString("location", "0, 0");
+        return preferences.getString(Constants.LOCATION, "0,0");
     }
 
 
@@ -274,14 +275,14 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
     {
         try {
             Log.v("the fb object is", object.toString());
-            editor.putString("email", object.getString("email"));
-            editor.putString("gender", object.getString("gender"));
-            editor.putString("username", "");
-            editor.putString("name", object.getString("name"));
-            editor.putString("userID", object.getString("id"));
-            editor.putString("locale", object.getString("locale"));
-            editor.putString("first_name", object.getString("first_name"));
-            editor.putString("last_name", object.getString("last_name"));
+            editor.putString(Constants.EMAIL, object.getString("email"));
+            editor.putString(Constants.GENDER, object.getString("gender"));
+            editor.putString(Constants.USERNAME, "");
+            editor.putString(Constants.NAME, object.getString("name"));
+            editor.putString(Constants.USER_ID, object.getString("id"));
+            editor.putString(Constants.LOCALE, object.getString("locale"));
+            editor.putString(Constants.FIRST_NAME, object.getString("first_name"));
+            editor.putString(Constants.LAST_NAME, object.getString("last_name"));
             editor.apply();
 
         }
@@ -365,7 +366,7 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
 
     public void reset(View view)
     {
-        serverCalls.resetDemo(preferences.getString("auth_token", ""), preferences.getString("uuid", ""));
+        serverCalls.resetDemo(preferences.getString(Constants.AUTH_TOKEN, ""), preferences.getString(Constants.UUID, ""));
     }
 
     public void hideSoftKeyBoard()

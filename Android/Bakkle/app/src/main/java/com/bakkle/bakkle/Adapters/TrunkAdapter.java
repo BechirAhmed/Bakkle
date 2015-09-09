@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bakkle.bakkle.Activities.ItemDetailActivity;
+import com.bakkle.bakkle.Helpers.Constants;
 import com.bakkle.bakkle.Helpers.FeedItem;
 import com.bakkle.bakkle.Helpers.ServerCalls;
 import com.bakkle.bakkle.R;
@@ -80,17 +81,17 @@ public class TrunkAdapter extends ArrayAdapter<FeedItem>{
             public void onClick(View view)
             {
                 Intent intent = new Intent(context, ItemDetailActivity.class);
-                intent.putExtra("title", item.getTitle());
-                intent.putExtra("seller", item.getSellerDisplayName());
-                intent.putExtra("price", item.getPrice());
-                intent.putExtra("distance", item.getDistance(
-                        preferences.getString("latitude", "0"),
-                        preferences.getString("longitude", "0")));
-                intent.putExtra("sellerImageUrl", "http://graph.facebook.com/" + item.getSellerFacebookId() + "/picture?width=142&height=142");
-                intent.putExtra("description", item.getDescription());
-                intent.putExtra("pk", item.getPk());
-                intent.putExtra("parent", "trunk");
-                intent.putStringArrayListExtra("imageURLs", item.getImageUrls());
+                intent.putExtra(Constants.TITLE, item.getTitle());
+                intent.putExtra(Constants.SELLER, item.getSellerDisplayName());
+                intent.putExtra(Constants.PRICE, item.getPrice());
+                intent.putExtra(Constants.DISTANCE, item.getDistance(
+                        preferences.getString(Constants.LATITUDE, "0"),
+                        preferences.getString(Constants.LONGITUDE, "0")));
+                intent.putExtra(Constants.SELLER_IMAGE_URL, "http://graph.facebook.com/" + item.getSellerFacebookId() + "/picture?width=142&height=142");
+                intent.putExtra(Constants.DESCRIPTION, item.getDescription());
+                intent.putExtra(Constants.PK, item.getPk());
+                intent.putExtra(Constants.PARENT, "trunk");
+                intent.putStringArrayListExtra(Constants.IMAGE_URLS, item.getImageUrls());
                 context.startActivity(intent);
             }
         });
@@ -98,12 +99,12 @@ public class TrunkAdapter extends ArrayAdapter<FeedItem>{
         viewHolder.title.setText(item.getTitle());
         viewHolder.method.setText(item.getMethod());
         viewHolder.tags.setText("Tags: " + item.getTagsString());
-        viewHolder.distance.setText(item.getDistance(preferences.getString("latitude", "0"), preferences.getString("longitude", "0")));
+        viewHolder.distance.setText(item.getDistance(preferences.getString(Constants.LATITUDE, "0"), preferences.getString(Constants.LONGITUDE, "0")));
         viewHolder.price.setText("$" + item.getPrice());
         viewHolder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                serverCalls.deleteItem(preferences.getString("auth_token", ""), preferences.getString("uuid", ""), item.getPk());
+                serverCalls.deleteItem(preferences.getString(Constants.AUTH_TOKEN, ""), preferences.getString(Constants.UUID, ""), item.getPk());
                 remove(item);
             }
         });

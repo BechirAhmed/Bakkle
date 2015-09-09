@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bakkle.bakkle.Activities.LoginActivity;
+import com.bakkle.bakkle.Helpers.Constants;
 import com.bakkle.bakkle.Helpers.ServerCalls;
 import com.bakkle.bakkle.R;
 import com.bumptech.glide.Glide;
@@ -56,8 +57,8 @@ public class ProfileFragment extends Fragment
         description = null;
         editor = preferences.edit();
         serverCalls = new ServerCalls(mActivity);
-        json = serverCalls.getAccount(preferences.getString("auth_token", ""), preferences.getString("uuid", ""));
-        url = "http://graph.facebook.com/" + preferences.getString("userID", "0") + "/picture?width=300&height=300";
+        json = serverCalls.getAccount(preferences.getString(Constants.AUTH_TOKEN, ""), preferences.getString(Constants.UUID, ""));
+        url = "http://graph.facebook.com/" + preferences.getString(Constants.USER_ID, "0") + "/picture?width=300&height=300";
     }
     
     
@@ -66,7 +67,7 @@ public class ProfileFragment extends Fragment
     {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        ((TextView) view.findViewById(R.id.name)).setText(preferences.getString("name", "Not Signed In"));
+        ((TextView) view.findViewById(R.id.name)).setText(preferences.getString(Constants.NAME, "Not Signed In"));
         final EditText editText = (EditText) view.findViewById(R.id.aboutMeTextEdit);
         final TextView textView = (TextView) view.findViewById(R.id.aboutMeText);
         final Button logout = (Button) (view.findViewById(R.id.logout));
@@ -113,8 +114,8 @@ public class ProfileFragment extends Fragment
 
 
                 serverCalls.setDescription(
-                        preferences.getString("auth_token", ""),
-                        preferences.getString("uuid", ""),
+                        preferences.getString(Constants.AUTH_TOKEN, ""),
+                        preferences.getString(Constants.UUID, ""),
                         description);
             }
         });
@@ -127,8 +128,8 @@ public class ProfileFragment extends Fragment
             {
                 FacebookSdk.sdkInitialize(mActivity);
                 LoginManager.getInstance().logOut();
-                editor.putBoolean("LoggedIn", false);
-                editor.putBoolean("newuser", true);
+                editor.putBoolean(Constants.LOGGED_IN, false);
+                editor.putBoolean(Constants.NEW_USER, true);
                 editor.apply();
                 startActivity(new Intent(mActivity, LoginActivity.class));
                 mActivity.finish();

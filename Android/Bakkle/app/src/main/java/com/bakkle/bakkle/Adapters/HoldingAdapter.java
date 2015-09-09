@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bakkle.bakkle.Helpers.Constants;
 import com.bakkle.bakkle.Helpers.FeedItem;
 import com.bakkle.bakkle.R;
 import com.bumptech.glide.Glide;
@@ -71,7 +72,7 @@ public class HoldingAdapter extends ArrayAdapter<FeedItem>{
         viewHolder.title.setText(item.getTitle());
         viewHolder.method.setText(item.getMethod());
         viewHolder.tags.setText("Tags: " + item.getTagsString());
-        viewHolder.distance.setText(item.getDistance(preferences.getString("latitude", "0"), preferences.getString("longitude", "0")));
+        viewHolder.distance.setText(item.getDistance(preferences.getString(Constants.LATITUDE, "0"), preferences.getString(Constants.LONGITUDE, "0")));
         viewHolder.price.setText("$" + item.getPrice());
         new CountDownTimer(5400000, 1000){
             public void onTick(long millisUntilFinished){

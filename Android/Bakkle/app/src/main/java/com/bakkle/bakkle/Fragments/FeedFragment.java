@@ -22,6 +22,7 @@ import com.andtinder.view.CardContainer;
 import com.andtinder.view.SimpleCardStackAdapter;
 import com.bakkle.bakkle.Activities.HomeActivity;
 import com.bakkle.bakkle.Activities.ItemDetailActivity;
+import com.bakkle.bakkle.Helpers.Constants;
 import com.bakkle.bakkle.Helpers.FeedItem;
 import com.bakkle.bakkle.Helpers.ServerCalls;
 import com.bakkle.bakkle.R;
@@ -74,13 +75,13 @@ public class FeedFragment extends Fragment
         mCardContainer.setOrientation(Orientations.Orientation.Ordered);
         bar = (ProgressBar) view.findViewById(R.id.spinner);
         searchView = (SearchView) view.findViewById(R.id.searchField);
-        searchView.setQuery(preferences.getString("search_text", ""), false);
+        searchView.setQuery(preferences.getString(Constants.SEARCH_TEXT, ""), false);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener()
         {
             @Override
             public boolean onQueryTextSubmit(String s)
             {
-                editor.putString("search_text", s);
+                editor.putString(Constants.SEARCH_TEXT, s);
                 editor.apply();
                 ((HomeActivity) mActivity).hideSoftKeyBoard();
                 getFragmentManager().beginTransaction().replace(R.id.content_frame, new FeedFragment())
@@ -92,7 +93,7 @@ public class FeedFragment extends Fragment
             @Override
             public boolean onQueryTextChange(String s)
             {
-                editor.putString("search_text", s);
+                editor.putString(Constants.SEARCH_TEXT, s);
                 editor.apply();
                 return false;
             }
@@ -146,8 +147,8 @@ public class FeedFragment extends Fragment
                     feedItem.getSellerDisplayName(),
                     "$" + feedItem.getPrice(),
                     feedItem.getDistance(
-                            preferences.getString("latitude", "0"),
-                            preferences.getString("longitude", "0")),
+                            preferences.getString(Constants.LATITUDE, "0"),
+                            preferences.getString(Constants.LONGITUDE, "0")),
                     feedItem.getMethod(),
                     feedItem.getPk(),
                     feedItem.getDescription(),
@@ -161,8 +162,8 @@ public class FeedFragment extends Fragment
                 {
                     Toast.makeText(mActivity, "Want", Toast.LENGTH_SHORT).show();
                     serverCalls.markItem("want",
-                            preferences.getString("auth_token", "0"),
-                            preferences.getString("uuid", "0"),
+                            preferences.getString(Constants.AUTH_TOKEN, "0"),
+                            preferences.getString(Constants.UUID, "0"),
                             cardModel.getPk(),
                             "42");
                     showSplashScreen(cardModel.getPk(), cardModel.getCardImageURL());
@@ -174,8 +175,8 @@ public class FeedFragment extends Fragment
                     Toast.makeText(mActivity, "Nope", Toast.LENGTH_SHORT).show();
 
                     serverCalls.markItem("meh",
-                            preferences.getString("auth_token", "0"),
-                            preferences.getString("uuid", "0"),
+                            preferences.getString(Constants.AUTH_TOKEN, "0"),
+                            preferences.getString(Constants.UUID, "0"),
                             cardModel.getPk(),
                             "42");
                 }
@@ -185,8 +186,8 @@ public class FeedFragment extends Fragment
                 {
                     Toast.makeText(mActivity, "Holding", Toast.LENGTH_SHORT).show();
                     serverCalls.markItem("hold",
-                            preferences.getString("auth_token", "0"),
-                            preferences.getString("uuid", "0"),
+                            preferences.getString(Constants.AUTH_TOKEN, "0"),
+                            preferences.getString(Constants.UUID, "0"),
                             cardModel.getPk(),
                             "42");
                 }
@@ -196,8 +197,8 @@ public class FeedFragment extends Fragment
                 {
                     Toast.makeText(mActivity, "Report", Toast.LENGTH_SHORT).show();
                     serverCalls.markItem("report",
-                            preferences.getString("auth_token", "0"),
-                            preferences.getString("uuid", "0"),
+                            preferences.getString(Constants.AUTH_TOKEN, "0"),
+                            preferences.getString(Constants.UUID, "0"),
                             cardModel.getPk(),
                             "42");
                 }
@@ -208,15 +209,15 @@ public class FeedFragment extends Fragment
                 public void OnClickListener(CardModel cardModel)
                 {
                     Intent intent = new Intent(mActivity, ItemDetailActivity.class);
-                    intent.putExtra("title", cardModel.getTitle());
-                    intent.putExtra("seller", cardModel.getSeller());
-                    intent.putExtra("price", cardModel.getPrice());
-                    intent.putExtra("distance", cardModel.getDistance());
-                    intent.putExtra("sellerImageUrl", cardModel.getSellerImageURL());
-                    intent.putExtra("description", cardModel.getDescription());
-                    intent.putExtra("pk", cardModel.getPk());
-                    intent.putStringArrayListExtra("imageURLs", cardModel.getImageURLs());
-                    intent.putExtra("parent", "feed");
+                    intent.putExtra(Constants.TITLE, cardModel.getTitle());
+                    intent.putExtra(Constants.SELLER, cardModel.getSeller());
+                    intent.putExtra(Constants.PRICE, cardModel.getPrice());
+                    intent.putExtra(Constants.DISTANCE, cardModel.getDistance());
+                    intent.putExtra(Constants.SELLER_IMAGE_URL, cardModel.getSellerImageURL());
+                    intent.putExtra(Constants.DESCRIPTION, cardModel.getDescription());
+                    intent.putExtra(Constants.PK, cardModel.getPk());
+                    intent.putStringArrayListExtra(Constants.IMAGE_URLS, cardModel.getImageURLs());
+                    intent.putExtra(Constants.PARENT, "feed");
                     startActivityForResult(intent, 1);
                 }
             });
@@ -253,13 +254,13 @@ public class FeedFragment extends Fragment
         protected JsonObject doInBackground(Void... voids)
         {
             return serverCalls.getFeedItems(
-                    preferences.getString("auth_token", "0"),
-                    preferences.getInt("price_filter", 100) + "",
-                    preferences.getInt("distance_filter", 100) + "",
-                    preferences.getString("search_text", ""),
-                    preferences.getString("locationString", "0, 0"),
+                    preferences.getString(Constants.AUTH_TOKEN, "0"),
+                    preferences.getInt(Constants.PRICE_FILTER, 100) + "",
+                    preferences.getInt(Constants.DISTANCE_FILTER, 100) + "",
+                    preferences.getString(Constants.SEARCH_TEXT, ""),
+                    preferences.getString(Constants.LOCATION, "0, 0"),
                     "",
-                    preferences.getString("uuid", "0")
+                    preferences.getString(Constants.UUID, "0")
             );
         }
 
@@ -268,7 +269,6 @@ public class FeedFragment extends Fragment
         {
             bar.setVisibility(View.GONE);
             populateFeed(jsonObject.getAsJsonArray("feed"));
-            Log.v("jsonObject is", jsonObject.toString());
         }
     }
 }

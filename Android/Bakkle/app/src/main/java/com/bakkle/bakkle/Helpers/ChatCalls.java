@@ -76,9 +76,9 @@ public class ChatCalls extends Service
     public int onStartCommand(Intent i, int flags, int startId)
     {
         Log.v("LocalService", "Received start id " + startId + ": " + i);
-        uuid = i.getExtras().getString("uuid");
+        uuid = i.getExtras().getString(Constants.UUID);
         userId = i.getExtras().getString("sellerPk");
-        authToken = i.getExtras().getString("auth_token");
+        authToken = i.getExtras().getString(Constants.AUTH_TOKEN);
 
         connect();
 

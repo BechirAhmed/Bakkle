@@ -16,6 +16,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.bakkle.bakkle.Activities.HomeActivity;
+import com.bakkle.bakkle.Helpers.Constants;
 import com.bakkle.bakkle.R;
 
 
@@ -69,15 +70,15 @@ public class RefineFragment extends Fragment
         final TextView priceValue = (TextView) view.findViewById(R.id.priceValue);
         searchView = (SearchView) view.findViewById(R.id.searchField);
         ImageButton close = (ImageButton) view.findViewById(R.id.imageButton);
-        distanceBar.setProgress(preferences.getInt("distance_filter", 100));
-        priceBar.setProgress(preferences.getInt("price_filter", 100));
-        searchView.setQuery(preferences.getString("search_text", ""), false);
+        distanceBar.setProgress(preferences.getInt(Constants.DISTANCE_FILTER, 100));
+        priceBar.setProgress(preferences.getInt(Constants.PRICE_FILTER, 100));
+        searchView.setQuery(preferences.getString(Constants.SEARCH_TEXT, ""), false);
         close.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-                editor.putString("search_text", searchView.getQuery().toString());
+                editor.putString(Constants.SEARCH_TEXT, searchView.getQuery().toString());
                 editor.apply();
                 ((HomeActivity) mActivity).hideSoftKeyBoard();
                 getFragmentManager().beginTransaction().replace(R.id.content_frame, new FeedFragment())
@@ -91,7 +92,7 @@ public class RefineFragment extends Fragment
             @Override
             public boolean onQueryTextSubmit(String s)
             {
-                editor.putString("search_text", s);
+                editor.putString(Constants.SEARCH_TEXT, s);
                 editor.apply();
                 ((HomeActivity) mActivity).hideSoftKeyBoard();
                 getFragmentManager().beginTransaction().replace(R.id.content_frame, new FeedFragment())
@@ -103,7 +104,7 @@ public class RefineFragment extends Fragment
             @Override
             public boolean onQueryTextChange(String s)
             {
-                editor.putString("search_text", s);
+                editor.putString(Constants.SEARCH_TEXT, s);
                 editor.apply();
                 return false;
             }
@@ -146,7 +147,7 @@ public class RefineFragment extends Fragment
                     distanceValue.setText(progress + " mi");
                 else
                     distanceValue.setText("∞ mi");
-                editor.putInt("distance_filter", progress);
+                editor.putInt(Constants.DISTANCE_FILTER, progress);
                 editor.apply();
             }
         });
@@ -179,7 +180,7 @@ public class RefineFragment extends Fragment
                     priceValue.setText("$" + progress);
                 else
                     priceValue.setText("$∞");
-                editor.putInt("price_filter", progress);
+                editor.putInt(Constants.PRICE_FILTER, progress);
                 editor.apply();
             }
         });

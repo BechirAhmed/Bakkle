@@ -29,6 +29,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bakkle.bakkle.Helpers.Constants;
 import com.bakkle.bakkle.R;
 import com.bumptech.glide.Glide;
 
@@ -79,8 +80,8 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
         setContentView(R.layout.activity_camera);
         final Intent intent = getIntent();
         pics = new ArrayList<>();
-        for (int i = 0; i < intent.getIntExtra("num", 0); i++) {
-            pics.add(new ImageTaken(new File(intent.getStringExtra("pic"+i)), true, i));
+        for (int i = 0; i < intent.getIntExtra(Constants.NUM_OF_PICS, 0); i++) {
+            pics.add(new ImageTaken(new File(intent.getStringExtra(Constants.PICTURE_PATH+i)), true, i));
         }
         imageCount = 0;
         mCameraID = getBackCameraID();
@@ -125,11 +126,11 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
                 int y = 0;
                 for (ImageTaken taken : pics) {
                     if (taken.isBeingUsed()) {
-                        intent.putExtra("pic" + y, taken.getFile().getAbsolutePath());
+                        intent.putExtra(Constants.PICTURE_PATH + y, taken.getFile().getAbsolutePath());
                         y++;
                     }
                 }
-                intent.putExtra("num", y);
+                intent.putExtra(Constants.NUM_OF_PICS, y);
                 setResult(-1, intent);
                 finish();
             }

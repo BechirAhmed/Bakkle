@@ -26,6 +26,7 @@ import android.widget.ListView;
 import com.bakkle.bakkle.Adapters.ChatArrayAdapter;
 import com.bakkle.bakkle.Helpers.ChatCalls;
 import com.bakkle.bakkle.Helpers.ChatMessage;
+import com.bakkle.bakkle.Helpers.Constants;
 import com.bakkle.bakkle.Helpers.ServerCalls;
 import com.bakkle.bakkle.R;
 import com.bumptech.glide.Glide;
@@ -75,16 +76,16 @@ public class ChatActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         Bundle b = getIntent().getExtras();
-        chatId = b.getInt("chatId");
-        selfBuyer = b.getBoolean("selfBuyer");
-        fbUrl = b.getString("url");
-        title = b.getString("title");
-        sellerName = b.getString("seller");
-        price = b.getString("price");
-        distance = b.getString("distance");
-        description = b.getString("description");
-        pk = b.getString("pk");
-        imageUrls = b.getStringArrayList("imageUrls");
+        chatId = b.getInt(Constants.CHAT_ID);
+        selfBuyer = b.getBoolean(Constants.SELF_BUYER);
+        fbUrl = b.getString(Constants.SELLER_IMAGE_URL);
+        title = b.getString(Constants.TITLE);
+        sellerName = b.getString(Constants.SELLER);
+        price = b.getString(Constants.PRICE);
+        distance = b.getString(Constants.DISTANCE);
+        description = b.getString(Constants.DESCRIPTION);
+        pk = b.getString(Constants.PK);
+        imageUrls = b.getStringArrayList(Constants.IMAGE_URLS);
 
         send = (Button) findViewById(R.id.send);
         listView = (ListView) findViewById(R.id.list);
@@ -113,8 +114,8 @@ public class ChatActivity extends AppCompatActivity
                 .into((ImageView) findViewById(R.id.profilePicture));
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        authToken = preferences.getString("auth_token", "");
-        uuid = preferences.getString("uuid", "");
+        authToken = preferences.getString(Constants.AUTH_TOKEN, "");
+        uuid = preferences.getString(Constants.UUID, "");
         chatCalls = new ChatCalls(uuid, authToken.substring(33, 35), authToken, new GetMessagesWebSocketConnectCallback());
         chatArrayAdapter = new ChatArrayAdapter(this, R.layout.right_message, selfBuyer, chatCalls);
         listView.setAdapter(chatArrayAdapter);
@@ -250,15 +251,15 @@ public class ChatActivity extends AppCompatActivity
     public void viewItem(MenuItem item)
     {
         Intent intent = new Intent(this, ItemDetailActivity.class);
-        intent.putExtra("title", title);
-        intent.putExtra("seller", sellerName);
-        intent.putExtra("price", price);
-        intent.putExtra("distance", distance);
-        intent.putExtra("sellerImageUrl", fbUrl);
-        intent.putExtra("description", description);
-        intent.putExtra("pk", pk);
-        intent.putExtra("parent", "chat");
-        intent.putStringArrayListExtra("imageURLs", imageUrls);
+        intent.putExtra(Constants.TITLE, title);
+        intent.putExtra(Constants.SELLER, sellerName);
+        intent.putExtra(Constants.PRICE, price);
+        intent.putExtra(Constants.DISTANCE, distance);
+        intent.putExtra(Constants.SELLER_IMAGE_URL, fbUrl);
+        intent.putExtra(Constants.DESCRIPTION, description);
+        intent.putExtra(Constants.PK, pk);
+        intent.putExtra(Constants.PARENT, "chat");
+        intent.putStringArrayListExtra(Constants.IMAGE_URLS, imageUrls);
         startActivity(intent);
     }
     private class GetMessagesWebSocketConnectCallback implements AsyncHttpClient.WebSocketConnectCallback

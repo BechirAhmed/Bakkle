@@ -28,6 +28,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bakkle.bakkle.Helpers.Constants;
 import com.bakkle.bakkle.Helpers.ServerCalls;
 import com.bakkle.bakkle.R;
 import com.bumptech.glide.Glide;
@@ -112,9 +113,9 @@ public class AddItemActivity extends AppCompatActivity
                 int i;
                 for(i = 0; i < picturePaths.size(); i++)
                 {
-                    intent.putExtra("pic" + i, picturePaths.get(i));
+                    intent.putExtra(Constants.PICTURE_PATH + i, picturePaths.get(i));
                 }
-                intent.putExtra("num", i);
+                intent.putExtra(Constants.NUM_OF_PICS, i);
                 startActivityForResult(intent, 1);
             }
         });
@@ -161,8 +162,8 @@ public class AddItemActivity extends AppCompatActivity
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
             ArrayList<String> paths = new ArrayList<>();
             int i = 0;
-            while(i < data.getIntExtra("num", 0)) {
-                paths.add(data.getStringExtra("pic" + i));
+            while(i < data.getIntExtra(Constants.NUM_OF_PICS, 0)) {
+                paths.add(data.getStringExtra(Constants.PICTURE_PATH + i));
                 i++;
             }
 
@@ -286,8 +287,8 @@ public class AddItemActivity extends AppCompatActivity
             ProgressDialog dialog = new ProgressDialog(this);
             dialog.show();
             json = new ServerCalls(this).addItem(title, description, price, "Pick-up", "", picturePaths,
-                    preferences.getString("auth_token", ""), preferences.getString("uuid", ""),
-                    preferences.getString("locationString", "0,0"));
+                    preferences.getString(Constants.AUTH_TOKEN, ""), preferences.getString(Constants.UUID, ""),
+                    preferences.getString(Constants.LOCATION, "0,0"));
             dialog.dismiss();
         }
 
@@ -311,9 +312,9 @@ public class AddItemActivity extends AppCompatActivity
         int i;
         for(i = 0; i < picturePaths.size(); i++)
         {
-            intent.putExtra("pic" + i, picturePaths.get(i));
+            intent.putExtra(Constants.PICTURE_PATH + i, picturePaths.get(i));
         }
-        intent.putExtra("num", i);
+        intent.putExtra(Constants.NUM_OF_PICS, i);
         startActivityForResult(intent, 1);
     }
 }

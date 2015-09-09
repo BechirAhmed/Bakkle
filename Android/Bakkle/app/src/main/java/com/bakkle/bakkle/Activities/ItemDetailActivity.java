@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bakkle.bakkle.Helpers.Constants;
 import com.bakkle.bakkle.Helpers.ServerCalls;
 import com.bakkle.bakkle.R;
 import com.bumptech.glide.Glide;
@@ -60,16 +61,16 @@ public class ItemDetailActivity extends AppCompatActivity
         Intent intent = getIntent();
         serverCalls = new ServerCalls(this);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        garage = intent.getBooleanExtra("garage", false);
-        title = intent.getStringExtra("title");
-        price = intent.getStringExtra("price");
-        description = intent.getStringExtra("description");
-        seller = intent.getStringExtra("seller");
-        distance = intent.getStringExtra("distance");
-        pk = intent.getStringExtra("pk");
-        sellerImageUrl = intent.getStringExtra("sellerImageUrl");
-        imageURLs = intent.getStringArrayListExtra("imageURLs");
-        parent = intent.getStringExtra("parent");
+        garage = intent.getBooleanExtra(Constants.GARAGE, false);
+        title = intent.getStringExtra(Constants.TITLE);
+        price = intent.getStringExtra(Constants.PRICE);
+        description = intent.getStringExtra(Constants.DESCRIPTION);
+        seller = intent.getStringExtra(Constants.SELLER);
+        distance = intent.getStringExtra(Constants.DISTANCE);
+        pk = intent.getStringExtra(Constants.PK);
+        sellerImageUrl = intent.getStringExtra(Constants.SELLER_IMAGE_URL);
+        imageURLs = intent.getStringArrayListExtra(Constants.IMAGE_URLS);
+        parent = intent.getStringExtra(Constants.PARENT);
         if (imageURLs != null) {
             for (String url : imageURLs) {
                 Log.v("test", "url is " + url);
@@ -162,12 +163,12 @@ public class ItemDetailActivity extends AppCompatActivity
     public void markWant(View view)
     {
         serverCalls.markItem("want",
-                preferences.getString("auth_token", "0"),
-                preferences.getString("uuid", "0"),
+                preferences.getString(Constants.AUTH_TOKEN, ""),
+                preferences.getString(Constants.UUID, ""),
                 pk,
                 "42");
         Intent intent = new Intent();
-        intent.putExtra("markWant", true);
+        intent.putExtra(Constants.MARK_WANT, true);
         if(parent.equals("feed"))
         {
             setResult(1, intent);

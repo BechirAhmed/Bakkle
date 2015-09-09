@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.bakkle.bakkle.Helpers.ChatCalls;
 import com.bakkle.bakkle.Helpers.ChatMessage;
+import com.bakkle.bakkle.Helpers.Constants;
 import com.bakkle.bakkle.R;
 import com.koushikdutta.async.http.AsyncHttpClient;
 import com.koushikdutta.async.http.WebSocket;
@@ -47,8 +48,8 @@ public class ChatArrayAdapter extends ArrayAdapter<ChatMessage>
         this.context = context;
         this.isSelfBuyer = isSelfBuyer;
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        uuid = preferences.getString("uuid", "");
-        authToken = preferences.getString("auth_token", "");
+        uuid = preferences.getString(Constants.UUID, "");
+        authToken = preferences.getString(Constants.AUTH_TOKEN, "");
         this.chatCalls = chatCalls;
     }
 
