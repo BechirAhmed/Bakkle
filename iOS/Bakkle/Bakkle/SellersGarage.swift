@@ -231,7 +231,8 @@ class SellersGarageView: UIViewController, UITableViewDelegate, UITableViewDataS
         cell.selectorView.userInteractionEnabled = true
         var tapGestureRecognizer = UITapGestureRecognizer(target:self, action:Selector("imageTapped:"))
         cell.selectorView.addGestureRecognizer(tapGestureRecognizer)
-        cell.selectorView.tag = indexPath.row
+//        cell.selectorView.tag = indexPath.row
+        cell.selectorView.tag = getIndex(indexPath)
         return cell
     }
     
