@@ -13,12 +13,21 @@
         android:layout_height="match_parent">
 
 
+        <Space
+            android:id="@+id/blank"
+            android:layout_width="24dp"
+            android:layout_centerInParent="true"
+            android:layout_height="fill_parent"/>
+
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profilePicture"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
-            android:paddingLeft="96dp"
-            android:layout_centerInParent="true" />
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/blank"
+            android:clickable="false"
+            android:focusable="false"
+            android:longClickable="false"/>
 
 
     </RelativeLayout>

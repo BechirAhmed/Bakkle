@@ -231,7 +231,7 @@ public class ServerCalls
     }
 
     public JsonObject addItem(String name, String description, String price, String pickupMethod,
-                              String tags, ArrayList<String> imageUri, String authToken, String uuid, String location)
+                              String tags, ArrayList<String> imageUri, File video, String authToken, String uuid, String location)
     {
         try {
             Builders.Any.M body = Ion.with(mContext)
@@ -248,6 +248,9 @@ public class ServerCalls
             for (String uri : imageUri) {
                 body.setMultipartFile("image", new File(uri));
             }
+
+            if(video != null)
+                body.setMultipartFile("video", video);
 
             jsonResponse = body.asJsonObject().get();
             return jsonResponse;

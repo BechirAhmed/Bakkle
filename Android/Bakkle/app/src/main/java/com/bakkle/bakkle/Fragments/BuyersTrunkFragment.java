@@ -1,6 +1,5 @@
 package com.bakkle.bakkle.Fragments;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ListFragment;
 import android.content.Intent;
@@ -48,17 +47,13 @@ public class BuyersTrunkFragment extends ListFragment
     String authToken;
     JsonObject json;
 
-    private ActionBar mActionBar;
 
 
     // TODO: Rename and change types of parameters
-    public static BuyersTrunkFragment newInstance(String param1, String param2)
+    public static BuyersTrunkFragment newInstance()
     {
         BuyersTrunkFragment fragment = new BuyersTrunkFragment();
-//        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
-//        fragment.setArguments(args);
+
         return fragment;
     }
 
@@ -66,9 +61,7 @@ public class BuyersTrunkFragment extends ListFragment
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public BuyersTrunkFragment()
-    {
-    }
+    public BuyersTrunkFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -85,11 +78,6 @@ public class BuyersTrunkFragment extends ListFragment
         json = serverCalls.populateTrunk(authToken, uuid);
 
         items = getItems(json);
-
-        /*if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }*/
 
         setListAdapter(new TrunkAdapter(mActivity, items));
 

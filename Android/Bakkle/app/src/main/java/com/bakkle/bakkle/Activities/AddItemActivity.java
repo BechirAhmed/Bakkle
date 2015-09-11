@@ -28,6 +28,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bakkle.bakkle.Fragments.FeedFragment;
 import com.bakkle.bakkle.Helpers.Constants;
 import com.bakkle.bakkle.Helpers.ServerCalls;
 import com.bakkle.bakkle.R;
@@ -61,6 +62,7 @@ public class AddItemActivity extends AppCompatActivity
 
     ArrayList<ImageView> productPictureViews = new ArrayList<>();
     ArrayList<String> picturePaths = new ArrayList<>();
+    File video = null;
 //    final String[] commonWords = {"the", "of", "and", "a", "to", "in", "is", "you",
 //            "that", "it", "he", "was", "for", "on", "are", "as", "with", "his", "they", "i", "at",
 //            "be", "this", "have", "from", "or", "one", "had", "by", "but", "not", "what", "all",
@@ -131,24 +133,6 @@ public class AddItemActivity extends AppCompatActivity
 
     }
 
-    private File createImageFile() throws IOException
-    {
-        // Create an imageViews file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "Bakkle_" + timeStamp + "_";
-        File storageDir = Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
-
-        // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = image.getAbsolutePath();
-        return image;
-    }
-
     public int dpToPx(int dp)
     {
         DisplayMetrics displayMetrics = this.getResources().getDisplayMetrics();
@@ -166,6 +150,8 @@ public class AddItemActivity extends AppCompatActivity
                 paths.add(data.getStringExtra(Constants.PICTURE_PATH + i));
                 i++;
             }
+            if(data.hasExtra(Constants.VIDEO_PATH))
+                video = new File(data.getStringExtra(Constants.VIDEO_PATH));
 
             for (String path : paths) {
                 RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.imageCollection);
@@ -175,10 +161,7 @@ public class AddItemActivity extends AppCompatActivity
                 final BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inSampleSize = 8;
 
-
-                Log.v("path is ", path);
                 Bitmap temp = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(path, options), dpToPx(250), dpToPx(250));
-
 
                 FileOutputStream fileOutputStream;
 
@@ -286,7 +269,7 @@ public class AddItemActivity extends AppCompatActivity
 
             ProgressDialog dialog = new ProgressDialog(this);
             dialog.show();
-            json = new ServerCalls(this).addItem(title, description, price, "Pick-up", "", picturePaths,
+            json = new ServerCalls(this).addItem(title, description, price, "Pick-up", "", picturePaths, video,
                     preferences.getString(Constants.AUTH_TOKEN, ""), preferences.getString(Constants.UUID, ""),
                     preferences.getString(Constants.LOCATION, "0,0"));
             dialog.dismiss();
@@ -302,7 +285,7 @@ public class AddItemActivity extends AppCompatActivity
         }
 
         finish();
-
+        new FeedFragment().new bgTask().execute();
     }
 
     @Override

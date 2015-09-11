@@ -81,7 +81,7 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
         final Intent intent = getIntent();
         pics = new ArrayList<>();
         for (int i = 0; i < intent.getIntExtra(Constants.NUM_OF_PICS, 0); i++) {
-            pics.add(new ImageTaken(new File(intent.getStringExtra(Constants.PICTURE_PATH+i)), true, i));
+            pics.add(new ImageTaken(new File(intent.getStringExtra(Constants.PICTURE_PATH + i)), true, i));
         }
         imageCount = 0;
         mCameraID = getBackCameraID();
@@ -106,10 +106,10 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
         capture = (ImageView) findViewById(R.id.capture);
         surfaceHolder = surfaceView.getHolder();
         surfaceHolder.addCallback(this);
-        if(pics.size() > 0){
-            for(int i = 0; i < pics.size(); i++){
+        if (pics.size() > 0) {
+            for (int i = 0; i < pics.size(); i++) {
                 Glide.with(this)
-                        .load(pics.get(i).getFile())
+                        .load(pics.get(i).getImageFile())
                         .crossFade()
                         .fitCenter()
                         .into(imageViews[i]);
@@ -126,7 +126,9 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
                 int y = 0;
                 for (ImageTaken taken : pics) {
                     if (taken.isBeingUsed()) {
-                        intent.putExtra(Constants.PICTURE_PATH + y, taken.getFile().getAbsolutePath());
+                        intent.putExtra(Constants.PICTURE_PATH + y, taken.getImageFile().getAbsolutePath());
+                        if(taken.isVideoThumbnail())
+                            intent.putExtra(Constants.VIDEO_PATH, taken.getVideoFile().getAbsolutePath());
                         y++;
                     }
                 }
@@ -179,7 +181,6 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
                 initRecorder();
                 isLongPressed = true;
                 currentlyRecording = true;
-                initRecorder();
                 progressBar.setVisibility(View.VISIBLE);
                 progressBar.setMax(15);
                 progressBar.setProgress(0);
@@ -234,9 +235,9 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
 
     private void addVideoToList()
     {
-        Bitmap bMap = ThumbnailUtils.createVideoThumbnail(video.getAbsolutePath(), MediaStore.Video.Thumbnails.MICRO_KIND);
+        Bitmap bMap = ThumbnailUtils.createVideoThumbnail(video.getPath(), MediaStore.Video.Thumbnails.MINI_KIND);
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "BakkleTN_" + timeStamp + "_";
+        String imageFileName = "BakkleTN_" + timeStamp;
         File storageDir = Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES);
         File image = null;
@@ -247,14 +248,14 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
                     storageDir      /* directory */
             );
             FileOutputStream out = new FileOutputStream(image);
-            bMap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            bMap.compress(Bitmap.CompressFormat.JPEG, 85, out);
             out.flush();
             out.close();
         }
         catch (IOException e) {
             e.printStackTrace();
         }
-        loadPicIntoView(new ImageTaken(image, true, imageCount++, true));
+        loadPicIntoView(new ImageTaken(image, true, imageCount++, true, video));
     }
 
     private int getFrontCameraID()
@@ -607,7 +608,7 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
             final int j = i;
             if (!occupied[i]) {
                 Glide.with(this)
-                        .load(imageTaken.getFile())
+                        .load(imageTaken.getImageFile())
                         .into(imageViews[i]);
                 occupied[i] = true;
                 deletePictureViews[i].setVisibility(View.VISIBLE);
@@ -626,7 +627,7 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
                             ImageTaken taken = pics.get(x);
                             if (taken.isBeingUsed()) {
                                 Glide.with(CameraActivity.this)
-                                        .load(taken.getFile())
+                                        .load(taken.getImageFile())
                                         .into(imageViews[y]);
                                 deletePictureViews[y].setVisibility(View.VISIBLE);
                                 deletePictureViews[y++].setOnClickListener(this);
@@ -744,30 +745,37 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
 
     private class ImageTaken
     {
-        File    file;
+        File    imageFile;
+        File    videoFile;
         boolean beingUsed;
         boolean videoThumbnail;
         int     rank;
 
         public ImageTaken(File file, boolean beingUsed, int rank)
         {
-            this.file = file;
+            this.imageFile = file;
             this.beingUsed = beingUsed;
             this.rank = rank;
             videoThumbnail = false;
         }
 
-        public ImageTaken(File file, boolean beingUsed, int rank, boolean videoThumbnail)
+        public ImageTaken(File file, boolean beingUsed, int rank, boolean videoThumbnail, File videoFile)
         {
-            this.file = file;
+            this.imageFile = file;
             this.beingUsed = beingUsed;
             this.rank = rank;
             this.videoThumbnail = videoThumbnail;
+            this.videoFile = videoFile;
         }
 
-        public File getFile()
+        public File getImageFile()
         {
-            return file;
+            return imageFile;
+        }
+
+        public File getVideoFile()
+        {
+            return videoFile;
         }
 
         public boolean isBeingUsed()

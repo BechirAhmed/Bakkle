@@ -242,7 +242,7 @@ public class FeedFragment extends Fragment
     }
 
 
-    private class bgTask extends AsyncTask<Void, Void, JsonObject>
+    public class bgTask extends AsyncTask<Void, Void, JsonObject>
     {
         @Override
         protected void onPreExecute()

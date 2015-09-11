@@ -168,12 +168,14 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
                                 getFragmentManager().beginTransaction().replace(R.id.content_frame,
                                         new HoldingPatternFragment()).addToBackStack(null).
                                         setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
+                                invalidateOptionsMenu();
                                 break;
                             case 4:
                                 //startActivity(new Intent(getApplicationContext(), DemoOptionsFragment.class));
                                 getFragmentManager().beginTransaction().replace(R.id.content_frame,
                                         new DemoOptionsFragment()).addToBackStack(null)
                                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
+                                invalidateOptionsMenu();
                                 break;
                             default:
                                 Toast.makeText(getParent(), "Error", Toast.LENGTH_SHORT).show();
@@ -203,15 +205,6 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
                             Log.v("testing 123", "testing 123");
                             Log.d("testing", preferences.getString(Constants.UUID, "0"));
                             Log.d("testing", preferences.getString(Constants.USER_ID, "0"));
-
-//                            String auth_token = serverCalls.loginFacebook(
-//                                    preferences.getString("uuid", "0"),
-//                                    preferences.getString("userID", "0"),
-//                                    getLocation()
-//                            );
-//                            editor.putString("auth_token", auth_token);
-//                            editor.putBoolean("newuser", false);
-//                            editor.apply();
 
                             serverCalls.registerFacebook(
                                     preferences.getString(Constants.EMAIL, ""),
@@ -274,7 +267,6 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
     public void addUserInfoToPreferences(JSONObject object)
     {
         try {
-            Log.v("the fb object is", object.toString());
             editor.putString(Constants.EMAIL, object.getString("email"));
             editor.putString(Constants.GENDER, object.getString("gender"));
             editor.putString(Constants.USERNAME, "");
@@ -284,10 +276,9 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
             editor.putString(Constants.FIRST_NAME, object.getString("first_name"));
             editor.putString(Constants.LAST_NAME, object.getString("last_name"));
             editor.apply();
-
         }
         catch (Exception e) {
-            Log.v("testt error", e.getMessage());
+            Log.v("Error", e.getMessage());
         }
     }
 

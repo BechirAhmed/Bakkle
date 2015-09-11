@@ -78,7 +78,10 @@ public class ChatActivity extends AppCompatActivity
         Bundle b = getIntent().getExtras();
         chatId = b.getInt(Constants.CHAT_ID);
         selfBuyer = b.getBoolean(Constants.SELF_BUYER);
-        fbUrl = b.getString(Constants.SELLER_IMAGE_URL);
+        if(b.containsKey(Constants.SELLER_IMAGE_URL))
+            fbUrl = b.getString(Constants.SELLER_IMAGE_URL);
+        else if(b.containsKey(Constants.BUYER_IMAGE_URL))
+            fbUrl = b.getString(Constants.BUYER_IMAGE_URL);
         title = b.getString(Constants.TITLE);
         sellerName = b.getString(Constants.SELLER);
         price = b.getString(Constants.PRICE);
@@ -96,6 +99,9 @@ public class ChatActivity extends AppCompatActivity
         final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
         upArrow.setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        getSupportActionBar().setCustomView(R.layout.toolbar_chat);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayShowCustomEnabled(true);
         //toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha));
         //toolbar.setLogo();
         toolbar.setNavigationOnClickListener(new View.OnClickListener()
