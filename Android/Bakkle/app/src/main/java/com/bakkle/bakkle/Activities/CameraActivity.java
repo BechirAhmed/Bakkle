@@ -565,7 +565,7 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
             mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
             mRecorder.setMaxDuration(15000);
             mRecorder.setPreviewDisplay(surfaceHolder.getSurface());
-            mRecorder.setOutputFile(mOutputFileName);
+            mRecorder.setOutputFile(video.getPath());
 
             mRecorder.prepare();
         }
@@ -741,6 +741,12 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
         o2.inSampleSize = scale;
         return BitmapFactory.decodeStream(getContentResolver().openInputStream(selectedImage), null, o2);
 
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
     }
 
     private class ImageTaken

@@ -62,6 +62,13 @@ public class FeedFragment extends Fragment
         mActivity = activity;
     }
 
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        new bgTask().execute();
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)

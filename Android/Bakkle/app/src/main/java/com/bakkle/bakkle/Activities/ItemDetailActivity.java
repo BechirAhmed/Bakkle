@@ -2,52 +2,44 @@ package com.bakkle.bakkle.Activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.ThumbnailUtils;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.bakkle.bakkle.Helpers.Constants;
 import com.bakkle.bakkle.Helpers.ServerCalls;
 import com.bakkle.bakkle.R;
 import com.bumptech.glide.Glide;
-import com.koushikdutta.ion.Ion;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 
 public class ItemDetailActivity extends AppCompatActivity
 {
 
-//    private Toolbar toolbar;
-    private ArrayList<ImageView> productPictureViews = new ArrayList<>();
-    String parent;
-    String title;
-    String price;
-    String description;
-    String sellerImageUrl;
+    //    private Toolbar toolbar;
+    private ArrayList<View> productPictureViews = new ArrayList<>();
+    String            parent;
+    String            title;
+    String            price;
+    String            description;
+    String            sellerImageUrl;
     ArrayList<String> imageURLs;
-    String seller;
-    String distance;
-    String pk;
-    boolean garage;
-    ServerCalls serverCalls;
+    String            seller;
+    String            distance;
+    String            pk;
+    boolean           garage;
+    ServerCalls       serverCalls;
     SharedPreferences preferences;
 
     @Override
@@ -123,41 +115,55 @@ public class ItemDetailActivity extends AppCompatActivity
     public void loadPictureIntoView(String url)
     {
         RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.imageCollection);
-        ImageView imageView = new ImageView(this);
-        imageView.setId(productPictureViews.size() + 1);
-
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.MATCH_PARENT,
                 RelativeLayout.LayoutParams.MATCH_PARENT);
-        if (imageView.getId() != 1) {
-            ImageView previous = productPictureViews.get(productPictureViews.size() - 1);
-            layoutParams.addRule(RelativeLayout.RIGHT_OF, previous.getId());
-            imageView.setPadding(10, 0, 0, 0);
-        }
-
-        imageView.setLayoutParams(layoutParams);
-        imageView.setAdjustViewBounds(true);
-        imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-
-        relativeLayout.addView(imageView);
 
         if (!url.endsWith("mp4")) {
+            ImageView imageView = new ImageView(this);
+            imageView.setId(productPictureViews.size() + 1);
+
+            if (imageView.getId() != 1) {
+                ImageView previous = (ImageView) productPictureViews.get(productPictureViews.size() - 1);
+                layoutParams.addRule(RelativeLayout.RIGHT_OF, previous.getId());
+                imageView.setPadding(10, 0, 0, 0);
+            }
+
+            imageView.setLayoutParams(layoutParams);
+            imageView.setAdjustViewBounds(true);
+            imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+
+            relativeLayout.addView(imageView);
+
             Glide.with(this)
                     .load(url)
                     .fitCenter()
                     .crossFade()
                     .placeholder(R.drawable.loading)
                     .into(imageView);
+            productPictureViews.add(imageView);
         }
         else { //TODO: Download and display video
             try {
+                Uri uri = Uri.parse(url); //Declare your url here.
 
+                VideoView mVideoView  = new VideoView(this);
+                mVideoView.setId(productPictureViews.size() + 1);
+                ImageView previous = (ImageView) productPictureViews.get(productPictureViews.size() - 1);
+                layoutParams.addRule(RelativeLayout.RIGHT_OF, previous.getId());
+                mVideoView.setPadding(10, 0, 0, 0);
+                mVideoView.setLayoutParams(layoutParams);
+
+                mVideoView.setMediaController(new MediaController(this));
+                mVideoView.setVideoURI(uri);
+                mVideoView.requestFocus();
+                mVideoView.start();
             }
-            catch (Exception e){}
+            catch (Exception e) {
+            }
         }
 
 
-        productPictureViews.add(imageView);
     }
 
     public void markWant(View view)
@@ -169,8 +175,7 @@ public class ItemDetailActivity extends AppCompatActivity
                 "42");
         Intent intent = new Intent();
         intent.putExtra(Constants.MARK_WANT, true);
-        if(parent.equals("feed"))
-        {
+        if (parent.equals("feed")) {
             setResult(1, intent);
         }
         finish();

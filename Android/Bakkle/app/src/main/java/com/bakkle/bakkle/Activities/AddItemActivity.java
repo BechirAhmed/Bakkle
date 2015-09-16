@@ -150,8 +150,10 @@ public class AddItemActivity extends AppCompatActivity
                 paths.add(data.getStringExtra(Constants.PICTURE_PATH + i));
                 i++;
             }
-            if(data.hasExtra(Constants.VIDEO_PATH))
+            if(data.hasExtra(Constants.VIDEO_PATH)) {
+                Log.v("video", "data had extra");
                 video = new File(data.getStringExtra(Constants.VIDEO_PATH));
+            }
 
             for (String path : paths) {
                 RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.imageCollection);
@@ -269,9 +271,10 @@ public class AddItemActivity extends AppCompatActivity
 
             ProgressDialog dialog = new ProgressDialog(this);
             dialog.show();
-            json = new ServerCalls(this).addItem(title, description, price, "Pick-up", "", picturePaths, video,
-                    preferences.getString(Constants.AUTH_TOKEN, ""), preferences.getString(Constants.UUID, ""),
-                    preferences.getString(Constants.LOCATION, "0,0"));
+            Log.v("The video file url is", video.getAbsolutePath());
+//            json = new ServerCalls(this).addItem(title, description, price, "Pick-up", "", picturePaths, video,
+//                    preferences.getString(Constants.AUTH_TOKEN, ""), preferences.getString(Constants.UUID, ""),
+//                    preferences.getString(Constants.LOCATION, "0,0"));
             dialog.dismiss();
         }
 
@@ -285,7 +288,7 @@ public class AddItemActivity extends AppCompatActivity
         }
 
         finish();
-        new FeedFragment().new bgTask().execute();
+
     }
 
     @Override
