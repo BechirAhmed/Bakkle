@@ -78,7 +78,7 @@ public class AddItemActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        startActivityForResult((new Intent(this, CameraActivity.class)), 1);
+        startActivityForResult((new Intent(this, CameraActivity.class)), REQUEST_TAKE_PHOTO);
 //        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 //        if (intent.resolveActivity(getPackageManager()) != null)  //TODO: Add my own mCamera interface so that only square pictures are taken
 //        //TODO: add video
@@ -272,9 +272,9 @@ public class AddItemActivity extends AppCompatActivity
             ProgressDialog dialog = new ProgressDialog(this);
             dialog.show();
             Log.v("The video file url is", video.getAbsolutePath());
-//            json = new ServerCalls(this).addItem(title, description, price, "Pick-up", "", picturePaths, video,
-//                    preferences.getString(Constants.AUTH_TOKEN, ""), preferences.getString(Constants.UUID, ""),
-//                    preferences.getString(Constants.LOCATION, "0,0"));
+            json = new ServerCalls(this).addItem(title, description, price, "Pick-up", "", picturePaths, video,
+                    preferences.getString(Constants.AUTH_TOKEN, ""), preferences.getString(Constants.UUID, ""),
+                    preferences.getString(Constants.LOCATION, "0,0"));
             dialog.dismiss();
         }
 

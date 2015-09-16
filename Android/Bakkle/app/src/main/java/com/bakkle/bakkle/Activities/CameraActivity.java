@@ -126,14 +126,17 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
                 int y = 0;
                 for (ImageTaken taken : pics) {
                     if (taken.isBeingUsed()) {
-                        intent.putExtra(Constants.PICTURE_PATH + y, taken.getImageFile().getAbsolutePath());
-                        if(taken.isVideoThumbnail())
+                        if(taken.isVideoThumbnail()) {
+                            intent.putExtra(Constants.PICTURE_PATH, taken.getImageFile().getAbsolutePath());
                             intent.putExtra(Constants.VIDEO_PATH, taken.getVideoFile().getAbsolutePath());
-                        y++;
+                            Log.v("testing", "video test");
+                        }
+                        else
+                            intent.putExtra(Constants.PICTURE_PATH + y++, taken.getImageFile().getAbsolutePath());
                     }
                 }
                 intent.putExtra(Constants.NUM_OF_PICS, y);
-                setResult(-1, intent);
+                setResult(RESULT_OK, intent);
                 finish();
             }
         });
@@ -255,7 +258,9 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
         catch (IOException e) {
             e.printStackTrace();
         }
-        loadPicIntoView(new ImageTaken(image, true, imageCount++, true, video));
+        ImageTaken vidTaken = new ImageTaken(image, true, imageCount++, true, video);
+        pics.add(vidTaken);
+        loadPicIntoView(vidTaken);
     }
 
     private int getFrontCameraID()
@@ -670,7 +675,6 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
 
         Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
         chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{pickIntent});
-        Log.v("Test", "test");
         startActivityForResult(chooserIntent, SELECT_PHOTO);
     }
 
