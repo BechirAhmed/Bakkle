@@ -12,10 +12,10 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.bakkle.bakkle.Adapters.ViewPagerAdapter;
+import com.bakkle.bakkle.Helpers.Constants;
 import com.bakkle.bakkle.Helpers.FeedItem;
 import com.bakkle.bakkle.R;
 import com.bakkle.bakkle.Views.SlidingTabLayout;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -57,20 +57,20 @@ public class GarageItemActivity extends AppCompatActivity
             }
         });
         Intent i = getIntent();
-        itemId = i.getStringExtra("itemId");
-        numWant = i.getStringExtra("numWant");
-        numHold = i.getStringExtra("numHold");
-        numMeh = i.getStringExtra("numMeh");
-        numView = i.getStringExtra("numView");
-        title = i.getStringExtra("title");
-        price = i.getStringExtra("price");
-        description = i.getStringExtra("description");
-        seller = i.getStringExtra("seller");
-        distance = i.getStringExtra("distance");
-        pk = i.getStringExtra("pk");
-        sellerImageUrl = i.getStringExtra("sellerImageUrl");
-        imageURLs = i.getStringArrayListExtra("imageURLs");
-        item = new Gson().fromJson(i.getStringExtra("item"), FeedItem.class);
+        itemId = i.getStringExtra(Constants.ITEM_ID);
+        numWant = i.getStringExtra(Constants.NUM_WANT);
+        numHold = i.getStringExtra(Constants.NUM_HOLD);
+        numMeh = i.getStringExtra(Constants.NUM_MEH);
+        numView = i.getStringExtra(Constants.NUM_VIEW);
+        title = i.getStringExtra(Constants.TITLE);
+        price = i.getStringExtra(Constants.PRICE);
+        description = i.getStringExtra(Constants.DESCRIPTION);
+        seller = i.getStringExtra(Constants.SELLER);
+        distance = i.getStringExtra(Constants.DISTANCE);
+        pk = i.getStringExtra(Constants.PK);
+        sellerImageUrl = i.getStringExtra(Constants.SELLER_IMAGE_URL);
+        imageURLs = i.getStringArrayListExtra(Constants.IMAGE_URLS);
+        //item = new Gson().fromJson(i.getStringExtra("item"), FeedItem.class);
         adapter = new ViewPagerAdapter(getSupportFragmentManager(), Titles, numTabs, itemId,
                 numView, numWant, numHold, numMeh, title, price, description, seller, distance,
                 pk, sellerImageUrl, imageURLs);

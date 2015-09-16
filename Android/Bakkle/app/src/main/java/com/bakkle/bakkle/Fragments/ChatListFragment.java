@@ -17,6 +17,7 @@ import com.bakkle.bakkle.Activities.ChatActivity;
 import com.bakkle.bakkle.Adapters.ChatListAdapter;
 import com.bakkle.bakkle.Helpers.BuyerInfo;
 import com.bakkle.bakkle.Helpers.ChatCalls;
+import com.bakkle.bakkle.Helpers.Constants;
 import com.bakkle.bakkle.R;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -80,19 +81,19 @@ public class ChatListFragment extends ListFragment
         super.onCreate(savedInstanceState);
         Bundle b = getArguments();
         if (getArguments() != null) {
-            itemId = b.getString("itemId");
-            title = b.getString("title");
-            seller = b.getString("seller");
-            price = b.getString("price");
-            distance = b.getString("distance");
-            sellerImageUrl = b.getString("sellerImageUrl");
-            description = b.getString("description");
-            pk = b.getString("pk");
-            imageURLs = b.getStringArrayList("imageURLs");
+            itemId = b.getString(Constants.ITEM_ID);
+            title = b.getString(Constants.TITLE);
+            seller = b.getString(Constants.SELLER);
+            price = b.getString(Constants.PRICE);
+            distance = b.getString(Constants.DISTANCE);
+            sellerImageUrl = b.getString(Constants.SELLER_IMAGE_URL);
+            description = b.getString(Constants.DESCRIPTION);
+            pk = b.getString(Constants.PK);
+            imageURLs = b.getStringArrayList(Constants.IMAGE_URLS);
         }
         preferences = PreferenceManager.getDefaultSharedPreferences(mActivity);
-        uuid = preferences.getString("uuid", "");
-        authToken = preferences.getString("auth_token", "");
+        uuid = preferences.getString(Constants.UUID, "");
+        authToken = preferences.getString(Constants.AUTH_TOKEN, "");
 
         buyerInfos = new ArrayList<>();
         chatListAdapter = new ChatListAdapter(mActivity, buyerInfos);
@@ -190,16 +191,16 @@ public class ChatListFragment extends ListFragment
         super.onListItemClick(l, v, position, id);
         BuyerInfo buyerInfo = (BuyerInfo) getListAdapter().getItem(position);
         Intent intent = new Intent(mActivity, ChatActivity.class);
-        intent.putExtra("chatId", buyerInfo.getChatPk());
-        intent.putExtra("selfBuyer", false);
-        intent.putExtra("url", buyerInfo.getFacebookURL());
-        intent.putExtra("title", title);
-        intent.putExtra("seller", seller);
-        intent.putExtra("price", price);
-        intent.putExtra("distance", distance);
-        intent.putExtra("description", description);
-        intent.putExtra("pk", pk);
-        intent.putExtra("urls", imageURLs);
+        intent.putExtra(Constants.CHAT_ID, buyerInfo.getChatPk());
+        intent.putExtra(Constants.SELF_BUYER, false);
+        intent.putExtra(Constants.BUYER_IMAGE_URL, buyerInfo.getFacebookURL());
+        intent.putExtra(Constants.TITLE, title);
+        intent.putExtra(Constants.SELLER, seller);
+        intent.putExtra(Constants.PRICE, price);
+        intent.putExtra(Constants.DISTANCE, distance);
+        intent.putExtra(Constants.DESCRIPTION, description);
+        intent.putExtra(Constants.PK, pk);
+        intent.putExtra(Constants.IMAGE_URLS, imageURLs);
 
         startActivity(intent);
     }

@@ -17,29 +17,29 @@ import java.util.ArrayList;
  */
 public class ServerCalls
 {
-    //    final static String url_base                 = "http://bakkle.rhventures.org:8000/";
-    final static String url_base = "https://app.bakkle.com/";
-    final static String url_login = "account/login_facebook/";
-    final static String url_logout = "account/logout/";
-    final static String url_facebook = "account/facebook/";
-    final static String url_register_push = "account/device/register_push/";
-    final static String url_reset = "items/reset/";
-    final static String url_mark = "items/";
-    final static String url_feed = "items/feed/";
-    final static String url_garage = "items/get_seller_items/";
-    final static String url_add_item = "items/add_item/";
-    final static String url_send_chat = "conversation/send_message/";
-    final static String url_view_item = "items/";
-    final static String url_buyers_trunk = "items/get_buyers_trunk/";
+    //final static String url_base                = "http://bakkle.rhventures.org:8000/";
+    final static String url_base                = "https://app.bakkle.com/";
+    final static String url_login               = "account/login_facebook/";
+    final static String url_logout              = "account/logout/";
+    final static String url_facebook            = "account/facebook/";
+    final static String url_register_push       = "account/device/register_push/";
+    final static String url_reset               = "items/reset/";
+    final static String url_mark                = "items/";
+    final static String url_feed                = "items/feed/";
+    final static String url_garage              = "items/get_seller_items/";
+    final static String url_add_item            = "items/add_item/";
+    final static String url_send_chat           = "conversation/send_message/";
+    final static String url_view_item           = "items/";
+    final static String url_buyers_trunk        = "items/get_buyers_trunk/";
     final static String url_get_holding_pattern = "items/get_holding_pattern/";
-    final static String url_buyertransactions = "items/get_buyer_transactions/";
-    final static String url_sellertransactions = "items/get_seller_transactions/";
-    final static String url_getaccount = "account/get_account/";
-    final static String url_setdescription = "account/set_description/";
+    final static String url_buyertransactions   = "items/get_buyer_transactions/";
+    final static String url_sellertransactions  = "items/get_seller_transactions/";
+    final static String url_getaccount          = "account/get_account/";
+    final static String url_setdescription      = "account/set_description/";
 
-    Context mContext;
-    int response;
-    String auth_token;
+    Context    mContext;
+    int        response;
+    String     auth_token;
     JsonObject jsonResponse;
 
     //TODO: make this entire class non-instantiable. aka, make the class final, make the constructor private, and pass the context to each method individually
@@ -94,8 +94,6 @@ public class ServerCalls
                     .get()
                     .get("auth_token")
                     .getAsString();
-
-            Log.v("auth token-server call ", auth_token);
         }
         catch (Exception e) {
             Log.d("testing error", "" + e.getMessage());
@@ -233,7 +231,7 @@ public class ServerCalls
     }
 
     public JsonObject addItem(String name, String description, String price, String pickupMethod,
-                              String tags, ArrayList<String> imageUri, String authToken, String uuid, String location)
+                              String tags, ArrayList<String> imageUri, File video, String authToken, String uuid, String location)
     {
         try {
             Builders.Any.M body = Ion.with(mContext)
@@ -250,6 +248,9 @@ public class ServerCalls
             for (String uri : imageUri) {
                 body.setMultipartFile("image", new File(uri));
             }
+
+            if (video != null)
+                body.setMultipartFile("videos", video);
 
             jsonResponse = body.asJsonObject().get();
             return jsonResponse;

@@ -28,6 +28,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bakkle.bakkle.Fragments.FeedFragment;
+import com.bakkle.bakkle.Helpers.Constants;
 import com.bakkle.bakkle.Helpers.ServerCalls;
 import com.bakkle.bakkle.R;
 import com.bumptech.glide.Glide;
@@ -50,18 +52,17 @@ public class AddItemActivity extends AppCompatActivity
 
     String mCurrentPhotoPath;
     static final int REQUEST_TAKE_PHOTO = 1;
-    static final int MAX_IMAGE_COUNT = 5;
+    static final int MAX_IMAGE_COUNT = 4;
     EditText titleEditText, priceEditText, descriptionEditText;
     SwitchCompat facebookSwitch;
     CallbackManager callbackManager;
     String title;
     String price;
     String description;
-    //Bitmap firstPhoto;
-    //ImageView firstImageView;
-    //ArrayList <Bitmap> productPictures = new ArrayList<>();
+
     ArrayList<ImageView> productPictureViews = new ArrayList<>();
     ArrayList<String> picturePaths = new ArrayList<>();
+    File video = null;
 //    final String[] commonWords = {"the", "of", "and", "a", "to", "in", "is", "you",
 //            "that", "it", "he", "was", "for", "on", "are", "as", "with", "his", "they", "i", "at",
 //            "be", "this", "have", "from", "or", "one", "had", "by", "but", "not", "what", "all",
@@ -77,24 +78,25 @@ public class AddItemActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (intent.resolveActivity(getPackageManager()) != null)  //TODO: Add my own camera interface so that only square pictures are taken
-        //TODO: add video
-        {
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            }
-            catch (Exception e) {
-                Log.v("create image file error", e.getMessage());
-            }
-            if (photoFile != null) {
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
-                startActivityForResult(intent, REQUEST_TAKE_PHOTO);
-            }
-        }
+        startActivityForResult((new Intent(this, CameraActivity.class)), REQUEST_TAKE_PHOTO);
+//        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        if (intent.resolveActivity(getPackageManager()) != null)  //TODO: Add my own mCamera interface so that only square pictures are taken
+//        //TODO: add video
+//        {
+//            File photoFile = null;
+//            try {
+//                photoFile = createImageFile();
+//            }
+//            catch (Exception e) {
+//                Log.v("create image file error", e.getMessage());
+//            }
+//            if (photoFile != null) {
+//                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+//                startActivityForResult(intent, REQUEST_TAKE_PHOTO);
+//            }
+//        }
         setContentView(R.layout.activity_add_item);
-        FacebookSdk.sdkInitialize(getApplicationContext());
+        FacebookSdk.sdkInitialize(this);
         callbackManager = CallbackManager.Factory.create();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -109,7 +111,14 @@ public class AddItemActivity extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
-                onBackPressed();
+                Intent intent = new Intent(AddItemActivity.this, CameraActivity.class);
+                int i;
+                for(i = 0; i < picturePaths.size(); i++)
+                {
+                    intent.putExtra(Constants.PICTURE_PATH + i, picturePaths.get(i));
+                }
+                intent.putExtra(Constants.NUM_OF_PICS, i);
+                startActivityForResult(intent, 1);
             }
         });
 
@@ -124,24 +133,6 @@ public class AddItemActivity extends AppCompatActivity
 
     }
 
-    private File createImageFile() throws IOException
-    {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "Bakkle_" + timeStamp + "_";
-        File storageDir = Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
-
-        // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = image.getAbsolutePath();
-        return image;
-    }
-
     public int dpToPx(int dp)
     {
         DisplayMetrics displayMetrics = this.getResources().getDisplayMetrics();
@@ -152,53 +143,61 @@ public class AddItemActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        startActivity(new Intent(this, CameraActivity.class));
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
-
-            Matrix matrix = new Matrix();
-            matrix.postRotate(90);
-
-            final BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inSampleSize = 8;
-            Bitmap temp = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(mCurrentPhotoPath, options), dpToPx(250), dpToPx(250));
-            temp = Bitmap.createBitmap(temp, 0, 0, temp.getWidth(), temp.getHeight(), matrix, true); //rotate picture 90 degrees
-
-
-            FileOutputStream fileOutputStream;
-
-            try {
-                fileOutputStream = new FileOutputStream(mCurrentPhotoPath);
-                Bitmap.createScaledBitmap(temp, 640, 640, true)
-                        .compress(Bitmap.CompressFormat.JPEG, 90, fileOutputStream);
-                fileOutputStream.flush();
-                fileOutputStream.close();
+            ArrayList<String> paths = new ArrayList<>();
+            int i = 0;
+            while(i < data.getIntExtra(Constants.NUM_OF_PICS, 0)) {
+                paths.add(data.getStringExtra(Constants.PICTURE_PATH + i));
+                i++;
             }
-            catch (Exception e) {
-                Log.v("Bitmap scaling error", e.getMessage());
+            if(data.hasExtra(Constants.VIDEO_PATH)) {
+                Log.v("video", "data had extra");
+                video = new File(data.getStringExtra(Constants.VIDEO_PATH));
             }
 
-            RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.imageCollection);
-            ImageView imageView = new ImageView(this);
-            imageView.setId(productPictureViews.size() + 1);
-            Glide.with(this).load(new File(mCurrentPhotoPath)).
-                    fitCenter().crossFade().override(dpToPx(250), dpToPx(250)).into(imageView);
-            //imageView.setImageBitmap(temp);
-            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.WRAP_CONTENT,
-                    RelativeLayout.LayoutParams.MATCH_PARENT);
-            if (imageView.getId() != 1) {
-                ImageView previous = productPictureViews.get(productPictureViews.size() - 1);
-                layoutParams.addRule(RelativeLayout.RIGHT_OF, previous.getId());
-                imageView.setPadding(10, 0, 0, 0);
-            }
-            imageView.setLayoutParams(layoutParams);
-            imageView.setAdjustViewBounds(true);
-            imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            for (String path : paths) {
+                RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.imageCollection);
+                RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
+                        RelativeLayout.LayoutParams.WRAP_CONTENT,
+                        RelativeLayout.LayoutParams.MATCH_PARENT);
+                final BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize = 8;
 
-            relativeLayout.addView(imageView);
-            //productPictures.add(temp);
-            productPictureViews.add(imageView);
-            picturePaths.add(mCurrentPhotoPath);
+                Bitmap temp = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(path, options), dpToPx(250), dpToPx(250));
+
+                FileOutputStream fileOutputStream;
+
+                try {
+                    fileOutputStream = new FileOutputStream(path);
+                    Bitmap.createScaledBitmap(temp, 640, 640, true)
+                            .compress(Bitmap.CompressFormat.JPEG, 85, fileOutputStream);
+                    fileOutputStream.flush();
+                    fileOutputStream.close();
+                }
+                catch (Exception e) {
+                    Log.v("Bitmap scaling error", ""+e.getMessage());
+                }
+
+                ImageView imageView = new ImageView(this);
+                imageView.setId(productPictureViews.size() + 1);
+                //imageView.setImageBitmap(temp);
+
+                if (imageView.getId() != 1) {
+                    ImageView previous = productPictureViews.get(productPictureViews.size() - 1);
+                    layoutParams.addRule(RelativeLayout.RIGHT_OF, previous.getId());
+                    imageView.setPadding(10, 0, 0, 0);
+                }
+                imageView.setLayoutParams(layoutParams);
+                imageView.setAdjustViewBounds(true);
+                imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+
+                relativeLayout.addView(imageView);
+                Glide.with(this).load(new File(path)).
+                        fitCenter().crossFade().into(imageView);
+                //productPictures.add(temp);
+                productPictureViews.add(imageView);
+                picturePaths.add(path);
+            }
         }
 
         else {
@@ -233,30 +232,30 @@ public class AddItemActivity extends AppCompatActivity
     }
 
 
-    public void addAnotherImage(View view)
-    {
-        if (picturePaths.size() == MAX_IMAGE_COUNT) {
-            Toast.makeText(this, "5 Pictures Max!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (intent.resolveActivity(getPackageManager()) != null)  //TODO: Add my own camera interface so that only square pictures are taken
-        {
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            }
-            catch (Exception e) {
-
-            }
-            if (photoFile != null) {
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
-                startActivityForResult(intent, REQUEST_TAKE_PHOTO);
-            }
-        }
-
-    }
+//    public void addAnotherImage(View view)
+//    {
+//        if (picturePaths.size() == MAX_IMAGE_COUNT) {
+//            Toast.makeText(this, "5 Pictures Max!", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//
+//        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        if (intent.resolveActivity(getPackageManager()) != null)  //TODO: Add my own mCamera interface so that only square pictures are taken
+//        {
+//            File photoFile = null;
+//            try {
+//                photoFile = createImageFile();
+//            }
+//            catch (Exception e) {
+//
+//            }
+//            if (photoFile != null) {
+//                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+//                startActivityForResult(intent, REQUEST_TAKE_PHOTO);
+//            }
+//        }
+//
+//    }
 
     public void uploadItem(View view)
     {
@@ -272,9 +271,10 @@ public class AddItemActivity extends AppCompatActivity
 
             ProgressDialog dialog = new ProgressDialog(this);
             dialog.show();
-            json = new ServerCalls(this).addItem(title, description, price, "Pick-up", "", picturePaths,
-                    preferences.getString("auth_token", ""), preferences.getString("uuid", ""),
-                    preferences.getString("locationString", "0,0"));
+            Log.v("The video file url is", video.getAbsolutePath());
+            json = new ServerCalls(this).addItem(title, description, price, "Pick-up", "", picturePaths, video,
+                    preferences.getString(Constants.AUTH_TOKEN, ""), preferences.getString(Constants.UUID, ""),
+                    preferences.getString(Constants.LOCATION, "0,0"));
             dialog.dismiss();
         }
 
@@ -289,5 +289,18 @@ public class AddItemActivity extends AppCompatActivity
 
         finish();
 
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        Intent intent = new Intent(AddItemActivity.this, CameraActivity.class);
+        int i;
+        for(i = 0; i < picturePaths.size(); i++)
+        {
+            intent.putExtra(Constants.PICTURE_PATH + i, picturePaths.get(i));
+        }
+        intent.putExtra(Constants.NUM_OF_PICS, i);
+        startActivityForResult(intent, 1);
     }
 }

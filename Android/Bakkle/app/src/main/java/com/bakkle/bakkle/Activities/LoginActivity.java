@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 
+import com.bakkle.bakkle.Helpers.Constants;
 import com.bakkle.bakkle.R;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
@@ -79,15 +80,15 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener
                         @Override
                         public void onLocationUpdated(Location location)
                         {
-                            editor.putString("locationString", location.getLatitude() + "," + location.getLongitude());
-                            editor.putString("latitude", String.valueOf(location.getLatitude()));
-                            editor.putString("longitude", String.valueOf(location.getLongitude()));
+                            editor.putString(Constants.LOCATION, location.getLatitude() + "," + location.getLongitude());
+                            editor.putString(Constants.LATITUDE, String.valueOf(location.getLatitude()));
+                            editor.putString(Constants.LONGITUDE, String.valueOf(location.getLongitude()));
                             editor.apply();
                         }
                     });
 
 
-            if (preferences.getBoolean("LoggedIn", false)) {
+            if (preferences.getBoolean(Constants.LOGGED_IN, false)) {
 
                 Intent intent = new Intent(this, HomeActivity.class);
                 startActivity(intent);
@@ -96,10 +97,10 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener
             }
 
             editor = preferences.edit();
-            editor.putString("uuid", Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+            editor.putString(Constants.UUID, Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
             editor.apply();
 
-            Log.v("uuid is", preferences.getString("uuid", "0"));
+            Log.v("uuid is", preferences.getString(Constants.UUID, "0"));
             LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>()
             {
                 private ProfileTracker mProfileTracker;
@@ -199,9 +200,9 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener
                 finish();
                 break;
             case R.id.btnSignInFacebook:
-                if (preferences.getBoolean("LoggedIn", false)) {
+                if (preferences.getBoolean(Constants.LOGGED_IN, false)) {
                     LoginManager.getInstance().logOut();
-                    editor.putBoolean("LoggedIn", false);
+                    editor.putBoolean(Constants.LOGGED_IN, false);
                     editor.apply();
                 }
                 else {
@@ -209,8 +210,8 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener
                             ("public_profile", "email", "user_friends"));
                     LoginManager.getInstance().logInWithPublishPermissions(
                             this, Arrays.asList("publish_actions"));
-                    editor.putBoolean("LoggedIn", true);
-                    editor.putBoolean("newuser", true);
+                    editor.putBoolean(Constants.LOGGED_IN, true);
+                    editor.putBoolean(Constants.NEW_USER, true);
                     editor.apply();
                 }
                 break;

@@ -8,8 +8,8 @@ import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -31,6 +31,7 @@ import com.bakkle.bakkle.Fragments.ProfileFragment;
 import com.bakkle.bakkle.Fragments.RefineFragment;
 import com.bakkle.bakkle.Fragments.SellersGarageFragment;
 import com.bakkle.bakkle.Fragments.SplashFragment;
+import com.bakkle.bakkle.Helpers.Constants;
 import com.bakkle.bakkle.Helpers.FeedItem;
 import com.bakkle.bakkle.Helpers.ServerCalls;
 import com.bakkle.bakkle.R;
@@ -59,17 +60,17 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
         RefineFragment.OnFragmentInteractionListener, SplashFragment.OnFragmentInteractionListener
 {
     private ArrayList<String> mDrawerItems;
-    private TypedArray mDrawerIcons;
-    private Toolbar toolbar;
+    private TypedArray        mDrawerIcons;
+    private Toolbar           toolbar;
 
     FeedItem item;
 
     Drawer drawer = null;
 
-    SharedPreferences preferences;
+    SharedPreferences        preferences;
     SharedPreferences.Editor editor;
-    LinearLayout linearLayout;
-    ServerCalls serverCalls;
+    LinearLayout             linearLayout;
+    ServerCalls              serverCalls;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -112,7 +113,7 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
                 .withHeaderBackground(R.color.gray)
                 .withSelectionListEnabled(false)
                 .addProfiles(
-                        new ProfileDrawerItem().withName(preferences.getString("name", "Not Signed In")).withIcon("http://graph.facebook.com/" + preferences.getString("userID", "0") + "/picture?width=300&height=300")
+                        new ProfileDrawerItem().withName(preferences.getString(Constants.NAME, "Not Signed In")).withIcon("http://graph.facebook.com/" + preferences.getString("userID", "0") + "/picture?width=300&height=300")
                 )
                 .withProfileImagesClickable(true)
                 .withProfileImagesVisible(true)
@@ -167,12 +168,14 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
                                 getFragmentManager().beginTransaction().replace(R.id.content_frame,
                                         new HoldingPatternFragment()).addToBackStack(null).
                                         setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
+                                invalidateOptionsMenu();
                                 break;
                             case 4:
                                 //startActivity(new Intent(getApplicationContext(), DemoOptionsFragment.class));
                                 getFragmentManager().beginTransaction().replace(R.id.content_frame,
                                         new DemoOptionsFragment()).addToBackStack(null)
                                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
+                                invalidateOptionsMenu();
                                 break;
                             default:
                                 Toast.makeText(getParent(), "Error", Toast.LENGTH_SHORT).show();
@@ -190,7 +193,62 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
 
         serverCalls = new ServerCalls(this);
 
-        new Login().execute();
+        if (preferences.getBoolean(Constants.NEW_USER, true)) {
+            Log.v("new user", "true");
+            GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(),
+                    new GraphRequest.GraphJSONObjectCallback()
+                    {
+                        @Override
+                        public void onCompleted(JSONObject object, GraphResponse response)
+                        {
+                            addUserInfoToPreferences(object);
+                            Log.v("testing 123", "testing 123");
+                            Log.d("testing", preferences.getString(Constants.UUID, "0"));
+                            Log.d("testing", preferences.getString(Constants.USER_ID, "0"));
+
+                            serverCalls.registerFacebook(
+                                    preferences.getString(Constants.EMAIL, ""),
+                                    preferences.getString(Constants.GENDER, ""),
+                                    preferences.getString(Constants.USERNAME, ""),
+                                    preferences.getString(Constants.NAME, ""),
+                                    preferences.getString(Constants.USER_ID, ""),
+                                    preferences.getString(Constants.LOCALE, ""),
+                                    preferences.getString(Constants.FIRST_NAME, ""),
+                                    preferences.getString(Constants.LAST_NAME, ""),
+                                    preferences.getString(Constants.UUID, ""));
+
+                            String auth_token = serverCalls.loginFacebook(
+                                    preferences.getString(Constants.UUID, "0"),
+                                    preferences.getString(Constants.USER_ID, "0"),
+                                    getLocation()
+                            );
+                            Log.v("auth", "just did the server call");
+                            editor.putString(Constants.AUTH_TOKEN, auth_token);
+                            editor.putBoolean(Constants.NEW_USER, false);
+                            editor.apply();
+
+                            getFragmentManager().beginTransaction().replace(R.id.content_frame,
+                                    new FeedFragment()).commit();
+                        }
+                    });
+
+            Bundle parameters = new Bundle();
+            parameters.putString("fields", "locale, email, gender");
+            //request.executeAsync();
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+
+            StrictMode.setThreadPolicy(policy);
+            addUserInfoToPreferences(request.executeAndWait().getJSONObject());
+//            if(result == 1)
+//                Toast.makeText(this, "Logged in successfully!", Toast.LENGTH_SHORT).show();
+//            else //TODO:Display error on fail? and go back to login screen
+//                Toast.makeText(this, "Login error!!", Toast.LENGTH_SHORT).show();
+
+        }
+        else {
+            getFragmentManager().beginTransaction().replace(R.id.content_frame,
+                    new FeedFragment()).commit();
+        }
     }
 
     @Override
@@ -202,26 +260,25 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
 
     public String getLocation()
     {
-        return preferences.getString("location", "0, 0");
+        return preferences.getString(Constants.LOCATION, "0,0");
     }
 
 
     public void addUserInfoToPreferences(JSONObject object)
     {
         try {
-            Log.v("the fb object is", object.toString());
-            editor.putString("email", object.getString("email"));
-            editor.putString("gender", object.getString("gender"));
-            editor.putString("username", "");
-            editor.putString("name", object.getString("name"));
-            editor.putString("userID", object.getString("id"));
-            editor.putString("locale", object.getString("locale"));
-            editor.putString("first_name", object.getString("first_name"));
-            editor.putString("last_name", object.getString("last_name"));
+            editor.putString(Constants.EMAIL, object.getString("email"));
+            editor.putString(Constants.GENDER, object.getString("gender"));
+            editor.putString(Constants.USERNAME, "");
+            editor.putString(Constants.NAME, object.getString("name"));
+            editor.putString(Constants.USER_ID, object.getString("id"));
+            editor.putString(Constants.LOCALE, object.getString("locale"));
+            editor.putString(Constants.FIRST_NAME, object.getString("first_name"));
+            editor.putString(Constants.LAST_NAME, object.getString("last_name"));
             editor.apply();
         }
         catch (Exception e) {
-            Log.v("testt", e.getMessage());
+            Log.v("Error", e.getMessage());
         }
     }
 
@@ -300,7 +357,7 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
 
     public void reset(View view)
     {
-        serverCalls.resetDemo(preferences.getString("auth_token", ""), preferences.getString("uuid", ""));
+        serverCalls.resetDemo(preferences.getString(Constants.AUTH_TOKEN, ""), preferences.getString(Constants.UUID, ""));
     }
 
     public void hideSoftKeyBoard()
@@ -325,81 +382,4 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
             return true;
         }
     }
-
-    private class Login extends AsyncTask<Void, Void, Void>
-    {
-        @Override
-        protected void onPreExecute()
-        {
-
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids)
-        {
-            if (preferences.getBoolean("newuser", true)) {
-                Log.v("new user", "true");
-                GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(),
-                        new GraphRequest.GraphJSONObjectCallback()
-                        {
-                            @Override
-                            public void onCompleted(JSONObject object, GraphResponse response)
-                            {
-                                addUserInfoToPreferences(object);
-//                    result = serverCalls.registerFacebook(
-//                            preferences.getString("email", "null"),
-//                            preferences.getString("gender", "null"),
-//                            preferences.getString("username", "null"),
-//                            preferences.getString("name", "null"),
-//                            preferences.getString("userId", "null"),
-//                            preferences.getString("locale", "null"),
-//                            preferences.getString("first_name", "null"),
-//                            preferences.getString("last_name", "null"),
-//                            preferences.getString("uuid", "0"));
-//                    editor.putBoolean("done", true);
-//                    editor.apply();
-                            }
-                        });
-
-                Bundle parameters = new Bundle();
-                parameters.putString("fields", "locale, email, gender");
-                //request.executeAsync();
-                addUserInfoToPreferences(request.executeAndWait().getJSONObject());
-//            if(result == 1)
-//                Toast.makeText(this, "Logged in successfully!", Toast.LENGTH_SHORT).show();
-//            else //TODO:Display error on fail? and go back to login screen
-//                Toast.makeText(this, "Login error!!", Toast.LENGTH_SHORT).show();
-
-            }
-
-            Log.d("testing", preferences.getString("uuid", "0"));
-            Log.d("testing", preferences.getString("userID", "0"));
-            if (preferences.getBoolean("newuser", true) ||
-                    preferences.getString("auth_token", "0").equals("0") ||
-                    preferences.getString("userID", "0").equals("0")) {
-
-                String auth_token = serverCalls.loginFacebook(
-                        preferences.getString("uuid", "0"),
-                        preferences.getString("userID", "0"),
-                        getLocation()
-                );
-                editor.putString("auth_token", auth_token);
-                editor.putBoolean("newuser", false);
-                editor.apply();
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void voids)
-        {
-            getFragmentManager().beginTransaction().replace(R.id.content_frame,
-                    new FeedFragment()).commitAllowingStateLoss();
-        }
-
-
-    }
-
-
 }
