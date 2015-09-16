@@ -543,14 +543,12 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
         String videoFileName = "Bakkle_" + timeStamp + "_";
         File storageDir = Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_MOVIES);
-        String mOutputFileName = null;
         try {
             video = File.createTempFile(
                     videoFileName,  /* prefix */
                     ".mp4",         /* suffix */
                     storageDir      /* directory */
             );
-            mOutputFileName = video.getPath();
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -564,10 +562,11 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
             mRecorder.setAudioSource(MediaRecorder.AudioSource.CAMCORDER);
             mRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
             mRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-            mRecorder.setVideoSize(176, 144);
-            mRecorder.setVideoFrameRate(15);
-            mRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.MPEG_4_SP);
-            mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+            //mRecorder.setVideoSize(640, 360);
+            mRecorder.setVideoFrameRate(24);
+            mRecorder.setOrientationHint(90);
+            mRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
+            mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
             mRecorder.setMaxDuration(15000);
             mRecorder.setPreviewDisplay(surfaceHolder.getSurface());
             mRecorder.setOutputFile(video.getPath());

@@ -147,7 +147,7 @@ public class ItemDetailActivity extends AppCompatActivity
             try {
                 Uri uri = Uri.parse(url); //Declare your url here.
 
-                VideoView mVideoView  = new VideoView(this);
+                VideoView mVideoView = new VideoView(this);
                 mVideoView.setId(productPictureViews.size() + 1);
                 ImageView previous = (ImageView) productPictureViews.get(productPictureViews.size() - 1);
                 layoutParams.addRule(RelativeLayout.RIGHT_OF, previous.getId());
