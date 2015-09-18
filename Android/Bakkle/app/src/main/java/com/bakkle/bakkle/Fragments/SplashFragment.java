@@ -16,6 +16,7 @@ import android.widget.ImageView;
 
 import com.bakkle.bakkle.Activities.ChatActivity;
 import com.bakkle.bakkle.Helpers.ChatCalls;
+import com.bakkle.bakkle.Helpers.Constants;
 import com.bakkle.bakkle.R;
 import com.bumptech.glide.Glide;
 import com.google.gson.JsonElement;
@@ -47,7 +48,7 @@ public class SplashFragment extends Fragment
     {
         SplashFragment fragment = new SplashFragment();
         Bundle args = new Bundle();
-        args.putString("pk", pk);
+        args.putString(Constants.PK, pk);
         args.putString("url", url);
         fragment.setArguments(args);
         return fragment;
@@ -69,8 +70,8 @@ public class SplashFragment extends Fragment
     {
         View view = inflater.inflate(R.layout.fragment_splash, container, false);
         preferences = PreferenceManager.getDefaultSharedPreferences(mActivity);
-        authToken = preferences.getString("auth_token", "");
-        uuid = preferences.getString("uuid", "");
+        authToken = preferences.getString(Constants.AUTH_TOKEN, "");
+        uuid = preferences.getString(Constants.UUID, "");
         Glide.with(mActivity)
                 .load(getArguments().getString("url"))
                 .thumbnail(0.1f)
@@ -96,7 +97,7 @@ public class SplashFragment extends Fragment
             @Override
             public void onClick(View view)
             {
-                new StartChatIntermediary(getArguments().getString("pk"));
+                new StartChatIntermediary(getArguments().getString(Constants.PK));
             }
         });
 
@@ -151,8 +152,8 @@ public class SplashFragment extends Fragment
                     if(!jsonObject.has("chatId"))
                         return;
                     Intent i = new Intent(mActivity, ChatActivity.class);
-                    i.putExtra("chatId", Integer.parseInt(jsonObject.get("chatId").getAsString()));
-                    i.putExtra("selfBuyer", true);
+                    i.putExtra(Constants.CHAT_ID, Integer.parseInt(jsonObject.get("chatId").getAsString()));
+                    i.putExtra(Constants.SELF_BUYER, true);
                     startActivity(i);
                 }
             });

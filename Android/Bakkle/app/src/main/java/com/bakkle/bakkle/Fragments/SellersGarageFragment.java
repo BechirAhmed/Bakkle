@@ -11,6 +11,7 @@ import android.widget.ListView;
 
 import com.bakkle.bakkle.Activities.GarageItemActivity;
 import com.bakkle.bakkle.Adapters.GarageAdapter;
+import com.bakkle.bakkle.Helpers.Constants;
 import com.bakkle.bakkle.Helpers.FeedItem;
 import com.bakkle.bakkle.Helpers.ServerCalls;
 import com.google.gson.JsonArray;
@@ -62,7 +63,7 @@ public class SellersGarageFragment extends ListFragment
 //        }
 //
 
-        json = serverCalls.populateGarage(preferences.getString("auth_token", ""), preferences.getString("uuid", ""));
+        json = serverCalls.populateGarage(preferences.getString(Constants.AUTH_TOKEN, ""), preferences.getString(Constants.UUID, ""));
         setListAdapter(new GarageAdapter(mActivity, getItems(json)));
     }
 
@@ -95,19 +96,19 @@ public class SellersGarageFragment extends ListFragment
 
         FeedItem item = (FeedItem) getListAdapter().getItem(position);
         Intent intent = new Intent(mActivity, GarageItemActivity.class);
-        intent.putExtra("itemId", item.getPk());
-        intent.putExtra("numWant", item.getNumWant());
-        intent.putExtra("numHold", item.getNumHold());
-        intent.putExtra("numMeh", item.getNumMeh());
-        intent.putExtra("numView", item.getNumView());
-        intent.putExtra("title", item.getTitle());
-        intent.putExtra("seller", item.getSellerDisplayName());
-        intent.putExtra("price", item.getPrice());
-        intent.putExtra("distance", item.getDistance(preferences.getString("latitude", ""), preferences.getString("longitude", "")));
-        intent.putExtra("sellerImageUrl", "http://graph.facebook.com/" + item.getSellerFacebookId() + "/picture?width=142&height=142");
-        intent.putExtra("description", item.getDescription());
-        intent.putExtra("pk", item.getPk());
-        intent.putStringArrayListExtra("imageURLs", item.getImageUrls());
+        intent.putExtra(Constants.ITEM_ID, item.getPk());
+        intent.putExtra(Constants.NUM_WANT, item.getNumWant());
+        intent.putExtra(Constants.NUM_HOLD, item.getNumHold());
+        intent.putExtra(Constants.NUM_MEH, item.getNumMeh());
+        intent.putExtra(Constants.NUM_VIEW, item.getNumView());
+        intent.putExtra(Constants.TITLE, item.getTitle());
+        intent.putExtra(Constants.SELLER, item.getSellerDisplayName());
+        intent.putExtra(Constants.PRICE, item.getPrice());
+        intent.putExtra(Constants.DISTANCE, item.getDistance(preferences.getString(Constants.LATITUDE, ""), preferences.getString(Constants.LONGITUDE, "")));
+        intent.putExtra(Constants.SELLER_IMAGE_URL, "http://graph.facebook.com/" + item.getSellerFacebookId() + "/picture?width=142&height=142");
+        intent.putExtra(Constants.DESCRIPTION, item.getDescription());
+        intent.putExtra(Constants.PK, item.getPk());
+        intent.putStringArrayListExtra(Constants.IMAGE_URLS, item.getImageUrls());
 
         startActivity(intent);
     }

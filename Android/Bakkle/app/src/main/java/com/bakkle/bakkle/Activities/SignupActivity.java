@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
+import com.bakkle.bakkle.Helpers.Constants;
 import com.bakkle.bakkle.R;
 
 
@@ -23,14 +24,14 @@ public class SignupActivity extends AppCompatActivity implements OnClickListener
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
 
-        if(preferences.getBoolean("LoggedIn", false)) {
+        if(preferences.getBoolean(Constants.LOGGED_IN, false)) {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
 
         }
 
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putString("uuid", Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID));
+        editor.putString(Constants.UUID, Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID));
         editor.apply();
 
         setContentView(R.layout.activity_signup);

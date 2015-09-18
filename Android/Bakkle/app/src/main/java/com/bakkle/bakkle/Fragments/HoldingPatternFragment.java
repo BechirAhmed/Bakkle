@@ -11,6 +11,7 @@ import android.widget.ListView;
 
 import com.bakkle.bakkle.Activities.ItemDetailActivity;
 import com.bakkle.bakkle.Adapters.HoldingAdapter;
+import com.bakkle.bakkle.Helpers.Constants;
 import com.bakkle.bakkle.Helpers.FeedItem;
 import com.bakkle.bakkle.Helpers.ServerCalls;
 import com.google.gson.JsonArray;
@@ -51,7 +52,7 @@ public class HoldingPatternFragment extends ListFragment {
 
         preferences = PreferenceManager.getDefaultSharedPreferences(mActivity);
 
-        json = serverCalls.populateHolding(preferences.getString("auth_token", "0"), preferences.getString("uuid", "0"));
+        json = serverCalls.populateHolding(preferences.getString(Constants.AUTH_TOKEN, "0"), preferences.getString(Constants.UUID, "0"));
 
         setListAdapter(new HoldingAdapter(mActivity, getItems(json)));
     }
@@ -84,16 +85,17 @@ public class HoldingPatternFragment extends ListFragment {
         String url = "https://graph.facebook.com/" + item.getSellerFacebookId() + "/picture?width=142&height=142";
 
         Intent intent = new Intent(mActivity, ItemDetailActivity.class);
-        intent.putExtra("title", item.getTitle());
-        intent.putExtra("seller", item.getSellerDisplayName());
-        intent.putExtra("price", item.getPrice());
-        intent.putExtra("distance", item.getDistance(
-                preferences.getString("latitude", "0"),
-                preferences.getString("longitude", "0")));
-        intent.putExtra("sellerImageUrl", url);
-        intent.putExtra("description", item.getDescription());
-        intent.putExtra("pk", item.getPk());
-        intent.putStringArrayListExtra("imageURLs", item.getImageUrls());
+        intent.putExtra(Constants.TITLE, item.getTitle());
+        intent.putExtra(Constants.SELLER, item.getSellerDisplayName());
+        intent.putExtra(Constants.PRICE, item.getPrice());
+        intent.putExtra(Constants.DISTANCE, item.getDistance(
+                preferences.getString(Constants.LATITUDE, "0"),
+                preferences.getString(Constants.LONGITUDE, "0")));
+        intent.putExtra(Constants.SELLER_IMAGE_URL, url);
+        intent.putExtra(Constants.DESCRIPTION, item.getDescription());
+        intent.putExtra(Constants.PK, item.getPk());
+        intent.putExtra(Constants.PARENT, "holding");
+        intent.putStringArrayListExtra(Constants.IMAGE_URLS, item.getImageUrls());
         startActivity(intent);
 
 

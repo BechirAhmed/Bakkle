@@ -1,6 +1,5 @@
 package com.bakkle.bakkle.Fragments;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ListFragment;
 import android.content.Intent;
@@ -17,6 +16,7 @@ import android.widget.ListView;
 import com.bakkle.bakkle.Activities.ChatActivity;
 import com.bakkle.bakkle.Adapters.TrunkAdapter;
 import com.bakkle.bakkle.Helpers.ChatCalls;
+import com.bakkle.bakkle.Helpers.Constants;
 import com.bakkle.bakkle.Helpers.FeedItem;
 import com.bakkle.bakkle.Helpers.ServerCalls;
 import com.google.gson.JsonArray;
@@ -47,17 +47,13 @@ public class BuyersTrunkFragment extends ListFragment
     String authToken;
     JsonObject json;
 
-    private ActionBar mActionBar;
 
 
     // TODO: Rename and change types of parameters
-    public static BuyersTrunkFragment newInstance(String param1, String param2)
+    public static BuyersTrunkFragment newInstance()
     {
         BuyersTrunkFragment fragment = new BuyersTrunkFragment();
-//        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
-//        fragment.setArguments(args);
+
         return fragment;
     }
 
@@ -65,9 +61,7 @@ public class BuyersTrunkFragment extends ListFragment
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public BuyersTrunkFragment()
-    {
-    }
+    public BuyersTrunkFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -79,16 +73,11 @@ public class BuyersTrunkFragment extends ListFragment
         serverCalls = new ServerCalls(mActivity);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(mActivity);
-        uuid = preferences.getString("uuid", "");
-        authToken = preferences.getString("auth_token", "");
+        uuid = preferences.getString(Constants.UUID, "");
+        authToken = preferences.getString(Constants.AUTH_TOKEN, "");
         json = serverCalls.populateTrunk(authToken, uuid);
 
         items = getItems(json);
-
-        /*if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }*/
 
         setListAdapter(new TrunkAdapter(mActivity, items));
 
@@ -196,16 +185,16 @@ public class BuyersTrunkFragment extends ListFragment
                     if(!jsonObject.has("chatId"))
                         return;
                     Intent i = new Intent(mActivity, ChatActivity.class);
-                    i.putExtra("chatId", Integer.parseInt(jsonObject.get("chatId").getAsString()));
-                    i.putExtra("selfBuyer", true);
-                    i.putExtra("url", "http://graph.facebook.com/" + item.getSellerFacebookId() + "/picture?width=142&height=142");
-                    i.putExtra("title", item.getTitle());
-                    i.putExtra("seller", item.getSellerDisplayName());
-                    i.putExtra("price", item.getPrice());
-                    i.putExtra("distance", item.getDistance(preferences.getString("latitude", "0"), preferences.getString("longitude", "0")));
-                    i.putExtra("description", item.getDescription());
-                    i.putExtra("pk", item.getPk());
-                    i.putExtra("urls", item.getImageUrls());
+                    i.putExtra(Constants.CHAT_ID, Integer.parseInt(jsonObject.get("chatId").getAsString()));
+                    i.putExtra(Constants.SELF_BUYER, true);
+                    i.putExtra(Constants.SELLER_IMAGE_URL, "http://graph.facebook.com/" + item.getSellerFacebookId() + "/picture?width=142&height=142");
+                    i.putExtra(Constants.TITLE, item.getTitle());
+                    i.putExtra(Constants.SELLER, item.getSellerDisplayName());
+                    i.putExtra(Constants.PRICE, item.getPrice());
+                    i.putExtra(Constants.DISTANCE, item.getDistance(preferences.getString(Constants.LATITUDE, "0"), preferences.getString(Constants.LONGITUDE, "0")));
+                    i.putExtra(Constants.DESCRIPTION, item.getDescription());
+                    i.putExtra(Constants.PK, item.getPk());
+                    i.putExtra(Constants.IMAGE_URLS, item.getImageUrls());
                     startActivity(i);
                 }
             });
