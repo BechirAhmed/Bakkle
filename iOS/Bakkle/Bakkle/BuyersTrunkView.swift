@@ -213,7 +213,7 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
         cell.itemImage!.userInteractionEnabled = true
         var tapGestureRecognizer = UITapGestureRecognizer(target:self, action:Selector("imageTapped:"))
         cell.itemImage!.addGestureRecognizer(tapGestureRecognizer)
-        cell.itemImage!.tag = indexPath.row
+        cell.itemImage!.tag = getIndex(indexPath)
         cell.titleLabel!.text = title.uppercaseString
         cell.priceLabel!.text = "$" + price
       
