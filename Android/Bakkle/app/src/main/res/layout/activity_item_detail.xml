@@ -150,7 +150,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/description"
-                android:layout_below="@+id/title"
                 android:text="Description"/>
 
         </RelativeLayout>
