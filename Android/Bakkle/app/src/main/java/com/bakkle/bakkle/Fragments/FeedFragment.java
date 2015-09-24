@@ -52,6 +52,15 @@ public class FeedFragment extends Fragment
 
     OnCardSelected onCardSelected;
 
+    public static FeedFragment newInstance(boolean showTutorial)
+    {
+        FeedFragment fragment = new FeedFragment();
+        Bundle args = new Bundle();
+        args.putBoolean(Constants.SHOW_TUORIAL, showTutorial);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
 
     public FeedFragment() {}
 
@@ -230,8 +239,14 @@ public class FeedFragment extends Fragment
             });
 
             adapter.add(card);
-            mCardContainer.setAdapter(adapter);
+
         }
+        if(getArguments().getBoolean(Constants.SHOW_TUORIAL, false))
+        {
+            card = new CardModel();
+            adapter.add(card);
+        }
+        mCardContainer.setAdapter(adapter);
     }
 
     @Override

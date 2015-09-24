@@ -28,31 +28,43 @@ public final class SimpleCardStackAdapter extends CardStackAdapter
     {
         if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            convertView = inflater.inflate(R.layout.std_card_inner, parent, false);
+            if (model.isTutorial()) {
+                convertView = inflater.inflate(R.layout.tutorial_card, parent, false);
+                Glide.with(context)
+                        .load(R.drawable.tutorial_card)
+                        .fitCenter()
+                        .into((ImageView) convertView.findViewById(R.id.image));
+            }
+            else {
+                convertView = inflater.inflate(R.layout.std_card_inner, parent, false);
+            }
             assert convertView != null;
         }
 
-        //Drawable image = model.getCardImageDrawable();
 
-        setCardImage((ImageView) (convertView.findViewById(R.id.image)), model.getCardImageURL());
-        //setCardImage((ImageView) (convertView.findViewById(R.id.sellerImage)), model.getSellerImageURL());
+        if (!model.isTutorial()) {
+            //Drawable image = model.getCardImageDrawable();
 
-        //((ImageView) convertView.findViewById(R.id.image)).setImageDrawable(model.getCardImageDrawable());
+            setCardImage((ImageView) (convertView.findViewById(R.id.image)), model.getCardImageURL());
+            //setCardImage((ImageView) (convertView.findViewById(R.id.sellerImage)), model.getSellerImageURL());
 
-        setSellerImage((ImageView) convertView.findViewById(R.id.sellerImage), model.getSellerImageURL());
+            //((ImageView) convertView.findViewById(R.id.image)).setImageDrawable(model.getCardImageDrawable());
 
-        //((de.hdodenhof.circleimageview.CircleImageView) convertView.findViewById(R.id.sellerImage)).setImageDrawable(model.getSellerImageDrawable());
-        //((de.hdodenhof.circleimageview.CircleImageView) convertView.findViewById(R.id.sellerImage)).setImageResource(R.drawable.loading);
-        ((FontFitTextView) convertView.findViewById(R.id.title)).setText(model.getTitle());
-        ((TextView) convertView.findViewById(R.id.seller)).setText(model.getSeller());
-        ((TextView) convertView.findViewById(R.id.price)).setText(model.getPrice());
+            setSellerImage((ImageView) convertView.findViewById(R.id.sellerImage), model.getSellerImageURL());
+
+            //((de.hdodenhof.circleimageview.CircleImageView) convertView.findViewById(R.id.sellerImage)).setImageDrawable(model.getSellerImageDrawable());
+            //((de.hdodenhof.circleimageview.CircleImageView) convertView.findViewById(R.id.sellerImage)).setImageResource(R.drawable.loading);
+            ((FontFitTextView) convertView.findViewById(R.id.title)).setText(model.getTitle());
+            ((TextView) convertView.findViewById(R.id.seller)).setText(model.getSeller());
+            ((TextView) convertView.findViewById(R.id.price)).setText(model.getPrice());
 
 
-//		StackBlurManager stackBlurManager = new StackBlurManager(model.cardImageBitmap);
-//		stackBlurManager.processRenderScript(context, 23);
-//
-//		RelativeLayout relativeLayout = (RelativeLayout) convertView.findViewById(R.id.topBar);
-//		relativeLayout.setBackground(new BitmapDrawable(context.getResources(), stackBlurManager.returnBlurredImage()));
+    //		StackBlurManager stackBlurManager = new StackBlurManager(model.cardImageBitmap);
+    //		stackBlurManager.processRenderScript(context, 23);
+    //
+    //		RelativeLayout relativeLayout = (RelativeLayout) convertView.findViewById(R.id.topBar);
+    //		relativeLayout.setBackground(new BitmapDrawable(context.getResources(), stackBlurManager.returnBlurredImage()));
+        }
 
         return convertView;
     }

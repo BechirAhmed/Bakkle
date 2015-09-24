@@ -52,4 +52,7 @@ public class Constants
     public static final String NUM_VIEW         = "numView";
 
 
+    public static final String SHOW_TUORIAL     = "showTutorial";
+
+
 }
