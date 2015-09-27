@@ -173,7 +173,7 @@ public class ChatActivity extends AppCompatActivity
         messageText = chatText.getText().toString();
         if (!messageText.equals("")) {
             chatCalls.setCallback(new SendMessageWebSocketCallback());
-            chatArrayAdapter.add(new ChatMessage(left, messageText));
+            chatArrayAdapter.insert(new ChatMessage(left, messageText), 0);
             chatText.setText("");
         }
         return true;

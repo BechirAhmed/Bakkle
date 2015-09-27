@@ -241,7 +241,7 @@ public class FeedFragment extends Fragment
             adapter.add(card);
 
         }
-        if(getArguments().getBoolean(Constants.SHOW_TUORIAL, false))
+        if(getArguments() != null && getArguments().containsKey(Constants.SHOW_TUORIAL) && getArguments().getBoolean(Constants.SHOW_TUORIAL, false))
         {
             card = new CardModel();
             adapter.add(card);

@@ -165,7 +165,7 @@
         android:layout_alignBaseline="@+id/share"
         android:layout_alignLeft="@+id/confirm"
         android:paddingLeft="16dp"
-        android:text="Share to Facebook?"
+        android:text="@string/share_to_facebook"
         android:textStyle="bold"/>
 
 

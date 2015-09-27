@@ -60,6 +60,7 @@
     <string name="description_text_add_item">Words to describe item</string>
     <string name="title_activity_camera">CameraActivity</string>
     <string name="next">Next</string>
+    <string name="share_to_facebook">Share to Facebook?</string>
 
 
 </resources>

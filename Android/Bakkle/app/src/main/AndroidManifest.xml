@@ -24,15 +24,18 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".Activities.SplashActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".Activities.SignupActivity"
-            android:label="@string/title_activity_login">
+            android:label="@string/title_activity_login"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".Activities.LoginActivity"
-            android:label="@string/title_activity_sign_in">
+            android:label="@string/title_activity_sign_in"
+            android:screenOrientation="portrait">
             <intent-filter android:label="@string/app_name">
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -42,12 +45,14 @@
         <activity
             android:name=".Activities.HomeActivity"
             android:label="@string/title_activity_home"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize">
         </activity>
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
 
         <provider
@@ -66,7 +71,8 @@
         <activity
             android:name=".Activities.ItemDetailActivity"
             android:label="@string/title_activity_item_detail"
-            android:parentActivityName=".Activities.HomeActivity">
+            android:parentActivityName=".Activities.HomeActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Activities.HomeActivity"/>
@@ -74,27 +80,31 @@
         <activity
             android:name=".Activities.AddItemActivity"
             android:label="@string/title_activity_add_item"
-            android:parentActivityName=".Activities.HomeActivity">
+            android:parentActivityName=".Activities.HomeActivity"
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Activities.HomeActivity"/>
         </activity>
         <activity
             android:name=".Activities.ChatActivity"
-            android:label="@string/title_activity_chat">
+            android:label="@string/title_activity_chat"
+            android:screenOrientation="portrait">
         </activity>
 
-        <service
-            android:name=".Helpers.ChatCalls"
-            android:icon="@drawable/bakkle_icon"
-            android:label="Chat"
-            android:process=":chat">
-        </service>
+        <!--<service-->
+        <!--android:name=".Helpers.ChatCalls"-->
+        <!--android:icon="@drawable/bakkle_icon"-->
+        <!--android:label="Chat"-->
+        <!--android:process=":chat">-->
+        <!--</service>-->
 
         <activity
             android:name=".Activities.GarageItemActivity"
             android:label="@string/title_activity_garage_item"
-            android:parentActivityName=".Activities.HomeActivity">
+            android:parentActivityName=".Activities.HomeActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.bakkle.bakkle.Activities.HomeActivity"/>
@@ -102,7 +112,8 @@
         <activity
             android:name=".Activities.CameraActivity"
             android:label="@string/title_activity_camera"
-            android:parentActivityName=".Activities.AddItemActivity">
+            android:parentActivityName=".Activities.AddItemActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.bakkle.bakkle.Activities.AddItemActivity"/>

@@ -127,7 +127,7 @@ public class AddItemActivity extends AppCompatActivity
         descriptionEditText = (EditText) findViewById(R.id.descriptionField);
 
         facebookSwitch = (SwitchCompat) findViewById(R.id.share);
-        facebookSwitch.setChecked(true);
+        facebookSwitch.setChecked(false);
 
         //productPictureViews.add((ImageView) findViewById(R.id.firstImage));
 
@@ -271,7 +271,6 @@ public class AddItemActivity extends AppCompatActivity
 
             ProgressDialog dialog = new ProgressDialog(this);
             dialog.show();
-            Log.v("The video file url is", video.getAbsolutePath());
             json = new ServerCalls(this).addItem(title, description, price, "Pick-up", "", picturePaths, video,
                     preferences.getString(Constants.AUTH_TOKEN, ""), preferences.getString(Constants.UUID, ""),
                     preferences.getString(Constants.LOCATION, "0,0"));
