@@ -14,8 +14,6 @@ import FBSDKShareKit
 
 class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UITextViewDelegate {
     
-    static let KEYBOARD_MOVE_VALUE: CGFloat = 210
-    static let NUMPAD_MOVE_VALUE:CGFloat = 260
     static let DESCRIPTION_PLACEHOLDER_COLOR = UIColor(red: CGFloat(AddItem.red)/255.0, green: CGFloat(AddItem.green)/255.0, blue: CGFloat(AddItem.blue)/255.0, alpha: CGFloat(1.0))
     static let BAKKLE_GREEN_COLOR = Theme.ColorGreen
     static let CONFIRM_BUTTON_DISABLED_COLOR = UIColor.lightGrayColor()
@@ -39,7 +37,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     var videosChanged: Bool?
     var allowPlayback = true
     var animationDuration: Double = 0.25
-    
+    var keyboardHeight:CGFloat = 0
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var closeBtn: UIButton!
     @IBOutlet weak var titleField: UITextField!
@@ -92,7 +90,9 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         titleField.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
         priceField.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "revealKeyboard:", name: UIKeyboardWillChangeFrameNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardDidShow:", name: UIKeyboardDidShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
+
         
         for url: NSURL in videos {
             self.videoImages[url] = Bakkle.sharedInstance.previewImageForLocalVideo(url)
@@ -119,35 +119,6 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         descriptionField.becomeFirstResponder()
     }
     
-    func revealKeyboard(notification: NSNotification) {
-        // userInfo will not be nil
-        if let info = notification.userInfo {
-            // should not matter whether duration is nil or not, though this will update the variable
-            if let duration = info[UIKeyboardAnimationDurationUserInfoKey]?.doubleValue {
-                self.animationDuration = duration
-            }
-            
-            // Should never be nil, though 0 is assumed to be the height
-            var height: CGFloat = 0
-            if let keyboardHeight = info[UIKeyboardFrameEndUserInfoKey]?.CGRectValue() {
-                height = keyboardHeight.origin.y
-            }
-            
-            var animationCurve = 0
-            if let curve = info[UIKeyboardAnimationCurveUserInfoKey]?.integerValue {
-                animationCurve = curve
-            }
-            
-            UIView.beginAnimations(nil, context: nil)
-            UIView.setAnimationDuration(self.animationDuration)
-            UIView.setAnimationCurve(UIViewAnimationCurve(rawValue: animationCurve)!)
-            UIView.setAnimationBeginsFromCurrentState(true)
-            self.view.frame.origin.y = height - self.view.frame.size.height
-            self.view.layoutIfNeeded()
-            UIView.commitAnimations()
-        }
-    }
-    
     /**
      * UITextView does not have placeholder text, the next 2 functions implement a placeholder
      *
@@ -160,7 +131,6 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     func textViewDidBeginEditing(textView: UITextView) {
         self.allowPlayback = false
         
-//        animateViewMoving(true, moveValue: AddItem.KEYBOARD_MOVE_VALUE)
         if textView.textColor == AddItem.DESCRIPTION_PLACEHOLDER_COLOR {
             textView.textColor = UIColor.blackColor()
             textView.text = ""
@@ -174,8 +144,6 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
             textView.textColor = AddItem.DESCRIPTION_PLACEHOLDER_COLOR
             textView.text = AddItem.TAG_PLACEHOLDER_STR
         }
-        
-//        animateViewMoving(false, moveValue: AddItem.KEYBOARD_MOVE_VALUE)
         
         // There is an odd bug with button text on this call, see
         // disableConfirmButtonHandler() documentation for more information
@@ -210,12 +178,9 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         self.allowPlayback = false
         
         if textField == priceField {
-//            animateViewMoving(true, moveValue: AddItem.NUMPAD_MOVE_VALUE)
             if priceField.text == "take it!" {
                 priceField.text = "0"
             }
-        }else{
-//            animateViewMoving(true, moveValue: AddItem.KEYBOARD_MOVE_VALUE)
         }
     }
     
@@ -225,24 +190,29 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     func textFieldDidEndEditing(textField: UITextField) {
         self.allowPlayback = true
         
-        if textField == priceField {
-//            animateViewMoving(false, moveValue: AddItem.NUMPAD_MOVE_VALUE)
-        }else{
-//            animateViewMoving(false, moveValue: AddItem.KEYBOARD_MOVE_VALUE)
-        }
         formatPrice()
         disableConfirmButtonHandler()
     }
     
-    // helper function to help screen move up or down
-    func animateViewMoving(up: Bool, moveValue: CGFloat) {
-//        let movementDuration = 0.5
-//        let movement = up ? -moveValue : moveValue
-//        UIView.beginAnimations("animateView", context: nil)
-//        UIView.setAnimationBeginsFromCurrentState(true)
-//        UIView.setAnimationDuration(movementDuration)
-//        self.view.frame = CGRectOffset(self.view.frame, 0, movement)
-//        UIView.commitAnimations()
+    /* helper function to help the screen move up and down when the keyboard shows or dismisses */
+    func animateViewMoving(up: Bool) {
+        var movement = (up ? -keyboardHeight : keyboardHeight)
+        
+        UIView.animateWithDuration(0.5, animations: {
+            self.view.frame = CGRectOffset(self.view.frame, 0, movement)
+        })    }
+    
+    func keyboardDidShow(notification: NSNotification) {
+        if let userInfo = notification.userInfo {
+            if let keyboardSize =  (userInfo[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue() {
+                keyboardHeight = keyboardSize.height
+                self.animateViewMoving(true)
+            }
+        }
+    }
+    
+    func keyboardWillHide(notification: NSNotification) {
+        animateViewMoving(false)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -268,6 +238,12 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
             isEditting = false
         }
         disableConfirmButtonHandler()
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
     func dismissKeyboard() {

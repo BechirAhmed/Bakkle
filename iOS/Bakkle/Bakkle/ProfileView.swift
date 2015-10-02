@@ -23,6 +23,7 @@ class ProfileView: UIViewController, UITextViewDelegate {
     @IBOutlet weak var descriptionTextView: UITextView!
     var canEdit = true
     var user: NSDictionary!
+    var keyboardHeight:CGFloat = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,6 +41,10 @@ class ProfileView: UIViewController, UITextViewDelegate {
         self.backgroundAvatar.clipsToBounds = true
         self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "dismissKeyboard"))
         
+        let center = NSNotificationCenter.defaultCenter() as NSNotificationCenter
+        center.addObserver(self, selector: "keyboardDidShow:", name: UIKeyboardDidShowNotification, object: nil)
+        center.addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
+        
         if canEdit {
             self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         }else{
@@ -47,6 +52,12 @@ class ProfileView: UIViewController, UITextViewDelegate {
             logoutBtn.hidden = true
             titleLabel.text = "PROFILE"
         }
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
     func setupButtons() {
@@ -127,25 +138,27 @@ class ProfileView: UIViewController, UITextViewDelegate {
             descriptionTextView.text = "DESCRIPTION"
         }
     }
-    
-    func textViewDidBeginEditing(textView: UITextView) {
-        animateViewMoving(true, moveValue: AddItem.KEYBOARD_MOVE_VALUE)
-    }
 
     
-    func textViewDidEndEditing(textView: UITextView) {
-        animateViewMoving(false, moveValue: AddItem.KEYBOARD_MOVE_VALUE)
+    /* helper function to help the screen move up and down when the keyboard shows or dismisses */
+    func animateViewMoving(up: Bool) {
+        var movement = (up ? -keyboardHeight : keyboardHeight)
+        
+        UIView.animateWithDuration(0.5, animations: {
+            self.view.frame = CGRectOffset(self.view.frame, 0, movement)
+        })    }
+    
+    func keyboardDidShow(notification: NSNotification) {
+        if let userInfo = notification.userInfo {
+            if let keyboardSize =  (userInfo[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue() {
+                keyboardHeight = keyboardSize.height
+                self.animateViewMoving(true)
+            }
+        }
     }
     
-    /* helper function to help the screen move up and down when the keyboard shows or dismisses */
-    func animateViewMoving(up: Bool, moveValue: CGFloat) {
-        let movementDuration = 0.5
-        let movement = up ? -moveValue : moveValue
-        UIView.beginAnimations("animateView", context: nil)
-        UIView.setAnimationBeginsFromCurrentState(true)
-        UIView.setAnimationDuration(movementDuration)
-        self.view.frame = CGRectOffset(self.view.frame, 0, movement)
-        UIView.commitAnimations()
+    func keyboardWillHide(notification: NSNotification) {
+        animateViewMoving(false)
     }
 
 

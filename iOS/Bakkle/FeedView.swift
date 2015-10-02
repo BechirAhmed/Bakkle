@@ -425,8 +425,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             if self.swipeView.imageView.image == nil {
                 self.swipeView.imageView.image = UIImage(named: "loading.png")
                 self.swipeView.userInteractionEnabled = false
-            }
-            if imgURL != nil {
+            }else if imgURL != nil {
                 self.swipeView.userInteractionEnabled = true
             }
         }else if view == self.bottomView {
