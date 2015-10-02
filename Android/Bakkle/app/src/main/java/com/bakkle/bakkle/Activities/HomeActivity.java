@@ -82,6 +82,7 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
         editor = preferences.edit();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        serverCalls = new ServerCalls(this);
         mDrawerItems = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.drawer_items)));
         mDrawerIcons = getResources().obtainTypedArray(R.array.drawer_icons);
 
@@ -106,6 +107,65 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
                 return null;
             }
         });
+
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setHomeButtonEnabled(false);
+
+
+        if (preferences.getBoolean(Constants.NEW_USER, true)) {
+            Log.v("new user", "true");
+            GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(),
+                    new GraphRequest.GraphJSONObjectCallback()
+                    {
+                        @Override
+                        public void onCompleted(JSONObject object, GraphResponse response)
+                        {
+                            addUserInfoToPreferences(object);
+                            Log.d("testing", preferences.getString(Constants.UUID, "0"));
+                            Log.d("testing", preferences.getString(Constants.USER_ID, "0"));
+
+                            serverCalls.registerFacebook(
+                                    preferences.getString(Constants.EMAIL, ""),
+                                    preferences.getString(Constants.GENDER, ""),
+                                    preferences.getString(Constants.USERNAME, ""),
+                                    preferences.getString(Constants.NAME, ""),
+                                    preferences.getString(Constants.USER_ID, ""),
+                                    preferences.getString(Constants.LOCALE, ""),
+                                    preferences.getString(Constants.FIRST_NAME, ""),
+                                    preferences.getString(Constants.LAST_NAME, ""),
+                                    preferences.getString(Constants.UUID, ""));
+
+                            String auth_token = serverCalls.loginFacebook(
+                                    preferences.getString(Constants.UUID, "0"),
+                                    preferences.getString(Constants.USER_ID, "0"),
+                                    getLocation()
+                            );
+                            editor.putString(Constants.AUTH_TOKEN, auth_token);
+                            editor.putBoolean(Constants.NEW_USER, false);
+                            editor.apply();
+
+                            getFragmentManager().beginTransaction().replace(R.id.content_frame,
+                                    FeedFragment.newInstance(true)).commit();
+                        }
+                    });
+
+            Bundle parameters = new Bundle();
+            parameters.putString("fields", "locale, email, gender");
+            //request.executeAsync();
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+
+            StrictMode.setThreadPolicy(policy);
+            addUserInfoToPreferences(request.executeAndWait().getJSONObject());
+//            if(result == 1)
+//                Toast.makeText(this, "Logged in successfully!", Toast.LENGTH_SHORT).show();
+//            else //TODO:Display error on fail? and go back to login screen
+//                Toast.makeText(this, "Login error!!", Toast.LENGTH_SHORT).show();
+
+        }
+        else {
+            getFragmentManager().beginTransaction().replace(R.id.content_frame,
+                    FeedFragment.newInstance(false)).commit();
+        }
 
         AccountHeader headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
@@ -187,68 +247,6 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
                 })
                 .build();
 
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        getSupportActionBar().setHomeButtonEnabled(false);
-
-
-        serverCalls = new ServerCalls(this);
-
-        if (preferences.getBoolean(Constants.NEW_USER, true)) {
-            Log.v("new user", "true");
-            GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(),
-                    new GraphRequest.GraphJSONObjectCallback()
-                    {
-                        @Override
-                        public void onCompleted(JSONObject object, GraphResponse response)
-                        {
-                            addUserInfoToPreferences(object);
-                            Log.v("testing 123", "testing 123");
-                            Log.d("testing", preferences.getString(Constants.UUID, "0"));
-                            Log.d("testing", preferences.getString(Constants.USER_ID, "0"));
-
-                            serverCalls.registerFacebook(
-                                    preferences.getString(Constants.EMAIL, ""),
-                                    preferences.getString(Constants.GENDER, ""),
-                                    preferences.getString(Constants.USERNAME, ""),
-                                    preferences.getString(Constants.NAME, ""),
-                                    preferences.getString(Constants.USER_ID, ""),
-                                    preferences.getString(Constants.LOCALE, ""),
-                                    preferences.getString(Constants.FIRST_NAME, ""),
-                                    preferences.getString(Constants.LAST_NAME, ""),
-                                    preferences.getString(Constants.UUID, ""));
-
-                            String auth_token = serverCalls.loginFacebook(
-                                    preferences.getString(Constants.UUID, "0"),
-                                    preferences.getString(Constants.USER_ID, "0"),
-                                    getLocation()
-                            );
-                            Log.v("auth", "just did the server call");
-                            editor.putString(Constants.AUTH_TOKEN, auth_token);
-                            editor.putBoolean(Constants.NEW_USER, false);
-                            editor.apply();
-
-                            getFragmentManager().beginTransaction().replace(R.id.content_frame,
-                                    new FeedFragment()).commit();
-                        }
-                    });
-
-            Bundle parameters = new Bundle();
-            parameters.putString("fields", "locale, email, gender");
-            //request.executeAsync();
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-
-            StrictMode.setThreadPolicy(policy);
-            addUserInfoToPreferences(request.executeAndWait().getJSONObject());
-//            if(result == 1)
-//                Toast.makeText(this, "Logged in successfully!", Toast.LENGTH_SHORT).show();
-//            else //TODO:Display error on fail? and go back to login screen
-//                Toast.makeText(this, "Login error!!", Toast.LENGTH_SHORT).show();
-
-        }
-        else {
-            getFragmentManager().beginTransaction().replace(R.id.content_frame,
-                    new FeedFragment()).commit();
-        }
     }
 
     @Override

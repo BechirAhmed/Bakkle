@@ -15,3 +15,7 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+-dontwarn lombok.**
+-dontwarn com.sun.**
+#-dontwarn **retrofit**

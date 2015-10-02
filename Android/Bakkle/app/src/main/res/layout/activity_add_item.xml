@@ -9,6 +9,11 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar_title"/>
 
+    <Space
+        android:layout_width="48dp"
+        android:layout_height="fill_parent"
+        android:layout_alignParentRight="true"/>
+
     <HorizontalScrollView
         android:id="@+id/images"
         android:layout_width="fill_parent"
@@ -64,7 +69,6 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/titlePrompt"
-            android:layout_alignRight="@+id/priceField"
             android:layout_toRightOf="@+id/titlePrompt"
             android:backgroundTint="@color/green"
             android:editable="false"
@@ -100,7 +104,6 @@
             android:backgroundTint="@color/green"
             android:hint="$--.--"
             android:inputType="numberDecimal"
-            android:numeric="decimal"
             android:textColor="@color/black"
             android:theme="@style/AppCompatTheme"/>
     </RelativeLayout>
@@ -124,76 +127,36 @@
         <EditText
             android:id="@+id/descriptionField"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@+id/share"
-            android:layout_alignBaseline="@+id/descriptionPrompt"
-            android:layout_alignTop="@+id/descriptionPrompt"
-            android:layout_below="@+id/priceField"
+            android:layout_height="wrap_content"
             android:layout_toEndOf="@+id/descriptionPrompt"
             android:hint="@string/description_text_add_item"
             android:inputType="textCapSentences|textMultiLine"
-            android:lines="7"
+            android:lines="3"
             android:textColor="@color/black"
             android:theme="@style/AppCompatTheme"/>
+
     </RelativeLayout>
 
-    <!--<TextView-->
-    <!--android:id="@+id/method"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_alignLeft="@+id/confirm"-->
-    <!--android:layout_below="@+id/tags"-->
-    <!--android:paddingBottom="25dp"-->
-    <!--android:paddingLeft="16dp"-->
-    <!--android:text="Method"-->
-    <!--android:textStyle="bold"/>-->
-
-    <!--<Spinner-->
-    <!--android:id="@+id/methodPicker"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_alignParentEnd="true"-->
-    <!--android:layout_alignTop="@+id/method"-->
-    <!--android:backgroundTint="@color/green"-->
-    <!--android:entries="@array/Methods"-->
-    <!--android:paddingBottom="25dp"-->
-    <!--android:paddingRight="16dp"-->
-    <!--android:prompt="@string/choose"-->
-    <!--android:textColor="@color/black"-->
-    <!--android:theme="@style/AppCompatTheme"/>-->
-
-    <TextView
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/share"
-        android:layout_alignLeft="@+id/confirm"
-        android:paddingLeft="16dp"
-        android:text="Share to Facebook?"
-        android:textStyle="bold"/>
+        android:layout_below="@+id/tags"
+        android:paddingTop="10dp"
+        android:layout_alignParentStart="true">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/share"
+            android:text="@string/share_to_facebook"
+            android:textStyle="bold"/>
 
-    <android.support.v7.widget.SwitchCompat
-        android:id="@+id/share"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/confirm"
-        android:layout_alignRight="@+id/confirm"
-        android:backgroundTintMode="src_atop"
-        android:paddingBottom="25dp"
-        android:paddingRight="16dp"
-        android:theme="@style/AppCompatTheme"/>
-
-
-    <Button
-        android:id="@+id/confirm"
-        android:layout_width="fill_parent"
-        android:layout_height="45dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/green"
-        android:onClick="uploadItem"
-        android:text="CONFIRM"
-        android:textColor="@color/white"
-        android:textStyle="bold"/>
-
-
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/share"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppCompatTheme"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"/>
+    </RelativeLayout>
 </RelativeLayout>

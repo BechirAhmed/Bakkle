@@ -3,26 +3,25 @@
     android:id="@+id/global_container"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="325dp"
     android:layout_height="440dp"
-    android:layout_gravity="center"
-    android:background="@drawable/rounded_corners">
+    android:layout_gravity="center">
+
 
     <ImageView
         android:id="@+id/image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/title"
+        android:layout_above="@+id/info"
         android:layout_below="@+id/topBar"
+        android:background="@drawable/rounded_corners"
         android:scaleType="centerCrop"/>
-    <!--android:src="@drawable/loading"/>-->
 
     <RelativeLayout
         android:id="@+id/topBar"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="@color/gray">
+        android:background="@drawable/rounded_corners_top">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/sellerImage"
@@ -43,13 +42,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/sellerImage"
             android:layout_toRightOf="@+id/sellerImage"
             android:fontFamily="sans-serif-light"
             android:paddingLeft="20dp"
             android:textColor="@android:color/primary_text_dark"
             android:textSize="16sp"
-            android:textStyle="bold"
-            tools:text="Seller"/>
+            android:textStyle="bold" />
 
     </RelativeLayout>
 
@@ -58,7 +57,7 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/gray"
+        android:background="@drawable/rounded_corners_bottom"
         android:gravity="center">
 
 
@@ -70,9 +69,7 @@
             android:padding="10dp"
             android:textColor="@android:color/primary_text_dark"
             android:textSize="20sp"
-            android:textStyle="bold"
-            tools:text="Title"
-            />
+            android:textStyle="bold"/>
 
         <com.andtinder.FontFitTextView
             android:id="@+id/price"
@@ -80,54 +77,54 @@
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/title"
             android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:paddingRight="20dp"
-            android:text="$15"
             android:textColor="@android:color/primary_text_dark"
             android:textSize="20sp"/>
 
     </RelativeLayout>
 
 
-    <com.andtinder.OverlayView
-        android:id="@+id/like_overlay"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignTop="@+id/image"
-        android:animateLayoutChanges="true"
-        android:src="@drawable/like"
-        android:visibility="gone"/>
+    <!--<com.andtinder.OverlayView-->
+        <!--android:id="@+id/like_overlay"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentLeft="true"-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:layout_alignTop="@+id/image"-->
+        <!--android:animateLayoutChanges="true"-->
+        <!--android:src="@drawable/like"-->
+        <!--android:visibility="gone"/>-->
 
-    <com.andtinder.OverlayView
-        android:id="@+id/dislike_overlay"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/image"
-        android:animateLayoutChanges="true"
-        android:src="@drawable/dislike"
-        android:visibility="gone"/>
+    <!--<com.andtinder.OverlayView-->
+        <!--android:id="@+id/dislike_overlay"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_alignTop="@+id/image"-->
+        <!--android:animateLayoutChanges="true"-->
+        <!--android:src="@drawable/dislike"-->
+        <!--android:visibility="gone"/>-->
 
-    <com.andtinder.OverlayView
-        android:id="@+id/holding_overlay"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/title"
-        android:layout_centerHorizontal="true"
-        android:animateLayoutChanges="true"
-        android:src="@drawable/ic_like"
-        android:visibility="gone"/>
+    <!--<com.andtinder.OverlayView-->
+        <!--android:id="@+id/holding_overlay"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_above="@+id/title"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:animateLayoutChanges="true"-->
+        <!--android:src="@drawable/ic_like"-->
+        <!--android:visibility="gone"/>-->
 
-    <com.andtinder.OverlayView
-        android:id="@+id/comment_overlay"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/image"
-        android:layout_centerHorizontal="true"
-        android:animateLayoutChanges="true"
-        android:src="@drawable/ic_like"
-        android:visibility="gone"/>
+    <!--<com.andtinder.OverlayView-->
+        <!--android:id="@+id/comment_overlay"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignTop="@+id/image"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:animateLayoutChanges="true"-->
+        <!--android:src="@drawable/ic_like"-->
+        <!--android:visibility="gone"/>-->
 
 </RelativeLayout>

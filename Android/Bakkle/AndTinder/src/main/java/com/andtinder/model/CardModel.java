@@ -33,6 +33,7 @@ public class CardModel
     private String sellerImageURL;
     private String description;
     private ArrayList<String> imageURLs;
+    private boolean tutorial;
 
     private Drawable cardImageDrawable;
 
@@ -72,6 +73,7 @@ public class CardModel
     public CardModel()
     {
         this(null, null, null, null, null, null, null, null, null/*, (Drawable)null, (Drawable)null*/);
+        tutorial = true;
     }
 
     public CardModel(String title, String seller, String price, String distance, String method,
@@ -258,5 +260,11 @@ public class CardModel
     {
         return this.mOnClickListener;
     }
+
+    public boolean isTutorial()
+    {
+        return tutorial;
+    }
+
 
 }
