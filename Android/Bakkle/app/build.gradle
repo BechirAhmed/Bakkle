@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion "22.0.0"
+    compileSdkVersion 23
+    buildToolsVersion "23.0.0"
 
     defaultConfig {
         applicationId "com.bakkle.bakkle"
         minSdkVersion 17
-        targetSdkVersion 22
+        targetSdkVersion 23
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
@@ -37,14 +37,14 @@ repositories {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(':AndTinder')
-    compile 'com.android.support:appcompat-v7:22.1.1'
+    compile 'com.android.support:appcompat-v7:23.+'
     compile 'com.google.android.gms:play-services-location:7.5.0'
     compile 'io.nlopez.smartlocation:library:3.0.11'
     compile 'com.facebook.android:facebook-android-sdk:4.1.0'
     compile 'com.koushikdutta.ion:ion:2.+'
     compile 'com.koushikdutta.async:androidasync:2.+'
-    compile 'com.android.support:recyclerview-v7:22.0.0'
-    compile 'com.android.support:support-v4:22.+'
+    compile 'com.android.support:recyclerview-v7:23.0.0'
+    compile 'com.android.support:support-v4:23.+'
     compile 'com.github.bumptech.glide:glide:3.6.1'
     compile 'com.daimajia.swipelayout:library:1.2.0@aar'
     compile 'de.hdodenhof:circleimageview:1.2.1'

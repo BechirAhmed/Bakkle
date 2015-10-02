@@ -257,7 +257,7 @@ public class AddItemActivity extends AppCompatActivity
 //
 //    }
 
-    public void uploadItem(View view)
+    public void uploadItem(MenuItem item)
     {
         title = titleEditText.getText().toString();
         price = priceEditText.getText().toString();
