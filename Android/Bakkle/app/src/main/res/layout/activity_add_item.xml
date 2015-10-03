@@ -9,154 +9,167 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar_title"/>
 
-    <Space
-        android:layout_width="48dp"
-        android:layout_height="fill_parent"
-        android:layout_alignParentRight="true"/>
-
-    <HorizontalScrollView
-        android:id="@+id/images"
-        android:layout_width="fill_parent"
-        android:layout_height="250dp"
-        android:layout_below="@id/toolbar"
-        android:background="@color/black">
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
+        android:isScrollContainer="true">
 
         <RelativeLayout
-            android:id="@+id/imageRelativeLayout"
             android:layout_width="wrap_content"
-            android:layout_height="fill_parent">
+            android:layout_height="wrap_content">
+
+            <HorizontalScrollView
+                android:id="@+id/images"
+                android:layout_width="fill_parent"
+                android:layout_height="250dp"
+                android:layout_below="@id/toolbar"
+                android:background="@color/black">
+
+                <RelativeLayout
+                    android:id="@+id/imageRelativeLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent">
+
+                    <RelativeLayout
+                        android:id="@+id/imageCollection"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+
+                    </RelativeLayout>
+
+                    <!--<ImageView-->
+                    <!--android:id="@+id/add"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_alignParentBottom="true"-->
+                    <!--android:layout_toRightOf="@+id/imageCollection"-->
+                    <!--android:onClick="addAnotherImage"-->
+                    <!--android:src="@drawable/ic_action_camera"/>-->
+
+                </RelativeLayout>
+
+            </HorizontalScrollView>
 
             <RelativeLayout
-                android:id="@+id/imageCollection"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:id="@+id/title"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/images"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="15dp">
 
+                <TextView
+                    android:id="@+id/titlePrompt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="10dp"
+                    android:text="Title"
+                    android:textStyle="bold"/>
+
+                <EditText
+                    android:id="@+id/titleField"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/titlePrompt"
+                    android:layout_toRightOf="@+id/titlePrompt"
+                    android:backgroundTint="@color/green"
+                    android:hint="@string/title_hint"
+                    android:inputType="textCapSentences"
+                    android:lines="1"
+                    android:textColor="@color/black"
+                    android:theme="@style/AppCompatTheme"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/price"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/title"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp">
+
+                <TextView
+                    android:id="@+id/pricePrompt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="10dp"
+                    android:text="Price"
+                    android:textStyle="bold"/>
+
+                <EditText
+                    android:id="@+id/priceField"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/pricePrompt"
+                    android:layout_toRightOf="@+id/pricePrompt"
+                    android:backgroundTint="@color/green"
+                    android:hint="$--.--"
+                    android:inputType="numberDecimal"
+                    android:textColor="@color/black"
+                    android:theme="@style/AppCompatTheme"/>
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/tags"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/price"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp">
+
+                <TextView
+                    android:id="@+id/descriptionPrompt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="10dp"
+                    android:text="Description"
+                    android:textStyle="bold"/>
+
+                <EditText
+                    android:id="@+id/descriptionField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:hint="@string/description_text_add_item"
+                    android:inputType="textCapSentences|textMultiLine"
+                    android:lines="3"
+                    android:textColor="@color/black"
+                    android:theme="@style/AppCompatTheme"/>
 
             </RelativeLayout>
 
-            <!--<ImageView-->
-                <!--android:id="@+id/add"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_alignParentBottom="true"-->
-                <!--android:layout_toRightOf="@+id/imageCollection"-->
-                <!--android:onClick="addAnotherImage"-->
-                <!--android:src="@drawable/ic_action_camera"/>-->
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tags"
+                android:paddingBottom="25dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/share"
+                    android:text="@string/share_to_facebook"
+                    android:textStyle="bold"/>
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/share"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:theme="@style/AppCompatTheme"/>
+            </RelativeLayout>
 
         </RelativeLayout>
 
-    </HorizontalScrollView>
 
-    <RelativeLayout
-        android:id="@+id/title"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/images"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="15dp">
-
-        <TextView
-            android:id="@+id/titlePrompt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingRight="10dp"
-            android:text="Title"
-            android:textStyle="bold"/>
-
-        <EditText
-            android:id="@+id/titleField"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/titlePrompt"
-            android:layout_toRightOf="@+id/titlePrompt"
-            android:backgroundTint="@color/green"
-            android:editable="false"
-            android:hint="Title"
-            android:inputType="textCapSentences"
-            android:lines="1"
-            android:textColor="@color/black"
-            android:theme="@style/AppCompatTheme"/>
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/price"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/title"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp">
-
-        <TextView
-            android:id="@+id/pricePrompt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingRight="10dp"
-            android:text="Price"
-            android:textStyle="bold"/>
-
-        <EditText
-            android:id="@+id/priceField"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/pricePrompt"
-            android:layout_toRightOf="@+id/pricePrompt"
-            android:backgroundTint="@color/green"
-            android:hint="$--.--"
-            android:inputType="numberDecimal"
-            android:textColor="@color/black"
-            android:theme="@style/AppCompatTheme"/>
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/tags"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/price"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp">
-
-        <TextView
-            android:id="@+id/descriptionPrompt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingRight="10dp"
-            android:text="Description"
-            android:textStyle="bold"/>
-
-        <EditText
-            android:id="@+id/descriptionField"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@+id/descriptionPrompt"
-            android:hint="@string/description_text_add_item"
-            android:inputType="textCapSentences|textMultiLine"
-            android:lines="3"
-            android:textColor="@color/black"
-            android:theme="@style/AppCompatTheme"/>
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tags"
-        android:paddingTop="10dp"
-        android:layout_alignParentStart="true">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/share"
-            android:text="@string/share_to_facebook"
-            android:textStyle="bold"/>
-
-        <android.support.v7.widget.SwitchCompat
-            android:id="@+id/share"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:theme="@style/AppCompatTheme"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"/>
-    </RelativeLayout>
+    </ScrollView>
 </RelativeLayout>
