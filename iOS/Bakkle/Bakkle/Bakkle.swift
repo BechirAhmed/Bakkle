@@ -555,7 +555,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         task.resume()
     }
     
-    /* Populates the holding pattern with items from the server */
+    /* Populates the watch list with items from the server */
     func populateHolding(success: ()->()) {
         let url: NSURL? = NSURL(string: url_base + url_get_holding_pattern)
         let request = NSMutableURLRequest(URL: url!)

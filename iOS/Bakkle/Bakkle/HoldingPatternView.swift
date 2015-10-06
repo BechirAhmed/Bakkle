@@ -219,11 +219,11 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
             return 0
         }
         if activeItem.count != 0 || expiredItem.count != 0 || soldItem.count != 0 {
-            println("Actually got items from the holding pattern!")
-            println(String(Bakkle.sharedInstance.holdingItems.count) + " items in holding pattern")
+            println("Actually got items from the watch list!")
+            println(String(Bakkle.sharedInstance.holdingItems.count) + " items in watch list")
             return activeItem.count + soldItem.count + expiredItem.count + 3
         }
-        println("Didn't get anything in holding pattern")
+        println("Didn't get anything in watch list")
         return 3
     }
     
