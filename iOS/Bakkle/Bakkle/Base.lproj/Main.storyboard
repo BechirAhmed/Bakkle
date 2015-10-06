@@ -584,7 +584,7 @@
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="csT-TU-XOh" secondAttribute="trailing" id="4vW-qR-ckz"/>
                                             <constraint firstItem="csT-TU-XOh" firstAttribute="bottom" secondItem="lOj-Vx-uFJ" secondAttribute="top" constant="30" id="5a5-gv-cVJ">
-                                                <variation key="heightClass=regular-widthClass=compact" constant="-15"/>
+                                                <variation key="heightClass=regular-widthClass=compact" constant="-30"/>
                                             </constraint>
                                             <constraint firstItem="nSX-e0-sZy" firstAttribute="height" secondItem="q3X-lx-mRO" secondAttribute="height" multiplier="0.75" id="5jt-xa-feM"/>
                                             <constraint firstItem="csT-TU-XOh" firstAttribute="top" secondItem="nSX-e0-sZy" secondAttribute="bottom" constant="8" id="724-QZ-P2H"/>
