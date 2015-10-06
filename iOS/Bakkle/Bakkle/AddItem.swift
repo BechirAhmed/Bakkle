@@ -196,11 +196,13 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     
     /* helper function to help the screen move up and down when the keyboard shows or dismisses */
     func animateViewMoving(up: Bool) {
-        var movement = (up ? -keyboardHeight : keyboardHeight)
+        var movement = (up ? -keyboardHeight : 0)
         
         UIView.animateWithDuration(0.5, animations: {
-            self.view.frame = CGRectOffset(self.view.frame, 0, movement)
-        })    }
+            self.view.transform = CGAffineTransformMakeTranslation(0, movement)
+            self.view.layoutIfNeeded()
+        })
+    }
     
     func keyboardDidShow(notification: NSNotification) {
         if let userInfo = notification.userInfo {
