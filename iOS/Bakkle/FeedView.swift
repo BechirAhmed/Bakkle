@@ -50,7 +50,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     // For start a chat view
     @IBOutlet weak var startChatView: UIView!
     @IBOutlet weak var sendMessageButton: UIButton!
-    @IBOutlet weak var keepBrowsingButton: UIButton!
+    @IBOutlet weak var makeAnOfferButton: UIButton!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var viewDescriptionLabel: UILabel!
     @IBOutlet weak var startChatItemImage: UIImageView!
@@ -131,7 +131,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             self.startChatView.transform = CGAffineTransformRotate(CGAffineTransformIdentity,  rotation * rotationMultiplier)
             
             if state.thresholdRatio == 0.0 {
-                self.keepBrowsingButton.sendActionsForControlEvents(.TouchUpOutside)
+                self.makeAnOfferButton.sendActionsForControlEvents(.TouchUpOutside)
                 self.sendMessageButton.sendActionsForControlEvents(.TouchUpOutside)
             }
         }
@@ -157,7 +157,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             self.view.addSubview(goodwillLogo)
         }
         
-        self.keepBrowsingButton.layer.borderColor = UIColor.whiteColor().CGColor
+        self.makeAnOfferButton.layer.borderColor = UIColor.whiteColor().CGColor
         self.sendMessageButton.layer.borderColor = UIColor.whiteColor().CGColor
         self.startChatItemImage.layer.borderColor = UIColor.whiteColor().CGColor
         self.startChatItemImage.layer.masksToBounds = true
@@ -533,7 +533,10 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             loadNext()
             break
         case MDCSwipeDirection.Right:
-            Bakkle.sharedInstance.markItem("want", item_id: self.item_id, success: {}, fail: {})
+            
+            /* Don't mark as want at first
+                should mark item according what is selected on the start a chat screen */
+//            Bakkle.sharedInstance.markItem("want", item_id: self.item_id, success: {}, fail: {})
             self.itemData = Bakkle.sharedInstance.feedItems[0] as? NSDictionary
             
             // Ensure that the item isn't your own
@@ -622,6 +625,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         
         if let x: AnyObject = itemData!.valueForKey("pk") {
             self.sendMessageButton.tag = Int(x.intValue)
+            self.makeAnOfferButton.tag = Int(x.intValue)
         }
         
         self.view.bringSubviewToFront(self.startChatView)
@@ -642,7 +646,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     func closeStartAChat(state: MDCSwipeResult?) {
         self.sendMessageButton.tag = 0
         
-        self.keepBrowsingButton.sendActionsForControlEvents(.TouchUpOutside)
+        self.makeAnOfferButton.sendActionsForControlEvents(.TouchUpOutside)
         self.sendMessageButton.sendActionsForControlEvents(.TouchUpOutside)
         
         var destination = self.startChatView.frame
@@ -707,11 +711,43 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         }
         WSManager.enqueueWorkPayload(chatPayload)
         
+        // mark as want
+        Bakkle.sharedInstance.markItem("want", item_id: self.item_id, success: {}, fail: {})
+        
         self.closeStartAChat(nil)
     }
     
-    @IBAction func keepBrowsing(sender: UIButton) {
+    @IBAction func makeAnOffer(sender: UIButton) {
         sender.layer.borderColor = UIColor.whiteColor().CGColor
+        
+        let buyer = User(facebookID: Bakkle.sharedInstance.facebook_id_str,accountID: Bakkle.sharedInstance.account_id,
+            firstName: Bakkle.sharedInstance.first_name, lastName: Bakkle.sharedInstance.last_name)
+        let account = Account(user: buyer)
+        let chatItem = self.itemData!
+        let chatItemId = String(sender.tag)
+        var chatId: Int = 0
+        var chatPayload: WSRequest = WSStartChatRequest(itemId: chatItemId)
+        chatPayload.successHandler = {
+            (var success: NSDictionary) in
+            chatId = success.valueForKey("chatId") as! Int
+            var buyerChat = Chat(user: buyer, lastMessageText: "", lastMessageSentDate: NSDate(), chatId: chatId)
+            let chatViewController = ChatViewController(chat: buyerChat)
+            chatViewController.itemData = chatItem
+            chatViewController.seller = chatItem.valueForKey("seller") as! NSDictionary
+            chatViewController.isBuyer = true
+            chatViewController.shouldProposeOffer = true
+            self.navigationController?.pushViewController(chatViewController, animated: true)
+        }
+        WSManager.enqueueWorkPayload(chatPayload)
+        
+        // mark as want
+        Bakkle.sharedInstance.markItem("want", item_id: self.item_id, success: {}, fail: {})
+        
+        self.closeStartAChat(nil)
+    }
+    
+    @IBAction func saveToWatchList(sender: AnyObject) {
+        Bakkle.sharedInstance.markItem("hold", item_id: self.item_id, success: {}, fail: {})
         self.closeStartAChat(nil)
     }
     

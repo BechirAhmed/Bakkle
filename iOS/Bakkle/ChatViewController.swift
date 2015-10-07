@@ -28,6 +28,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     var offerSent: Bool = false
     var offerReceived: Bool = false
     var itemData: NSDictionary?
+    var shouldProposeOffer: Bool = false
     
     override var inputAccessoryView: UIView! {
         get {
@@ -189,6 +190,9 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             profileButton.hnk_setImageFromURL(imgURL!, state: UIControlState.Normal, placeholder: UIImage(named:"loading.png"), format: nil, failure: nil, success: nil)
             }
         
+        if shouldProposeOffer {
+            proposeOffer()
+        }
     }
     
     override func viewWillDisappear(animated: Bool)  {
