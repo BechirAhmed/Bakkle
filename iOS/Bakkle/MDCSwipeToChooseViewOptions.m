@@ -40,7 +40,7 @@
         _nopeRotationAngle = 15.f;
         _nopeTextSize = 60.0f;
         
-        _holdText = [NSLocalizedString(@"HOLDING", nil) uppercaseString];
+        _holdText = [NSLocalizedString(@"WATCHING", nil) uppercaseString];
         _holdColor = [UIColor whiteColor];
         _holdRotationAngle = -15.f;
         _holdTextSize = 38.0f;
