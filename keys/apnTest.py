@@ -7,16 +7,14 @@ from apns import APNs, Payload
 use_sandbox = True
 token_hex = 'e69ffa8cb3299d2c3428641d4213be48ce37d373554ab18ce905dd2eab7c7655'
 token_hex = '3c28f1cc5c714aa05f959ccd7def34a87df4dabc46979c0a58741cba362a83b0'
+token_hex = '0cc56e5016dcd41324873689a76a24d0ca9656fc0e5815634a398493337dffed'
 message = 'Test Payload'
 soundname = 'default'
 badge = 1
 
 # Config
-cert_file = 'apn-push-prod-2015-03-30.p12.pem'
-key_file = 'apn-push-prod-2015-03-30.p12.pem'
-if use_sandbox:
-    cert_file = 'apn-push-dev-2015-03-30.p12.pem'
-    key_file = 'apn-push-dev-2015-03-30.p12.pem'
+cert_file = 'Certificates.p12.pem'
+key_file = 'Certificates.p12.pem'
 
 
 apns = APNs(use_sandbox=use_sandbox, cert_file=cert_file, key_file=key_file)
