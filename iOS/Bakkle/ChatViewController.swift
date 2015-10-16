@@ -20,7 +20,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     var photoButton: UIButton!
     var rotating = false
     var chatID: String!
-    var itemIndex: Int = 0
+    var item: NSDictionary? = nil
     var seller: NSDictionary!
     var isBuyer: Bool = false
     var refreshControl: UIRefreshControl = UIRefreshControl()
@@ -34,13 +34,6 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         get {
             if toolBar == nil {
                 toolBar = UIToolbar(frame: CGRectMake(0, 0, 0, toolBarMinHeight-0.5))
-                
-//                photoButton = UIButton.buttonWithType(.System) as! UIButton
-//                photoButton.setTitle("", forState: .Normal)
-//                photoButton.setImage(IconImage().camera(), forState: .Normal)
-//                photoButton.contentEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
-//                photoButton.addTarget(self, action: "openPhoto", forControlEvents: UIControlEvents.TouchUpInside)
-//                toolBar.addSubview(photoButton)
                 
                 textView = InputTextView(frame: CGRectZero)
                 textView.backgroundColor = UIColor.whiteColor()
@@ -67,9 +60,6 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 // Auto Layout allows `sendButton` to change width, e.g., for localization.
                 textView.setTranslatesAutoresizingMaskIntoConstraints(false)
                 sendButton.setTranslatesAutoresizingMaskIntoConstraints(false)
-//                photoButton.setTranslatesAutoresizingMaskIntoConstraints(false)
-//                toolBar.addConstraint(NSLayoutConstraint(item: photoButton, attribute: .Left, relatedBy: .Equal, toItem: toolBar, attribute: .Left, multiplier: 1, constant: 2))
-//                toolBar.addConstraint(NSLayoutConstraint(item: photoButton, attribute: .Bottom, relatedBy: .Equal, toItem: toolBar, attribute: .Bottom, multiplier: 1, constant: -4.5))
                 toolBar.addConstraint(NSLayoutConstraint(item: textView, attribute: .Left, relatedBy: .Equal, toItem: toolBar, attribute: .Left, multiplier: 1, constant: 4))
                 toolBar.addConstraint(NSLayoutConstraint(item: textView, attribute: .Top, relatedBy: .Equal, toItem: toolBar, attribute: .Top, multiplier: 1, constant: 7.5))
                 toolBar.addConstraint(NSLayoutConstraint(item: textView, attribute: .Right, relatedBy: .Equal, toItem: sendButton, attribute: .Left, multiplier: 1, constant: -2))
@@ -369,9 +359,10 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             // Assumes the itemData was passed as an Item, not BuyerItem
             vc.item = item
         } else if isBuyer {
-            vc.item = Bakkle.sharedInstance.trunkItems[self.itemIndex].valueForKey("item") as! NSDictionary
+            
+            vc.item = self.item!
         } else {
-            vc.item = Bakkle.sharedInstance.garageItems[self.itemIndex] as! NSDictionary
+            vc.item = self.item!
             vc.available = false
         }
         let status = vc.item.valueForKey("status") as! String
@@ -477,23 +468,6 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         return chat.loadedMessages.count * 2 // for sent-date cell
     }
     
-    // If this code is used, it might not be compatible with the chat directly from 
-    // the feed view
-    func acceptButton(){
-        // Code to support ratings
-//        let sb: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-//        let vc: BuyItemView = sb.instantiateViewControllerWithIdentifier("BuyItemView") as! BuyItemView
-//        vc.modalTransitionStyle = UIModalTransitionStyle.CoverVertical
-//        self.dismissKeyboard()
-//        if isBuyer {
-//            vc.item = Bakkle.sharedInstance.trunkItems[self.itemIndex].valueForKey("item") as! NSDictionary
-//        } else {
-//            vc.item = Bakkle.sharedInstance.garageItems[self.itemIndex] as! NSDictionary
-//        }
-//        self.presentViewController(vc, animated: true, completion: nil)
-        
-    }
-
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var indexFloor: Int = Int(floor(Double(indexPath.row) * 0.5))
         let message = chat.loadedMessages[indexFloor]

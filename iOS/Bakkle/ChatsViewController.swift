@@ -1,4 +1,4 @@
-import UIKit
+ import UIKit
 
 class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextViewDelegate  {
     var account: Account!
@@ -180,7 +180,7 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let chat = self.account!.chats[indexPath.row]
         let chatViewController = ChatViewController(chat: chat)
-        chatViewController.itemIndex = self.garageIndex
+        chatViewController.item = Bakkle.sharedInstance.garageItems[self.garageIndex] as? NSDictionary
         chatViewController.isBuyer = false
         self.navigationController?.pushViewController(chatViewController, animated: true)
         tableView.deselectRowAtIndexPath(indexPath, animated: true)

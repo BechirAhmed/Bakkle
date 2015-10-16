@@ -30,8 +30,10 @@ if test == 2:
     custom_dict = {
         'chat_id': 69, 'item_id': 10, 'message': 'I want to buy your mower', 'name': 'Hugo Chavez'}
     message = custom_dict['message']
+#custom = {
+#    'chat_id': 69, 'item_id': 2542 , 'seller_id': 9, 'buyer_id': 13}
 custom = {
-    'chat_id': 69, 'item_id': 2542 , 'seller_id': 9, 'buyer_id': 13}
+    'chat_id': 3284, 'item_id': 2056 , 'seller_id': 3, 'buyer_id': 9}
 
 # Send a notification
 #payload = Payload(alert=message, sound=soundname, badge=badge)

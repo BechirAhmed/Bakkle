@@ -11,4 +11,9 @@ import Foundation
 class ItemDetailsCell: UICollectionViewCell{
     
     @IBOutlet weak var imgView: UIImageView!
+    
+    override func didMoveToSuperview() {
+        self.setNeedsLayout()
+        self.layoutIfNeeded()
+    }
 }

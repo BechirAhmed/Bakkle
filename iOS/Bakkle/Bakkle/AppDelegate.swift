@@ -31,6 +31,60 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         UIApplication.sharedApplication().statusBarStyle = .LightContent
         
+        if let userInfo = launchOptions?[UIApplicationLaunchOptionsRemoteNotificationKey] as? [NSObject : AnyObject] {
+            
+//            if let chat_id = userInfo["chat_id"] as? Int {
+//                let vc = self.window?.rootViewController as? UINavigationController
+//                let item_id = userInfo["item_id"] as? Int
+//                let seller_id = userInfo["seller_id"] as? Int
+//                let buyer_id = userInfo["buyer_id"] as? Int
+//                if seller_id == Bakkle.sharedInstance.account_id {
+//                    // user is a seller
+//                    Bakkle.sharedInstance.getAccount(buyer_id as NSInteger!, success: { () -> () in
+//                        let account = (Bakkle.sharedInstance.responseDict as NSDictionary!).valueForKey("account") as! NSDictionary
+//                        let name = account.valueForKey("display_name") as! String
+//                        let buyer = User(facebookID: account.valueForKey("facebook_id") as! String, accountID: buyer_id!, firstName: name, lastName: name)
+//                        var chatItem: NSDictionary? = nil
+//                        for index in 0...Bakkle.sharedInstance.garageItems.count-1 {
+//                            if Bakkle.sharedInstance.garageItems[index].valueForKey("pk") as? Int == item_id {
+//                                chatItem = Bakkle.sharedInstance.garageItems[index] as? NSDictionary
+//                            }
+//                        }
+//                        let buyerChat = Chat(user: buyer, lastMessageText: "", lastMessageSentDate: NSDate(), chatId: chat_id)
+//                        let chatViewController = ChatViewController(chat: buyerChat)
+//                        chatViewController.item = chatItem
+//                        chatViewController.seller = chatItem!.valueForKey("seller") as! NSDictionary
+//                        chatViewController.isBuyer = false
+//                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+//                            vc!.pushViewController(chatViewController, animated: true)
+//                        })
+//                        
+//                        }, fail: { () -> () in
+//                    })
+//                }else if buyer_id == Bakkle.sharedInstance.account_id {
+//                    // user is a buyer
+//                    let buyer = User(facebookID: Bakkle.sharedInstance.facebook_id_str,accountID: Bakkle.sharedInstance.account_id,
+//                        firstName: Bakkle.sharedInstance.first_name, lastName: Bakkle.sharedInstance.last_name)
+//                    var chatItem: NSDictionary? = nil
+//                    for index in 0...Bakkle.sharedInstance.trunkItems.count-1 {
+//                        if Bakkle.sharedInstance.trunkItems[index].valueForKey("pk") as? Int == item_id {
+//                            chatItem = Bakkle.sharedInstance.trunkItems[index] as? NSDictionary
+//                        }
+//                    }
+//                    let buyerChat = Chat(user: buyer, lastMessageText: "", lastMessageSentDate: NSDate(), chatId: chat_id)
+//                    let chatViewController = ChatViewController(chat: buyerChat)
+//                    chatViewController.item = chatItem
+//                    chatViewController.seller = chatItem!.valueForKey("seller") as! NSDictionary
+//                    chatViewController.isBuyer = true
+//                    vc!.pushViewController(chatViewController, animated: true)
+//                }
+//            } else if let item_id = userInfo["item_id"] as? Int {
+//                println("There is a item_id \(item_id)")
+//                NSNotificationCenter.defaultCenter().postNotificationName("pushNotification", object: nil, userInfo: userInfo)
+//            }
+        }
+        
+        
         return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
     }
     
@@ -98,10 +152,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if application.applicationState == UIApplicationState.Active {
             var localNotification: UILocalNotification = UILocalNotification()
             localNotification.userInfo = userInfo
-            localNotification.soundName = "Bakkle_Notification_new.m4r"
             localNotification.fireDate = NSDate()
 
-//            application.applicationIconBadgeNumber = 0 //TODO: Set to unread message count.
             let blob: Dictionary = userInfo as Dictionary
             
             if let aps = userInfo["aps"] as? NSDictionary {
@@ -111,16 +163,63 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     localNotification.alertBody = message
                 }
             }
-
-            if let custom = userInfo["custom"] as? NSDictionary {
-                println("There is a custom")
-            }
             
             application.scheduleLocalNotification(localNotification)
+        }
+        else {
+            if let chat_id = userInfo["chat_id"] as? Int {
+                let vc = self.window?.rootViewController as? UINavigationController
+                let item_id = userInfo["item_id"] as? Int
+                let seller_id = userInfo["seller_id"] as? Int
+                let buyer_id = userInfo["buyer_id"] as? Int
+                if seller_id == Bakkle.sharedInstance.account_id {
+                    // user is a seller
+                    Bakkle.sharedInstance.getAccount(buyer_id as NSInteger!, success: { () -> () in
+                        let account = (Bakkle.sharedInstance.responseDict as NSDictionary!).valueForKey("account") as! NSDictionary
+                        let name = account.valueForKey("display_name") as! String
+                        let buyer = User(facebookID: account.valueForKey("facebook_id") as! String, accountID: buyer_id!, firstName: name, lastName: name)
+                        var chatItem: NSDictionary? = nil
+                        for index in 0...Bakkle.sharedInstance.garageItems.count-1 {
+                            if Bakkle.sharedInstance.garageItems[index].valueForKey("pk") as? Int == item_id {
+                                chatItem = Bakkle.sharedInstance.garageItems[index] as? NSDictionary
+                            }
+                        }
+                        let buyerChat = Chat(user: buyer, lastMessageText: "", lastMessageSentDate: NSDate(), chatId: chat_id)
+                        let chatViewController = ChatViewController(chat: buyerChat)
+                        chatViewController.item = chatItem
+                        chatViewController.seller = chatItem!.valueForKey("seller") as! NSDictionary
+                        chatViewController.isBuyer = false
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            vc!.pushViewController(chatViewController, animated: true)
+                        })
+                        
+                    }, fail: { () -> () in
+                    })
+                }else if buyer_id == Bakkle.sharedInstance.account_id {
+                    // user is a buyer
+                    let buyer = User(facebookID: Bakkle.sharedInstance.facebook_id_str,accountID: Bakkle.sharedInstance.account_id,
+                        firstName: Bakkle.sharedInstance.first_name, lastName: Bakkle.sharedInstance.last_name)
+                    var chatItem: NSDictionary? = nil
+                    for index in 0...Bakkle.sharedInstance.trunkItems.count-1 {
+                        if (Bakkle.sharedInstance.trunkItems[index].valueForKey("item") as! NSDictionary).valueForKey("pk") as? Int == item_id {
+                            chatItem = Bakkle.sharedInstance.trunkItems[index].valueForKey("item") as? NSDictionary
+                        }
+                    }
+                    let buyerChat = Chat(user: buyer, lastMessageText: "", lastMessageSentDate: NSDate(), chatId: chat_id)
+                    let chatViewController = ChatViewController(chat: buyerChat)
+                    chatViewController.item = chatItem
+                    chatViewController.seller = chatItem!.valueForKey("seller") as! NSDictionary
+                    chatViewController.isBuyer = true
+                    vc!.pushViewController(chatViewController, animated: true)
+                }
+            } else if let item_id = userInfo["item_id"] as? Int {
+                println("There is a item_id \(item_id)")
+                NSNotificationCenter.defaultCenter().postNotificationName("pushNotification", object: nil, userInfo: userInfo)
+            }
             
-            //UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Did receive a Remote Notification" message:[NSString stringWithFormat:@"Your App name received this notification while it was running:\n%@",[[userInfo objectForKey:@"aps"] objectForKey:@"alert"]]delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         }
     }
+    
     
     func application(application: UIApplication, handleWatchKitExtensionRequest userInfo: [NSObject : AnyObject]?, reply: (([NSObject : AnyObject]!) -> Void)!)
     {

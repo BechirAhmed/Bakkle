@@ -238,17 +238,15 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
         }
         let buyer = User(facebookID: Bakkle.sharedInstance.facebook_id_str,accountID: Bakkle.sharedInstance.account_id,
             firstName: Bakkle.sharedInstance.first_name, lastName: Bakkle.sharedInstance.last_name)
-        let account = Account(user: buyer)
         let chatItem = getItem(indexPath).valueForKey("item") as! NSDictionary
         let chatItemId = (chatItem.valueForKey("pk") as! NSNumber).stringValue
-        var chatId: Int = 0
         var chatPayload: WSRequest = WSStartChatRequest(itemId: chatItemId)
         chatPayload.successHandler = {
             (var success: NSDictionary) in
-            chatId = success.valueForKey("chatId") as! Int
+            let chatId = success.valueForKey("chatId") as! Int
             var buyerChat = Chat(user: buyer, lastMessageText: "", lastMessageSentDate: NSDate(), chatId: chatId)
             let chatViewController = ChatViewController(chat: buyerChat)
-            chatViewController.itemIndex = self.getIndex(indexPath)
+            chatViewController.item = chatItem
             chatViewController.seller = chatItem.valueForKey("seller") as! NSDictionary
             chatViewController.isBuyer = true
             self.navigationController?.pushViewController(chatViewController, animated: true)
