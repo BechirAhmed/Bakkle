@@ -50,7 +50,12 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:1.2.1'
     compile 'com.quinny898.library.persistentsearch:library:1.0.0-SNAPSHOT'
     compile 'com.github.lecho:hellocharts-library:1.5.5@aar'
+    compile 'com.parse.bolts:bolts-android:1.+'
+    compile 'com.parse:parse-android:1.+'
     compile('com.mikepenz:materialdrawer:3.1.2@aar') {
         transitive = true
     }
+
+    //compile files('libs/bolts-android-1.2.1.jar')
+    //compile files('libs/Parse-1.10.3.jar')
 }

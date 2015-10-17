@@ -276,9 +276,22 @@ public class ServerCalls
 
     }
 
-    public void deleteItem(String authToken, String uuid, String pk)
+    public void deleteTrunkItem(String authToken, String uuid, String pk)
     {
         markItem("meh", authToken, uuid, pk, "42");
+    }
+
+    public void deleteSellerItem(String pk)
+    {
+        try {
+            jsonResponse = Ion.with(mContext)
+                    .load(url_base + url_mark + pk + "/" + "delete/")
+                    .asJsonObject()
+                    .get();
+        }
+        catch (Exception e) {
+            Log.v("Exception", e.getMessage());
+        }
     }
 
     public JsonObject getAccount(String authToken, String uuid)

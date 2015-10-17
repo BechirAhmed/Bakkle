@@ -104,7 +104,7 @@ public class TrunkAdapter extends ArrayAdapter<FeedItem>{
         viewHolder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                serverCalls.deleteItem(preferences.getString(Constants.AUTH_TOKEN, ""), preferences.getString(Constants.UUID, ""), item.getPk());
+                serverCalls.deleteTrunkItem(preferences.getString(Constants.AUTH_TOKEN, ""), preferences.getString(Constants.UUID, ""), item.getPk());
                 remove(item);
             }
         });

@@ -75,7 +75,7 @@ public class FeedFragment extends Fragment
     public void onResume()
     {
         super.onResume();
-        new bgTask().execute();
+        //new bgTask().execute();
     }
 
 
@@ -258,8 +258,8 @@ public class FeedFragment extends Fragment
 
     private void showSplashScreen(String pk, String url)
     {
-        getFragmentManager().beginTransaction().replace(R.id.content_frame,
-                SplashFragment.newInstance(pk, url)).addToBackStack(null).
+        getFragmentManager().beginTransaction().hide(this).
+                add(R.id.content_frame, SplashFragment.newInstance(pk, url)).addToBackStack(null).
                 setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
     }
 
@@ -278,7 +278,7 @@ public class FeedFragment extends Fragment
             return serverCalls.getFeedItems(
                     preferences.getString(Constants.AUTH_TOKEN, "0"),
                     preferences.getInt(Constants.PRICE_FILTER, 100) + "",
-                    preferences.getInt(Constants.DISTANCE_FILTER, 100) + "",
+                    preferences.getInt(Constants.DISTANCE_FILTER, 50) + "",
                     preferences.getString(Constants.SEARCH_TEXT, ""),
                     preferences.getString(Constants.LOCATION, "0, 0"),
                     "",

@@ -110,7 +110,10 @@ public abstract class CardStackAdapter extends BaseAdapter
     public CardModel getCardModel(int position)
     {
         synchronized (mLock) {
-            return mData.get(mData.size() - 1 - position);
+            if(mData.size() > 2)
+                return mData.get(mData.size() - 1 - position);
+            else
+                return mData.get(mData.size() - 1);
         }
     }
 

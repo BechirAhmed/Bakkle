@@ -107,8 +107,9 @@ public class GarageAdapter extends ArraySwipeAdapter<FeedItem>
             @Override
             public void onClick(View view)
             {
+                serverCalls.deleteSellerItem(item.getPk());
                 Toast.makeText(c, "You are in the delete Item page", Toast.LENGTH_SHORT).show();
-                //serverCalls.deleteItem(preferences.getString("auth_token", "0"), preferences.getString("uuid", "0"), item.getPk());
+                //serverCalls.deleteTrunkItem(preferences.getString("auth_token", "0"), preferences.getString("uuid", "0"), item.getPk());
             }
         });
 
