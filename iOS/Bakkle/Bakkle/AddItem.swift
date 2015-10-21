@@ -152,6 +152,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         } else {
             initRun = false
         }
+        animateViewMoving(false)
     }
     
     func textViewDidChange(textView: UITextView) {
@@ -192,6 +193,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         
         formatPrice()
         disableConfirmButtonHandler()
+        animateViewMoving(false)
     }
     
     /* helper function to help the screen move up and down when the keyboard shows or dismisses */
@@ -214,7 +216,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     }
     
     func keyboardWillHide(notification: NSNotification) {
-        animateViewMoving(false)
+        //animateViewMoving(false)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -409,13 +411,11 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         if textField == titleField {
+            //titleField.resignFirstResponder()
             priceField.becomeFirstResponder()
         }
         else if textField == priceField {
            descriptionField.becomeFirstResponder()
-        }
-        else if textField == descriptionField {
-            descriptionField.resignFirstResponder()
         }
         return true
     }

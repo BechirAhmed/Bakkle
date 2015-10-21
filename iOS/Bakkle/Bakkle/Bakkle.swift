@@ -76,6 +76,8 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     var trunkItems: [NSObject]!
     var holdingItems: [NSObject]!
     
+    var userInfo: [NSObject: AnyObject]!
+    
     //TODO: Remove
     var responseDict: NSDictionary!
     
