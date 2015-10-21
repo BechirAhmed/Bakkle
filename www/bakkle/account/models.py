@@ -101,5 +101,5 @@ class Device(models.Model):
         if (dt is None or dt == ""):
             return
         print("notifying {} token {}".format(self.account_id, dt))
-        sendPushMessage(self.account_id.app_flavor, dt, message, badge, sound)
+        sendPushMessage(self.account_id.app_flavor, dt, message, badge, sound,custom)
         # TODO: Log this to db so we know what we did.
