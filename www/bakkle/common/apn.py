@@ -23,7 +23,7 @@ if use_sandbox:
 
 
 @run_async
-def sendPushMessage(app_flavor, token, message, badge, sound):
+def sendPushMessage(app_flavor, token, message, badge, sound, custom={}):
     if app_flavor == 2:
         cert_file = goodwill_cert_file
     else:
@@ -31,7 +31,7 @@ def sendPushMessage(app_flavor, token, message, badge, sound):
 
     apns = APNs(use_sandbox=use_sandbox, cert_file=cert_file,
                 key_file=cert_file)
-    payload = Payload(alert=message, sound=sound, badge=badge)
+    payload = Payload(alert=message, sound=sound, badge=badge,custom=custom)
     logging.debug("Sending notification " + str(payload) + " to " + str(token))
     apns.gateway_server.send_notification(token, payload)
 
