@@ -86,6 +86,7 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
         mDrawerItems = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.drawer_items)));
         mDrawerIcons = getResources().obtainTypedArray(R.array.drawer_icons);
 
+
         DrawerImageLoader.init(new DrawerImageLoader.IDrawerImageLoader()
         {
             @Override
@@ -194,12 +195,12 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
                 .withAccountHeader(headerResult)
                 .withActionBarDrawerToggle(true)
                 .withActionBarDrawerToggleAnimated(true)
+                .withSelectedItem(0)
                 .addDrawerItems(
                         new PrimaryDrawerItem().withName(mDrawerItems.get(0)).withIcon(mDrawerIcons.getDrawable(0)),
                         new PrimaryDrawerItem().withName(mDrawerItems.get(1)).withIcon(mDrawerIcons.getDrawable(1)),
                         new PrimaryDrawerItem().withName(mDrawerItems.get(2)).withIcon(mDrawerIcons.getDrawable(2)),
-                        new PrimaryDrawerItem().withName(mDrawerItems.get(3)).withIcon(mDrawerIcons.getDrawable(3)),
-                        new PrimaryDrawerItem().withName(mDrawerItems.get(4)).withIcon(mDrawerIcons.getDrawable(4))
+                        new PrimaryDrawerItem().withName(mDrawerItems.get(3)).withIcon(mDrawerIcons.getDrawable(3))
                 )
                 .withTranslucentStatusBar(false)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener()

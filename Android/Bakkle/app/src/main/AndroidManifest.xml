@@ -1,122 +1,162 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    package="com.bakkle.bakkle"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.bakkle.bakkle" >
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="com.bakkle.bakkle.permission.C2D_MESSAGE" />
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <permission
+        android:name="com.bakkle.bakkle.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
 
-    <uses-feature android:name="android.hardware.camera"/>
-    <uses-feature android:name="android.hardware.camera.autofocus"/>
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <application
+        android:name=".Application"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
         android:screenOrientation="portrait"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         <activity
             android:name=".Activities.SplashActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".Activities.SignupActivity"
             android:label="@string/title_activity_login"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".Activities.LoginActivity"
             android:label="@string/title_activity_sign_in"
-            android:screenOrientation="portrait">
-            <intent-filter android:label="@string/app_name">
-                <action android:name="android.intent.action.MAIN"/>
+            android:screenOrientation="portrait" >
+            <intent-filter android:label="@string/app_name" >
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".Activities.HomeActivity"
             android:label="@string/title_activity_home"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustNothing" >
         </activity>
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <provider
             android:name="com.facebook.FacebookContentProvider"
             android:authorities="@string/facebook_authorities"
-            android:exported="true"/>
+            android:exported="true" />
 
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version"
-            tools:replace="android:value"/>
+            tools:replace="android:value" />
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id"/>
+            android:value="@string/facebook_app_id" />
 
         <activity
             android:name=".Activities.ItemDetailActivity"
             android:label="@string/title_activity_item_detail"
             android:parentActivityName=".Activities.HomeActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Activities.HomeActivity"/>
+                android:value=".Activities.HomeActivity" />
         </activity>
         <activity
             android:name=".Activities.AddItemActivity"
             android:label="@string/title_activity_add_item"
             android:parentActivityName=".Activities.HomeActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Activities.HomeActivity"/>
+                android:value=".Activities.HomeActivity" />
         </activity>
         <activity
             android:name=".Activities.ChatActivity"
             android:label="@string/title_activity_chat"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
         </activity>
 
-        <!--<service-->
-        <!--android:name=".Helpers.ChatCalls"-->
-        <!--android:icon="@drawable/bakkle_icon"-->
-        <!--android:label="Chat"-->
-        <!--android:process=":chat">-->
-        <!--</service>-->
+        <!-- <service -->
+        <!-- android:name=".Helpers.ChatCalls" -->
+        <!-- android:icon="@drawable/bakkle_icon" -->
+        <!-- android:label="Chat" -->
+        <!-- android:process=":chat"> -->
+        <!-- </service> -->
 
         <activity
             android:name=".Activities.GarageItemActivity"
             android:label="@string/title_activity_garage_item"
             android:parentActivityName=".Activities.HomeActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.bakkle.bakkle.Activities.HomeActivity"/>
+                android:value="com.bakkle.bakkle.Activities.HomeActivity" />
         </activity>
         <activity
             android:name=".Activities.CameraActivity"
             android:label="@string/title_activity_camera"
             android:parentActivityName=".Activities.AddItemActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.bakkle.bakkle.Activities.AddItemActivity"/>
+                android:value="com.bakkle.bakkle.Activities.AddItemActivity" />
+        </activity>
+
+        <service android:name="com.parse.PushService" />
+
+        <receiver
+            android:name="com.parse.ParsePushBroadcastReceiver"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.parse.push.intent.RECEIVE" />
+                <action android:name="com.parse.push.intent.DELETE" />
+                <action android:name="com.parse.push.intent.OPEN" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.parse.GcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
+                <category android:name="com.bakkle.bakkle" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".Activities.WatchVideo"
+            android:label="@string/title_activity_watch_video"
+            android:parentActivityName=".Activities.ItemDetailActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.bakkle.bakkle.Activities.ItemDetailActivity" />
         </activity>
     </application>
 

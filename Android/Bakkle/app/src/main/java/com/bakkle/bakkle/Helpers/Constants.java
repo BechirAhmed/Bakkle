@@ -55,4 +55,8 @@ public class Constants
     public static final String SHOW_TUORIAL     = "showTutorial";
 
 
+    public static final String APPLICATION_ID = "sxjMPMgXvXLMAGddMk4Zy9U8PKkvGP0N8MzBjiVg";
+    public static final String CLIENT_ID = "Gz8C7dTo72cMDpo4YgUbS6z7JSUl5f4AVgZjBaqO";
+
+
 }

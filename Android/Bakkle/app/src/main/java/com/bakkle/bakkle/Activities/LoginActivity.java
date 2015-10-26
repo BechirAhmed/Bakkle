@@ -43,7 +43,8 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener
     private CallbackManager callbackManager;
     private boolean isResumed = false;
     private AccessTokenTracker accessTokenTracker;
-
+    AlertDialog.Builder builder = null;
+    AlertDialog dialog = null;
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
 
@@ -59,7 +60,119 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener
 
 
         if (!SmartLocation.with(this).location().state().locationServicesEnabled()) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder = new AlertDialog.Builder(this);
+            builder.setTitle("GPS not found");  // GPS not found
+            builder.setMessage("In order for Bakkle to function properly, Location Services need to be enabled. Would like to enable them now?"); // Want to enable?
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener()
+            {
+                public void onClick(DialogInterface dialogInterface, int i)
+                {
+                    startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                }
+            });
+            builder.setNegativeButton("Not right now", null);
+            dialog = builder.create();
+            dialog.show();
+        }
+        else {
+            SmartLocation.with(this).location()
+                    .oneFix()
+                    .start(new OnLocationUpdatedListener()
+                    {
+                        @Override
+                        public void onLocationUpdated(Location location)
+                        {
+                            editor.putString(Constants.LOCATION, location.getLatitude() + "," + location.getLongitude());
+                            editor.putString(Constants.LATITUDE, String.valueOf(location.getLatitude()));
+                            editor.putString(Constants.LONGITUDE, String.valueOf(location.getLongitude()));
+                            editor.apply();
+                        }
+                    });
+
+
+            if (preferences.getBoolean(Constants.LOGGED_IN, false)) {
+
+                Intent intent = new Intent(this, HomeActivity.class);
+                startActivity(intent);
+                //SmartLocation.with(this).location().stop();
+                finish();
+            }
+
+            editor = preferences.edit();
+            editor.putString(Constants.UUID, Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+            editor.apply();
+
+            Log.v("uuid is", preferences.getString(Constants.UUID, "0"));
+            LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>()
+            {
+                private ProfileTracker mProfileTracker;
+
+                @Override
+                public void onSuccess(LoginResult loginResult)
+                {
+                    AccessToken token = loginResult.getAccessToken();
+                    mProfileTracker = new ProfileTracker()
+                    {
+                        @Override
+                        protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile)
+                        {
+                            Profile.setCurrentProfile(currentProfile);
+                            mProfileTracker.stopTracking();
+                        }
+                    };
+
+                    mProfileTracker.startTracking();
+
+                    if (token != null) {
+                        editor.putBoolean("LoggedIn", true);
+                        editor.apply();
+                        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+
+
+                }
+
+                @Override
+                public void onCancel()
+                {
+                    System.out.println("Facebook Canceled");
+                }
+
+                @Override
+                public void onError(FacebookException e)
+                {
+                    System.out.println(e.getMessage());
+                }
+            });
+
+            // Set up custom Action Bar and enable up navigation
+//        getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+//        getActionBar().setCustomView(R.layout.action_bar_title);
+//        getActionBar().setDisplayHomeAsUpEnabled(false);
+//        getActionBar().setDisplayShowHomeEnabled(false);
+//        getActionBar().setHomeButtonEnabled(false);
+
+//        ((TextView)findViewById(R.id.action_bar_title)).setText(R.string.title_activity_sign_in);
+//        ((ImageButton)findViewById(R.id.action_bar_right)).setVisibility(View.INVISIBLE);
+//        ((ImageButton) findViewById(R.id.action_bar_home)).setImageResource(R.drawable.ic_action_cancel);
+//        ((ImageButton) findViewById(R.id.action_bar_home)).setOnClickListener(this);
+
+            // Add on click listeners to buttons
+//        ((Button)findViewById(R.id.btnSignIn)).setOnClickListener(this);
+            ((LoginButton) findViewById(R.id.btnSignInFacebook)).setOnClickListener(this);
+        }
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        if(builder != null && dialog != null)
+            dialog.dismiss();
+        if (!SmartLocation.with(this).location().state().locationServicesEnabled()) {
+            builder = new AlertDialog.Builder(this);
             builder.setTitle("GPS not found");  // GPS not found
             builder.setMessage("In order for Bakkle to function properly, Location Services need to be enabled. Would like to enable them now?"); // Want to enable?
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener()

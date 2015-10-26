@@ -528,8 +528,7 @@ public class CardContainer extends AdapterView<ListAdapter> implements View.OnDr
             final View topCard = mTopCard;
             float dx = e2.getX() - e1.getX();
             float dy = e2.getY() - e1.getY();
-            Log.v("x and y are", mTopCard.getX() + ", " + mTopCard.getY());
-            if ((Math.abs(dx) > mTouchSlop * 4 || Math.abs(dy) > mTouchSlop * 4)  //TODO: Maybe change the value mTouchSlop so that it doesnt fling as easily
+            if ((Math.abs(dx) > mTouchSlop * 4 || Math.abs(dy) > mTouchSlop * 4)  //TODO: Maybe change the value mTouchSlop so that it doesn't fling as easily
                     && (Math.abs(mTopCard.getX()) > 350 || Math.abs(mTopCard.getY()) > 250)
                     && (Math.abs(velocityX) > mFlingSlop * 3 || Math.abs(velocityY) > mFlingSlop * 3)) {
                 float targetX = topCard.getX();

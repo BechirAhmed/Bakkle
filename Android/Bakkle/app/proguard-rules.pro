@@ -18,4 +18,5 @@
 
 -dontwarn lombok.**
 -dontwarn com.sun.**
+-dontwarn io.**
 #-dontwarn **retrofit**

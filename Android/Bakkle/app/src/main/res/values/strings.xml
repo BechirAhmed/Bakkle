@@ -61,6 +61,8 @@
     <string name="title_activity_camera">CameraActivity</string>
     <string name="next">Next</string>
     <string name="share_to_facebook">Share to Facebook?</string>
+    <string name="title_hint">Title</string>
+    <string name="title_activity_watch_video">WatchVideo</string>
 
 
 </resources>
