@@ -85,7 +85,7 @@ public class FeedFragment extends Fragment
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(mActivity);
-
+        editor = preferences.edit();
         serverCalls = new ServerCalls(mActivity);
         mCardContainer = (CardContainer) view.findViewById(R.id.cardView);
         mCardContainer.setOrientation(Orientations.Orientation.Ordered);
@@ -182,6 +182,7 @@ public class FeedFragment extends Fragment
                             preferences.getString(Constants.UUID, "0"),
                             cardModel.getPk(),
                             "42");
+                    Log.v("Pk is ", cardModel.getPk());
                     showSplashScreen(cardModel.getPk(), cardModel.getCardImageURL());
                 }
 

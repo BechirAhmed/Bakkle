@@ -1,10 +1,15 @@
 package com.bakkle.bakkle.Activities;
 
+import android.content.ClipData;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
+import android.graphics.Bitmap;
+import android.media.ThumbnailUtils;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -21,6 +26,14 @@ import com.bakkle.bakkle.Helpers.ServerCalls;
 import com.bakkle.bakkle.R;
 import com.bumptech.glide.Glide;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 
 
@@ -38,9 +51,13 @@ public class ItemDetailActivity extends AppCompatActivity
     String            seller;
     String            distance;
     String            pk;
+    String            videoFilepath;
     boolean           garage;
     ServerCalls       serverCalls;
     SharedPreferences preferences;
+    RelativeLayout relativeLayout;
+    RelativeLayout.LayoutParams layoutParams;
+    //ProgressBar bar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -63,14 +80,18 @@ public class ItemDetailActivity extends AppCompatActivity
         sellerImageUrl = intent.getStringExtra(Constants.SELLER_IMAGE_URL);
         imageURLs = intent.getStringArrayListExtra(Constants.IMAGE_URLS);
         parent = intent.getStringExtra(Constants.PARENT);
+        relativeLayout = (RelativeLayout) findViewById(R.id.imageCollection);
+        layoutParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.MATCH_PARENT);
         if (imageURLs != null) {
             for (String url : imageURLs) {
-                Log.v("test", "url is " + url);
                 loadPictureIntoView(url);
             }
         }
         else {
-            Log.v("test", "imageURLs was null");
+            //https://dansimpsonpoet.files.wordpress.com/2014/04/image-not-found.png?w=1000
+            loadPictureIntoView("http://camaleon.tuzitio.com/assets/image-not-found-4a963b95bf081c3ea02923dceaeb3f8085e1a654fc54840aac61a57a60903fef.png");
         }
 
         ((TextView) findViewById(R.id.seller)).setText(seller);
@@ -114,10 +135,6 @@ public class ItemDetailActivity extends AppCompatActivity
 
     public void loadPictureIntoView(String url)
     {
-        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.imageCollection);
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.MATCH_PARENT,
-                RelativeLayout.LayoutParams.MATCH_PARENT);
 
         if (!url.endsWith("mp4")) {
             ImageView imageView = new ImageView(this);
@@ -143,26 +160,73 @@ public class ItemDetailActivity extends AppCompatActivity
                     .into(imageView);
             productPictureViews.add(imageView);
         }
-        else { //TODO: Download and display video
-            try {
-                Uri uri = Uri.parse(url); //Declare your url here.
+        else { //TODO: Display video
+            new DownloadVideo().execute(url);
+            File f = null;
+            Bitmap bmp = ThumbnailUtils.createVideoThumbnail(videoFilepath, MediaStore.Images.Thumbnails.MINI_KIND);
+            String videoFileName = "Bakkle_" + pk + "_";
+            File storageDir = Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_MOVIES);
+            try { //TODO: do not redownload file if it already exists
+                f = File.createTempFile(
+                        videoFileName,  /* prefix */
+                        ".mp4",         /* suffix */
+                        storageDir      /* directory */
+                );
+            }
+            catch (Exception e)
+            {
 
-                VideoView mVideoView = new VideoView(this);
-                mVideoView.setId(productPictureViews.size() + 1);
+            }
+            FileOutputStream out = null;
+            try {
+                out = new FileOutputStream(f);
+                bmp.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+                // PNG is a lossless format, the compression factor (100) is ignored
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (out != null) {
+                        out.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            ImageView imageView = new ImageView(this);
+            imageView.setId(productPictureViews.size() + 1);
+
+            if (imageView.getId() != 1) {
                 ImageView previous = (ImageView) productPictureViews.get(productPictureViews.size() - 1);
                 layoutParams.addRule(RelativeLayout.RIGHT_OF, previous.getId());
-                mVideoView.setPadding(10, 0, 0, 0);
-                mVideoView.setLayoutParams(layoutParams);
+                imageView.setPadding(10, 0, 0, 0);
+            }
 
-                mVideoView.setMediaController(new MediaController(this));
-                mVideoView.setVideoURI(uri);
-                mVideoView.requestFocus();
-                mVideoView.start();
-            }
-            catch (Exception e) {
-            }
+            imageView.setLayoutParams(layoutParams);
+            imageView.setAdjustViewBounds(true);
+            imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            imageView.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    Intent intent = new Intent(ItemDetailActivity.this, WatchVideo.class);
+                    intent.putExtra("filepath", videoFilepath);
+                    startActivity(intent);
+                }
+            });
+            relativeLayout.addView(imageView);
+
+            Glide.with(this)
+                    .load(f)
+                    .fitCenter()
+                    .crossFade()
+                    .placeholder(R.drawable.loading)
+                    .into(imageView);
+            productPictureViews.add(imageView);
         }
-
 
     }
 
@@ -185,4 +249,109 @@ public class ItemDetailActivity extends AppCompatActivity
     {
         finish();
     }
+
+
+    private class DownloadVideo extends AsyncTask<String, String, String>
+    {
+        @Override
+        protected void onPreExecute()
+        {
+            //bar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected String doInBackground(String... f_url)
+        {
+            int count;
+            File f = null;
+            try {
+                URL url = new URL(f_url[0]);
+                URLConnection connection = url.openConnection();
+                connection.connect();
+
+                // this will be useful so that you can show a typical 0-100%
+                // progress bar
+                int lengthOfFile = connection.getContentLength();
+
+                // download the file
+                InputStream input = new BufferedInputStream(url.openStream()); //add lengthOfFile as parameter
+
+                // Output stream
+                String videoFileName = "Bakkle_" + pk + "_";
+                File storageDir = Environment.getExternalStoragePublicDirectory(
+                        Environment.DIRECTORY_MOVIES);
+                try { //TODO: do not redownload file if it already exists
+                    f = File.createTempFile(
+                            videoFileName,  /* prefix */
+                            ".mp4",         /* suffix */
+                            storageDir      /* directory */
+                    );
+                }
+                catch (Exception e)
+                {
+
+                }
+                OutputStream output = new FileOutputStream(f);
+
+                byte data[] = new byte[1024];
+
+                long total = 0;
+
+                while ((count = input.read(data)) != -1) {
+                    total += count;
+                    // publishing the progress....
+                    // After this onProgressUpdate will be called
+                    //publishProgress("" + (int) ((total * 100) / lengthOfFile));
+
+                    // writing data to file
+                    output.write(data, 0, count);
+                }
+
+                // flushing output
+                output.flush();
+
+                // closing streams
+                output.close();
+                input.close();
+
+            } catch (Exception e) {
+                Log.e("Error: ", e.getMessage());
+            }
+            videoFilepath = f.getPath();
+            return videoFilepath;
+        }
+
+
+        @Override
+        protected void onPostExecute(String file_url)
+        {
+            //bar.setVisibility(View.GONE);
+            //Uri uri = Uri.parse(file_url); //Declare your url here.
+
+//                bar = new ProgressBar(this);
+//                RelativeLayout.LayoutParams barParams = new RelativeLayout.LayoutParams(
+//                        RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            MediaController vidControl = new MediaController(ItemDetailActivity.this);
+            VideoView mVideoView = new VideoView(ItemDetailActivity.this);
+            mVideoView.setId(productPictureViews.size() + 1);
+
+            ImageView previous = (ImageView) productPictureViews.get(productPictureViews.size() - 1);
+
+            //barParams.addRule(RelativeLayout.RIGHT_OF, previous.getId());
+
+
+            layoutParams.addRule(RelativeLayout.RIGHT_OF, previous.getId());
+            mVideoView.setPadding(10, 0, 0, 0);
+            mVideoView.setLayoutParams(layoutParams);
+
+//            mVideoView.setMediaController(new MediaController(ItemDetailActivity.this));
+  //          mVideoView.requestFocus();
+            mVideoView.setVideoPath(file_url);
+            vidControl.setAnchorView(mVideoView);
+            mVideoView.setMediaController(vidControl);
+            mVideoView.start();
+        }
+    }
+
+
 }
