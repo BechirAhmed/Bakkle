@@ -4,7 +4,7 @@
         <item>@string/title_activity_home</item>
         <item>@string/title_activity_sellers_garage</item>
         <item>@string/title_activity_buyers_trunk</item>
-        <item>@string/title_activity_holding_pattern</item>
+        <item>@string/title_activity_watchlist</item>
     </string-array>
     <string-array name="drawer_icons">
         <item>@drawable/ic_home</item>

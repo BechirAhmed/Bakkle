@@ -26,7 +26,7 @@ import android.widget.Toast;
 import com.bakkle.bakkle.Fragments.BuyersTrunkFragment;
 import com.bakkle.bakkle.Fragments.DemoOptionsFragment;
 import com.bakkle.bakkle.Fragments.FeedFragment;
-import com.bakkle.bakkle.Fragments.HoldingPatternFragment;
+import com.bakkle.bakkle.Fragments.WatchListFragment;
 import com.bakkle.bakkle.Fragments.ProfileFragment;
 import com.bakkle.bakkle.Fragments.RefineFragment;
 import com.bakkle.bakkle.Fragments.SellersGarageFragment;
@@ -56,7 +56,7 @@ import java.util.Arrays;
 
 
 public class HomeActivity extends AppCompatActivity implements SellersGarageFragment.OnFragmentInteractionListener,
-        BuyersTrunkFragment.OnFragmentInteractionListener, HoldingPatternFragment.OnFragmentInteractionListener,
+        BuyersTrunkFragment.OnFragmentInteractionListener, WatchListFragment.OnFragmentInteractionListener,
         RefineFragment.OnFragmentInteractionListener, SplashFragment.OnFragmentInteractionListener
 {
     private ArrayList<String> mDrawerItems;
@@ -227,7 +227,7 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
                                 break;
                             case 3:
                                 getFragmentManager().beginTransaction().replace(R.id.content_frame,
-                                        new HoldingPatternFragment()).addToBackStack(null).
+                                        new WatchListFragment()).addToBackStack(null).
                                         setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
                                 invalidateOptionsMenu();
                                 break;

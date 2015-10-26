@@ -28,7 +28,7 @@ import java.util.Arrays;
  * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
  * interface.
  */
-public class HoldingPatternFragment extends ListFragment {
+public class WatchListFragment extends ListFragment {
 
     SharedPreferences preferences;
     Activity mActivity;
@@ -42,7 +42,7 @@ public class HoldingPatternFragment extends ListFragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public HoldingPatternFragment() {}
+    public WatchListFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

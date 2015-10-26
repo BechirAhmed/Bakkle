@@ -48,7 +48,7 @@ public class HoldingAdapter extends ArrayAdapter<FeedItem>{
         final ViewHolder viewHolder;
         if(convertView == null){
             viewHolder = new ViewHolder();
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.holding_pattern_list_item, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.watchlist_list_item, parent, false);
             viewHolder.icon = (ImageView) convertView.findViewById(R.id.icon);
             viewHolder.title = (TextView) convertView.findViewById(R.id.title);
             viewHolder.method = (TextView) convertView.findViewById(R.id.method);
