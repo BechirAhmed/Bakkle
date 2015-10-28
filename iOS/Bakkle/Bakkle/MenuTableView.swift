@@ -119,11 +119,18 @@ class MenuTableController: UITableViewController {
         }
     }
     
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if Bakkle.developerTools {
+            return 5
+        }
+        return 6
+    }
+    
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         if indexPath.row == 0 {
             return 177
         }
-        if (indexPath.row == 2 && Bakkle.sharedInstance.flavor == Bakkle.GOODWILL) || (indexPath.row == 6 && !Bakkle.developerTools) {
+        if (indexPath.row == 2 && Bakkle.sharedInstance.flavor == Bakkle.GOODWILL) {
             return 0
         }
         return 60

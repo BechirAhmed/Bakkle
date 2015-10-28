@@ -419,16 +419,16 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             view.imageView.hnk_setImageFromURL(imgURL!)
             view.imageView.contentMode = UIViewContentMode.ScaleAspectFill
             view.profileImg.image = Bakkle.sharedInstance.flavor == Bakkle.GOODWILL ? UIImage(named: "gwIcon@2x.png") : UIImage(data: NSData(contentsOfURL: profileImgURL!)!)
-        }
-        
-        if view == self.swipeView {
-            if self.swipeView.imageView.image == nil {
-                self.swipeView.imageView.image = UIImage(named: "loading.png")
-                self.swipeView.userInteractionEnabled = false
-            }else if imgURL != nil {
+            if (view == self.swipeView){
                 self.swipeView.userInteractionEnabled = true
             }
-        }else if view == self.bottomView {
+        }
+        
+        
+        if self.swipeView.imageView.image == nil {
+            self.swipeView.imageView.image = UIImage(named: "loading.png")
+        }
+        if view == self.bottomView {
             self.bottomView.userInteractionEnabled = false
         }
     }
