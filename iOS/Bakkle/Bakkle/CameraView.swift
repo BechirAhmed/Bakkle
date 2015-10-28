@@ -185,6 +185,13 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
                 }
             }
         }
+        
+        var model = UIDevice.currentDevice().model
+        if model == "iPad" {
+            self.cameraView.addConstraint(NSLayoutConstraint(item: self.cameraView, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: self.cameraView, attribute: NSLayoutAttribute.Height, multiplier: 1.15, constant: 0.0))
+        } else{
+            self.cameraView.addConstraint(NSLayoutConstraint(item: self.cameraView, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: self.cameraView, attribute: NSLayoutAttribute.Width, multiplier: 1.0, constant: 0.0))
+        }
     }
     
     // Make any aesthetic UI changes (corner rounding, etc) and setup AVFoundation
@@ -460,7 +467,9 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         
         // Create the preview layer, and add it to the screen
         capturePreview = AVCaptureVideoPreviewLayer(session: captureSession!)
-        capturePreview?.frame = CGRectMake(0, 0, cameraView.layer.frame.width, cameraView.layer.frame.height)
+        var startPoint = (cameraView.layer.frame.width - cameraView.layer.frame.height ) / 2
+        capturePreview?.frame = CGRectMake(startPoint, 0, cameraView.layer.frame.height, cameraView.layer.frame.height)
+        
         capturePreview?.videoGravity = AVLayerVideoGravityResizeAspectFill
         self.cameraView.layer.insertSublayer(capturePreview, below: self.flashView.layer)
         

@@ -31,6 +31,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         UIApplication.sharedApplication().statusBarStyle = .LightContent
         
+        UIApplication.sharedApplication().applicationIconBadgeNumber = 0
+        
         if let userInfo = launchOptions?[UIApplicationLaunchOptionsRemoteNotificationKey] as? [NSObject : AnyObject] {
             Bakkle.sharedInstance.userInfo = userInfo
         }
