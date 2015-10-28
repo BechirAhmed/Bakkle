@@ -110,9 +110,7 @@ class ProfileView: UIViewController, UITextViewDelegate {
     
     @IBAction func btnLogout(sender: AnyObject) {
         Bakkle.sharedInstance.logout()
-        self.revealViewController().dismissViewControllerAnimated(true, completion: { () -> Void in
-            //
-        })
+        self.navigationController?.popToRootViewControllerAnimated(true)
     }
     
     @IBAction func btnEdit(sender: AnyObject) {

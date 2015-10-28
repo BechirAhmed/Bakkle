@@ -31,8 +31,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         UIApplication.sharedApplication().statusBarStyle = .LightContent
         
-        UIApplication.sharedApplication().applicationIconBadgeNumber = 0
-        
         if let userInfo = launchOptions?[UIApplicationLaunchOptionsRemoteNotificationKey] as? [NSObject : AnyObject] {
             Bakkle.sharedInstance.userInfo = userInfo
         }
@@ -100,6 +98,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         /* DO nothing on failure */
     }
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
+        
+        UIApplication.sharedApplication().applicationIconBadgeNumber = 0
 
         if application.applicationState == UIApplicationState.Active {
             var localNotification: UILocalNotification = UILocalNotification()
