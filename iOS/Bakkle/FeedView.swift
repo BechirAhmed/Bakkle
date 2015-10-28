@@ -64,6 +64,57 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if ((Bakkle.sharedInstance.userInfo) != nil){
+            UIApplication.sharedApplication().applicationIconBadgeNumber = 0
+            var userInfo = Bakkle.sharedInstance.userInfo
+            Bakkle.sharedInstance.userInfo = nil
+            if let chat_id = userInfo["chat_id"] as? Int {
+                let item_id = userInfo["item_id"] as? Int
+                let seller_id = userInfo["seller_id"] as? Int
+                let buyer_id = userInfo["buyer_id"] as? Int
+                if seller_id == Bakkle.sharedInstance.account_id {
+                    // user is a seller
+                    Bakkle.sharedInstance.getAccount(buyer_id as NSInteger!, success: { () -> () in
+                        let account = (Bakkle.sharedInstance.responseDict as NSDictionary!).valueForKey("account") as! NSDictionary
+                        let name = account.valueForKey("display_name") as! String
+                        let buyer = User(facebookID: account.valueForKey("facebook_id") as! String, accountID: buyer_id!, firstName: name, lastName: name)
+                        var chatItem: NSDictionary? = nil
+                        for index in 0...Bakkle.sharedInstance.garageItems.count-1 {
+                            if Bakkle.sharedInstance.garageItems[index].valueForKey("pk") as? Int == item_id {
+                                chatItem = Bakkle.sharedInstance.garageItems[index] as? NSDictionary
+                            }
+                        }
+                        let buyerChat = Chat(user: buyer, lastMessageText: "", lastMessageSentDate: NSDate(), chatId: chat_id)
+                        let chatViewController = ChatViewController(chat: buyerChat)
+                        chatViewController.item = chatItem
+                        chatViewController.seller = chatItem!.valueForKey("seller") as! NSDictionary
+                        chatViewController.isBuyer = false
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            self.navigationController!.pushViewController(chatViewController, animated: true)
+                        })
+                        
+                        }, fail: { () -> () in
+                    })
+                }else if buyer_id == Bakkle.sharedInstance.account_id {
+                    // user is a buyer
+                    let buyer = User(facebookID: Bakkle.sharedInstance.facebook_id_str,accountID: Bakkle.sharedInstance.account_id,
+                        firstName: Bakkle.sharedInstance.first_name, lastName: Bakkle.sharedInstance.last_name)
+                    var chatItem: NSDictionary? = nil
+                    for index in 0...Bakkle.sharedInstance.trunkItems.count-1 {
+                        if (Bakkle.sharedInstance.trunkItems[index].valueForKey("item") as! NSDictionary).valueForKey("pk") as? Int == item_id {
+                            chatItem = Bakkle.sharedInstance.trunkItems[index].valueForKey("item") as? NSDictionary
+                        }
+                    }
+                    let buyerChat = Chat(user: buyer, lastMessageText: "", lastMessageSentDate: NSDate(), chatId: chat_id)
+                    let chatViewController = ChatViewController(chat: buyerChat)
+                    chatViewController.item = chatItem
+                    chatViewController.seller = chatItem!.valueForKey("seller") as! NSDictionary
+                    chatViewController.isBuyer = true
+                    self.navigationController!.pushViewController(chatViewController, animated: true)
+                }
+            }
+        }
+        
         model = UIDevice.currentDevice().model
         
         if(Bakkle.sharedInstance.flavor == Bakkle.GOODWILL){
