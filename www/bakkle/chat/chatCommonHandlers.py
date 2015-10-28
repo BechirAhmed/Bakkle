@@ -76,7 +76,7 @@ def sendChatMessage(clients, chatId, senderId, message, offerPrice, offerMethod)
             except ValueError:
                 return {"status": 0, "error": "Price was not a valid decimal."}
 
-            Offer.objects.filter(item=chat.ite m).filter(status='Active').filter(
+            Offer.objects.filter(item=chat.item).filter(status='Active').filter(
                 sent_by_buyer=sentByBuyer).update(status='Retracted')
 
             offer = Offer.objects.create(
@@ -115,7 +115,7 @@ def sendChatMessage(clients, chatId, senderId, message, offerPrice, offerMethod)
         device.send_notification(
             message,
             sellerNumUnreadChats,
-            {'chat_id': chatId, 'item_id':chat.item , 'seller_id'chat.item.seller: , 'buyer_id':chat.buyer})
+            {'chat_id': chatId, 'item_id':chat.item, 'seller_id':chat.item.seller , 'buyer_id':chat.buyer})
 
     devices = Device.objects.filter(account_id=chat.buyer)
     buyerNumUnreadChats = getNumUnreadChatsForAccount(chat.item.seller.pk)
@@ -123,7 +123,7 @@ def sendChatMessage(clients, chatId, senderId, message, offerPrice, offerMethod)
         device.send_notification(
             message,
             buyerNumUnreadChats,
-            {'chat_id': chatId, 'item_id': chat.item, 'seller_id':chat.item.seller, 'buyer_id':chat.buyer})
+            {'chat_id': chatId, 'item_id':chat.item, 'seller_id':chat.item.seller , 'buyer_id':chat.buyer})
 
     if(message is not None and message != ""):
         if(chat.item.seller.pk in clients):

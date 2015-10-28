@@ -124,6 +124,6 @@ if __name__ == "__main__":
     tornado.options.parse_command_line()
     # os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'bakkle.settings')
     django.setup()
-
+    print("starting server")
     app.listen(8000)
     ioloop.IOLoop.instance().start()
