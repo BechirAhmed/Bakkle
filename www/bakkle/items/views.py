@@ -137,17 +137,19 @@ def add_item(request):
     location = request.GET.get('location')
     seller_id = auth_token.split('_')[1]
     price = request.GET.get('price')
-    tags = request.GET.get('tags',"")
-    method = request.GET.get('method')
+    # tags and method don't exist anymore
+    # tags = request.GET.get('tags',"")
+    # method = request.GET.get('method')
     notifyFlag = request.GET.get('notify')
 
     # Get the item id if present (If it is present an item will be edited not added)
     item_id = request.GET.get('item_id', "")
 
-    # Ensure that required fields are present otherwise send back a failed status
-    if (title == None or title == "") or (tags == None or tags == "") or (price == None or price == "") or (method == None or method == ""):
-        response_data = { "status":0, "error": "A required parameter was not provided." }
-        return HttpResponse(json.dumps(response_data), content_type="application/json")
+    # title, description and price are not required any more
+    # Ensure that required fields are present otherwise send back a failed status 
+    # if (title == None or title == "") or (tags == None or tags == "") or (price == None or price == "") or (method == None or method == ""):
+    #     response_data = { "status":0, "error": "A required parameter was not provided." }
+    #     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
     # Ensure that the price can be converted to a decimal otherwise send back a failed status
     try:
