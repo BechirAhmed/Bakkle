@@ -95,6 +95,19 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         refreshControl.addTarget(self, action: Selector("refreshChats"), forControlEvents: UIControlEvents.ValueChanged)
         self.tableView.addSubview(refreshControl)
+        
+        let notificationCenter = NSNotificationCenter.defaultCenter()
+        let mainQueue = NSOperationQueue.mainQueue()
+        var observer = notificationCenter.addObserverForName(Bakkle.bkAppBecameActive, object: nil, queue: mainQueue) { _ in
+            self.appBecameActive()
+        }
+        UIApplication.sharedApplication().applicationIconBadgeNumber = 0
+    }
+    
+    func appBecameActive() {
+        self.tableView.reloadData()
+        
+        UIApplication.sharedApplication().applicationIconBadgeNumber = 0
     }
     
     func refreshChats() {
@@ -155,6 +168,11 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
     override func viewDidAppear(animated: Bool)  {
         super.viewDidAppear(animated)
         tableView.flashScrollIndicators()
+    }
+    
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

@@ -39,6 +39,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     static let bkTrunkUpdate    = "com.bakkle.trunkUpdate"
     static let bkHoldingUpdate  = "com.bakkle.holdingUpdate"
     static let bkFilterChanged  = "com.bakkle.filterChanged"
+    static let bkAppBecameActive = "com.bakkle.appBecameActive"
     
     // DO NOT ENABLE if there is no way to select servers from settings file.
     static let developerTools   = false

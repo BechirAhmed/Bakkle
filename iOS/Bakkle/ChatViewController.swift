@@ -151,6 +151,18 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         self.tableView.addSubview(refreshControl)
         
         self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "dismissKeyboard"))
+        
+        let mainQueue = NSOperationQueue.mainQueue()
+        var observer = notificationCenter.addObserverForName(Bakkle.bkAppBecameActive, object: nil, queue: mainQueue) { _ in
+            self.appBecameActive()
+        }
+        
+        UIApplication.sharedApplication().applicationIconBadgeNumber = 0
+    }
+    
+    func appBecameActive() {
+        UIApplication.sharedApplication().applicationIconBadgeNumber = 0
+        self.tableView.reloadData()
     }
     
     deinit {
@@ -188,6 +200,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     override func viewWillDisappear(animated: Bool)  {
         super.viewWillDisappear(animated)
         chat.draft = textView.text
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
     // This gets called a lot. Perhaps there's a better way to know when `view.window` has been set?
