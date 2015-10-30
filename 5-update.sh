@@ -63,4 +63,4 @@ sudo rm -f /etc/init.d/bakkle*
 sudo install -m 755      ./etc/init.d/bakkle /etc/init.d/bakkle
 sudo update-rc.d bakkle defaults
 sudo service bakkle start
-sudo tail -f $BAKKLE_LOG_FILE
+#sudo tail -f $BAKKLE_LOG_FILE
