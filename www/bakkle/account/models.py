@@ -100,6 +100,5 @@ class Device(models.Model):
         dt = self.apns_token.replace(' ', '').replace('<', '').replace('>', '')
         if (dt is None or dt == ""):
             return
-        print("notifying {} token {}".format(self.account_id, dt))
-        sendPushMessage(self.account_id.app_flavor, dt, message, badge, sound,custom)
+        sendPushMessage(self.account_id.app_flavor, dt, message, 1, sound,custom)
         # TODO: Log this to db so we know what we did.
