@@ -115,7 +115,7 @@ static CGFloat const MDCSwipeToChooseViewLabelHeight = 65.f;
 }
 
 - (void)constructImageView {
-    CGFloat yCoordinate = 0;
+    CGFloat yCoordinate = (self.bounds.size.height - self.bounds.size.width)/2;
     if (!_ipad) {
         yCoordinate = (self.bounds.size.height - self.bounds.size.width)/2;
     }
@@ -133,7 +133,7 @@ static CGFloat const MDCSwipeToChooseViewLabelHeight = 65.f;
 }
 
 - (void)constructInformationView {
-    CGFloat bottomHeight = self.bounds.size.height - self.bounds.size.width;
+    CGFloat bottomHeight = (self.bounds.size.height - self.bounds.size.width);
     if (!_ipad){
         bottomHeight = (self.bounds.size.height - self.bounds.size.width)/2;
     }
@@ -149,6 +149,10 @@ static CGFloat const MDCSwipeToChooseViewLabelHeight = 65.f;
     _informationView.autoresizingMask = UIViewAutoresizingFlexibleWidth |
     UIViewAutoresizingFlexibleTopMargin;
     
+    if (_ipad) {
+        [self addBlur:self.informationView];
+    }
+    
     [self addSubview:_informationView];
     
     [self constructNameLabel];
@@ -156,7 +160,7 @@ static CGFloat const MDCSwipeToChooseViewLabelHeight = 65.f;
 }
 
 -(void)constructTopUserInfoView {
-    CGFloat topHeight = 0;
+    CGFloat topHeight = (self.bounds.size.height - self.bounds.size.width);
     if (!_ipad){
         topHeight = (self.bounds.size.height - self.bounds.size.width)/2;
     }
@@ -169,15 +173,30 @@ static CGFloat const MDCSwipeToChooseViewLabelHeight = 65.f;
     
     [self addSubview:_topUserInfoView];
     
+    if (_ipad) {
+        [self addBlur:self.topUserInfoView];
+    }
+    
     [self constructUserProfileImg];
     [self constructSellersName];
     //[self constructRatingView];
     
 }
 
+-(void)addBlur:(UIView *) view {
+    UIVisualEffect *blur = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+    UIVisualEffectView *effectView = [[UIVisualEffectView alloc] initWithEffect:blur];
+    UIImageView *bottomBlurImg = [[UIImageView alloc] initWithFrame:view.bounds];
+    effectView.frame = bottomBlurImg.bounds;
+    [bottomBlurImg setContentMode:UIViewContentModeScaleAspectFill];
+    bottomBlurImg.clipsToBounds = YES;
+    [bottomBlurImg addSubview:effectView];
+    [view addSubview:bottomBlurImg];
+}
+
 -(void)constructUserProfileImg {
     CGFloat leftPadding = 11.f;
-    CGRect frame = CGRectMake(leftPadding, 0, 40, 40);
+    CGRect frame = CGRectMake(leftPadding, 0, 30, 30);
     _profileImg = [[UIImageView alloc] initWithFrame:frame];
     _profileImg.center = CGPointMake(leftPadding+20, CGRectGetHeight(_topUserInfoView.frame)/2);
     _profileImg.layer.cornerRadius = _profileImg.frame.size.width/2;
