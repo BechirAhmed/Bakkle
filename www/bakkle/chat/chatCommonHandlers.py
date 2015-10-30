@@ -110,20 +110,24 @@ def sendChatMessage(clients, chatId, senderId, message, offerPrice, offerMethod)
 
     devices = Device.objects.filter(account_id=chat.item.seller)
     sellerNumUnreadChats = getNumUnreadChatsForAccount(chat.item.seller.pk)
-
     for device in devices:
         device.send_notification(
             message,
             sellerNumUnreadChats,
-            {'chat_id': chatId, 'item_id':chat.item, 'seller_id':chat.item.seller , 'buyer_id':chat.buyer})
+            "Bakkle_Notification_new.m4r",
+            {'chat_id': chat.id, 'item_id':chat.item.id, 'seller_id':chat.item.seller.id, 'buyer_id':chat.buyer.id})
+        
 
     devices = Device.objects.filter(account_id=chat.buyer)
-    buyerNumUnreadChats = getNumUnreadChatsForAccount(chat.item.seller.pk)
+    buyerNumUnreadChats = getNumUnreadChatsForAccount(chat.buyer.pk)
+
     for device in devices:
         device.send_notification(
             message,
             buyerNumUnreadChats,
-            {'chat_id': chatId, 'item_id':chat.item, 'seller_id':chat.item.seller , 'buyer_id':chat.buyer})
+            "Bakkle_Notification_new.m4r",
+            {'chat_id': chat.id, 'item_id':chat.item.id, 'seller_id':chat.item.seller.id, 'buyer_id':chat.buyer.id})
+
 
     if(message is not None and message != ""):
         if(chat.item.seller.pk in clients):
