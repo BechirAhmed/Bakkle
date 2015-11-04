@@ -71,6 +71,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     var first_name: String!
     var last_name: String!
     var profileImgURL: NSURL!
+    var isGuest: Bool = true
     
     var feedItems: [NSObject]!
     var garageItems: [NSObject]!
@@ -423,8 +424,8 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             let responseString = NSString(data: data, encoding: NSUTF8StringEncoding)
             println("Response: \(responseString)")
             
-            self.auth_token = ""
-            self.account_id = 0
+            self.auth_token = nil
+            self.account_id = nil
         }
         task.resume()
     }

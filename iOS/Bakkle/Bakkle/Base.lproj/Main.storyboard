@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="10m-Jb-r3R">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="CRb-vL-jlS">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
@@ -11,7 +11,7 @@
         <!--Login View-->
         <scene sceneID="ufC-wZ-h7g">
             <objects>
-                <viewController id="vXZ-lx-hvc" customClass="LoginView" customModule="Bakkle" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="loginView" id="vXZ-lx-hvc" customClass="LoginView" customModule="Bakkle" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="jyV-Pf-zRb"/>
                         <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
@@ -67,8 +67,8 @@
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <animations/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="230" id="YNI-RK-Reo"/>
-                                    <constraint firstAttribute="height" constant="40" id="jGY-iD-6n4"/>
+                                    <constraint firstAttribute="width" constant="230" placeholder="YES" id="YNI-RK-Reo"/>
+                                    <constraint firstAttribute="height" constant="40" placeholder="YES" id="jGY-iD-6n4"/>
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
@@ -167,12 +167,11 @@
                         <outlet property="logoImageView" destination="A3C-sg-V8F" id="paZ-R5-rLh"/>
                         <outlet property="logoImageViewAspectRatio" destination="7hl-Cc-pmE" id="Tgv-Xe-xQI"/>
                         <outlet property="signUpLabel" destination="vxf-aK-VXy" id="5Jx-zd-w3W"/>
-                        <segue destination="nJL-RM-6Db" kind="show" identifier="PushToFeedSegue" id="zhM-P9-5wu"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1800" y="1827.75"/>
+            <point key="canvasLocation" x="-2625" y="1818"/>
         </scene>
         <!--Feed View-->
         <scene sceneID="ZC6-XV-s1s">
@@ -430,7 +429,7 @@
                                             </mask>
                                         </variation>
                                         <connections>
-                                            <segue destination="Tk1-Fv-owu" kind="presentation" id="zsR-Bp-dYb"/>
+                                            <action selector="loginCheck:" destination="dzt-bR-uoN" eventType="touchUpInside" id="qgQ-ap-fK8"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -731,14 +730,14 @@
                                         <exclude reference="HW5-kf-R7E"/>
                                     </mask>
                                     <mask key="constraints">
-                                        <exclude reference="2UF-ST-H8d"/>
-                                        <exclude reference="XgK-Ng-Htc"/>
-                                        <exclude reference="k0b-gT-TDW"/>
-                                        <exclude reference="ld5-Hc-XqL"/>
                                         <exclude reference="Nh0-ob-H8a"/>
                                         <exclude reference="ZpT-aW-9V0"/>
                                         <exclude reference="bte-by-GNf"/>
                                         <exclude reference="jtM-wN-URo"/>
+                                        <exclude reference="2UF-ST-H8d"/>
+                                        <exclude reference="XgK-Ng-Htc"/>
+                                        <exclude reference="k0b-gT-TDW"/>
+                                        <exclude reference="ld5-Hc-XqL"/>
                                         <exclude reference="DCR-tg-pHd"/>
                                         <exclude reference="MUX-zC-jZo"/>
                                         <exclude reference="RXt-rj-kiB"/>
@@ -752,14 +751,14 @@
                                         <include reference="HW5-kf-R7E"/>
                                     </mask>
                                     <mask key="constraints">
-                                        <include reference="2UF-ST-H8d"/>
-                                        <include reference="XgK-Ng-Htc"/>
-                                        <include reference="k0b-gT-TDW"/>
-                                        <include reference="ld5-Hc-XqL"/>
                                         <include reference="Nh0-ob-H8a"/>
                                         <include reference="ZpT-aW-9V0"/>
                                         <include reference="bte-by-GNf"/>
                                         <include reference="jtM-wN-URo"/>
+                                        <include reference="2UF-ST-H8d"/>
+                                        <include reference="XgK-Ng-Htc"/>
+                                        <include reference="k0b-gT-TDW"/>
+                                        <include reference="ld5-Hc-XqL"/>
                                         <include reference="DCR-tg-pHd"/>
                                         <include reference="MUX-zC-jZo"/>
                                         <include reference="RXt-rj-kiB"/>
@@ -3467,18 +3466,18 @@
                                     </mask>
                                     <mask key="constraints">
                                         <exclude reference="2b6-CC-CLE"/>
-                                        <exclude reference="EK5-iR-V4A"/>
-                                        <exclude reference="bT6-a4-6vF"/>
-                                        <exclude reference="dqX-KL-lQR"/>
-                                        <exclude reference="uU1-zs-Sam"/>
+                                        <exclude reference="Bgb-eH-Wf5"/>
+                                        <exclude reference="TBR-Gf-7pI"/>
                                         <exclude reference="4SH-2Q-84e"/>
                                         <exclude reference="MCL-BE-JzV"/>
                                         <exclude reference="dfE-HZ-cvp"/>
                                         <exclude reference="jZ7-MJ-wMu"/>
                                         <exclude reference="ucP-uW-6hZ"/>
                                         <exclude reference="yng-Rs-Rac"/>
-                                        <exclude reference="Bgb-eH-Wf5"/>
-                                        <exclude reference="TBR-Gf-7pI"/>
+                                        <exclude reference="EK5-iR-V4A"/>
+                                        <exclude reference="bT6-a4-6vF"/>
+                                        <exclude reference="dqX-KL-lQR"/>
+                                        <exclude reference="uU1-zs-Sam"/>
                                     </mask>
                                 </variation>
                                 <variation key="heightClass=regular-widthClass=compact">
@@ -3489,18 +3488,18 @@
                                     </mask>
                                     <mask key="constraints">
                                         <include reference="2b6-CC-CLE"/>
-                                        <include reference="EK5-iR-V4A"/>
-                                        <include reference="bT6-a4-6vF"/>
-                                        <include reference="dqX-KL-lQR"/>
-                                        <include reference="uU1-zs-Sam"/>
+                                        <include reference="Bgb-eH-Wf5"/>
+                                        <include reference="TBR-Gf-7pI"/>
                                         <exclude reference="4SH-2Q-84e"/>
                                         <exclude reference="MCL-BE-JzV"/>
                                         <include reference="dfE-HZ-cvp"/>
                                         <exclude reference="jZ7-MJ-wMu"/>
                                         <include reference="ucP-uW-6hZ"/>
                                         <include reference="yng-Rs-Rac"/>
-                                        <include reference="Bgb-eH-Wf5"/>
-                                        <include reference="TBR-Gf-7pI"/>
+                                        <include reference="EK5-iR-V4A"/>
+                                        <include reference="bT6-a4-6vF"/>
+                                        <include reference="dqX-KL-lQR"/>
+                                        <include reference="uU1-zs-Sam"/>
                                     </mask>
                                 </variation>
                                 <connections>
@@ -4361,6 +4360,7 @@
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <navigationItem key="navigationItem" id="QFR-h9-eyW"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <segue destination="aNC-04-Ly5" kind="custom" identifier="sw_front" customClass="SWRevealViewControllerSegueSetController" id="lk1-fc-YGc"/>
@@ -4369,7 +4369,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bYI-MA-clg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1114.5" y="1827.75"/>
+            <point key="canvasLocation" x="-1245" y="1824"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="2IF-mK-ott">
@@ -5009,7 +5009,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Nqw-pa-qWQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="672.75" y="1800.375"/>
+            <point key="canvasLocation" x="1470.75" y="1800.375"/>
         </scene>
         <!--SELLER'S GARAGE-->
         <scene sceneID="67G-PQ-Tsp">
@@ -5249,6 +5249,9 @@
                                                     <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="15"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
+                                                    <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                                        <rect key="frame" x="99.5" y="8" width="212.5" height="20.5"/>
+                                                    </variation>
                                                 </label>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ABU-0d-c2I">
                                                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
@@ -7750,24 +7753,24 @@
             <point key="canvasLocation" x="1103.25" y="2411.625"/>
         </scene>
         <!--Navigation Controller-->
-        <scene sceneID="DQj-fe-poF">
+        <scene sceneID="fet-SD-d30">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="10m-Jb-r3R" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="CRb-vL-jlS" sceneMemberID="viewController">
                     <toolbarItems/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="gxx-kM-VTe">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="MSe-NV-Ivt">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <animations/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="vXZ-lx-hvc" kind="relationship" relationship="rootViewController" id="H3X-bs-Zha"/>
+                        <segue destination="nJL-RM-6Db" kind="relationship" relationship="rootViewController" id="mb4-jt-lkO"/>
                     </connections>
                 </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="iMM-uK-Xw5" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="KeS-wt-adg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2718" y="1827.75"/>
+            <point key="canvasLocation" x="-1854" y="1824"/>
         </scene>
     </scenes>
     <resources>
@@ -7782,8 +7785,7 @@
         <image name="mock-rating-stars.png" width="1600" height="373"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Rco-rv-njI"/>
-        <segue reference="nLu-8f-h8F"/>
-        <segue reference="zsR-Bp-dYb"/>
+        <segue reference="lk1-fc-YGc"/>
+        <segue reference="qNE-kT-jWH"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -802,6 +802,16 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         self.closeStartAChat(nil)
     }
     
+    @IBAction func loginCheck(sender: AnyObject) {
+        let sb = UIStoryboard(name: "Main", bundle: nil)
+        if Bakkle.sharedInstance.auth_token == nil {
+            let vc = sb.instantiateViewControllerWithIdentifier("loginView") as! LoginView
+            self.presentViewController(vc, animated: true, completion: nil)
+        }else{
+            let vc = sb.instantiateViewControllerWithIdentifier("CameraView") as! CameraView
+            self.presentViewController(vc, animated: true, completion: nil)
+        }
+    }
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         if segue.identifier == self.itemDetailSegue {
             let destinationVC = segue.destinationViewController as! ItemDetails

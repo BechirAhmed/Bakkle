@@ -121,7 +121,8 @@ class LoginView: UIViewController, FBSDKLoginButtonDelegate {
                         
                         // jump into the feedview if successfully logged in
                         dispatch_async(dispatch_get_main_queue()) {
-                            self.performSegueWithIdentifier(self.mainScreenSegueIdentifier, sender: self)
+                            Bakkle.sharedInstance.isGuest = false
+                            self.dismissViewControllerAnimated(true, completion: nil)
                         }
                         
                         dispatch_async(dispatch_get_main_queue()) {
