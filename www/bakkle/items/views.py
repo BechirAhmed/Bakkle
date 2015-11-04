@@ -136,7 +136,7 @@ def add_item(request):
     description = request.GET.get('description', "")
     location = request.GET.get('location')
     seller_id = auth_token.split('_')[1]
-    price = request.GET.get('price')
+    price = request.GET.get('price',"")
     # tags and method don't exist anymore
     # tags = request.GET.get('tags',"")
     # method = request.GET.get('method')
@@ -153,7 +153,10 @@ def add_item(request):
 
     # Ensure that the price can be converted to a decimal otherwise send back a failed status
     try:
-        price = Decimal(price)
+        if (price == ""):
+            price = -1.00
+        else:
+            price = Decimal(price)
     except ValueError:
         response_data = { "status":0, "error": "Price was not a valid decimal." }
         return HttpResponse(json.dumps(response_data), content_type="application/json")
@@ -175,7 +178,10 @@ def add_item(request):
             status = Items.ACTIVE)
         item.save()
         if(notifyFlag == None or notifyFlag == "" or int(notifyFlag) != 0):
-            notify_all_new_item("New: ${} - {}".format(item.price, item.title))
+            if (price == -1.00):
+                notify_all_new_item("New: {}".format(item.title))
+            else:
+                notify_all_new_item("New: ${} - {}".format(item.price, item.title))
     else:
         # Else get the item
         try:
