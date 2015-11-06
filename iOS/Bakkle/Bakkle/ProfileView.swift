@@ -116,6 +116,9 @@ class ProfileView: UIViewController, UITextViewDelegate {
         }
         
         self.nameLabel.text = user.valueForKey("display_name") as? String
+        self.editBtn.enabled = true
+        self.editBtn.backgroundColor = Theme.ColorGreen
+
         self.descriptionTextView.text = user.valueForKey("description") as? String
         if descriptionTextView.text.isEmpty {
             descriptionTextView.textColor = AddItem.DESCRIPTION_PLACEHOLDER_COLOR
@@ -140,10 +143,10 @@ class ProfileView: UIViewController, UITextViewDelegate {
             self.logoutBtn.setTitle("LOG OUT", forState: UIControlState.Normal)
             let sb = UIStoryboard(name: "Main", bundle: nil)
             let vc = sb.instantiateViewControllerWithIdentifier("loginView") as! LoginView
+            vc.previousVC = self
             self.presentViewController(vc, animated: true, completion: nil)
         }else{
             Bakkle.sharedInstance.logout()
-            Bakkle.sharedInstance.isGuest = true
             setGuestInfo()
         }
     }

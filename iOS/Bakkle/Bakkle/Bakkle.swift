@@ -17,6 +17,9 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     let url_settings: String      = "account/settings/"
     let url_logout: String        = "account/logout/"
     let url_facebook: String      = "account/facebook/"
+    let url_guest: String         = "account/guest/"
+    let url_register_local        = "account/register_local"
+    let url_login_local           = "account/login_local"
     let url_register_push: String = "account/device/register_push/"
     let url_reset: String         = "items/reset/"
     let url_mark: String          = "items/" //+status/
@@ -33,6 +36,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     let url_sellertransactions: String  = "items/get_seller_transactions/"
     let url_getaccount:String     = "account/get_account/"
     let url_setdescription:String = "account/set_description/"
+   
 
     static let bkFeedUpdate     = "com.bakkle.feedUpdate"
     static let bkGarageUpdate   = "com.bakkle.garageUpdate"
@@ -130,6 +134,13 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         }
         
         settings()
+        
+        if FBSDKAccessToken.currentAccessToken() != nil {
+            
+        }else{
+            register_device()
+        }
+        
     }
         
     /* Return a public URL to the item on the web */
@@ -348,6 +359,46 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         task.resume()
     }
     
+    // register use device uuid
+    func guest(success: ()->(), fail: ()->()) {
+        let url:NSURL? = NSURL(string: url_base + url_guest)
+        let request = NSMutableURLRequest(URL: url!)
+        
+        request.HTTPMethod = "POST"
+        let postString = "&device_uuid=\(self.deviceUUID)&flavor=\(self.flavor)"
+        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+        
+        info("guest")
+        info("URL: \(url)")
+        info("METHOD: \(request.HTTPMethod)")
+        info("BODY: \(postString)")
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
+            data, response, error in
+            
+            if error != nil {
+                println("error=\(error)")
+                return
+            }
+            
+            let responseString = NSString(data: data, encoding:NSUTF8StringEncoding)
+            println("Response: \(responseString)")
+            
+            /* JSON parse */
+            var error: NSError? = error
+            if (data != nil && data.length != 0) {
+                var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &error) as! NSDictionary
+                
+                if responseDict.valueForKey("status")?.integerValue == 1 {
+                    // TODO: write what need to do if succeed
+                    success()
+                }
+            } else {
+                //TODO: Trigger reattempt to connect timer.
+            }
+        }
+        task.resume()
+    }
+    
     /* login and get account details */
     func login(success: ()->(), fail: ()->()) {
             let url:NSURL? = NSURL(string: url_base + url_login)
@@ -386,7 +437,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                     self.auth_token = responseDict.valueForKey("auth_token") as! String
                     var accountId = split(self.auth_token) {$0 == "_"}
                     self.account_id = accountId[1].toInt()
-                    
+                    self.isGuest = false
                     // Connect to web socket
                     WSManager.setAuthenticationWithUUID(self.deviceUUID, withToken: self.auth_token)
                     WSManager.connectWS()
@@ -426,6 +477,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             
             self.auth_token = nil
             self.account_id = nil
+            self.isGuest = true
         }
         task.resume()
     }

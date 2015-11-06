@@ -236,24 +236,30 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
         if indexPath.row == 0 || indexPath.row == activeItem.count + 1 || indexPath.row == activeItem.count + boughtItem.count + 2 {
             return
         }
-        let buyer = User(facebookID: Bakkle.sharedInstance.facebook_id_str,accountID: Bakkle.sharedInstance.account_id,
-            firstName: Bakkle.sharedInstance.first_name, lastName: Bakkle.sharedInstance.last_name)
-        let chatItem = getItem(indexPath).valueForKey("item") as! NSDictionary
-        let chatItemId = (chatItem.valueForKey("pk") as! NSNumber).stringValue
-        var chatPayload: WSRequest = WSStartChatRequest(itemId: chatItemId)
-        chatPayload.successHandler = {
-            (var success: NSDictionary) in
-            let chatId = success.valueForKey("chatId") as! Int
-            var buyerChat = Chat(user: buyer, lastMessageText: "", lastMessageSentDate: NSDate(), chatId: chatId)
-            let chatViewController = ChatViewController(chat: buyerChat)
-            chatViewController.item = chatItem
-            chatViewController.seller = chatItem.valueForKey("seller") as! NSDictionary
-            chatViewController.isBuyer = true
-            self.navigationController?.pushViewController(chatViewController, animated: true)
+        let sb = UIStoryboard(name: "Main", bundle: nil)
+        if Bakkle.sharedInstance.isGuest {
+            let vc = sb.instantiateViewControllerWithIdentifier("loginView") as! LoginView
+            self.presentViewController(vc, animated: true, completion: nil)
+        }else{
+            let buyer = User(facebookID: Bakkle.sharedInstance.facebook_id_str,accountID: Bakkle.sharedInstance.account_id,
+                firstName: Bakkle.sharedInstance.first_name, lastName: Bakkle.sharedInstance.last_name)
+            let chatItem = getItem(indexPath).valueForKey("item") as! NSDictionary
+            let chatItemId = (chatItem.valueForKey("pk") as! NSNumber).stringValue
+            var chatPayload: WSRequest = WSStartChatRequest(itemId: chatItemId)
+            chatPayload.successHandler = {
+                (var success: NSDictionary) in
+                let chatId = success.valueForKey("chatId") as! Int
+                var buyerChat = Chat(user: buyer, lastMessageText: "", lastMessageSentDate: NSDate(), chatId: chatId)
+                let chatViewController = ChatViewController(chat: buyerChat)
+                chatViewController.item = chatItem
+                chatViewController.seller = chatItem.valueForKey("seller") as! NSDictionary
+                chatViewController.isBuyer = true
+                self.navigationController?.pushViewController(chatViewController, animated: true)
+            }
+            WSManager.enqueueWorkPayload(chatPayload)
+            self.view.userInteractionEnabled = false
+            self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
         }
-        WSManager.enqueueWorkPayload(chatPayload)  
-        self.view.userInteractionEnabled = false
-        self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
     
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
