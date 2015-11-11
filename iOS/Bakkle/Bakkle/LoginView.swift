@@ -10,11 +10,9 @@ import UIKit
 
 import FBSDKLoginKit
 
-class LoginView: UIViewController, FBSDKLoginButtonDelegate {
+class LoginView: UIViewController {
     
     let mainScreenSegueIdentifier = "PushToFeedSegue"
-    
-    @IBOutlet weak var fbLoginView: FBSDKLoginButton!
     
     @IBOutlet weak var logoImageView: UIImageView!
     @IBOutlet weak var logoImageViewAspectRatio: NSLayoutConstraint!
@@ -22,6 +20,10 @@ class LoginView: UIViewController, FBSDKLoginButtonDelegate {
     @IBOutlet weak var loginScreenBkg: UIImageView!
     
     @IBOutlet weak var signUpLabel: UILabel!
+    @IBOutlet weak var facebookBtn: UIButton!
+    @IBOutlet weak var emailRegisterBtn: UIButton!
+    @IBOutlet weak var signInLabel: UILabel!
+    @IBOutlet weak var signInBtn: UIButton!
     
     var background:UIImageView!
     var logo: UIImageView!
@@ -30,75 +32,11 @@ class LoginView: UIViewController, FBSDKLoginButtonDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.fbLoginView.userInteractionEnabled = true
-        
         if (Bakkle.sharedInstance.flavor == Bakkle.GOODWILL ){
             self.logoImageView.image = UIImage(named: "GWLogo_Full@2x.png")!
             logoImageView.contentMode = UIViewContentMode.ScaleAspectFit
             self.loginScreenBkg.image = UIImage(named: "LoginScreen-bkg-blue.png")!
         }
-        
-        // add the image, making the login view looks like the launch screen when user already logged in
-        setBackgroundImg()
-        setLogoImg()
-    }
-    
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(true)
-        
-        // check if the user already logged in, if not, set the background image to transparent
-        if FBSDKAccessToken.currentAccessToken() != nil {
-            self.fbLoginView.hidden = true
-            self.fbLoginView.userInteractionEnabled = false
-            self.signUpLabel.hidden = true
-            
-            background.hidden = false
-            view.userInteractionEnabled = false
-            
-            bakkleLogin()
-        } else {
-            self.fbLoginView.hidden = false
-            self.fbLoginView.userInteractionEnabled = true
-            self.signUpLabel.hidden = false
-            
-            background.hidden = true
-            view.userInteractionEnabled = true
-        }
-    }
-    
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        self.fbLoginView.sizeToFit()
-    }
-    
-    // create the background image, which is the same as the launch screen background
-    func setBackgroundImg(){
-        if Bakkle.sharedInstance.flavor == Bakkle.GOODWILL {
-            background = UIImageView(image: UIImage(named: "LoginScreen-bkg-Blue.png"))
-        } else{
-            background = UIImageView(image: UIImage(named: "LoginScreen-bkg.png"))
-        }
-        background.frame = CGRectMake(0, 0, self.view.bounds.width, self.view.bounds.height)
-        self.view.addSubview(background)
-    }
-    
-    // create the logo image, which is the same as the launch screen logo
-    func setLogoImg(){
-        if Bakkle.sharedInstance.flavor == Bakkle.GOODWILL {
-            logo = UIImageView(image: UIImage(named: "GWLogo_Full@2x.png"))
-            logo.contentMode = UIViewContentMode.ScaleAspectFit
-            logo.addConstraint(NSLayoutConstraint(item: logo, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: logo, attribute: NSLayoutAttribute.Height, multiplier: 2, constant: 0.0))
-        }else{
-            logo = UIImageView(image: UIImage(named: "logo-white-design-clear.png"))
-            logo.addConstraint(NSLayoutConstraint(item: logo, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: logo, attribute: NSLayoutAttribute.Width, multiplier: 25.0/62.0, constant: 0.0))
-        }
-        background.addSubview(logo)
-        
-        logo.setTranslatesAutoresizingMaskIntoConstraints(false)
-        background.addConstraint(NSLayoutConstraint(item: logo, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: background, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0.0))
-        background.addConstraint(NSLayoutConstraint(item: logo, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem: background, attribute: NSLayoutAttribute.Top, multiplier: 1.0, constant: 49.0))
-        background.addConstraint(NSLayoutConstraint(item: logo, attribute: NSLayoutAttribute.Left, relatedBy: NSLayoutRelation.Equal, toItem: background, attribute: NSLayoutAttribute.Left, multiplier: 1.0, constant: 36.0))
     }
     
     func bakkleLogin() {
@@ -148,30 +86,38 @@ class LoginView: UIViewController, FBSDKLoginButtonDelegate {
             }
         }) // FBSDKGraphRequest completion handler
     }
-    
-    /* FBSDKLoginButton Protocol Methods */
-    
-    func loginButton(loginButton: FBSDKLoginButton!, didCompleteWithResult result: FBSDKLoginManagerLoginResult!, error: NSError!) {
-        if error != nil {
-            // Process error
-            var alert = UIAlertController(title: error.localizedDescription, message: error.localizedRecoverySuggestion, preferredStyle: UIAlertControllerStyle.Alert)
-            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
-            self.presentViewController(alert, animated: true, completion: nil)
-        } else if result.isCancelled {
-            // Run code if the user cancelled the login process
-        } else {
-            self.fbLoginView.userInteractionEnabled = false
-            self.fbLoginView.hidden = true
-            self.signUpLabel.hidden = true
-            
-            // this handles checks for missing information
-            bakkleLogin()
-        }
+
+    @IBAction func facebookPressed(sender: UIButton) {
+        let login = FBSDKLoginManager()
+        login.logInWithReadPermissions(["public_profile"], handler: { (result, error) -> Void in
+            if error != nil {
+                var alert = UIAlertController(title: error.localizedDescription, message: error.localizedRecoverySuggestion, preferredStyle: UIAlertControllerStyle.Alert)
+                alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
+                self.presentViewController(alert, animated: true, completion: nil)
+            }else if result.isCancelled {
+                // Run code if the user cancelled the login process
+            } else {
+                self.signInBtn.hidden = true
+                self.signInLabel.hidden = true
+                self.emailRegisterBtn.hidden = true
+                self.facebookBtn.hidden = true
+                self.signUpLabel.hidden = true
+                
+                // this handles checks for missing information
+                self.bakkleLogin()
+            }
+        })
     }
     
-    func loginButtonDidLogOut(loginButton: FBSDKLoginButton!) {
-        // Should never be called, login page is inaccessible when logged in
+    @IBAction func emailPressed(sender: UIButton) {
+        // TODO
     }
+    
+    @IBAction func signInPressed(sender: UIButton) {
+        // TODO
+    }
+    
+    
     
 }
 

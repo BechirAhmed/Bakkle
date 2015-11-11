@@ -17,7 +17,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     let url_settings: String      = "account/settings/"
     let url_logout: String        = "account/logout/"
     let url_facebook: String      = "account/facebook/"
-    let url_guest: String         = "account/guest/"
+    let url_connect: String         = "connect"
     let url_register_local        = "account/register_local"
     let url_login_local           = "account/login_local"
     let url_register_push: String = "account/device/register_push/"
@@ -134,12 +134,6 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         }
         
         settings()
-        
-        if FBSDKAccessToken.currentAccessToken() != nil {
-            
-        }else{
-            register_device()
-        }
         
     }
         
@@ -360,15 +354,15 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     }
     
     // register use device uuid
-    func guest(success: ()->(), fail: ()->()) {
-        let url:NSURL? = NSURL(string: url_base + url_guest)
+    func connect(success: ()->(), fail: ()->()) {
+        let url:NSURL? = NSURL(string: url_base + url_connect)
         let request = NSMutableURLRequest(URL: url!)
         
         request.HTTPMethod = "POST"
         let postString = "&device_uuid=\(self.deviceUUID)&flavor=\(self.flavor)"
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
         
-        info("guest")
+        info("connect")
         info("URL: \(url)")
         info("METHOD: \(request.HTTPMethod)")
         info("BODY: \(postString)")
@@ -390,6 +384,8 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                 
                 if responseDict.valueForKey("status")?.integerValue == 1 {
                     // TODO: write what need to do if succeed
+                    self.auth_token = responseDict.valueForKey("auth_token") as! String
+                    self.isGuest = true
                     success()
                 }
             } else {

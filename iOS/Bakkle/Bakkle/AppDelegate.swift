@@ -29,6 +29,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         
+//        Bakkle.sharedInstance.connect({ () -> () in
+//            
+//        }, fail: { () -> () in
+//            
+//        })
+        
         UIApplication.sharedApplication().statusBarStyle = .LightContent
         
         if let userInfo = launchOptions?[UIApplicationLaunchOptionsRemoteNotificationKey] as? [NSObject : AnyObject] {
