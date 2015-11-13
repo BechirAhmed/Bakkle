@@ -19,5 +19,53 @@
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Bakkle/Bakkle.swift"
+            timestampString = "469146755.808178"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "141"
+            endingLineNumber = "141"
+            landmarkName = "init()"
+            landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Bakkle.Bakkle.init (Bakkle.Bakkle.Type)() -&gt; Bakkle.Bakkle"
+                  moduleName = "Bakkle"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/xiaox/Documents/omnisite-bakkle/iOS/Bakkle/Bakkle/Bakkle.swift"
+                  timestampString = "469146765.16036"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "142"
+                  endingLineNumber = "142"
+                  offsetFromSymbolStart = "5624">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Bakkle.Bakkle.(init (Bakkle.Bakkle.Type) -&gt; () -&gt; Bakkle.Bakkle).(closure #1)"
+                  moduleName = "Bakkle"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/xiaox/Documents/omnisite-bakkle/iOS/Bakkle/Bakkle/Bakkle.swift"
+                  timestampString = "469146765.160621"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "142"
+                  endingLineNumber = "142"
+                  offsetFromSymbolStart = "0">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>
