@@ -250,7 +250,6 @@ class SellersGarageView: UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        UIApplication.sharedApplication().applicationIconBadgeNumber = 0
         if indexPath.row == 0 || indexPath.row == activeItem.count + 1 {
             return
         }

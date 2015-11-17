@@ -236,7 +236,6 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
         if indexPath.row == 0 || indexPath.row == activeItem.count + 1 || indexPath.row == activeItem.count + boughtItem.count + 2 {
             return
         }
-        UIApplication.sharedApplication().applicationIconBadgeNumber = 0
         let buyer = User(facebookID: Bakkle.sharedInstance.facebook_id_str,accountID: Bakkle.sharedInstance.account_id,
             firstName: Bakkle.sharedInstance.first_name, lastName: Bakkle.sharedInstance.last_name)
         let chatItem = getItem(indexPath).valueForKey("item") as! NSDictionary

@@ -1,3 +1,8 @@
+#!/usr/bin/env python
+#
+# TO RUN: ./server.py <configuration.conf>
+#
+
 import os
 import sys
 import logging

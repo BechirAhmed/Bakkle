@@ -91,8 +91,6 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         priceField.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardDidShow:", name: UIKeyboardDidShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
-
         
         for url: NSURL in videos {
             self.videoImages[url] = Bakkle.sharedInstance.previewImageForLocalVideo(url)
@@ -215,10 +213,6 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         }
     }
     
-    func keyboardWillHide(notification: NSNotification) {
-        //animateViewMoving(false)
-    }
-    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(true)
 
@@ -277,7 +271,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     * ever to be changed
     */
     func disableConfirmButtonHandler() -> Bool {
-        if confirmHit || trimString(self.priceField.text) == "$" || descriptionField.textColor == AddItem.DESCRIPTION_PLACEHOLDER_COLOR || self.titleField.text.isEmpty || self.priceField.text.isEmpty || self.descriptionField.text.isEmpty || itemImages?.count < 1 || itemImages?.count > CameraView.MAX_IMAGE_COUNT {
+        if confirmHit || self.titleField.text.isEmpty || itemImages?.count < 1 || itemImages?.count > CameraView.MAX_IMAGE_COUNT {
             confirmButton.enabled = false
             confirmButton.backgroundColor = AddItem.CONFIRM_BUTTON_DISABLED_COLOR
         } else {
@@ -411,11 +405,9 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         if textField == titleField {
-            //titleField.resignFirstResponder()
+            titleField.resignFirstResponder()
             priceField.becomeFirstResponder()
-        }
-        else if textField == priceField {
-           descriptionField.becomeFirstResponder()
+//            animateViewMoving(false)
         }
         return true
     }

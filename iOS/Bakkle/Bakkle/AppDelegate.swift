@@ -78,6 +78,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         FBSDKAppEvents.activateApp()
         
+        // Alert app that we just came back from sleep
+        NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkAppBecameActive, object: nil, userInfo: nil);
+        
         Bakkle.sharedInstance.setServer() //Settings may have changed
         //Bakkle.sharedInstance.refresh()
     }
@@ -142,6 +145,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         chatViewController.seller = chatItem!.valueForKey("seller") as! NSDictionary
                         chatViewController.isBuyer = false
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                           
                             vc!.pushViewController(chatViewController, animated: true)
                         })
                         
