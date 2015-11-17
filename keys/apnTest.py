@@ -4,22 +4,20 @@ import time
 from apns import APNs, Payload
 
 # Parms
-use_sandbox = True
-token_hex = 'e69ffa8cb3299d2c3428641d4213be48ce37d373554ab18ce905dd2eab7c7655'
-token_hex = '3c28f1cc5c714aa05f959ccd7def34a87df4dabc46979c0a58741cba362a83b0'
-token_hex = '0cc56e5016dcd41324873689a76a24d0ca9656fc0e5815634a398493337dffed'
+token_hex = '963c3f72abe5dee900f066e88486272dd7e2648948abb4352ecbb52294b7317e'
 message = 'Test Payload'
 soundname = 'Bakkle_Notification_new.m4r'
 badge = 1
 
 # Config
-cert_file = 'Certificates.p12.pem'
-key_file = 'Certificates.p12.pem'
+use_sandbox=False
+cert_file = 'apn-push-prod.pem'
+key_file = cert_file
 
 
 apns = APNs(use_sandbox=use_sandbox, cert_file=cert_file, key_file=key_file)
 
-test = 2
+test = 1
 if test == 0:
     custom_dict = {}
 if test == 1:
