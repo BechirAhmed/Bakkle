@@ -120,10 +120,12 @@ if __name__ == "__main__":
     # enable_pretty_logging()
     args = sys.argv
     BAKKLE_LOG_FILE = "/bakkle/log/bakkle.log"
+    PORT=8000
     args.append("--log_file_prefix=" + BAKKLE_LOG_FILE)
     tornado.options.parse_command_line()
     # os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'bakkle.settings')
     django.setup()
+    logging.info("Starting server on port {}".format(PORT))
     print("starting server")
-    app.listen(8000)
+    app.listen(PORT)
     ioloop.IOLoop.instance().start()

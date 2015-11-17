@@ -2,7 +2,7 @@ from common.bakkleRequestHandler import bakkleRequestHandler
 from common.bakkleRequestHandler import QueryArgumentError
 from common.decorators import run_async
 from tornado.web import asynchronous
-
+import logging
 
 import accountsCommonHandlers
 
@@ -288,6 +288,7 @@ class deviceRegisterPushHandler(bakkleRequestHandler):
             device_uuid = self.getArgument('device_uuid')
             device_token = self.getArgument('device_token')
             client_ip = self.getIP()
+            logging.info("device_register_push device_token={},device_uudi={}".format(device_token.replace(" ", ""),device_uuid))
         except QueryArgumentError as error:
             return self.writeJSON({"status": 0, "message": error.message})
 

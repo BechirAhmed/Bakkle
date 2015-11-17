@@ -262,6 +262,7 @@ def device_register_push(request):
     device_token = request.POST.get('device_token', "")
     auth_token = request.POST.get('auth_token', "")
     device_uuid = request.POST.get('device_uuid', "")
+    logging.info("device_register_push device_token={},auth_token={},device_uudi={}".format(device_token,auth_token,device_uuid))
 
     # Check that all require params are sent and are of the right format
     if (device_token == None or device_token.strip() == "") or (auth_token == None or auth_token.strip() == "" or auth_token.find('_') == -1) or (device_uuid == None or device_uuid.strip() == ""):
