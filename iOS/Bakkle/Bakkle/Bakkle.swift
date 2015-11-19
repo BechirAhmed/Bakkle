@@ -16,6 +16,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     let url_login: String         = "account/login_facebook/"
     let url_settings: String      = "account/settings/"
     let url_logout: String        = "account/logout/"
+    let url_guest_user_id: String = "account/guestuserid"
     let url_facebook: String      = "account/facebook/"
     let url_register_push: String = "account/device/register_push/"
     let url_reset: String         = "items/reset/"
@@ -47,11 +48,11 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     static let servers   =   ["https://app.bakkle.com/",            // 0 (Production Single)
                               "https://app-cluster.bakkle.com/",    // 1 (Production Cluster)
                               "http://bakkle.rhventures.org:8000/"] // 2 (Test)
-//                              "http://wongb.rhventures.org:8000/"]  // 3 (Ben)
+    
     static let serverNames = ["Production Server Single",
                               "Production Server Cluster",
                               "Test Server (Developers Only)"]
-//                              "Ben (Developers Only)"]
+    
     static let BAKKLE = 1
     static let GOODWILL = 2
     
@@ -71,6 +72,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     var first_name: String!
     var last_name: String!
     var profileImgURL: NSURL!
+    var guest_user_id_str: String!
     
     var feedItems: [NSObject]!
     var garageItems: [NSObject]!
@@ -297,6 +299,42 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                 }
             }
             task.resume()
+    }
+    
+    
+    func guestUserID(device_uuid:String) {
+        let url:NSURL? = NSURL(string: url_base + url_guest_user_id)
+        let request = NSMutableURLRequest(URL: url!)
+        
+        request.HTTPMethod = "POST"
+        let postString = "device_uuid=\(device_uuid)"
+        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+        
+        info("guest user id")
+        info("URL: \(url)")
+        info("METHOD: \(request.HTTPMethod)")
+        info("BODY: \(postString)")
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
+            data, response, error in
+            
+            if error != nil {
+                println("error=\(error)")
+                return
+            }
+            
+            let responseString = NSString(data: data, encoding: NSUTF8StringEncoding)
+            println("Response: \(responseString)")
+            
+            var error: NSError? = error
+            if data != nil && data.length != 0 {
+                var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &error) as! NSDictionary
+                
+                if responseDict.valueForKey("userid")?.integerValue == 1 {
+                    self.guest_user_id_str = responseDict.valueForKey("userid") as! String
+                }
+            }
+        }
+
     }
 
     
