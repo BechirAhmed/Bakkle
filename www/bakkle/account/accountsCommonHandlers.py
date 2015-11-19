@@ -282,12 +282,12 @@ def facebook(facebook_id, display_name, device_uuid, app_flavor):
 # Get guest user_id
 @time_method
 def guest_user_id(device_uuid):
-    return { "status:" 1, "userid": md5.new(device_uuid).hexdigest() }
+    return { "status": 1, "userid": md5.new(device_uuid).hexdigest() }
 
 # Get local user_id
 @time_method
 def local_user_id(device_uuid):
-    return { "status:" 1, "userid": md5.new(device_uuid).hexdigest() }
+    return { "status": 1, "userid": md5.new(device_uuid).hexdigest() }
 
 # Set name and profile info
 @time_method
