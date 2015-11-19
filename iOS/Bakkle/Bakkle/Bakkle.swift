@@ -75,6 +75,8 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                                   // when logged in with facebook, store the facebook id here. When logged in local, store the local ID here.
     var guest_id_str: String!     // Store ID for 'guest mode'. This is kept even after you login with a real account.
     var account_type: Int = 0     // 1=fb, 2=local.  Guest mode is when facebookid=0
+    
+    
     var first_name: String!
     var last_name: String!
     var profileImgURL: NSURL!
@@ -1242,7 +1244,15 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             self.account_type = temp
             self.info("Restored \( self.account_type ) account_type.")
         }
-
+        if let temp = userDefaults.objectForKey("first_name") as? Int {
+            self.first_name = temp
+            self.info("Restored \( self.first_name ) first_name.")
+        }
+        if let temp = userDefaults.objectForKey("last_name") as? Int {
+            self.last_name = temp
+            self.info("Restored \( self.last_name ) last_name.")
+        }
+        
         // We force a version upgrade
         if let version = userDefaults.objectForKey("version") as? NSString {
             info("Stored version: \(version)")
@@ -1354,6 +1364,14 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         // Store ACCOUNT TYPE
         userDefaults.setObject(self.account_type, forKey: "account_type")
         self.info("Stored account_type = \(self.account_type)")
+
+        // Store FIRST_NAME
+        userDefaults.setObject(self.account_type, forKey: "first_name")
+        self.info("Stored first_name = \(self.first_name)")
+        
+        // Store LAST NAME
+        userDefaults.setObject(self.account_type, forKey: "last_name")
+        self.info("Stored last_name = \(self.last_name)")
         
         userDefaults.synchronize()
     }
