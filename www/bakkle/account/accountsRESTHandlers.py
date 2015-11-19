@@ -273,6 +273,89 @@ class facebookHandler(bakkleRequestHandler):
 
         self.writeJSON(respObj)
 
+class guestUserIdHandler(bakkleRequestHandler):
+
+    def post(self):
+
+        try:
+            device_uuid = self.getArgument('device_uuid')
+        except QueryArgumentError as error:
+            return self.writeJSON({"status": 0, "message": error.message})
+
+        respObj = accountsCommonHandlers.guest_user_id(device_uuid)
+
+        self.writeJSON(respObj)
+
+class localUserIdHandler(bakkleRequestHandler):
+
+    def post(self):
+
+        try:
+            device_uuid = self.getArgument('device_uuid')
+        except QueryArgumentError as error:
+            return self.writeJSON({"status": 0, "message": error.message})
+
+        respObj = accountsCommonHandlers.guest_user_id(device_uuid)
+
+        self.writeJSON(respObj)
+
+
+class updateProfileHandler(bakkleRequestHandler):
+
+    def post(self):
+
+        try:
+            facebook_id = self.getArgument('user_id')
+            display_name = self.getArgument('name')
+            device_uuid = self.getArgument('device_uuid')
+            app_flavor = self.getArgument('flavor', 1)
+        except QueryArgumentError as error:
+            return self.writeJSON({"status": 0, "message": error.message})
+
+        respObj = accountsCommonHandlers.update_profile(facebook_id,
+                                                        display_name,
+                                                        device_uuid,
+                                                        app_flavor)
+
+        self.writeJSON(respObj)
+
+class setPasswordHandler(bakkleRequestHandler):
+
+    def post(self):
+
+        try:
+            facebook_id = self.getArgument('user_id')
+            device_uuid = self.getArgument('device_uuid')
+            app_flavor = self.getArgument('flavor', 1)
+            password = self.getArgument('password', 1)
+        except QueryArgumentError as error:
+            return self.writeJSON({"status": 0, "message": error.message})
+
+        respObj = accountsCommonHandlers.set_password(facebook_id,
+                                                      device_uuid,
+                                                      app_flavor,
+                                                      password)
+
+        self.writeJSON(respObj)
+
+class authenticateLocalHandler(bakkleRequestHandler):
+
+    def post(self):
+
+        try:
+            facebook_id = self.getArgument('user_id')
+            device_uuid = self.getArgument('device_uuid')
+            app_flavor = self.getArgument('flavor', 1)
+            password = self.getArgument('password')
+        except QueryArgumentError as error:
+            return self.writeJSON({"status": 0, "message": error.message})
+
+        respObj = accountsCommonHandlers.authenticate_local(facebook_id,
+                                                            device_uuid,
+                                                            app_flavor,
+                                                            password)
+
+        self.writeJSON(respObj)
 
 class deviceRegisterPushHandler(bakkleRequestHandler):
 

@@ -92,7 +92,9 @@ class BuyerItem(models.Model):
         (SOLD_TO, 'Sold To'),
         (MY_ITEM, 'My Item')
     )
-    buyer = models.ForeignKey(Account)
+    buyer = models.ForeignKey(Account, null = True)
+    #alter table items_buyeritem add column uuid varchar(36) null
+    uuid = models.CharField(max_length=36, null = True)
     item = models.ForeignKey(Items)
     view_time = models.DateTimeField(auto_now = True)
     view_duration = models.DecimalField(max_digits = 10, decimal_places = 2)

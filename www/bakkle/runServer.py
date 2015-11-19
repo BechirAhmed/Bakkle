@@ -19,7 +19,9 @@ import django
 from django.conf import settings
 from common.sysVars import getDATABASES
 
+DATABASES=getDATABASES()
 settings.configure(DATABASES=getDATABASES())
+print("Database = {}".format(DATABASES['default']))
 
 from django.db import models
 
@@ -103,6 +105,16 @@ app = web.Application([
             accountsRESTHandlers.logoutHandler, name='logout'),
     web.url(r'^/account/facebook/$',
             accountsRESTHandlers.facebookHandler, name='facebook'),
+    web.url(r'^/account/guestuserid/$',
+            accountsRESTHandlers.guestUserIdHandler, name='guestuserid'),
+    web.url(r'^/account/localuserid/$',
+            accountsRESTHandlers.localUserIdHandler, name='localuserid'),
+    web.url(r'^/account/updateprofile/$',
+            accountsRESTHandlers.updateProfileHandler, name='updateprofile'),
+    web.url(r'^/account/setpassword/$',
+            accountsRESTHandlers.setPasswordHandler, name='setpassword'),
+    web.url(r'^/account/authenticate_local/$',
+            accountsRESTHandlers.authenticateLocalHandler, name='authenticate_local'),
     web.url(r'^/account/settings/$',
             accountsRESTHandlers.settingsHandler, name='settings'),
     web.url(r'^/account/device/register_push/$',
@@ -120,12 +132,17 @@ app = web.Application([
 ], debug=False
 )
 
+PORT=8000
+overridePORT=os.environ.get('PORT')
+if overridePORT!=None:
+    print("Environment overrides PORT={}".format(overridePORT))
+    PORT=overridePORT
+
 # Start the server
 if __name__ == "__main__":
     # enable_pretty_logging()
     args = sys.argv
     BAKKLE_LOG_FILE = "/bakkle/log/bakkle.log"
-    PORT=8000
     args.append("--log_file_prefix=" + BAKKLE_LOG_FILE)
     tornado.options.parse_command_line()
     # os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'bakkle.settings')

@@ -270,6 +270,7 @@ def spam_item(item_id):
 
 @time_method
 def feed(buyer_id, device_uuid, user_location, search_text, filter_distance, filter_price):
+    logging.info("feed buyer_id={}, device_uuid={}, user_location={}, search_text={}, filter_distance={}, filter_price={}".format(buyer_id, device_uuid, user_location, search_text, filter_distance, filter_price))
 
     startTime = time.time()
 
@@ -317,12 +318,13 @@ def feed(buyer_id, device_uuid, user_location, search_text, filter_distance, fil
 
     # get the account object and the device and update location
     try:
-        account = Account.objects.get(id=buyer_id)
-        account.user_location = location
-        account.save()
+        if buyer_id != 0:
+           account = Account.objects.get(id=buyer_id)
+           account.user_location = location
+           account.save()
 
         # Get the device
-        device = Device.objects.get(account_id=buyer_id, uuid=device_uuid)
+        device = Device.objects.get(uuid=device_uuid)
         device.user_location = location
         device.save()
     except Account.DoesNotExist:
@@ -340,8 +342,15 @@ def feed(buyer_id, device_uuid, user_location, search_text, filter_distance, fil
                   ("updating locations", (time.time() - startTime) * 1000.0))
     startTime = time.time()
 
-    # get items
-    items_viewed = BuyerItem.objects.filter(buyer=buyer_id).values('item')
+    # get items (when in guest mode filter on uuid not buyer account id)
+    items_viewed = None
+    if buyer_id==0:
+       logging.info("Getting items for UUID={}".format(device_uuid))
+       #import pdb; pdb.set_trace()
+       items_viewed = BuyerItem.objects.filter(uuid=device_uuid).values('item')
+    else:
+       logging.info("Getting items for buyer_id={}".format(buyer_id))
+       items_viewed = BuyerItem.objects.filter(buyer=buyer_id).values('item')
     appFlavor = account.app_flavor
 
     item_list = None
@@ -386,6 +395,8 @@ def feed(buyer_id, device_uuid, user_location, search_text, filter_distance, fil
     item_array = []
     paginatedItems = Paginator(item_list, 100)
     numUserItems = 0
+
+    logging.info("Num items {}".len(users_list))
 
     # show user's items before other items - place at top of array.
     if(users_list is not None and len(users_list) != 0):

@@ -26,7 +26,15 @@ def getDATABASES():
             'HOST': 'bakkle.cw8vja43bda8.us-west-2.rds.amazonaws.com',
             'PORT': '5432',
          },
-         'production': {
+         'test': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'test',
+            'USER': 'test',
+            'PASSWORD': 'bakkletest',
+            'HOST': 'test.cw8vja43bda8.us-west-2.rds.amazonaws.com:5432',
+            'PORT': '5432',
+        },
+        'production': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'NAME': 'bakkle',
             'USER': 'root',
@@ -49,6 +57,12 @@ def getDATABASES():
     elif(hostname == 'rhv-bakkle-bld' or hostname == 'rhv-lnx-291scs'):
         DATABASES['default'] = DATABASES['dev']
         activeDB = 'dev'
+
+    overrideDB=os.environ.get('DATABASE')
+    if overrideDB!=None:
+        print("Environment overrides database={}".format(overrideDB))
+        DATABASES['default'] = DATABASES[overrideDB]
+        activeDB = overrideDB
 
     return DATABASES;
 

@@ -209,14 +209,15 @@ class feedHandler(bakkleRequestHandler):
     @run_async
     def asyncHelper(self):
         try:
-
+            buyer_id = 0
             if(not self.authenticate()):
-                self.writeJSON(
-                    {'success': 0, 'error': 'Device not authenticated'})
-                self.finish()
-                return
-
-            buyer_id = self.getUser()
+                #self.writeJSON(
+                #    {'success': 0, 'error': 'Device not authenticated'})
+                #self.finish()
+                #return
+                pass
+            else:
+                buyer_id = self.getUser()
             device_uuid = self.getArgument('device_uuid')
             user_location = self.getArgument('user_location')
 

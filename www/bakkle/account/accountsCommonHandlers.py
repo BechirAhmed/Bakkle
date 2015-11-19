@@ -279,6 +279,64 @@ def facebook(facebook_id, display_name, device_uuid, app_flavor):
     account.save()
     return {"status": 1}
 
+# Get guest user_id
+@time_method
+def guest_user_id(device_uuid):
+    return { "userid": md5.new(device_uuid).hexdigest() }
+
+# Get local user_id
+@time_method
+def local_user_id(device_uuid):
+    return { "userid": md5.new(device_uuid).hexdigest() }
+
+# Set name and profile info
+@time_method
+def update_profile(facebook_id, display_name, device_uuid, app_flavor):
+    # Update or create the account
+    try:
+        account = Account.objects.get(
+            facebook_id=facebook_id,
+            app_flavor=app_flavor)[0]
+        account.display_name = display_name
+        account.save()
+    except:
+        return {"status": 0, "message": "error updating profile"}
+    return {"status": 1}
+
+# Set name and profile info
+@time_method
+def set_password(facebook_id, device_uuid, app_flavor, password):
+
+    try:
+        account = Account.objects.get(
+            facebook_id=facebook_id,
+            app_flavor=app_flavor)[0]
+        account.password = password
+        account.save()
+        logging.info("password set account.id={}".format(account.id))
+    except:
+        return {"status": 0, "message": "error setting password"}
+    return {"status": 1}
+
+# Set name and profile info
+@time_method
+def authenticate_local(facebook_id, device_uuid, app_flavor, password):
+
+    try:
+        account = Account.objects.get(
+            facebook_id=facebook_id,
+            app_flavor=app_flavor)[0]
+        if md5.new(account.password).hexdigest() != md5.new(display_name).hexdigest():
+            logging.info("authentication rejected account.id={}".format(account.id))
+            return {"status": 0, "message": "incorrect username or password"}
+    except:
+        logging.info("authentication failed account.id={}".format(facebook_id))
+        return {"status": 0, "message": "incorrect username"}
+    logging.info("authentication succeeded account.id={}".format(account.id))
+    return {"status": 1}
+
+
+
 # DEVICE STUFF
 
 # Register a new device

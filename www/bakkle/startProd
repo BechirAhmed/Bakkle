@@ -1,0 +1,5 @@
+#!/bin/sh
+
+killall -9 tail
+tail -f /bakkle/log/bakkle.log &
+sudo DATABASE=production python runServer.py
