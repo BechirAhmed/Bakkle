@@ -44,6 +44,11 @@ class LoginView: UIViewController {
     func setupButtons(){
         closeBtn.setImage(IconImage().close(), forState: .Normal)
         closeBtn.setTitle("", forState: .Normal)
+        self.signInBtn.hidden = false
+        self.signInLabel.hidden = false
+        self.emailRegisterBtn.hidden = false
+        self.facebookBtn.hidden = false
+        self.signUpLabel.hidden = false
     }
     
     @IBAction func facebookPressed(sender: UIButton) {

@@ -70,8 +70,11 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     
     var account_id: Int! = 0
     var auth_token: String!
-    var facebook_id: Int!
-    var facebook_id_str: String!
+//    var facebook_id: Int!
+    var facebook_id_str: String!  // Store ID for 'logged in' for BOTH facebook and local, despite the name
+                                  // when logged in with facebook, store the facebook id here. When logged in local, store the local ID here.
+    var guest_id_str: String!     // Store ID for 'guest mode'. This is kept even after you login with a real account.
+    var account_type: Int = 0     // 1=fb, 2=local.  Guest mode is when facebookid=0
     var first_name: String!
     var last_name: String!
     var profileImgURL: NSURL!
@@ -135,6 +138,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         
         settings()
         
+        /* We don't have to do this with 3 account types
         print(FBSDKAccessToken.currentAccessToken())
         if (FBSDKAccessToken.currentAccessToken() != nil) {
             self.bakkleLogin({ () -> () in
@@ -142,8 +146,16 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             })
         }else{
         }
+        */
     }
-        
+    
+    //func isGuest( ) {
+    //    return isGuest;
+   // }
+//    func isLoggedIn( ) {
+//        return
+//    }
+    
     /* Return a public URL to the item on the web */
     /* In future we hope to have a URL shortener */
     func getItemURL( item_id: Int ) -> ( String ) {
@@ -319,7 +331,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         let request = NSMutableURLRequest(URL: url!)
         
         self.facebook_id_str = userid
-        self.facebook_id = userid.toInt()
+//        self.facebook_id = userid.toInt()
             
         request.HTTPMethod = "POST"
         let postString = "name=\(name)&gender=\(gender)&user_id=\(userid)&first_name=\(first_name)&last_name=\(last_name)&device_uuid=\(self.deviceUUID)&flavor=\(self.flavor)"
@@ -1218,6 +1230,19 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         if userDefaults.objectForKey("instruction") == nil{
             userDefaults.setBool(true, forKey: "instruction")
         }
+        if let temp = userDefaults.objectForKey("guest_id_str") as? String {
+            self.guest_id_str = temp
+            self.info("Restored \( self.guest_id_str ) guest_id_str.")
+        }
+        if let temp = userDefaults.objectForKey("facebook_id_str") as? String {
+            self.facebook_id_str = temp
+            self.info("Restored \( self.facebook_id_str ) facebook_id_str.")
+        }
+        if let temp = userDefaults.objectForKey("account_type") as? Int {
+            self.account_type = temp
+            self.info("Restored \( self.account_type ) account_type.")
+        }
+
         // We force a version upgrade
         if let version = userDefaults.objectForKey("version") as? NSString {
             info("Stored version: \(version)")
@@ -1304,7 +1329,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             userDefaults.removeObjectForKey("garageItems")
         }
 
-        // Store HODLING
+        // Store HOLDING
         if self.holdingItems != nil {
             let data3 = NSJSONSerialization.dataWithJSONObject(self.holdingItems, options: nil, error: nil)
             let string3 = NSString(data: data3!, encoding: NSUTF8StringEncoding)
@@ -1317,6 +1342,18 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         // Store VERSION
         userDefaults.setObject(self.appVersion().build, forKey: "version")
         self.info("Stored version = \(self.appVersion().build)")
+        
+        // Store GUESTID
+        userDefaults.setObject(self.guest_id_str, forKey: "guest_id_str")
+        self.info("Stored guest_id_str = \(self.guest_id_str)")
+
+        // Store FACEBOOK/LOCALID
+        userDefaults.setObject(self.facebook_id_str, forKey: "facebook_id_str")
+        self.info("Stored facebook_id_str = \(self.facebook_id_str)")
+
+        // Store ACCOUNT TYPE
+        userDefaults.setObject(self.account_type, forKey: "account_type")
+        self.info("Stored account_type = \(self.account_type)")
         
         userDefaults.synchronize()
     }
