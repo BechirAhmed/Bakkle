@@ -5,7 +5,7 @@ from common.decorators import run_async
 from tornado.web import asynchronous
 
 import itemsCommonHandlers
-
+import logging
 
 class indexHandler(bakkleRequestHandler):
 
@@ -208,16 +208,19 @@ class feedHandler(bakkleRequestHandler):
 
     @run_async
     def asyncHelper(self):
+        logging.info("feedhandler")
         try:
-            buyer_id = 0
-            if(not self.authenticate()):
-                #self.writeJSON(
-                #    {'success': 0, 'error': 'Device not authenticated'})
-                #self.finish()
-                #return
-                pass
-            else:
-                buyer_id = self.getUser()
+            auth_token = self.getArgument('auth_token')
+            logging.info("Auth_token={}".format(auth_token))
+            #buyer_id = 0
+            #if(not self.authenticate()):
+            #    #self.writeJSON(
+            #    #    {'success': 0, 'error': 'Device not authenticated'})
+            #    #self.finish()
+            #    #return
+            #    pass
+            #else:
+            buyer_id = self.getUser()
             device_uuid = self.getArgument('device_uuid')
             user_location = self.getArgument('user_location')
 

@@ -286,15 +286,15 @@ def guest_user_id(device_uuid):
 
 # Get local user_id
 @time_method
-def local_user_id(device_uuid):
-    return { "status": 1, "userid": md5.new(device_uuid).hexdigest() }
+def local_user_id(email, device_uuid):
+    return { "status": 1, "userid": md5.new(email).hexdigest() }
 
 # Set name and profile info
 @time_method
 def update_profile(facebook_id, display_name, device_uuid, app_flavor):
     # Update or create the account
     try:
-        account = Account.objects.get(
+        account = Account.objects.get_or_create(
             facebook_id=facebook_id,
             app_flavor=app_flavor)[0]
         account.display_name = display_name
@@ -308,7 +308,7 @@ def update_profile(facebook_id, display_name, device_uuid, app_flavor):
 def set_password(facebook_id, device_uuid, app_flavor, password):
 
     try:
-        account = Account.objects.get(
+        account = Account.objects.get_or_create(
             facebook_id=facebook_id,
             app_flavor=app_flavor)[0]
         account.password = password

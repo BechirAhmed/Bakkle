@@ -293,11 +293,12 @@ class localUserIdHandler(bakkleRequestHandler):
     def post(self):
 
         try:
+            email = self.getArgument('email')
             device_uuid = self.getArgument('device_uuid')
         except QueryArgumentError as error:
             return self.writeJSON({"status": 0, "message": error.message})
 
-        respObj = accountsCommonHandlers.guest_user_id(device_uuid)
+        respObj = accountsCommonHandlers.local_user_id(email, device_uuid)
 
         logging.info("Getting local device_uuid={}. response={}".format(device_uuid, respObj))
         self.writeJSON(respObj)

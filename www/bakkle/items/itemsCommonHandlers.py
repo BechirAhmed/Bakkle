@@ -26,6 +26,8 @@ from common.decorators import run_async
 from django.core.mail import send_mail
 from tornado.log import logging
 
+import logging
+
 MAX_ITEM_IMAGE = 5
 
 config = {}
@@ -270,7 +272,7 @@ def spam_item(item_id):
 
 @time_method
 def feed(buyer_id, device_uuid, user_location, search_text, filter_distance, filter_price):
-    logging.info("feed buyer_id={}, device_uuid={}, user_location={}, search_text={}, filter_distance={}, filter_price={}".format(buyer_id, device_uuid, user_location, search_text, filter_distance, filter_price))
+    logging.info("[feed()] buyer_id={}, device_uuid={}, user_location={}, search_text={}, filter_distance={}, filter_price={}".format(buyer_id, device_uuid, user_location, search_text, filter_distance, filter_price))
     search_text = ""
     startTime = time.time()
 
@@ -318,13 +320,13 @@ def feed(buyer_id, device_uuid, user_location, search_text, filter_distance, fil
 
     # get the account object and the device and update location
     try:
-        if buyer_id != 0:
-           account = Account.objects.get(id=buyer_id)
-           account.user_location = location
-           account.save()
+        #if buyer_id != 0:
+        account = Account.objects.get(id=buyer_id)
+        account.user_location = location
+        account.save()
 
         # Get the device
-        device = Device.objects.get(uuid=device_uuid)
+        device = Device.objects.get(account_id=buyer_id, uuid=device_uuid)
         device.user_location = location
         device.save()
     except Account.DoesNotExist:
@@ -343,15 +345,15 @@ def feed(buyer_id, device_uuid, user_location, search_text, filter_distance, fil
     startTime = time.time()
 
     # get items (when in guest mode filter on uuid not buyer account id)
-    items_viewed = None
-    if buyer_id==0:
-       logging.info("Getting items for UUID={}".format(device_uuid))
-       #import pdb; pdb.set_trace()
-       items_viewed = BuyerItem.objects.filter(uuid=device_uuid).values('item')
-    else:
-       logging.info("Getting items for buyer_id={}".format(buyer_id))
-       items_viewed = BuyerItem.objects.filter(buyer=buyer_id).values('item')
-    items_viewed = BuyerItem.objects.all().values('item')
+    items_viewed = BuyerItem.objects.filter(buyer=buyer_id).values('item')
+    #items_viewed = None
+    #if buyer_id==0:
+    #   logging.info("Getting items for UUID={}".format(device_uuid))
+    #   #import pdb; pdb.set_trace()
+    #   items_viewed = BuyerItem.objects.filter(uuid=device_uuid).values('item')
+    #else:
+    #   logging.info("Getting items for buyer_id={}".format(buyer_id))
+    #   items_viewed = BuyerItem.objects.filter(buyer=buyer_id).values('item')
     appFlavor = account.app_flavor
 
     item_list = None
@@ -359,46 +361,59 @@ def feed(buyer_id, device_uuid, user_location, search_text, filter_distance, fil
 
     logging.info("Applying search filter={}".format(search_text))
     if(search_text is not None and search_text != ""):
+        logging.info(" searching")
         search_text.strip()
 
         # if filter price is 100+, ignore filter.
         if(filter_price == MAX_ITEM_PRICE):
+            logging.info(" no max price")
+
             item_list = Items.objects.exclude(pk__in=items_viewed).filter(seller__app_flavor=appFlavor).filter(Q(status=Items.ACTIVE) | Q(
                 status=Items.PENDING)).filter(Q(tags__contains=search_text) | Q(title__contains=search_text)).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
         else:
+            logging.info(" filtering on price")
             item_list = Items.objects.exclude(pk__in=items_viewed).filter(seller__app_flavor=appFlavor).filter(Q(price__lte=filter_price)).filter(Q(status=Items.ACTIVE) | Q(
                 status=Items.PENDING)).filter(Q(tags__contains=search_text) | Q(title__contains=search_text)).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
     else:
 
+        logging.info(" no search filter")
         # if filter price is 100+, ignore filter.
         if(filter_distance == MAX_ITEM_DISTANCE):
+            logging.info(" no distance filter")
             if(filter_price == MAX_ITEM_PRICE):
+                logging.info(" no price filter")
                 item_list = Items.objects.exclude(pk__in=items_viewed).exclude(seller__pk=buyer_id).filter(seller__app_flavor=appFlavor).filter(
                     Q(status=Items.ACTIVE) | Q(status=Items.PENDING)).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
                 users_list = Items.objects.filter(Q(seller__pk=buyer_id)).filter(
                     Q(status=Items.ACTIVE) | Q(status=Items.PENDING)).order_by('-post_date')[:1]
             else:
+                logging.info(" max price filter")
                 item_list = Items.objects.exclude(pk__in=items_viewed).exclude(seller__pk=buyer_id).filter(seller__app_flavor=appFlavor).filter(
                     Q(price__lte=filter_price)).filter(Q(status=Items.ACTIVE) | Q(status=Items.PENDING)).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
                 users_list = Items.objects.filter(Q(seller__pk=buyer_id)).filter(
                     Q(status=Items.ACTIVE) | Q(status=Items.PENDING)).order_by('-post_date')[:1]
         else:
+            logging.info(" distance filter")
             if(filter_price == MAX_ITEM_PRICE):
+                logging.info(" no max price filter")
                 item_list = Items.objects.exclude(pk__in=items_viewed).exclude(seller__pk=buyer_id).filter(seller__app_flavor=appFlavor).filter(Q(status=Items.ACTIVE) | Q(
                     status=Items.PENDING)).filter(longitude__lte=lonMax, longitude__gte=lonMin, latitude__lte=latMax, latitude__gte=latMin).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
                 users_list = Items.objects.filter(Q(seller__pk=buyer_id)).filter(
                     Q(status=Items.ACTIVE) | Q(status=Items.PENDING)).order_by('-post_date')[:1]
             else:
+                logging.info(" max price filter")
                 item_list = Items.objects.exclude(pk__in=items_viewed).exclude(seller__pk=buyer_id).filter(seller__app_flavor=appFlavor).filter(Q(price__lte=filter_price)).filter(
                     Q(status=Items.ACTIVE) | Q(status=Items.PENDING)).filter(longitude__lte=lonMax, longitude__gte=lonMin, latitude__lte=latMax, latitude__gte=latMin).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
                 users_list = Items.objects.filter(Q(seller__pk=buyer_id)).filter(
                     Q(status=Items.ACTIVE) | Q(status=Items.PENDING)).order_by('-post_date')[:1]
 
+    logging.info("paginating")
     item_array = []
     paginatedItems = Paginator(item_list, 100)
     numUserItems = 0
 
-    logging.info("Num items {}".len(users_list))
+    logging.info("Num items {}".format(len(item_list)))
+    logging.info("Num items from user {}".format(len(users_list)))
 
     # show user's items before other items - place at top of array.
     if(users_list is not None and len(users_list) != 0):
