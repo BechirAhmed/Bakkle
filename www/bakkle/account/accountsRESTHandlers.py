@@ -188,6 +188,8 @@ class loginFacebookHandler(bakkleRequestHandler):
                                                         client_ip,
                                                         app_flavor)
 
+        logging.info("loginfacebook: user_id={} uuid={} client_ip={}".format(user_id, device_uuid, client_ip))
+        logging.info("response: {}".format(respObj))
         self.writeJSON(respObj)
 
 
@@ -223,6 +225,7 @@ class getAccountHandler(bakkleRequestHandler):
 
         try:
             accountId = self.getArgument('accountId')
+            logging.info("accountid={}".format(accountId))
         except QueryArgumentError as error:
             return self.writeJSON({"status": 0, "message": error.message})
 
@@ -331,7 +334,8 @@ class setPasswordHandler(bakkleRequestHandler):
             facebook_id = self.getArgument('user_id')
             device_uuid = self.getArgument('device_uuid')
             app_flavor = self.getArgument('flavor', 1)
-            password = self.getArgument('password', 1)
+            password = self.getArgument('password')
+            logging.info("Setting password userid={}".format(facebook_id))
         except QueryArgumentError as error:
             return self.writeJSON({"status": 0, "message": error.message})
 
@@ -351,6 +355,7 @@ class authenticateLocalHandler(bakkleRequestHandler):
             device_uuid = self.getArgument('device_uuid')
             app_flavor = self.getArgument('flavor', 1)
             password = self.getArgument('password')
+            logging.info("authenticate userid={} device={}".format(facebook_id, device_uuid))
         except QueryArgumentError as error:
             return self.writeJSON({"status": 0, "message": error.message})
 

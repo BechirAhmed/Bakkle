@@ -313,7 +313,7 @@ def set_password(facebook_id, device_uuid, app_flavor, password):
             app_flavor=app_flavor)[0]
         account.password = password
         account.save()
-        logging.info("password set account.id={}".format(account.id))
+        #logging.info("password set account.id={}".format(account.id))
     except:
         return {"status": 0, "message": "error setting password"}
     return {"status": 1}
@@ -323,16 +323,16 @@ def set_password(facebook_id, device_uuid, app_flavor, password):
 def authenticate_local(facebook_id, device_uuid, app_flavor, password):
 
     try:
-        account = Account.objects.get(
+        account = Account.objects.get_or_create(
             facebook_id=facebook_id,
             app_flavor=app_flavor)[0]
-        if md5.new(account.password).hexdigest() != md5.new(display_name).hexdigest():
-            logging.info("authentication rejected account.id={}".format(account.id))
+        if md5.new(account.password).hexdigest() != md5.new(password).hexdigest():
+            #logging.info("authentication rejected account.id={}".format(account.id))
             return {"status": 0, "message": "incorrect username or password"}
     except:
-        logging.info("authentication failed account.id={}".format(facebook_id))
+        #logging.info("authentication failed account.id={}".format(facebook_id))
         return {"status": 0, "message": "incorrect username"}
-    logging.info("authentication succeeded account.id={}".format(account.id))
+    #logging.info("authentication succeeded account.id={}".format(account.id))
     return {"status": 1}
 
 
