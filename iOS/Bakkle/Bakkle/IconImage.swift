@@ -57,6 +57,11 @@ class IconImage {
         return factory.createImageForIcon(NIKFontAwesomeIcon.Edit)
     }
     
+    func edit(color: UIColor) -> UIImage {
+        factory.colors = [color]
+        return factory.createImageForIcon(NIKFontAwesomeIcon.Edit)
+    }
+    
     func edit() -> UIImage {
         setup(MENU_SIZE)
         return factory.createImageForIcon(NIKFontAwesomeIcon.Edit)

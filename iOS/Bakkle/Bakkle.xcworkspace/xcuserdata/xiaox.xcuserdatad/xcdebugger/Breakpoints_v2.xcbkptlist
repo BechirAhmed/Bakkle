@@ -25,46 +25,110 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Bakkle/Bakkle.swift"
-            timestampString = "469146755.808178"
+            filePath = "Bakkle/MenuTableView.swift"
+            timestampString = "469740789.065585"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "141"
-            endingLineNumber = "141"
-            landmarkName = "init()"
+            startingLineNumber = "91"
+            endingLineNumber = "91"
+            landmarkName = "setupBackground()"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Bakkle/Bakkle.swift"
+            timestampString = "469745267.913963"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1429"
+            endingLineNumber = "1429"
+            landmarkName = "persistData()"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Bakkle/LoginView.swift"
+            timestampString = "469744670.131917"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "96"
+            endingLineNumber = "96"
+            landmarkName = "bakkleLogin()"
             landmarkType = "5">
             <Locations>
                <Location
                   shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "Bakkle.Bakkle.init (Bakkle.Bakkle.Type)() -&gt; Bakkle.Bakkle"
+                  symbolName = "Bakkle.LoginView.(bakkleLogin (Bakkle.LoginView) -&gt; () -&gt; ()).(closure #1)"
                   moduleName = "Bakkle"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/xiaox/Documents/omnisite-bakkle/iOS/Bakkle/Bakkle/Bakkle.swift"
-                  timestampString = "469146765.16036"
+                  urlString = "file:///Users/xiaox/Documents/omnisite-bakkle/iOS/Bakkle/Bakkle/LoginView.swift"
+                  timestampString = "469743370.53729"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "142"
-                  endingLineNumber = "142"
-                  offsetFromSymbolStart = "5624">
+                  startingLineNumber = "95"
+                  endingLineNumber = "95"
+                  offsetFromSymbolStart = "2684">
                </Location>
                <Location
                   shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "Bakkle.Bakkle.(init (Bakkle.Bakkle.Type) -&gt; () -&gt; Bakkle.Bakkle).(closure #1)"
+                  symbolName = "Bakkle.LoginView.(bakkleLogin (Bakkle.LoginView) -&gt; () -&gt; ()).(closure #1).(closure #1)"
                   moduleName = "Bakkle"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/xiaox/Documents/omnisite-bakkle/iOS/Bakkle/Bakkle/Bakkle.swift"
-                  timestampString = "469146765.160621"
+                  urlString = "file:///Users/xiaox/Documents/omnisite-bakkle/iOS/Bakkle/Bakkle/LoginView.swift"
+                  timestampString = "469743370.537509"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "142"
-                  endingLineNumber = "142"
-                  offsetFromSymbolStart = "0">
+                  startingLineNumber = "97"
+                  endingLineNumber = "97"
+                  offsetFromSymbolStart = "16">
                </Location>
             </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Bakkle/AppDelegate.swift"
+            timestampString = "469743813.154025"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "41"
+            endingLineNumber = "41"
+            landmarkName = "application(_:didFinishLaunchingWithOptions:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Bakkle/Bakkle.swift"
+            timestampString = "469743939.182612"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "527"
+            endingLineNumber = "527"
+            landmarkName = "facebook(_:name:userid:first_name:last_name:success:)"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
