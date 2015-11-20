@@ -62,6 +62,7 @@
 		602C39151B3C9B12005CB493 /* PNChartConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602C39141B3C9B12005CB493 /* PNChartConfig.swift */; };
 		6034E6951B41B93900DEA291 /* AcceptOfferCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6034E6941B41B93900DEA291 /* AcceptOfferCell.swift */; };
 		604D602E1BFFA0A10060579C /* default_profile.png in Resources */ = {isa = PBXBuildFile; fileRef = 604D602D1BFFA0A10060579C /* default_profile.png */; };
+		604D60301BFFBC690060579C /* SigUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604D602F1BFFBC690060579C /* SigUpView.swift */; };
 		60708D561BF681FD0021D5A6 /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60708D551BF681FD0021D5A6 /* SignInView.swift */; };
 		60EEB9981B5546F100E87B8D /* switch-camera-outline.png in Resources */ = {isa = PBXBuildFile; fileRef = 60EEB9971B5546F100E87B8D /* switch-camera-outline.png */; };
 		60F3BC0E1B5E900A0033EF83 /* Goodwill Logo.png in Resources */ = {isa = PBXBuildFile; fileRef = F0D6F3F91B5E8B3E00938A06 /* Goodwill Logo.png */; };
@@ -275,6 +276,7 @@
 		602C39141B3C9B12005CB493 /* PNChartConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PNChartConfig.swift; sourceTree = "<group>"; };
 		6034E6941B41B93900DEA291 /* AcceptOfferCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AcceptOfferCell.swift; sourceTree = "<group>"; };
 		604D602D1BFFA0A10060579C /* default_profile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = default_profile.png; sourceTree = "<group>"; };
+		604D602F1BFFBC690060579C /* SigUpView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SigUpView.swift; sourceTree = "<group>"; };
 		60708D551BF681FD0021D5A6 /* SignInView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		60EEB9971B5546F100E87B8D /* switch-camera-outline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "switch-camera-outline.png"; sourceTree = "<group>"; };
 		60F3BC101B5E90BC0033EF83 /* Goodwill-LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "Goodwill-LaunchScreen.xib"; sourceTree = "<group>"; };
@@ -619,6 +621,7 @@
 			children = (
 				5EBDD6921AB211E600C7FBE7 /* LoginView.swift */,
 				60708D551BF681FD0021D5A6 /* SignInView.swift */,
+				604D602F1BFFBC690060579C /* SigUpView.swift */,
 				5EE2C98A1AB9D1730031D8CD /* FeedView.swift */,
 				1B00CB1A1B22231B00710C01 /* ItemData.swift */,
 				A0D96F851AD771900046DA13 /* SellersGarage.swift */,
@@ -1122,6 +1125,7 @@
 				728647EB1B2F0E3F009A24C9 /* ChatsViewController.swift in Sources */,
 				DB6726DF1B1765810014A896 /* RateView.m in Sources */,
 				A08D53D61B0815CB000C406C /* UserCell.swift in Sources */,
+				604D60301BFFBC690060579C /* SigUpView.swift in Sources */,
 				5EE2C9BB1AB9F0FB0031D8CD /* MDCViewState.m in Sources */,
 				5E78D7E11AF121BA0014ED8F /* GarageCell.swift in Sources */,
 				A0D96F861AD771900046DA13 /* SellersGarage.swift in Sources */,

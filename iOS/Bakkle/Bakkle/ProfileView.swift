@@ -119,7 +119,7 @@ class ProfileView: UIViewController, UITextViewDelegate {
         self.nameLabel.text = user.valueForKey("display_name") as? String
         self.editBtn.enabled = true
         self.editBtn.backgroundColor = Theme.ColorGreen
-
+        
         self.descriptionTextView.text = user.valueForKey("description") as? String
         if descriptionTextView.text.isEmpty {
             descriptionTextView.textColor = AddItem.DESCRIPTION_PLACEHOLDER_COLOR
@@ -149,7 +149,15 @@ class ProfileView: UIViewController, UITextViewDelegate {
         }else{
             FBSDKLoginManager().logOut()
             FBSDKAccessToken.setCurrentAccessToken(nil)
-            Bakkle.sharedInstance.logout()
+            Bakkle.sharedInstance.logout({ () -> () in
+                Bakkle.sharedInstance.facebook("", name: "Guest User", userid: Bakkle.sharedInstance.guest_id_str, first_name: "Guest", last_name: "User", success: { () -> () in
+                    Bakkle.sharedInstance.login({
+                        Bakkle.sharedInstance.populateFeed({})
+                        }, fail: {})
+                    
+                })
+                
+            })
             setGuestInfo()
         }
     }

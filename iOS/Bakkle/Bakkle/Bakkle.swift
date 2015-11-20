@@ -144,7 +144,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         
         settings()
         
-        self.account_type = 0
+//        self.account_type = 0
     }
     
     /* Return a public URL to the item on the web */
@@ -524,9 +524,8 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         let url:NSURL? = NSURL(string: url_base + url_facebook)
         let request = NSMutableURLRequest(URL: url!)
         
-        if self.account_type == 2 || self.account_type == 1 {
+        if self.account_type != 0 {
             self.facebook_id_str = userid
-            
         }
             
         request.HTTPMethod = "POST"
@@ -584,7 +583,13 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             let encLocation = user_location.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
             request.HTTPMethod = "POST"
-            let postString = "device_uuid=\(self.deviceUUID)&user_id=\(self.facebook_id_str)&screen_width=\(screen_width)&screen_height=\(screen_height)&app_version=\(a)&app_build=\(b)&user_location=\(encLocation)&is_ios=true&flavor=\(self.flavor)"
+        var user_id: String
+        if Bakkle.sharedInstance.account_type == 0 {
+            user_id = self.guest_id_str
+        }else{
+            user_id = self.facebook_id_str
+        }
+            let postString = "device_uuid=\(self.deviceUUID)&user_id=\(user_id)&screen_width=\(screen_width)&screen_height=\(screen_height)&app_version=\(a)&app_build=\(b)&user_location=\(encLocation)&is_ios=true&flavor=\(self.flavor)"
             request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
             
             println("[Bakkle] login (facebook)")
@@ -613,7 +618,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                     WSManager.connectWS()
                     success()
                 } else {
-                    Bakkle.sharedInstance.logout()
+                    Bakkle.sharedInstance.logout({})
                     fail()
                 }
             }
@@ -621,7 +626,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     }
     
     /* logout */
-    func logout() {
+    func logout(success: () -> ()) {
         let url:NSURL? = NSURL(string: url_base + url_logout)
         let request = NSMutableURLRequest(URL: url!)
         
@@ -642,9 +647,8 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             let responseString = NSString(data: data, encoding: NSUTF8StringEncoding)
             println("Response: \(responseString)")
             
-            self.auth_token = nil
-            self.account_id = nil
             self.account_type = 0
+            success()
         }
         task.resume()
     }

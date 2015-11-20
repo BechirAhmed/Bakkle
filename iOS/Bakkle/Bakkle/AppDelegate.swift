@@ -3,7 +3,7 @@
 //  Bakkle
 //
 //  Created by Ishank Tandon on 3/12/15.
-//  Copyright (c) 2015 Ishank Tandon. All rights reserved.
+//  Copyright (c) 2015 Ishank Tandon. All rights reserved.fgcbxbfdbffhgsbfsxc z fd
 //
 
 import UIKit
@@ -35,7 +35,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             Bakkle.sharedInstance.userInfo = userInfo
         }
 
-        print(Bakkle.sharedInstance.account_type)
+//        print(Bakkle.sharedInstance.account_type)
         if Bakkle.sharedInstance.account_type == 0 {
             Bakkle.sharedInstance.guestUserID(Bakkle.sharedInstance.deviceUUID){
                 Bakkle.sharedInstance.facebook("", name: "Guest User", userid: Bakkle.sharedInstance.guest_id_str, first_name: "Guest", last_name: "User", success: { () -> () in
@@ -46,12 +46,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 })
             }
         }
-//        else  {
-//            print(Bakkle.sharedInstance.first_name)
-//            Bakkle.sharedInstance.login({ () -> () in
-//                Bakkle.sharedInstance.populateFeed({})
-//                }, fail: {})
-//        }
+        else  {
+            print(Bakkle.sharedInstance.first_name)
+            Bakkle.sharedInstance.login({ () -> () in
+                Bakkle.sharedInstance.populateFeed({})
+                }, fail: {})
+        }
         
         
         
