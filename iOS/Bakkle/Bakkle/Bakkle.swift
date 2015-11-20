@@ -1566,11 +1566,11 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         self.info("Stored account_type = \(self.account_type)")
 
         // Store FIRST_NAME
-        userDefaults.setObject(self.account_type, forKey: "first_name")
+        userDefaults.setObject(self.first_name, forKey: "first_name")
         self.info("Stored first_name = \(self.first_name)")
         
         // Store LAST NAME
-        userDefaults.setObject(self.account_type, forKey: "last_name")
+        userDefaults.setObject(self.last_name, forKey: "last_name")
         self.info("Stored last_name = \(self.last_name)")
         
         userDefaults.synchronize()
