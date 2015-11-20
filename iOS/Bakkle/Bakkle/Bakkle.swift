@@ -152,13 +152,6 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         */
     }
     
-    //func isGuest( ) {
-    //    return isGuest;
-   // }
-//    func isLoggedIn( ) {
-//        return
-//    }
-    
     /* Return a public URL to the item on the web */
     /* In future we hope to have a URL shortener */
     func getItemURL( item_id: Int ) -> ( String ) {
@@ -478,7 +471,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                 if responseDict.valueForKey("status")?.integerValue == 1 {
                     // TODO: write what need to do if succeed
                     self.auth_token = responseDict.valueForKey("auth_token") as! String
-                    self.isGuest = true
+                    self.account_type = 0
                     success()
                 }
             } else {
@@ -526,7 +519,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                     self.auth_token = responseDict.valueForKey("auth_token") as! String
                     var accountId = split(self.auth_token) {$0 == "_"}
                     self.account_id = accountId[1].toInt()
-                    self.isGuest = false
+                    self.account_type = 1
                     // Connect to web socket
                     WSManager.setAuthenticationWithUUID(self.deviceUUID, withToken: self.auth_token)
                     WSManager.connectWS()
@@ -566,7 +559,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             
             self.auth_token = nil
             self.account_id = nil
-            self.isGuest = true
+            self.account_type = 0
         }
         task.resume()
     }
@@ -1281,11 +1274,11 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             self.account_type = temp
             self.info("Restored \( self.account_type ) account_type.")
         }
-        if let temp = userDefaults.objectForKey("first_name") as? Int {
+        if let temp = userDefaults.objectForKey("first_name") as? String {
             self.first_name = temp
             self.info("Restored \( self.first_name ) first_name.")
         }
-        if let temp = userDefaults.objectForKey("last_name") as? Int {
+        if let temp = userDefaults.objectForKey("last_name") as? String {
             self.last_name = temp
             self.info("Restored \( self.last_name ) last_name.")
         }

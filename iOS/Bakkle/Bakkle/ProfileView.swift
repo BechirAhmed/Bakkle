@@ -77,7 +77,7 @@ class ProfileView: UIViewController, UITextViewDelegate {
     
     override func viewWillAppear(animated: Bool) {
         
-        if Bakkle.sharedInstance.isGuest {
+        if Bakkle.sharedInstance.account_type == 0 {
             setGuestInfo()
         }else{
             setUserInfo()
@@ -139,7 +139,7 @@ class ProfileView: UIViewController, UITextViewDelegate {
     }
     
     @IBAction func btnLogout(sender: AnyObject) {
-        if (Bakkle.sharedInstance.isGuest) {
+        if Bakkle.sharedInstance.account_type == 0 {
             self.logoutBtn.setTitle("LOG OUT", forState: UIControlState.Normal)
             let sb = UIStoryboard(name: "Main", bundle: nil)
             let vc = sb.instantiateViewControllerWithIdentifier("loginView") as! LoginView

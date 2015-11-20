@@ -151,7 +151,7 @@ class SellersGarageView: UIViewController, UITableViewDelegate, UITableViewDataS
     
     @IBAction func btnAdd(sender: AnyObject) {
         let sb = UIStoryboard(name: "Main", bundle: nil)
-        if Bakkle.sharedInstance.isGuest {
+        if Bakkle.sharedInstance.account_type == 0 {
             let vc = sb.instantiateViewControllerWithIdentifier("loginView") as! LoginView
             self.presentViewController(vc, animated: true, completion: nil)
         }else{
@@ -265,7 +265,7 @@ class SellersGarageView: UIViewController, UITableViewDelegate, UITableViewDataS
             return
         }
         let sb = UIStoryboard(name: "Main", bundle: nil)
-        if Bakkle.sharedInstance.isGuest {
+        if Bakkle.sharedInstance.account_type == 0 {
             let vc = sb.instantiateViewControllerWithIdentifier("loginView") as! LoginView
             self.presentViewController(vc, animated: true, completion: nil)
         }else{

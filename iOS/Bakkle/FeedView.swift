@@ -742,7 +742,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     
     @IBAction func sendMessage (sender: UIButton) {
         let sb = UIStoryboard(name: "Main", bundle: nil)
-        if Bakkle.sharedInstance.isGuest {
+        if Bakkle.sharedInstance.account_type == 0 {
             let vc = sb.instantiateViewControllerWithIdentifier("loginView") as! LoginView
             self.presentViewController(vc, animated: true, completion: nil)
         }else{
@@ -776,7 +776,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     
     @IBAction func makeAnOffer(sender: UIButton) {
         let sb = UIStoryboard(name: "Main", bundle: nil)
-        if Bakkle.sharedInstance.isGuest {
+        if Bakkle.sharedInstance.account_type == 0 {
             let vc = sb.instantiateViewControllerWithIdentifier("loginView") as! LoginView
             self.presentViewController(vc, animated: true, completion: nil)
         }else{
@@ -817,7 +817,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     
     @IBAction func loginCheck(sender: AnyObject) {
         let sb = UIStoryboard(name: "Main", bundle: nil)
-        if Bakkle.sharedInstance.isGuest {
+        if Bakkle.sharedInstance.account_type == 0 {
             let vc = sb.instantiateViewControllerWithIdentifier("loginView") as! LoginView
             self.presentViewController(vc, animated: true, completion: nil)
         }else{

@@ -100,7 +100,7 @@ class MenuTableController: UITableViewController {
     }
     
     func setupProfileImg() {
-        if Bakkle.sharedInstance.auth_token == nil {
+        if Bakkle.sharedInstance.account_type == 0 {
             self.profileImg.image = UIImage(named: "default_profile")
         }else{
             self.profileImg.hnk_setImageFromURL(Bakkle.sharedInstance.profileImgURL!)
@@ -113,7 +113,7 @@ class MenuTableController: UITableViewController {
     }
     
     func setupProfileLabel() {
-        if Bakkle.sharedInstance.auth_token == nil {
+        if Bakkle.sharedInstance.account_type == 0 {
             self.nameLabel.text = "Guest"
         }else{
             self.nameLabel.text = Bakkle.sharedInstance.first_name + " " + Bakkle.sharedInstance.last_name
@@ -152,7 +152,7 @@ class MenuTableController: UITableViewController {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if indexPath.row == 0 {
             self.view.userInteractionEnabled = false
-            if Bakkle.sharedInstance.isGuest {
+            if Bakkle.sharedInstance.account_type == 0 {
                 self.performSegueWithIdentifier(self.profileSegue, sender: self)
             }else{
                 Bakkle.sharedInstance.getAccount(Bakkle.sharedInstance.account_id, success: {

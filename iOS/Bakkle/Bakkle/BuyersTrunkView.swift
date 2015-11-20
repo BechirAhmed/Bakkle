@@ -237,7 +237,7 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
             return
         }
         let sb = UIStoryboard(name: "Main", bundle: nil)
-        if Bakkle.sharedInstance.isGuest {
+        if Bakkle.sharedInstance.account_type == 0 {
             let vc = sb.instantiateViewControllerWithIdentifier("loginView") as! LoginView
             self.presentViewController(vc, animated: true, completion: nil)
         }else{
