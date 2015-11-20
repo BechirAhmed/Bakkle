@@ -3,7 +3,7 @@
 //  Bakkle
 //
 //  Created by Ishank Tandon on 3/12/15.
-//  Copyright (c) 2015 Ishank Tandon. All rights reserved.fgcbxbfdbffhgsbfsxc z fd
+//  Copyright (c) 2015 Ishank Tandon. All rights reserved.
 //
 
 import UIKit
