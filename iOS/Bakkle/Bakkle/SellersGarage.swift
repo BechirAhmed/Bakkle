@@ -149,6 +149,17 @@ class SellersGarageView: UIViewController, UITableViewDelegate, UITableViewDataS
         self.revealViewController().revealToggleAnimated(true)
     }
     
+    @IBAction func btnAdd(sender: AnyObject) {
+        let sb = UIStoryboard(name: "Main", bundle: nil)
+        if Bakkle.sharedInstance.account_type == 0 {
+            let vc = sb.instantiateViewControllerWithIdentifier("loginView") as! LoginView
+            self.presentViewController(vc, animated: true, completion: nil)
+        }else{
+            let vc = sb.instantiateViewControllerWithIdentifier("CameraView") as! CameraView
+            self.presentViewController(vc, animated: true, completion: nil)
+        }
+    }
+    
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
@@ -253,12 +264,19 @@ class SellersGarageView: UIViewController, UITableViewDelegate, UITableViewDataS
         if indexPath.row == 0 || indexPath.row == activeItem.count + 1 {
             return
         }
-        let chatsViewController = ChatsViewController()
-        chatsViewController.chatItemID = (getItem(indexPath).valueForKey("pk") as! NSNumber).stringValue
-        chatsViewController.garageIndex = getIndex(indexPath)
-        self.navigationController?.pushViewController(chatsViewController, animated: true)
-        self.view.userInteractionEnabled = false
-        self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        let sb = UIStoryboard(name: "Main", bundle: nil)
+        if Bakkle.sharedInstance.account_type == 0 {
+            let vc = sb.instantiateViewControllerWithIdentifier("loginView") as! LoginView
+            self.presentViewController(vc, animated: true, completion: nil)
+        }else{
+            let chatsViewController = ChatsViewController()
+            chatsViewController.chatItemID = (getItem(indexPath).valueForKey("pk") as! NSNumber).stringValue
+            chatsViewController.garageIndex = getIndex(indexPath)
+            self.navigationController?.pushViewController(chatsViewController, animated: true)
+            self.view.userInteractionEnabled = false
+            self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        }
+       
     }
     
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {

@@ -11,7 +11,7 @@ import Photos
 import Haneke
 
 class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDelegate, UINavigationControllerDelegate, MDCSwipeToChooseDelegate, UIAlertViewDelegate {
-
+    
     
     let menuSegue = "presentNav"
     let itemDetailSegue = "ItemDetailSegue"
@@ -197,13 +197,13 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(true)
-    
+        
         if Bakkle.sharedInstance.flavor == Bakkle.GOODWILL {
             var goodwillLogo: UIImageView = UIImageView(frame: CGRectMake(btnAddItem.frame.origin.x, logoImageView.frame.midY + 2.5, 35.0, 35.0))
             goodwillLogo.image = UIImage(named: "gwIcon@2x.png")!
             goodwillLogo.layer.cornerRadius = 7.0
-//            goodwillLogo.layer.borderWidth = 1.0
-//            goodwillLogo.layer.borderColor = UIColor.whiteColor().CGColor
+            //            goodwillLogo.layer.borderWidth = 1.0
+            //            goodwillLogo.layer.borderColor = UIColor.whiteColor().CGColor
             goodwillLogo.layer.masksToBounds = true
             self.view.addSubview(goodwillLogo)
         }
@@ -220,7 +220,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         
         // Always look for updates
         requestUpdates()
-
+        
         filterChanged()
         
         resetSwipeView()
@@ -233,7 +233,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                 }
             }
         }
-
+        
         fromCamera = false
     }
     
@@ -249,7 +249,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         // set up image for tutorial
         view.imageView.image = UIImage(named: "InstructionScreen-new.png")
     }
-        
+    
     
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self)
@@ -328,7 +328,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         println("[FeedScreen] removing item from feed")
         
         // Put the swipe view back in the correct location
-//        resetSwipeView()
+        //        resetSwipeView()
         
         if(Bakkle.sharedInstance.feedItems.count < 10){
             requestUpdates();
@@ -384,9 +384,9 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                     self.view.insertSubview(self.bottomView, belowSubview: self.swipeView)
                 }
         }
-        
-        
-        /* If view is off the page we need to reset the view */
+            
+            
+            /* If view is off the page we need to reset the view */
         else if (state != nil && state.direction != MDCSwipeDirection.None) {
             
             //if view is still on page, yet has been swiped in a direction, remove it.
@@ -404,7 +404,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             //add gesture recognizer to top view (swipeView)
             self.swipeView.addGestureRecognizer(itemDetailTap)
         }
-
+        
     }
     
     /* Check server for new items */
@@ -444,7 +444,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         let facebookID = sellersProfile.valueForKey("facebook_id") as! String
         let sellersName = sellersProfile.valueForKey("display_name") as! String
         var facebookProfileImgString = "http://graph.facebook.com/\(facebookID)/picture?width=142&height=142"
-    
+        
         let dividedName = split(sellersName) {$0 == " "}
         let firstName = dividedName[0] as String
         
@@ -463,8 +463,8 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         }
         view.priceLabel.text = myString
         view.sellerName.text = firstName
-//        view.ratingView.rating = 3.5
-    
+        //        view.ratingView.rating = 3.5
+        
         if imgURL != nil {
             view.bottomBlurImg.hnk_setImageFromURL(imgURL!)
             view.imageView.hnk_setImageFromURL(imgURL!)
@@ -498,7 +498,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                 if let x: AnyObject = topItem.valueForKey("pk") {
                     self.item_id = Int(x.intValue)
                 }
-
+                
                 if self.swipeView.tutorial  {
                     displayInstruction(self.swipeView)
                 }else{
@@ -510,7 +510,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                 if Bakkle.sharedInstance.feedItems.count > 1 {
                     if self.bottomView != nil {
                         self.bottomView.alpha = 1
-                                
+                        
                         var bottomItem = Bakkle.sharedInstance.feedItems[1] as! NSDictionary
                         setupView(self.bottomView, item: bottomItem)
                     }
@@ -586,8 +586,8 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         case MDCSwipeDirection.Right:
             
             /* Don't mark as want at first
-                should mark item according what is selected on the start a chat screen */
-//            Bakkle.sharedInstance.markItem("want", item_id: self.item_id, success: {}, fail: {})
+            should mark item according what is selected on the start a chat screen */
+            //            Bakkle.sharedInstance.markItem("want", item_id: self.item_id, success: {}, fail: {})
             self.itemData = Bakkle.sharedInstance.feedItems[0] as? NSDictionary
             
             // Ensure that the item isn't your own
@@ -689,8 +689,8 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         UIView.animateWithDuration(0.75, animations: { Void in
             self.startChatView.transform = CGAffineTransformRotate(CGAffineTransformIdentity, 0)
             self.startChatView.layoutIfNeeded()
-        }, completion: {Void in
-        
+            }, completion: {Void in
+                
         })
     }
     
@@ -729,72 +729,85 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         UIView.animateWithDuration(0.16, animations: { Void in
             self.startChatView.transform = CGAffineTransformRotate(CGAffineTransformIdentity, transformAngle)
             self.startChatView.layoutIfNeeded()
-        }, completion: {Void in
-            self.revealViewController().panGestureRecognizer().enabled = true
-            
-            self.startChatView.transform = CGAffineTransformRotate(CGAffineTransformIdentity, CGFloat(-M_PI_4))
-            self.startChatViewOriginX.constant = self.startChatView.frame.width * -1
-            self.startChatView.hidden = true
-            self.darkenStartAChat.alpha = 0.0
-            self.loadNext()
+            }, completion: {Void in
+                self.revealViewController().panGestureRecognizer().enabled = true
+                
+                self.startChatView.transform = CGAffineTransformRotate(CGAffineTransformIdentity, CGFloat(-M_PI_4))
+                self.startChatViewOriginX.constant = self.startChatView.frame.width * -1
+                self.startChatView.hidden = true
+                self.darkenStartAChat.alpha = 0.0
+                self.loadNext()
         })
     }
     
     @IBAction func sendMessage (sender: UIButton) {
-        sender.layer.borderColor = UIColor.whiteColor().CGColor
-        
-        let buyer = User(facebookID: Bakkle.sharedInstance.facebook_id_str,accountID: Bakkle.sharedInstance.account_id,
-            firstName: Bakkle.sharedInstance.first_name, lastName: Bakkle.sharedInstance.last_name)
-        let account = Account(user: buyer)
-        let chatItem = self.itemData!
-        let chatItemId = String(sender.tag)
-        var chatId: Int = 0
-        var chatPayload: WSRequest = WSStartChatRequest(itemId: chatItemId)
-        chatPayload.successHandler = {
-            (var success: NSDictionary) in
-            chatId = success.valueForKey("chatId") as! Int
-            var buyerChat = Chat(user: buyer, lastMessageText: "", lastMessageSentDate: NSDate(), chatId: chatId)
-            let chatViewController = ChatViewController(chat: buyerChat)
-            chatViewController.itemData = chatItem
-            chatViewController.seller = chatItem.valueForKey("seller") as! NSDictionary
-            chatViewController.isBuyer = true
-            self.navigationController?.pushViewController(chatViewController, animated: true)
+        let sb = UIStoryboard(name: "Main", bundle: nil)
+        if Bakkle.sharedInstance.account_type == 0 {
+            let vc = sb.instantiateViewControllerWithIdentifier("loginView") as! LoginView
+            self.presentViewController(vc, animated: true, completion: nil)
+        }else{
+            sender.layer.borderColor = UIColor.whiteColor().CGColor
+            
+            let buyer = User(facebookID: Bakkle.sharedInstance.facebook_id_str,accountID: Bakkle.sharedInstance.account_id,
+                firstName: Bakkle.sharedInstance.first_name, lastName: Bakkle.sharedInstance.last_name)
+            let account = Account(user: buyer)
+            let chatItem = self.itemData!
+            let chatItemId = String(sender.tag)
+            var chatId: Int = 0
+            var chatPayload: WSRequest = WSStartChatRequest(itemId: chatItemId)
+            chatPayload.successHandler = {
+                (var success: NSDictionary) in
+                chatId = success.valueForKey("chatId") as! Int
+                var buyerChat = Chat(user: buyer, lastMessageText: "", lastMessageSentDate: NSDate(), chatId: chatId)
+                let chatViewController = ChatViewController(chat: buyerChat)
+                chatViewController.itemData = chatItem
+                chatViewController.seller = chatItem.valueForKey("seller") as! NSDictionary
+                chatViewController.isBuyer = true
+                self.navigationController?.pushViewController(chatViewController, animated: true)
+            }
+            WSManager.enqueueWorkPayload(chatPayload)
+            
+            // mark as want
+            Bakkle.sharedInstance.markItem("want", item_id: self.item_id, success: {}, fail: {})
+            
+            self.closeStartAChat(nil)
         }
-        WSManager.enqueueWorkPayload(chatPayload)
-        
-        // mark as want
-        Bakkle.sharedInstance.markItem("want", item_id: self.item_id, success: {}, fail: {})
-        
-        self.closeStartAChat(nil)
     }
     
     @IBAction func makeAnOffer(sender: UIButton) {
-        sender.layer.borderColor = UIColor.whiteColor().CGColor
-        
-        let buyer = User(facebookID: Bakkle.sharedInstance.facebook_id_str,accountID: Bakkle.sharedInstance.account_id,
-            firstName: Bakkle.sharedInstance.first_name, lastName: Bakkle.sharedInstance.last_name)
-        let account = Account(user: buyer)
-        let chatItem = self.itemData!
-        let chatItemId = String(sender.tag)
-        var chatId: Int = 0
-        var chatPayload: WSRequest = WSStartChatRequest(itemId: chatItemId)
-        chatPayload.successHandler = {
-            (var success: NSDictionary) in
-            chatId = success.valueForKey("chatId") as! Int
-            var buyerChat = Chat(user: buyer, lastMessageText: "", lastMessageSentDate: NSDate(), chatId: chatId)
-            let chatViewController = ChatViewController(chat: buyerChat)
-            chatViewController.itemData = chatItem
-            chatViewController.seller = chatItem.valueForKey("seller") as! NSDictionary
-            chatViewController.isBuyer = true
-            chatViewController.shouldProposeOffer = true
-            self.navigationController?.pushViewController(chatViewController, animated: true)
+        let sb = UIStoryboard(name: "Main", bundle: nil)
+        if Bakkle.sharedInstance.account_type == 0 {
+            let vc = sb.instantiateViewControllerWithIdentifier("loginView") as! LoginView
+            self.presentViewController(vc, animated: true, completion: nil)
+        }else{
+            
+            sender.layer.borderColor = UIColor.whiteColor().CGColor
+            
+            let buyer = User(facebookID: Bakkle.sharedInstance.facebook_id_str,accountID: Bakkle.sharedInstance.account_id,
+                firstName: Bakkle.sharedInstance.first_name, lastName: Bakkle.sharedInstance.last_name)
+            let account = Account(user: buyer)
+            let chatItem = self.itemData!
+            let chatItemId = String(sender.tag)
+            var chatId: Int = 0
+            var chatPayload: WSRequest = WSStartChatRequest(itemId: chatItemId)
+            chatPayload.successHandler = {
+                (var success: NSDictionary) in
+                chatId = success.valueForKey("chatId") as! Int
+                var buyerChat = Chat(user: buyer, lastMessageText: "", lastMessageSentDate: NSDate(), chatId: chatId)
+                let chatViewController = ChatViewController(chat: buyerChat)
+                chatViewController.itemData = chatItem
+                chatViewController.seller = chatItem.valueForKey("seller") as! NSDictionary
+                chatViewController.isBuyer = true
+                chatViewController.shouldProposeOffer = true
+                self.navigationController?.pushViewController(chatViewController, animated: true)
+            }
+            WSManager.enqueueWorkPayload(chatPayload)
+            
+            // mark as want
+            Bakkle.sharedInstance.markItem("want", item_id: self.item_id, success: {}, fail: {})
+            
+            self.closeStartAChat(nil)
         }
-        WSManager.enqueueWorkPayload(chatPayload)
-        
-        // mark as want
-        Bakkle.sharedInstance.markItem("want", item_id: self.item_id, success: {}, fail: {})
-        
-        self.closeStartAChat(nil)
     }
     
     @IBAction func saveToWatchList(sender: AnyObject) {
@@ -802,6 +815,16 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         self.closeStartAChat(nil)
     }
     
+    @IBAction func loginCheck(sender: AnyObject) {
+        let sb = UIStoryboard(name: "Main", bundle: nil)
+        if Bakkle.sharedInstance.account_type == 0 {
+            let vc = sb.instantiateViewControllerWithIdentifier("loginView") as! LoginView
+            self.presentViewController(vc, animated: true, completion: nil)
+        }else{
+            let vc = sb.instantiateViewControllerWithIdentifier("CameraView") as! CameraView
+            self.presentViewController(vc, animated: true, completion: nil)
+        }
+    }
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         if segue.identifier == self.itemDetailSegue {
             let destinationVC = segue.destinationViewController as! ItemDetails
