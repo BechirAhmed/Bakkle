@@ -11,12 +11,16 @@ import FBSDKLoginKit
 
 class Bakkle : NSObject, CLLocationManagerDelegate {
     
-    let apiVersion: Float = 1.2
+    let apiVersion: Float = 1.3
     var url_base: String          = "https://app.bakkle.com/"
     let url_login: String         = "account/login_facebook/"
     let url_settings: String      = "account/settings/"
     let url_logout: String        = "account/logout/"
-    let url_guest_user_id: String = "account/guestuserid"
+    let url_guest_user_id: String = "account/guestuserid/"
+    let url_local_user_id         = "account/localuserid"
+    let url_update_profile        = "account/updateprofile/"
+    let url_set_password          = "account/setpassword/"
+    let url_authenticate_local    = "account/authenticatelocal/"
     let url_facebook: String      = "account/facebook/"
     let url_register_push: String = "account/device/register_push/"
     let url_reset: String         = "items/reset/"
@@ -98,6 +102,8 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     var image_precache : Int = 10
     var video_length_sec : Double = 15.0
     var video_framerate : Int32 = 28
+    
+    var errorStr:String!
     
     var theme_base : UIColor = UIColor(red: 51.0/255.0, green: 205.0/255.0, blue: 95.0/255.0, alpha: 1.0);
     var theme_baseDark : UIColor = UIColor(red: 41.0/255.0, green: 170.0/255.0, blue: 66.0/255.0, alpha: 1.0);
@@ -329,13 +335,167 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             if data != nil && data.length != 0 {
                 var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &error) as! NSDictionary
                 
-                if responseDict.valueForKey("userid")?.integerValue == 1 {
+                if responseDict.valueForKey("status")?.integerValue == 1 {
                     self.guest_user_id_str = responseDict.valueForKey("userid") as! String
                 }
             }
         }
 
     }
+    
+    func localUserID(device_uuid:String) {
+        let url:NSURL? = NSURL(string: url_base + url_local_user_id)
+        let request = NSMutableURLRequest(URL: url!)
+        
+        request.HTTPMethod = "POST"
+        let postString = "device_uuid=\(device_uuid)"
+        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+        
+        info("guest user id")
+        info("URL: \(url)")
+        info("METHOD: \(request.HTTPMethod)")
+        info("BODY: \(postString)")
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
+            data, response, error in
+            
+            if error != nil {
+                println("error=\(error)")
+                return
+            }
+            
+            let responseString = NSString(data: data, encoding: NSUTF8StringEncoding)
+            println("Response: \(responseString)")
+            
+            var error: NSError? = error
+            if data != nil && data.length != 0 {
+                var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &error) as! NSDictionary
+                
+                if responseDict.valueForKey("status")?.integerValue == 1 {
+                    self.guest_user_id_str = responseDict.valueForKey("userid") as! String
+                }
+            }
+        }
+        
+    }
+    
+    func updateProfile(user_id: String, display_name:String, device_uuid:String) {
+        let url:NSURL? = NSURL(string: url_base + url_update_profile)
+        let request = NSMutableURLRequest(URL: url!)
+        
+        request.HTTPMethod = "POST"
+        let postString = "user_id=\(user_id)&name=\(display_name)&device_uuid=\(device_uuid)&flavor=1"
+        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+        
+        info("guest user id")
+        info("URL: \(url)")
+        info("METHOD: \(request.HTTPMethod)")
+        info("BODY: \(postString)")
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
+            data, response, error in
+            
+            if error != nil {
+                println("error=\(error)")
+                return
+            }
+            
+            let responseString = NSString(data: data, encoding: NSUTF8StringEncoding)
+            println("Response: \(responseString)")
+            
+            self.errorStr = ""
+            
+            var error: NSError? = error
+            if data != nil && data.length != 0 {
+                var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &error) as! NSDictionary
+                
+                if responseDict.valueForKey("status")?.integerValue == 1 {
+                    self.info("successfully updated profile")
+                } else {
+                    self.errorStr = responseDict.valueForKey("message") as! String
+                }
+            }
+        }
+    }
+    
+    func setPassword(user_id: String, device_uuid:String, password:String) {
+        let url:NSURL? = NSURL(string: url_base + url_set_password)
+        let request = NSMutableURLRequest(URL: url!)
+        
+        request.HTTPMethod = "POST"
+        let postString = "user_id=\(user_id)&device_uuid=\(device_uuid)&flavor=1&password=\(password)"
+        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+        
+        info("guest user id")
+        info("URL: \(url)")
+        info("METHOD: \(request.HTTPMethod)")
+        info("BODY: \(postString)")
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
+            data, response, error in
+            
+            if error != nil {
+                println("error=\(error)")
+                return
+            }
+            
+            let responseString = NSString(data: data, encoding: NSUTF8StringEncoding)
+            println("Response: \(responseString)")
+            
+            self.errorStr = ""
+            
+            var error: NSError? = error
+            if data != nil && data.length != 0 {
+                var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &error) as! NSDictionary
+                
+                if responseDict.valueForKey("status")?.integerValue == 1 {
+                    self.info("password set successfully")
+                }
+                else {
+                    self.errorStr = responseDict.valueForKey("message") as! String
+                }
+            }
+        }
+    }
+    
+    
+    func authenticateLocal(user_id: String, device_uuid:String, password:String) {
+        let url:NSURL? = NSURL(string: url_base + url_authenticate_local)
+        let request = NSMutableURLRequest(URL: url!)
+        
+        request.HTTPMethod = "POST"
+        let postString = "user_id=\(user_id)&device_uuid=\(device_uuid)&flavor=1&password=\(password)"
+        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+        
+        info("guest user id")
+        info("URL: \(url)")
+        info("METHOD: \(request.HTTPMethod)")
+        info("BODY: \(postString)")
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
+            data, response, error in
+            
+            if error != nil {
+                println("error=\(error)")
+                return
+            }
+            
+            let responseString = NSString(data: data, encoding: NSUTF8StringEncoding)
+            println("Response: \(responseString)")
+            
+            self.errorStr = ""
+            
+            var error: NSError? = error
+            if data != nil && data.length != 0 {
+                var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &error) as! NSDictionary
+                
+                if responseDict.valueForKey("status")?.integerValue == 1 {
+                    self.info("successfult authenticated local account")
+                }
+                else {
+                    self.errorStr = responseDict.valueForKey("message") as! String
+                }
+            }
+        }
+    }
+    
+    
 
     
     /* register and login using facebook */
@@ -1260,6 +1420,16 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         } else {
             userDefaults.removeObjectForKey("holdingItems")
         }
+        
+//        if let temp = userDefaults.objectForKey("first_name") as? Int {
+//            self.first_name = temp
+//            self.info("Restored \( self.first_name ) first_name.")
+//        }
+//        if let temp = userDefaults.objectForKey("last_name") as? Int {
+//            self.last_name = temp
+//            self.info("Restored \( self.last_name ) last_name.")
+//        }
+        
 
         // Store VERSION
         userDefaults.setObject(self.appVersion().build, forKey: "version")
