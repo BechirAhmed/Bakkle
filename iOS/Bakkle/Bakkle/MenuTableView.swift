@@ -31,8 +31,6 @@ class MenuTableController: UITableViewController {
             self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         }
         setupImages()
-        setupBackground()
-        setupProfileLabel()
         profileBtn.image = IconImage().settings()
         self.tableView.tableFooterView = UIView()
     }
@@ -54,6 +52,8 @@ class MenuTableController: UITableViewController {
         super.viewDidAppear(animated)
         UIApplication.sharedApplication().statusBarHidden = true
         setupProfileImg()
+        setupBackground()
+        setupProfileLabel()
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -88,14 +88,23 @@ class MenuTableController: UITableViewController {
         visualEffectView.frame = tableView.bounds
         var backgroundImageView = UIImageView(frame: tableView.bounds)
         backgroundImageView.contentMode = UIViewContentMode.ScaleAspectFill
-        backgroundImageView.hnk_setImageFromURL(Bakkle.sharedInstance.profileImgURL!)
+        if Bakkle.sharedInstance.auth_token == nil {
+            backgroundImageView.image = UIImage(named: "default_profile")
+        }else{
+            backgroundImageView.hnk_setImageFromURL(Bakkle.sharedInstance.profileImgURL!)
+        }
+        
         backgroundImageView.clipsToBounds = true
         backgroundImageView.addSubview(visualEffectView)
         tableView.backgroundView = backgroundImageView
     }
     
     func setupProfileImg() {
-        self.profileImg.hnk_setImageFromURL(Bakkle.sharedInstance.profileImgURL!)
+        if Bakkle.sharedInstance.auth_token == nil {
+            self.profileImg.image = UIImage(named: "default_profile")
+        }else{
+            self.profileImg.hnk_setImageFromURL(Bakkle.sharedInstance.profileImgURL!)
+        }
         self.profileImg.layer.cornerRadius = self.profileImg.frame.size.width/2
         self.profileImg.layer.borderWidth = 5.0
         self.profileImg.clipsToBounds = true
@@ -104,7 +113,11 @@ class MenuTableController: UITableViewController {
     }
     
     func setupProfileLabel() {
-        self.nameLabel.text = Bakkle.sharedInstance.first_name + " " + Bakkle.sharedInstance.last_name
+        if Bakkle.sharedInstance.auth_token == nil {
+            self.nameLabel.text = "Guest"
+        }else{
+            self.nameLabel.text = Bakkle.sharedInstance.first_name + " " + Bakkle.sharedInstance.last_name
+        }
     }
     
     @IBAction func btnContact(sender: AnyObject) {
@@ -139,12 +152,17 @@ class MenuTableController: UITableViewController {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if indexPath.row == 0 {
             self.view.userInteractionEnabled = false
-            Bakkle.sharedInstance.getAccount(Bakkle.sharedInstance.account_id, success: {
-                self.user = Bakkle.sharedInstance.responseDict
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    self.performSegueWithIdentifier(self.profileSegue, sender: self)
-                })
-            }, fail: {})
+            if Bakkle.sharedInstance.isGuest {
+                self.performSegueWithIdentifier(self.profileSegue, sender: self)
+            }else{
+                Bakkle.sharedInstance.getAccount(Bakkle.sharedInstance.account_id, success: {
+                    self.user = Bakkle.sharedInstance.responseDict.valueForKey("account") as! NSDictionary
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        self.performSegueWithIdentifier(self.profileSegue, sender: self)
+                    })
+                    }, fail: {})
+            }
+            
             
         }
     }

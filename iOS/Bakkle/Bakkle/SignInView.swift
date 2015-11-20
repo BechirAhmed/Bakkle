@@ -33,7 +33,6 @@ class SignInView: UIViewController {
     
     @IBAction func facebookPressed(sender: AnyObject) {
         let login = FBSDKLoginManager()
-        Bakkle.sharedInstance.account_type = 1
         login.logInWithReadPermissions(["public_profile"], handler: { (result, error) -> Void in
             if error != nil {
                 var alert = UIAlertController(title: error.localizedDescription, message: error.localizedRecoverySuggestion, preferredStyle: UIAlertControllerStyle.Alert)

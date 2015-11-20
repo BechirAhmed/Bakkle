@@ -35,7 +35,6 @@ class ProfileView: UIViewController, UITextViewDelegate {
             self.saveBtn.backgroundColor = Bakkle.sharedInstance.theme_base
         }
         
-        user = user.valueForKey("account") as! NSDictionary
         setupButtons()
         self.backgroundAvatar.contentMode = UIViewContentMode.ScaleAspectFill
         self.backgroundAvatar.clipsToBounds = true
@@ -78,6 +77,30 @@ class ProfileView: UIViewController, UITextViewDelegate {
     
     override func viewWillAppear(animated: Bool) {
         
+        if Bakkle.sharedInstance.isGuest {
+            setGuestInfo()
+        }else{
+            setUserInfo()
+        }
+    }
+    
+    func setGuestInfo(){
+        dispatch_async(dispatch_get_global_queue(
+            Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.backgroundAvatar.image = UIImage(named: "default_profile")
+                    self.avatar.image = UIImage(named: "default_profile")
+                    self.setAttributesForImage()
+                }
+        }
+        
+        self.nameLabel.text = "Guest"
+        self.editBtn.enabled = false
+        self.editBtn.backgroundColor = AddItem.CONFIRM_BUTTON_DISABLED_COLOR
+        self.logoutBtn.setTitle("LOGIN", forState: UIControlState.Normal)
+    }
+    
+    func setUserInfo() {
         let facebook_id = user.valueForKey("facebook_id") as! String
         println("facebook_id: \(facebook_id)")
         var facebookProfileImageUrlString = "http://graph.facebook.com/\(facebook_id)/picture?width=250&height=250"
@@ -88,17 +111,14 @@ class ProfileView: UIViewController, UITextViewDelegate {
                     println("[SettingsView] displaying image \(facebookProfileImageUrlString)")
                     self.backgroundAvatar.hnk_setImageFromURL(imgURL!)
                     self.avatar.hnk_setImageFromURL(imgURL!)
-                    var visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .Light)) as UIVisualEffectView
-                    visualEffectView.frame = self.backgroundAvatar.frame
-                    self.backgroundAvatar.addSubview(visualEffectView)
-                    
-                    self.avatar.layer.cornerRadius = self.avatar.frame.size.width/2
-                    self.avatar.layer.borderWidth = 7.0
-                    self.avatar.layer.borderColor = UIColor.whiteColor().CGColor
+                    self.setAttributesForImage()
                 }
         }
         
         self.nameLabel.text = user.valueForKey("display_name") as? String
+        self.editBtn.enabled = true
+        self.editBtn.backgroundColor = Theme.ColorGreen
+
         self.descriptionTextView.text = user.valueForKey("description") as? String
         if descriptionTextView.text.isEmpty {
             descriptionTextView.textColor = AddItem.DESCRIPTION_PLACEHOLDER_COLOR
@@ -108,9 +128,27 @@ class ProfileView: UIViewController, UITextViewDelegate {
         }
     }
     
+    func setAttributesForImage(){
+        var visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .Light)) as UIVisualEffectView
+        visualEffectView.frame = self.backgroundAvatar.frame
+        self.backgroundAvatar.addSubview(visualEffectView)
+        
+        self.avatar.layer.cornerRadius = self.avatar.frame.size.width/2
+        self.avatar.layer.borderWidth = 7.0
+        self.avatar.layer.borderColor = UIColor.whiteColor().CGColor
+    }
+    
     @IBAction func btnLogout(sender: AnyObject) {
-        Bakkle.sharedInstance.logout()
-        self.navigationController?.popToRootViewControllerAnimated(true)
+        if (Bakkle.sharedInstance.isGuest) {
+            self.logoutBtn.setTitle("LOG OUT", forState: UIControlState.Normal)
+            let sb = UIStoryboard(name: "Main", bundle: nil)
+            let vc = sb.instantiateViewControllerWithIdentifier("loginView") as! LoginView
+            vc.previousVC = self
+            self.presentViewController(vc, animated: true, completion: nil)
+        }else{
+            Bakkle.sharedInstance.logout()
+            setGuestInfo()
+        }
     }
     
     @IBAction func btnEdit(sender: AnyObject) {
@@ -136,7 +174,7 @@ class ProfileView: UIViewController, UITextViewDelegate {
             descriptionTextView.text = "DESCRIPTION"
         }
     }
-
+    
     
     /* helper function to help the screen move up and down when the keyboard shows or dismisses */
     func animateViewMoving(up: Bool) {
@@ -158,8 +196,8 @@ class ProfileView: UIViewController, UITextViewDelegate {
     func keyboardWillHide(notification: NSNotification) {
         animateViewMoving(false)
     }
-
-
+    
+    
     /* MENUBAR ITEMS */
     @IBAction func btnMenu(sender: AnyObject) {
         self.revealViewController().revealToggleAnimated(true)
