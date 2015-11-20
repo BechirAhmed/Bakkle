@@ -43,7 +43,7 @@ class SignUpView: UIViewController {
     func setupButtons(){
         closeBtn.setImage(IconImage().close(), forState: .Normal)
         closeBtn.setTitle("", forState: .Normal)
-        editBtn.image = IconImage().edit()
+        editBtn.image = IconImage().edit(UIColor.blackColor())
     }
     
     func setupProfileImg() {
@@ -53,26 +53,26 @@ class SignUpView: UIViewController {
 //            self.profileImg.hnk_setImageFromURL(Bakkle.sharedInstance.profileImgURL!)
 //        }
         self.profileImg.layer.cornerRadius = self.profileImg.frame.size.width/2
-        self.profileImg.layer.borderWidth = 10.0
+        self.profileImg.layer.borderWidth = 8.0
         self.profileImg.clipsToBounds = true
         let borderColor = UIColor.grayColor()
         self.profileImg.layer.borderColor = borderColor.CGColor
     }
     
     @IBAction func signUpPressed(sender: AnyObject) {
-        let email = self.emailField.text
-        let password = self.passwordField.text
-        Bakkle.sharedInstance.account_type = 2
-        Bakkle.sharedInstance.localUserID(email, device_uuid: Bakkle.sharedInstance.deviceUUID)
-        Bakkle.sharedInstance.authenticateLocal(Bakkle.sharedInstance.facebook_id_str, device_uuid: Bakkle.sharedInstance.deviceUUID, password: password, success: { () -> () in
-            Bakkle.sharedInstance.login({ () -> () in
-                
-                Bakkle.sharedInstance.persistData()
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    self.dismissViewControllerAnimated(true, completion: nil)
-                })
-                }, fail: {})
-            }, fail: {})
+//        let email = self.emailField.text
+//        let password = self.passwordField.text
+//        Bakkle.sharedInstance.account_type = 2
+//        Bakkle.sharedInstance.localUserID(email, device_uuid: Bakkle.sharedInstance.deviceUUID)
+//        Bakkle.sharedInstance.authenticateLocal(Bakkle.sharedInstance.facebook_id_str, device_uuid: Bakkle.sharedInstance.deviceUUID, password: password, success: { () -> () in
+//            Bakkle.sharedInstance.login({ () -> () in
+//                
+//                Bakkle.sharedInstance.persistData()
+//                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+//                    self.dismissViewControllerAnimated(true, completion: nil)
+//                })
+//                }, fail: {})
+//            }, fail: {})
     }
     
     @IBAction func closePressed(sender: AnyObject) {
