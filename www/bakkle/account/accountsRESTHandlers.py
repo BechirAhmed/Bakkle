@@ -277,6 +277,7 @@ class guestUserIdHandler(bakkleRequestHandler):
 
     def post(self):
 
+        logging.info("Getting guest userid")
         try:
             device_uuid = self.getArgument('device_uuid')
         except QueryArgumentError as error:
@@ -284,6 +285,7 @@ class guestUserIdHandler(bakkleRequestHandler):
 
         respObj = accountsCommonHandlers.guest_user_id(device_uuid)
 
+        logging.info("Getting guest device_uuid={}. response={}".format(device_uuid, respObj))
         self.writeJSON(respObj)
 
 class localUserIdHandler(bakkleRequestHandler):
@@ -297,6 +299,7 @@ class localUserIdHandler(bakkleRequestHandler):
 
         respObj = accountsCommonHandlers.guest_user_id(device_uuid)
 
+        logging.info("Getting local device_uuid={}. response={}".format(device_uuid, respObj))
         self.writeJSON(respObj)
 
 

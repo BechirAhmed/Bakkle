@@ -271,7 +271,7 @@ def spam_item(item_id):
 @time_method
 def feed(buyer_id, device_uuid, user_location, search_text, filter_distance, filter_price):
     logging.info("feed buyer_id={}, device_uuid={}, user_location={}, search_text={}, filter_distance={}, filter_price={}".format(buyer_id, device_uuid, user_location, search_text, filter_distance, filter_price))
-
+    search_text = ""
     startTime = time.time()
 
     MAX_ITEM_PRICE = 100
@@ -351,11 +351,13 @@ def feed(buyer_id, device_uuid, user_location, search_text, filter_distance, fil
     else:
        logging.info("Getting items for buyer_id={}".format(buyer_id))
        items_viewed = BuyerItem.objects.filter(buyer=buyer_id).values('item')
+    items_viewed = BuyerItem.objects.all().values('item')
     appFlavor = account.app_flavor
 
     item_list = None
     users_list = None
 
+    logging.info("Applying search filter={}".format(search_text))
     if(search_text is not None and search_text != ""):
         search_text.strip()
 
