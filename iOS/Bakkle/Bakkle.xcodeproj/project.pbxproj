@@ -61,6 +61,7 @@
 		602C39121B3C9995005CB493 /* PNValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602C39101B3C9995005CB493 /* PNValue.swift */; };
 		602C39151B3C9B12005CB493 /* PNChartConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602C39141B3C9B12005CB493 /* PNChartConfig.swift */; };
 		6034E6951B41B93900DEA291 /* AcceptOfferCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6034E6941B41B93900DEA291 /* AcceptOfferCell.swift */; };
+		604D602E1BFFA0A10060579C /* default_profile.png in Resources */ = {isa = PBXBuildFile; fileRef = 604D602D1BFFA0A10060579C /* default_profile.png */; };
 		60708D561BF681FD0021D5A6 /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60708D551BF681FD0021D5A6 /* SignInView.swift */; };
 		60EEB9981B5546F100E87B8D /* switch-camera-outline.png in Resources */ = {isa = PBXBuildFile; fileRef = 60EEB9971B5546F100E87B8D /* switch-camera-outline.png */; };
 		60F3BC0E1B5E900A0033EF83 /* Goodwill Logo.png in Resources */ = {isa = PBXBuildFile; fileRef = F0D6F3F91B5E8B3E00938A06 /* Goodwill Logo.png */; };
@@ -273,6 +274,7 @@
 		602C39131B3C9A2A005CB493 /* PNChartDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNChartDelegate.h; sourceTree = "<group>"; };
 		602C39141B3C9B12005CB493 /* PNChartConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PNChartConfig.swift; sourceTree = "<group>"; };
 		6034E6941B41B93900DEA291 /* AcceptOfferCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AcceptOfferCell.swift; sourceTree = "<group>"; };
+		604D602D1BFFA0A10060579C /* default_profile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = default_profile.png; sourceTree = "<group>"; };
 		60708D551BF681FD0021D5A6 /* SignInView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		60EEB9971B5546F100E87B8D /* switch-camera-outline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "switch-camera-outline.png"; sourceTree = "<group>"; };
 		60F3BC101B5E90BC0033EF83 /* Goodwill-LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "Goodwill-LaunchScreen.xib"; sourceTree = "<group>"; };
@@ -640,6 +642,7 @@
 		A08D53B71B07DC8E000C406C /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				604D602D1BFFA0A10060579C /* default_profile.png */,
 				F0D6F40D1B5EC1A500938A06 /* gwIcon@2x.png */,
 				F0D6F4101B5EC54700938A06 /* GWLogo_Full@2x.png */,
 				F0D6F3FE1B5EA06600938A06 /* icon-i-blue.png */,
@@ -944,6 +947,7 @@
 				A058A2AD1AFDAD96005E7432 /* bkg-chat-text.png in Resources */,
 				DB5DB3581B18E18100734692 /* icon-tags75.png in Resources */,
 				5E1DCC9F1AD44C72002D41FD /* tiger.jpg in Resources */,
+				604D602E1BFFA0A10060579C /* default_profile.png in Resources */,
 				A058A2A61AFD6024005E7432 /* btn-addItem@2x.png in Resources */,
 				DBEE0E991AF3C855005E60BD /* btb-want.png in Resources */,
 				A058A2B41AFDADA2005E7432 /* mask-buyer-grey.png in Resources */,

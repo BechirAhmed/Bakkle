@@ -8,6 +8,7 @@
 
 import UIKit
 import Haneke
+import FBSDKLoginKit
 
 class ProfileView: UIViewController, UITextViewDelegate {
     
@@ -146,6 +147,8 @@ class ProfileView: UIViewController, UITextViewDelegate {
             vc.previousVC = self
             self.presentViewController(vc, animated: true, completion: nil)
         }else{
+            FBSDKLoginManager().logOut()
+            FBSDKAccessToken.setCurrentAccessToken(nil)
             Bakkle.sharedInstance.logout()
             setGuestInfo()
         }

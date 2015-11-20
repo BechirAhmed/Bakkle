@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import FBSDKLoginKit
 
 class Bakkle : NSObject, CLLocationManagerDelegate {
     
@@ -17,12 +16,11 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     let url_settings: String      = "account/settings/"
     let url_logout: String        = "account/logout/"
     let url_guest_user_id: String = "account/guestuserid/"
-    let url_local_user_id         = "account/localuserid"
+    let url_local_user_id         = "account/localuserid/"
     let url_update_profile        = "account/updateprofile/"
     let url_set_password          = "account/setpassword/"
     let url_authenticate_local    = "account/authenticatelocal/"
     let url_facebook: String      = "account/facebook/"
-    let url_connect: String         = "connect"
     let url_register_local        = "account/register_local"
     let url_login_local           = "account/login_local"
     let url_register_push: String = "account/device/register_push/"
@@ -75,7 +73,6 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     
     var account_id: Int! = 0
     var auth_token: String!
-//    var facebook_id: Int!
     var facebook_id_str: String!  // Store ID for 'logged in' for BOTH facebook and local, despite the name
                                   // when logged in with facebook, store the facebook id here. When logged in local, store the local ID here.
     var guest_id_str: String!     // Store ID for 'guest mode'. This is kept even after you login with a real account.
@@ -85,7 +82,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     var first_name: String!
     var last_name: String!
     var profileImgURL: NSURL!
-    var guest_user_id_str: String!
+    var email: String!
     
     var feedItems: [NSObject]!
     var garageItems: [NSObject]!
@@ -147,15 +144,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         
         settings()
         
-        /* We don't have to do this with 3 account types
-        print(FBSDKAccessToken.currentAccessToken())
-        if (FBSDKAccessToken.currentAccessToken() != nil) {
-            self.bakkleLogin({ () -> () in
-                // Run code
-            })
-        }else{
-        }
-        */
+        self.account_type = 0
     }
     
     /* Return a public URL to the item on the web */
@@ -327,7 +316,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     }
     
     
-    func guestUserID(device_uuid:String) {
+    func guestUserID(device_uuid:String, success: ()->()) {
         let url:NSURL? = NSURL(string: url_base + url_guest_user_id)
         let request = NSMutableURLRequest(URL: url!)
         
@@ -345,6 +334,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             if error != nil {
                 println("error=\(error)")
                 return
+//                fail()
             }
             
             let responseString = NSString(data: data, encoding: NSUTF8StringEncoding)
@@ -355,19 +345,24 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                 var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &error) as! NSDictionary
                 
                 if responseDict.valueForKey("status")?.integerValue == 1 {
-                    self.guest_user_id_str = responseDict.valueForKey("userid") as! String
+                    self.guest_id_str = responseDict.valueForKey("userid") as! String
+                    success()
+                }else{
+//                    fail()
                 }
             }
         }
-
+        task.resume()
     }
     
-    func localUserID(device_uuid:String) {
+    func localUserID(email: String, device_uuid:String) {
         let url:NSURL? = NSURL(string: url_base + url_local_user_id)
         let request = NSMutableURLRequest(URL: url!)
         
+        self.email = email
+        
         request.HTTPMethod = "POST"
-        let postString = "device_uuid=\(device_uuid)"
+        let postString = "device_uuid=\(device_uuid)&email=\(email)"
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
         
         info("guest user id")
@@ -390,11 +385,12 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                 var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &error) as! NSDictionary
                 
                 if responseDict.valueForKey("status")?.integerValue == 1 {
-                    self.guest_user_id_str = responseDict.valueForKey("userid") as! String
+                    
+                    self.facebook_id_str = responseDict.valueForKey("userid") as! String
                 }
             }
         }
-        
+        task.resume()
     }
     
     func updateProfile(user_id: String, display_name:String, device_uuid:String) {
@@ -433,6 +429,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                 }
             }
         }
+        task.resume()
     }
     
     func setPassword(user_id: String, device_uuid:String, password:String) {
@@ -472,10 +469,11 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                 }
             }
         }
+        task.resume()
     }
     
     
-    func authenticateLocal(user_id: String, device_uuid:String, password:String) {
+    func authenticateLocal(user_id: String, device_uuid:String, password:String, success: ()->(), fail: ()->()) {
         let url:NSURL? = NSURL(string: url_base + url_authenticate_local)
         let request = NSMutableURLRequest(URL: url!)
         
@@ -506,24 +504,30 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                 
                 if responseDict.valueForKey("status")?.integerValue == 1 {
                     self.info("successfult authenticated local account")
+                    success()
                 }
                 else {
                     self.errorStr = responseDict.valueForKey("message") as! String
+                    fail()
                 }
             }
         }
+        task.resume()
     }
     
     
 
     
     /* register and login using facebook */
+    /* create account */
     func facebook(gender: String, name: String, userid: String, first_name: String, last_name: String, success: ()->()) {
         let url:NSURL? = NSURL(string: url_base + url_facebook)
         let request = NSMutableURLRequest(URL: url!)
         
-        self.facebook_id_str = userid
-//        self.facebook_id = userid.toInt()
+        if self.account_type == 2 || self.account_type == 1 {
+            self.facebook_id_str = userid
+            
+        }
             
         request.HTTPMethod = "POST"
         let postString = "name=\(name)&gender=\(gender)&user_id=\(userid)&first_name=\(first_name)&last_name=\(last_name)&device_uuid=\(self.deviceUUID)&flavor=\(self.flavor)"
@@ -563,83 +567,8 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         }
         task.resume()
     }
-    func bakkleLogin(success: ()->()) {
-        FBSDKGraphRequest(graphPath: "me", parameters: ["fields":"id, name, first_name, last_name, gender, verified"]).startWithCompletionHandler({ (connection, result2, error) -> Void in
-            if error != nil {
-                println("error=\(error)")
-                return
-            } else {
-                var verifiedKey = "verified"
-                NSLog("User verified = \(result2.objectForKey(verifiedKey))")
-                var userid = result2.objectForKey("id") as! String
-                var gender = result2.objectForKey("gender") as! String
-                var name = result2.objectForKey("name") as! String
-                var first_name = result2.objectForKey("first_name") as! String
-                var last_name = result2.objectForKey("last_name") as! String
-                Bakkle.sharedInstance.facebook(gender, name: name, userid: userid, first_name: first_name, last_name: last_name, success: {
-                    // Sucessfully logged in via FB
-                    Bakkle.sharedInstance.login({
-                        
-                        // jump into the feedview if successfully logged in
-                        dispatch_async(dispatch_get_main_queue()) {
-                            success()
-                        }
-                        
-                        dispatch_async(dispatch_get_main_queue()) {
-                            // Register for push notifications.
-                            let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate!
-                            appDelegate.registerForPushNotifications(UIApplication.sharedApplication())
-                        }
-                        
-                        }, fail: {
-                            NSLog("oops")
-                    })
-                }) // Bakkle.sharedInstance.facebook
-            }
-        }) // FBSDKGraphRequest completion handler
-    }
     
     // register use device uuid
-    func connect(success: ()->(), fail: ()->()) {
-        let url:NSURL? = NSURL(string: url_base + url_connect)
-        let request = NSMutableURLRequest(URL: url!)
-        
-        request.HTTPMethod = "POST"
-        let postString = "&device_uuid=\(self.deviceUUID)&flavor=\(self.flavor)"
-        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
-        
-        info("connect")
-        info("URL: \(url)")
-        info("METHOD: \(request.HTTPMethod)")
-        info("BODY: \(postString)")
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
-            data, response, error in
-            
-            if error != nil {
-                println("error=\(error)")
-                return
-            }
-            
-            let responseString = NSString(data: data, encoding:NSUTF8StringEncoding)
-            println("Response: \(responseString)")
-            
-            /* JSON parse */
-            var error: NSError? = error
-            if (data != nil && data.length != 0) {
-                var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &error) as! NSDictionary
-                
-                if responseDict.valueForKey("status")?.integerValue == 1 {
-                    // TODO: write what need to do if succeed
-                    self.auth_token = responseDict.valueForKey("auth_token") as! String
-                    self.account_type = 0
-                    success()
-                }
-            } else {
-                //TODO: Trigger reattempt to connect timer.
-            }
-        }
-        task.resume()
-    }
     
     /* login and get account details */
     func login(success: ()->(), fail: ()->()) {
@@ -679,7 +608,6 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                     self.auth_token = responseDict.valueForKey("auth_token") as! String
                     var accountId = split(self.auth_token) {$0 == "_"}
                     self.account_id = accountId[1].toInt()
-                    self.account_type = 1
                     // Connect to web socket
                     WSManager.setAuthenticationWithUUID(self.deviceUUID, withToken: self.auth_token)
                     WSManager.connectWS()
@@ -694,9 +622,6 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     
     /* logout */
     func logout() {
-        FBSDKLoginManager().logOut()
-        FBSDKAccessToken.setCurrentAccessToken(nil)
-        
         let url:NSURL? = NSURL(string: url_base + url_logout)
         let request = NSMutableURLRequest(URL: url!)
         
