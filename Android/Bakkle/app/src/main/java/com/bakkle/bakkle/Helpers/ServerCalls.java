@@ -51,6 +51,24 @@ public class ServerCalls
 
     }
 
+    public String getGuestUserId(String uuid)
+    {
+        try {
+            return
+                    Ion.with(mContext)
+                    .load("https://app.bakkle.com/account/guestuserid/")
+                    .setBodyParameter("device_uuid", uuid)
+                    .asJsonObject()
+                    .get()
+                    .get("userid")
+                    .getAsString();
+        }
+        catch (Exception e) {
+            Log.v("error", e.getMessage());
+        }
+        return "";
+    }
+
     public int registerFacebook(final String email, final String gender, final String username,
                                 final String name, final String userid, final String locale,
                                 final String first_name, final String last_name, String id)

@@ -92,7 +92,7 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener
 
             if (preferences.getBoolean(Constants.LOGGED_IN, false)) {
 
-                Intent intent = new Intent(this, HomeActivity.class);
+                Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
                 //SmartLocation.with(this).location().stop();
                 finish();
@@ -126,7 +126,7 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener
                     if (token != null) {
                         editor.putBoolean("LoggedIn", true);
                         editor.apply();
-                        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(intent);
                         finish();
                     }
@@ -203,7 +203,7 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener
 
             if (preferences.getBoolean(Constants.LOGGED_IN, false)) {
 
-                Intent intent = new Intent(this, HomeActivity.class);
+                Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
                 //SmartLocation.with(this).location().stop();
                 finish();
@@ -237,7 +237,7 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener
                     if (token != null) {
                         editor.putBoolean("LoggedIn", true);
                         editor.apply();
-                        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(intent);
                         finish();
                     }
@@ -308,7 +308,7 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener
         switch (id) {
             case R.id.btnSignIn:
                 // TODO: Implement Sign in Code
-                Intent homeIntent = new Intent(this, HomeActivity.class);
+                Intent homeIntent = new Intent(this, MainActivity.class);
                 startActivity(homeIntent);
                 finish();
                 break;

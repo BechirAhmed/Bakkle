@@ -2,15 +2,18 @@ package com.bakkle.bakkle.Activities;
 
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -26,19 +29,18 @@ import android.widget.Toast;
 import com.bakkle.bakkle.Fragments.BuyersTrunkFragment;
 import com.bakkle.bakkle.Fragments.DemoOptionsFragment;
 import com.bakkle.bakkle.Fragments.FeedFragment;
-import com.bakkle.bakkle.Fragments.WatchListFragment;
 import com.bakkle.bakkle.Fragments.ProfileFragment;
 import com.bakkle.bakkle.Fragments.RefineFragment;
 import com.bakkle.bakkle.Fragments.SellersGarageFragment;
 import com.bakkle.bakkle.Fragments.SplashFragment;
+import com.bakkle.bakkle.Fragments.WatchListFragment;
 import com.bakkle.bakkle.Helpers.Constants;
 import com.bakkle.bakkle.Helpers.FeedItem;
 import com.bakkle.bakkle.Helpers.ServerCalls;
 import com.bakkle.bakkle.R;
 import com.bumptech.glide.Glide;
-import com.facebook.AccessToken;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookSdk;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.accountswitcher.AccountHeader;
@@ -54,16 +56,23 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import io.nlopez.smartlocation.OnLocationUpdatedListener;
+import io.nlopez.smartlocation.SmartLocation;
 
-public class HomeActivity extends AppCompatActivity implements SellersGarageFragment.OnFragmentInteractionListener,
+
+public class MainActivity extends AppCompatActivity implements SellersGarageFragment.OnFragmentInteractionListener,
         BuyersTrunkFragment.OnFragmentInteractionListener, WatchListFragment.OnFragmentInteractionListener,
         RefineFragment.OnFragmentInteractionListener, SplashFragment.OnFragmentInteractionListener
 {
     private ArrayList<String> mDrawerItems;
     private TypedArray        mDrawerIcons;
     private Toolbar           toolbar;
+    AlertDialog.Builder builder = null;
+    AlertDialog         dialog  = null;
 
     FeedItem item;
+
+    private CallbackManager callbackManager;
 
     Drawer drawer = null;
 
@@ -76,7 +85,7 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_main);
         linearLayout = (LinearLayout) findViewById(R.id.content_frame_holder);
         preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         editor = preferences.edit();
@@ -85,6 +94,56 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
         serverCalls = new ServerCalls(this);
         mDrawerItems = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.drawer_items)));
         mDrawerIcons = getResources().obtainTypedArray(R.array.drawer_icons);
+        callbackManager = CallbackManager.Factory.create();
+        FacebookSdk.sdkInitialize(this);
+
+        if (!SmartLocation.with(this).location().state().locationServicesEnabled()) {
+            builder = new AlertDialog.Builder(this);
+            builder.setTitle("GPS not found");  // GPS not found
+            builder.setMessage("In order for Bakkle to function properly, Location Services need to be enabled. Would like to enable them now?"); // Want to enable?
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener()
+            {
+                public void onClick(DialogInterface dialogInterface, int i)
+                {
+                    startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                }
+            });
+            builder.setNegativeButton("Not right now", null);
+            dialog = builder.create();
+            dialog.show();
+        }
+        else {
+            SmartLocation.with(this).location()
+                    .oneFix()
+                    .start(new OnLocationUpdatedListener()
+                    {
+                        @Override
+                        public void onLocationUpdated(Location location)
+                        {
+                            editor.putString(Constants.LOCATION, location.getLatitude() + "," + location.getLongitude());
+                            editor.putString(Constants.LATITUDE, String.valueOf(location.getLatitude()));
+                            editor.putString(Constants.LONGITUDE, String.valueOf(location.getLongitude()));
+                            editor.apply();
+                        }
+                    });
+        }
+        if (!preferences.contains(Constants.UUID)) {
+            editor.putString(Constants.UUID, Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID));
+            editor.apply();
+        }
+        if (preferences.getBoolean(Constants.AUTHENTICATED, false) ||
+                preferences.getBoolean(Constants.LOGGED_IN, false)) {
+
+            getFragmentManager().beginTransaction().replace(R.id.content_frame,
+                    FeedFragment.newInstance(false)).commit();
+            //SmartLocation.with(this).location().stop();
+        }
+        else
+        {
+
+        }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
         DrawerImageLoader.init(new DrawerImageLoader.IDrawerImageLoader()
@@ -92,7 +151,7 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
             @Override
             public void set(ImageView imageView, Uri uri, Drawable placeholder)
             {
-                Glide.with(HomeActivity.this)
+                Glide.with(MainActivity.this)
                         .load(uri.toString())
                         .into(imageView);
             }
@@ -111,58 +170,87 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
 
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 //        getSupportActionBar().setHomeButtonEnabled(false);
-
-
-        if (preferences.getBoolean(Constants.NEW_USER, true)) {
+        if ( ! preferences.getBoolean(Constants.AUTHENTICATED, false)) {
             Log.v("new user", "true");
-            GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(),
-                    new GraphRequest.GraphJSONObjectCallback()
-                    {
-                        @Override
-                        public void onCompleted(JSONObject object, GraphResponse response)
-                        {
-                            addUserInfoToPreferences(object);
-                            Log.d("testing", preferences.getString(Constants.UUID, "0"));
-                            Log.d("testing", preferences.getString(Constants.USER_ID, "0"));
+            addUserInfoToPreferences();
+            Log.d("testing", preferences.getString(Constants.UUID, "0"));
+            Log.d("testing", preferences.getString(Constants.USER_ID, "0"));
 
-                            serverCalls.registerFacebook(
-                                    preferences.getString(Constants.EMAIL, ""),
-                                    preferences.getString(Constants.GENDER, ""),
-                                    preferences.getString(Constants.USERNAME, ""),
-                                    preferences.getString(Constants.NAME, ""),
-                                    preferences.getString(Constants.USER_ID, ""),
-                                    preferences.getString(Constants.LOCALE, ""),
-                                    preferences.getString(Constants.FIRST_NAME, ""),
-                                    preferences.getString(Constants.LAST_NAME, ""),
-                                    preferences.getString(Constants.UUID, ""));
+            serverCalls.registerFacebook(
+                    preferences.getString(Constants.EMAIL, ""),
+                    preferences.getString(Constants.GENDER, ""),
+                    preferences.getString(Constants.USERNAME, ""),
+                    preferences.getString(Constants.NAME, ""),
+                    preferences.getString(Constants.USER_ID, ""),
+                    preferences.getString(Constants.LOCALE, ""),
+                    preferences.getString(Constants.FIRST_NAME, ""),
+                    preferences.getString(Constants.LAST_NAME, ""),
+                    preferences.getString(Constants.UUID, ""));
 
-                            String auth_token = serverCalls.loginFacebook(
-                                    preferences.getString(Constants.UUID, "0"),
-                                    preferences.getString(Constants.USER_ID, "0"),
-                                    getLocation()
-                            );
-                            editor.putString(Constants.AUTH_TOKEN, auth_token);
-                            editor.putBoolean(Constants.NEW_USER, false);
-                            editor.apply();
+            String auth_token = serverCalls.loginFacebook(
+                    preferences.getString(Constants.UUID, "0"),
+                    preferences.getString(Constants.USER_ID, "0"),
+                    getLocation()
+            );
+            editor.putString(Constants.AUTH_TOKEN, auth_token);
+            editor.putBoolean(Constants.NEW_USER, false);
+            editor.apply();
 
-                            getFragmentManager().beginTransaction().replace(R.id.content_frame,
-                                    FeedFragment.newInstance(true)).commit();
-                        }
-                    });
-
-            Bundle parameters = new Bundle();
-            parameters.putString("fields", "locale, email, gender");
-            //request.executeAsync();
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-
-            StrictMode.setThreadPolicy(policy);
-            addUserInfoToPreferences(request.executeAndWait().getJSONObject());
-//            if(result == 1)
-//                Toast.makeText(this, "Logged in successfully!", Toast.LENGTH_SHORT).show();
-//            else //TODO:Display error on fail? and go back to login screen
-//                Toast.makeText(this, "Login error!!", Toast.LENGTH_SHORT).show();
+            getFragmentManager().beginTransaction().replace(R.id.content_frame,
+                    FeedFragment.newInstance(true)).commit();
 
         }
+
+//        if (preferences.getBoolean(Constants.NEW_USER, true)) {
+//            Log.v("new user", "true");
+//            GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(),
+//                    new GraphRequest.GraphJSONObjectCallback()
+//                    {
+//                        @Override
+//                        public void onCompleted(JSONObject object, GraphResponse response)
+//                        {
+//                            addUserInfoToPreferences(object);
+//                            Log.d("testing", preferences.getString(Constants.UUID, "0"));
+//                            Log.d("testing", preferences.getString(Constants.USER_ID, "0"));
+//
+//                            serverCalls.registerFacebook(
+//                                    preferences.getString(Constants.EMAIL, ""),
+//                                    preferences.getString(Constants.GENDER, ""),
+//                                    preferences.getString(Constants.USERNAME, ""),
+//                                    preferences.getString(Constants.NAME, ""),
+//                                    preferences.getString(Constants.USER_ID, ""),
+//                                    preferences.getString(Constants.LOCALE, ""),
+//                                    preferences.getString(Constants.FIRST_NAME, ""),
+//                                    preferences.getString(Constants.LAST_NAME, ""),
+//                                    preferences.getString(Constants.UUID, ""));
+//
+//                            String auth_token = serverCalls.loginFacebook(
+//                                    preferences.getString(Constants.UUID, "0"),
+//                                    preferences.getString(Constants.USER_ID, "0"),
+//                                    getLocation()
+//                            );
+//                            editor.putString(Constants.AUTH_TOKEN, auth_token);
+//                            editor.putBoolean(Constants.NEW_USER, false);
+//                            editor.apply();
+//
+//                            getFragmentManager().beginTransaction().replace(R.id.content_frame,
+//                                    FeedFragment.newInstance(true)).commit();
+//                        }
+//                    });
+//
+//            Bundle parameters = new Bundle();
+//            parameters.putString("fields", "locale, email, gender");
+//            //request.executeAsync();
+//            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+//
+//            StrictMode.setThreadPolicy(policy);
+//            addUserInfoToPreferences(request.executeAndWait().getJSONObject());
+////            if(result == 1)
+////                Toast.makeText(this, "Logged in successfully!", Toast.LENGTH_SHORT).show();
+////            else //TODO:Display error on fail? and go back to login screen
+////                Toast.makeText(this, "Login error!!", Toast.LENGTH_SHORT).show();
+//
+//        }
         else {
             getFragmentManager().beginTransaction().replace(R.id.content_frame,
                     FeedFragment.newInstance(false)).commit();
@@ -274,6 +362,21 @@ public class HomeActivity extends AppCompatActivity implements SellersGarageFrag
             editor.putString(Constants.LOCALE, object.getString("locale"));
             editor.putString(Constants.FIRST_NAME, object.getString("first_name"));
             editor.putString(Constants.LAST_NAME, object.getString("last_name"));
+            editor.apply();
+        }
+        catch (Exception e) {
+            Log.v("Error", e.getMessage());
+        }
+    }
+
+    public void addUserInfoToPreferences()
+    {
+        try {
+            editor.putString(Constants.USERNAME, "Guest User");
+            editor.putString(Constants.NAME, "Guest User");
+            editor.putString(Constants.USER_ID, serverCalls.getGuestUserId(preferences.getString(Constants.UUID, "")));
+            editor.putString(Constants.FIRST_NAME, "Guest");
+            editor.putString(Constants.LAST_NAME, "User");
             editor.apply();
         }
         catch (Exception e) {

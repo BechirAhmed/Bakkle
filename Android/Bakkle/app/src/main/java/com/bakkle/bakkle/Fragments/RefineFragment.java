@@ -15,7 +15,7 @@ import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.bakkle.bakkle.Activities.HomeActivity;
+import com.bakkle.bakkle.Activities.MainActivity;
 import com.bakkle.bakkle.Helpers.Constants;
 import com.bakkle.bakkle.R;
 
@@ -80,7 +80,7 @@ public class RefineFragment extends Fragment
             {
                 editor.putString(Constants.SEARCH_TEXT, searchView.getQuery().toString());
                 editor.apply();
-                ((HomeActivity) mActivity).hideSoftKeyBoard();
+                ((MainActivity) mActivity).hideSoftKeyBoard();
                 getFragmentManager().beginTransaction().replace(R.id.content_frame, new FeedFragment())
                         .disallowAddToBackStack().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
                         .commit();
@@ -94,7 +94,7 @@ public class RefineFragment extends Fragment
             {
                 editor.putString(Constants.SEARCH_TEXT, s);
                 editor.apply();
-                ((HomeActivity) mActivity).hideSoftKeyBoard();
+                ((MainActivity) mActivity).hideSoftKeyBoard();
                 getFragmentManager().beginTransaction().replace(R.id.content_frame, new FeedFragment())
                         .disallowAddToBackStack().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
                         .commit();

@@ -20,7 +20,7 @@ import com.andtinder.model.CardModel;
 import com.andtinder.model.Orientations;
 import com.andtinder.view.CardContainer;
 import com.andtinder.view.SimpleCardStackAdapter;
-import com.bakkle.bakkle.Activities.HomeActivity;
+import com.bakkle.bakkle.Activities.MainActivity;
 import com.bakkle.bakkle.Activities.ItemDetailActivity;
 import com.bakkle.bakkle.Helpers.Constants;
 import com.bakkle.bakkle.Helpers.FeedItem;
@@ -99,7 +99,7 @@ public class FeedFragment extends Fragment
             {
                 editor.putString(Constants.SEARCH_TEXT, s);
                 editor.apply();
-                ((HomeActivity) mActivity).hideSoftKeyBoard();
+                ((MainActivity) mActivity).hideSoftKeyBoard();
                 getFragmentManager().beginTransaction().replace(R.id.content_frame, new FeedFragment())
                         .disallowAddToBackStack().setTransition(android.app.FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
                         .commit();

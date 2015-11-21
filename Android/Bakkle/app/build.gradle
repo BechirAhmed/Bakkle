@@ -8,13 +8,13 @@ android {
         applicationId "com.bakkle.bakkle"
         minSdkVersion 17
         targetSdkVersion 23
-        versionCode 2
+        versionCode 4
         versionName "1.0"
         multiDexEnabled true
     }
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -38,6 +38,7 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(':AndTinder')
     compile 'com.android.support:appcompat-v7:23.0.1'
+    compile 'com.android.support:cardview-v7:23.0.1'
     compile 'com.google.android.gms:play-services-location:8.1.0'
     compile 'io.nlopez.smartlocation:library:3.2.0'
     compile 'com.facebook.android:facebook-android-sdk:4.1.0'
