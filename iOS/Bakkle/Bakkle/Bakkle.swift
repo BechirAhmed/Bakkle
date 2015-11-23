@@ -1145,7 +1145,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         task.resume()
     }
     
-    func getAccount(account_id: NSInteger, success: ()->(), fail: ()->()) {
+    func getAccount(account_id: NSInteger, success: (account: NSDictionary)->(), fail: ()->()) {
         var postString: String
          postString = "device_uuid=\(self.deviceUUID)&auth_token=\(self.auth_token)&accountId=\(account_id)"
         let url: NSURL? = NSURL(string: url_base +  url_getaccount + "?\(postString)")
@@ -1169,11 +1169,11 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             println("Response: \(responseString)")
             
             var parseError: NSError?
-            self.responseDict = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! NSDictionary!
+            self.responseDict = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! NSDictionary
             self.debg("RESPONSE DICT IS: \(self.responseDict)")
             
             if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
-                success()
+                success(account: self.responseDict.valueForKey("account") as! NSDictionary)
             } else {
                 fail()
             }

@@ -102,8 +102,8 @@ class LoginView: UIViewController {
                         // jump into the feedview if successfully logged in
                         dispatch_async(dispatch_get_main_queue()) {
                             if self.previousVC != nil {
-                                Bakkle.sharedInstance.getAccount(Bakkle.sharedInstance.account_id, success: {
-                                    self.previousVC.user = Bakkle.sharedInstance.responseDict.valueForKey("account") as! NSDictionary
+                                Bakkle.sharedInstance.getAccount(Bakkle.sharedInstance.account_id, success: { (account: NSDictionary) -> () in
+                                    self.previousVC.user = account 
                                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                                         self.dismissViewControllerAnimated(true, completion: nil)
                                     })

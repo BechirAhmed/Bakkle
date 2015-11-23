@@ -78,7 +78,7 @@ class ProfileView: UIViewController, UITextViewDelegate {
     
     override func viewWillAppear(animated: Bool) {
         
-        if Bakkle.sharedInstance.account_type == 0 {
+        if Bakkle.sharedInstance.account_type == Bakkle.bkAccountTypeGuest {
             setGuestInfo()
         }else{
             setUserInfo()
