@@ -112,7 +112,7 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
         let distance = Bakkle.sharedInstance.distanceTo(CLLocation(locationString: location)) as CLLocationDistance!
         
         itemTitleLabel.text = topTitle
-        itemPriceLabel.text = "$" + topPrice
+        itemPriceLabel.text = (topPrice as NSString).floatValue != 0 ? topPrice : "Offer"
         if description == "" {
             itemTagsTextView.text = tags
         }else {

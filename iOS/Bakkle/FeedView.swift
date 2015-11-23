@@ -455,9 +455,15 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         view.nameLabel.text = topTitle
         
         var myString : String = ""
+        
+        //  Trim the zeroes after the decimal.
         if suffix(topPrice, 2) == "00" {
-            let withoutZeroes = "$\((topPrice as NSString).integerValue)"
-            myString = " " + withoutZeroes
+            let withoutZeroes = (topPrice as NSString).integerValue
+            if withoutZeroes == 0 {
+                myString = " Offer"
+            } else {
+                myString = " $\(withoutZeroes)"
+            }
         } else {
             myString = " $" + topPrice
         }
