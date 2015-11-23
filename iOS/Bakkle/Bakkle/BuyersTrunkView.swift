@@ -120,7 +120,7 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
             case "Active":
                 self.activeItem.append(index)
                 break
-            case "Expired":
+            case "Sold":
                 if Bakkle.sharedInstance.trunkItems[index].valueForKey("sale") != nil {
                     self.boughtItem.append(index)
                 }else {
