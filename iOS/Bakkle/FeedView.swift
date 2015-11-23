@@ -443,14 +443,14 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         let sellersProfile = item.valueForKey("seller") as! NSDictionary
         let facebookID = sellersProfile.valueForKey("facebook_id") as! String
         let sellersName = sellersProfile.valueForKey("display_name") as! String
-        var facebookProfileImgString = "http://graph.facebook.com/\(facebookID)/picture?width=142&height=142"
+        
+        let profileImageURL = NSURL(string: Bakkle.sharedInstance.profileImageURL())
         
         let dividedName = split(sellersName) {$0 == " "}
         let firstName = dividedName[0] as String
         
         let firstURL = imgURLs[0] as! String
         let imgURL = NSURL(string: firstURL)
-        let profileImgURL = NSURL(string: facebookProfileImgString)
         
         view.nameLabel.text = topTitle
         
@@ -469,7 +469,8 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             view.bottomBlurImg.hnk_setImageFromURL(imgURL!)
             view.imageView.hnk_setImageFromURL(imgURL!)
             view.imageView.contentMode = UIViewContentMode.ScaleAspectFill
-            view.profileImg.image = Bakkle.sharedInstance.flavor == Bakkle.GOODWILL ? UIImage(named: "gwIcon@2x.png") : UIImage(data: NSData(contentsOfURL: profileImgURL!)!)
+            
+            view.profileImg.hnk_setImageFromURL(profileImageURL!)
             if (view == self.swipeView){
                 self.swipeView.userInteractionEnabled = true
             }
@@ -817,7 +818,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     
     @IBAction func loginCheck(sender: AnyObject) {
         let sb = UIStoryboard(name: "Main", bundle: nil)
-        if Bakkle.sharedInstance.account_type == 0 {
+        if Bakkle.sharedInstance.checkPermission(Bakkle.bkPermissionAddItem) {
             let vc = sb.instantiateViewControllerWithIdentifier("loginView") as! LoginView
             self.presentViewController(vc, animated: true, completion: nil)
         }else{

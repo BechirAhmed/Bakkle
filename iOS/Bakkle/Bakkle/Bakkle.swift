@@ -48,6 +48,13 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     static let bkFilterChanged  = "com.bakkle.filterChanged"
     static let bkAppBecameActive = "com.bakkle.appBecameActive"
     
+    static let bkPermissionAddItem     = "com.bakkle.permission.additem"
+    
+    // Account types
+    static let bkAccountTypeGuest = 0
+    static let bkAccountTypeFacebook = 1
+    static let bkAccountTypeEmail = 2
+    
     // DO NOT ENABLE if there is no way to select servers from settings file.
     static let developerTools   = false
     static let defaultServerNum = 0 // 0 = prod, 1 = prod cluster (sets default server in list below)
@@ -76,7 +83,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     var facebook_id_str: String!  // Store ID for 'logged in' for BOTH facebook and local, despite the name
                                   // when logged in with facebook, store the facebook id here. When logged in local, store the local ID here.
     var guest_id_str: String!     // Store ID for 'guest mode'. This is kept even after you login with a real account.
-    var account_type: Int = 0     // 1=fb, 2=local.  Guest mode is when facebookid=0
+    var account_type: Int = Bakkle.bkAccountTypeGuest
     
     
     var first_name: String!
@@ -143,8 +150,6 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         }
         
         settings()
-        
-//        self.account_type = 0
     }
     
     /* Return a public URL to the item on the web */
@@ -315,6 +320,29 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             task.resume()
     }
     
+    // Check to see if user has permission to perform requested action
+    func checkPermission(action:String) -> Bool {
+        
+        if action == Bakkle.bkPermissionAddItem {
+            return Bakkle.sharedInstance.account_type == 0
+        }
+        
+        // Default
+        return Bakkle.sharedInstance.account_type == 0
+    }
+    
+    func profileImageURL() -> String {
+        if account_type == Bakkle.bkAccountTypeFacebook {
+            return "http://graph.facebook.com/\(facebook_id_str)/picture?width=142&height=142"
+        }
+        if account_type == Bakkle.bkAccountTypeEmail {
+            // TODO: lookup image URL
+            return "https://app.bakkle.com/guest.png"
+        }
+
+        // Else assume guest
+        return "https://app.bakkle.com/guest.png"
+    }
     
     func guestUserID(device_uuid:String, success: ()->()) {
         let url:NSURL? = NSURL(string: url_base + url_guest_user_id)
@@ -355,7 +383,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         task.resume()
     }
     
-    func localUserID(email: String, device_uuid:String) {
+    func localUserID(email: String, device_uuid:String, success: ()->()) {
         let url:NSURL? = NSURL(string: url_base + url_local_user_id)
         let request = NSMutableURLRequest(URL: url!)
         
@@ -365,7 +393,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         let postString = "device_uuid=\(device_uuid)&email=\(email)"
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
         
-        info("guest user id")
+        info("local user id")
         info("URL: \(url)")
         info("METHOD: \(request.HTTPMethod)")
         info("BODY: \(postString)")
@@ -387,6 +415,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                 if responseDict.valueForKey("status")?.integerValue == 1 {
                     
                     self.facebook_id_str = responseDict.valueForKey("userid") as! String
+                    success()
                 }
             }
         }
