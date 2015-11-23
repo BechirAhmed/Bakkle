@@ -52,8 +52,8 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     
     // Account types
     static let bkAccountTypeGuest = 0
-    static let bkAccountTypeFacebook = 1
-    static let bkAccountTypeEmail = 2
+    static let bkAccountTypeFacebook = 2
+    static let bkAccountTypeEmail = 3
     
     // DO NOT ENABLE if there is no way to select servers from settings file.
     static let developerTools   = false
