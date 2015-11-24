@@ -38,11 +38,21 @@ class SignInView: UIViewController {
         Bakkle.sharedInstance.authenticateLocal(Bakkle.sharedInstance.facebook_id_str, device_uuid: Bakkle.sharedInstance.deviceUUID, password: password, success: { () -> () in
             Bakkle.sharedInstance.login({ () -> () in
                 
+                
                 Bakkle.sharedInstance.persistData()
-                self.dismissViewControllerAnimated(true, completion: nil)
-                self.parentViewController?.dismissViewControllerAnimated(true, completion: nil)
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.dismissViewControllerAnimated(true, completion: nil)
+                })
+                
                 }, fail: {})
-            }, fail: {})
+            }, fail: {
+                
+                var alert = UIAlertController(title: "Password is not correct", message: "The given password is not correct. Please login again.", preferredStyle: UIAlertControllerStyle.Alert)
+                alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.presentViewController(alert, animated: true, completion: nil)
+                })
+            })
         }
     }
     
@@ -52,7 +62,9 @@ class SignInView: UIViewController {
             if error != nil {
                 var alert = UIAlertController(title: error.localizedDescription, message: error.localizedRecoverySuggestion, preferredStyle: UIAlertControllerStyle.Alert)
                 alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
-                self.presentViewController(alert, animated: true, completion: nil)
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.presentViewController(alert, animated: true, completion: nil)
+                })
             }else if result.isCancelled {
                 // Run code if the user cancelled the login process
             } else {

@@ -105,7 +105,7 @@ class MenuTableController: UITableViewController {
     }
     
     func setupProfileLabel() {
-        if Bakkle.sharedInstance.account_type == Bakkle.bkAccountTypeGuest || Bakkle.sharedInstance.first_name == nil || Bakkle.sharedInstance.last_name == nil {
+        if Bakkle.sharedInstance.account_type == Bakkle.bkAccountTypeGuest {
             self.nameLabel.text = "Guest"
         }else{
             self.nameLabel.text = Bakkle.sharedInstance.first_name + " " + Bakkle.sharedInstance.last_name

@@ -87,7 +87,7 @@ class ProfileView: UIViewController, UITextViewDelegate {
     
     func setGuestInfo(){
         self.setImage()
-        self.nameLabel.text = user.valueForKey("display_name") as? String
+        self.nameLabel.text = "Guest"
         self.editBtn.enabled = false
         self.editBtn.backgroundColor = AddItem.CONFIRM_BUTTON_DISABLED_COLOR
         self.logoutBtn.setTitle("LOGIN", forState: UIControlState.Normal)

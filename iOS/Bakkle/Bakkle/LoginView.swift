@@ -76,7 +76,16 @@ class LoginView: UIViewController {
     
     
     @IBAction func closePressed(sender: AnyObject) {
-        self.dismissViewControllerAnimated(true, completion: nil)
+        if self.previousVC != nil {
+            Bakkle.sharedInstance.getAccount(Bakkle.sharedInstance.account_id, success: { (account: NSDictionary) -> () in
+                self.previousVC.user = account
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.dismissViewControllerAnimated(true, completion: nil)
+                })
+                }, fail: {})
+        }else{
+            self.dismissViewControllerAnimated(true, completion: nil)
+        }
     }
     
     func bakkleLogin() {

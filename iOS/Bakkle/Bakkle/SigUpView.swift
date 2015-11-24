@@ -94,11 +94,21 @@ class SignUpView: UIViewController, UITextFieldDelegate {
         let password = self.passwordField.text
         let confirmPassword = self.confirmPasswordField.text
         if password == confirmPassword {
+            Bakkle.sharedInstance.account_type = Bakkle.bkAccountTypeEmail
             Bakkle.sharedInstance.localUserID(email, device_uuid: Bakkle.sharedInstance.deviceUUID, success: { () -> () in
                 let fullName = split(name) {$0 == " "}
-                Bakkle.sharedInstance.facebook("", name: name, userid: Bakkle.sharedInstance.facebook_id_str, first_name: fullName[0], last_name: fullName[1], success: { () -> () in
+                let first_name = fullName[0]
+                var last_name: String = ""
+                if fullName.count == 2 {
+                    last_name = fullName[1]
+                }
+                Bakkle.sharedInstance.facebook("", name: name, userid: Bakkle.sharedInstance.facebook_id_str, first_name: first_name, last_name: last_name, success: { () -> () in
                     Bakkle.sharedInstance.setPassword(Bakkle.sharedInstance.facebook_id_str, device_uuid: Bakkle.sharedInstance.deviceUUID, password: password, success: { () -> () in
-                            self.dismissViewControllerAnimated(true, completion: nil)
+                        Bakkle.sharedInstance.login({ () -> () in
+                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                self.dismissViewControllerAnimated(true, completion: nil)
+                            })
+                        }, fail: {})
                     })
                 })
             })
@@ -108,17 +118,6 @@ class SignUpView: UIViewController, UITextFieldDelegate {
             alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
             self.presentViewController(alert, animated: true, completion: nil)
         }
-//        Bakkle.sharedInstance.account_type = 2
-//
-//        Bakkle.sharedInstance.authenticateLocal(Bakkle.sharedInstance.facebook_id_str, device_uuid: Bakkle.sharedInstance.deviceUUID, password: password, success: { () -> () in
-//            Bakkle.sharedInstance.login({ () -> () in
-//                
-//                Bakkle.sharedInstance.persistData()
-//                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-//                    self.dismissViewControllerAnimated(true, completion: nil)
-//                })
-//                }, fail: {})
-//            }, fail: {})
     }
     
     @IBAction func closePressed(sender: AnyObject) {
