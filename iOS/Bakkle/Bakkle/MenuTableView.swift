@@ -100,10 +100,10 @@ class MenuTableController: UITableViewController {
     }
     
     func setupProfileImg() {
-        if Bakkle.sharedInstance.account_type == 0 || Bakkle.sharedInstance.profileImgURL == nil {
+        if Bakkle.sharedInstance.account_type == 0 {
             self.profileImg.image = UIImage(named: "default_profile")
         }else{
-            self.profileImg.hnk_setImageFromURL(Bakkle.sharedInstance.profileImgURL!)
+            self.profileImg.hnk_setImageFromURL(NSURL(string: Bakkle.sharedInstance.profileImageURL())!)
         }
         self.profileImg.layer.cornerRadius = self.profileImg.frame.size.width/2
         self.profileImg.layer.borderWidth = 5.0
@@ -152,18 +152,12 @@ class MenuTableController: UITableViewController {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if indexPath.row == 0 {
             self.view.userInteractionEnabled = false
-            if Bakkle.sharedInstance.account_type == 0 {
-                self.performSegueWithIdentifier(self.profileSegue, sender: self)
-            }else{
-                Bakkle.sharedInstance.getAccount(Bakkle.sharedInstance.account_id, success: {
-                    self.user = Bakkle.sharedInstance.responseDict.valueForKey("account") as! NSDictionary
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        self.performSegueWithIdentifier(self.profileSegue, sender: self)
-                    })
-                    }, fail: {})
-            }
-            
-            
+            Bakkle.sharedInstance.getAccount(Bakkle.sharedInstance.account_id, success: { (account: NSDictionary) -> () in
+                self.user = account
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.performSegueWithIdentifier(self.profileSegue, sender: self)
+                })
+                }, fail: {})
         }
     }
     

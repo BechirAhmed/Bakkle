@@ -20,6 +20,9 @@ class SignInView: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupButtons()
+        emailField.text = "tandoni@rose-hulman.edu"
+        passwordField.text = "GoVentures"
+
     }
     
     func setupButtons(){
@@ -31,16 +34,15 @@ class SignInView: UIViewController {
         let email = self.emailField.text
         let password = self.passwordField.text
         Bakkle.sharedInstance.account_type = 2
-        Bakkle.sharedInstance.localUserID(email, device_uuid: Bakkle.sharedInstance.deviceUUID)
+        Bakkle.sharedInstance.localUserID(email, device_uuid: Bakkle.sharedInstance.deviceUUID) {
         Bakkle.sharedInstance.authenticateLocal(Bakkle.sharedInstance.facebook_id_str, device_uuid: Bakkle.sharedInstance.deviceUUID, password: password, success: { () -> () in
             Bakkle.sharedInstance.login({ () -> () in
                 
                 Bakkle.sharedInstance.persistData()
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    self.dismissViewControllerAnimated(true, completion: nil)
-                })
+                self.dismissViewControllerAnimated(true, completion: nil)
                 }, fail: {})
             }, fail: {})
+        }
     }
     
     @IBAction func facebookPressed(sender: AnyObject) {

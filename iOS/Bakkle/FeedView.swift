@@ -74,8 +74,8 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                 let buyer_id = userInfo["buyer_id"] as? Int
                 if seller_id == Bakkle.sharedInstance.account_id {
                     // user is a seller
-                    Bakkle.sharedInstance.getAccount(buyer_id as NSInteger!, success: { () -> () in
-                        let account = (Bakkle.sharedInstance.responseDict as NSDictionary!).valueForKey("account") as! NSDictionary
+                    Bakkle.sharedInstance.getAccount(buyer_id as NSInteger!, success: { (account: NSDictionary) -> () in
+//                        let account = (Bakkle.sharedInstance.responseDict as NSDictionary!).valueForKey("account") as! NSDictionary
                         let name = account.valueForKey("display_name") as! String
                         let buyer = User(facebookID: account.valueForKey("facebook_id") as! String, accountID: buyer_id!, firstName: name, lastName: name)
                         var chatItem: NSDictionary? = nil
@@ -441,23 +441,30 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         let topPrice: String = item.valueForKey("price") as! String
         
         let sellersProfile = item.valueForKey("seller") as! NSDictionary
-        let facebookID = sellersProfile.valueForKey("facebook_id") as! String
+        let sellerFacebookID = sellersProfile.valueForKey("facebook_id") as! String
         let sellersName = sellersProfile.valueForKey("display_name") as! String
-        var facebookProfileImgString = "http://graph.facebook.com/\(facebookID)/picture?width=142&height=142"
+        let sellersImageProfile = sellersProfile.valueForKey("avatar_image_url") as! String
+        
+//        let profileImageURL = NSURL(string)
         
         let dividedName = split(sellersName) {$0 == " "}
         let firstName = dividedName[0] as String
         
         let firstURL = imgURLs[0] as! String
         let imgURL = NSURL(string: firstURL)
-        let profileImgURL = NSURL(string: facebookProfileImgString)
         
         view.nameLabel.text = topTitle
         
         var myString : String = ""
+        
+        //  Trim the zeroes after the decimal.
         if suffix(topPrice, 2) == "00" {
-            let withoutZeroes = "$\((topPrice as NSString).integerValue)"
-            myString = " " + withoutZeroes
+            let withoutZeroes = (topPrice as NSString).integerValue
+            if withoutZeroes == 0 {
+                myString = " Offer"
+            } else {
+                myString = " $\(withoutZeroes)"
+            }
         } else {
             myString = " $" + topPrice
         }
@@ -469,7 +476,8 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             view.bottomBlurImg.hnk_setImageFromURL(imgURL!)
             view.imageView.hnk_setImageFromURL(imgURL!)
             view.imageView.contentMode = UIViewContentMode.ScaleAspectFill
-            view.profileImg.image = Bakkle.sharedInstance.flavor == Bakkle.GOODWILL ? UIImage(named: "gwIcon@2x.png") : UIImage(data: NSData(contentsOfURL: profileImgURL!)!)
+            
+            view.profileImg.hnk_setImageFromURL(NSURL(string: sellersImageProfile)!)
             if (view == self.swipeView){
                 self.swipeView.userInteractionEnabled = true
             }
@@ -817,7 +825,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     
     @IBAction func loginCheck(sender: AnyObject) {
         let sb = UIStoryboard(name: "Main", bundle: nil)
-        if Bakkle.sharedInstance.account_type == 0 {
+        if Bakkle.sharedInstance.checkPermission(Bakkle.bkPermissionAddItem) {
             let vc = sb.instantiateViewControllerWithIdentifier("loginView") as! LoginView
             self.presentViewController(vc, animated: true, completion: nil)
         }else{

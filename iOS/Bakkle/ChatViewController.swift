@@ -439,15 +439,15 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         vc.canEdit = false
         if isBuyer {
             let account_id = seller.valueForKey("pk") as! Int
-            Bakkle.sharedInstance.getAccount(account_id, success: {
-                vc.user = Bakkle.sharedInstance.responseDict
+            Bakkle.sharedInstance.getAccount(account_id, success: { (account: NSDictionary) -> () in
+                vc.user = account
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     self.presentViewController(vc, animated: true, completion: nil)
                 })
                 }, fail: {})
         }else {
-            Bakkle.sharedInstance.getAccount(chat.user.accountID, success: {
-                vc.user = Bakkle.sharedInstance.responseDict
+            Bakkle.sharedInstance.getAccount(chat.user.accountID, success: { (account: NSDictionary) -> () in
+                vc.user = account
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     self.presentViewController(vc, animated: true, completion: nil)
                 })

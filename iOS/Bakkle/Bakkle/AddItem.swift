@@ -177,7 +177,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         self.allowPlayback = false
         
         if textField == priceField {
-            if priceField.text == "take it!" {
+            if priceField.text == "offer" {
                 priceField.text = "0"
             }
         }
@@ -282,18 +282,21 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     }
     
     func formatPrice() {
-        if (priceField.text as String).lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
-            var str = (priceField.text! as NSString).stringByReplacingOccurrencesOfString("$", withString: "")
-            str = str.stringByReplacingOccurrencesOfString(" ", withString: "")
+        if (priceField.text as String).lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 && (priceField.text as NSString).floatValue > 0 {
+            var str = (priceField.text! as NSString).stringByReplacingOccurrencesOfString("$", withString: "").stringByReplacingOccurrencesOfString(" ", withString: "")
             var value:Float = (str as NSString).floatValue
             // Currently capping value at 100k
             if value > 100000 {
                 value = 100000
             }
             if value == 0 {
-                priceField.text = "take it!"
+                priceField.text = "offer"
             } else {
                 priceField.text = String(format: "$ %.2f", value )
+            }
+        } else {
+            if priceField.resignFirstResponder() {
+                priceField.text = "offer"
             }
         }
     }
@@ -335,6 +338,10 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
             }
         }
         
+        if priceField.text.isEmpty {
+            priceField.text = "offer"
+        }
+        
         self.titleField.enabled = false
         self.priceField.enabled = false
         self.descriptionField.editable = false
@@ -355,8 +362,10 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
             item_id = nil
         }
         
+        let priceToSend = priceField.text == "offer" ? "0" : priceField.text
+        
         Bakkle.sharedInstance.addItem(self.titleField.text, description: self.descriptionField.text, location: Bakkle.sharedInstance.user_location,
-            price: self.priceField.text,
+            price: priceToSend,
             images:imageData, videos:videoData, item_id: item_id, success: {
                 (item_id:Int?, image_url: String?) -> () in
                     time = NSDate.timeIntervalSinceReferenceDate() - time

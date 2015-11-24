@@ -3,7 +3,7 @@
 //  Bakkle
 //
 //  Created by Ishank Tandon on 3/12/15.
-//  Copyright (c) 2015 Ishank Tandon. All rights reserved.fgcbxbfdbffhgsbfsxc z fd
+//  Copyright (c) 2015 Ishank Tandon. All rights reserved.
 //
 
 import UIKit
@@ -31,6 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         UIApplication.sharedApplication().statusBarStyle = .LightContent
         
+        // If we launched from a notification, read the data.
         if let userInfo = launchOptions?[UIApplicationLaunchOptionsRemoteNotificationKey] as? [NSObject : AnyObject] {
             Bakkle.sharedInstance.userInfo = userInfo
         }
@@ -149,8 +150,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 let buyer_id = userInfo["buyer_id"] as? Int
                 if seller_id == Bakkle.sharedInstance.account_id {
                     // user is a seller
-                    Bakkle.sharedInstance.getAccount(buyer_id as NSInteger!, success: { () -> () in
-                        let account = (Bakkle.sharedInstance.responseDict as NSDictionary!).valueForKey("account") as! NSDictionary
+                    Bakkle.sharedInstance.getAccount(buyer_id as NSInteger!, success: { (account: NSDictionary) -> () in
+                     //   let account = (Bakkle.sharedInstance.responseDict as NSDictionary!).valueForKey("account") as! NSDictionary
                         let name = account.valueForKey("display_name") as! String
                         let buyer = User(facebookID: account.valueForKey("facebook_id") as! String, accountID: buyer_id!, firstName: name, lastName: name)
                         var chatItem: NSDictionary? = nil

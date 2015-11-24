@@ -247,6 +247,17 @@ class SellersGarageView: UIViewController, UITableViewDelegate, UITableViewDataS
         return cell
     }
     
+    @IBAction func addItemTapped(sender: AnyObject) {
+        let sb = UIStoryboard(name: "Main", bundle: nil)
+        if Bakkle.sharedInstance.checkPermission(Bakkle.bkPermissionAddItem) {
+            let vc = sb.instantiateViewControllerWithIdentifier("loginView") as! LoginView
+            self.presentViewController(vc, animated: true, completion: nil)
+        }else{
+            let vc = sb.instantiateViewControllerWithIdentifier("CameraView") as! CameraView
+            self.presentViewController(vc, animated: true, completion: nil)
+        }
+    }
+    
     func imageTapped(sender: UITapGestureRecognizer){
         let sb: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let vc: ItemDetails = sb.instantiateViewControllerWithIdentifier("ItemDetails") as! ItemDetails
