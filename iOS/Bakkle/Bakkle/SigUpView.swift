@@ -18,7 +18,7 @@ import UIKit
 
 import FBSDKLoginKit
 
-class SignUpView: UIViewController {
+class SignUpView: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var closeBtn: UIButton!
     @IBOutlet weak var nameField: UITextField!
@@ -29,15 +29,48 @@ class SignUpView: UIViewController {
     @IBOutlet weak var profileImg: UIImageView!
     @IBOutlet weak var editBtn: UIImageView!
     
+    var kbHeight: CGFloat!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupButtons()
+        
+        //text field delegates
+        nameField.delegate = self
+        emailField.delegate = self
+        passwordField.delegate = self
+        confirmPasswordField.delegate = self
+        
+        var tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
+        self.view.addGestureRecognizer(tap)
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
         setupProfileImg()
+    }
+   
+    func dismissKeyboard() {
+        self.nameField.resignFirstResponder() || self.emailField.resignFirstResponder() || self.passwordField.resignFirstResponder() || self.confirmPasswordField.resignFirstResponder()
+    }
+    
+    func textFieldDidBeginEditing(textField: UITextField) {
+        animateViewMoving(true, moveValue: 150)
+    }
+    
+    func textFieldDidEndEditing(textField: UITextField) {
+        animateViewMoving(false, moveValue: 150)
+    }
+    
+    func animateViewMoving(up: Bool, moveValue: CGFloat) {
+        let movementDuration = 0.5
+        let movement = up ? -moveValue : moveValue
+        UIView.beginAnimations("animateView", context: nil)
+        UIView.setAnimationBeginsFromCurrentState(true)
+        UIView.setAnimationDuration(movementDuration)
+        self.view.frame = CGRectOffset(self.view.frame, 0, movement)
+        UIView.commitAnimations()
     }
     
     func setupButtons(){
@@ -77,5 +110,11 @@ class SignUpView: UIViewController {
     
     @IBAction func closePressed(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        
+        return true
     }
 }
