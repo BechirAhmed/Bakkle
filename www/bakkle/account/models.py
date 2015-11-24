@@ -55,6 +55,7 @@ class Account(models.Model):
             'buyer_rating': self.buyer_rating,
             'user_location': self.user_location,
             'facebook_id': self.facebook_id,
+            'avatar_image_url': self.avatar_image_url,
             'description': self.description,
             'flavor': self.app_flavor}
 

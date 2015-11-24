@@ -256,7 +256,7 @@ class logoutHandler(bakkleRequestHandler):
 
         self.writeJSON(respObj)
 
-
+# create account
 class facebookHandler(bakkleRequestHandler):
 
     def post(self):
@@ -266,12 +266,14 @@ class facebookHandler(bakkleRequestHandler):
             display_name = self.getArgument('name')
             device_uuid = self.getArgument('device_uuid')
             app_flavor = self.getArgument('flavor', 1)
+            avatar_image_url = self.getArgument('avatar_image_url', 'https://app.bakkle.com/img/default_profile.png')
         except QueryArgumentError as error:
             return self.writeJSON({"status": 0, "message": error.message})
 
         respObj = accountsCommonHandlers.facebook(facebook_id,
                                                   display_name,
                                                   device_uuid,
+                                                  avatar_image_url,
                                                   app_flavor)
 
         self.writeJSON(respObj)
