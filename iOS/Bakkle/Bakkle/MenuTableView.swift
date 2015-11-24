@@ -100,10 +100,10 @@ class MenuTableController: UITableViewController {
     }
     
     func setupProfileImg() {
-        if Bakkle.sharedInstance.account_type == 0 || Bakkle.sharedInstance.profileImgURL == nil {
+        if Bakkle.sharedInstance.account_type == 0 {
             self.profileImg.image = UIImage(named: "default_profile")
         }else{
-            self.profileImg.hnk_setImageFromURL(Bakkle.sharedInstance.profileImgURL!)
+            self.profileImg.hnk_setImageFromURL(NSURL(string: Bakkle.sharedInstance.profileImageURL())!)
         }
         self.profileImg.layer.cornerRadius = self.profileImg.frame.size.width/2
         self.profileImg.layer.borderWidth = 5.0

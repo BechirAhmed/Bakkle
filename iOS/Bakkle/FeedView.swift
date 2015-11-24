@@ -441,10 +441,11 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         let topPrice: String = item.valueForKey("price") as! String
         
         let sellersProfile = item.valueForKey("seller") as! NSDictionary
-        let facebookID = sellersProfile.valueForKey("facebook_id") as! String
+        let sellerFacebookID = sellersProfile.valueForKey("facebook_id") as! String
         let sellersName = sellersProfile.valueForKey("display_name") as! String
+        let sellersImageProfile = sellersProfile.valueForKey("avatar_image_url") as! String
         
-        let profileImageURL = NSURL(string: Bakkle.sharedInstance.profileImageURL())
+//        let profileImageURL = NSURL(string)
         
         let dividedName = split(sellersName) {$0 == " "}
         let firstName = dividedName[0] as String
@@ -476,7 +477,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             view.imageView.hnk_setImageFromURL(imgURL!)
             view.imageView.contentMode = UIViewContentMode.ScaleAspectFill
             
-            view.profileImg.hnk_setImageFromURL(profileImageURL!)
+            view.profileImg.hnk_setImageFromURL(NSURL(string: sellersImageProfile)!)
             if (view == self.swipeView){
                 self.swipeView.userInteractionEnabled = true
             }

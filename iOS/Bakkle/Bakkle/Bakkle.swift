@@ -556,9 +556,16 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         if self.account_type != 0 {
             self.facebook_id_str = userid
         }
+        
+        var avatarImageURL = ""
+        if self.account_type == Bakkle.bkAccountTypeFacebook {
+            avatarImageURL = "http://graph.facebook.com/\(userid)/picture"
+        } else {
+            avatarImageURL = "https://app.bakkle.com/img/default_profile.png"
+        }
             
         request.HTTPMethod = "POST"
-        let postString = "name=\(name)&gender=\(gender)&user_id=\(userid)&first_name=\(first_name)&last_name=\(last_name)&device_uuid=\(self.deviceUUID)&flavor=\(self.flavor)"
+        let postString = "name=\(name)&gender=\(gender)&user_id=\(userid)&first_name=\(first_name)&last_name=\(last_name)&device_uuid=\(self.deviceUUID)&flavor=\(self.flavor)&avatar_image_url=\(avatarImageURL)"
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
         
         info("facebook")
@@ -613,7 +620,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         
             request.HTTPMethod = "POST"
         var user_id: String
-        if Bakkle.sharedInstance.account_type == 0 {
+        if Bakkle.sharedInstance.account_type == Bakkle.bkAccountTypeGuest {
             user_id = self.guest_id_str
         }else{
             user_id = self.facebook_id_str
