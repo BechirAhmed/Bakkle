@@ -47,11 +47,7 @@ class SignUpView: UIViewController {
     }
     
     func setupProfileImg() {
-//        if Bakkle.sharedInstance.account_type == 0 || Bakkle.sharedInstance.profileImgURL == nil {
-            self.profileImg.image = UIImage(named: "default_profile")
-//        }else{
-//            self.profileImg.hnk_setImageFromURL(Bakkle.sharedInstance.profileImgURL!)
-//        }
+        self.profileImg.image = UIImage(named: "default_profile")
         self.profileImg.layer.cornerRadius = self.profileImg.frame.size.width/2
         self.profileImg.layer.borderWidth = 8.0
         self.profileImg.clipsToBounds = true
@@ -60,10 +56,27 @@ class SignUpView: UIViewController {
     }
     
     @IBAction func signUpPressed(sender: AnyObject) {
-//        let email = self.emailField.text
-//        let password = self.passwordField.text
+        let name = self.nameField.text
+        let email = self.emailField.text
+        let password = self.passwordField.text
+        let confirmPassword = self.confirmPasswordField.text
+        if password == confirmPassword {
+            Bakkle.sharedInstance.localUserID(email, device_uuid: Bakkle.sharedInstance.deviceUUID, success: { () -> () in
+                let fullName = split(name) {$0 == " "}
+                Bakkle.sharedInstance.facebook("", name: name, userid: Bakkle.sharedInstance.facebook_id_str, first_name: fullName[0], last_name: fullName[1], success: { () -> () in
+                    Bakkle.sharedInstance.setPassword(Bakkle.sharedInstance.facebook_id_str, device_uuid: Bakkle.sharedInstance.deviceUUID, password: password, success: { () -> () in
+                            self.dismissViewControllerAnimated(true, completion: nil)
+                    })
+                })
+            })
+            
+        }else{
+            var alert = UIAlertController(title: "Password does not match", message: "The two password don't match", preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
+            self.presentViewController(alert, animated: true, completion: nil)
+        }
 //        Bakkle.sharedInstance.account_type = 2
-//        Bakkle.sharedInstance.localUserID(email, device_uuid: Bakkle.sharedInstance.deviceUUID)
+//
 //        Bakkle.sharedInstance.authenticateLocal(Bakkle.sharedInstance.facebook_id_str, device_uuid: Bakkle.sharedInstance.deviceUUID, password: password, success: { () -> () in
 //            Bakkle.sharedInstance.login({ () -> () in
 //                

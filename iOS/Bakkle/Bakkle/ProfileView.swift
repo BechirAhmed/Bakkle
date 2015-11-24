@@ -86,36 +86,15 @@ class ProfileView: UIViewController, UITextViewDelegate {
     }
     
     func setGuestInfo(){
-        dispatch_async(dispatch_get_global_queue(
-            Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
-                dispatch_async(dispatch_get_main_queue()) {
-                    self.backgroundAvatar.image = UIImage(named: "default_profile")
-                    self.avatar.image = UIImage(named: "default_profile")
-                    self.setAttributesForImage()
-                }
-        }
-        
-        self.nameLabel.text = "Guest"
+        self.setImage()
+        self.nameLabel.text = user.valueForKey("display_name") as? String
         self.editBtn.enabled = false
         self.editBtn.backgroundColor = AddItem.CONFIRM_BUTTON_DISABLED_COLOR
         self.logoutBtn.setTitle("LOGIN", forState: UIControlState.Normal)
     }
     
     func setUserInfo() {
-        let facebook_id = user.valueForKey("facebook_id") as! String
-        println("facebook_id: \(facebook_id)")
-        var facebookProfileImageUrlString = "http://graph.facebook.com/\(facebook_id)/picture?width=250&height=250"
-        dispatch_async(dispatch_get_global_queue(
-            Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
-                let imgURL = NSURL(string: facebookProfileImageUrlString)
-                dispatch_async(dispatch_get_main_queue()) {
-                    println("[SettingsView] displaying image \(facebookProfileImageUrlString)")
-                    self.backgroundAvatar.hnk_setImageFromURL(imgURL!)
-                    self.avatar.hnk_setImageFromURL(imgURL!)
-                    self.setAttributesForImage()
-                }
-        }
-        
+        self.setImage()
         self.nameLabel.text = user.valueForKey("display_name") as? String
         self.editBtn.enabled = true
         self.editBtn.backgroundColor = Theme.ColorGreen
@@ -129,18 +108,25 @@ class ProfileView: UIViewController, UITextViewDelegate {
         }
     }
     
-    func setAttributesForImage(){
-        var visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .Light)) as UIVisualEffectView
-        visualEffectView.frame = self.backgroundAvatar.frame
-        self.backgroundAvatar.addSubview(visualEffectView)
-        
-        self.avatar.layer.cornerRadius = self.avatar.frame.size.width/2
-        self.avatar.layer.borderWidth = 7.0
-        self.avatar.layer.borderColor = UIColor.whiteColor().CGColor
+    func setImage(){
+        dispatch_async(dispatch_get_global_queue(
+            Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.backgroundAvatar.hnk_setImageFromURL(NSURL(string: Bakkle.sharedInstance.profileImageURL())!)
+                    self.avatar.hnk_setImageFromURL(NSURL(string: Bakkle.sharedInstance.profileImageURL())!)
+                    var visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .Light)) as UIVisualEffectView
+                    visualEffectView.frame = self.backgroundAvatar.frame
+                    self.backgroundAvatar.addSubview(visualEffectView)
+                    
+                    self.avatar.layer.cornerRadius = self.avatar.frame.size.width/2
+                    self.avatar.layer.borderWidth = 7.0
+                    self.avatar.layer.borderColor = UIColor.whiteColor().CGColor
+                }
+        }
     }
     
     @IBAction func btnLogout(sender: AnyObject) {
-        if Bakkle.sharedInstance.account_type == 0 {
+        if Bakkle.sharedInstance.account_type == Bakkle.bkAccountTypeGuest {
             self.logoutBtn.setTitle("LOG OUT", forState: UIControlState.Normal)
             let sb = UIStoryboard(name: "Main", bundle: nil)
             let vc = sb.instantiateViewControllerWithIdentifier("loginView") as! LoginView

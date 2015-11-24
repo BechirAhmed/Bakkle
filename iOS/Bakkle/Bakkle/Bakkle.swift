@@ -324,11 +324,11 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     func checkPermission(action:String) -> Bool {
         
         if action == Bakkle.bkPermissionAddItem {
-            return Bakkle.sharedInstance.account_type == 0
+            return Bakkle.sharedInstance.account_type == Bakkle.bkAccountTypeGuest
         }
         
         // Default
-        return Bakkle.sharedInstance.account_type == 0
+        return Bakkle.sharedInstance.account_type == Bakkle.bkAccountTypeGuest
     }
     
     func profileImageURL() -> String {
@@ -337,11 +337,11 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         }
         if account_type == Bakkle.bkAccountTypeEmail {
             // TODO: lookup image URL
-            return "https://app.bakkle.com/guest.png"
+            return "https://app.bakkle.com/img/default_profile.png"
         }
 
         // Else assume guest
-        return "https://app.bakkle.com/guest.png"
+        return "https://app.bakkle.com/img/default_profile.png"
     }
     
     func guestUserID(device_uuid:String, success: ()->()) {
@@ -461,7 +461,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         task.resume()
     }
     
-    func setPassword(user_id: String, device_uuid:String, password:String) {
+    func setPassword(user_id: String, device_uuid:String, password:String, success: ()->()) {
         let url:NSURL? = NSURL(string: url_base + url_set_password)
         let request = NSMutableURLRequest(URL: url!)
         
@@ -492,6 +492,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                 
                 if responseDict.valueForKey("status")?.integerValue == 1 {
                     self.info("password set successfully")
+                    success()
                 }
                 else {
                     self.errorStr = responseDict.valueForKey("message") as! String
@@ -683,7 +684,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             let responseString = NSString(data: data, encoding: NSUTF8StringEncoding)
             println("Response: \(responseString)")
             
-            self.account_type = 0
+            self.account_type = Bakkle.bkAccountTypeGuest
             success()
         }
         task.resume()

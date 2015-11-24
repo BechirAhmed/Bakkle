@@ -33,13 +33,14 @@ class SignInView: UIViewController {
     @IBAction func signInPressed(sender: AnyObject) {
         let email = self.emailField.text
         let password = self.passwordField.text
-        Bakkle.sharedInstance.account_type = 2
+        Bakkle.sharedInstance.account_type = Bakkle.bkAccountTypeEmail
         Bakkle.sharedInstance.localUserID(email, device_uuid: Bakkle.sharedInstance.deviceUUID) {
         Bakkle.sharedInstance.authenticateLocal(Bakkle.sharedInstance.facebook_id_str, device_uuid: Bakkle.sharedInstance.deviceUUID, password: password, success: { () -> () in
             Bakkle.sharedInstance.login({ () -> () in
                 
                 Bakkle.sharedInstance.persistData()
                 self.dismissViewControllerAnimated(true, completion: nil)
+                self.parentViewController?.dismissViewControllerAnimated(true, completion: nil)
                 }, fail: {})
             }, fail: {})
         }
@@ -74,7 +75,7 @@ class SignInView: UIViewController {
                 var name = result2.objectForKey("name") as! String
                 var first_name = result2.objectForKey("first_name") as! String
                 var last_name = result2.objectForKey("last_name") as! String
-                Bakkle.sharedInstance.account_type = 1
+                Bakkle.sharedInstance.account_type = Bakkle.bkAccountTypeFacebook
                 Bakkle.sharedInstance.facebook(gender, name: name, userid: userid, first_name: first_name, last_name: last_name, success: {
                     // Sucessfully logged in via FB
                     Bakkle.sharedInstance.login({
