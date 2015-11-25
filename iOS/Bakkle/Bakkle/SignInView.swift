@@ -20,8 +20,6 @@ class SignInView: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupButtons()
-        emailField.text = "tandoni@rose-hulman.edu"
-        passwordField.text = "GoVentures"
 
     }
     
