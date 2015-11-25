@@ -10,12 +10,13 @@ import UIKit
 
 import FBSDKLoginKit
 
-class SignInView: UIViewController {
+class SignInView: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var closeBtn: UIButton!
     @IBOutlet weak var emailField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
     @IBOutlet weak var facebookBtn: UIButton!
+    @IBOutlet weak var signInBtn: UIButton!
     
     var parentLoginInVC: LoginView? = nil
     var profileVC: ProfileView? = nil
@@ -23,9 +24,17 @@ class SignInView: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupButtons()
+        
+        //text field delegates
+        emailField.delegate = self
+        passwordField.delegate = self
 
         var tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
         self.view.addGestureRecognizer(tap)
+        
+        signInBtn.enabled = false
+        signInBtn.setTitleColor(AddItem.CONFIRM_BUTTON_DISABLED_COLOR, forState: .Normal)
+
 
     }
     
@@ -38,15 +47,32 @@ class SignInView: UIViewController {
         self.emailField.resignFirstResponder() || self.passwordField.resignFirstResponder()
     }
     
+    func disableButtonHandler() {
+        if self.emailField.text.isEmpty || self.passwordField.text.isEmpty {
+            signInBtn.enabled = false
+            signInBtn.setTitleColor(AddItem.CONFIRM_BUTTON_DISABLED_COLOR, forState: .Normal)
+        }else{
+            signInBtn.enabled = true
+            signInBtn.setTitleColor(AddItem.BAKKLE_GREEN_COLOR, forState: .Normal)
+        }
+    }
+    
+    func textFieldDidBeginEditing(textField: UITextField) {
+        self.disableButtonHandler()
+    }
+    
+    func textFieldDidEndEditing(textField: UITextField) {
+        self.disableButtonHandler()
+    }
+    
     @IBAction func signInPressed(sender: AnyObject) {
+        self.dismissKeyboard()
         let email = self.emailField.text
         let password = self.passwordField.text
         Bakkle.sharedInstance.account_type = Bakkle.bkAccountTypeEmail
         Bakkle.sharedInstance.localUserID(email, device_uuid: Bakkle.sharedInstance.deviceUUID) {
         Bakkle.sharedInstance.authenticateLocal(Bakkle.sharedInstance.facebook_id_str, device_uuid: Bakkle.sharedInstance.deviceUUID, password: password, success: { () -> () in
             Bakkle.sharedInstance.login({ () -> () in
-                
-                
                 Bakkle.sharedInstance.persistData()
                 if self.profileVC != nil {
                     Bakkle.sharedInstance.getAccount(Bakkle.sharedInstance.account_id, success: { (account: NSDictionary) -> () in
@@ -132,6 +158,7 @@ class SignInView: UIViewController {
     
     
     @IBAction func closePressed(sender: AnyObject) {
+        self.dismissKeyboard()
         self.dismissViewControllerAnimated(true, completion: nil)
     }
 }
