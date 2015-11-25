@@ -112,8 +112,9 @@ class ProfileView: UIViewController, UITextViewDelegate {
         dispatch_async(dispatch_get_global_queue(
             Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
                 dispatch_async(dispatch_get_main_queue()) {
-                    self.backgroundAvatar.hnk_setImageFromURL(NSURL(string: Bakkle.sharedInstance.profileImageURL())!)
-                    self.avatar.hnk_setImageFromURL(NSURL(string: Bakkle.sharedInstance.profileImageURL())!)
+                    let finalString = Bakkle.sharedInstance.profileImageURL() + "?width=500&height=500"
+                    self.backgroundAvatar.hnk_setImageFromURL(NSURL(string: finalString)!)
+                    self.avatar.hnk_setImageFromURL(NSURL(string: finalString)!)
                     var visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .Light)) as UIVisualEffectView
                     visualEffectView.frame = self.backgroundAvatar.frame
                     self.backgroundAvatar.addSubview(visualEffectView)
@@ -141,7 +142,7 @@ class ProfileView: UIViewController, UITextViewDelegate {
                         Bakkle.sharedInstance.populateFeed({})
                         }, fail: {})
                     
-                })
+                    }, fail: {})
                 
             })
             setGuestInfo()

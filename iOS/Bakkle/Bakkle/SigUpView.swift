@@ -106,8 +106,12 @@ class SignUpView: UIViewController, UITextFieldDelegate {
                     Bakkle.sharedInstance.setPassword(Bakkle.sharedInstance.facebook_id_str, device_uuid: Bakkle.sharedInstance.deviceUUID, password: password, success: { () -> () in
                         Bakkle.sharedInstance.login({ () -> () in
                             self.dismissViewControllerAnimated(true, completion: nil)
-                        }, fail: {})
+                            }, fail: {})
                     })
+                    }, fail: { () -> () in
+                        var alert = UIAlertController(title: "Account exists", message: "An account with the provided email already exists", preferredStyle: UIAlertControllerStyle.Alert)
+                        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
+                        self.presentViewController(alert, animated: true, completion: nil)
                 })
             })
             

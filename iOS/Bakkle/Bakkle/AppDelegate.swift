@@ -44,7 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                       Bakkle.sharedInstance.populateFeed({})
                     }, fail: {})
                     
-                })
+                    }, fail: {})
             }
         }
         else  {

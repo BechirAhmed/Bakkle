@@ -93,9 +93,7 @@ class SignInView: UIViewController {
                         Bakkle.sharedInstance.persistData()
                         
                         // jump into the feedview if successfully logged in
-                        dispatch_async(dispatch_get_main_queue()) {
                             self.dismissViewControllerAnimated(true, completion: nil)
-                        }
                         
                         dispatch_async(dispatch_get_main_queue()) {
                             // Register for push notifications.
@@ -106,7 +104,7 @@ class SignInView: UIViewController {
                         }, fail: {
                             NSLog("oops")
                     })
-                }) // Bakkle.sharedInstance.facebook
+                    }, fail: {}) // Bakkle.sharedInstance.facebook
             }
         }) // FBSDKGraphRequest completion handler
     }

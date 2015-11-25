@@ -79,9 +79,7 @@ class LoginView: UIViewController {
         if self.previousVC != nil {
             Bakkle.sharedInstance.getAccount(Bakkle.sharedInstance.account_id, success: { (account: NSDictionary) -> () in
                 self.previousVC.user = account
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     self.dismissViewControllerAnimated(true, completion: nil)
-                })
                 }, fail: {})
         }else{
             self.dismissViewControllerAnimated(true, completion: nil)
@@ -112,10 +110,8 @@ class LoginView: UIViewController {
                         dispatch_async(dispatch_get_main_queue()) {
                             if self.previousVC != nil {
                                 Bakkle.sharedInstance.getAccount(Bakkle.sharedInstance.account_id, success: { (account: NSDictionary) -> () in
-                                    self.previousVC.user = account 
-                                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                    self.previousVC.user = account
                                         self.dismissViewControllerAnimated(true, completion: nil)
-                                    })
                                     }, fail: {})
                             }else{
                                 self.dismissViewControllerAnimated(true, completion: nil)
@@ -132,7 +128,7 @@ class LoginView: UIViewController {
                         }, fail: {
                             NSLog("oops")
                     })
-                }) // Bakkle.sharedInstance.facebook
+                    }, fail: {}) // Bakkle.sharedInstance.facebook
             }
         }) // FBSDKGraphRequest completion handler
     }
