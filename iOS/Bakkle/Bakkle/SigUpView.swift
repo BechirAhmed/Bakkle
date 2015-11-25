@@ -30,6 +30,8 @@ class SignUpView: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var editBtn: UIImageView!
     
     var kbHeight: CGFloat!
+    var parentLoginInVC: LoginView? = nil
+    var profileVC: ProfileView? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,7 +52,7 @@ class SignUpView: UIViewController, UITextFieldDelegate {
         
         setupProfileImg()
     }
-   
+    
     func dismissKeyboard() {
         self.nameField.resignFirstResponder() || self.emailField.resignFirstResponder() || self.passwordField.resignFirstResponder() || self.confirmPasswordField.resignFirstResponder()
     }
@@ -105,13 +107,23 @@ class SignUpView: UIViewController, UITextFieldDelegate {
                 Bakkle.sharedInstance.facebook("", name: name, userid: Bakkle.sharedInstance.facebook_id_str, first_name: first_name, last_name: last_name, success: { () -> () in
                     Bakkle.sharedInstance.setPassword(Bakkle.sharedInstance.facebook_id_str, device_uuid: Bakkle.sharedInstance.deviceUUID, password: password, success: { () -> () in
                         Bakkle.sharedInstance.login({ () -> () in
-                            self.dismissViewControllerAnimated(true, completion: nil)
-                            }, fail: {})
+                            if self.profileVC != nil {
+                                Bakkle.sharedInstance.getAccount(Bakkle.sharedInstance.account_id, success: { (account: NSDictionary) -> () in
+                                    self.profileVC!.user = account
+                                    self.dismissViewControllerAnimated(true, completion: nil)
+                                    if self.parentLoginInVC != nil {
+                                        self.parentLoginInVC?.dismissViewControllerAnimated(false, completion: nil)
+                                    }
+                                    }, fail: {})
+                            }else{
+                                self.dismissViewControllerAnimated(true, completion: nil)
+                                if self.parentLoginInVC != nil {
+                                    self.parentLoginInVC?.dismissViewControllerAnimated(false, completion: nil)
+                                }
+                                
+                            }
+                        }, fail: {})
                     })
-                    }, fail: { () -> () in
-                        var alert = UIAlertController(title: "Account exists", message: "An account with the provided email already exists", preferredStyle: UIAlertControllerStyle.Alert)
-                        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
-                        self.presentViewController(alert, animated: true, completion: nil)
                 })
             })
             

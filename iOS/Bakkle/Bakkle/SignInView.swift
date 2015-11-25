@@ -17,15 +17,25 @@ class SignInView: UIViewController {
     @IBOutlet weak var passwordField: UITextField!
     @IBOutlet weak var facebookBtn: UIButton!
     
+    var parentLoginInVC: LoginView? = nil
+    var profileVC: ProfileView? = nil
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupButtons()
+
+        var tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
+        self.view.addGestureRecognizer(tap)
 
     }
     
     func setupButtons(){
         closeBtn.setImage(IconImage().close(), forState: .Normal)
         closeBtn.setTitle("", forState: .Normal)
+    }
+    
+    func dismissKeyboard() {
+        self.emailField.resignFirstResponder() || self.passwordField.resignFirstResponder()
     }
     
     @IBAction func signInPressed(sender: AnyObject) {
@@ -38,9 +48,22 @@ class SignInView: UIViewController {
                 
                 
                 Bakkle.sharedInstance.persistData()
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                if self.profileVC != nil {
+                    Bakkle.sharedInstance.getAccount(Bakkle.sharedInstance.account_id, success: { (account: NSDictionary) -> () in
+                        self.profileVC!.user = account
+                        self.dismissViewControllerAnimated(true, completion: nil)
+                        if self.parentLoginInVC != nil {
+                            self.parentLoginInVC?.dismissViewControllerAnimated(false, completion: nil)
+                        }
+                        }, fail: {})
+                }else{
                     self.dismissViewControllerAnimated(true, completion: nil)
-                })
+                    if self.parentLoginInVC != nil {
+                        self.parentLoginInVC?.dismissViewControllerAnimated(false, completion: nil)
+                    }
+                    
+                }
+
                 
                 }, fail: {})
             }, fail: {
