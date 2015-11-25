@@ -45,6 +45,10 @@ class SignUpView: UIViewController, UITextFieldDelegate {
         
         var tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
         self.view.addGestureRecognizer(tap)
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardDidShow:", name: UIKeyboardDidShowNotification, object: nil)
+        
+         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardDidHide:", name: UIKeyboardDidHideNotification, object: nil)
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -53,26 +57,60 @@ class SignUpView: UIViewController, UITextFieldDelegate {
         setupProfileImg()
     }
     
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
     func dismissKeyboard() {
         self.nameField.resignFirstResponder() || self.emailField.resignFirstResponder() || self.passwordField.resignFirstResponder() || self.confirmPasswordField.resignFirstResponder()
     }
     
-    func textFieldDidBeginEditing(textField: UITextField) {
-        animateViewMoving(true, moveValue: 150)
+    func keyboardDidShow(notification: NSNotification) {
+        if let userInfo = notification.userInfo {
+            if let keyboardSize =  (userInfo[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue() {
+                kbHeight = keyboardSize.height
+                self.animateViewMoving(true, height: keyboardSize.height)
+            }
+        }
+    }
+    
+    func keyboardDidHide(notification: NSNotification) {
+        self.animateViewMoving(false, height: 0)
     }
     
     func textFieldDidEndEditing(textField: UITextField) {
-        animateViewMoving(false, moveValue: 150)
+        animateViewMoving(false, height: 0)
     }
     
-    func animateViewMoving(up: Bool, moveValue: CGFloat) {
-        let movementDuration = 0.5
-        let movement = up ? -moveValue : moveValue
-        UIView.beginAnimations("animateView", context: nil)
-        UIView.setAnimationBeginsFromCurrentState(true)
-        UIView.setAnimationDuration(movementDuration)
-        self.view.frame = CGRectOffset(self.view.frame, 0, movement)
-        UIView.commitAnimations()
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        if textField == nameField {
+            nameField.resignFirstResponder()
+            emailField.becomeFirstResponder()
+        }
+        if textField == emailField {
+            emailField.resignFirstResponder()
+            passwordField.becomeFirstResponder()
+        }
+        if textField == passwordField {
+            passwordField.resignFirstResponder()
+            confirmPasswordField.becomeFirstResponder()
+        }
+        if textField == confirmPasswordField {
+            confirmPasswordField.resignFirstResponder()
+        }
+        return true
+    }
+    
+    func animateViewMoving(up: Bool, height: CGFloat) {
+        var movement = (up ? -height : 0)
+        
+        UIView.animateWithDuration(0.5, animations: {
+            self.view.transform = CGAffineTransformMakeTranslation(0, movement)
+//            self.view.layoutIfNeeded()
+//            self.view.setNeedsLayout()
+        })
     }
     
     func setupButtons(){
@@ -138,9 +176,4 @@ class SignUpView: UIViewController, UITextFieldDelegate {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        
-        return true
-    }
 }
