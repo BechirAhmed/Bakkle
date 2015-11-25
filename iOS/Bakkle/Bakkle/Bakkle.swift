@@ -566,7 +566,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         }
             
         request.HTTPMethod = "POST"
-        let postString = "name=\(name)&gender=\(gender)&user_id=\(userid)&first_name=\(first_name)&last_name=\(last_name)&device_uuid=\(self.deviceUUID)&flavor=\(self.flavor)&avatar_image_url=\(avatarImageURL)"
+        let postString = "name=\(name)&gender=\(gender)&user_id=\(userid)&first_name=\(first_name)&last_name=\(last_name)&device_uuid=\(self.deviceUUID)&flavor=\(self.flavor)&avatar_image_url=\(avatarImageURL)&account_type=\(self.account_type)"
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
         
         info("facebook")
@@ -720,7 +720,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             let responseString = NSString(data: data, encoding: NSUTF8StringEncoding)
             self.debg("Response: \(responseString)")
         }
-        task.resume()
+        task.resume() 
     }
     
     /* mark feed item 'status' as MEH/WANT/HOLD/REPORT */    func markItem(status: String, item_id: Int,  message: String? = "", success: ()->(), fail: ()->()) {
