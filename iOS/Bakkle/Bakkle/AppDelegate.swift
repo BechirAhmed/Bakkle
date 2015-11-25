@@ -39,7 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        print(Bakkle.sharedInstance.account_type)
         if Bakkle.sharedInstance.account_type == 0 {
             Bakkle.sharedInstance.guestUserID(Bakkle.sharedInstance.deviceUUID){
-                Bakkle.sharedInstance.facebook("", name: "Guest User", userid: Bakkle.sharedInstance.guest_id_str, first_name: "Guest", last_name: "User", success: { () -> () in
+                Bakkle.sharedInstance.facebook("", name: "Guest", userid: Bakkle.sharedInstance.guest_id_str, first_name: "Guest", last_name: "", success: { () -> () in
                     Bakkle.sharedInstance.login({
                       Bakkle.sharedInstance.populateFeed({})
                     }, fail: {})

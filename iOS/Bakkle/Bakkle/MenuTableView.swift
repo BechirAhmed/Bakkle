@@ -88,23 +88,15 @@ class MenuTableController: UITableViewController {
         visualEffectView.frame = tableView.bounds
         var backgroundImageView = UIImageView(frame: tableView.bounds)
         backgroundImageView.contentMode = UIViewContentMode.ScaleAspectFill
-        if Bakkle.sharedInstance.account_type == 0 || Bakkle.sharedInstance.profileImgURL == nil  {
-            backgroundImageView.image = UIImage(named: "default_profile")
-        }else{
-            backgroundImageView.hnk_setImageFromURL(Bakkle.sharedInstance.profileImgURL!)
-        }
-        
+        backgroundImageView.hnk_setImageFromURL(NSURL(string: Bakkle.sharedInstance.profileImageURL())!)
         backgroundImageView.clipsToBounds = true
         backgroundImageView.addSubview(visualEffectView)
         tableView.backgroundView = backgroundImageView
     }
     
     func setupProfileImg() {
-        if Bakkle.sharedInstance.account_type == 0 {
-            self.profileImg.image = UIImage(named: "default_profile")
-        }else{
-            self.profileImg.hnk_setImageFromURL(NSURL(string: Bakkle.sharedInstance.profileImageURL())!)
-        }
+        let url = NSURL(string: Bakkle.sharedInstance.profileImageURL())
+        self.profileImg.hnk_setImageFromURL(url!)
         self.profileImg.layer.cornerRadius = self.profileImg.frame.size.width/2
         self.profileImg.layer.borderWidth = 5.0
         self.profileImg.clipsToBounds = true
@@ -113,7 +105,7 @@ class MenuTableController: UITableViewController {
     }
     
     func setupProfileLabel() {
-        if Bakkle.sharedInstance.account_type == 0 || Bakkle.sharedInstance.first_name == nil || Bakkle.sharedInstance.last_name == nil {
+        if Bakkle.sharedInstance.account_type == Bakkle.bkAccountTypeGuest {
             self.nameLabel.text = "Guest"
         }else{
             self.nameLabel.text = Bakkle.sharedInstance.first_name + " " + Bakkle.sharedInstance.last_name

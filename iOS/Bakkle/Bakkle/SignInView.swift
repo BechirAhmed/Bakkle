@@ -33,15 +33,26 @@ class SignInView: UIViewController {
     @IBAction func signInPressed(sender: AnyObject) {
         let email = self.emailField.text
         let password = self.passwordField.text
-        Bakkle.sharedInstance.account_type = 2
+        Bakkle.sharedInstance.account_type = Bakkle.bkAccountTypeEmail
         Bakkle.sharedInstance.localUserID(email, device_uuid: Bakkle.sharedInstance.deviceUUID) {
         Bakkle.sharedInstance.authenticateLocal(Bakkle.sharedInstance.facebook_id_str, device_uuid: Bakkle.sharedInstance.deviceUUID, password: password, success: { () -> () in
             Bakkle.sharedInstance.login({ () -> () in
                 
+                
                 Bakkle.sharedInstance.persistData()
-                self.dismissViewControllerAnimated(true, completion: nil)
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.dismissViewControllerAnimated(true, completion: nil)
+                })
+                
                 }, fail: {})
-            }, fail: {})
+            }, fail: {
+                
+                var alert = UIAlertController(title: "Password is not correct", message: "The given password is not correct. Please login again.", preferredStyle: UIAlertControllerStyle.Alert)
+                alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.presentViewController(alert, animated: true, completion: nil)
+                })
+            })
         }
     }
     
@@ -51,7 +62,9 @@ class SignInView: UIViewController {
             if error != nil {
                 var alert = UIAlertController(title: error.localizedDescription, message: error.localizedRecoverySuggestion, preferredStyle: UIAlertControllerStyle.Alert)
                 alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
-                self.presentViewController(alert, animated: true, completion: nil)
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.presentViewController(alert, animated: true, completion: nil)
+                })
             }else if result.isCancelled {
                 // Run code if the user cancelled the login process
             } else {
@@ -74,7 +87,7 @@ class SignInView: UIViewController {
                 var name = result2.objectForKey("name") as! String
                 var first_name = result2.objectForKey("first_name") as! String
                 var last_name = result2.objectForKey("last_name") as! String
-                Bakkle.sharedInstance.account_type = 1
+                Bakkle.sharedInstance.account_type = Bakkle.bkAccountTypeFacebook
                 Bakkle.sharedInstance.facebook(gender, name: name, userid: userid, first_name: first_name, last_name: last_name, success: {
                     // Sucessfully logged in via FB
                     Bakkle.sharedInstance.login({
