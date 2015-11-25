@@ -138,9 +138,14 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
         let sellerProfile: NSDictionary = item!.valueForKey("seller") as! NSDictionary
         let sellerFBID: String = sellerProfile.valueForKey("facebook_id") as! String
         let sellerFacebookProfileImgString = "http://graph.facebook.com/\(sellerFBID)/picture?width=142&height=142"
-        let profileImageURL = NSURL(string: sellerFacebookProfileImgString)
+        var profileImageURL: NSURL
+        if Bakkle.sharedInstance.account_type == Bakkle.bkAccountTypeFacebook {
+            profileImageURL = NSURL(string: sellerFacebookProfileImgString)!
+        } else {
+            profileImageURL = NSURL(string: sellerProfile.valueForKey("avatar_image_url") as! String)!
+        }
         println("FACEBOOK PROFILE LINK IS: \(sellerFacebookProfileImgString)")
-        sellerAvatar.image = UIImage(data: NSData(contentsOfURL: profileImageURL!)!)
+        sellerAvatar.image = UIImage(data: NSData(contentsOfURL: profileImageURL)!)
         sellerAvatar.layer.borderWidth = 2.0
         sellerAvatar.layer.borderColor = UIColor.whiteColor().CGColor
         sellerAvatar.layer.cornerRadius = sellerAvatar.layer.frame.size.width / 2
