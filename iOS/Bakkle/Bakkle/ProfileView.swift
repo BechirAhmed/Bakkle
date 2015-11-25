@@ -107,19 +107,20 @@ class ProfileView: UIViewController, UITextViewDelegate {
     func setUserInfo() {
         let facebook_id = user.valueForKey("facebook_id") as! String
         println("facebook_id: \(facebook_id)")
-        var facebookProfileImageUrlString = Bakkle.sharedInstance.profileImageURL() + "?width=500&height=500"
+//        var facebookProfileImageUrlString = "http://graph.facebook.com/\(facebook_id)/picture/?width=500&height=500"
+        let imgURL = NSURL(string: user.valueForKey("avatar_image_url") as! String)!
+        
         dispatch_async(dispatch_get_global_queue(
             Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
-                let imgURL = NSURL(string: facebookProfileImageUrlString)
                 dispatch_async(dispatch_get_main_queue()) {
-                    println("[SettingsView] displaying image \(facebookProfileImageUrlString)")
-                    if Bakkle.sharedInstance.account_type == Bakkle.bkAccountTypeFacebook {
-                        self.backgroundAvatar.hnk_setImageFromURL(imgURL!)
-                        self.avatar.hnk_setImageFromURL(imgURL!)
-                    }else{
-                        self.backgroundAvatar.hnk_setImageFromURL(NSURL(string: Bakkle.sharedInstance.profileImageURL())!)
-                        self.avatar.hnk_setImageFromURL(NSURL(string:Bakkle.sharedInstance.profileImageURL())!)
-                    }
+                    println("[SettingsView] displaying image \(imgURL)")
+//                    if Bakkle.sharedInstance.account_type == Bakkle.bkAccountTypeFacebook {
+                        self.backgroundAvatar.hnk_setImageFromURL(imgURL)
+                        self.avatar.hnk_setImageFromURL(imgURL)
+//                    }else{
+//                        self.backgroundAvatar.hnk_setImageFromURL(NSURL(string: Bakkle.sharedInstance.profileImageURL())!)
+//                        self.avatar.hnk_setImageFromURL(NSURL(string:Bakkle.sharedInstance.profileImageURL())!)
+//                    }
                     
                      self.setImageAttributes()
                 }
