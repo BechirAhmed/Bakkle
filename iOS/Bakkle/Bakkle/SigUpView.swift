@@ -69,7 +69,7 @@ class SignUpView: UIViewController, UITextFieldDelegate {
     
     func keyboardDidShow(notification: NSNotification) {
         if let userInfo = notification.userInfo {
-            if let keyboardSize =  (userInfo[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue() {
+            if let keyboardSize =  (userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.CGRectValue() {
                 kbHeight = keyboardSize.height
                 self.animateViewMoving(true, height: keyboardSize.height)
             }
@@ -86,15 +86,13 @@ class SignUpView: UIViewController, UITextFieldDelegate {
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         if textField == nameField {
-            nameField.resignFirstResponder()
             emailField.becomeFirstResponder()
+            
         }
         if textField == emailField {
-            emailField.resignFirstResponder()
             passwordField.becomeFirstResponder()
         }
         if textField == passwordField {
-            passwordField.resignFirstResponder()
             confirmPasswordField.becomeFirstResponder()
         }
         if textField == confirmPasswordField {
@@ -104,13 +102,21 @@ class SignUpView: UIViewController, UITextFieldDelegate {
     }
     
     func animateViewMoving(up: Bool, height: CGFloat) {
-        var movement = (up ? -height : 0)
-        
-        UIView.animateWithDuration(0.5, animations: {
-            self.view.transform = CGAffineTransformMakeTranslation(0, movement)
-//            self.view.layoutIfNeeded()
-//            self.view.setNeedsLayout()
-        })
+        if up {
+            UIView.animateWithDuration(0.5, animations: {
+                self.view.transform = CGAffineTransformIdentity
+                self.view.layoutIfNeeded()
+            })
+            UIView.animateWithDuration(0.5, animations: {
+                self.view.transform = CGAffineTransformMakeTranslation(0, -self.kbHeight)
+                self.view.layoutIfNeeded()
+            })
+        }else{
+            UIView.animateWithDuration(0.5, animations: {
+                self.view.transform = CGAffineTransformIdentity
+                self.view.layoutIfNeeded()
+            })
+        }
     }
     
     func setupButtons(){
