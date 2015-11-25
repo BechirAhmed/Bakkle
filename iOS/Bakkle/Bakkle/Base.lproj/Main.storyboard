@@ -292,6 +292,9 @@
                                                 <animations/>
                                                 <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits"/>
+                                                <connections>
+                                                    <outlet property="delegate" destination="PIF-3b-jRh" id="eSW-M7-Zhe"/>
+                                                </connections>
                                             </textField>
                                         </subviews>
                                         <animations/>
@@ -333,6 +336,9 @@
                                                 <animations/>
                                                 <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits"/>
+                                                <connections>
+                                                    <outlet property="delegate" destination="PIF-3b-jRh" id="4jm-Db-BLJ"/>
+                                                </connections>
                                             </textField>
                                         </subviews>
                                         <animations/>
@@ -385,6 +391,9 @@
                                                 <animations/>
                                                 <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                                                <connections>
+                                                    <outlet property="delegate" destination="PIF-3b-jRh" id="i8c-PP-DlB"/>
+                                                </connections>
                                             </textField>
                                         </subviews>
                                         <animations/>
@@ -434,6 +443,9 @@
                                                 <animations/>
                                                 <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                                                <connections>
+                                                    <outlet property="delegate" destination="PIF-3b-jRh" id="o6l-e4-8Rc"/>
+                                                </connections>
                                             </textField>
                                         </subviews>
                                         <animations/>
@@ -8814,6 +8826,7 @@
                         <outlet property="emailField" destination="M3E-zj-0bj" id="Nvf-yT-gU7"/>
                         <outlet property="facebookBtn" destination="DUI-qS-vyY" id="qZ8-xK-ND6"/>
                         <outlet property="passwordField" destination="YzD-dD-ccN" id="kcT-Zx-Mw9"/>
+                        <outlet property="signInBtn" destination="MFl-VM-7Iy" id="wAe-un-171"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="P06-i3-am7" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -105,7 +105,6 @@ class SignUpView: UIViewController, UITextFieldDelegate {
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         if textField == nameField {
             emailField.becomeFirstResponder()
-            
         }
         if textField == emailField {
             passwordField.becomeFirstResponder()

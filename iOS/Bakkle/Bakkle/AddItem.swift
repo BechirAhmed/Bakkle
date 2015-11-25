@@ -91,6 +91,8 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         priceField.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardDidShow:", name: UIKeyboardDidShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardDidHide:", name: UIKeyboardDidHideNotification, object: nil)
+
         
         for url: NSURL in videos {
             self.videoImages[url] = Bakkle.sharedInstance.previewImageForLocalVideo(url)
@@ -196,12 +198,21 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     
     /* helper function to help the screen move up and down when the keyboard shows or dismisses */
     func animateViewMoving(up: Bool) {
-        var movement = (up ? -keyboardHeight : 0)
-        
-        UIView.animateWithDuration(0.5, animations: {
-            self.view.transform = CGAffineTransformMakeTranslation(0, movement)
-            self.view.layoutIfNeeded()
-        })
+        if up {
+            UIView.animateWithDuration(0.5, animations: {
+                self.view.transform = CGAffineTransformIdentity
+                self.view.layoutIfNeeded()
+            })
+            UIView.animateWithDuration(0.5, animations: {
+                self.view.transform = CGAffineTransformMakeTranslation(0, -self.keyboardHeight)
+                self.view.layoutIfNeeded()
+            })
+        }else{
+            UIView.animateWithDuration(0.5, animations: {
+                self.view.transform = CGAffineTransformIdentity
+                self.view.layoutIfNeeded()
+            })
+        }
     }
     
     func keyboardDidShow(notification: NSNotification) {
@@ -211,6 +222,10 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
                 self.animateViewMoving(true)
             }
         }
+    }
+    
+    func keyboardDidHide(notification: NSNotification) {
+        self.animateViewMoving(false)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -414,9 +429,10 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         if textField == titleField {
-            titleField.resignFirstResponder()
             priceField.becomeFirstResponder()
-//            animateViewMoving(false)
+        }
+        if textField == priceField {
+            descriptionField.becomeFirstResponder()
         }
         return true
     }
