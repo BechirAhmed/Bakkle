@@ -70,9 +70,7 @@ class SignInView: UIViewController {
                 
                 var alert = UIAlertController(title: "Password is not correct", message: "The given password is not correct. Please login again.", preferredStyle: UIAlertControllerStyle.Alert)
                 alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     self.presentViewController(alert, animated: true, completion: nil)
-                })
             })
         }
     }

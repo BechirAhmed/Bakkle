@@ -107,18 +107,18 @@ class ProfileView: UIViewController, UITextViewDelegate {
     func setUserInfo() {
         let facebook_id = user.valueForKey("facebook_id") as! String
         println("facebook_id: \(facebook_id)")
-        var facebookProfileImageUrlString = "http://graph.facebook.com/\(facebook_id)/picture?width=250&height=250"
+        var facebookProfileImageUrlString = Bakkle.sharedInstance.profileImageURL() + "?width=500&height=500"
         dispatch_async(dispatch_get_global_queue(
             Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
                 let imgURL = NSURL(string: facebookProfileImageUrlString)
                 dispatch_async(dispatch_get_main_queue()) {
                     println("[SettingsView] displaying image \(facebookProfileImageUrlString)")
-                    if facebook_id == Bakkle.sharedInstance.facebook_id_str && Bakkle.sharedInstance.account_type == Bakkle.bkAccountTypeEmail {
-                        self.backgroundAvatar.hnk_setImageFromURL(NSURL(string: Bakkle.sharedInstance.profileImageURL())!)
-                        self.avatar.hnk_setImageFromURL(NSURL(string: Bakkle.sharedInstance.profileImageURL())!)
-                    }else{
+                    if Bakkle.sharedInstance.account_type == Bakkle.bkAccountTypeFacebook {
                         self.backgroundAvatar.hnk_setImageFromURL(imgURL!)
                         self.avatar.hnk_setImageFromURL(imgURL!)
+                    }else{
+                        self.backgroundAvatar.hnk_setImageFromURL(NSURL(string: Bakkle.sharedInstance.profileImageURL())!)
+                        self.avatar.hnk_setImageFromURL(NSURL(string:Bakkle.sharedInstance.profileImageURL())!)
                     }
                     
                      self.setImageAttributes()
@@ -164,7 +164,7 @@ class ProfileView: UIViewController, UITextViewDelegate {
                         Bakkle.sharedInstance.populateFeed({})
                         }, fail: {})
                     
-                })
+                    }, fail:{})
                 
             })
             setGuestInfo()
