@@ -592,8 +592,8 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                 if responseDict.valueForKey("status")?.integerValue == 1 {
                     self.first_name = first_name
                     self.last_name = last_name
-                    let facebookProfileImageUrlString = "http://graph.facebook.com/\(Bakkle.sharedInstance.facebook_id_str)/picture?width=250&height=250"
-                    self.profileImgURL = NSURL(string: facebookProfileImageUrlString)
+                    
+                    self.profileImgURL = NSURL(string: self.profileImageURL())
 
                     success()
                 }
@@ -650,6 +650,14 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                     self.auth_token = responseDict.valueForKey("auth_token") as! String
                     var accountId = split(self.auth_token) {$0 == "_"}
                     self.account_id = accountId[1].toInt()
+                    let display_name = responseDict.valueForKey("display_name") as! String
+                    let nameArr = split(display_name) {$0 == " "}
+                    self.first_name = nameArr[0]
+                    self.last_name = ""
+                    if nameArr.count == 2 {
+                        self.last_name = nameArr[1]
+                    }
+                    self.profileImgURL = NSURL(string: self.profileImageURL())
                     // Connect to web socket
                     WSManager.setAuthenticationWithUUID(self.deviceUUID, withToken: self.auth_token)
                     WSManager.connectWS()

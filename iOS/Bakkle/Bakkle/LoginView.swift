@@ -12,7 +12,8 @@ import FBSDKLoginKit
 
 class LoginView: UIViewController {
     
-    let mainScreenSegueIdentifier = "PushToFeedSegue"
+    let signInScreenSegueIdentifier = "PushToSignInSegue"
+    let signUpScreenSegueIdentifier = "PushToSignUpSegue"
     
     @IBOutlet weak var logoImageView: UIImageView!
     @IBOutlet weak var logoImageViewAspectRatio: NSLayoutConstraint!
@@ -24,7 +25,6 @@ class LoginView: UIViewController {
     @IBOutlet weak var emailRegisterBtn: UIButton!
     @IBOutlet weak var signInLabel: UILabel!
     @IBOutlet weak var signInBtn: UIButton!
-    @IBOutlet weak var closeBtn: UIButton!
     
     var background:UIImageView!
     var logo: UIImageView!
@@ -42,8 +42,6 @@ class LoginView: UIViewController {
     }
     
     func setupButtons(){
-        closeBtn.setImage(IconImage().close(), forState: .Normal)
-        closeBtn.setTitle("", forState: .Normal)
         self.signInBtn.hidden = false
         self.signInLabel.hidden = false
         self.emailRegisterBtn.hidden = false
@@ -71,21 +69,6 @@ class LoginView: UIViewController {
                 self.bakkleLogin()
             }
         })
-    }
-    
-    
-    
-    @IBAction func closePressed(sender: AnyObject) {
-        if self.previousVC != nil {
-            Bakkle.sharedInstance.getAccount(Bakkle.sharedInstance.account_id, success: { (account: NSDictionary) -> () in
-                self.previousVC.user = account
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    self.dismissViewControllerAnimated(true, completion: nil)
-                })
-                }, fail: {})
-        }else{
-            self.dismissViewControllerAnimated(true, completion: nil)
-        }
     }
     
     func bakkleLogin() {
@@ -137,5 +120,22 @@ class LoginView: UIViewController {
         }) // FBSDKGraphRequest completion handler
     }
     
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == self.signUpScreenSegueIdentifier {
+            let destinationVC = segue.destinationViewController as! SignUpView
+            destinationVC.parentLoginInVC = self
+            if self.previousVC != nil {
+                destinationVC.profileVC = self.previousVC
+            }
+        }
+        if segue.identifier == self.signInScreenSegueIdentifier {
+            let destinationVC = segue.destinationViewController as! SignInView
+            destinationVC.parentLoginInVC = self
+            if self.previousVC != nil {
+                destinationVC.profileVC = self.previousVC
+            }
+        }
+    }
 }
 
