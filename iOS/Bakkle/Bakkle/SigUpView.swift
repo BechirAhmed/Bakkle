@@ -48,7 +48,10 @@ class SignUpView: UIViewController, UITextFieldDelegate {
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardDidShow:", name: UIKeyboardDidShowNotification, object: nil)
         
-         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardDidHide:", name: UIKeyboardDidHideNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardDidHide:", name: UIKeyboardDidHideNotification, object: nil)
+        
+        signUpBtn.enabled = false
+        signUpBtn.setTitleColor(AddItem.CONFIRM_BUTTON_DISABLED_COLOR, forState: .Normal)
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -76,12 +79,27 @@ class SignUpView: UIViewController, UITextFieldDelegate {
         }
     }
     
+    func disableButtonHandler() {
+        if self.nameField.text.isEmpty || self.emailField.text.isEmpty || self.passwordField.text.isEmpty || self.confirmPasswordField.text.isEmpty {
+            signUpBtn.enabled = false
+            signUpBtn.setTitleColor(AddItem.CONFIRM_BUTTON_DISABLED_COLOR, forState: .Normal)
+        }else{
+            signUpBtn.enabled = true
+            signUpBtn.setTitleColor(AddItem.BAKKLE_GREEN_COLOR, forState: .Normal)
+        }
+    }
+    
     func keyboardDidHide(notification: NSNotification) {
         self.animateViewMoving(false, height: 0)
     }
     
+    func textFieldDidBeginEditing(textField: UITextField) {
+        self.disableButtonHandler()
+    }
+    
     func textFieldDidEndEditing(textField: UITextField) {
-        animateViewMoving(false, height: 0)
+        self.animateViewMoving(false, height: 0)
+        self.disableButtonHandler()
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
@@ -135,6 +153,7 @@ class SignUpView: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func signUpPressed(sender: AnyObject) {
+        self.dismissKeyboard()
         let name = self.nameField.text
         let email = self.emailField.text
         let password = self.passwordField.text
@@ -166,13 +185,15 @@ class SignUpView: UIViewController, UITextFieldDelegate {
                                 }
                                 
                             }
-                        }, fail: {})
+                            }, fail: {})
                     })
-                }, fail: {() -> () in
-                    var alert = UIAlertController(title: "Account exists", message: "Account already exists. Try logging in.", preferredStyle: UIAlertControllerStyle.Alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
-                    self.presentViewController(alert, animated: true, completion: nil)
-})
+                    }, fail: {() -> () in
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            var alert = UIAlertController(title: "Account exists", message: "Account already exists. Try logging in.", preferredStyle: UIAlertControllerStyle.Alert)
+                            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
+                            self.presentViewController(alert, animated: true, completion: nil)
+                        })
+                })
             })
             
         }else{
@@ -183,6 +204,7 @@ class SignUpView: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func closePressed(sender: AnyObject) {
+        self.dismissKeyboard()
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
