@@ -224,7 +224,8 @@ def login_facebook(facebook_id, device_uuid, user_location, app_version, is_ios,
         device.is_ios = False
     device.save()
 
-    return {"status": 1, "auth_token": device.auth_token}
+    return {"status": 1, "auth_token": device.auth_token,
+            "display_name": account.display_name }
 
 # Logout of account
 
