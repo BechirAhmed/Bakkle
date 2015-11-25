@@ -333,7 +333,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     
     func profileImageURL() -> String {
         if account_type == Bakkle.bkAccountTypeFacebook {
-            return "http://graph.facebook.com/\(facebook_id_str)/picture?width=142&height=142"
+            return "http://graph.facebook.com/\(facebook_id_str)/picture"
         }
         if account_type == Bakkle.bkAccountTypeEmail {
             // TODO: lookup image URL
@@ -550,7 +550,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     
     /* register and login using facebook */
     /* create account */
-    func facebook(gender: String, name: String, userid: String, first_name: String, last_name: String, success: ()->()) {
+    func facebook(gender: String, name: String, userid: String, first_name: String, last_name: String, success: ()->(), fail: ()->()) {
         let url:NSURL? = NSURL(string: url_base + url_facebook)
         let request = NSMutableURLRequest(URL: url!)
         
@@ -584,6 +584,8 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             let responseString = NSString(data: data, encoding:NSUTF8StringEncoding)
             println("Response: \(responseString)")
             
+            self.errorStr = ""
+            
             /* JSON parse */
             var error: NSError? = error
             if (data != nil && data.length != 0) {
@@ -596,6 +598,10 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                     self.profileImgURL = NSURL(string: self.profileImageURL())
 
                     success()
+                }
+                else {
+                    self.errorStr = responseDict.valueForKey("message") as! String
+                    fail()
                 }
             } else {
                 //TODO: Trigger reattempt to connect timer.

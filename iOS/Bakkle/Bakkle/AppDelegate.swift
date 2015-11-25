@@ -14,9 +14,9 @@ import FBSDKShareKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
+    
     var window: UIWindow?
-
+    
     override class func initialize () {
         // Initialize Facebook buttons
         FBSDKLoginButton.initialize()
@@ -35,16 +35,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if let userInfo = launchOptions?[UIApplicationLaunchOptionsRemoteNotificationKey] as? [NSObject : AnyObject] {
             Bakkle.sharedInstance.userInfo = userInfo
         }
-
-//        print(Bakkle.sharedInstance.account_type)
+        
+        //        print(Bakkle.sharedInstance.account_type)
         if Bakkle.sharedInstance.account_type == 0 {
             Bakkle.sharedInstance.guestUserID(Bakkle.sharedInstance.deviceUUID){
                 Bakkle.sharedInstance.facebook("", name: "Guest User", userid: Bakkle.sharedInstance.guest_id_str, first_name: "Guest", last_name: "User", success: { () -> () in
                     Bakkle.sharedInstance.login({
-                      Bakkle.sharedInstance.populateFeed({})
-                    }, fail: {})
+                        Bakkle.sharedInstance.populateFeed({})
+                        }, fail: {})
                     
-                })
+                    }, fail: {})
             }
         }
         else  {
@@ -105,7 +105,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Bakkle.sharedInstance.setServer() //Settings may have changed
         //Bakkle.sharedInstance.refresh()
     }
-
+    
     func applicationWillTerminate(application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
@@ -124,12 +124,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
         
         UIApplication.sharedApplication().applicationIconBadgeNumber = 0
-
+        
         if application.applicationState == UIApplicationState.Active {
             var localNotification: UILocalNotification = UILocalNotification()
             localNotification.userInfo = userInfo
             localNotification.fireDate = NSDate()
-
+            
             let blob: Dictionary = userInfo as Dictionary
             
             if let aps = userInfo["aps"] as? NSDictionary {
@@ -151,7 +151,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 if seller_id == Bakkle.sharedInstance.account_id {
                     // user is a seller
                     Bakkle.sharedInstance.getAccount(buyer_id as NSInteger!, success: { (account: NSDictionary) -> () in
-                     //   let account = (Bakkle.sharedInstance.responseDict as NSDictionary!).valueForKey("account") as! NSDictionary
+                        //   let account = (Bakkle.sharedInstance.responseDict as NSDictionary!).valueForKey("account") as! NSDictionary
                         let name = account.valueForKey("display_name") as! String
                         let buyer = User(facebookID: account.valueForKey("facebook_id") as! String, accountID: buyer_id!, firstName: name, lastName: name)
                         var chatItem: NSDictionary? = nil
@@ -166,11 +166,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         chatViewController.seller = chatItem!.valueForKey("seller") as! NSDictionary
                         chatViewController.isBuyer = false
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                           
+                            
                             vc!.pushViewController(chatViewController, animated: true)
                         })
                         
-                    }, fail: { () -> () in
+                        }, fail: { () -> () in
                     })
                 }else if buyer_id == Bakkle.sharedInstance.account_id {
                     // user is a buyer
@@ -288,6 +288,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 println("Got Some other key")
             }}
     }
-
+    
 }
 

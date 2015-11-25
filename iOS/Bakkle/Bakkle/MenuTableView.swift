@@ -88,14 +88,16 @@ class MenuTableController: UITableViewController {
         visualEffectView.frame = tableView.bounds
         var backgroundImageView = UIImageView(frame: tableView.bounds)
         backgroundImageView.contentMode = UIViewContentMode.ScaleAspectFill
-        backgroundImageView.hnk_setImageFromURL(NSURL(string: Bakkle.sharedInstance.profileImageURL())!)
+        let finalString = Bakkle.sharedInstance.profileImageURL() + "?width=142&height=142"
+        backgroundImageView.hnk_setImageFromURL(NSURL(string: finalString)!)
         backgroundImageView.clipsToBounds = true
         backgroundImageView.addSubview(visualEffectView)
         tableView.backgroundView = backgroundImageView
     }
     
     func setupProfileImg() {
-        let url = NSURL(string: Bakkle.sharedInstance.profileImageURL())
+        let finalString = Bakkle.sharedInstance.profileImageURL() + "?width=142&height=142"
+        let url = NSURL(string: finalString)
         self.profileImg.hnk_setImageFromURL(url!)
         self.profileImg.layer.cornerRadius = self.profileImg.frame.size.width/2
         self.profileImg.layer.borderWidth = 5.0
