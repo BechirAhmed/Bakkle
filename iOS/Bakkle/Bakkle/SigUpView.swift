@@ -105,9 +105,7 @@ class SignUpView: UIViewController, UITextFieldDelegate {
                 Bakkle.sharedInstance.facebook("", name: name, userid: Bakkle.sharedInstance.facebook_id_str, first_name: first_name, last_name: last_name, success: { () -> () in
                     Bakkle.sharedInstance.setPassword(Bakkle.sharedInstance.facebook_id_str, device_uuid: Bakkle.sharedInstance.deviceUUID, password: password, success: { () -> () in
                         Bakkle.sharedInstance.login({ () -> () in
-                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                                self.dismissViewControllerAnimated(true, completion: nil)
-                            })
+                            self.dismissViewControllerAnimated(true, completion: nil)
                         }, fail: {})
                     })
                 })
