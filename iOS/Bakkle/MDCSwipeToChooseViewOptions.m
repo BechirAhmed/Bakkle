@@ -43,7 +43,7 @@
         _holdText = [NSLocalizedString(@"WATCH", nil) uppercaseString];
         _holdColor = [UIColor whiteColor];
         _holdRotationAngle = -15.f;
-        _holdTextSize = 45.0f;
+        _holdTextSize = 42.0f;
         
         _reportText = [NSLocalizedString(@"REPORT", nil) uppercaseString];
         _reportColor = [UIColor colorWith8BitRed:255.0f green:102.f blue:0 alpha:1.f];
