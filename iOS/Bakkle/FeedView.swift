@@ -60,7 +60,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     var itemData: NSDictionary?
     var sendMessageContext = 0
     var keepBrowsingContext = 0
-    
+    var recordstart = NSDate()
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -326,7 +326,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     /* Used at end of swipe, this is used to load the next item in the view */
     func loadNext() {
         println("[FeedScreen] removing item from feed")
-        
+        recordstart = NSDate();
         // Put the swipe view back in the correct location
         //        resetSwipeView()
         
@@ -588,11 +588,16 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         
         switch direction {
         case MDCSwipeDirection.Left:
+            let recordend = NSDate();
+            var recordtime: Double = recordend.timeIntervalSinceDate(recordstart);
+            //println(recordtime);
             Bakkle.sharedInstance.markItem("meh", item_id: self.item_id, success: {}, fail: {})
             loadNext()
             break
         case MDCSwipeDirection.Right:
-            
+            let recordend = NSDate();
+            var recordtime: Double = recordend.timeIntervalSinceDate(recordstart);
+            //println(recordtime);
             /* Don't mark as want at first
             should mark item according what is selected on the start a chat screen */
             //            Bakkle.sharedInstance.markItem("want", item_id: self.item_id, success: {}, fail: {})
@@ -607,10 +612,16 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             
             break
         case MDCSwipeDirection.Up:
+            let recordend = NSDate();
+            var recordtime: Double = recordend.timeIntervalSinceDate(recordstart);
+            //println(recordtime);
             Bakkle.sharedInstance.markItem("hold", item_id: self.item_id, success: {}, fail: {})
             loadNext()
             break
         case MDCSwipeDirection.Down:
+            let recordend = NSDate();
+            var recordtime: Double = recordend.timeIntervalSinceDate(recordstart);
+            //println(recordtime);
             let alertController = UIAlertController(title: "Alert", message:"INPUT BELOW", preferredStyle: .Alert)
             var report: UITextField!
             let confirmAction = UIAlertAction(title: "Confirm", style: .Default, handler: { action in
