@@ -1,10 +1,11 @@
 platform :ios, '8.0'
 use_frameworks!
 target 'Bakkle' do
-  pod 'HanekeSwift'
+  pod 'HanekeSwift', '~> 0.9.1'
   pod 'FontAwesomeIconFactory'
   pod 'SocketRocket'
   pod 'FBSDKCoreKit'
-  pod 'FBSDKLoginKit'
+  pod 'FBSDKLoginKit', '~> 4.5.1'
   pod 'FBSDKShareKit'
+  pod 'Reachability'
 end

@@ -15,8 +15,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "116"
             endingLineNumber = "116"
-            landmarkName = "setupProfileLabel()"
-            landmarkType = "5">
+            landmarkName = "MenuTableController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -47,7 +47,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1429"
             endingLineNumber = "1429"
-            landmarkName = "persistData()"
+            landmarkName = "restoreData()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -58,11 +58,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Bakkle/LoginView.swift"
-            timestampString = "469744670.131917"
+            timestampString = "470779511.865318"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "96"
-            endingLineNumber = "96"
+            startingLineNumber = "105"
+            endingLineNumber = "105"
             landmarkName = "bakkleLogin()"
             landmarkType = "5">
             <Locations>
@@ -127,7 +127,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "527"
             endingLineNumber = "527"
-            landmarkName = "facebook(_:name:userid:first_name:last_name:success:)"
+            landmarkName = "authenticateLocal(_:device_uuid:password:success:fail:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

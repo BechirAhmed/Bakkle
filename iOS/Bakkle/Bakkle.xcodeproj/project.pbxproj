@@ -63,6 +63,7 @@
 		6034E6951B41B93900DEA291 /* AcceptOfferCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6034E6941B41B93900DEA291 /* AcceptOfferCell.swift */; };
 		604D602E1BFFA0A10060579C /* default_profile.png in Resources */ = {isa = PBXBuildFile; fileRef = 604D602D1BFFA0A10060579C /* default_profile.png */; };
 		604D60301BFFBC690060579C /* SigUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604D602F1BFFBC690060579C /* SigUpView.swift */; };
+		605ECFEC1C0F890400B111C3 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 605ECFEB1C0F890400B111C3 /* SystemConfiguration.framework */; };
 		60708D561BF681FD0021D5A6 /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60708D551BF681FD0021D5A6 /* SignInView.swift */; };
 		60EEB9981B5546F100E87B8D /* switch-camera-outline.png in Resources */ = {isa = PBXBuildFile; fileRef = 60EEB9971B5546F100E87B8D /* switch-camera-outline.png */; };
 		60F3BC0E1B5E900A0033EF83 /* Goodwill Logo.png in Resources */ = {isa = PBXBuildFile; fileRef = F0D6F3F91B5E8B3E00938A06 /* Goodwill Logo.png */; };
@@ -165,7 +166,7 @@
 		DBEE0E971AF3C464005E60BD /* item-detail-overlay.png in Resources */ = {isa = PBXBuildFile; fileRef = DBEE0E961AF3C464005E60BD /* item-detail-overlay.png */; };
 		DBEE0E991AF3C855005E60BD /* btb-want.png in Resources */ = {isa = PBXBuildFile; fileRef = DBEE0E981AF3C855005E60BD /* btb-want.png */; };
 		DBEE0E9B1AF3C85C005E60BD /* btn-want-disabled.png in Resources */ = {isa = PBXBuildFile; fileRef = DBEE0E9A1AF3C85C005E60BD /* btn-want-disabled.png */; };
-		E5016D9C10A43489915BBFC7 /* Pods_Bakkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E0CABDBE20E9D5B2EED4810 /* Pods_Bakkle.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		E5016D9C10A43489915BBFC7 /* Pods_Bakkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E0CABDBE20E9D5B2EED4810 /* Pods_Bakkle.framework */; };
 		F0D6F3FF1B5EA06600938A06 /* icon-i-blue.png in Resources */ = {isa = PBXBuildFile; fileRef = F0D6F3FE1B5EA06600938A06 /* icon-i-blue.png */; };
 		F0D6F4021B5EA17100938A06 /* LoginScreen-bkg.png in Resources */ = {isa = PBXBuildFile; fileRef = F0D6F4011B5EA17100938A06 /* LoginScreen-bkg.png */; };
 		F0D6F4081B5EA28900938A06 /* SplashScreen-bkg-Blue.png in Resources */ = {isa = PBXBuildFile; fileRef = F0D6F4071B5EA28900938A06 /* SplashScreen-bkg-Blue.png */; };
@@ -277,6 +278,7 @@
 		6034E6941B41B93900DEA291 /* AcceptOfferCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AcceptOfferCell.swift; sourceTree = "<group>"; };
 		604D602D1BFFA0A10060579C /* default_profile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = default_profile.png; sourceTree = "<group>"; };
 		604D602F1BFFBC690060579C /* SigUpView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SigUpView.swift; sourceTree = "<group>"; };
+		605ECFEB1C0F890400B111C3 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		60708D551BF681FD0021D5A6 /* SignInView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		60EEB9971B5546F100E87B8D /* switch-camera-outline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "switch-camera-outline.png"; sourceTree = "<group>"; };
 		60F3BC101B5E90BC0033EF83 /* Goodwill-LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "Goodwill-LaunchScreen.xib"; sourceTree = "<group>"; };
@@ -411,6 +413,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				605ECFEC1C0F890400B111C3 /* SystemConfiguration.framework in Frameworks */,
 				1BE43B5C1B6A9AEF00A6E6F8 /* CoreLocation.framework in Frameworks */,
 				A0A8F9001B1F2C870055BBC0 /* AVFoundation.framework in Frameworks */,
 				DB5372921B0823DD00CC49B7 /* Social.framework in Frameworks */,
@@ -521,6 +524,7 @@
 		5EE2C98E1AB9E3BB0031D8CD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				605ECFEB1C0F890400B111C3 /* SystemConfiguration.framework */,
 				1BE43B5B1B6A9AEF00A6E6F8 /* CoreLocation.framework */,
 				A03E93BE1B4339E700F12733 /* FontAwesomeIconFactory.framework */,
 				A03E93BC1B4339E400F12733 /* Haneke.framework */,

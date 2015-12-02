@@ -25,6 +25,8 @@ class LoginView: UIViewController {
     @IBOutlet weak var emailRegisterBtn: UIButton!
     @IBOutlet weak var signInLabel: UILabel!
     @IBOutlet weak var signInBtn: UIButton!
+    @IBOutlet weak var closeBtn: UIButton!
+    
     
     var background:UIImageView!
     var logo: UIImageView!
@@ -42,11 +44,18 @@ class LoginView: UIViewController {
     }
     
     func setupButtons(){
+        closeBtn.setImage(IconImage().close(), forState: .Normal)
+        closeBtn.setTitle("", forState: .Normal)
         self.signInBtn.hidden = false
         self.signInLabel.hidden = false
         self.emailRegisterBtn.hidden = false
         self.facebookBtn.hidden = false
         self.signUpLabel.hidden = false
+    }
+    
+    
+    @IBAction func closePressed(sender: UIButton) {
+            self.dismissViewControllerAnimated(true, completion: nil)
     }
     
     @IBAction func facebookPressed(sender: UIButton) {

@@ -11,6 +11,7 @@ import UIKit
 import FBSDKCoreKit
 import FBSDKLoginKit
 import FBSDKShareKit
+import Reachability
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -31,10 +32,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         UIApplication.sharedApplication().statusBarStyle = .LightContent
         
+//        let reachability: Reachability = Reachability.reachabilityForInternetConnection()
+//        let networkStatus: NetworkStatus = reachability.currentReachabilityStatus()
+//        if networkStatus.hashValue == 0 {
+//            
+//        }else{
+//            
+//        }
+        
         // If we launched from a notification, read the data.
         if let userInfo = launchOptions?[UIApplicationLaunchOptionsRemoteNotificationKey] as? [NSObject : AnyObject] {
             Bakkle.sharedInstance.userInfo = userInfo
         }
+        
+        
+        
         
         //        print(Bakkle.sharedInstance.account_type)
         if Bakkle.sharedInstance.account_type == 0 {
