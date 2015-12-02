@@ -753,6 +753,10 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         if Bakkle.sharedInstance.account_type == 0 {
             let vc = sb.instantiateViewControllerWithIdentifier("loginView") as! LoginView
             self.presentViewController(vc, animated: true, completion: nil)
+            self.btnAddItem.enabled = true
+            self.searchBar.userInteractionEnabled = true
+            self.refineButton.enabled = true
+            self.menuBtn.enabled = true
         }else{
             sender.layer.borderColor = UIColor.whiteColor().CGColor
             
@@ -787,6 +791,10 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         if Bakkle.sharedInstance.account_type == 0 {
             let vc = sb.instantiateViewControllerWithIdentifier("loginView") as! LoginView
             self.presentViewController(vc, animated: true, completion: nil)
+            self.btnAddItem.enabled = true
+            self.searchBar.userInteractionEnabled = true
+            self.refineButton.enabled = true
+            self.menuBtn.enabled = true
         }else{
             
             sender.layer.borderColor = UIColor.whiteColor().CGColor
