@@ -85,7 +85,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     var guest_id_str: String!     // Store ID for 'guest mode'. This is kept even after you login with a real account.
     var account_type: Int = Bakkle.bkAccountTypeGuest
     
-    
+    var duration:Double = 0
     var first_name: String!
     var last_name: String!
     var profileImgURL: NSURL!
@@ -191,6 +191,13 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             // TODO : Warn no location services available
         }
     }
+    
+    func updateduration(time:Double)
+    {
+        duration = time
+        println("Worked")
+    }
+    
     
     // Returns miles
     func distanceTo(destination: CLLocation) -> (CLLocationDistance?) {

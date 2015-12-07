@@ -242,20 +242,20 @@
                                 <exclude reference="UHg-aG-uFa"/>
                             </mask>
                             <mask key="constraints">
-                                <exclude reference="om7-rQ-YCI"/>
-                                <exclude reference="kwD-0R-aW4"/>
-                                <exclude reference="pNK-3l-kME"/>
-                                <exclude reference="MAB-ks-BzS"/>
-                                <exclude reference="ek2-b7-5sw"/>
-                                <exclude reference="Mv4-r7-31I"/>
-                                <exclude reference="3o6-Zp-zFs"/>
-                                <exclude reference="fuN-Bk-Lyg"/>
+                                <exclude reference="qPV-F2-Akd"/>
                                 <exclude reference="Ef3-42-mEq"/>
                                 <exclude reference="UvK-cL-vk6"/>
-                                <exclude reference="qPV-F2-Akd"/>
+                                <exclude reference="3o6-Zp-zFs"/>
+                                <exclude reference="fuN-Bk-Lyg"/>
                                 <exclude reference="7LD-VN-Ybv"/>
                                 <exclude reference="d2O-Jx-isf"/>
                                 <exclude reference="qbu-wx-9lK"/>
+                                <exclude reference="kwD-0R-aW4"/>
+                                <exclude reference="pNK-3l-kME"/>
+                                <exclude reference="om7-rQ-YCI"/>
+                                <exclude reference="MAB-ks-BzS"/>
+                                <exclude reference="ek2-b7-5sw"/>
+                                <exclude reference="Mv4-r7-31I"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
@@ -267,20 +267,20 @@
                                 <include reference="UHg-aG-uFa"/>
                             </mask>
                             <mask key="constraints">
-                                <include reference="om7-rQ-YCI"/>
-                                <include reference="kwD-0R-aW4"/>
-                                <include reference="pNK-3l-kME"/>
-                                <include reference="MAB-ks-BzS"/>
-                                <include reference="ek2-b7-5sw"/>
-                                <include reference="Mv4-r7-31I"/>
-                                <include reference="3o6-Zp-zFs"/>
-                                <include reference="fuN-Bk-Lyg"/>
+                                <include reference="qPV-F2-Akd"/>
                                 <include reference="Ef3-42-mEq"/>
                                 <include reference="UvK-cL-vk6"/>
-                                <include reference="qPV-F2-Akd"/>
+                                <include reference="3o6-Zp-zFs"/>
+                                <include reference="fuN-Bk-Lyg"/>
                                 <include reference="7LD-VN-Ybv"/>
                                 <include reference="d2O-Jx-isf"/>
                                 <include reference="qbu-wx-9lK"/>
+                                <include reference="kwD-0R-aW4"/>
+                                <include reference="pNK-3l-kME"/>
+                                <include reference="om7-rQ-YCI"/>
+                                <include reference="MAB-ks-BzS"/>
+                                <include reference="ek2-b7-5sw"/>
+                                <include reference="Mv4-r7-31I"/>
                             </mask>
                         </variation>
                     </view>
@@ -311,7 +311,7 @@
                         <viewControllerLayoutGuide type="bottom" id="geh-jH-ph4"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="uV9-i4-yuS">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SIGN UP" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UWr-Vj-31P">
@@ -410,7 +410,8 @@
                                                 <exclude reference="okM-7c-9Du"/>
                                             </mask>
                                         </variation>
-                                        <variation key="heightClass=regular-widthClass=compact">
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="8" y="43" width="268" height="37"/>
                                             <mask key="subviews">
                                                 <include reference="kPY-AF-IXd"/>
                                             </mask>
@@ -463,7 +464,8 @@
                                                 <exclude reference="zm5-ZR-WwQ"/>
                                             </mask>
                                         </variation>
-                                        <variation key="heightClass=regular-widthClass=compact">
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="8" y="81" width="268" height="38"/>
                                             <mask key="subviews">
                                                 <include reference="WEF-pR-e2z"/>
                                             </mask>
@@ -690,7 +692,7 @@
                                     <constraint firstAttribute="height" constant="21" id="TAw-lK-2BZ"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                                 <variation key="default">
                                     <mask key="constraints">
@@ -5302,12 +5304,15 @@
                                                         </mask>
                                                     </variation>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Seller's Garage" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Yz-uK-BJp">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Selling" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Yz-uK-BJp">
                                                     <rect key="frame" x="42" y="5" width="271" height="35"/>
                                                     <animations/>
                                                     <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="21"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
+                                                    <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                                        <rect key="frame" x="51" y="8" width="150" height="43"/>
+                                                    </variation>
                                                 </label>
                                             </subviews>
                                             <animations/>
@@ -5382,12 +5387,15 @@
                                                         </mask>
                                                     </variation>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Buyer's Trunk" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Iw8-EK-S3r">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Buying" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Iw8-EK-S3r">
                                                     <rect key="frame" x="42" y="5" width="239" height="35"/>
                                                     <animations/>
                                                     <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="21"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
+                                                    <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                                        <rect key="frame" x="51" y="8" width="133" height="43"/>
+                                                    </variation>
                                                 </label>
                                             </subviews>
                                             <animations/>
@@ -5733,12 +5741,15 @@
                                             <action selector="btnMenu:" destination="6Ze-gR-D6u" eventType="touchUpInside" id="axI-b6-PHc"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SELLER'S GARAGE" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e7V-yc-Rjq">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Selling" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e7V-yc-Rjq">
                                         <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
                                         <animations/>
-                                        <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="21"/>
+                                        <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="24"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="93" y="8" width="190" height="29"/>
+                                        </variation>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zTX-TZ-6Zh" userLabel="Add Button">
                                         <rect key="frame" x="305" y="25" width="54" height="39"/>
@@ -5928,7 +5939,7 @@
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                     <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
-                                                        <rect key="frame" x="99" y="8" width="212" height="20.5"/>
+                                                        <rect key="frame" x="99" y="8" width="213" height="21"/>
                                                     </variation>
                                                 </label>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ABU-0d-c2I">
@@ -6360,12 +6371,15 @@
                                             <action selector="btnClose:" destination="5rT-aH-bSn" eventType="touchUpInside" id="w2s-AP-lGJ"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PROFILE" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xtk-UF-fA6">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Profile" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xtk-UF-fA6">
                                         <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
                                         <animations/>
-                                        <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="21"/>
+                                        <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="24"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="144" y="8" width="88" height="29"/>
+                                        </variation>
                                     </label>
                                 </subviews>
                                 <animations/>
@@ -7216,12 +7230,15 @@
                             <view opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fWd-Sh-hdA" userLabel="Title Bar">
                                 <rect key="frame" x="0.0" y="20" width="375" height="39"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="BUYER'S TRUNK" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dWA-na-vWS">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Buying" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dWA-na-vWS">
                                         <rect key="frame" x="99" y="7" width="177" height="26"/>
                                         <animations/>
-                                        <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="21"/>
+                                        <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="24"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
+                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                            <rect key="frame" x="104" y="8" width="168" height="29"/>
+                                        </variation>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vmo-0r-UxV" userLabel="Menu Button">
                                         <rect key="frame" x="0.0" y="0.0" width="54" height="39"/>

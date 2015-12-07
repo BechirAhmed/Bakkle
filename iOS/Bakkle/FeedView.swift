@@ -590,6 +590,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         case MDCSwipeDirection.Left:
             let recordend = NSDate();
             var recordtime: Double = recordend.timeIntervalSinceDate(recordstart);
+            //Bakkle.updateduration(recordtime);
             //println(recordtime);
             Bakkle.sharedInstance.markItem("meh", item_id: self.item_id, success: {}, fail: {})
             loadNext()
@@ -597,6 +598,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         case MDCSwipeDirection.Right:
             let recordend = NSDate();
             var recordtime: Double = recordend.timeIntervalSinceDate(recordstart);
+            //Bakkle.updateduration(recordtime);
             //println(recordtime);
             /* Don't mark as want at first
             should mark item according what is selected on the start a chat screen */
@@ -614,6 +616,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         case MDCSwipeDirection.Up:
             let recordend = NSDate();
             var recordtime: Double = recordend.timeIntervalSinceDate(recordstart);
+            //Bakkle.updateduration(recordtime);
             //println(recordtime);
             Bakkle.sharedInstance.markItem("hold", item_id: self.item_id, success: {}, fail: {})
             loadNext()
@@ -621,6 +624,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         case MDCSwipeDirection.Down:
             let recordend = NSDate();
             var recordtime: Double = recordend.timeIntervalSinceDate(recordstart);
+            //Bakkle.updateduration(recordtime);
             //println(recordtime);
             let alertController = UIAlertController(title: "Alert", message:"INPUT BELOW", preferredStyle: .Alert)
             var report: UITextField!
