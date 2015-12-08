@@ -19,6 +19,11 @@
 			<key>orderHint</key>
 			<integer>3</integer>
 		</dict>
+		<key>Goodwill.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>12</integer>
+		</dict>
 		<key>Notification - Bakkle WatchKit App.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
