@@ -114,8 +114,6 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
         
         classifyData()
         Bakkle.sharedInstance.populateHolding({})
-        
-        self.titleBar.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "goToFeed"))
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -132,10 +130,6 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
     func setupButtons() {
         menuBtn.setImage(IconImage().menu(), forState: .Normal)
         menuBtn.setTitle("", forState: .Normal)
-    }
-    
-    func goToFeed() {
-        self.performSegueWithIdentifier("PushToFeedView", sender: self)
     }
     
     // helper function

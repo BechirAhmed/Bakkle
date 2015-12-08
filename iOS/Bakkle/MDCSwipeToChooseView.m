@@ -62,7 +62,7 @@ static CGFloat const MDCSwipeToChooseViewLabelHeight = 65.f;
             [self constructInstructionImageView];
         }else {
             [self constructImageView];
-            [self constructTopUserInfoView];
+//            [self constructTopUserInfoView];
             [self constructInformationView];
                     }
         [self constructLikedView];
@@ -119,7 +119,7 @@ static CGFloat const MDCSwipeToChooseViewLabelHeight = 65.f;
     if (!_ipad) {
         yCoordinate = (self.bounds.size.height - self.bounds.size.width)/2;
     }
-    _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, yCoordinate, self.bounds.size.width, self.bounds.size.width)];
+    _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.width + yCoordinate)];
     [_imageView setContentMode:UIViewContentModeScaleAspectFill];
     _imageView.clipsToBounds = YES;
     [self addSubview:_imageView];
@@ -159,29 +159,29 @@ static CGFloat const MDCSwipeToChooseViewLabelHeight = 65.f;
     [self constructPriceLabel];
 }
 
--(void)constructTopUserInfoView {
-    CGFloat topHeight = (self.bounds.size.height - self.bounds.size.width);
-    if (!_ipad){
-        topHeight = (self.bounds.size.height - self.bounds.size.width)/2;
-    }
-    
-    CGRect topFrame = CGRectMake(0, 0, CGRectGetWidth(self.bounds), topHeight);
-    _topUserInfoView = [[UIView alloc] initWithFrame:topFrame];
-    _topUserInfoView.backgroundColor = [UIColor clearColor];
-    _topUserInfoView.clipsToBounds = YES;
-    _topUserInfoView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
-    
-    [self addSubview:_topUserInfoView];
-    
-    if (_ipad) {
-        [self addBlur:self.topUserInfoView];
-    }
-    
-    [self constructUserProfileImg];
-    [self constructSellersName];
-    //[self constructRatingView];
-    
-}
+//-(void)constructTopUserInfoView {
+//    CGFloat topHeight = (self.bounds.size.height - self.bounds.size.width);
+//    if (!_ipad){
+//        topHeight = (self.bounds.size.height - self.bounds.size.width)/2;
+//    }
+//    
+//    CGRect topFrame = CGRectMake(0, 0, CGRectGetWidth(self.bounds), topHeight);
+//    _topUserInfoView = [[UIView alloc] initWithFrame:topFrame];
+//    _topUserInfoView.backgroundColor = [UIColor clearColor];
+//    _topUserInfoView.clipsToBounds = YES;
+//    _topUserInfoView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
+//    
+//    [self addSubview:_topUserInfoView];
+//    
+//    if (_ipad) {
+//        [self addBlur:self.topUserInfoView];
+//    }
+//    
+//    [self constructUserProfileImg];
+//    [self constructSellersName];
+//    //[self constructRatingView];
+//    
+//}
 
 -(void)addBlur:(UIView *) view {
     UIVisualEffect *blur = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
@@ -194,29 +194,29 @@ static CGFloat const MDCSwipeToChooseViewLabelHeight = 65.f;
     [view addSubview:bottomBlurImg];
 }
 
--(void)constructUserProfileImg {
-    CGFloat leftPadding = 11.f;
-    CGRect frame = CGRectMake(leftPadding, 0, 30, 30);
-    _profileImg = [[UIImageView alloc] initWithFrame:frame];
-    _profileImg.center = CGPointMake(leftPadding+20, CGRectGetHeight(_topUserInfoView.frame)/2);
-    _profileImg.layer.cornerRadius = _profileImg.frame.size.width/2;
-    _profileImg.layer.masksToBounds = YES;
-    _profileImg.layer.borderWidth = 2.0;
-    _profileImg.contentMode = UIViewContentModeScaleAspectFill;
-    UIColor *borderColor = [UIColor whiteColor];
-    _profileImg.layer.borderColor = borderColor.CGColor;
-    [_topUserInfoView addSubview:_profileImg];
-}
+//-(void)constructUserProfileImg {
+//    CGFloat leftPadding = 11.f;
+//    CGRect frame = CGRectMake(leftPadding, 0, 30, 30);
+//    _profileImg = [[UIImageView alloc] initWithFrame:frame];
+//    _profileImg.center = CGPointMake(leftPadding+20, CGRectGetHeight(_topUserInfoView.frame)/2);
+//    _profileImg.layer.cornerRadius = _profileImg.frame.size.width/2;
+//    _profileImg.layer.masksToBounds = YES;
+//    _profileImg.layer.borderWidth = 2.0;
+//    _profileImg.contentMode = UIViewContentModeScaleAspectFill;
+//    UIColor *borderColor = [UIColor whiteColor];
+//    _profileImg.layer.borderColor = borderColor.CGColor;
+//    [_topUserInfoView addSubview:_profileImg];
+//}
 
--(void)constructSellersName {
-    CGRect frame = CGRectMake(_profileImg.frame.size.width + 24, 0, (_topUserInfoView.frame.size.width*3/4)-(_profileImg.frame.size.width + 10), CGRectGetHeight(_topUserInfoView.frame));
-    _sellerName = [[UILabel alloc] initWithFrame:frame];
-    _sellerName.text = [NSString stringWithFormat:@"%s", ""];
-    _sellerName.font = [UIFont fontWithName:@"Avenir-Black" size:23];
-    _sellerName.textColor = [UIColor whiteColor];
-    _sellerName.textAlignment = NSTextAlignmentLeft;
-    [_topUserInfoView addSubview:_sellerName];
-}
+//-(void)constructSellersName {
+//    CGRect frame = CGRectMake(_profileImg.frame.size.width + 24, 0, (_topUserInfoView.frame.size.width*3/4)-(_profileImg.frame.size.width + 10), CGRectGetHeight(_topUserInfoView.frame));
+//    _sellerName = [[UILabel alloc] initWithFrame:frame];
+//    _sellerName.text = [NSString stringWithFormat:@"%s", ""];
+//    _sellerName.font = [UIFont fontWithName:@"Avenir-Black" size:23];
+//    _sellerName.textColor = [UIColor whiteColor];
+//    _sellerName.textAlignment = NSTextAlignmentLeft;
+//    [_topUserInfoView addSubview:_sellerName];
+//}
 
 //-(void)constructRatingView {
 //    CGRect frame = CGRectMake(CGRectGetWidth(_topUserInfoView.frame)*3/4 - 30, 0, 90, CGRectGetHeight(_topUserInfoView.frame));

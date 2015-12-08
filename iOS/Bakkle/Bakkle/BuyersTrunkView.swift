@@ -54,8 +54,6 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
         classifyData()
         
         Bakkle.sharedInstance.populateTrunk({})
-        
-         self.titleBar.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "goToFeed"))
     }
     
     deinit {
@@ -65,10 +63,6 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
     func setupButtons() {
         menuBtn.setImage(IconImage().menu(), forState: .Normal)
         menuBtn.setTitle("", forState: .Normal)
-    }
-    
-    func goToFeed() {
-        self.performSegueWithIdentifier("PushToFeedView", sender: self)
     }
     
     // helper function

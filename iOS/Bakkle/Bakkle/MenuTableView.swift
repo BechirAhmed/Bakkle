@@ -51,6 +51,7 @@ class MenuTableController: UITableViewController {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         UIApplication.sharedApplication().statusBarHidden = true
+        self.revealViewController().setNeedsStatusBarAppearanceUpdate()
         setupProfileImg()
         setupBackground()
         setupProfileLabel()
@@ -59,6 +60,7 @@ class MenuTableController: UITableViewController {
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         UIApplication.sharedApplication().setStatusBarHidden(false, withAnimation: UIStatusBarAnimation.None)
+        self.revealViewController().setNeedsStatusBarAppearanceUpdate()
     }
     
     override func viewDidDisappear(animated: Bool) {
@@ -115,7 +117,7 @@ class MenuTableController: UITableViewController {
     }
     
     @IBAction func btnContact(sender: AnyObject) {
-        UIApplication.sharedApplication().openURL(NSURL(string: (Bakkle.sharedInstance.flavor == Bakkle.GOODWILL ? "http://www.goodwill.org/" : "http://www.bakkle.com/contact/"))!)
+        UIApplication.sharedApplication().openURL(NSURL(string: "http://www.bakkle.com/contact/")!)
     }
     
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
@@ -158,6 +160,7 @@ class MenuTableController: UITableViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         self.view.userInteractionEnabled = false
         UIApplication.sharedApplication().setStatusBarHidden(false, withAnimation: UIStatusBarAnimation.None)
+        self.revealViewController().setNeedsStatusBarAppearanceUpdate()
         if segue.identifier == self.profileSegue {
             let destinationVC = segue.destinationViewController as! ProfileView
             if self.user != nil {

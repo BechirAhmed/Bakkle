@@ -52,16 +52,10 @@ class SellersGarageView: UIViewController, UITableViewDelegate, UITableViewDataS
         
         classifyData()
         requestUpdates()
-        
-        self.titleBar.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "goToFeed"))
     }
     
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self)
-    }
-    
-    func goToFeed() {
-        self.performSegueWithIdentifier("PushToFeedView", sender: self)
     }
     
     // helper function

@@ -469,7 +469,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             myString = " $" + topPrice
         }
         view.priceLabel.text = myString
-        view.sellerName.text = firstName
+//        view.sellerName.text = firstName
         //        view.ratingView.rating = 3.5
         
         if imgURL != nil {
@@ -477,7 +477,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             view.imageView.hnk_setImageFromURL(imgURL!)
             view.imageView.contentMode = UIViewContentMode.ScaleAspectFill
             
-            view.profileImg.hnk_setImageFromURL(NSURL(string: sellersImageProfile)!)
+//            view.profileImg.hnk_setImageFromURL(NSURL(string: sellersImageProfile)!)
             if (view == self.swipeView){
                 self.swipeView.userInteractionEnabled = true
             }

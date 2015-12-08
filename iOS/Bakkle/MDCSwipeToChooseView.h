@@ -38,8 +38,6 @@
  */
 @property (nonatomic, strong) UIView *informationView;
 
-@property (nonatomic, strong) UIView *topUserInfoView;
-
 /*!
  * The main image to be displayed and then "liked" or "disliked".
  */
