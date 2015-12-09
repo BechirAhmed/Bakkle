@@ -32,6 +32,9 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
             self.view.backgroundColor = Bakkle.sharedInstance.theme_base
         }
         
+        // display status bar every time the screen shows up
+        UIApplication.sharedApplication().statusBarHidden = false
+        
         setupButtons()
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "messageCell")

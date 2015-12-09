@@ -30,6 +30,10 @@ class SellersGarageView: UIViewController, UITableViewDelegate, UITableViewDataS
 
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         
+        // display status bar every time the screen shows up
+        UIApplication.sharedApplication().statusBarHidden = false
+
+        
         setupButtons()
         
         self.tableView.tableFooterView = UIView()

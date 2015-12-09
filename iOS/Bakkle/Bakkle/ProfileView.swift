@@ -29,6 +29,10 @@ class ProfileView: UIViewController, UITextViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // display status bar every time the screen shows up
+        UIApplication.sharedApplication().statusBarHidden = false
+
+        
         if(Bakkle.sharedInstance.flavor == Bakkle.GOODWILL){
             self.view.backgroundColor = Bakkle.sharedInstance.theme_base
             self.editBtn.backgroundColor = Bakkle.sharedInstance.theme_base
