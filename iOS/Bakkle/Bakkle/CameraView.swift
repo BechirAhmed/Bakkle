@@ -27,7 +27,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     /* ORIGIN IDENTIFIERS */
     var isEditting: Bool = false
     var item: NSDictionary!
-    
+
     /* SEGUE NAVIGATION */
     @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var nextButton: UIButton!
@@ -136,7 +136,6 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: .Fade)
-        
         setupAVFoundation()
         loadingCameraPreviewLabel.hidden = false
         
@@ -185,6 +184,12 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
                 }
             }
         }
+        enum UIImagePickerControllerCameraFlashMode : Int {
+            case Off
+            case Auto
+            case On
+        }
+
         
         var model = UIDevice.currentDevice().model
         if model == "iPad" {
