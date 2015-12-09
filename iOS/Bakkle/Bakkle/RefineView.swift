@@ -99,7 +99,7 @@ class RefineView: UIViewController, UISearchBarDelegate {
     @IBAction func filterRealtime(sender: AnyObject) {
         //println("d:\(Int(distance.value)) p:\(price.value) n: \(number.value)")
         self.dismissKeyboard()
-        if distance.value >= 100 {
+        if distance.value > 100 {
             distanceLbl.text = "∞"
         } else {
             distanceLbl.text = "\(Int(distance.value)) mi"
@@ -114,7 +114,7 @@ class RefineView: UIViewController, UISearchBarDelegate {
     @IBAction func filterChanged(sender: AnyObject) {
         println("SET d:\(Int(distance.value)) p:\(price.value)")
         self.dismissKeyboard()
-        if distance.value >= 100 {
+        if distance.value > 100 {
             distanceLbl.text = "∞"
         } else {
             distanceLbl.text = "\(Int(distance.value)) mi"

@@ -101,7 +101,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     var responseDict: NSDictionary!
     
     var filter_distance: Float = 100
-    var filter_price: Float = 50
+    var filter_price: Float = 100
     
     var search_text: String = ""
     var user_location: String = ""
