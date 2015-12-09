@@ -101,7 +101,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     var responseDict: NSDictionary!
     
     var filter_distance: Float = 100
-    var filter_price: Float = 50
+    var filter_price: Float = 100
     
     var search_text: String = ""
     var user_location: String = ""
@@ -738,12 +738,11 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         task.resume() 
     }
     
-    /* mark feed item 'status' as MEH/WANT/HOLD/REPORT */    func markItem(status: String, item_id: Int,  message: String? = "", success: ()->(), fail: ()->()) {
+    /* mark feed item 'status' as MEH/WANT/HOLD/REPORT */    func markItem(status: String, item_id: Int,  message: String? = "", success: ()->(), fail: ()->(),duration: Double = 0) {
         let url:NSURL? = NSURL(string: url_base + url_mark + "\(status)/")
         let request = NSMutableURLRequest(URL: url!)
         
-        let view_duration = 42 //TODO: this needs to be accepted as a parm
-        
+        let view_duration = duration //TODO: this needs to be accepted as a parm
         request.HTTPMethod = "POST"
         
         var postString : String

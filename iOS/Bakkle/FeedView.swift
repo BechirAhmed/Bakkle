@@ -61,6 +61,8 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     var sendMessageContext = 0
     var keepBrowsingContext = 0
     var recordstart = NSDate()
+    var recordtime: Double = 0.0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -593,15 +595,13 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         switch direction {
         case MDCSwipeDirection.Left:
             let recordend = NSDate();
-            var recordtime: Double = recordend.timeIntervalSinceDate(recordstart);
-            //Bakkle.updateduration(recordtime);
-            //println(recordtime);
-            Bakkle.sharedInstance.markItem("meh", item_id: self.item_id, success: {}, fail: {})
+            self.recordtime = recordend.timeIntervalSinceDate(recordstart);
+            Bakkle.sharedInstance.markItem("meh", item_id: self.item_id, success: {}, fail: {},duration:self.recordtime)
             loadNext()
             break
         case MDCSwipeDirection.Right:
             let recordend = NSDate();
-            var recordtime: Double = recordend.timeIntervalSinceDate(recordstart);
+            self.recordtime = recordend.timeIntervalSinceDate(recordstart);
             //Bakkle.updateduration(recordtime);
             //println(recordtime);
             /* Don't mark as want at first
@@ -615,19 +615,17 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             } else {
                 loadNext()
             }
-            
             break
         case MDCSwipeDirection.Up:
             let recordend = NSDate();
-            var recordtime: Double = recordend.timeIntervalSinceDate(recordstart);
-            //Bakkle.updateduration(recordtime);
-            //println(recordtime);
-            Bakkle.sharedInstance.markItem("hold", item_id: self.item_id, success: {}, fail: {})
+            self.recordtime = recordend.timeIntervalSinceDate(recordstart);
+
+            Bakkle.sharedInstance.markItem("hold", item_id: self.item_id, success: {}, fail: {},duration: self.recordtime)
             loadNext()
             break
         case MDCSwipeDirection.Down:
             let recordend = NSDate();
-            var recordtime: Double = recordend.timeIntervalSinceDate(recordstart);
+            recordtime = recordend.timeIntervalSinceDate(recordstart);
             //Bakkle.updateduration(recordtime);
             //println(recordtime);
             let alertController = UIAlertController(title: "Alert", message:"INPUT BELOW", preferredStyle: .Alert)
@@ -635,9 +633,9 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             let confirmAction = UIAlertAction(title: "Confirm", style: .Default, handler: { action in
                 if report != nil {
                     println(report.text)
-                    Bakkle.sharedInstance.markItem("report", item_id: self.item_id, message: report.text, success: {}, fail: {})
+                    Bakkle.sharedInstance.markItem("report", item_id: self.item_id, message: report.text, success: {}, fail: {},duration:self.recordtime)
                 } else {
-                    Bakkle.sharedInstance.markItem("report", item_id: self.item_id, success: {}, fail: {})
+                    Bakkle.sharedInstance.markItem("report", item_id: self.item_id, success: {}, fail: {},duration:self.recordtime)
                 }
                 self.loadNext()
             })
@@ -799,7 +797,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             WSManager.enqueueWorkPayload(chatPayload)
             
             // mark as want
-            Bakkle.sharedInstance.markItem("want", item_id: self.item_id, success: {}, fail: {})
+            Bakkle.sharedInstance.markItem("want", item_id: self.item_id, success: {}, fail: {},duration: self.recordtime)
             
             self.closeStartAChat(nil)
         }
@@ -839,14 +837,14 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             WSManager.enqueueWorkPayload(chatPayload)
             
             // mark as want
-            Bakkle.sharedInstance.markItem("want", item_id: self.item_id, success: {}, fail: {})
+            Bakkle.sharedInstance.markItem("want", item_id: self.item_id, success: {}, fail: {},duration: self.recordtime)
             
             self.closeStartAChat(nil)
         }
     }
     
     @IBAction func saveToWatchList(sender: AnyObject) {
-        Bakkle.sharedInstance.markItem("hold", item_id: self.item_id, success: {}, fail: {})
+        Bakkle.sharedInstance.markItem("hold", item_id: self.item_id, success: {}, fail: {},duration: self.recordtime)
         self.closeStartAChat(nil)
     }
     
