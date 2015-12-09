@@ -25,11 +25,7 @@ class MenuTableController: UITableViewController {
        
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        /* Reveal */
-        if self.revealViewController() != nil {
-            self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
-        }
+    
         setupImages()
         profileBtn.image = IconImage().settings()
         self.tableView.tableFooterView = UIView()
@@ -87,8 +83,8 @@ class MenuTableController: UITableViewController {
     
     func setupBackground() {
         var visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .Dark)) as UIVisualEffectView
-        visualEffectView.frame = tableView.bounds
-        var backgroundImageView = UIImageView(frame: tableView.bounds)
+        visualEffectView.frame = tableView.frame
+        var backgroundImageView = UIImageView(frame: tableView.frame)
         backgroundImageView.contentMode = UIViewContentMode.ScaleAspectFill
         let finalString = Bakkle.sharedInstance.profileImageURL() + "?width=142&height=142"
         backgroundImageView.hnk_setImageFromURL(NSURL(string: finalString)!)
@@ -123,7 +119,7 @@ class MenuTableController: UITableViewController {
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         /* This fixes the small lines on the left hand side of the cell dividers */
         cell.backgroundColor = UIColor.clearColor()
-        if (indexPath.row == 2 && Bakkle.sharedInstance.flavor == Bakkle.GOODWILL) || (indexPath.row == 6 && !Bakkle.developerTools) {
+        if (indexPath.row == 2 && Bakkle.sharedInstance.flavor == Bakkle.GOODWILL) {
             cell.hidden = true
         }
     }
@@ -159,8 +155,6 @@ class MenuTableController: UITableViewController {
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         self.view.userInteractionEnabled = false
-        UIApplication.sharedApplication().setStatusBarHidden(false, withAnimation: UIStatusBarAnimation.None)
-        self.revealViewController().setNeedsStatusBarAppearanceUpdate()
         if segue.identifier == self.profileSegue {
             let destinationVC = segue.destinationViewController as! ProfileView
             if self.user != nil {

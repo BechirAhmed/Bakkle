@@ -80,6 +80,10 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // display status bar every time the screen shows up
+        UIApplication.sharedApplication().statusBarHidden = false
+
+        
         if(Bakkle.sharedInstance.flavor == Bakkle.GOODWILL){
             self.view.backgroundColor = Bakkle.sharedInstance.theme_base
         }

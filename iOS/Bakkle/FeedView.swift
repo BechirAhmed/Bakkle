@@ -64,6 +64,10 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // display status bar every time the screen shows up
+        UIApplication.sharedApplication().statusBarHidden = false
+
+        
         if ((Bakkle.sharedInstance.userInfo) != nil){
             UIApplication.sharedApplication().applicationIconBadgeNumber = 0
             var userInfo = Bakkle.sharedInstance.userInfo
