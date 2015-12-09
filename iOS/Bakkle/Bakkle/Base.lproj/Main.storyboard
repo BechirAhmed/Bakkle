@@ -2538,11 +2538,11 @@
                                     </mask>
                                     <mask key="constraints">
                                         <exclude reference="Sel-Bl-yGp"/>
-                                        <exclude reference="4cd-PB-7mo"/>
-                                        <exclude reference="nao-Yx-Pt5"/>
                                         <exclude reference="BNv-JC-ew3"/>
                                         <exclude reference="pjP-sJ-jkx"/>
                                         <exclude reference="qd3-aa-rzf"/>
+                                        <exclude reference="4cd-PB-7mo"/>
+                                        <exclude reference="nao-Yx-Pt5"/>
                                     </mask>
                                 </variation>
                                 <variation key="heightClass=regular-widthClass=compact">
@@ -2552,11 +2552,11 @@
                                     </mask>
                                     <mask key="constraints">
                                         <include reference="Sel-Bl-yGp"/>
-                                        <include reference="4cd-PB-7mo"/>
-                                        <include reference="nao-Yx-Pt5"/>
                                         <include reference="BNv-JC-ew3"/>
                                         <include reference="pjP-sJ-jkx"/>
                                         <exclude reference="qd3-aa-rzf"/>
+                                        <include reference="4cd-PB-7mo"/>
+                                        <include reference="nao-Yx-Pt5"/>
                                     </mask>
                                 </variation>
                             </view>
