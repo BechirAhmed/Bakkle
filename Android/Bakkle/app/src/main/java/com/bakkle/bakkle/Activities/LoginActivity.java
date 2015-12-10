@@ -1,51 +1,40 @@
 package com.bakkle.bakkle.Activities;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.location.Location;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
-import android.support.v4.app.NavUtils;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 
 import com.bakkle.bakkle.Helpers.Constants;
+import com.bakkle.bakkle.Helpers.ServerCalls;
 import com.bakkle.bakkle.R;
 import com.facebook.AccessToken;
-import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
+
+import org.json.JSONObject;
 
 import java.util.Arrays;
-
-import io.nlopez.smartlocation.OnLocationUpdatedListener;
-import io.nlopez.smartlocation.SmartLocation;
 
 
 public class LoginActivity extends AppCompatActivity implements OnClickListener
 {
 
-    private LoginButton loginButton;
     private CallbackManager callbackManager;
-    private boolean isResumed = false;
-    private AccessTokenTracker accessTokenTracker;
-    AlertDialog.Builder builder = null;
-    AlertDialog dialog = null;
-    SharedPreferences preferences;
+    SharedPreferences        preferences;
     SharedPreferences.Editor editor;
 
 
@@ -56,242 +45,102 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener
         callbackManager = CallbackManager.Factory.create();
         FacebookSdk.sdkInitialize(this);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        editor = preferences.edit();
         setContentView(R.layout.activity_login);
+        final ServerCalls serverCalls = new ServerCalls(this);
 
+        findViewById(R.id.btnSignIn).setOnClickListener(this);
+        findViewById(R.id.btnSignInFacebook).setOnClickListener(this);
 
-        if (!SmartLocation.with(this).location().state().locationServicesEnabled()) {
-            builder = new AlertDialog.Builder(this);
-            builder.setTitle("GPS not found");  // GPS not found
-            builder.setMessage("In order for Bakkle to function properly, Location Services need to be enabled. Would like to enable them now?"); // Want to enable?
-            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener()
+        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>()
+        {
+            private ProfileTracker mProfileTracker;
+
+            @Override
+            public void onSuccess(LoginResult loginResult)
             {
-                public void onClick(DialogInterface dialogInterface, int i)
+                AccessToken token = loginResult.getAccessToken();
+                mProfileTracker = new ProfileTracker()
                 {
-                    startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-                }
-            });
-            builder.setNegativeButton("Not right now", null);
-            dialog = builder.create();
-            dialog.show();
-        }
-        else {
-            SmartLocation.with(this).location()
-                    .oneFix()
-                    .start(new OnLocationUpdatedListener()
+                    @Override
+                    protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile)
                     {
-                        @Override
-                        public void onLocationUpdated(Location location)
-                        {
-                            editor.putString(Constants.LOCATION, location.getLatitude() + "," + location.getLongitude());
-                            editor.putString(Constants.LATITUDE, String.valueOf(location.getLatitude()));
-                            editor.putString(Constants.LONGITUDE, String.valueOf(location.getLongitude()));
-                            editor.apply();
-                        }
-                    });
+                        Profile.setCurrentProfile(currentProfile);
+                        mProfileTracker.stopTracking();
+                    }
+                };
+
+                mProfileTracker.startTracking();
+
+                if (token != null) {
+                    editor.putBoolean("LoggedIn", true);
+                    editor.apply();
+
+                    GraphRequest request = GraphRequest.newMeRequest(token,
+                            new GraphRequest.GraphJSONObjectCallback()
+                            {
+                                @Override
+                                public void onCompleted(JSONObject object, GraphResponse response)
+                                {
+                                    addUserInfoToPreferences(object);
+                                    Log.d("testing", preferences.getString(Constants.UUID, ""));
+                                    Log.d("testing", preferences.getString(Constants.USER_ID, ""));
+
+                                    serverCalls.registerFacebook(
+                                            preferences.getString(Constants.EMAIL, ""),
+                                            preferences.getString(Constants.GENDER, ""),
+                                            preferences.getString(Constants.USERNAME, ""),
+                                            preferences.getString(Constants.NAME, ""),
+                                            preferences.getString(Constants.USER_ID, ""),
+                                            preferences.getString(Constants.LOCALE, ""),
+                                            preferences.getString(Constants.FIRST_NAME, ""),
+                                            preferences.getString(Constants.LAST_NAME, ""),
+                                            preferences.getString(Constants.UUID, ""));
+
+                                    String auth_token = serverCalls.loginFacebook(
+                                            preferences.getString(Constants.UUID, ""),
+                                            preferences.getString(Constants.USER_ID, ""),
+                                            getLocation()
+                                    );
+                                    editor.putString(Constants.AUTH_TOKEN, auth_token);
+                                    editor.putBoolean(Constants.NEW_USER, false);
+                                    editor.apply();
+                                }
+                            });
+
+                    Bundle parameters = new Bundle();
+                    parameters.putString("fields", "locale, email, gender");
+                    //request.executeAsync();
+                    StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+
+                    StrictMode.setThreadPolicy(policy);
+                    addUserInfoToPreferences(request.executeAndWait().getJSONObject());
 
 
-            if (preferences.getBoolean(Constants.LOGGED_IN, false)) {
-
-                Intent intent = new Intent(this, HomeActivity.class);
-                startActivity(intent);
-                //SmartLocation.with(this).location().stop();
-                finish();
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
             }
 
-            editor = preferences.edit();
-            editor.putString(Constants.UUID, Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
-            editor.apply();
-
-            Log.v("uuid is", preferences.getString(Constants.UUID, "0"));
-            LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>()
+            @Override
+            public void onCancel()
             {
-                private ProfileTracker mProfileTracker;
 
-                @Override
-                public void onSuccess(LoginResult loginResult)
-                {
-                    AccessToken token = loginResult.getAccessToken();
-                    mProfileTracker = new ProfileTracker()
-                    {
-                        @Override
-                        protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile)
-                        {
-                            Profile.setCurrentProfile(currentProfile);
-                            mProfileTracker.stopTracking();
-                        }
-                    };
+            }
 
-                    mProfileTracker.startTracking();
+            @Override
+            public void onError(FacebookException e)
+            {
 
-                    if (token != null) {
-                        editor.putBoolean("LoggedIn", true);
-                        editor.apply();
-                        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
-
-
-                }
-
-                @Override
-                public void onCancel()
-                {
-                    System.out.println("Facebook Canceled");
-                }
-
-                @Override
-                public void onError(FacebookException e)
-                {
-                    System.out.println(e.getMessage());
-                }
-            });
-
-            // Set up custom Action Bar and enable up navigation
-//        getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-//        getActionBar().setCustomView(R.layout.action_bar_title);
-//        getActionBar().setDisplayHomeAsUpEnabled(false);
-//        getActionBar().setDisplayShowHomeEnabled(false);
-//        getActionBar().setHomeButtonEnabled(false);
-
-//        ((TextView)findViewById(R.id.action_bar_title)).setText(R.string.title_activity_sign_in);
-//        ((ImageButton)findViewById(R.id.action_bar_right)).setVisibility(View.INVISIBLE);
-//        ((ImageButton) findViewById(R.id.action_bar_home)).setImageResource(R.drawable.ic_action_cancel);
-//        ((ImageButton) findViewById(R.id.action_bar_home)).setOnClickListener(this);
-
-            // Add on click listeners to buttons
-//        ((Button)findViewById(R.id.btnSignIn)).setOnClickListener(this);
-            ((LoginButton) findViewById(R.id.btnSignInFacebook)).setOnClickListener(this);
-        }
+            }
+        });
     }
 
     @Override
     public void onResume()
     {
         super.onResume();
-        if(builder != null && dialog != null)
-            dialog.dismiss();
-        if (!SmartLocation.with(this).location().state().locationServicesEnabled()) {
-            builder = new AlertDialog.Builder(this);
-            builder.setTitle("GPS not found");  // GPS not found
-            builder.setMessage("In order for Bakkle to function properly, Location Services need to be enabled. Would like to enable them now?"); // Want to enable?
-            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener()
-            {
-                public void onClick(DialogInterface dialogInterface, int i)
-                {
-                    startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-                }
-            });
-            builder.setNegativeButton("Not right now", null);
-            builder.create().show();
-        }
-        else {
-            SmartLocation.with(this).location()
-                    .oneFix()
-                    .start(new OnLocationUpdatedListener()
-                    {
-                        @Override
-                        public void onLocationUpdated(Location location)
-                        {
-                            editor.putString(Constants.LOCATION, location.getLatitude() + "," + location.getLongitude());
-                            editor.putString(Constants.LATITUDE, String.valueOf(location.getLatitude()));
-                            editor.putString(Constants.LONGITUDE, String.valueOf(location.getLongitude()));
-                            editor.apply();
-                        }
-                    });
-
-
-            if (preferences.getBoolean(Constants.LOGGED_IN, false)) {
-
-                Intent intent = new Intent(this, HomeActivity.class);
-                startActivity(intent);
-                //SmartLocation.with(this).location().stop();
-                finish();
-            }
-
-            editor = preferences.edit();
-            editor.putString(Constants.UUID, Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
-            editor.apply();
-
-            Log.v("uuid is", preferences.getString(Constants.UUID, "0"));
-            LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>()
-            {
-                private ProfileTracker mProfileTracker;
-
-                @Override
-                public void onSuccess(LoginResult loginResult)
-                {
-                    AccessToken token = loginResult.getAccessToken();
-                    mProfileTracker = new ProfileTracker()
-                    {
-                        @Override
-                        protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile)
-                        {
-                            Profile.setCurrentProfile(currentProfile);
-                            mProfileTracker.stopTracking();
-                        }
-                    };
-
-                    mProfileTracker.startTracking();
-
-                    if (token != null) {
-                        editor.putBoolean("LoggedIn", true);
-                        editor.apply();
-                        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
-
-
-                }
-
-                @Override
-                public void onCancel()
-                {
-                    System.out.println("Facebook Canceled");
-                }
-
-                @Override
-                public void onError(FacebookException e)
-                {
-                    System.out.println(e.getMessage());
-                }
-            });
-
-            // Set up custom Action Bar and enable up navigation
-//        getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-//        getActionBar().setCustomView(R.layout.action_bar_title);
-//        getActionBar().setDisplayHomeAsUpEnabled(false);
-//        getActionBar().setDisplayShowHomeEnabled(false);
-//        getActionBar().setHomeButtonEnabled(false);
-
-//        ((TextView)findViewById(R.id.action_bar_title)).setText(R.string.title_activity_sign_in);
-//        ((ImageButton)findViewById(R.id.action_bar_right)).setVisibility(View.INVISIBLE);
-//        ((ImageButton) findViewById(R.id.action_bar_home)).setImageResource(R.drawable.ic_action_cancel);
-//        ((ImageButton) findViewById(R.id.action_bar_home)).setOnClickListener(this);
-
-            // Add on click listeners to buttons
-//        ((Button)findViewById(R.id.btnSignIn)).setOnClickListener(this);
-            ((LoginButton) findViewById(R.id.btnSignInFacebook)).setOnClickListener(this);
-        }
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_sign_in, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -308,28 +157,16 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener
         switch (id) {
             case R.id.btnSignIn:
                 // TODO: Implement Sign in Code
-                Intent homeIntent = new Intent(this, HomeActivity.class);
-                startActivity(homeIntent);
-                finish();
+
                 break;
             case R.id.btnSignInFacebook:
-                if (preferences.getBoolean(Constants.LOGGED_IN, false)) {
-                    LoginManager.getInstance().logOut();
-                    editor.putBoolean(Constants.LOGGED_IN, false);
-                    editor.apply();
-                }
-                else {
-                    LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList
-                            ("public_profile", "email", "user_friends"));
-                    LoginManager.getInstance().logInWithPublishPermissions(
-                            this, Arrays.asList("publish_actions"));
-                    editor.putBoolean(Constants.LOGGED_IN, true);
-                    editor.putBoolean(Constants.NEW_USER, true);
-                    editor.apply();
-                }
-                break;
-            case R.id.action_bar_home:
-                NavUtils.navigateUpFromSameTask(this);
+                LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList
+                        ("public_profile", "email", "user_friends"));
+                LoginManager.getInstance().logInWithPublishPermissions(
+                        this, Arrays.asList("publish_actions"));
+                editor.putBoolean(Constants.LOGGED_IN, true);
+                editor.putBoolean(Constants.NEW_USER, true);
+                editor.apply();
                 break;
         }
     }
@@ -340,6 +177,29 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener
     {
         //startActivity(new Intent(this, SignupActivity.class));
         finish();
+    }
+
+    public String getLocation()
+    {
+        return preferences.getString(Constants.LOCATION, "0,0");
+    }
+
+    public void addUserInfoToPreferences(JSONObject object)
+    {
+        try {
+            editor.putString(Constants.EMAIL, object.getString("email"));
+            editor.putString(Constants.GENDER, object.getString("gender"));
+            editor.putString(Constants.USERNAME, "");
+            editor.putString(Constants.NAME, object.getString("name"));
+            editor.putString(Constants.USER_ID, object.getString("id"));
+            editor.putString(Constants.LOCALE, object.getString("locale"));
+            editor.putString(Constants.FIRST_NAME, object.getString("first_name"));
+            editor.putString(Constants.LAST_NAME, object.getString("last_name"));
+            editor.apply();
+        }
+        catch (Exception e) {
+            Log.v("Error", e.getMessage());
+        }
     }
 
 }

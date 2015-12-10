@@ -15,7 +15,8 @@
 
     <string name="title_activity_sign_in">@string/app_name</string>
     <string name="title_activity_login">@string/app_name</string>
-    <string name="title_activity_home">FEED</string>
+    <string name="title_activity_main">@string/app_name</string>
+    <string name="title_fragment_feed">FEED</string>
     <string name="title_activity_sellers_garage">SELLER\'S GARAGE</string>
     <string name="title_activity_buyers_trunk">BUYER\'S TRUNK</string>
     <string name="title_activity_watchlist">WATCH LIST</string>
@@ -63,6 +64,8 @@
     <string name="share_to_facebook">Share to Facebook?</string>
     <string name="title_hint">Title</string>
     <string name="title_activity_watch_video">WatchVideo</string>
+    <string name="add_item">Add Item</string>
+    <string name="refine">Refine</string>
 
 
 </resources>

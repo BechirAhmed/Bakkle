@@ -51,6 +51,24 @@ public class ServerCalls
 
     }
 
+    public String getGuestUserId(String uuid)
+    {
+        try {
+            return
+                    Ion.with(mContext)
+                    .load("https://app.bakkle.com/account/guestuserid/")
+                    .setBodyParameter("device_uuid", uuid)
+                    .asJsonObject()
+                    .get()
+                    .get("userid")
+                    .getAsString();
+        }
+        catch (Exception e) {
+            Log.v("error", e.getMessage());
+        }
+        return "";
+    }
+
     public int registerFacebook(final String email, final String gender, final String username,
                                 final String name, final String userid, final String locale,
                                 final String first_name, final String last_name, String id)
@@ -58,7 +76,7 @@ public class ServerCalls
 
         response = 0;
         try {
-            response = Ion.with(mContext)
+            JsonObject res = Ion.with(mContext)
                     .load(url_base + url_facebook)
                     .setBodyParameter("email", email)
                     .setBodyParameter("name", name)
@@ -70,9 +88,10 @@ public class ServerCalls
                     .setBodyParameter("last_name", last_name)
                     .setBodyParameter("device_uuid", id)
                     .asJsonObject()
-                    .get()
-                    .get("status")
-                    .getAsInt();
+                    .get();
+
+            Log.v("testing", res.toString());
+            response = res.get("status").getAsInt();
         }
         catch (Exception e) {
             Log.d("testing error 1", e.getMessage());

@@ -1,97 +1,98 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.bakkle.bakkle.Activities.SignupActivity"
-    android:orientation="vertical"
-    android:background="@color/green">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/green"
+              android:orientation="vertical"
+              android:paddingBottom="@dimen/activity_vertical_margin"
+              android:paddingLeft="@dimen/activity_horizontal_margin"
+              android:paddingRight="@dimen/activity_horizontal_margin"
+              android:paddingTop="@dimen/activity_vertical_margin"
+              tools:context="com.bakkle.bakkle.Activities.SignupActivity">
 
 
     <ImageView
+        android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/imageView"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/logo_green_design_png_white_with_ko"
-        android:adjustViewBounds="true"
-        android:layout_marginTop="40dp"
+        android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginLeft="20dp" />
+        android:layout_marginTop="40dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/logo_green_design_png_white_with_ko"/>
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:gravity="bottom"
+        android:nestedScrollingEnabled="true"
+        android:orientation="vertical"
         android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:nestedScrollingEnabled="true">
+        android:paddingRight="16dp">
 
-        <!--<LinearLayout
-            android:orientation="vertical"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/edit_text_background">
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
-                android:textSize="20sp"
-                android:id="@+id/editSignInEmail"
-                android:hint="@string/email_hint"/>
+            android:background="@drawable/edit_text_background"
+            android:orientation="vertical">
 
             <EditText
+                android:id="@+id/editSignInEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                android:textSize="20sp"
+                android:hint="@string/email_hint"
+                android:inputType="textEmailAddress"
+                android:textSize="20sp"/>
+
+            <EditText
                 android:id="@+id/editSignInPassword"
-                android:hint="@string/password_hint"/>
-            </LinearLayout>
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/password_hint"
+                android:inputType="textPassword"
+                android:textSize="20sp"/>
+        </LinearLayout>
 
         <Button
+            android:id="@+id/btnSignIn"
+            style="@style/textStyleGreen"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/sign_in"
-            android:id="@+id/btnSignIn"
             android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
             android:background="@color/light_green"
-            style="@style/textStyleGreen"
-            android:layout_marginTop="16dp" />
+            android:text="@string/sign_in"/>
 
-        <View android:layout_width="match_parent"
-            android:layout_height="1dip"
-            android:background="@color/white"
-            android:layout_marginTop="24dp"
+        <View
             android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:layout_marginTop="24dp"
+            android:background="@color/white"
             />
 
         <TextView
+            android:id="@+id/textView2"
+            style="@style/textStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/or"
-            android:id="@+id/textView2"
             android:layout_below="@+id/divider"
             android:layout_gravity="center_horizontal"
-            style="@style/textStyle"
             android:layout_marginTop="-14dp"
             android:background="@color/green"
+            android:paddingLeft="5dp"
             android:paddingRight="5dp"
-            android:paddingLeft="5dp" /> -->
-
+            android:text="@string/or"/>
 
 
         <com.facebook.login.widget.LoginButton
+            android:id="@+id/btnSignInFacebook"
+            style="@style/textStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
-            android:id="@+id/btnSignInFacebook"
             android:layout_gravity="center_horizontal"
-
-            style="@style/textStyle"
-            android:layout_marginTop="24dp" />
+            android:layout_marginTop="24dp"/>
 
         <!--android:text="@string/facebook_login"
         android:background="@drawable/facebook_button" -->

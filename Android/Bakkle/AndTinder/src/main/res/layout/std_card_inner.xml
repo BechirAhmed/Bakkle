@@ -14,7 +14,6 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/info"
         android:layout_below="@+id/topBar"
-        android:background="@drawable/rounded_corners"
         android:scaleType="centerCrop"/>
 
     <RelativeLayout

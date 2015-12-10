@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="drawer_items">
-        <item>@string/title_activity_home</item>
+        <item>@string/title_fragment_feed</item>
         <item>@string/title_activity_sellers_garage</item>
         <item>@string/title_activity_buyers_trunk</item>
         <item>@string/title_activity_watchlist</item>

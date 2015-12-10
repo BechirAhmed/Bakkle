@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bakkle.bakkle.Activities.LoginActivity;
+import com.bakkle.bakkle.Activities.MainActivity;
 import com.bakkle.bakkle.Helpers.Constants;
 import com.bakkle.bakkle.Helpers.ServerCalls;
 import com.bakkle.bakkle.R;
@@ -58,6 +59,7 @@ public class ProfileFragment extends Fragment
         editor = preferences.edit();
         serverCalls = new ServerCalls(mActivity);
         json = serverCalls.getAccount(preferences.getString(Constants.AUTH_TOKEN, ""), preferences.getString(Constants.UUID, ""));
+        Log.v("testing", json.toString());
         url = "http://graph.facebook.com/" + preferences.getString(Constants.USER_ID, "0") + "/picture?width=300&height=300";
     }
     
@@ -67,14 +69,20 @@ public class ProfileFragment extends Fragment
     {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        ((TextView) view.findViewById(R.id.name)).setText(preferences.getString(Constants.NAME, "Not Signed In"));
+        ((TextView) view.findViewById(R.id.name)).setText(preferences.getString(Constants.NAME, "Guest User"));
         final EditText editText = (EditText) view.findViewById(R.id.aboutMeTextEdit);
         final TextView textView = (TextView) view.findViewById(R.id.aboutMeText);
         final Button logout = (Button) (view.findViewById(R.id.logout));
         final Button edit = (Button) view.findViewById(R.id.edit);
         final Button save = (Button) view.findViewById(R.id.saveButton);
-        description = json.get("account").getAsJsonObject().get("description").getAsString();
-        textView.setText(description);
+        try {
+            description = json.get("account").getAsJsonObject().get("description").getAsString();
+            textView.setText(description);
+        }
+        catch (Exception e)
+        {
+
+        }
 
         Glide.with(mActivity)
                 .load(url)
@@ -128,10 +136,19 @@ public class ProfileFragment extends Fragment
             {
                 FacebookSdk.sdkInitialize(mActivity);
                 LoginManager.getInstance().logOut();
-                editor.putBoolean(Constants.LOGGED_IN, false);
-                editor.putBoolean(Constants.NEW_USER, true);
+                editor.remove(Constants.LOGGED_IN);
+                editor.remove(Constants.NEW_USER);
+                editor.remove(Constants.EMAIL);
+                editor.remove(Constants.GENDER);
+                editor.remove(Constants.USERNAME);
+                editor.remove(Constants.NAME);
+                editor.remove(Constants.USER_ID);
+                editor.remove(Constants.LOCALE);
+                editor.remove(Constants.FIRST_NAME);
+                editor.remove(Constants.LAST_NAME);
+                editor.remove(Constants.AUTHENTICATED);
                 editor.apply();
-                startActivity(new Intent(mActivity, LoginActivity.class));
+                startActivity(new Intent(mActivity, MainActivity.class));
                 mActivity.finish();
             }
         });
