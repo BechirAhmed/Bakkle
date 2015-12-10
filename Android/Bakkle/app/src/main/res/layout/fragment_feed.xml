@@ -37,7 +37,7 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:onClick="refineButtonClick"
-            android:text="Refine"
+            android:text="@string/refine"
             android:textColor="@color/black"/>
 
     </RelativeLayout>

@@ -39,18 +39,11 @@ public class FeedFragment extends Fragment
     Activity    mActivity;
     FeedItem feedItem = null;
     CardContainer mCardContainer;
-    private SearchView  searchView;
     private ProgressBar bar;
     CardModel                card;
     SharedPreferences.Editor editor;
     SharedPreferences        preferences;
 
-    public interface OnCardSelected
-    {
-        void OnCardSelected(FeedItem item);
-    }
-
-    OnCardSelected onCardSelected;
 
     public static FeedFragment newInstance(boolean showTutorial)
     {
@@ -83,14 +76,13 @@ public class FeedFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
-
         preferences = PreferenceManager.getDefaultSharedPreferences(mActivity);
         editor = preferences.edit();
         serverCalls = new ServerCalls(mActivity);
         mCardContainer = (CardContainer) view.findViewById(R.id.cardView);
         mCardContainer.setOrientation(Orientations.Orientation.Ordered);
         bar = (ProgressBar) view.findViewById(R.id.spinner);
-        searchView = (SearchView) view.findViewById(R.id.searchField);
+        SearchView searchView = (SearchView) view.findViewById(R.id.searchField);
         searchView.setQuery(preferences.getString(Constants.SEARCH_TEXT, ""), false);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener()
         {
@@ -129,9 +121,7 @@ public class FeedFragment extends Fragment
 
         final SimpleCardStackAdapter adapter = new SimpleCardStackAdapter(mActivity);
         JsonObject temp;
-        ArrayList<FeedItem> feedItems = new ArrayList<>();
         ArrayList<String> imageUrls;
-        JsonObject seller;
         JsonArray imageUrlArray;
         JsonElement element;
 

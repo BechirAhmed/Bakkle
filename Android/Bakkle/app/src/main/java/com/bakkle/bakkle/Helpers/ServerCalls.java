@@ -76,7 +76,7 @@ public class ServerCalls
 
         response = 0;
         try {
-            response = Ion.with(mContext)
+            JsonObject res = Ion.with(mContext)
                     .load(url_base + url_facebook)
                     .setBodyParameter("email", email)
                     .setBodyParameter("name", name)
@@ -88,9 +88,10 @@ public class ServerCalls
                     .setBodyParameter("last_name", last_name)
                     .setBodyParameter("device_uuid", id)
                     .asJsonObject()
-                    .get()
-                    .get("status")
-                    .getAsInt();
+                    .get();
+
+            Log.v("testing", res.toString());
+            response = res.get("status").getAsInt();
         }
         catch (Exception e) {
             Log.d("testing error 1", e.getMessage());

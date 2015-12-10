@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.bakkle.bakkle.Activities.ChatActivity;
+import com.bakkle.bakkle.Activities.SignupActivity;
 import com.bakkle.bakkle.Helpers.ChatCalls;
 import com.bakkle.bakkle.Helpers.Constants;
 import com.bakkle.bakkle.R;
@@ -39,7 +40,7 @@ public class SplashFragment extends Fragment
 {
     
     private OnFragmentInteractionListener mListener;
-    Activity mActivity;
+    Activity          mActivity;
     SharedPreferences preferences;
     protected String authToken;
     String uuid;
@@ -85,11 +86,7 @@ public class SplashFragment extends Fragment
             @Override
             public void onClick(View view)
             {
-                //getFragmentManager().beginTransaction().remove(SplashFragment.this).commit();
                 getFragmentManager().popBackStack();
-//                getFragmentManager().beginTransaction().replace(R.id.content_frame,
-//                        new FeedFragment()).addToBackStack(null).
-//                        setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
             }
         });
         sendMessage.setOnClickListener(new View.OnClickListener()
@@ -97,7 +94,12 @@ public class SplashFragment extends Fragment
             @Override
             public void onClick(View view)
             {
-                new StartChatIntermediary(getArguments().getString(Constants.PK));
+                if (preferences.getBoolean(Constants.NEW_USER, true)) {
+                    startActivity(new Intent(mActivity, SignupActivity.class));
+                }
+                if (!preferences.getBoolean(Constants.NEW_USER, true)) {
+                    new StartChatIntermediary(getArguments().getString(Constants.PK));
+                }
             }
         });
 
@@ -117,13 +119,16 @@ public class SplashFragment extends Fragment
     private class WebSocketCallBack implements AsyncHttpClient.WebSocketConnectCallback
     {
         String pk;
-        public WebSocketCallBack(String pk) {this.pk = pk;}
+
+        public WebSocketCallBack(String pk)
+        {
+            this.pk = pk;
+        }
 
         @Override
         public void onCompleted(Exception ex, WebSocket webSocket)
         {
-            if(ex != null)
-            {
+            if (ex != null) {
                 Log.e("callback exception", ex.getMessage());
                 return;
             }
@@ -133,8 +138,6 @@ public class SplashFragment extends Fragment
                 json.put("itemId", pk);
                 json.put("uuid", uuid);
                 json.put("auth_token", authToken);
-//                json.put("uuid", "E7F742EB-67EE-4738-ABEC-F0A3B62B45EB");
-//                json.put("auth_token", "f02dfb77e9615ae630753b37637abb31_10");
             }
             catch (Exception e) {
                 Log.e("Websocket callback", e.getMessage());
@@ -149,7 +152,7 @@ public class SplashFragment extends Fragment
                     JsonParser jsonParser = new JsonParser();
                     JsonElement jsonElement = jsonParser.parse(s);
                     JsonObject jsonObject = jsonElement.getAsJsonObject();
-                    if(!jsonObject.has("chatId"))
+                    if (!jsonObject.has("chatId"))
                         return;
                     Intent i = new Intent(mActivity, ChatActivity.class);
                     i.putExtra(Constants.CHAT_ID, Integer.parseInt(jsonObject.get("chatId").getAsString()));

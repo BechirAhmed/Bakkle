@@ -8,7 +8,6 @@
         android:id="@+id/addItem"
         android:icon="@drawable/ic_action_camera"
         app:showAsAction="always"
-        android:onClick="addItem"
-        android:title="Add Item"/>
+        android:title="@string/add_item"/>
 
 </menu>
