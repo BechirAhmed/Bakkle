@@ -5,7 +5,7 @@
 //  Created by Barr, Patrick T on 7/8/15.
 //  Copyright (c) 2015 Bakkle. All rights reserved.
 //
-
+import UIKit
 import AVFoundation
 import QuartzCore
 
@@ -184,13 +184,8 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
                 }
             }
         }
-        enum UIImagePickerControllerCameraFlashMode : Int {
-            case Off
-            case Auto
-            case On
-        }
 
-        
+        var cameraFlashMode: UIImagePickerControllerCameraFlashMode
         var model = UIDevice.currentDevice().model
         if model == "iPad" {
             self.cameraView.addConstraint(NSLayoutConstraint(item: self.cameraView, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: self.cameraView, attribute: NSLayoutAttribute.Height, multiplier: 1.15, constant: 0.0))
@@ -321,6 +316,12 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         self.removeVideos()
         self.dismissViewControllerAnimated(true, completion: nil)
     }
+
+    /*
+    enum CameraFlashMode: Int {
+        case Off, On, Auto
+    }
+
     
     // Iterates through all the types of files saved for movies and removes them
     func removeVideos() {
@@ -328,6 +329,85 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             self.removeVideos(i)
         }
     }
+    
+    var hasFlash: Bool = {
+        let devices = AVCaptureDevice.devicesWithMediaType(AVMediaTypeVideo)
+        for  device in devices  {
+            let captureDevice = device as! AVCaptureDevice
+            if (captureDevice.position == .Back) {
+                return captureDevice.hasFlash
+            }
+        }
+        return false
+        }()
+
+        flashMode = CameraFlashMode.OFF{
+            didSet {
+                if flashMode != oldValue {
+                    _updateFlasMode(flashMode)
+                }
+            }
+        }
+    /**
+    Change current flash mode to next value from available ones.
+    
+    :returns: Current flash mode: Off / On / Auto
+    */
+    func changeFlashMode() -> CameraFlashMode {
+        flashMode = CameraFlashMode(rawValue: (flashMode.rawValue+1)%3)!
+        return flashMode
+    }
+    
+    
+    
+    func _updateTorch(flashMode: CameraFlashMode) {
+        captureSession?.beginConfiguration()
+        let devices = AVCaptureDevice.devicesWithMediaType(AVMediaTypeVideo)
+        for  device in devices  {
+            let captureDevice = device as! AVCaptureDevice
+            if (captureDevice.position == AVCaptureDevicePosition.Back) {
+                let avTorchMode = AVCaptureTorchMode(rawValue: flashMode.rawValue)
+                if (captureDevice.isTorchModeSupported(avTorchMode!)) {
+                    do {
+                    try captureDevice.lockForConfiguration()
+                    } catch {
+                        return;
+                    }
+                    captureDevice.torchMode = avTorchMode!
+                    captureDevice.unlockForConfiguration()
+                }
+            }
+        }
+        captureSession?.commitConfiguration()
+    }
+    func _updateFlasMode(flashMode: CameraFlashMode) {
+        captureSession?.beginConfiguration()
+        let devices = AVCaptureDevice.devicesWithMediaType(AVMediaTypeVideo)
+        for  device in devices  {
+            let captureDevice = device as! AVCaptureDevice
+            if (captureDevice.position == AVCaptureDevicePosition.Back) {
+                let avFlashMode = AVCaptureFlashMode(rawValue: flashMode.rawValue)
+                if (captureDevice.isFlashModeSupported(avFlashMode!)) {
+                    do {
+                    try captureDevice.lockForConfiguration()
+                    } catch {
+                        return
+                    }
+                    captureDevice.flashMode = avFlashMode!
+                    captureDevice.unlockForConfiguration()
+                }
+            }
+        }
+        captureSession?.commitConfiguration()
+    }
+    
+    
+    */
+    
+    
+    
+    
+    
     
     // Removes the specified video
     func removeVideos(index: Int) {
@@ -499,6 +579,9 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     
     // Called when recording begins
     func captureOutput(captureOutput: AVCaptureFileOutput!, didStartRecordingToOutputFileAtURL fileURL: NSURL!, fromConnections connections: [AnyObject]!) {
+        //if flashMode != .Off {
+        //    _updateTorch(flashMode)
+        //}
         NSLog("Started Recording")
     }
     

@@ -145,7 +145,7 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
             @Override
             public void onClick(View view)
             {
-                Intent intent1 = new Intent(CameraActivity.this, HomeActivity.class);
+                Intent intent1 = new Intent(CameraActivity.this, MainActivity.class);
                 intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent1.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent1);

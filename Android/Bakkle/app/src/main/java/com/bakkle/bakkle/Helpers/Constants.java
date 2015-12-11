@@ -26,6 +26,7 @@ public class Constants
     public static final String DISTANCE_FILTER = "distance_filter";
     public static final String SEARCH_TEXT     = "search_text";
     public static final String NEW_USER        = "newuser";
+    public static final String AUTHENTICATED   = "authenticated";
 
     //Intent keys
     public static final String PICTURE_PATH     = "pic";
