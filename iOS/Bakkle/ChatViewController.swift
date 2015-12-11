@@ -122,7 +122,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         let offerButtonWidth:CGFloat = 50
         var offerButton = UIButton(frame: CGRectMake(header.bounds.origin.x+header.bounds.size.width-infoButtonWidth-offerButtonWidth, header.bounds.origin.y+topHeight, offerButtonWidth, headerHeight))
-        offerButton.setImage(IconImage().check(), forState: UIControlState.Normal)
+        offerButton.setImage(IconImage().money(), forState: UIControlState.Normal)
         offerButton.addTarget(self, action: "btnOffer:", forControlEvents: UIControlEvents.TouchUpInside)
         header.addSubview(offerButton)
         view.addSubview(header)

@@ -291,6 +291,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         requestUpdates()
         searchBar.resignFirstResponder()
     }
+    
     func searchBarCancelButtonClicked(searchBar: UISearchBar) {
         requestUpdates()
         searchBar.resignFirstResponder()
@@ -493,7 +494,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         if self.swipeView.imageView.image == nil {
             self.swipeView.imageView.image = UIImage(named: "loading.png")
         }
-        if view == self.bottomView {
+        if self.bottomView != nil && view == self.bottomView {
             self.bottomView.userInteractionEnabled = false
         }
     }

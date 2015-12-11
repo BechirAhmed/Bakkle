@@ -11,6 +11,8 @@ import UIKit
 class RefineView: UIViewController, UISearchBarDelegate {
     
     @IBOutlet weak var menuBtn: UIButton!
+    @IBOutlet weak var confirmBtn: UIButton!
+    
     
     @IBOutlet weak var distance: UISlider!
     @IBOutlet weak var price: UISlider!
@@ -82,6 +84,7 @@ class RefineView: UIViewController, UISearchBarDelegate {
     func setupButtons() {
         menuBtn.setImage(IconImage().close(), forState: .Normal)
         menuBtn.setTitle("", forState: .Normal)
+        confirmBtn.layer.cornerRadius = 8.0
     }
     
     func setupBackground() {

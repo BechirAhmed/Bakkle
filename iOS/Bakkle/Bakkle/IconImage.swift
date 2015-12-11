@@ -45,6 +45,11 @@ class IconImage {
         return factory.createImageForIcon(NIKFontAwesomeIcon.Check)
     }
     
+    func money() -> UIImage {
+        setup(NAV_SIZE)
+        return factory.createImageForIcon(NIKFontAwesomeIcon.Dollar)
+    }
+    
     /* SWIPE MENU ICONS */
     
     func home() -> UIImage {

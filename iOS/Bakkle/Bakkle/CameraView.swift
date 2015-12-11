@@ -160,7 +160,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             successLabel.hidden = false
             
             if self.addItem!.successfulAdd {
-                self.removeVideos()
+//                self.removeVideos()
             }
             
             self.dismissViewControllerAnimated(true, completion: nil)
@@ -313,7 +313,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     
     // Cancel button was pressed, remove any unwanted video files
     @IBAction func cancel(sender: AnyObject) {
-        self.removeVideos()
+//        self.removeVideos()
         self.dismissViewControllerAnimated(true, completion: nil)
     }
 
