@@ -1,60 +1,90 @@
-<FrameLayout
-    android:id="@+id/feed"
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/lib-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.bakkle.bakkle.FeedFragment">
 
-    <ProgressBar
-        android:id="@+id/spinner"
+    <FrameLayout
+        android:id="@+id/message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:id="@+id/error"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/error_image"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/ic_error"
+                android:tint="@color/colorSecondaryText"/>
+
+            <TextView
+                android:id="@+id/error_text"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/error_image"
+                android:layout_centerHorizontal="true"
+                android:text="There was an error! Please check your Network Connection and try again"
+                android:textAlignment="center"
+                android:textColor="@color/colorSecondaryText"
+                android:textSize="12sp"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/done"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/done_image"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/ic_done_all"
+                android:tint="@color/colorSecondaryText"/>
+
+            <TextView
+                android:id="@+id/done_text"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/done_image"
+                android:layout_centerHorizontal="true"
+                android:text="Nice! You reached the end of the Feed!"
+                android:textAlignment="center"
+                android:textColor="@color/colorSecondaryText"
+                android:textSize="12sp"/>
+
+        </RelativeLayout>
+    </FrameLayout>
+
+
+    <Button
+        android:id="@+id/refresh"
+        style="?android:attr/borderlessButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:theme="@style/AppCompatTheme"
+        android:layout_below="@+id/message"
+        android:layout_centerInParent="true"
+        android:text="REFRESH"
+        android:textColor="@color/colorSecondaryText"
         android:visibility="gone"/>
 
-    <RelativeLayout
+
+    <com.lorentzos.flingswipe.SwipeFlingAdapterView
+        android:id="@+id/feed"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/dark_green">
+        android:layout_height="match_parent"
+        android:paddingBottom="24dp"
+        app:direction="ALL"
+        app:rotation_degrees="16"/>
 
-        <android.support.v7.widget.SearchView
-            android:id="@+id/searchField"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
-            android:layout_below="@id/action_bar_image"
-            android:layout_toLeftOf="@+id/refine"
-            android:iconifiedByDefault="true"
-            android:queryHint="Search for Items"
-            android:theme="@style/AppCompatTheme"/>
-
-        <Button
-            android:id="@+id/refine"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:onClick="refineButtonClick"
-            android:text="@string/refine"
-            android:textColor="@color/black"/>
-
-    </RelativeLayout>
-
-    <!--<android.support.v7.widget.CardView-->
-        <!--android:id="@+id/cardView"-->
-        <!--xmlns:card_view="http://schemas.android.com/apk/res-auto"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="center"-->
-        <!--card_view:cardCornerRadius="10dp">-->
-    <!--</android.support.v7.widget.CardView>-->
-
-    <com.andtinder.view.CardContainer
-        android:id="@+id/cardView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
-
-</FrameLayout>
+</RelativeLayout>

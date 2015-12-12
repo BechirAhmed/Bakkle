@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:checkableBehavior="single"
+        android:id="@+id/main_options">
+        <item
+            android:id="@+id/feed"
+            android:icon="@drawable/ic_home"
+            android:title="Feed"/>
+        <item
+            android:id="@+id/seller"
+            android:icon="@drawable/ic_store"
+            android:title="Selling"/>
+        <item
+            android:id="@+id/buyer"
+            android:icon="@drawable/ic_shopping_cart"
+            android:title="Buying"/>
+        <item
+            android:id="@+id/watch"
+            android:icon="@drawable/ic_watch_later"
+            android:title="Watch List"/>
+    </group>
+
+    <group
+        android:checkableBehavior="none"
+        android:id="@+id/secondary_options">
+        <item
+            android:id="@+id/nav_share"
+            android:icon="@drawable/ic_menu_share"
+            android:title="Share"/>
+    </group>
+
+</menu>

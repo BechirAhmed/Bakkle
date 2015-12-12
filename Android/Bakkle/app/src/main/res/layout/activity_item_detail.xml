@@ -1,173 +1,47 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.bakkle.bakkle.Activities.ItemDetailActivity">
+    android:fitsSystemWindows="true"
+    tools:context="com.bakkle.bakkle.ItemDetailActivity">
 
-    <android.support.v7.widget.Toolbar
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical"
-        android:id="@+id/toolbar"
-        android:background="@color/green"
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="56dp">
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
 
-        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/green">
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay"/>
 
+    </android.support.design.widget.AppBarLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:id="@+id/action_bar_image"
-                android:layout_centerInParent="true"
-                android:text="Details"
-                android:textColor="@color/white"
-                android:textSize="@dimen/abc_text_size_headline_material"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                />
+    <include layout="@layout/content_item_detail"/>
 
-            <ImageButton
-                android:id="@+id/close"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_alignParentLeft="true"
-                android:background="@null"
-                android:onClick="end"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_action_close" />
-
-            <!--<ImageButton
-                android:id="@+id/search_button"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="0dp"
-                android:layout_toLeftOf="@+id/action_bar_rightImage"
-                android:background="@null"
-                android:src="@drawable/ic_search"
-                /> -->
-
-
-        </RelativeLayout>
-
-    </android.support.v7.widget.Toolbar>
-
-    <com.bakkle.bakkle.Views.SquareHorizontalScrollView
-        android:layout_width="fill_parent"
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_want"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar"
-        android:id="@+id/images">
+        android:src="@drawable/ic_thumb_up"
+        android:layout_gravity="bottom|right"
+        android:tint="@color/colorTextAndIcons"
+        app:backgroundTint="@color/colorPrimary"
+        android:layout_margin="@dimen/fab_margin" />
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:id="@id/imageCollection">
-
-        </RelativeLayout>
-
-
-    </com.bakkle.bakkle.Views.SquareHorizontalScrollView>
-
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="40dp"
-        android:layout_below="@+id/images"
-        android:id="@+id/buyerInfo"
-        android:background="#d3d3d3">
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_centerVertical="true"
-            android:paddingLeft="10dp"
-            android:id="@+id/sellerImage"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="5dp"
-            android:id="@+id/seller"
-            android:layout_centerVertical="true"
-            android:textSize="20sp"
-            android:text="Seller"
-            android:layout_toRightOf="@+id/sellerImage"
-            android:textStyle="bold"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/distance"
-            android:layout_centerVertical="true"
-            android:paddingRight="10dp"
-            android:layout_alignParentRight="true"
-            android:text="100 mi"
-            android:textSize="20sp"
-            />
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="fill_parent"
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_nope"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/buyerInfo"
-        android:padding="10dp">
+        android:src="@drawable/ic_thumb_down"
+        android:layout_gravity="bottom|left"
+        android:tint="@color/colorTextAndIcons"
+        app:backgroundTint="@color/colorNope"
+        android:layout_margin="@dimen/fab_margin" />
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/mainItemInfo">
-
-
-                <com.andtinder.FontFitTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/title"
-                    android:layout_toLeftOf="@id/price"
-                    android:textStyle="bold"
-                    android:text="Title"/>
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/price"
-                    android:paddingLeft="10dp"
-                    android:layout_alignParentRight="true"
-                    android:textSize="18sp"
-                    android:text="$100.00"/>
-        </RelativeLayout>
-
-
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="10dp"
-            android:layout_below="@+id/mainItemInfo">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/description"
-                android:text="Description"/>
-
-        </RelativeLayout>
-
-
-    </RelativeLayout>
-
-    <Button
-        android:layout_width="fill_parent"
-        android:layout_height="50dp"
-        android:background="@color/green"
-        android:textColor="@color/white"
-        android:id="@+id/wantButton"
-        android:layout_alignParentBottom="true"
-        android:text="WANT"
-        android:onClick="markWant"
-        android:textSize="38sp"/>
-
-
-
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

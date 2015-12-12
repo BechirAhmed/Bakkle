@@ -1,0 +1,47 @@
+[
+    {
+        "outputFile": "/Users/vanshgandhi/Desktop/Bakkle/SwipeCards/build/intermediates/res/merged/androidTest/debug/values/values.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 3,
+                    "startColumn": 4,
+                    "startOffset": 561,
+                    "endColumn": 54,
+                    "endOffset": 611
+                },
+                "from": {
+                    "file": "/Users/vanshgandhi/Desktop/Bakkle/SwipeCards/build/intermediates/bundles/debug/res/values/values.xml",
+                    "position": {
+                        "startLine": 3,
+                        "startColumn": 4,
+                        "startOffset": 561,
+                        "endColumn": 54,
+                        "endOffset": 611
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 4,
+                    "startColumn": 4,
+                    "startOffset": 616,
+                    "endLine": 8,
+                    "endColumn": 12,
+                    "endOffset": 792
+                },
+                "from": {
+                    "file": "/Users/vanshgandhi/Desktop/Bakkle/SwipeCards/build/intermediates/bundles/debug/res/values/values.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 616,
+                        "endLine": 8,
+                        "endColumn": 12,
+                        "endOffset": 792
+                    }
+                }
+            }
+        ]
+    }
+]
