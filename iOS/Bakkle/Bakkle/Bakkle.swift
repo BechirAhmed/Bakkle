@@ -738,7 +738,8 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         task.resume() 
     }
     
-    /* mark feed item 'status' as MEH/WANT/HOLD/REPORT */    func markItem(status: String, item_id: Int,  message: String? = "", success: ()->(), fail: ()->(),duration: Double = 0) {
+    /* mark feed item 'status' as MEH/WANT/HOLD/REPORT */
+    func markItem(status: String, item_id: Int,  message: String? = "", success: ()->(), fail: ()->(),duration: Double = 0) {
         let url:NSURL? = NSURL(string: url_base + url_mark + "\(status)/")
         let request = NSMutableURLRequest(URL: url!)
         
