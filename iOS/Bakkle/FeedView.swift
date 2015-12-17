@@ -10,6 +10,7 @@ import UIKit
 import Photos
 import Haneke
 
+
 class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDelegate, UINavigationControllerDelegate, MDCSwipeToChooseDelegate, UIAlertViewDelegate {
     
     
@@ -32,7 +33,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     
     var itemDetailTap: UITapGestureRecognizer!
     var item_id = 42 //TODO: unhardcode this
-    var model: String = ""
+    var model: String = UIDevice.currentDevice().model
     
     @IBOutlet weak var menuBtn: UIButton!
     @IBOutlet weak var noNewItemsLabel: UILabel!
@@ -57,6 +58,8 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     @IBOutlet weak var startChatViewOriginX: NSLayoutConstraint!
     @IBOutlet weak var startChatViewOriginY: NSLayoutConstraint!
     @IBOutlet weak var darkenStartAChat: UIView!
+    @IBOutlet weak var noInternectView: UIView!
+    
     var itemData: NSDictionary?
     var sendMessageContext = 0
     var keepBrowsingContext = 0
@@ -68,61 +71,13 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         
         // display status bar every time the screen shows up
         UIApplication.sharedApplication().statusBarHidden = false
-
         
+        // check if comes from a notification
         if ((Bakkle.sharedInstance.userInfo) != nil){
-            UIApplication.sharedApplication().applicationIconBadgeNumber = 0
-            var userInfo = Bakkle.sharedInstance.userInfo
-            Bakkle.sharedInstance.userInfo = nil
-            if let chat_id = userInfo["chat_id"] as? Int {
-                let item_id = userInfo["item_id"] as? Int
-                let seller_id = userInfo["seller_id"] as? Int
-                let buyer_id = userInfo["buyer_id"] as? Int
-                if seller_id == Bakkle.sharedInstance.account_id {
-                    // user is a seller
-                    Bakkle.sharedInstance.getAccount(buyer_id as NSInteger!, success: { (account: NSDictionary) -> () in
-//                        let account = (Bakkle.sharedInstance.responseDict as NSDictionary!).valueForKey("account") as! NSDictionary
-                        let name = account.valueForKey("display_name") as! String
-                        let buyer = User(facebookID: account.valueForKey("facebook_id") as! String, accountID: buyer_id!, firstName: name, lastName: name)
-                        var chatItem: NSDictionary? = nil
-                        for index in 0...Bakkle.sharedInstance.garageItems.count-1 {
-                            if Bakkle.sharedInstance.garageItems[index].valueForKey("pk") as? Int == item_id {
-                                chatItem = Bakkle.sharedInstance.garageItems[index] as? NSDictionary
-                            }
-                        }
-                        let buyerChat = Chat(user: buyer, lastMessageText: "", lastMessageSentDate: NSDate(), chatId: chat_id)
-                        let chatViewController = ChatViewController(chat: buyerChat)
-                        chatViewController.item = chatItem
-                        chatViewController.seller = chatItem!.valueForKey("seller") as! NSDictionary
-                        chatViewController.isBuyer = false
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            self.navigationController!.pushViewController(chatViewController, animated: true)
-                        })
-                        
-                        }, fail: { () -> () in
-                    })
-                }else if buyer_id == Bakkle.sharedInstance.account_id {
-                    // user is a buyer
-                    let buyer = User(facebookID: Bakkle.sharedInstance.facebook_id_str,accountID: Bakkle.sharedInstance.account_id,
-                        firstName: Bakkle.sharedInstance.first_name, lastName: Bakkle.sharedInstance.last_name)
-                    var chatItem: NSDictionary? = nil
-                    for index in 0...Bakkle.sharedInstance.trunkItems.count-1 {
-                        if (Bakkle.sharedInstance.trunkItems[index].valueForKey("item") as! NSDictionary).valueForKey("pk") as? Int == item_id {
-                            chatItem = Bakkle.sharedInstance.trunkItems[index].valueForKey("item") as? NSDictionary
-                        }
-                    }
-                    let buyerChat = Chat(user: buyer, lastMessageText: "", lastMessageSentDate: NSDate(), chatId: chat_id)
-                    let chatViewController = ChatViewController(chat: buyerChat)
-                    chatViewController.item = chatItem
-                    chatViewController.seller = chatItem!.valueForKey("seller") as! NSDictionary
-                    chatViewController.isBuyer = true
-                    self.navigationController!.pushViewController(chatViewController, animated: true)
-                }
-            }
+            showChatViewController()
         }
         
-        model = UIDevice.currentDevice().model
-        
+        // check if it is a goodwill app
         if(Bakkle.sharedInstance.flavor == Bakkle.GOODWILL){
             self.view.backgroundColor = Bakkle.sharedInstance.theme_base
             self.titleBar.backgroundColor = Bakkle.sharedInstance.theme_baseDark
@@ -131,6 +86,8 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             logoImageView.image = logo;
             logoImageViewHeight.constant = 20;
             logoImageViewWidth.constant = 140;
+            
+            btnAddItem.hidden = true
         }
         
         // Always look for updates
@@ -151,8 +108,9 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         // Item detail tap
         itemDetailTap = UITapGestureRecognizer(target: self, action: "goToDetails")
         
-        // dismiss tap
+        // dismiss keyboard tap
         self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "dismissKeyboard"))
+        
         // Register for feed updates
         let notificationCenter = NSNotificationCenter.defaultCenter()
         let mainQueue = NSOperationQueue.mainQueue()
@@ -163,6 +121,8 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         var observer2 = notificationCenter.addObserverForName(Bakkle.bkFilterChanged, object: nil, queue: mainQueue) { _ in
             self.filterChanged()
         }
+        
+        
         setupButtons()
         
         // Removed border around search bar.
@@ -170,39 +130,16 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         searchBar.layer.borderColor = titleBar.backgroundColor?.CGColor
         searchBar.layer.borderWidth = 1
         
-        if Bakkle.sharedInstance.flavor == Bakkle.GOODWILL {
-            btnAddItem.hidden = true
-        }
-        
         // Start a Chat Swiping
-        var startChatViewOptions: MDCSwipeOptions = MDCSwipeOptions.new()
-        startChatViewOptions.delegate = self
-        startChatViewOptions.threshold = self.view.frame.width / 4
-        
-        startChatViewOptions.onPan = { state -> Void in
-            self.darkenStartAChat.alpha = state.thresholdRatio / 3 * 2
-            
-            var rotation = CGFloat(-M_PI_4)
-            // Rotation multiplier is the distance moved (x) / total distance (according to what the position it ends on after close)
-            var rotationMultiplier = (self.view.frame.midX - self.startChatView.frame.midX) / (self.startChatView.frame.width * 2)
-            self.startChatView.transform = CGAffineTransformRotate(CGAffineTransformIdentity,  rotation * rotationMultiplier)
-            
-            if state.thresholdRatio == 0.0 {
-                self.makeAnOfferButton.sendActionsForControlEvents(.TouchUpOutside)
-                self.sendMessageButton.sendActionsForControlEvents(.TouchUpOutside)
-            }
-        }
-        
-        startChatViewOptions.onChosen = { state -> Void in
-            self.closeStartAChat(state)
-        }
-        
-        self.startChatView.mdc_swipeToChooseSetup(startChatViewOptions)
+        setupChatSwiping()
         
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(true)
+        
+        // set up the no internet view
+        setupNoInternetView()
         
         if Bakkle.sharedInstance.flavor == Bakkle.GOODWILL {
             var goodwillLogo: UIImageView = UIImageView(frame: CGRectMake(btnAddItem.frame.origin.x, logoImageView.frame.midY + 2.5, 35.0, 35.0))
@@ -241,6 +178,14 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         }
         
         fromCamera = false
+        
+       
+        
+        // check internet connection
+        checkInternetConnection()
+        
+        
+        
     }
     
     func displayInstruction(view: MDCSwipeToChooseView!) {
@@ -254,6 +199,107 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         
         // set up image for tutorial
         view.imageView.image = UIImage(named: "InstructionScreen-new.png")
+    }
+    
+    func setupNoInternetView(){
+        var visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.Dark)) as UIVisualEffectView
+        visualEffectView.frame = CGRectMake(0, 0, noInternectView.frame.width, noInternectView.frame.height)
+        self.noInternectView.addSubview(visualEffectView)
+        var backgroundImageView = UIImageView(frame: CGRectMake(0, 0, noInternectView.frame.width, noInternectView.frame.height))
+        backgroundImageView.contentMode = UIViewContentMode.ScaleAspectFit
+        backgroundImageView.image = UIImage(named: "no-internet.png")
+        backgroundImageView.clipsToBounds = true
+        self.noInternectView.addSubview(backgroundImageView)
+    }
+    
+    func checkInternetConnection(){
+        if Bakkle.sharedInstance.isInternetConnected() {
+            self.noInternectView.hidden = true
+            self.btnAddItem.enabled = true
+        }else{
+            self.noInternectView.hidden = false
+            self.view.bringSubviewToFront(self.noInternectView)
+            self.btnAddItem.enabled = false
+        }
+
+    }
+    
+    func showChatViewController(){
+        UIApplication.sharedApplication().applicationIconBadgeNumber = 0
+        var userInfo = Bakkle.sharedInstance.userInfo
+        Bakkle.sharedInstance.userInfo = nil
+        if let chat_id = userInfo["chat_id"] as? Int {
+            let item_id = userInfo["item_id"] as? Int
+            let seller_id = userInfo["seller_id"] as? Int
+            let buyer_id = userInfo["buyer_id"] as? Int
+            if seller_id == Bakkle.sharedInstance.account_id {
+                // user is a seller
+                Bakkle.sharedInstance.getAccount(buyer_id as NSInteger!, success: { (account: NSDictionary) -> () in
+                    //                        let account = (Bakkle.sharedInstance.responseDict as NSDictionary!).valueForKey("account") as! NSDictionary
+                    let name = account.valueForKey("display_name") as! String
+                    let buyer = User(facebookID: account.valueForKey("facebook_id") as! String, accountID: buyer_id!, firstName: name, lastName: name)
+                    var chatItem: NSDictionary? = nil
+                    for index in 0...Bakkle.sharedInstance.garageItems.count-1 {
+                        if Bakkle.sharedInstance.garageItems[index].valueForKey("pk") as? Int == item_id {
+                            chatItem = Bakkle.sharedInstance.garageItems[index] as? NSDictionary
+                        }
+                    }
+                    let buyerChat = Chat(user: buyer, lastMessageText: "", lastMessageSentDate: NSDate(), chatId: chat_id)
+                    let chatViewController = ChatViewController(chat: buyerChat)
+                    chatViewController.item = chatItem
+                    chatViewController.seller = chatItem!.valueForKey("seller") as! NSDictionary
+                    chatViewController.isBuyer = false
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        self.navigationController!.pushViewController(chatViewController, animated: true)
+                    })
+                    
+                    }, fail: { () -> () in
+                })
+            }else if buyer_id == Bakkle.sharedInstance.account_id {
+                // user is a buyer
+                let buyer = User(facebookID: Bakkle.sharedInstance.facebook_id_str,accountID: Bakkle.sharedInstance.account_id,
+                    firstName: Bakkle.sharedInstance.first_name, lastName: Bakkle.sharedInstance.last_name)
+                var chatItem: NSDictionary? = nil
+                for index in 0...Bakkle.sharedInstance.trunkItems.count-1 {
+                    if (Bakkle.sharedInstance.trunkItems[index].valueForKey("item") as! NSDictionary).valueForKey("pk") as? Int == item_id {
+                        chatItem = Bakkle.sharedInstance.trunkItems[index].valueForKey("item") as? NSDictionary
+                    }
+                }
+                let buyerChat = Chat(user: buyer, lastMessageText: "", lastMessageSentDate: NSDate(), chatId: chat_id)
+                let chatViewController = ChatViewController(chat: buyerChat)
+                chatViewController.item = chatItem
+                chatViewController.seller = chatItem!.valueForKey("seller") as! NSDictionary
+                chatViewController.isBuyer = true
+                self.navigationController!.pushViewController(chatViewController, animated: true)
+            }
+        }
+        
+    }
+    
+    func  setupChatSwiping(){
+        var startChatViewOptions: MDCSwipeOptions = MDCSwipeOptions.new()
+        startChatViewOptions.delegate = self
+        startChatViewOptions.threshold = self.view.frame.width / 4
+        
+        startChatViewOptions.onPan = { state -> Void in
+            self.darkenStartAChat.alpha = state.thresholdRatio / 3 * 2
+            
+            var rotation = CGFloat(-M_PI_4)
+            // Rotation multiplier is the distance moved (x) / total distance (according to what the position it ends on after close)
+            var rotationMultiplier = (self.view.frame.midX - self.startChatView.frame.midX) / (self.startChatView.frame.width * 2)
+            self.startChatView.transform = CGAffineTransformRotate(CGAffineTransformIdentity,  rotation * rotationMultiplier)
+            
+            if state.thresholdRatio == 0.0 {
+                self.makeAnOfferButton.sendActionsForControlEvents(.TouchUpOutside)
+                self.sendMessageButton.sendActionsForControlEvents(.TouchUpOutside)
+            }
+        }
+        
+        startChatViewOptions.onChosen = { state -> Void in
+            self.closeStartAChat(state)
+        }
+        
+        self.startChatView.mdc_swipeToChooseSetup(startChatViewOptions)
     }
     
     
@@ -287,6 +333,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     func searchBarTextDidBeginEditing(searchBar: UISearchBar){
         searching = true
     }
+    
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
         requestUpdates()
         searchBar.resignFirstResponder()
@@ -452,7 +499,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         let sellersName = sellersProfile.valueForKey("display_name") as! String
         let sellersImageProfile = sellersProfile.valueForKey("avatar_image_url") as! String
         
-//        let profileImageURL = NSURL(string)
+        //        let profileImageURL = NSURL(string)
         
         let dividedName = split(sellersName) {$0 == " "}
         let firstName = dividedName[0] as String
@@ -476,7 +523,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             myString = " $" + topPrice
         }
         view.priceLabel.text = myString
-//        view.sellerName.text = firstName
+        //        view.sellerName.text = firstName
         //        view.ratingView.rating = 3.5
         
         if imgURL != nil {
@@ -484,7 +531,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             view.imageView.hnk_setImageFromURL(imgURL!)
             view.imageView.contentMode = UIViewContentMode.ScaleAspectFill
             
-//            view.profileImg.hnk_setImageFromURL(NSURL(string: sellersImageProfile)!)
+            //            view.profileImg.hnk_setImageFromURL(NSURL(string: sellersImageProfile)!)
             if (view == self.swipeView){
                 self.swipeView.userInteractionEnabled = true
             }
@@ -554,6 +601,8 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             self.progressIndicator.alpha = 0
             noNewItemsLabel.alpha = 1
         }
+    
+        checkInternetConnection()
     }
     
     func viewDidCancelSwipe(view: UIView!) {
@@ -620,7 +669,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         case MDCSwipeDirection.Up:
             let recordend = NSDate();
             self.recordtime = recordend.timeIntervalSinceDate(recordstart);
-
+            
             Bakkle.sharedInstance.markItem("hold", item_id: self.item_id, success: {}, fail: {},duration: self.recordtime)
             loadNext()
             break

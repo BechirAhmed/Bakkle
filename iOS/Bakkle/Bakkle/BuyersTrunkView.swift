@@ -218,6 +218,10 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
     }
     
     func imageTapped(sender: UITapGestureRecognizer){
+        if !Bakkle.sharedInstance.isInternetConnected() {
+            self.noInternetConnectionAlert()
+            return
+        }
         let sb: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let vc: ItemDetails = sb.instantiateViewControllerWithIdentifier("ItemDetails") as! ItemDetails
         vc.modalTransitionStyle = UIModalTransitionStyle.FlipHorizontal
@@ -230,6 +234,11 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if !Bakkle.sharedInstance.isInternetConnected() {
+            self.tableView.deselectRowAtIndexPath(indexPath, animated: false)
+            self.noInternetConnectionAlert()
+            return
+        }
         if indexPath.row == 0 || indexPath.row == activeItem.count + 1 || indexPath.row == activeItem.count + boughtItem.count + 2 {
             return
         }
@@ -259,7 +268,11 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
         }
     }
     
+    
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        if !Bakkle.sharedInstance.isInternetConnected() {
+           return false
+        }
         if indexPath.row == 0 || indexPath.row == activeItem.count + 1 || indexPath.row == activeItem.count + boughtItem.count + 2 {
             return false
         }
@@ -279,6 +292,13 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
             }, fail: {})
             
         }
+    }
+    
+    func noInternetConnectionAlert(){
+        var alert = UIAlertController(title: "No Internet", message: "There was an error! Please check your Network Connection and try again", preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
+        self.presentViewController(alert, animated: true, completion: nil)
+        
     }
     
     /* MENUBAR ITEMS */

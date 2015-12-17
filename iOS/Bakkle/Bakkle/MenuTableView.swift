@@ -143,6 +143,10 @@ class MenuTableController: UITableViewController {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if indexPath.row == 0 {
+            if !Bakkle.sharedInstance.isInternetConnected() {
+                self.noInternetConnectionAlert()
+                return
+            }
             self.view.userInteractionEnabled = false
             Bakkle.sharedInstance.getAccount(Bakkle.sharedInstance.account_id, success: { (account: NSDictionary) -> () in
                 self.user = account
@@ -161,6 +165,13 @@ class MenuTableController: UITableViewController {
                 destinationVC.user = self.user
             }
         }
+    }
+    
+    func noInternetConnectionAlert(){
+        var alert = UIAlertController(title: "No Internet", message: "There was an error! Please check your Network Connection and try again", preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
+        self.presentViewController(alert, animated: true, completion: nil)
+        
     }
 }
 

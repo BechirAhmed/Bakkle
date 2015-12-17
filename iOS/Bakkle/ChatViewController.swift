@@ -36,6 +36,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         get {
             if toolBar == nil {
                 toolBar = UIToolbar(frame: CGRectMake(0, 0, 0, toolBarMinHeight-0.5))
+                toolBar.backgroundColor = UIColor.whiteColor()
                 
                 textView = InputTextView(frame: CGRectZero)
                 textView.backgroundColor = UIColor.whiteColor()
@@ -97,6 +98,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         header = UIView(frame: CGRectMake(view.bounds.origin.x, view.bounds.origin.y, view.bounds.size.width, headerHeight+topHeight))
         header.backgroundColor = Bakkle.sharedInstance.theme_base
         
+        let testView = self.inputAccessoryView
         
         let buttonWidth: CGFloat = 80.0
         var backButton = UIButton(frame: CGRectMake(header.bounds.origin.x + 4, header.bounds.origin.y+24, buttonWidth, headerHeight - 8))
@@ -104,15 +106,17 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         backButton.addTarget(self, action: "btnBack:", forControlEvents: UIControlEvents.TouchUpInside)
         header.addSubview(backButton)
         
-        let profileButtonWidth: CGFloat = 80.0
+        let profileButtonWidth: CGFloat = 120.0
         let profileXpos:CGFloat = (header.bounds.size.width - header.bounds.origin.x
             - profileButtonWidth) / 2
-        nameLabel = UILabel(frame:CGRectMake(profileXpos, header.bounds.origin.y+topHeight+4, profileButtonWidth, profileButtonWidth/2))
+        nameLabel = UILabel(frame:CGRectMake(profileXpos, header.bounds.origin.y+topHeight+4, profileButtonWidth, headerHeight - 8))
         nameLabel.textColor = UIColor.whiteColor()
         nameLabel.font = nameLabel.font.fontWithSize(22)
-        nameLabel.font = UIFont(name:"Avenir-Heavy",size: 25)
-        nameLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        nameLabel.font = UIFont(name:"Avenir-Heavy",size: 22)
         nameLabel.textAlignment = NSTextAlignment.Center
+//        self.nameLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "btnProfile:"))
+        setupNameLabelTitle()
+       
         header.addSubview(nameLabel)
         //        profileButton = UIButton(frame: CGRectMake(profileXpos, header.bounds.origin.y+topHeight+4, profileButtonWidth, profileButtonWidth))
         //        profileButton.backgroundColor = Bakkle.sharedInstance.theme_base
@@ -129,11 +133,11 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         infoButton.addTarget(self, action: "btnI:", forControlEvents: UIControlEvents.TouchUpInside)
         header.addSubview(infoButton)
         
-
+        
         let offerButtonWidth:CGFloat = 50
         offerButton = UIButton(frame: CGRectMake(header.bounds.origin.x+header.bounds.size.width-infoButtonWidth-offerButtonWidth, header.bounds.origin.y+topHeight, offerButtonWidth, headerHeight))
         offerButton.setImage(IconImage().offer(), forState: UIControlState.Normal)
-
+        
         offerButton.addTarget(self, action: "btnOffer:", forControlEvents: UIControlEvents.TouchUpInside)
         header.addSubview(offerButton)
         view.addSubview(header)
@@ -169,6 +173,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         
         UIApplication.sharedApplication().applicationIconBadgeNumber = 0
+        
     }
     
     func appBecameActive() {
@@ -184,29 +189,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         super.viewDidAppear(animated)
         tableView.flashScrollIndicators()
         
-        if isBuyer {
-            let seller_facebookid = seller.valueForKey("facebook_id") as! String
-            var facebookProfileImageUrlString = "http://graph.facebook.com/\(seller_facebookid)/picture?width=142&height=142"
-            let imgURL = NSURL(string: facebookProfileImageUrlString)
-            
-            if(Bakkle.sharedInstance.flavor == Bakkle.GOODWILL){
-                nameLabel.text = "GOODWILL"
-                //                profileButton.hnk_setImage(UIImage(named: "gwIcon@2x.png")!, state: UIControlState.Normal, animated: false, success: nil)
-            }
-            else{
-                var name = seller.valueForKey("display_name") as! String
-                var nameArr = split(name) {$0 == " "}
-                nameLabel.text = nameArr[0]
-                //                profileButton.hnk_setImageFromURL(imgURL!, state: UIControlState.Normal, placeholder: UIImage(named:"loading.png"), format: nil, failure: nil, success: nil)
-            }
-        }
-        else {
-            let user = chat.user
-            var facebookProfileImageUrlString = "http://graph.facebook.com/\(user.facebookID)/picture?width=142&height=142"
-            let imgURL = NSURL(string: facebookProfileImageUrlString)
-            nameLabel.text = user.firstName
-            //            profileButton.hnk_setImageFromURL(imgURL!, state: UIControlState.Normal, placeholder: UIImage(named:"loading.png"), format: nil, failure: nil, success: nil)
-        }
+        
         
         if shouldProposeOffer {
             proposeOffer()
@@ -229,6 +212,33 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             textViewDidChange(textView)
             textView.becomeFirstResponder()
         }
+    }
+    
+    func setupNameLabelTitle() {
+        if isBuyer {
+            //            let seller_facebookid = seller.valueForKey("facebook_id") as! String
+            //            var facebookProfileImageUrlString = "http://graph.facebook.com/\(seller_facebookid)/picture?width=142&height=142"
+            //            let imgURL = NSURL(string: facebookProfileImageUrlString)
+            
+            if(Bakkle.sharedInstance.flavor == Bakkle.GOODWILL){
+                nameLabel.text = "GOODWILL"
+                //                profileButton.hnk_setImage(UIImage(named: "gwIcon@2x.png")!, state: UIControlState.Normal, animated: false, success: nil)
+            }
+            else{
+                var name = seller.valueForKey("display_name") as! String
+                var nameArr = split(name) {$0 == " "}
+                nameLabel.text = nameArr[0]
+                //                profileButton.hnk_setImageFromURL(imgURL!, state: UIControlState.Normal, placeholder: UIImage(named:"loading.png"), format: nil, failure: nil, success: nil)
+            }
+        }
+        else {
+            let user = chat.user
+            var facebookProfileImageUrlString = "http://graph.facebook.com/\(user.facebookID)/picture?width=142&height=142"
+            let imgURL = NSURL(string: facebookProfileImageUrlString)
+            nameLabel.text = user.firstName
+            //            profileButton.hnk_setImageFromURL(imgURL!, state: UIControlState.Normal, placeholder: UIImage(named:"loading.png"), format: nil, failure: nil, success: nil)
+        }
+
     }
     
     func refreshChat() {
@@ -449,6 +459,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     func btnProfile(sender:UIButton!)
     {
+        
         let sb: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let vc: ProfileView = sb.instantiateViewControllerWithIdentifier("ProfileView") as! ProfileView
         vc.modalTransitionStyle = UIModalTransitionStyle.CoverVertical

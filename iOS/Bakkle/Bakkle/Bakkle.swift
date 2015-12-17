@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Reachability
 
 class Bakkle : NSObject, CLLocationManagerDelegate {
     
@@ -268,6 +269,16 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         let shortVersion: String = NSBundle.mainBundle().infoDictionary?["CFBundleShortVersionString"] as! String
         
         return (build,bundleName)
+    }
+    
+    func isInternetConnected() -> Bool {
+        let reachability: Reachability = Reachability.reachabilityForInternetConnection()
+        let networkStatus: NetworkStatus = reachability.currentReachabilityStatus()
+        if networkStatus.hashValue == 0 {
+            return false
+        }else{
+            return true
+        }
     }
     
     /* register and login using facebook */
