@@ -5930,6 +5930,9 @@
                                                     <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="15"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
+                                                    <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                                        <rect key="frame" x="99.5" y="8" width="212.5" height="20.5"/>
+                                                    </variation>
                                                 </label>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ABU-0d-c2I">
                                                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
@@ -7103,14 +7106,14 @@
                                         <exclude reference="4FW-39-Xom"/>
                                     </mask>
                                     <mask key="constraints">
-                                        <exclude reference="Beg-v3-N97"/>
-                                        <exclude reference="iqL-BC-8PB"/>
-                                        <exclude reference="u9g-a7-xmP"/>
+                                        <exclude reference="adw-yD-boN"/>
+                                        <exclude reference="gzr-IU-FYw"/>
                                         <exclude reference="eVe-Ol-00y"/>
                                         <exclude reference="ofV-ai-45g"/>
                                         <exclude reference="qfN-aB-EyK"/>
-                                        <exclude reference="adw-yD-boN"/>
-                                        <exclude reference="gzr-IU-FYw"/>
+                                        <exclude reference="Beg-v3-N97"/>
+                                        <exclude reference="iqL-BC-8PB"/>
+                                        <exclude reference="u9g-a7-xmP"/>
                                     </mask>
                                 </variation>
                                 <variation key="heightClass=regular-widthClass=compact">
@@ -7120,14 +7123,14 @@
                                         <include reference="4FW-39-Xom"/>
                                     </mask>
                                     <mask key="constraints">
-                                        <include reference="Beg-v3-N97"/>
-                                        <include reference="iqL-BC-8PB"/>
-                                        <include reference="u9g-a7-xmP"/>
+                                        <include reference="adw-yD-boN"/>
+                                        <include reference="gzr-IU-FYw"/>
                                         <include reference="eVe-Ol-00y"/>
                                         <include reference="ofV-ai-45g"/>
                                         <include reference="qfN-aB-EyK"/>
-                                        <include reference="adw-yD-boN"/>
-                                        <include reference="gzr-IU-FYw"/>
+                                        <include reference="Beg-v3-N97"/>
+                                        <include reference="iqL-BC-8PB"/>
+                                        <include reference="u9g-a7-xmP"/>
                                     </mask>
                                 </variation>
                             </view>

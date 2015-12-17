@@ -15,7 +15,8 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     var toolBar: UIToolbar!
     var textView: UITextView!
     var messageType: UISegmentedControl!
-    var profileButton: UIButton!
+    //    var profileButton: UIButton!
+    var nameLabel: UILabel!
     var sendButton: UIButton!
     var photoButton: UIButton!
     var rotating = false
@@ -102,26 +103,33 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         backButton.addTarget(self, action: "btnBack:", forControlEvents: UIControlEvents.TouchUpInside)
         header.addSubview(backButton)
         
-        let profileButtonWidth: CGFloat = 36
+        let profileButtonWidth: CGFloat = 80.0
         let profileXpos:CGFloat = (header.bounds.size.width - header.bounds.origin.x
             - profileButtonWidth) / 2
-        profileButton = UIButton(frame: CGRectMake(profileXpos, header.bounds.origin.y+topHeight+4, profileButtonWidth, profileButtonWidth))
-        profileButton.backgroundColor = Bakkle.sharedInstance.theme_base
-        profileButton.setImage(UIImage(named: "loading.png"), forState: UIControlState.Normal)
-        profileButton.imageView?.layer.cornerRadius = profileButton.imageView!.frame.size.width/2
-        profileButton.imageView?.layer.borderWidth = 1.5
-        profileButton.imageView?.layer.borderColor = UIColor.whiteColor().CGColor
-        profileButton.addTarget(self, action: "btnProfile:", forControlEvents: UIControlEvents.TouchUpInside)
-        header.addSubview(profileButton)
+        nameLabel = UILabel(frame:CGRectMake(profileXpos, header.bounds.origin.y+topHeight+4, profileButtonWidth, profileButtonWidth/2))
+        nameLabel.textColor = UIColor.whiteColor()
+        nameLabel.font = nameLabel.font.fontWithSize(22)
+        nameLabel.font = UIFont(name:"Avenir-Heavy",size: 25)
+        nameLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        nameLabel.textAlignment = NSTextAlignment.Center
+        header.addSubview(nameLabel)
+        //        profileButton = UIButton(frame: CGRectMake(profileXpos, header.bounds.origin.y+topHeight+4, profileButtonWidth, profileButtonWidth))
+        //        profileButton.backgroundColor = Bakkle.sharedInstance.theme_base
+        //        profileButton.setImage(UIImage(named: "loading.png"), forState: UIControlState.Normal)
+        //        profileButton.imageView?.layer.cornerRadius = profileButton.imageView!.frame.size.width/2
+        //        profileButton.imageView?.layer.borderWidth = 1.5
+        //        profileButton.imageView?.layer.borderColor = UIColor.whiteColor().CGColor
+        //        profileButton.addTarget(self, action: "btnProfile:", forControlEvents: UIControlEvents.TouchUpInside)
+        //        header.addSubview(profileButton)
         
-        let infoButtonWidth:CGFloat = 50
-        var infoButton = UIButton(frame: CGRectMake(header.bounds.origin.x+header.bounds.size.width-infoButtonWidth, header.bounds.origin.y+topHeight, infoButtonWidth, headerHeight))
+        let infoButtonWidth:CGFloat = 40
+        var infoButton = UIButton(frame: CGRectMake(header.bounds.origin.x+header.bounds.size.width-infoButtonWidth, header.bounds.origin.y+topHeight, infoButtonWidth, headerHeight-4))
         infoButton.setImage(UIImage(named: Bakkle.sharedInstance.flavor == Bakkle.GOODWILL ? "icon-i-blue.png" : "icon-i.png"), forState: UIControlState.Normal)
         infoButton.addTarget(self, action: "btnI:", forControlEvents: UIControlEvents.TouchUpInside)
         header.addSubview(infoButton)
         
-        let offerButtonWidth:CGFloat = 50
-        var offerButton = UIButton(frame: CGRectMake(header.bounds.origin.x+header.bounds.size.width-infoButtonWidth-offerButtonWidth, header.bounds.origin.y+topHeight, offerButtonWidth, headerHeight))
+        let offerButtonWidth:CGFloat = 40
+        var offerButton = UIButton(frame: CGRectMake(header.bounds.origin.x+header.bounds.size.width-infoButtonWidth-offerButtonWidth, header.bounds.origin.y+topHeight, offerButtonWidth, headerHeight-4))
         offerButton.setImage(IconImage().money(), forState: UIControlState.Normal)
         offerButton.addTarget(self, action: "btnOffer:", forControlEvents: UIControlEvents.TouchUpInside)
         header.addSubview(offerButton)
@@ -179,18 +187,23 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             let imgURL = NSURL(string: facebookProfileImageUrlString)
             
             if(Bakkle.sharedInstance.flavor == Bakkle.GOODWILL){
-                profileButton.hnk_setImage(UIImage(named: "gwIcon@2x.png")!, state: UIControlState.Normal, animated: false, success: nil)
+                nameLabel.text = "GOODWILL"
+                //                profileButton.hnk_setImage(UIImage(named: "gwIcon@2x.png")!, state: UIControlState.Normal, animated: false, success: nil)
             }
             else{
-                profileButton.hnk_setImageFromURL(imgURL!, state: UIControlState.Normal, placeholder: UIImage(named:"loading.png"), format: nil, failure: nil, success: nil)
+                var name = seller.valueForKey("display_name") as! String
+                var nameArr = split(name) {$0 == " "}
+                nameLabel.text = nameArr[0]
+                //                profileButton.hnk_setImageFromURL(imgURL!, state: UIControlState.Normal, placeholder: UIImage(named:"loading.png"), format: nil, failure: nil, success: nil)
             }
         }
         else {
             let user = chat.user
             var facebookProfileImageUrlString = "http://graph.facebook.com/\(user.facebookID)/picture?width=142&height=142"
             let imgURL = NSURL(string: facebookProfileImageUrlString)
-            profileButton.hnk_setImageFromURL(imgURL!, state: UIControlState.Normal, placeholder: UIImage(named:"loading.png"), format: nil, failure: nil, success: nil)
-            }
+            nameLabel.text = user.firstName
+            //            profileButton.hnk_setImageFromURL(imgURL!, state: UIControlState.Normal, placeholder: UIImage(named:"loading.png"), format: nil, failure: nil, success: nil)
+        }
         
         if shouldProposeOffer {
             proposeOffer()
@@ -287,10 +300,10 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             println("received an offer")
             var message: NSDictionary = NSDictionary()
             var messageOrigin: String = ""
-
+            
             if(dict.objectForKey("message") != nil){
                 message = dict.objectForKey("message") as! NSDictionary
-        
+                
                 let dateString = message.valueForKey("date_sent") as! String
                 let date = NSDate().dateFromString(dateString, format:  "yyyy-MM-dd HH:mm:ss")
                 let incoming = (message.valueForKey("sent_by_buyer") as! Bool) == !self.isBuyer
@@ -303,7 +316,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 if(incomingChatId == self.chat.chatId){
                     self.chat.loadedMessages.append(loadedOffer)
                 }
-
+                
                 print("[NewOfferHandler] NewOfferHandler received new offer '\(offerPrice)' from userId \(messageOrigin)");
             }
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
@@ -313,7 +326,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             }, forNotification: "newOffer")
     }
     
-
+    
     func btnAcceptOffer(sender: UIButton!) {
         var sendPayload: WSRequest = WSAcceptOfferRequest(offerId: String(sender.tag))
         sendPayload.failHandler = {
@@ -353,7 +366,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         loadMessages()
         println("Countered offer")
     }
-
+    
     func btnBack(sender:UIButton!)
     {
         self.dismissKeyboard()
@@ -535,7 +548,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 }
                 return cell
             }
-            // Message cells
+                // Message cells
             else {
                 let cellIdentifier = NSStringFromClass(MessageBubbleCell)
                 var cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier) as! MessageBubbleCell!
