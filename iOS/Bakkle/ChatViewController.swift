@@ -114,10 +114,10 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         nameLabel.font = nameLabel.font.fontWithSize(22)
         nameLabel.font = UIFont(name:"Avenir-Heavy",size: 22)
         nameLabel.textAlignment = NSTextAlignment.Center
-//        self.nameLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "btnProfile:"))
+        self.header.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "btnProfile:"))
         setupNameLabelTitle()
-       
         header.addSubview(nameLabel)
+        
         //        profileButton = UIButton(frame: CGRectMake(profileXpos, header.bounds.origin.y+topHeight+4, profileButtonWidth, profileButtonWidth))
         //        profileButton.backgroundColor = Bakkle.sharedInstance.theme_base
         //        profileButton.setImage(UIImage(named: "loading.png"), forState: UIControlState.Normal)
@@ -173,6 +173,11 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         
         UIApplication.sharedApplication().applicationIconBadgeNumber = 0
+        
+        let status = item?.valueForKey("status") as! String
+        if status != "Active" {
+            self.offerButton.enabled = false
+        }
         
     }
     

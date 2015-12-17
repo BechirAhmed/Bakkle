@@ -646,7 +646,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         case MDCSwipeDirection.Left:
             let recordend = NSDate();
             self.recordtime = recordend.timeIntervalSinceDate(recordstart);
-            Bakkle.sharedInstance.markItem("meh", item_id: self.item_id, success: {}, fail: {},duration:self.recordtime)
+            Bakkle.sharedInstance.markItem("meh", item_id: self.item_id, duration: self.recordtime, success: {}, fail: {})
             loadNext()
             break
         case MDCSwipeDirection.Right:
@@ -670,7 +670,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             let recordend = NSDate();
             self.recordtime = recordend.timeIntervalSinceDate(recordstart);
             
-            Bakkle.sharedInstance.markItem("hold", item_id: self.item_id, success: {}, fail: {},duration: self.recordtime)
+            Bakkle.sharedInstance.markItem("hold", item_id: self.item_id, duration: self.recordtime, success: {}, fail: {})
             loadNext()
             break
         case MDCSwipeDirection.Down:
@@ -683,9 +683,9 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             let confirmAction = UIAlertAction(title: "Confirm", style: .Default, handler: { action in
                 if report != nil {
                     println(report.text)
-                    Bakkle.sharedInstance.markItem("report", item_id: self.item_id, message: report.text, success: {}, fail: {},duration:self.recordtime)
+                    Bakkle.sharedInstance.markItem("report", item_id: self.item_id, message: report.text, duration: self.recordtime, success: {}, fail: {})
                 } else {
-                    Bakkle.sharedInstance.markItem("report", item_id: self.item_id, success: {}, fail: {},duration:self.recordtime)
+                    Bakkle.sharedInstance.markItem("report", item_id: self.item_id, duration: self.recordtime,success: {}, fail: {})
                 }
                 self.loadNext()
             })
@@ -847,7 +847,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             WSManager.enqueueWorkPayload(chatPayload)
             
             // mark as want
-            Bakkle.sharedInstance.markItem("want", item_id: self.item_id, success: {}, fail: {},duration: self.recordtime)
+            Bakkle.sharedInstance.markItem("want", item_id: self.item_id, duration: self.recordtime,success: {}, fail: {})
             
             self.closeStartAChat(nil)
         }
@@ -887,14 +887,14 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             WSManager.enqueueWorkPayload(chatPayload)
             
             // mark as want
-            Bakkle.sharedInstance.markItem("want", item_id: self.item_id, success: {}, fail: {},duration: self.recordtime)
+            Bakkle.sharedInstance.markItem("want", item_id: self.item_id, duration: self.recordtime, success: {}, fail: {})
             
             self.closeStartAChat(nil)
         }
     }
     
     @IBAction func saveToWatchList(sender: AnyObject) {
-        Bakkle.sharedInstance.markItem("hold", item_id: self.item_id, success: {}, fail: {},duration: self.recordtime)
+        Bakkle.sharedInstance.markItem("hold", item_id: self.item_id, duration: self.recordtime, success: {}, fail: {})
         self.closeStartAChat(nil)
     }
     
