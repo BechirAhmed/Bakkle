@@ -174,10 +174,19 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         UIApplication.sharedApplication().applicationIconBadgeNumber = 0
         
-        let status = item?.valueForKey("status") as! String
-        if status != "Active" {
-            self.offerButton.enabled = false
+        if (item != nil){
+            let status = item?.valueForKey("status") as! String
+            if status != "Active" {
+                self.offerButton.enabled = false
+            }
         }
+        if (itemData != nil){
+            let status = itemData?.valueForKey("status") as! String
+            if status != "Active" {
+                self.offerButton.enabled = false
+            }
+        }
+        
         
     }
     
