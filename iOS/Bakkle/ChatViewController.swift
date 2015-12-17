@@ -19,6 +19,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     var nameLabel: UILabel!
     var sendButton: UIButton!
     var photoButton: UIButton!
+    var offerButton: UIButton!
     var rotating = false
     var chatID: String!
     var item: NSDictionary? = nil
@@ -128,9 +129,11 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         infoButton.addTarget(self, action: "btnI:", forControlEvents: UIControlEvents.TouchUpInside)
         header.addSubview(infoButton)
         
-        let offerButtonWidth:CGFloat = 40
-        var offerButton = UIButton(frame: CGRectMake(header.bounds.origin.x+header.bounds.size.width-infoButtonWidth-offerButtonWidth, header.bounds.origin.y+topHeight, offerButtonWidth, headerHeight-4))
-        offerButton.setImage(IconImage().money(), forState: UIControlState.Normal)
+
+        let offerButtonWidth:CGFloat = 50
+        offerButton = UIButton(frame: CGRectMake(header.bounds.origin.x+header.bounds.size.width-infoButtonWidth-offerButtonWidth, header.bounds.origin.y+topHeight, offerButtonWidth, headerHeight))
+        offerButton.setImage(IconImage().offer(), forState: UIControlState.Normal)
+
         offerButton.addTarget(self, action: "btnOffer:", forControlEvents: UIControlEvents.TouchUpInside)
         header.addSubview(offerButton)
         view.addSubview(header)
@@ -517,6 +520,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 if message.incoming {
                     if status == "Accepted" {
                         cell.makeOfferLabel.text = "YOU ACCEPTED THE OFFER OF $\(offer)."
+                        self.offerButton.enabled = false
                     } else if status == "Retracted" {
                         cell.makeOfferLabel.text = "YOU REJECTED THE OFFER OF $\(offer)."
                     } else {
@@ -535,6 +539,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 } else {
                     if status == "Accepted" {
                         cell.makeOfferLabel.text = "YOUR OFFER OF $\(offer) WAS ACCEPTED."
+                        self.offerButton.enabled = false
                     } else if status == "Retracted" {
                         cell.makeOfferLabel.text = "YOUR OFFER OF $\(offer) WAS REJECTED."
                     } else {

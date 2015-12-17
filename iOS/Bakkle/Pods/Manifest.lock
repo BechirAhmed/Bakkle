@@ -21,7 +21,7 @@ PODS:
   - FontAwesomeIconFactory (2.1.1)
   - HanekeSwift (0.9.1)
   - Reachability (3.2)
-  - SocketRocket (0.4.2)
+  - SocketRocket (0.4.1)
 
 DEPENDENCIES:
   - FBSDKCoreKit
@@ -40,6 +40,6 @@ SPEC CHECKSUMS:
   FontAwesomeIconFactory: bb9ce26d3dd13044854a82d380023c8e7d3ebf1a
   HanekeSwift: 50d37bfbc4432edc649167e538c259feccb4a2bb
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
-  SocketRocket: ffe08119b00ef982f6c37052a4705a057c8494ad
+  SocketRocket: ee0b5c34182d37bb4f1f8d628bbe737718126daa
 
 COCOAPODS: 0.39.0

@@ -40,9 +40,9 @@ class IconImage {
         return factory.createImageForIcon(NIKFontAwesomeIcon.ChevronLeft)
     }
     
-    func check() -> UIImage {
+    func offer() -> UIImage {
         setup(NAV_SIZE)
-        return factory.createImageForIcon(NIKFontAwesomeIcon.Check)
+        return factory.createImageForIcon(NIKFontAwesomeIcon.Dollar)
     }
     
     func money() -> UIImage {
