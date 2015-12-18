@@ -33,6 +33,8 @@
  */
 @interface MDCSwipeToChooseView : UIView
 
+@property (nonatomic, strong) UIPageControl *pageControl;
+
 /*
  * extra view beside swipe view
  */

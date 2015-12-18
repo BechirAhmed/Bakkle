@@ -35,6 +35,8 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     var item_id = 42 //TODO: unhardcode this
     var model: String = UIDevice.currentDevice().model
     
+    private var pageController: UIPageControl!
+    
     @IBOutlet weak var menuBtn: UIButton!
     @IBOutlet weak var noNewItemsLabel: UILabel!
     @IBOutlet weak var drawer: UIView!
@@ -188,7 +190,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         
     }
     
-    func displayInstruction(view: MDCSwipeToChooseView!) {
+    func displayInstruction(s: MDCSwipeToChooseView!) {
         // disable user interaction and show instruction
         self.searchBar.userInteractionEnabled = false
         self.refineButton.userInteractionEnabled = false
@@ -198,7 +200,22 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         self.revealViewController().panGestureRecognizer().enabled = false
         
         // set up image for tutorial
-        view.imageView.image = UIImage(named: "InstructionScreen-new.png")
+//        s.imageView.image = UIImage(named: "InstructionScreen-new.png")
+        
+//        let temp = UIImageView(image: UIImage(named: "InstructionScreen-new.png"))
+        
+        pageController = UIPageControl()
+        pageController.frame = self.swipeView.frame
+        pageController.numberOfPages = 5
+        pageController.currentPage = 0;
+        pageController.insertSubview(s, atIndex: 0);
+        pageController.backgroundColor = UIColor.blackColor()
+        
+        view.addSubview(pageController)
+        view.bringSubviewToFront(pageController)
+
+        s.pageControl = pageController
+        
     }
     
     func setupNoInternetView(){
