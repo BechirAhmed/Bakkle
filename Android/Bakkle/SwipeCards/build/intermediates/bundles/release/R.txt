@@ -11,6 +11,7 @@ int id RIGHT 0x7f040004
 int id TOP 0x7f040005
 int id VERTICAL 0x7f040006
 int string app_name 0x7f020000
+int string selling 0x7f020001
 int style SwipeFling 0x7f030000
 int[] styleable SwipeFlingAdapterView { 0x7f010000, 0x7f010001, 0x7f010002, 0x7f010003, 0x7f010004 }
 int styleable SwipeFlingAdapterView_SwipeFlingStyle 0

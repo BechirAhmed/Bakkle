@@ -17,8 +17,14 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
-    <style name="GreenButton" parent="ThemeOverlay.AppCompat.Light">
-        <item name="android:background">@color/colorPrimary</item>
+    <style name="AccentButton" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@color/colorAccent</item>
+        <item name="android:textColor">@color/colorTextAndIcons</item>
+    </style>
+
+    <style name="FacebookButton" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@color/colorFacebook</item>
+        <item name="android:textColor">@color/colorTextAndIcons</item>
     </style>
 
 </resources>

@@ -3,6 +3,7 @@ package com.bakkle.bakkle;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +13,9 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.bakkle.bakkle.Models.FeedItem;
+import com.bakkle.bakkle.Models.Person;
+import com.bakkle.bakkle.Views.DividerItemDecoration;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,7 +26,9 @@ import java.util.List;
 
 public class BuyingFragment extends Fragment
 {
-    RecyclerView recyclerView;
+    RecyclerView           recyclerView;
+    SwipeRefreshLayout listContainer;
+
 
     public BuyingFragment()
     {
@@ -45,18 +51,33 @@ public class BuyingFragment extends Fragment
     {
         View view = inflater.inflate(R.layout.recycler_view, container, false);
 
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle("Buyer's Trunk");
+        ((MainActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.buying));
 
-        recyclerView = (RecyclerView) view;
+        recyclerView = (RecyclerView) view.findViewById(R.id.list);
+        listContainer = (SwipeRefreshLayout) view.findViewById(R.id.listContainer);
+
+        listContainer.setColorSchemeResources(R.color.colorPrimary, R.color.colorNope, R.color.colorHoldBlue);
+
+        listContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshBuying();
+            }
+        });
+
 
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL_LIST));
 
-        recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        Server.getInstance().getBuying(new BuyingListener(), new BuyingErrorListener());
+        refreshBuying();
 
         return view;
+    }
+
+    public void refreshBuying()
+    {
+        API.getInstance().getBuying(new BuyingListener(), new BuyingErrorListener());
     }
 
     @Override
@@ -141,7 +162,7 @@ public class BuyingFragment extends Fragment
             JSONArray image_urlsJson = item.getJSONArray("image_urls");
 
             FeedItem feedItem = new FeedItem();
-            Seller seller = new Seller();
+            Person seller = new Person();
             String[] image_urls = new String[image_urlsJson.length()];
 
             for (int k = 0; k < image_urls.length; k++) {
@@ -172,13 +193,14 @@ public class BuyingFragment extends Fragment
         return items;
     }
 
-    public class BuyingListener implements Response.Listener<JSONObject>
+    private class BuyingListener implements Response.Listener<JSONObject>
     {
         @Override
         public void onResponse(JSONObject response)
         {
             try {
-                recyclerView.setAdapter(new WatchListAndBuyingAdapter(processJson(response), getActivity()));
+                recyclerView.setAdapter(new BuyingAdapter(processJson(response), getActivity()));
+                listContainer.setRefreshing(false);
             } catch (JSONException e) {
                 Toast.makeText(getContext(), "There was error retrieving the Buyer's Trunk",
                                Toast.LENGTH_SHORT).show();
@@ -192,7 +214,7 @@ public class BuyingFragment extends Fragment
         //TODO: Move showError() in FeedFragment to MainActivity, so that it can be used by any fragment
     }
 
-    public class BuyingErrorListener implements Response.ErrorListener
+    private class BuyingErrorListener implements Response.ErrorListener
     {
 
         @Override

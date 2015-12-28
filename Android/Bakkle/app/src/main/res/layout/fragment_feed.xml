@@ -2,8 +2,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/lib-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     tools:context="com.bakkle.bakkle.FeedFragment">
 
     <FrameLayout
@@ -31,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/error_image"
                 android:layout_centerHorizontal="true"
-                android:text="There was an error! Please check your Network Connection and try again"
+                android:text="@string/network_error"
                 android:textAlignment="center"
                 android:textColor="@color/colorSecondaryText"
                 android:textSize="12sp"/>
@@ -58,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/done_image"
                 android:layout_centerHorizontal="true"
-                android:text="Nice! You reached the end of the Feed!"
+                android:text="@string/end_feed_message"
                 android:textAlignment="center"
                 android:textColor="@color/colorSecondaryText"
                 android:textSize="12sp"/>
@@ -74,7 +74,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/message"
         android:layout_centerInParent="true"
-        android:text="REFRESH"
+        android:text="@string/refresh"
         android:textColor="@color/colorSecondaryText"
         android:visibility="gone"/>
 

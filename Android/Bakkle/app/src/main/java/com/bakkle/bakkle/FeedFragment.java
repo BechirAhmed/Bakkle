@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -27,6 +28,8 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.bakkle.bakkle.Models.FeedItem;
+import com.bakkle.bakkle.Models.Person;
 import com.lorentzos.flingswipe.Direction;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
@@ -48,6 +51,8 @@ public class FeedFragment extends Fragment
     RelativeLayout         error;
     RelativeLayout         done;
     Button                 refresh;
+    FeedItem previousItem = null;
+    FloatingActionButton undoFab;
 
     @Override
     public void onResume()
@@ -89,7 +94,7 @@ public class FeedFragment extends Fragment
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
         prefs = Prefs.getInstance(getContext());
 
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle("Bakkle");
+        activity.getSupportActionBar().setTitle("Bakkle");
 
         flingContainer = (SwipeFlingAdapterView) view.findViewById(R.id.feed);
         error = (RelativeLayout) view.findViewById(R.id.error);
@@ -108,6 +113,21 @@ public class FeedFragment extends Fragment
         flingContainer.setOnItemClickListener(this);
         flingContainer.setFlingListener(this);
 
+        undoFab = (FloatingActionButton) activity.findViewById(R.id.undo);
+        undoFab.hide();
+        undoFab.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                items.add(0, previousItem);
+                adapter.notifyDataSetChanged();
+                flingContainer.refresh();
+                previousItem = null;
+                undoFab.hide();
+            }
+        });
+
         refreshFeed();
 
         return view;
@@ -119,6 +139,8 @@ public class FeedFragment extends Fragment
         FeedItem item = (FeedItem) dataObject;
         Intent intent = new Intent(getContext(), ItemDetailActivity.class);
         intent.putExtra(Constants.FEED_ITEM, item);
+        intent.putExtra(Constants.SHOW_NOPE, true);
+        intent.putExtra(Constants.SHOW_WANT, true);
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivityForResult(intent, Constants.REQUEST_CODE_VIEW_ITEM);
     }
@@ -150,6 +172,11 @@ public class FeedFragment extends Fragment
     public void onCardExit(int direction, Object dataObject)
     {
         final FeedItem item = (FeedItem) dataObject;
+        if (previousItem != null) {
+            API.getInstance()
+                    .markItem(Constants.MARK_NOPE, previousItem.getPk(),
+                              "42"); //TODO: Get actual view duration
+        }
         if (Direction.hasRight(direction)) {
             /** Show splash screen.
              *
@@ -162,15 +189,15 @@ public class FeedFragment extends Fragment
              *  If user is logged in, complete the action
              */
             showTakeActionFragment(item.getImage_urls()[0], item.getPk());
+            previousItem = null;
 
         } else if (Direction.hasLeft(direction)) {
-            Server.getInstance()
-                    .markItem(Constants.MARK_NOPE, item.getPk(),
-                              "42"); //TODO: Get actual view duration
+            previousItem = item;
         } else if (Direction.hasTop(direction)) {
-            Server.getInstance()
+            API.getInstance()
                     .markItem(Constants.MARK_HOLD, item.getPk(),
                               "42"); //TODO: Get actual view duration
+            previousItem = null;
         } else if (Direction.hasBottom(direction)) {
             final EditText input = new EditText(getContext());
             input.setSingleLine(false);
@@ -191,12 +218,19 @@ public class FeedFragment extends Fragment
                         public void onClick(DialogInterface dialog, int which)
                         {
                             String reportText = input.getText().toString();
-                            Server.getInstance()
+                            previousItem = null;
+                            API.getInstance()
                                     .markItem(Constants.MARK_REPORT, item.getPk(), "42",
                                               reportText); //TODO: Get actual view duration
                         }
                     })
                     .show();
+        }
+
+        if (previousItem != null) {
+            undoFab.show();
+        } else {
+            undoFab.hide();
         }
 
     }
@@ -261,10 +295,10 @@ public class FeedFragment extends Fragment
         refresh.setVisibility(View.GONE);
     }
 
-    private void refreshFeed()
+    public void refreshFeed() //TODO: For some reason, calling this method doesn't actually seem to refresh the feed
     {
         hideErrorAndDone();
-        Server.getInstance(getContext()).getFeed(new FeedListener(), new FeedErrorListener());
+        API.getInstance(getContext()).getFeed(new FeedListener(), new FeedErrorListener());
     }
 
     private void doneProcessing()
@@ -276,6 +310,9 @@ public class FeedFragment extends Fragment
             showDone();
             return;
         }
+
+        flingContainer.removeAllViewsInLayout();
+
         adapter = new FeedAdapter(getContext(), R.layout.feed_item, items);
         flingContainer.setAdapter(adapter);
         adapter.notifyDataSetChanged();
@@ -287,15 +324,14 @@ public class FeedFragment extends Fragment
             return null;
         }
         JSONArray jsonArray = json.getJSONArray("feed");
-        int length = jsonArray.length();
-        List<FeedItem> items = new ArrayList<>(length);
-        for (int i = 0; i < length; i++) {
+        List<FeedItem> items = new ArrayList<>();
+        for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject item = jsonArray.getJSONObject(i);
             JSONObject sellerJson = item.getJSONObject("seller");
             JSONArray image_urlsJson = item.getJSONArray("image_urls");
 
             FeedItem feedItem = new FeedItem();
-            Seller seller = new Seller();
+            Person seller = new Person();
             String[] image_urls = new String[image_urlsJson.length()];
 
             for (int k = 0; k < image_urls.length; k++) {
@@ -361,7 +397,8 @@ public class FeedFragment extends Fragment
         // Inflate the menu; this adds items to the action bar if it is present.
         inflater.inflate(R.menu.feed, menu);
 
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(
+                menu.findItem(R.id.action_search));
         searchView.onActionViewCollapsed();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener()
         {
@@ -395,8 +432,10 @@ public class FeedFragment extends Fragment
             final SeekBar priceSeekBar = (SeekBar) view.findViewById(R.id.priceBar);
             final SeekBar distanceSeekBar = (SeekBar) view.findViewById(R.id.distanceBar);
 
-            priceEditText.setText("$" + (prefs.getPriceFilter() == 100 ? "∞" : prefs.getPriceFilter()));
-            distanceEditText.setText((prefs.getDistanceFilter() == 100 ? "∞" : prefs.getDistanceFilter()) + " mi");
+            priceEditText.setText(
+                    "$" + (prefs.getPriceFilter() == 100 ? "∞" : prefs.getPriceFilter()));
+            distanceEditText.setText(
+                    (prefs.getDistanceFilter() == 100 ? "∞" : prefs.getDistanceFilter()) + " mi");
             distanceSeekBar.setProgress(prefs.getDistanceFilter());
             priceSeekBar.setProgress(prefs.getPriceFilter());
 

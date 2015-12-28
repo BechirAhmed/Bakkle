@@ -211,7 +211,7 @@ public class Prefs
 
     public String getUserImageUrl()
     {
-        return preferences.getString(Constants.IMAGE_URL, "");
+        return preferences.getString(Constants.IMAGE_URL, "https://app.bakkle.com/img/default_profile.png");
     }
 
     public void setDistanceFilter(int distance)
@@ -244,5 +244,26 @@ public class Prefs
     public void setSearchText(String text){
         editor.putString(Constants.SEARCH_TEXT, text);
         editor.commit();
+    }
+
+    public void logout()
+    {
+        editor.remove(Constants.NAME);
+        editor.remove(Constants.USER_ID);
+        editor.remove(Constants.AUTH_TOKEN);
+        editor.remove(Constants.AUTHENTICATED);
+        editor.remove(Constants.USERNAME);
+        editor.remove(Constants.FIRST_NAME);
+        editor.remove(Constants.LAST_NAME);
+        editor.remove(Constants.EMAIL);
+        editor.remove(Constants.LOCALE);
+        editor.remove(Constants.GENDER);
+        editor.remove(Constants.IMAGE_URL);
+        editor.commit();
+        setGuest(true);
+        setAuthenticated(false);
+        setLoggedIn(false);
+
+
     }
 }

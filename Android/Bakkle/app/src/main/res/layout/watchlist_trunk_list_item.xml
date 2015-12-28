@@ -6,7 +6,7 @@
     android:background="?android:attr/selectableItemBackground"
     android:orientation="horizontal">
 
-    <com.bakkle.bakkle.CircleImageView
+    <com.bakkle.bakkle.Views.CircleImageView
         android:id="@+id/product"
         android:layout_width="56dp"
         android:layout_height="56dp"

@@ -6,7 +6,7 @@
     android:background="@color/colorPrimary"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context="com.bakkle.bakkle.LoginFragment">
+    tools:context=".Profile.LoginFragment">
 
     <!-- Login progress -->
     <ProgressBar

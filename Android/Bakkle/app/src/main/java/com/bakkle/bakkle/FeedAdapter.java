@@ -5,16 +5,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.NetworkImageView;
+import com.bakkle.bakkle.Models.FeedItem;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-/**
- * Created by vanshgandhi on 12/5/15.
- */
 public class FeedAdapter extends ArrayAdapter<FeedItem>
 {
     List<FeedItem> items;
@@ -37,36 +35,29 @@ public class FeedAdapter extends ArrayAdapter<FeedItem>
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(resource, parent, false);
             holder = new ViewHolder();
-            holder.avatar   = (NetworkImageView) convertView.findViewById(R.id.avatar);
-            holder.product  = (NetworkImageView) convertView.findViewById(R.id.image);
-            holder.title    = (TextView)         convertView.findViewById(R.id.title);
-            holder.seller   = (TextView)         convertView.findViewById(R.id.seller);
-            holder.price    = (TextView)         convertView.findViewById(R.id.price);
-        }
-        else {
+            holder.product = (ImageView) convertView.findViewById(R.id.image);
+            holder.title = (TextView) convertView.findViewById(R.id.title);
+            holder.price = (TextView) convertView.findViewById(R.id.price);
+        } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        ImageLoader imageLoader = Server.getInstance().getImageLoader();
-        FeedItem item = items.get(position);
-        holder.price.setText("$" + item.getPrice());
-        holder.seller.setText(item.getSeller().getDisplay_name());
-        holder.title.setText(item.getTitle());
-//        holder.product.setDefaultImageResId(R.drawable.ic_wallpaper);
-//        holder.product.setErrorImageResId(R.drawable.ic_error);
-        holder.product.setImageUrl(item.getImage_urls()[0], imageLoader);
-        holder.avatar.setDefaultImageResId(R.drawable.ic_account_circle);
-        holder.avatar.setImageUrl("http://graph.facebook.com/" + item.getSeller().getFacebook_id() + "/picture?type=normal", imageLoader);
 
+        FeedItem item = items.get(position);
+        holder.price.setText("$".concat(item.getPrice()));
+        holder.title.setText(item.getTitle());
+
+        Picasso.with(getContext())
+                .load(item.getImage_urls()[0])
+                .centerCrop()
+                .fit()
+                .into(holder.product);
         return convertView;
     }
-
 
     static class ViewHolder
     {
         TextView  title;
-        TextView  seller;
         TextView  price;
-        NetworkImageView avatar;
-        NetworkImageView product;
+        ImageView product;
     }
 }

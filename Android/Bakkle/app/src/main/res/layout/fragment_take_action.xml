@@ -26,7 +26,7 @@
         android:textColor="@color/colorTextAndIcons"
         android:textSize="16sp"/>
 
-    <com.android.volley.toolbox.NetworkImageView
+    <ImageView
         android:id="@+id/product"
         android:layout_width="250dp"
         android:layout_height="250dp"
@@ -41,7 +41,7 @@
         android:layout_below="@id/product"
         android:layout_centerHorizontal="true"
         android:text="@string/send_message"
-        android:theme="@style/GreenButton"/>
+        android:theme="@style/AccentButton"/>
 
     <Button
         android:id="@+id/offer"
@@ -50,7 +50,7 @@
         android:layout_below="@id/message"
         android:layout_centerHorizontal="true"
         android:text="@string/make_an_offer"
-        android:theme="@style/GreenButton"/>
+        android:theme="@style/AccentButton"/>
 
     <Button
         android:id="@+id/save"

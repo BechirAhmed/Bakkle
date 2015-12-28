@@ -1,6 +1,6 @@
 [
     {
-        "outputFile": "/Users/vanshgandhi/Desktop/Bakkle/SwipeCards/build/intermediates/res/merged/androidTest/debug/values/values.xml",
+        "outputFile": "/Users/vanshgandhi/omnisite-bakkle/Android/Bakkle/SwipeCards/build/intermediates/res/merged/androidTest/debug/values/values.xml",
         "map": [
             {
                 "to": {
@@ -11,7 +11,7 @@
                     "endOffset": 611
                 },
                 "from": {
-                    "file": "/Users/vanshgandhi/Desktop/Bakkle/SwipeCards/build/intermediates/bundles/debug/res/values/values.xml",
+                    "file": "/Users/vanshgandhi/omnisite-bakkle/Android/Bakkle/SwipeCards/build/intermediates/bundles/debug/res/values/values.xml",
                     "position": {
                         "startLine": 3,
                         "startColumn": 4,
@@ -26,19 +26,38 @@
                     "startLine": 4,
                     "startColumn": 4,
                     "startOffset": 616,
-                    "endLine": 8,
-                    "endColumn": 12,
-                    "endOffset": 792
+                    "endColumn": 43,
+                    "endOffset": 655
                 },
                 "from": {
-                    "file": "/Users/vanshgandhi/Desktop/Bakkle/SwipeCards/build/intermediates/bundles/debug/res/values/values.xml",
+                    "file": "/Users/vanshgandhi/omnisite-bakkle/Android/Bakkle/SwipeCards/build/intermediates/bundles/debug/res/values/values.xml",
                     "position": {
                         "startLine": 4,
                         "startColumn": 4,
                         "startOffset": 616,
-                        "endLine": 8,
+                        "endColumn": 43,
+                        "endOffset": 655
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 5,
+                    "startColumn": 4,
+                    "startOffset": 660,
+                    "endLine": 9,
+                    "endColumn": 12,
+                    "endOffset": 836
+                },
+                "from": {
+                    "file": "/Users/vanshgandhi/omnisite-bakkle/Android/Bakkle/SwipeCards/build/intermediates/bundles/debug/res/values/values.xml",
+                    "position": {
+                        "startLine": 5,
+                        "startColumn": 4,
+                        "startOffset": 660,
+                        "endLine": 9,
                         "endColumn": 12,
-                        "endOffset": 792
+                        "endOffset": 836
                     }
                 }
             }

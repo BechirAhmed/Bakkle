@@ -1,8 +1,5 @@
 package com.bakkle.bakkle;
 
-/**
- * Created by vanshgandhi on 12/3/15.
- */
 public class Constants
 {
     public static String SHARED_PREFERENCES = "Bakkle";
@@ -43,6 +40,14 @@ public class Constants
     public static final String PK               = "pk";
     public static final String PARENT           = "parent";
     public static final String SELLING          = "selling";
+    public static final String BUYING           = "buying";
+    public static final String FEED             = "feed";
+    public static final String WATCH_LIST       = "watchlist";
+    public static final String CAMERA           = "camera";
+    public static final String INPUT_DETAILS    = "inputDetails";
+    public static final String IS_SELF_SELLER   = "isSelfSeller";
+    public static final String SELLING_ONE      = "sellingOne";
+    public static final String PROFILE          = "profile";
     public static final String CHAT_ID          = "chatId";
     public static final String SELF_BUYER       = "self_buyer";
     public static final String IMAGE_URLS       = "urls";
@@ -53,6 +58,8 @@ public class Constants
     public static final String NUM_MEH          = "numMeh";
     public static final String NUM_VIEW         = "numView";
     public static final String FEED_ITEM        = "feedItem";
+    public static final String SHOW_NOPE        = "showNope";
+    public static final String SHOW_WANT        = "showWant";
 
     public static final String SHOW_TUORIAL = "showTutorial";
 
@@ -64,10 +71,15 @@ public class Constants
     public static final String APPLICATION_ID = "sxjMPMgXvXLMAGddMk4Zy9U8PKkvGP0N8MzBjiVg";
     public static final String CLIENT_ID      = "Gz8C7dTo72cMDpo4YgUbS6z7JSUl5f4AVgZjBaqO";
 
+    public static final int REUSLT_CODE_OK            = -1;
     public static final int REQUEST_CODE_VIEW_ITEM    = 0;
     public static final int REQUEST_CODE_SEND_MESSAGE = 1;
     public static final int REQUEST_CODE_MAKE_OFFER   = 2;
     public static final int RESULT_CODE_WANT          = 3;
     public static final int RESULT_CODE_NOPE          = 4;
+    public static final int REQUEST_CODE_SIGN_IN      = 5;
+    public static final int RESULT_CODE_TOGGLED       = 6;
+    public static final int REQUEST_CODE_PROFILE      = 7;
+    public static final int REQUEST_CODE_MARK_ITEM    = 8;
 
 }

@@ -65,6 +65,7 @@ containing a value of this type.
     }
     public static final class string {
         public static final int app_name=0x7f020000;
+        public static final int selling=0x7f020001;
     }
     public static final class style {
         public static final int SwipeFling=0x7f030000;

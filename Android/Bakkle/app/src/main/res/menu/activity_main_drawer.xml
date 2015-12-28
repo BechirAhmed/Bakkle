@@ -7,28 +7,28 @@
         <item
             android:id="@+id/feed"
             android:icon="@drawable/ic_home"
-            android:title="Feed"/>
+            android:title="@string/feed"/>
         <item
             android:id="@+id/seller"
             android:icon="@drawable/ic_store"
-            android:title="Selling"/>
+            android:title="@string/selling"/>
         <item
             android:id="@+id/buyer"
             android:icon="@drawable/ic_shopping_cart"
-            android:title="Buying"/>
+            android:title="@string/buying"/>
         <item
             android:id="@+id/watch"
             android:icon="@drawable/ic_watch_later"
-            android:title="Watch List"/>
+            android:title="@string/watch_list"/>
     </group>
 
     <group
         android:checkableBehavior="none"
         android:id="@+id/secondary_options">
         <item
-            android:id="@+id/nav_share"
-            android:icon="@drawable/ic_menu_share"
-            android:title="Share"/>
+            android:id="@+id/nav_about"
+            android:icon="@drawable/ic_about"
+            android:title="@string/about"/>
     </group>
 
 </menu>

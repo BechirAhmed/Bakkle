@@ -1,8 +1,10 @@
 package com.bakkle.bakkle;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +14,10 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.bakkle.bakkle.Models.FeedItem;
+import com.bakkle.bakkle.Models.Person;
+import com.bakkle.bakkle.Profile.RegisterActivity;
+import com.bakkle.bakkle.Views.DividerItemDecoration;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,7 +28,8 @@ import java.util.List;
 
 public class WatchListFragment extends Fragment
 {
-    RecyclerView recyclerView;
+    RecyclerView       recyclerView;
+    SwipeRefreshLayout listContainer;
 
     public WatchListFragment()
     {
@@ -47,16 +54,34 @@ public class WatchListFragment extends Fragment
 
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Watch List");
 
-        recyclerView = (RecyclerView) view;
+        recyclerView = (RecyclerView) view.findViewById(R.id.list);
+        listContainer = (SwipeRefreshLayout) view.findViewById(R.id.listContainer);
 
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL_LIST));
+        listContainer.setColorSchemeResources(R.color.colorPrimary, R.color.colorNope,
+                                              R.color.colorHoldBlue);
 
-        recyclerView.setHasFixedSize(true);
+        listContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
+        {
+            @Override
+            public void onRefresh()
+            {
+                refreshWatchList();
+            }
+        });
+
+        recyclerView.addItemDecoration(
+                new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL_LIST));
+
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        Server.getInstance().getWatchList(new WatchListListener(), new WatchListErrorListener());
+        refreshWatchList();
 
         return view;
+    }
+
+    public void refreshWatchList()
+    {
+        API.getInstance().getWatchList(new WatchListListener(), new WatchListErrorListener());
     }
 
     @Override
@@ -138,7 +163,7 @@ public class WatchListFragment extends Fragment
             JSONArray image_urlsJson = item.getJSONArray("image_urls");
 
             FeedItem feedItem = new FeedItem();
-            Seller seller = new Seller();
+            Person seller = new Person();
             String[] image_urls = new String[image_urlsJson.length()];
 
             for (int k = 0; k < image_urls.length; k++) {
@@ -169,17 +194,45 @@ public class WatchListFragment extends Fragment
         return items;
     }
 
-    public class WatchListListener implements Response.Listener<JSONObject>
+    private class WatchListListener implements Response.Listener<JSONObject>
     {
         @Override
         public void onResponse(JSONObject response)
         {
             try {
-                recyclerView.setAdapter(new WatchListAndBuyingAdapter(processJson(response), getActivity()));
+                recyclerView.setAdapter(new WatchListAdapter(processJson(response), getActivity()));
+                listContainer.setRefreshing(false);
             } catch (JSONException e) {
                 Toast.makeText(getContext(), "There was error retrieving the Watch List",
                                Toast.LENGTH_SHORT).show();
                 showError();
+            }
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constants.REQUEST_CODE_VIEW_ITEM) {
+            if (resultCode == Constants.RESULT_CODE_NOPE) {
+                API.getInstance()
+                        .markItem(Constants.MARK_NOPE, data.getIntExtra(Constants.PK, -1), "42");
+            } else if (resultCode == Constants.RESULT_CODE_WANT) {
+                if (Prefs.getInstance().isGuest()) {
+                    Intent intent = new Intent(getContext(), RegisterActivity.class);
+                    startActivityForResult(intent, Constants.REQUEST_CODE_MARK_ITEM);
+                } else {
+                    API.getInstance()
+                            .markItem(Constants.MARK_WANT, data.getIntExtra(Constants.PK, -1),
+                                      "42");
+                }
+            }
+        } else if (requestCode == Constants.REQUEST_CODE_MARK_ITEM) {
+            if (resultCode == Constants.REUSLT_CODE_OK) {
+                API.getInstance()
+                        .markItem(Constants.MARK_WANT, data.getIntExtra(Constants.PK, -1),
+                                  "42");
             }
         }
     }
@@ -189,7 +242,7 @@ public class WatchListFragment extends Fragment
         //TODO: Move showError() in FeedFragment to MainActivity, so that it can be used by any fragment
     }
 
-    public class WatchListErrorListener implements Response.ErrorListener
+    private class WatchListErrorListener implements Response.ErrorListener
     {
 
         @Override

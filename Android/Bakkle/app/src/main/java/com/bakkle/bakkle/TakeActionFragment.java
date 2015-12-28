@@ -1,6 +1,5 @@
 package com.bakkle.bakkle;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,18 +9,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 
-import com.android.volley.toolbox.NetworkImageView;
+import com.bakkle.bakkle.Profile.RegisterActivity;
+import com.squareup.picasso.Picasso;
 
 public class TakeActionFragment extends Fragment
 {
-    private MainActivity                  mainActivity;
-    private NetworkImageView              product;
-    private Button                        saveButton;
-    private Button                        sendMessageButton;
-    private Button                        makeOfferButton;
-    private String                        image_url;
-    private int                           pk;
+    private MainActivity mainActivity;
+    private String       image_url;
+    private int          pk;
 
     private Prefs prefs;
 
@@ -54,12 +51,12 @@ public class TakeActionFragment extends Fragment
     {
         if (requestCode == Constants.REQUEST_CODE_SEND_MESSAGE) {
             // Make sure the request was successful
-            if (resultCode == Activity.RESULT_OK) {
+            if (resultCode == Constants.REUSLT_CODE_OK) {
                 mainActivity.updateNavHeader();
                 sendMessage();
             }
         } else if (requestCode == Constants.REQUEST_CODE_MAKE_OFFER) {
-            if (resultCode == Activity.RESULT_OK) {
+            if (resultCode == Constants.REUSLT_CODE_OK) {
                 mainActivity.updateNavHeader();
                 makeOffer();
             }
@@ -80,7 +77,7 @@ public class TakeActionFragment extends Fragment
 
     private void markWant()
     {
-        Server.getInstance().markItem(Constants.MARK_WANT, pk, "42");
+        API.getInstance().markItem(Constants.MARK_WANT, pk, "42");
     }
     
     @Override
@@ -92,7 +89,12 @@ public class TakeActionFragment extends Fragment
 
         prefs = Prefs.getInstance();
 
-        product = (NetworkImageView) view.findViewById(R.id.product);
+        ImageView product;
+        Button saveButton;
+        Button sendMessageButton;
+        Button makeOfferButton;
+
+        product = (ImageView) view.findViewById(R.id.product);
         sendMessageButton = (Button) view.findViewById(R.id.message);
         makeOfferButton = (Button) view.findViewById(R.id.offer);
         saveButton = (Button) view.findViewById(R.id.save);
@@ -103,7 +105,8 @@ public class TakeActionFragment extends Fragment
             public void onClick(View v)
             {
                 if (!prefs.isLoggedIn()) {
-                    startActivityForResult(new Intent(getContext(), RegisterActivity.class), Constants.REQUEST_CODE_SEND_MESSAGE);
+                    startActivityForResult(new Intent(getContext(), RegisterActivity.class),
+                                           Constants.REQUEST_CODE_SEND_MESSAGE);
                 } else {
                     sendMessage();
                 }
@@ -116,7 +119,8 @@ public class TakeActionFragment extends Fragment
             public void onClick(View v)
             {
                 if (!prefs.isLoggedIn()) {
-                    startActivityForResult(new Intent(getContext(), RegisterActivity.class), Constants.REQUEST_CODE_MAKE_OFFER);
+                    startActivityForResult(new Intent(getContext(), RegisterActivity.class),
+                                           Constants.REQUEST_CODE_MAKE_OFFER);
                 } else {
                     makeOffer();
                 }
@@ -128,12 +132,13 @@ public class TakeActionFragment extends Fragment
             @Override
             public void onClick(View v)
             {
-                Server.getInstance().markItem(Constants.MARK_HOLD, pk, "42"); //TODO: Get actual view duration
+                API.getInstance()
+                        .markItem(Constants.MARK_HOLD, pk, "42"); //TODO: Get actual view duration
                 mainActivity.onBackPressed();
             }
         });
 
-        product.setImageUrl(image_url, Server.getInstance().getImageLoader());
+        Picasso.with(getContext()).load(image_url).centerCrop().fit().into(product);
 
         return view;
     }

@@ -9,12 +9,12 @@
     tools:context="com.bakkle.bakkle.ItemDetailActivity"
     tools:showIn="@layout/activity_item_detail">
 
-    <com.bakkle.bakkle.SqaureViewPager
+    <com.bakkle.bakkle.Views.SqaureViewPager
         android:id="@+id/images"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    </com.bakkle.bakkle.SqaureViewPager>
+    </com.bakkle.bakkle.Views.SqaureViewPager>
 
     <com.viewpagerindicator.CirclePageIndicator
         android:id="@+id/indicator"
@@ -32,7 +32,7 @@
         android:layout_below="@+id/images"
         android:background="@color/colorPrimaryLight">
 
-        <com.bakkle.bakkle.CircleImageView
+        <com.bakkle.bakkle.Views.CircleImageView
             android:id="@+id/prof_pic"
             android:layout_width="@dimen/avatar_width"
             android:layout_height="@dimen/avatar_height"
