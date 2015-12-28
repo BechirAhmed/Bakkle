@@ -1,33 +1,30 @@
 <resources>
 
     <!-- Base application theme. -->
-
-    <style name="AppTheme" parent="MaterialDrawerTheme.Light.DarkToolbar">
-        <item name="material_drawer_background">@color/gray</item>
-        <item name="material_drawer_primary_text">@color/white</item>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="AppCompatTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/green</item>
-        <item name="colorPrimaryDark">@color/dark_green</item>
-        <item name="colorAccent">@color/green</item>
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppThemeAlt" parent="@android:style/Theme.Holo.Light.DarkActionBar">
-        <item name="android:windowContentOverlay">@null</item>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+    <style name="AccentButton" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@color/colorAccent</item>
+        <item name="android:textColor">@color/colorTextAndIcons</item>
     </style>
 
-    <style name="textStyle" parent="AppTheme">
-        <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">20sp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textAllCaps">true</item>
+    <style name="FacebookButton" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@color/colorFacebook</item>
+        <item name="android:textColor">@color/colorTextAndIcons</item>
     </style>
 
-    <style name="textStyleGreen" parent="AppTheme">
-        <item name="android:textColor">@color/green</item>
-        <item name="android:textSize">20sp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textAllCaps">true</item>
-    </style>
 </resources>

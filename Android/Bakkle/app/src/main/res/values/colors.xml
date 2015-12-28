@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="green">#36B454</color>
-    <color name="dark_green">#218F3B</color>
+    <color name="colorPrimary">#4CAF50</color>
+    <color name="colorPrimaryDark">#388E3C</color>
+    <color name="colorPrimaryLight">#C8E6C9</color>
+    <color name="colorAccent">#8BC34A</color>
+    <color name="colorPrimaryText">#212121</color>
+    <color name="colorSecondaryText">#727272</color>
+    <color name="colorDivider">#B6B6B6</color>
+    <color name="colorCardAndDialogDark">#424242</color>
+    <color name="colorDarkBackground">#303030</color>
+    <color name="colorTextAndIcons">#FFFFFF</color>
+    <color name="colorFacebook">#3B5998</color>
+    <color name="colorNope">#FFD50000</color>
+    <color name="colorHoldBlue">#1976D2</color>
     <color name="white">#FFFFFF</color>
-    <color name="facebook_blue">#3B5998</color>
-    <color name="brown">#3D3D3D</color>
-    <color name="light_green">#D6F5DF</color>
-    <color name="exterior_green">#99E6AF</color>
-    <color name="interior_green">@color/light_green</color>
-    <color name="blue">#00A0FF</color>
-    <color name="red">#E9393D</color>
-    <color name="black">#000000</color>
-    <color name="gray">#323232</color>
 </resources>

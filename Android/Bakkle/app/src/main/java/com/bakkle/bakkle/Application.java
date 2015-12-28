@@ -1,11 +1,10 @@
 package com.bakkle.bakkle;
 
-import com.bakkle.bakkle.Helpers.Constants;
 import com.parse.Parse;
 import com.parse.ParseInstallation;
 
 /**
- * Created by vanshgandhi on 10/16/15.
+ * Created by vanshgandhi on 12/3/15.
  */
 public class Application extends android.app.Application
 {
