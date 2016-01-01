@@ -129,8 +129,8 @@
                 android:ellipsize="none"
                 android:gravity="end"
                 android:maxLines="1"
-                android:textColor="@color/colorSecondaryText"
-                android:textSize="14sp"/>
+                android:textColor="@color/colorTextAndIcons"
+                android:textSize="18sp"/>
         </LinearLayout>
 
     </LinearLayout>

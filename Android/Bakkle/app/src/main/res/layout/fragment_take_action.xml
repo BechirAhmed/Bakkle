@@ -44,15 +44,6 @@
         android:theme="@style/AccentButton"/>
 
     <Button
-        android:id="@+id/offer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/message"
-        android:layout_centerHorizontal="true"
-        android:text="@string/make_an_offer"
-        android:theme="@style/AccentButton"/>
-
-    <Button
         android:id="@+id/save"
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="wrap_content"

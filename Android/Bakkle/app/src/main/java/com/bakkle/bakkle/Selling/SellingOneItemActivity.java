@@ -15,7 +15,6 @@ import com.bakkle.bakkle.Constants;
 import com.bakkle.bakkle.GetFeedItem;
 import com.bakkle.bakkle.Models.FeedItem;
 import com.bakkle.bakkle.R;
-import com.bakkle.bakkle.SectionsPagerAdapter;
 
 public class SellingOneItemActivity extends AppCompatActivity implements GetFeedItem
 {

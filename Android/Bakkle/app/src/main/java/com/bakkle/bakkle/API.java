@@ -102,9 +102,11 @@ public class API
     {
         String location = prefs.getLatitude() + "," + prefs.getLongitude();
         String url = url_base + url_feed;
+        int distance = prefs.getDistanceFilter() == 100 ? 101 : prefs.getDistanceFilter();
+        int price = prefs.getPriceFilter() == 100 ? 101 : prefs.getPriceFilter();
 
         try {
-            url += "?auth_token=" + URLEncoder.encode(prefs.getAuthToken(), "UTF-8") + "&device_uuid=" + URLEncoder.encode(prefs.getUuid(), "UTF-8") + "&filter_distance=" + prefs.getDistanceFilter() + "&filter_price=" + prefs.getPriceFilter() + "&search_text=" + URLEncoder.encode(prefs.getSearchText(), "UTF-8") + "&user_location=" + URLEncoder.encode(location, "UTF-8");
+            url += "?auth_token=" + URLEncoder.encode(prefs.getAuthToken(), "UTF-8") + "&device_uuid=" + URLEncoder.encode(prefs.getUuid(), "UTF-8") + "&filter_distance=" + distance + "&filter_price=" + price + "&search_text=" + URLEncoder.encode(prefs.getSearchText(), "UTF-8") + "&user_location=" + URLEncoder.encode(location, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             Toast.makeText(context, "There was error retrieving the feed", Toast.LENGTH_SHORT).show();
         }

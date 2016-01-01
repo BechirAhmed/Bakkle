@@ -1,12 +1,16 @@
 package com.bakkle.bakkle;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -20,7 +24,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
-import com.android.volley.toolbox.ImageLoader;
 import com.bakkle.bakkle.Profile.ProfileActivity;
 import com.bakkle.bakkle.Selling.SellingFragment;
 import com.google.android.gms.common.ConnectionResult;
@@ -31,18 +34,21 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class MainActivity extends AppCompatActivity
         implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
                    NavigationView.OnNavigationItemSelectedListener,
                    FeedFragment.OnFragmentInteractionListener
 {
-    DrawerLayout    drawer;
-    NavigationView  navigationView;
-    Toolbar         toolbar;
-    View            navHeader;
-    GoogleApiClient googleApiClient;
-    Location        lastLocation;
-    Prefs           prefs;
+    DrawerLayout         drawer;
+    NavigationView       navigationView;
+    Toolbar              toolbar;
+    View                 navHeader;
+    GoogleApiClient      googleApiClient;
+    Location             lastLocation;
+    Prefs                prefs;
     FloatingActionButton undoFab;
 
     @Override
@@ -57,6 +63,8 @@ public class MainActivity extends AppCompatActivity
         prefs = Prefs.getInstance(this);
 
         setupNavDrawer(toolbar);
+
+        requestLocationPermission();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener()
@@ -73,19 +81,80 @@ public class MainActivity extends AppCompatActivity
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
+    }
 
-        if (prefs.isAuthenticated()) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.content_frame, FeedFragment.newInstance(), Constants.FEED)
-                    .commit();
-            navigationView.getMenu().getItem(0).setChecked(true);
-
-            ((TextView) navHeader.findViewById(R.id.name)).setText(prefs.getName());
+    private void requestLocationPermission()
+    {
+        int permissionCheck = ContextCompat.checkSelfPermission(this,
+                                                                Manifest.permission.ACCESS_FINE_LOCATION);
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                                              new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
+                                              Constants.REQUEST_CODE_ACCESS_FINE_LOCATION);
         } else {
-            API.getInstance(getApplicationContext()).getGuestUserId(new GuestIdResponseListener());
-            ((TextView) navHeader.findViewById(R.id.name)).setText(R.string.guest_user);
-        }
+            if (prefs.isAuthenticated()) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.content_frame, FeedFragment.newInstance(), Constants.FEED)
+                        .commit();
 
+                navigationView.getMenu().getItem(0).setChecked(true);
+
+                ((TextView) navHeader.findViewById(R.id.name)).setText(prefs.getName());
+            } else {
+                API.getInstance(getApplicationContext())
+                        .getGuestUserId(new GuestIdResponseListener());
+                ((TextView) navHeader.findViewById(R.id.name)).setText(R.string.guest_user);
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[],
+                                           final int[] grantResults)
+    {
+        switch (requestCode) {
+            case Constants.REQUEST_CODE_ACCESS_FINE_LOCATION: {
+                new Timer().schedule(new TimerTask()
+                { //This is a workaround for a bug/crash in Android
+                    @Override
+                    public void run()
+                    {
+                        if (prefs.isAuthenticated()) {
+                            getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.content_frame, FeedFragment.newInstance(),
+                                             Constants.FEED)
+                                    .commit();
+                            runOnUiThread(new Runnable()
+                            {
+                                @Override
+                                public void run()
+                                {
+                                    navigationView.getMenu().getItem(0).setChecked(true);
+                                }
+                            });
+
+                            ((TextView) navHeader.findViewById(R.id.name)).setText(prefs.getName());
+                        } else {
+                            API.getInstance(getApplicationContext())
+                                    .getGuestUserId(new GuestIdResponseListener());
+                            ((TextView) navHeader.findViewById(R.id.name)).setText(
+                                    R.string.guest_user);
+                        }
+
+                        if (!(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                            FeedFragment fragment = (FeedFragment) (getSupportFragmentManager().findFragmentByTag(
+                                    Constants.FEED));
+                            if (fragment != null) {
+                                fragment.showLocationError();
+                            }
+                        }
+                    }
+                }, 0);
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
     }
 
     protected void onStart()
@@ -150,7 +219,6 @@ public class MainActivity extends AppCompatActivity
     {
         TextView name = (TextView) navHeader.findViewById(R.id.name);
         ImageView picture = (ImageView) navHeader.findViewById(R.id.prof_pic);
-        ImageLoader imageLoader = API.getInstance(getApplication()).getImageLoader();
 
         name.setText(prefs.getName());
         Picasso.with(this)
@@ -259,9 +327,17 @@ public class MainActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == Constants.REQUEST_CODE_PROFILE && resultCode == Constants.RESULT_CODE_TOGGLED) {
+        if (requestCode == Constants.REQUEST_CODE_PROFILE && resultCode == Constants.RESULT_CODE_NOW_SIGNED_OUT) {
+            updateNavHeader();
             API.getInstance(getApplicationContext()).getGuestUserId(new GuestIdResponseListener());
             ((TextView) navHeader.findViewById(R.id.name)).setText(R.string.guest_user);
+        } else if (requestCode == Constants.REQUEST_CODE_PROFILE && resultCode == Constants.RESULT_CODE_NOW_SIGNED_IN) {
+            updateNavHeader();
+            FeedFragment fragment = (FeedFragment) getSupportFragmentManager().findFragmentByTag(
+                    Constants.FEED);
+            if (fragment != null) {
+                fragment.refreshFeed();
+            }
         }
     }
 

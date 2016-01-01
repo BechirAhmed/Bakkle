@@ -63,5 +63,7 @@
     <string name="title_activity_about">AboutActivity</string>
     <string name="title_activity_chat">ChatActivity</string>
     <string name="view_item">View Item</string>
+    <string name="location_error_text">Location Access is needed for Bakkle to function properly and display items that are near you</string>
+    <string name="grant_location_permission">Grant Location Permission</string>
 
 </resources>

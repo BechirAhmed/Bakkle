@@ -50,7 +50,9 @@ public class FeedFragment extends Fragment
     Prefs                  prefs;
     RelativeLayout         error;
     RelativeLayout         done;
+    RelativeLayout         locationError;
     Button                 refresh;
+    Button                 grantLocation;
     FeedItem previousItem = null;
     FloatingActionButton undoFab;
 
@@ -99,7 +101,9 @@ public class FeedFragment extends Fragment
         flingContainer = (SwipeFlingAdapterView) view.findViewById(R.id.feed);
         error = (RelativeLayout) view.findViewById(R.id.error);
         done = (RelativeLayout) view.findViewById(R.id.done);
+        locationError = (RelativeLayout) view.findViewById(R.id.location_error);
         refresh = (Button) view.findViewById(R.id.refresh);
+        grantLocation = (Button) view.findViewById(R.id.grant_location_button);
 
         refresh.setOnClickListener(new View.OnClickListener()
         {
@@ -188,7 +192,7 @@ public class FeedFragment extends Fragment
              *
              *  If user is logged in, complete the action
              */
-            showTakeActionFragment(item.getImage_urls()[0], item.getPk());
+            showTakeActionFragment(item);
             previousItem = null;
 
         } else if (Direction.hasLeft(direction)) {
@@ -265,10 +269,10 @@ public class FeedFragment extends Fragment
                 .setAlpha(scrollProgressPercentVertical > 0 ? scrollProgressPercentVertical : 0);
     }
 
-    private void showTakeActionFragment(String image_url, int pk)
+    private void showTakeActionFragment(FeedItem feedItem)
     {
         getFragmentManager().beginTransaction()
-                .add(R.id.drawer_layout, TakeActionFragment.newInstance(image_url, pk))
+                .add(R.id.drawer_layout, TakeActionFragment.newInstance(feedItem))
                 .addToBackStack(null)
                 .commit();
 
@@ -276,23 +280,33 @@ public class FeedFragment extends Fragment
         activity.getDrawer().setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
 
-    private void showError()
+    public void showError()
     {
         error.setVisibility(View.VISIBLE);
         refresh.setVisibility(View.VISIBLE);
     }
 
-    private void showDone()
+    public void showDone()
     {
         done.setVisibility(View.VISIBLE);
         refresh.setVisibility(View.VISIBLE);
     }
 
-    private void hideErrorAndDone()
+    public void showLocationError()
+    {
+        hideErrorAndDone();
+        locationError.setVisibility(View.VISIBLE);
+        grantLocation.setVisibility(View.VISIBLE);
+
+    }
+
+    public void hideErrorAndDone()
     {
         error.setVisibility(View.GONE);
+        locationError.setVisibility(View.GONE);
         done.setVisibility(View.GONE);
         refresh.setVisibility(View.GONE);
+        grantLocation.setVisibility(View.GONE);
     }
 
     public void refreshFeed() //TODO: For some reason, calling this method doesn't actually seem to refresh the feed

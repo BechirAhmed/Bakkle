@@ -71,15 +71,18 @@ public class Constants
     public static final String APPLICATION_ID = "sxjMPMgXvXLMAGddMk4Zy9U8PKkvGP0N8MzBjiVg";
     public static final String CLIENT_ID      = "Gz8C7dTo72cMDpo4YgUbS6z7JSUl5f4AVgZjBaqO";
 
-    public static final int REUSLT_CODE_OK            = -1;
-    public static final int REQUEST_CODE_VIEW_ITEM    = 0;
-    public static final int REQUEST_CODE_SEND_MESSAGE = 1;
-    public static final int REQUEST_CODE_MAKE_OFFER   = 2;
-    public static final int RESULT_CODE_WANT          = 3;
-    public static final int RESULT_CODE_NOPE          = 4;
-    public static final int REQUEST_CODE_SIGN_IN      = 5;
-    public static final int RESULT_CODE_TOGGLED       = 6;
-    public static final int REQUEST_CODE_PROFILE      = 7;
-    public static final int REQUEST_CODE_MARK_ITEM    = 8;
+    public static final int REUSLT_CODE_OK                      = -1;
+    public static final int REQUEST_CODE_VIEW_ITEM              = 0;
+    public static final int REQUEST_CODE_SEND_MESSAGE           = 1;
+    public static final int REQUEST_CODE_MAKE_OFFER             = 2;
+    public static final int RESULT_CODE_WANT                    = 3;
+    public static final int RESULT_CODE_NOPE                    = 4;
+    public static final int REQUEST_CODE_SIGN_IN                = 5;
+    public static final int RESULT_CODE_NOW_SIGNED_OUT          = 6;
+    public static final int REQUEST_CODE_PROFILE                = 7;
+    public static final int REQUEST_CODE_MARK_ITEM              = 8;
+    public static final int REQUEST_CODE_ACCESS_FINE_LOCATION   = 9;
+    public static final int REQUEST_CODE_ACCESS_COARSE_LOCATION = 10;
+    public static final int RESULT_CODE_NOW_SIGNED_IN           = 11;
 
 }
