@@ -48,7 +48,6 @@ public class SellingOneItemActivity extends AppCompatActivity implements GetFeed
             @Override
             public void onClick(View view)
             {
-                //TODO: Start AddItem Activity
                 Snackbar.make(view, "This feature is coming soon!", Snackbar.LENGTH_SHORT).show();
             }
         });

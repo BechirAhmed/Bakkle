@@ -63,6 +63,7 @@ public class TakeActionFragment extends Fragment
         markWant();
         Intent intent = new Intent(getContext(), ChatActivity.class);
         intent.putExtra(Constants.FEED_ITEM, feedItem);
+        intent.putExtra(Constants.NAME, feedItem.getSeller().getDisplay_name());
         startActivity(intent);
         getFragmentManager().popBackStack();
     }

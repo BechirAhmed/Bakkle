@@ -26,7 +26,6 @@ public class RegisterActivity extends AppCompatActivity
         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new SignupLoginChooser()).commit();
     }
 
-    //TODO: On Activity Result, change the nav header, update the feed, make/send offer as expected
 
     @Override
     public void onFragmentInteraction(Uri uri)

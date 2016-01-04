@@ -2,10 +2,12 @@ package com.bakkle.bakkle;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,9 +28,10 @@ import java.util.List;
 
 public class BuyingFragment extends Fragment
 {
-    RecyclerView           recyclerView;
+    RecyclerView       recyclerView;
     SwipeRefreshLayout listContainer;
-
+    BuyingAdapter      buyingAdapter;
+    List<FeedItem>     items;
 
     public BuyingFragment()
     {
@@ -45,30 +48,86 @@ public class BuyingFragment extends Fragment
         super.onCreate(savedInstanceState);
     }
 
+    //TODO: Add ability to swipe to delete an item from Buying (don't want to use the thumbs up/down button)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.recycler_view, container, false);
+        final View view = inflater.inflate(R.layout.recycler_view, container, false);
 
         ((MainActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.buying));
+
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(
+                0, ItemTouchHelper.LEFT)
+        {
+
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
+                                  RecyclerView.ViewHolder target)
+            {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction)
+            {
+                //TODO: Swipe to delete
+                final int position = viewHolder.getAdapterPosition();
+                final FeedItem deletedItem = items.remove(position);
+                buyingAdapter.notifyItemRemoved(position);
+
+                final Snackbar snackbar = Snackbar.make(view,
+                                                        deletedItem.getTitle().concat(" has been deleted from Buying"),
+                                                        Snackbar.LENGTH_LONG)
+                        .setAction("Undo", new View.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(View v)
+                            {
+                                items.add(position, deletedItem);
+                                buyingAdapter.notifyItemInserted(position);
+                            }
+                        })
+                        .setCallback(new Snackbar.Callback()
+                        {
+                            @Override
+                            public void onDismissed(Snackbar snackbar, int event)
+                            {
+                                if (event == DISMISS_EVENT_ACTION) {
+                                    Snackbar.make(view, deletedItem.getTitle().concat(" has been restored to Buying"),
+                                                  Snackbar.LENGTH_SHORT).show();
+                                    return; //If an action was used to dismiss, the user wants to undo the deletion, so we do not need to continue
+                                }
+                                API.getInstance()
+                                        .markItem(Constants.MARK_NOPE, deletedItem.getPk(), "42");
+                            }
+                        });
+                snackbar.show();
+            }
+        };
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.list);
         listContainer = (SwipeRefreshLayout) view.findViewById(R.id.listContainer);
 
-        listContainer.setColorSchemeResources(R.color.colorPrimary, R.color.colorNope, R.color.colorHoldBlue);
+        listContainer.setColorSchemeResources(R.color.colorPrimary, R.color.colorNope,
+                                              R.color.colorHoldBlue);
 
-        listContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        listContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
+        {
             @Override
-            public void onRefresh() {
+            public void onRefresh()
+            {
                 refreshBuying();
             }
         });
 
-
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL_LIST));
+        recyclerView.addItemDecoration(
+                new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL_LIST));
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        itemTouchHelper.attachToRecyclerView(recyclerView);
 
         refreshBuying();
 
@@ -199,7 +258,9 @@ public class BuyingFragment extends Fragment
         public void onResponse(JSONObject response)
         {
             try {
-                recyclerView.setAdapter(new BuyingAdapter(processJson(response), getActivity()));
+                items = processJson(response);
+                buyingAdapter = new BuyingAdapter(items, getContext());
+                recyclerView.setAdapter(buyingAdapter);
                 listContainer.setRefreshing(false);
             } catch (JSONException e) {
                 Toast.makeText(getContext(), "There was error retrieving the Buyer's Trunk",

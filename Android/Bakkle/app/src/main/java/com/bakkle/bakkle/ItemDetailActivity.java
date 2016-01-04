@@ -1,5 +1,6 @@
 package com.bakkle.bakkle;
 
+import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -58,13 +59,32 @@ public class ItemDetailActivity extends AppCompatActivity
         descriptionTextView.setMovementMethod(new ScrollingMovementMethod());
 
         sellerTextView.setText(item.getSeller().getDisplay_name());
-        distanceTextView.setText("1 mile"); //TODO: Get Distance!
+
+        String itemLocation = item.getLocation();
+        String[] latLong = itemLocation.split(",");
+        String lat = latLong[0];
+        String longitude = latLong[1];
+        float userLat = Prefs.getInstance().getLatitude();
+        float userLong = Prefs.getInstance().getLongitude();
+        Location loc1 = new Location("");
+        loc1.setLatitude(userLat);
+        loc1.setLongitude(userLong);
+        Location loc2 = new Location("");
+        loc2.setLatitude(Double.valueOf(lat));
+        loc2.setLongitude(Double.valueOf(longitude));
+        double distanceInMiles = loc1.distanceTo(loc2) * 0.00062137;
+        distanceTextView.setText(String.valueOf(Math.round(distanceInMiles)).concat(" miles"));
+
         titleTextView.setText(item.getTitle());
         priceTextView.setText("$".concat(item.getPrice()));
         descriptionTextView.setText(item.getDescription());
 
-        Picasso.with(this).load("http://graph.facebook.com/" + item.getSeller()
-                .getFacebook_id() + "/picture?type=normal").fit().centerCrop().into(profilePictureImageView);
+        Picasso.with(this)
+                .load("http://graph.facebook.com/" + item.getSeller()
+                        .getFacebook_id() + "/picture?type=normal")
+                .fit()
+                .centerCrop()
+                .into(profilePictureImageView);
 
         if (getIntent().getBooleanExtra(Constants.SHOW_NOPE, false)) {
             fabNope.setOnClickListener(new View.OnClickListener()
@@ -86,7 +106,8 @@ public class ItemDetailActivity extends AppCompatActivity
                 @Override
                 public void onClick(View view)
                 {
-                    Snackbar.make(view, "Item moved to Buying", Snackbar.LENGTH_LONG); //TODO: Make the snackbar have an undo button
+                    Snackbar.make(view, "Item moved to Buying",
+                                  Snackbar.LENGTH_LONG); //TODO: Make the snackbar have an undo button
                     setResult(Constants.RESULT_CODE_WANT);
                     finish();
                 }
@@ -94,7 +115,6 @@ public class ItemDetailActivity extends AppCompatActivity
         } else {
             fabWant.setVisibility(View.GONE);
         }
-
 
     }
 

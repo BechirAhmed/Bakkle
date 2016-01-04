@@ -48,8 +48,6 @@
     <string name="title_activity_profile">ProfileActivity</string>
     <string name="title_activity_add_item">AddItemActivity</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_selling_one_item">SellingOneItemActivity</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="network_error">There was an error! Please check your Network Connection and try again</string>

@@ -55,6 +55,7 @@ public class FeedFragment extends Fragment
     Button                 grantLocation;
     FeedItem previousItem = null;
     FloatingActionButton undoFab;
+    boolean              shouldShowLocationError = false;
 
     @Override
     public void onResume()
@@ -292,9 +293,12 @@ public class FeedFragment extends Fragment
         refresh.setVisibility(View.VISIBLE);
     }
 
-    public void showLocationError()
+    public void showLocationError() //TODO: This method doesn't seem to actually show the error. Nor the button.
     {
         hideErrorAndDone();
+        items.clear(); //This is to make sure the cards are not displayed without location
+        adapter.notifyDataSetChanged();
+        flingContainer.refresh(); //Remove cards from layout view
         locationError.setVisibility(View.VISIBLE);
         grantLocation.setVisibility(View.VISIBLE);
 
@@ -311,8 +315,12 @@ public class FeedFragment extends Fragment
 
     public void refreshFeed() //TODO: For some reason, calling this method doesn't actually seem to refresh the feed
     {
-        hideErrorAndDone();
-        API.getInstance(getContext()).getFeed(new FeedListener(), new FeedErrorListener());
+        if (shouldShowLocationError) {
+            showLocationError();
+        } else {
+            hideErrorAndDone();
+            API.getInstance(getContext()).getFeed(new FeedListener(), new FeedErrorListener());
+        }
     }
 
     private void doneProcessing()
@@ -327,7 +335,7 @@ public class FeedFragment extends Fragment
 
         flingContainer.removeAllViewsInLayout();
 
-        adapter = new FeedAdapter(getContext(), R.layout.feed_item, items);
+        adapter = new FeedAdapter(getActivity(), R.layout.feed_item, items);
         flingContainer.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }

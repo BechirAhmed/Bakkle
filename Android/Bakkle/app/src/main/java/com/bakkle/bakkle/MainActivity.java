@@ -142,10 +142,17 @@ public class MainActivity extends AppCompatActivity
                         }
 
                         if (!(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                            FeedFragment fragment = (FeedFragment) (getSupportFragmentManager().findFragmentByTag(
+                            final FeedFragment fragment = (FeedFragment) (getSupportFragmentManager().findFragmentByTag(
                                     Constants.FEED));
                             if (fragment != null) {
-                                fragment.showLocationError();
+                                runOnUiThread(new Runnable()
+                                {
+                                    @Override
+                                    public void run()
+                                    {
+                                        fragment.showLocationError();
+                                    }
+                                });
                             }
                         }
                     }
