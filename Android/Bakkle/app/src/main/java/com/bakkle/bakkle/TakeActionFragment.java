@@ -19,7 +19,7 @@ import com.squareup.picasso.Picasso;
 public class TakeActionFragment extends Fragment
 {
     private MainActivity mainActivity;
-    private FeedItem feedItem;
+    private FeedItem     feedItem;
 
     private Prefs prefs;
 
@@ -110,12 +110,17 @@ public class TakeActionFragment extends Fragment
             public void onClick(View v)
             {
                 API.getInstance()
-                        .markItem(Constants.MARK_HOLD, feedItem.getPk(), "42"); //TODO: Get actual view duration
+                        .markItem(Constants.MARK_HOLD, feedItem.getPk(),
+                                  "42"); //TODO: Get actual view duration
                 mainActivity.onBackPressed();
             }
         });
 
-        Picasso.with(getContext()).load(feedItem.getImage_urls()[0]).centerCrop().fit().into(product);
+        Picasso.with(getContext())
+                .load(feedItem.getImage_urls()[0])
+                .centerCrop()
+                .fit()
+                .into(product);
 
         return view;
     }

@@ -11,8 +11,8 @@ public class Person implements Serializable
     String display_name;
     String description;
     String facebook_id;
-    int pk;
-    int flavor;
+    int    pk;
+    int    flavor;
     String user_location;
 
     public Person()
@@ -22,7 +22,11 @@ public class Person implements Serializable
 
     public String getAvatar_image_url()
     {
-        return avatar_image_url;
+        if (avatar_image_url != null && !avatar_image_url.equals("")) {
+            return avatar_image_url;
+        } else {
+            return "https://app.bakkle.com/img/default_profile.png";
+        }
     }
 
     public void setAvatar_image_url(String avatar_image_url)

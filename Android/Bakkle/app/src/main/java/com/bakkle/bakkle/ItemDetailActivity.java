@@ -78,10 +78,10 @@ public class ItemDetailActivity extends AppCompatActivity
         titleTextView.setText(item.getTitle());
         priceTextView.setText("$".concat(item.getPrice()));
         descriptionTextView.setText(item.getDescription());
+        //"http://graph.facebook.com/" + item.getSeller().getFacebook_id() + "/picture?type=normal"
 
         Picasso.with(this)
-                .load("http://graph.facebook.com/" + item.getSeller()
-                        .getFacebook_id() + "/picture?type=normal")
+                .load(item.getSeller().getAvatar_image_url())
                 .fit()
                 .centerCrop()
                 .into(profilePictureImageView);

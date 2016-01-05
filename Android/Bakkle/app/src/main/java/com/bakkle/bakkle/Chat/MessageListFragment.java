@@ -111,8 +111,12 @@ public class MessageListFragment extends Fragment
                 continue;
             }
             buyer.setDisplay_name(buyerJson.getString("display_name"));
-            buyer.setAvatar_image_url(buyerJson.getString("avatar_image_url"));
             buyer.setFacebook_id(buyerJson.getString("facebook_id"));
+
+            buyer.setAvatar_image_url(buyer.getFacebook_id()
+                                              .matches(
+                                                      "[0-9]+") ? "https://graph.facebook.com/" + buyer
+                    .getFacebook_id() + "/picture?type=normal" : null);
             buyer.setPk(buyerJson.getInt("pk"));
             buyer.setUser_location(buyerJson.getString("user_location"));
             buyerAndChatIds.add(new BuyerAndChatId(buyer, chatJson.getInt("pk")));

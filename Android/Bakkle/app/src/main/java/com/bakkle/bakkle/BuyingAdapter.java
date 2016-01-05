@@ -15,13 +15,11 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class BuyingAdapter
-        extends RecyclerView.Adapter<BuyingAdapter.ViewHolder>
+public class BuyingAdapter extends RecyclerView.Adapter<BuyingAdapter.ViewHolder>
 {
 
     private final List<FeedItem> items;
-    private Context             context;
-
+    private       Context        context;
 
     public BuyingAdapter(List<FeedItem> items, Context context)
     {
@@ -44,7 +42,11 @@ public class BuyingAdapter
         holder.titleTextView.setText(holder.item.getTitle());
         holder.priceTextView.setText("$".concat(holder.item.getPrice()));
 
-        Picasso.with(context).load(holder.item.getImage_urls()[0]).fit().centerCrop().into(holder.productImageView);
+        Picasso.with(context)
+                .load(holder.item.getImage_urls()[0])
+                .fit()
+                .centerCrop()
+                .into(holder.productImageView);
 
         holder.mView.setOnClickListener(new View.OnClickListener()
         {

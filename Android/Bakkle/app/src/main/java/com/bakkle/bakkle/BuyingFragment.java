@@ -76,9 +76,8 @@ public class BuyingFragment extends Fragment
                 final FeedItem deletedItem = items.remove(position);
                 buyingAdapter.notifyItemRemoved(position);
 
-                final Snackbar snackbar = Snackbar.make(view,
-                                                        deletedItem.getTitle().concat(" has been deleted from Buying"),
-                                                        Snackbar.LENGTH_LONG)
+                final Snackbar snackbar = Snackbar.make(view, deletedItem.getTitle()
+                        .concat(" has been deleted from Buying"), Snackbar.LENGTH_LONG)
                         .setAction("Undo", new View.OnClickListener()
                         {
                             @Override
@@ -94,7 +93,8 @@ public class BuyingFragment extends Fragment
                             public void onDismissed(Snackbar snackbar, int event)
                             {
                                 if (event == DISMISS_EVENT_ACTION) {
-                                    Snackbar.make(view, deletedItem.getTitle().concat(" has been restored to Buying"),
+                                    Snackbar.make(view, deletedItem.getTitle()
+                                                          .concat(" has been restored to Buying"),
                                                   Snackbar.LENGTH_SHORT).show();
                                     return; //If an action was used to dismiss, the user wants to undo the deletion, so we do not need to continue
                                 }
@@ -228,10 +228,13 @@ public class BuyingFragment extends Fragment
                 image_urls[k] = image_urlsJson.getString(k);
             }
 
-            seller.setAvatar_image_url(sellerJson.getString("avatar_image_url"));
             seller.setDisplay_name(sellerJson.getString("display_name"));
             seller.setDescription(sellerJson.getString("description"));
             seller.setFacebook_id(sellerJson.getString("facebook_id"));
+            seller.setAvatar_image_url(seller.getFacebook_id()
+                                               .matches(
+                                                       "[0-9]+") ? "https://graph.facebook.com/" + seller
+                    .getFacebook_id() + "/picture?type=normal" : null);
             seller.setPk(sellerJson.getInt("pk"));
             seller.setFlavor(sellerJson.getInt("flavor"));
             seller.setUser_location(sellerJson.getString("user_location"));

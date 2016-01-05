@@ -181,7 +181,7 @@ public class FeedFragment extends Fragment
             API.getInstance()
                     .markItem(Constants.MARK_NOPE, previousItem.getPk(),
                               "42"); //TODO: Get actual view duration
-        }
+        } //Marks previously Nope'd item as Nope on the server
         if (Direction.hasRight(direction)) {
             /** Show splash screen.
              *
@@ -213,8 +213,11 @@ public class FeedFragment extends Fragment
                     .setNegativeButton("CANCEL", new DialogInterface.OnClickListener()
                     {
                         @Override
-                        public void onClick(DialogInterface dialog, int which)
+                        public void onClick(DialogInterface dialog, int which) //Since the user clicked Cancel, add card back to feed
                         {
+                            items.add(0, item);
+                            adapter.notifyDataSetChanged();
+                            flingContainer.refresh();
                         }
                     })
                     .setPositiveButton("REPORT", new DialogInterface.OnClickListener()
@@ -360,10 +363,13 @@ public class FeedFragment extends Fragment
                 image_urls[k] = image_urlsJson.getString(k);
             }
 
-            seller.setAvatar_image_url(sellerJson.getString("avatar_image_url"));
             seller.setDisplay_name(sellerJson.getString("display_name"));
             seller.setDescription(sellerJson.getString("description"));
             seller.setFacebook_id(sellerJson.getString("facebook_id"));
+            seller.setAvatar_image_url(seller.getFacebook_id()
+                                               .matches(
+                                                       "[0-9]+") ? "https://graph.facebook.com/" + seller
+                    .getFacebook_id() + "/picture?type=normal" : null);
             seller.setPk(sellerJson.getInt("pk"));
             seller.setFlavor(sellerJson.getInt("flavor"));
             seller.setUser_location(sellerJson.getString("user_location"));
