@@ -5,4 +5,4 @@ Running and Active:
 	- Notification shows up in the notifications when top menu is dragged down but not on the screen and clicking it does not do anything
 
 Not Running:
-	- Notification shows up but does not take you to the chat screen.
+	- Notification shows up and cllicking on it opens the app but does not take you to the chat screen.
