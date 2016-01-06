@@ -32,7 +32,7 @@ if test == 2:
 #custom = {
 #    'chat_id': 69, 'item_id': 2542 , 'seller_id': 9, 'buyer_id': 13}
 custom = {
-    'chat_id': 3284, 'item_id': 2056 , 'seller_id': 3, 'buyer_id': 9}
+    'chat_id': 3694, 'item_id': 3034 , 'seller_id': 145, 'buyer_id': 13}
 
 # Send a notification
 #payload = Payload(alert=message, sound=soundname, badge=badge)

@@ -1,0 +1,8 @@
+Running in background:
+	- Clicking on the notification message takes you to the chat screen (given the values are passed correctly. an example: chat_id = 3694, item_id=3034, seller_id=145, buyer_id=13)	-> (Ishank has a buyer_id = 13 and Gage has a seller_id = 145 for the item 350z Tourismo)
+
+Running and Active:
+	- Notification shows up in the notifications when top menu is dragged down but not on the screen and clicking it does not do anything
+
+Not Running:
+	- Notification shows up but does not take you to the chat screen.
