@@ -5,15 +5,15 @@ from apns import APNs, Payload
 
 # Parms
 use_sandbox = True
-use_sandbox = False
+#use_sandbox = False
 token_hex = '1938ee016dae5b93ffe00015dabf7231ff628f41750a38c70361c33458df2d68' # black iphone 5 (Sandor)
 message = 'Test Payload'
 soundname = 'Bakkle_Notification_new.m4r'
 badge = 1
 
 # Config
-cert_file = 'Certificates.p12.pem'
-key_file = 'Certificates.p12.pem'
+cert_file = 'apn-push-dev.pem'
+key_file = cert_file
 
 
 apns = APNs(use_sandbox=use_sandbox, cert_file=cert_file, key_file=key_file)
