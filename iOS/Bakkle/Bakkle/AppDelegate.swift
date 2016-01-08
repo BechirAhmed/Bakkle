@@ -19,7 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
     var audioPlayer = AVAudioPlayer()
-
+    
     
     override class func initialize () {
         // Initialize Facebook buttons
@@ -177,7 +177,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 chatViewController.item = chatItem
                 chatViewController.seller = chatItem!.valueForKey("seller") as! NSDictionary
                 chatViewController.isBuyer = true
-                vc!.pushViewController(chatViewController, animated: true)
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    
+                    vc!.pushViewController(chatViewController, animated: true)
+                })
             }
             
         }
@@ -218,7 +221,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 println("There was an error: \(error)")
             } else {
                 audioPlayer.prepareToPlay()
-                    audioPlayer.play()
+                audioPlayer.play()
             }
             
         } else if let item_id = userInfo["item_id"] as? Int {
