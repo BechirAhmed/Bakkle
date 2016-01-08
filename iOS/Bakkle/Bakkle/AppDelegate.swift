@@ -113,6 +113,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         Bakkle.sharedInstance.setServer() //Settings may have changed
         //Bakkle.sharedInstance.refresh()
+        
+        dispatch_async(dispatch_get_main_queue()) {
+            // Register for push notifications.
+            self.registerForPushNotifications(UIApplication.sharedApplication())
+        }
     }
     
     func applicationWillTerminate(application: UIApplication) {
@@ -125,6 +130,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         println("Registered for notifications")
         Bakkle.sharedInstance.register_push(deviceToken)
     }
+    
     func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
         
         println("Failed to register for notifications")
