@@ -19,7 +19,7 @@ def sendPushMessage(app_flavor, token, message, badge, sound, custom={}, sandbox
     #token = '963c3f72abe5dee900f066e88486272dd7e2648948abb4352ecbb52294b7317e'
     apns = APNs(use_sandbox=sandbox, cert_file=cert_file, key_file=key_file)
     payload = Payload(alert=message, sound=sound, badge=badge,custom=custom)
-    logging.debug("Sending notification " + str(payload) + " to " + str(token))
+    logging.info("Sending notification " + str(payload) + " to " + str(token))
     print("Sending notification " + str(payload) + " to " + str(token))
     if sandbox==True:
         print("sandboxmode")

@@ -14,7 +14,7 @@ from decimal import *
 # import baseWSHandlers
 
 import datetime
-
+import logging
 
 def startChat(itemId, buyerId):
     try:
@@ -108,20 +108,24 @@ def sendChatMessage(clients, chatId, senderId, message, offerPrice, offerMethod)
     chat.hasUnreadSeller = sentByBuyer
     chat.save()
 
-    devices = Device.objects.filter(account_id=chat.item.seller)
-    sellerNumUnreadChats = getNumUnreadChatsForAccount(chat.item.seller.pk)
-    for device in devices:
+    logging.info("Chat item={} seller={} buyer={} senderid={}".format(chat.item.id, chat.item.seller.id, chat.buyer.id, senderId))
+
+    # Find devices owned by seller
+    if(sender != chat.item.seller):
+      devices = Device.objects.filter(account_id=chat.item.seller)
+      sellerNumUnreadChats = getNumUnreadChatsForAccount(chat.item.seller.pk)
+      for device in devices:
         device.send_notification(
             message,
             sellerNumUnreadChats,
             "Bakkle_Notification_new.m4r",
             {'chat_id': chat.id, 'item_id':chat.item.id, 'seller_id':chat.item.seller.id, 'buyer_id':chat.buyer.id})
         
-
-    devices = Device.objects.filter(account_id=chat.buyer)
-    buyerNumUnreadChats = getNumUnreadChatsForAccount(chat.buyer.pk)
-
-    for device in devices:
+    # Find devices owned by BUYER
+    if(sender != chat.buyer):
+      devices = Device.objects.filter(account_id=chat.buyer)
+      buyerNumUnreadChats = getNumUnreadChatsForAccount(chat.buyer.pk)
+      for device in devices:
         device.send_notification(
             message,
             buyerNumUnreadChats,
