@@ -65,6 +65,13 @@
 		604D60301BFFBC690060579C /* SigUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604D602F1BFFBC690060579C /* SigUpView.swift */; };
 		605ECFEC1C0F890400B111C3 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 605ECFEB1C0F890400B111C3 /* SystemConfiguration.framework */; };
 		60708D561BF681FD0021D5A6 /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60708D551BF681FD0021D5A6 /* SignInView.swift */; };
+		60BA452D1C404EB600D49C38 /* Ready.png in Resources */ = {isa = PBXBuildFile; fileRef = 60BA45281C404EB600D49C38 /* Ready.png */; };
+		60BA452E1C404EB600D49C38 /* SwipeDown.png in Resources */ = {isa = PBXBuildFile; fileRef = 60BA45291C404EB600D49C38 /* SwipeDown.png */; };
+		60BA452F1C404EB600D49C38 /* SwipeLeft.png in Resources */ = {isa = PBXBuildFile; fileRef = 60BA452A1C404EB600D49C38 /* SwipeLeft.png */; };
+		60BA45301C404EB600D49C38 /* SwipeRight.png in Resources */ = {isa = PBXBuildFile; fileRef = 60BA452B1C404EB600D49C38 /* SwipeRight.png */; };
+		60BA45311C404EB600D49C38 /* SwipeUp.png in Resources */ = {isa = PBXBuildFile; fileRef = 60BA452C1C404EB600D49C38 /* SwipeUp.png */; };
+		60BA45331C404FF400D49C38 /* no-internet.png in Resources */ = {isa = PBXBuildFile; fileRef = 60BA45321C404FF400D49C38 /* no-internet.png */; };
+		60BA45351C40577000D49C38 /* TutorialCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BA45341C40577000D49C38 /* TutorialCell.swift */; };
 		60EEB9981B5546F100E87B8D /* switch-camera-outline.png in Resources */ = {isa = PBXBuildFile; fileRef = 60EEB9971B5546F100E87B8D /* switch-camera-outline.png */; };
 		60F3BC0E1B5E900A0033EF83 /* Goodwill Logo.png in Resources */ = {isa = PBXBuildFile; fileRef = F0D6F3F91B5E8B3E00938A06 /* Goodwill Logo.png */; };
 		60F3BC111B5E90BC0033EF83 /* Goodwill-LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 60F3BC101B5E90BC0033EF83 /* Goodwill-LaunchScreen.xib */; };
@@ -280,6 +287,13 @@
 		604D602F1BFFBC690060579C /* SigUpView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SigUpView.swift; sourceTree = "<group>"; };
 		605ECFEB1C0F890400B111C3 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		60708D551BF681FD0021D5A6 /* SignInView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
+		60BA45281C404EB600D49C38 /* Ready.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Ready.png; sourceTree = "<group>"; };
+		60BA45291C404EB600D49C38 /* SwipeDown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SwipeDown.png; sourceTree = "<group>"; };
+		60BA452A1C404EB600D49C38 /* SwipeLeft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SwipeLeft.png; sourceTree = "<group>"; };
+		60BA452B1C404EB600D49C38 /* SwipeRight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SwipeRight.png; sourceTree = "<group>"; };
+		60BA452C1C404EB600D49C38 /* SwipeUp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SwipeUp.png; sourceTree = "<group>"; };
+		60BA45321C404FF400D49C38 /* no-internet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "no-internet.png"; sourceTree = "<group>"; };
+		60BA45341C40577000D49C38 /* TutorialCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TutorialCell.swift; sourceTree = "<group>"; };
 		60EEB9971B5546F100E87B8D /* switch-camera-outline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "switch-camera-outline.png"; sourceTree = "<group>"; };
 		60F3BC101B5E90BC0033EF83 /* Goodwill-LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "Goodwill-LaunchScreen.xib"; sourceTree = "<group>"; };
 		60F3BC121B5E91710033EF83 /* Goodwill-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Goodwill-Info.plist"; sourceTree = "<group>"; };
@@ -474,6 +488,7 @@
 				5EBDD6901AB211E600C7FBE7 /* AppDelegate.swift */,
 				5E78D7E01AF121BA0014ED8F /* GarageCell.swift */,
 				720510331B1F839B00D059AB /* ListItemCell.swift */,
+				60BA45341C40577000D49C38 /* TutorialCell.swift */,
 				6001F3401B21D004009C1A04 /* ItemDetailsCell.swift */,
 				A058A2AA1AFD8EAD005E7432 /* UIImage+Resize.swift */,
 				728647ED1B309F6F009A24C9 /* NSDate+String.swift */,
@@ -649,6 +664,12 @@
 		A08D53B71B07DC8E000C406C /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				60BA45321C404FF400D49C38 /* no-internet.png */,
+				60BA45281C404EB600D49C38 /* Ready.png */,
+				60BA45291C404EB600D49C38 /* SwipeDown.png */,
+				60BA452A1C404EB600D49C38 /* SwipeLeft.png */,
+				60BA452B1C404EB600D49C38 /* SwipeRight.png */,
+				60BA452C1C404EB600D49C38 /* SwipeUp.png */,
 				604D602D1BFFA0A10060579C /* default_profile.png */,
 				F0D6F40D1B5EC1A500938A06 /* gwIcon@2x.png */,
 				F0D6F4101B5EC54700938A06 /* GWLogo_Full@2x.png */,
@@ -951,7 +972,9 @@
 				A03508F91AB3C6AE00CA6455 /* logo-white-design-png.png in Resources */,
 				A0B7F4BA1AFB053B00065407 /* blank.png in Resources */,
 				A03508F71AB3C5FB00CA6455 /* logo-green-design-png-white.png in Resources */,
+				60BA452E1C404EB600D49C38 /* SwipeDown.png in Resources */,
 				A058A2AD1AFDAD96005E7432 /* bkg-chat-text.png in Resources */,
+				60BA452F1C404EB600D49C38 /* SwipeLeft.png in Resources */,
 				DB5DB3581B18E18100734692 /* icon-tags75.png in Resources */,
 				5E1DCC9F1AD44C72002D41FD /* tiger.jpg in Resources */,
 				604D602E1BFFA0A10060579C /* default_profile.png in Resources */,
@@ -969,6 +992,7 @@
 				A05DB74F1AF1A4C80076D97D /* dot.png in Resources */,
 				A018DF891ADE07E700AF5550 /* btn-cancel.png in Resources */,
 				5E023F881AD59F200002AFBC /* logo-white-design-png-transp-100.png in Resources */,
+				60BA45311C404EB600D49C38 /* SwipeUp.png in Resources */,
 				A0A2FFF31ACE213F00A42CD8 /* logo-white-design-png-100.png in Resources */,
 				A05DB7541AF3F22B0076D97D /* dot@2x.png in Resources */,
 				A0A709CE1ACAC9D700E772B9 /* Main.storyboard in Resources */,
@@ -995,6 +1019,7 @@
 				A08D53D21B0815CB000C406C /* MessageOutgoing.aiff in Resources */,
 				A0A200021ACE2F7500A42CD8 /* btn-facebook40.png in Resources */,
 				5E1DCCA31AD47C53002D41FD /* btn-x.png in Resources */,
+				60BA452D1C404EB600D49C38 /* Ready.png in Resources */,
 				DB5372941B0832E000CC49B7 /* pendant-tag660.png in Resources */,
 				A058A2A81AFD6024005E7432 /* btn-menu@2x.png in Resources */,
 				D0C6A42D1B080ACB0027ACCF /* mock-rating-stars.png in Resources */,
@@ -1010,6 +1035,7 @@
 				13AB6F9D1B0E3C520092EE61 /* btn-meh.png in Resources */,
 				A0D96F901AD7751E0046DA13 /* mock-settings.png in Resources */,
 				D0FCDFFA1B03B2E0006F76F7 /* btn-addCam.png in Resources */,
+				60BA45301C404EB600D49C38 /* SwipeRight.png in Resources */,
 				A08D53D81B0825E7000C406C /* icon-back.png in Resources */,
 				DB6726EA1B178F250014A896 /* star_half.png in Resources */,
 				A058A2B51AFDADA2005E7432 /* mask-buyer-grey@2x.png in Resources */,
@@ -1030,6 +1056,7 @@
 				A0D96F7D1AD765990046DA13 /* icon-pencil.png in Resources */,
 				A0D96F7E1AD765990046DA13 /* icon-house.png in Resources */,
 				602C38971B389A1F005CB493 /* InstructionScreen.png in Resources */,
+				60BA45331C404FF400D49C38 /* no-internet.png in Resources */,
 				A058A2B81AFDADA2005E7432 /* mask-buyer-white@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1103,6 +1130,7 @@
 				5EBDD6931AB211E600C7FBE7 /* LoginView.swift in Sources */,
 				5EE2C98B1AB9D1730031D8CD /* FeedView.swift in Sources */,
 				60708D561BF681FD0021D5A6 /* SignInView.swift in Sources */,
+				60BA45351C40577000D49C38 /* TutorialCell.swift in Sources */,
 				A0D96F801AD767BD0046DA13 /* MenuTableView.swift in Sources */,
 				A08D53CA1B0815CB000C406C /* Chat.swift in Sources */,
 				A0D96F8A1AD773DB0046DA13 /* RefineView.swift in Sources */,

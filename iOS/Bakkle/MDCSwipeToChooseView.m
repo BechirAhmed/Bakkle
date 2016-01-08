@@ -49,22 +49,17 @@ static CGFloat const MDCSwipeToChooseViewLabelHeight = 65.f;
 
 
 - (instancetype)initWithFrame:(CGRect)frame
-                      options:(MDCSwipeToChooseViewOptions *)options tutorial:(BOOL)tutorial goodwill:(BOOL)goodwill ipad:(BOOL)ipad{
+                      options:(MDCSwipeToChooseViewOptions *)options goodwill:(BOOL)goodwill ipad:(BOOL)ipad{
     
     self = [super initWithFrame: frame];
     if (self) {
         _options = options ? options : [MDCSwipeToChooseViewOptions new];
         self.ipad = ipad;
-        self.tutorial = tutorial;
         [self setupView];
         [self constructBlurBackground];
-        if (tutorial) {
-            [self constructInstructionImageView];
-        }else {
-            [self constructImageView];
-//            [self constructTopUserInfoView];
-            [self constructInformationView];
-                    }
+        [self constructImageView];
+        //            [self constructTopUserInfoView];
+        [self constructInformationView];
         [self constructLikedView];
         [self constructNopeImageView];
         if (!goodwill) {

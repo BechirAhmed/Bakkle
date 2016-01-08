@@ -17,6 +17,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     let menuSegue = "presentNav"
     let itemDetailSegue = "ItemDetailSegue"
     let refineSegue = "RefineSegue"
+    let tutorialCellIdentifier = "TutorialCell"
     let options = MDCSwipeToChooseViewOptions()
     
     var fromCamera: Bool! = false
@@ -35,8 +36,6 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     var item_id = 42 //TODO: unhardcode this
     var model: String = UIDevice.currentDevice().model
     
-    private var pageController: UIPageControl!
-    
     @IBOutlet weak var menuBtn: UIButton!
     @IBOutlet weak var noNewItemsLabel: UILabel!
     @IBOutlet weak var drawer: UIView!
@@ -46,6 +45,9 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     @IBOutlet weak var btnAddItem: UIButton!
     @IBOutlet weak var titleBar: UIView!
     @IBOutlet weak var logoImageView: UIImageView!
+    @IBOutlet weak var tutorialView: UIView!
+    @IBOutlet weak var tutorialCollectionView: UICollectionView!
+    @IBOutlet weak var pageControl: UIPageControl!
     
     @IBOutlet weak var logoImageViewHeight: NSLayoutConstraint!
     @IBOutlet weak var logoImageViewWidth: NSLayoutConstraint!
@@ -147,8 +149,6 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             var goodwillLogo: UIImageView = UIImageView(frame: CGRectMake(btnAddItem.frame.origin.x, logoImageView.frame.midY + 2.5, 35.0, 35.0))
             goodwillLogo.image = UIImage(named: "gwIcon@2x.png")!
             goodwillLogo.layer.cornerRadius = 7.0
-            //            goodwillLogo.layer.borderWidth = 1.0
-            //            goodwillLogo.layer.borderColor = UIColor.whiteColor().CGColor
             goodwillLogo.layer.masksToBounds = true
             self.view.addSubview(goodwillLogo)
         }
@@ -181,41 +181,56 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         
         fromCamera = false
         
-       
-        
         // check internet connection
         checkInternetConnection()
         
-        
+        // check tutorial 
+        checkTutorial()
         
     }
     
-    func displayInstruction(s: MDCSwipeToChooseView!) {
-        // disable user interaction and show instruction
-        self.searchBar.userInteractionEnabled = false
-        self.refineButton.userInteractionEnabled = false
-        self.menuBtn.userInteractionEnabled = false
-        self.itemDetailTap.enabled = false
-        self.btnAddItem.userInteractionEnabled = false
-        self.revealViewController().panGestureRecognizer().enabled = false
+    /* collectionView display multiple pictures */
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection: Int) -> Int {
+        return 5
+    }
+    
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+        let screenWidth = CGRectGetWidth(tutorialCollectionView.bounds)
+        let screenHeight = CGRectGetHeight(tutorialCollectionView.bounds)
+        return CGSize(width: screenWidth, height: screenHeight)
+    }
+    
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        let cell :TutorialCell = collectionView.dequeueReusableCellWithReuseIdentifier(tutorialCellIdentifier, forIndexPath: indexPath) as! TutorialCell
+    
+        cell.imgView.contentMode = UIViewContentMode.ScaleAspectFill
+        cell.imgView.clipsToBounds  = true
+        switch (indexPath.row) {
+        case 0: cell.imgView.image = UIImage(named: "SwipeRight.png")
+        case 1: cell.imgView.image = UIImage(named: "SwipeLeft.png")
+        case 2: cell.imgView.image = UIImage(named: "SwipeUp.png")
+        case 3: cell.imgView.image = UIImage(named: "SwipeDown.png")
+        case 4:
+            cell.imgView.image = UIImage(named: "Ready.png")
+            cell.button.hidden = false
+            break
+        default:
+            break
+        }
         
-        // set up image for tutorial
-//        s.imageView.image = UIImage(named: "InstructionScreen-new.png")
-        
-//        let temp = UIImageView(image: UIImage(named: "InstructionScreen-new.png"))
-        
-        pageController = UIPageControl()
-        pageController.frame = self.swipeView.frame
-        pageController.numberOfPages = 5
-        pageController.currentPage = 0;
-        pageController.insertSubview(s, atIndex: 0);
-        pageController.backgroundColor = UIColor.blackColor()
-        
-        view.addSubview(pageController)
-        view.bringSubviewToFront(pageController)
+        return cell
+    }
+    
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        var pageWidth: CGFloat  = tutorialCollectionView.bounds.size.width
+        var page: Int = Int(floor((tutorialCollectionView.contentOffset.x - pageWidth / 2) / pageWidth)) + 1
+        pageControl.currentPage = page
+    }
 
-        s.pageControl = pageController
-        
+    @IBAction func closeTutorial(button: UIButton) {
+        tutorialView.hidden = true
+        var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.setBool(false, forKey: "instruction")
     }
     
     func setupNoInternetView(){
@@ -238,7 +253,16 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             self.view.bringSubviewToFront(self.noInternectView)
             self.btnAddItem.enabled = false
         }
-
+    }
+    
+    func checkTutorial(){
+        var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        if userDefaults.boolForKey("instruction") {
+            self.tutorialView.hidden = false;
+            self.view.bringSubviewToFront(self.tutorialView)
+        }else{
+            self.tutorialView.hidden = true;
+        }
     }
     
     func showChatViewController(){
@@ -443,15 +467,14 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                     self.swipeView.removeFromSuperview()
                     self.swipeView = nil
                 }
-                var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
-                self.swipeView = MDCSwipeToChooseView(frame: CGRectMake(drawer.frame.origin.x, drawer.frame.origin.y+drawer.superview!.frame.origin.y, drawer.frame.size.width, drawer.frame.size.height), options: options, tutorial: userDefaults.boolForKey("instruction"), goodwill: Bakkle.sharedInstance.flavor == Bakkle.GOODWILL, ipad: model == "iPad")
+                self.swipeView = MDCSwipeToChooseView(frame: CGRectMake(drawer.frame.origin.x, drawer.frame.origin.y+drawer.superview!.frame.origin.y, drawer.frame.size.width, drawer.frame.size.height), options: options, goodwill: Bakkle.sharedInstance.flavor == Bakkle.GOODWILL, ipad: model == "iPad")
                 self.swipeView.addGestureRecognizer(itemDetailTap)
                 if Bakkle.sharedInstance.feedItems.count > 1 {
                     if self.bottomView != nil {
                         self.bottomView.removeFromSuperview()
                         self.bottomView = nil
                     }
-                    self.bottomView = MDCSwipeToChooseView(frame: self.swipeView.frame, options: nil, tutorial: false, goodwill: Bakkle.sharedInstance.flavor == Bakkle.GOODWILL, ipad: model == "iPad")
+                    self.bottomView = MDCSwipeToChooseView(frame: self.swipeView.frame, options: nil, goodwill: Bakkle.sharedInstance.flavor == Bakkle.GOODWILL, ipad: model == "iPad")
                     self.view.insertSubview(self.bottomView, belowSubview: self.swipeView)
                 }
         }
@@ -470,7 +493,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             self.swipeView = self.bottomView
             
             //create new bottomView
-            self.bottomView = MDCSwipeToChooseView(frame: self.swipeView.frame, options: nil, tutorial: false, goodwill: Bakkle.sharedInstance.flavor == Bakkle.GOODWILL, ipad: model == "iPad")
+            self.bottomView = MDCSwipeToChooseView(frame: self.swipeView.frame, options: nil, goodwill: Bakkle.sharedInstance.flavor == Bakkle.GOODWILL, ipad: model == "iPad")
             
             //add gesture recognizer to top view (swipeView)
             self.swipeView.addGestureRecognizer(itemDetailTap)
@@ -577,12 +600,8 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                 if let x: AnyObject = topItem.valueForKey("pk") {
                     self.item_id = Int(x.intValue)
                 }
-                
-                if self.swipeView.tutorial  {
-                    displayInstruction(self.swipeView)
-                }else{
-                    setupView(self.swipeView, item: topItem)
-                }
+            
+                setupView(self.swipeView, item: topItem)
                 
                 self.view.addSubview(swipeView)
                 
@@ -620,6 +639,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         }
     
         checkInternetConnection()
+        checkTutorial()
     }
     
     func viewDidCancelSwipe(view: UIView!) {
@@ -646,18 +666,6 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     }
     
     func view(view: UIView!, wasChosenWithDirection direction: MDCSwipeDirection) {
-        var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
-        if userDefaults.boolForKey("instruction") {
-            userDefaults.setBool(false, forKey: "instruction")
-            self.searchBar.userInteractionEnabled = true
-            self.refineButton.userInteractionEnabled = true
-            self.menuBtn.userInteractionEnabled = true
-            self.btnAddItem.userInteractionEnabled = true
-            self.itemDetailTap.enabled = true
-            self.revealViewController().panGestureRecognizer().enabled = true
-            loadNext()
-            return
-        }
         
         switch direction {
         case MDCSwipeDirection.Left:

@@ -86,9 +86,6 @@
 
 @property (strong, nonatomic) RateView *ratingView;
 
-// shows that if this view is a tutorial page or not
-@property BOOL tutorial;
-
 // shows that if the app is on ipad or iphone
 @property BOOL ipad;
 
@@ -98,7 +95,7 @@
  * the behavior of the view.
  */
 - (instancetype)initWithFrame:(CGRect)frame
-                      options:(MDCSwipeToChooseViewOptions *)options tutorial:(BOOL)tutorial goodwill:(BOOL)goodwill ipad:(BOOL)ipad;
+                      options:(MDCSwipeToChooseViewOptions *)options goodwill:(BOOL)goodwill ipad:(BOOL)ipad;
 
 @end
 
