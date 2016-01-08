@@ -49,22 +49,17 @@ static CGFloat const MDCSwipeToChooseViewLabelHeight = 65.f;
 
 
 - (instancetype)initWithFrame:(CGRect)frame
-                      options:(MDCSwipeToChooseViewOptions *)options tutorial:(BOOL)tutorial goodwill:(BOOL)goodwill ipad:(BOOL)ipad{
+                      options:(MDCSwipeToChooseViewOptions *)options goodwill:(BOOL)goodwill ipad:(BOOL)ipad{
     
     self = [super initWithFrame: frame];
     if (self) {
         _options = options ? options : [MDCSwipeToChooseViewOptions new];
         self.ipad = ipad;
-        self.tutorial = tutorial;
         [self setupView];
         [self constructBlurBackground];
-        if (tutorial) {
-            [self constructInstructionImageView];
-        }else {
-            [self constructImageView];
-//            [self constructTopUserInfoView];
-            [self constructInformationView];
-                    }
+        [self constructImageView];
+        //            [self constructTopUserInfoView];
+        [self constructInformationView];
         [self constructLikedView];
         [self constructNopeImageView];
         if (!goodwill) {
@@ -106,12 +101,18 @@ static CGFloat const MDCSwipeToChooseViewLabelHeight = 65.f;
     _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height)];
     [_imageView setContentMode:UIViewContentModeScaleAspectFill];
     _imageView.clipsToBounds = YES;
-    [self addSubview:_imageView];
     
-    _transparentImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, _imageView.frame.size.width, _imageView.frame.size.height)];
-    _transparentImage.backgroundColor = [UIColor blackColor];
-    _transparentImage.alpha = 0.f;
-    [_imageView addSubview:_transparentImage];
+    _pageControl = [[UIPageControl alloc] init];
+    [_pageControl setContentMode:UIViewContentModeScaleAspectFill];
+    _pageControl.clipsToBounds = YES;
+    _pageControl.numberOfPages = 5;
+    _pageControl.currentPage = 0;
+    [self addSubview:_pageControl];
+    
+//    _transparentImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, _imageView.frame.size.width, _imageView.frame.size.height)];
+//    _transparentImage.backgroundColor = [UIColor blackColor];
+//    _transparentImage.alpha = 0.f;
+//    [_imageView addSubview:_transparentImage];
 }
 
 - (void)constructImageView {
