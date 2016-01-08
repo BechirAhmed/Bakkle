@@ -169,6 +169,7 @@ class loginFacebookHandler(bakkleRequestHandler):
     def post(self):
         # TODO: Handle location
         # Get the rest of the necessary params from the request
+        logging.info("login_facebook called:")
         try:
             user_id = self.getArgument('user_id')
             device_uuid = self.getArgument('device_uuid')
@@ -267,6 +268,7 @@ class facebookHandler(bakkleRequestHandler):
             device_uuid = self.getArgument('device_uuid')
             app_flavor = self.getArgument('flavor', 1)
             avatar_image_url = self.getArgument('avatar_image_url', 'https://app.bakkle.com/img/default_profile.png')
+            account_type = self.getArgument('account_type', 0) #0-guest
         except QueryArgumentError as error:
             return self.writeJSON({"status": 0, "message": error.message})
 
@@ -274,7 +276,8 @@ class facebookHandler(bakkleRequestHandler):
                                                   display_name,
                                                   device_uuid,
                                                   avatar_image_url,
-                                                  app_flavor)
+                                                  app_flavor,
+                                                  account_type)
 
         self.writeJSON(respObj)
 
