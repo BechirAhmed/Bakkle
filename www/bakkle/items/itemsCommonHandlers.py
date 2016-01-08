@@ -160,9 +160,10 @@ def add_item(title, description, location, seller_id, price, tags, notifyFlag, i
             image_urls=image_urls,
             status=Items.ACTIVE)
         item.save()
-        if(notifyFlag is None or notifyFlag == "" or int(notifyFlag) != 0):
-            notify_all_new_item(
-                u"New: ${} - {}".format(item.price, item.title))
+        # Notifications disabled per James nov 2015
+        #if(notifyFlag is None or notifyFlag == "" or int(notifyFlag) != 0):
+        #    notify_all_new_item(
+        #        u"New: ${} - {}".format(item.price, item.title))
         logging.info("[AddItem] adding item: " + str(item.pk))
     else:
         # Else get the item
@@ -277,7 +278,7 @@ def feed(buyer_id, device_uuid, user_location, search_text, filter_distance, fil
     startTime = time.time()
 
     MAX_ITEM_PRICE = 100
-    MAX_ITEM_DISTANCE = 100
+    MAX_ITEM_DISTANCE = 101
     RETURN_ITEM_ARRAY_SIZE = 20
 
     # Check that location was in the correct format

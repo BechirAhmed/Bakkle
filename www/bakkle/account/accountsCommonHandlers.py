@@ -267,9 +267,21 @@ def logout(auth_token, device_uuid, client_ip):
 
 # Register with Facebook
 
-
+bkAccountTypeGuest    = 0
+bkAccountTypeFacebook = 2
+bkAccountTypeEmail    = 3
 @time_method
-def facebook(facebook_id, display_name, device_uuid, avatar_image_url, app_flavor):
+def facebook(facebook_id, display_name, device_uuid, avatar_image_url, app_flavor, account_type):
+
+    # check for existing local account
+    try:
+        if int(account_type) == bkAccountTypeEmail:
+            obj = Account.objects.get(facebook_id=facebook_id, app_flavor=app_flavor)
+            # Already exists, throw error
+            return { "status": 0, "message": "account already exists" }
+    except Account.DoesNotExist:
+        # we have no object!  do something
+        pass
 
     # Update or create the account
     account = Account.objects.get_or_create(
