@@ -83,7 +83,6 @@
 		726A38E31B39BE1E00CF5553 /* logo-white-design-clear.png in Resources */ = {isa = PBXBuildFile; fileRef = 726A38E21B39BE1E00CF5553 /* logo-white-design-clear.png */; };
 		727FA76D1B4C15750023C126 /* new-x.png in Resources */ = {isa = PBXBuildFile; fileRef = 727FA76C1B4C15750023C126 /* new-x.png */; };
 		728598C31B6A52C300C2FE55 /* InstructionScreen-new.png in Resources */ = {isa = PBXBuildFile; fileRef = 728598C21B6A52C300C2FE55 /* InstructionScreen-new.png */; };
-		728598C91B73B41000C2FE55 /* test-video.MOV in Resources */ = {isa = PBXBuildFile; fileRef = 728598C81B73B41000C2FE55 /* test-video.MOV */; };
 		728598CB1B75073500C2FE55 /* SplashScreen-bkg.png in Resources */ = {isa = PBXBuildFile; fileRef = F0D6F4041B5EA18700938A06 /* SplashScreen-bkg.png */; };
 		728647EB1B2F0E3F009A24C9 /* ChatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53BE1B0815CB000C406C /* ChatsViewController.swift */; };
 		728647EE1B309F6F009A24C9 /* NSDate+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 728647ED1B309F6F009A24C9 /* NSDate+String.swift */; };
@@ -306,7 +305,6 @@
 		726A38E21B39BE1E00CF5553 /* logo-white-design-clear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-white-design-clear.png"; sourceTree = "<group>"; };
 		727FA76C1B4C15750023C126 /* new-x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "new-x.png"; sourceTree = "<group>"; };
 		728598C21B6A52C300C2FE55 /* InstructionScreen-new.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "InstructionScreen-new.png"; sourceTree = "<group>"; };
-		728598C81B73B41000C2FE55 /* test-video.MOV */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = "test-video.MOV"; sourceTree = "<group>"; };
 		728647ED1B309F6F009A24C9 /* NSDate+String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSDate+String.swift"; sourceTree = "<group>"; };
 		72B5D8041B41E12D00E4B6EA /* BuyItemView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuyItemView.swift; sourceTree = "<group>"; };
 		72B5D8061B41E52300E4B6EA /* ChatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
@@ -516,7 +514,6 @@
 				5EE2C9B11AB9F0FB0031D8CD /* MDCSwipeToChoose-Prefix.pch */,
 				5EBDD6991AB211E600C7FBE7 /* LaunchScreen.xib */,
 				5EBDD68F1AB211E600C7FBE7 /* Info.plist */,
-				728598C81B73B41000C2FE55 /* test-video.MOV */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -1011,7 +1008,6 @@
 				602C38991B389A2E005CB493 /* WrongLocationForPhone.png in Resources */,
 				A05DB7521AF1BC090076D97D /* btn-menu.png in Resources */,
 				F0D6F4081B5EA28900938A06 /* SplashScreen-bkg-Blue.png in Resources */,
-				728598C91B73B41000C2FE55 /* test-video.MOV in Resources */,
 				F0D6F4021B5EA17100938A06 /* LoginScreen-bkg.png in Resources */,
 				728598CB1B75073500C2FE55 /* SplashScreen-bkg.png in Resources */,
 				A058A2A91AFD6024005E7432 /* btn-menu@3x.png in Resources */,
