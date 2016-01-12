@@ -10,6 +10,7 @@ sudo pip install boto
 sudo pip install tornado
 sudo pip install redis
 sudo pip install futures
+sudo pip install python-gcm
 
 #probably needed on ubuntus udo apt-get install libffi-dev libssl-dev
 sudo pip install requests[security]
