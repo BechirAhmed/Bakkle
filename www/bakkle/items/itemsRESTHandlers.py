@@ -163,7 +163,6 @@ class addItemHandler(bakkleRequestHandler):
             if(not self.authenticate()):
                 self.writeJSON(
                     {'success': 0, 'error': 'Device not authenticated'})
-                self.finish()
                 return
 
             # TODO: Handle location
@@ -184,7 +183,6 @@ class addItemHandler(bakkleRequestHandler):
             videos = self.request.files['videos']
         except QueryArgumentError as error:
             self.writeJSON({"status": 0, "message": error.message})
-            self.finish()
             return
         except KeyError:
             videos = []
@@ -192,7 +190,6 @@ class addItemHandler(bakkleRequestHandler):
         self.writeJSON(itemsCommonHandlers.add_item(
             title, description, location, seller_id, price,
             tags, notifyFlag, item_id, images, videos))
-        self.finish()
         return
 
 
