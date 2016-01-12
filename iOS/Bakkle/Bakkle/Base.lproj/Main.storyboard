@@ -1459,11 +1459,11 @@
                                                     <action selector="unhighlightBorder:" destination="dzt-bR-uoN" eventType="touchUpOutside" id="1RK-19-s0n"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="csT-TU-XOh" userLabel="Make an Offer">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="csT-TU-XOh" userLabel="Save to Watch List">
                                                 <rect key="frame" x="-23" y="-15" width="46" height="30"/>
                                                 <animations/>
                                                 <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="25"/>
-                                                <state key="normal" title="Make an Offer">
+                                                <state key="normal" title="Save to Watch List">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
@@ -1479,11 +1479,11 @@
                                                     <action selector="animateHighlightBorder:" destination="dzt-bR-uoN" eventType="touchDragInside" id="Rwz-pH-o0f"/>
                                                     <action selector="animateUnhighlightBorder:" destination="dzt-bR-uoN" eventType="touchDragOutside" id="zh0-Dd-c87"/>
                                                     <action selector="highlightBorder:" destination="dzt-bR-uoN" eventType="touchDown" id="jeJ-kH-V6y"/>
-                                                    <action selector="makeAnOffer:" destination="dzt-bR-uoN" eventType="touchUpInside" id="epi-1p-wD5"/>
+                                                    <action selector="saveToWatchList:" destination="dzt-bR-uoN" eventType="touchUpInside" id="0l5-3c-xd7"/>
                                                     <action selector="unhighlightBorder:" destination="dzt-bR-uoN" eventType="touchUpOutside" id="hWu-8U-NIB"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WvX-mD-H2h" userLabel="Save to Watch List">
+                                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WvX-mD-H2h" userLabel="Save to Watch List (text)">
                                                 <rect key="frame" x="-23" y="-15" width="46" height="30"/>
                                                 <animations/>
                                                 <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="17"/>
@@ -6197,6 +6197,9 @@
                                                     <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="15"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
+                                                    <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                                        <rect key="frame" x="99" y="8" width="213" height="21"/>
+                                                    </variation>
                                                 </label>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ABU-0d-c2I">
                                                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
