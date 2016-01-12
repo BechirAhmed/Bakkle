@@ -104,5 +104,9 @@ class Device(models.Model):
         if (dt is None or dt == ""):
             return
         print("notif to {} {}".format(dt, message))
-        sendPushMessage(self.account_id.app_flavor, dt, message, 1, sound, custom)
+        if self.device_type == 'gcm':
+            sendGcmPushMessage(dt, message, 1, sound, custom)
+        else:
+            sendPushMessage(self.account_id.app_flavor, dt, message, 1, sound, custom)
+
         # TODO: Log this to db so we know what we did.
