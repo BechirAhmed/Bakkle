@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/rootFrame"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:foreground="?selectableItemBackground">
+
+    <include
+        layout="@layout/mcam_include_camera_preview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/controlsFrame"/>
+
+    <RelativeLayout
+        android:id="@+id/controlsFrame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="?colorPrimaryDark"
+        android:elevation="@dimen/mcam_toolbar_elevation"
+        android:paddingBottom="@dimen/mcam_content_inset_less"
+        android:paddingLeft="@dimen/mcam_content_inset"
+        android:paddingRight="@dimen/mcam_content_inset"
+        android:paddingTop="@dimen/mcam_content_inset_less"
+        tools:ignore="UnusedAttribute">
+
+        <ImageButton
+            android:id="@+id/facing"
+            android:layout_width="@dimen/mcam_action_icon_size_smaller"
+            android:layout_height="@dimen/mcam_action_icon_size_smaller"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/mcam_circle_selector"
+            android:padding="@dimen/mcam_content_inset_less"
+            android:scaleType="fitXY"
+            android:src="@drawable/mcam_camera_front"
+            tools:ignore="ContentDescription"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
+
+            <ImageButton
+                android:id="@+id/picture"
+                android:layout_width="@dimen/mcam_action_icon_size"
+                android:layout_height="@dimen/mcam_action_icon_size"
+                android:background="@drawable/mcam_circle_selector"
+                android:padding="@dimen/mcam_content_inset_less"
+                android:scaleType="fitXY"
+                android:src="@drawable/mcam_action_capture"
+                tools:ignore="ContentDescription"/>
+
+            <ImageButton
+                android:id="@+id/video"
+                android:layout_width="@dimen/mcam_action_icon_size"
+                android:layout_height="@dimen/mcam_action_icon_size"
+                android:background="@drawable/mcam_circle_selector"
+                android:padding="@dimen/mcam_content_inset_less"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_videocam"
+                tools:ignore="ContentDescription"/>
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/recordDuration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/mcam_defaultDuration"
+            android:textColor="#fff"
+            android:textSize="@dimen/mcam_regular_content_fontsize"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

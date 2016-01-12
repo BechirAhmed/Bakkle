@@ -30,6 +30,8 @@ public class WatchListFragment extends Fragment
 {
     RecyclerView       recyclerView;
     SwipeRefreshLayout listContainer;
+    List<FeedItem> items;
+    WatchListAdapter adapter;
 
     public WatchListFragment()
     {
@@ -58,7 +60,7 @@ public class WatchListFragment extends Fragment
         listContainer = (SwipeRefreshLayout) view.findViewById(R.id.listContainer);
 
         listContainer.setColorSchemeResources(R.color.colorPrimary, R.color.colorNope,
-                                              R.color.colorHoldBlue);
+                R.color.colorHoldBlue);
 
         listContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
         {
@@ -170,10 +172,12 @@ public class WatchListFragment extends Fragment
                 image_urls[k] = image_urlsJson.getString(k);
             }
 
-            seller.setAvatar_image_url(sellerJson.getString("avatar_image_url"));
             seller.setDisplay_name(sellerJson.getString("display_name"));
             seller.setDescription(sellerJson.getString("description"));
             seller.setFacebook_id(sellerJson.getString("facebook_id"));
+            seller.setAvatar_image_url(seller.getFacebook_id()
+                    .matches(
+                            "[0-9]+") ? "https://graph.facebook.com/" + seller.getFacebook_id() + "/picture?type=normal" : null);
             seller.setPk(sellerJson.getInt("pk"));
             seller.setFlavor(sellerJson.getInt("flavor"));
             seller.setUser_location(sellerJson.getString("user_location"));
@@ -200,11 +204,13 @@ public class WatchListFragment extends Fragment
         public void onResponse(JSONObject response)
         {
             try {
-                recyclerView.setAdapter(new WatchListAdapter(processJson(response), getActivity()));
+                items = processJson(response);
+                adapter = new WatchListAdapter(items, getActivity(), WatchListFragment.this);
+                recyclerView.setAdapter(adapter);
                 listContainer.setRefreshing(false);
             } catch (JSONException e) {
                 Toast.makeText(getContext(), "There was error retrieving the Watch List",
-                               Toast.LENGTH_SHORT).show();
+                        Toast.LENGTH_SHORT).show();
                 showError();
             }
         }
@@ -218,6 +224,9 @@ public class WatchListFragment extends Fragment
             if (resultCode == Constants.RESULT_CODE_NOPE) {
                 API.getInstance()
                         .markItem(Constants.MARK_NOPE, data.getIntExtra(Constants.PK, -1), "42");
+                int position = data.getIntExtra(Constants.POSITION, -1);
+                items.remove(position);
+                adapter.notifyItemRemoved(position);
             } else if (resultCode == Constants.RESULT_CODE_WANT) {
                 if (Prefs.getInstance().isGuest()) {
                     Intent intent = new Intent(getContext(), RegisterActivity.class);
@@ -225,14 +234,16 @@ public class WatchListFragment extends Fragment
                 } else {
                     API.getInstance()
                             .markItem(Constants.MARK_WANT, data.getIntExtra(Constants.PK, -1),
-                                      "42");
+                                    "42");
+                    int position = data.getIntExtra(Constants.POSITION, -1);
+                    items.remove(position);
+                    adapter.notifyItemRemoved(position);
                 }
             }
         } else if (requestCode == Constants.REQUEST_CODE_MARK_ITEM) {
             if (resultCode == Constants.REUSLT_CODE_OK) {
                 API.getInstance()
-                        .markItem(Constants.MARK_WANT, data.getIntExtra(Constants.PK, -1),
-                                  "42");
+                        .markItem(Constants.MARK_WANT, data.getIntExtra(Constants.PK, -1), "42");
             }
         }
     }
@@ -249,7 +260,7 @@ public class WatchListFragment extends Fragment
         public void onErrorResponse(VolleyError error)
         {
             Toast.makeText(getContext(), "There was error retrieving the Watch List",
-                           Toast.LENGTH_SHORT).show();
+                    Toast.LENGTH_SHORT).show();
             showError();
         }
     }

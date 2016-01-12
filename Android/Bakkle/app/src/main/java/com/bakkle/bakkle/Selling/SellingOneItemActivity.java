@@ -15,7 +15,6 @@ import com.bakkle.bakkle.Constants;
 import com.bakkle.bakkle.GetFeedItem;
 import com.bakkle.bakkle.Models.FeedItem;
 import com.bakkle.bakkle.R;
-import com.bakkle.bakkle.SectionsPagerAdapter;
 
 public class SellingOneItemActivity extends AppCompatActivity implements GetFeedItem
 {
@@ -49,7 +48,6 @@ public class SellingOneItemActivity extends AppCompatActivity implements GetFeed
             @Override
             public void onClick(View view)
             {
-                //TODO: Start AddItem Activity
                 Snackbar.make(view, "This feature is coming soon!", Snackbar.LENGTH_SHORT).show();
             }
         });

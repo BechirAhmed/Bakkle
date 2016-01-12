@@ -85,7 +85,7 @@ public class ProfileActivity extends AppCompatActivity
                     profilePictureImageView.setImageResource(R.drawable.ic_account_circle);
                     LoginManager.getInstance().logOut();
                     prefs.logout();
-                    setResult(Constants.RESULT_CODE_TOGGLED);
+                    setResult(Constants.RESULT_CODE_NOW_SIGNED_OUT);
 
                 } else {
                     startActivityForResult(new Intent(ProfileActivity.this, RegisterActivity.class),
@@ -131,7 +131,7 @@ public class ProfileActivity extends AppCompatActivity
 
             nameTextView.setText(prefs.getName());
             API.getInstance(this).getAccount(new AccountListener());
-            setResult(Constants.RESULT_CODE_TOGGLED);
+            setResult(Constants.RESULT_CODE_NOW_SIGNED_IN);
         }
     }
 

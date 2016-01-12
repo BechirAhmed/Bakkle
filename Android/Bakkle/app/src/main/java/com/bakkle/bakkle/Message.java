@@ -65,7 +65,7 @@ public class Message
                     calendar.getDisplayName(Calendar.AM_PM, Calendar.SHORT, Locale.US);
 
         } catch (ParseException e) {
-            return "Error";
+            return "Jan 1, 12:00 AM";
         }
     }
 }

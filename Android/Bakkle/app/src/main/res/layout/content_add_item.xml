@@ -1,8 +1,123 @@
 <FrameLayout
-    android:id="@+id/content_frame"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:showIn="@layout/activity_add_item">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:isScrollContainer="false"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:id="@+id/content_frame"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.bakkle.bakkle.Views.SqaureViewPager
+                    android:id="@+id/images"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"/>
+
+                <com.viewpagerindicator.CirclePageIndicator
+                    android:id="@+id/indicator"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/images"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="16dp"/>
+            </RelativeLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingTop="8dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/titleInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Title"
+                        android:inputType="textCapWords"
+                        android:maxLines="1"
+                        android:singleLine="true"/>
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/priceInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/price"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:hint="Price"
+                        android:inputType="numberDecimal"
+                        android:maxLines="1"
+                        android:singleLine="true"/>
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/descriptionInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="top"
+                        android:hint="Item Description"
+                        android:inputType="textCapSentences|textMultiLine"
+                        android:lines="3"
+                        android:scrollbars="vertical"/>
+
+                </android.support.design.widget.TextInputLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="8dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Share to Facebook"
+                        android:textStyle="bold"/>
+
+                    <Switch
+                        android:id="@+id/share"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"/>
+                </LinearLayout>
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>

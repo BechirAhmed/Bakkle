@@ -1,5 +1,7 @@
+Authenticate email password when logging in
+Setting email password when creating account
+Decrease size of ItemDetail ViewPager (or find a better way to display description)
+Chat send button ripple effect and z-elevation
 Add Item
-Chat
 Push Notifications
-Item Analytics Page
 List Subheaders for Item lists

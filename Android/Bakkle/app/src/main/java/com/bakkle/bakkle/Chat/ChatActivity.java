@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,13 +39,15 @@ public class ChatActivity extends AppCompatActivity
     Prefs               prefs;
     boolean             isSelfSeller;
     int                 chatId;
+    int                 itemId;
+    boolean             chatInitiatedAlready;
     String              url;
     WebSocketConnection webSocketConnection;
     RecyclerView        recyclerView;
     ImageButton         sendButton;
     EditText            composeEditText;
-    ChatAdapter chatAdapter;
-    List<Message> messages;
+    ChatAdapter         chatAdapter;
+    List<Message>       messages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -57,6 +58,7 @@ public class ChatActivity extends AppCompatActivity
         feedItem = (FeedItem) getIntent().getSerializableExtra(Constants.FEED_ITEM);
         isSelfSeller = getIntent().getBooleanExtra(Constants.IS_SELF_SELLER, true);
         chatId = getIntent().getIntExtra(Constants.CHAT_ID, -1);
+        itemId = feedItem.getPk();
         toolbar.setTitle(getIntent().getStringExtra(Constants.NAME));
         setSupportActionBar(toolbar);
 
@@ -86,6 +88,7 @@ public class ChatActivity extends AppCompatActivity
         url = ws_base + "?uuid=" + prefs.getUuid() + "&userId=" + prefs.getAuthToken()
                 .split("_")[1];
 
+        chatInitiatedAlready = chatId != -1;
         getChat(new GetChatListener());
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -97,15 +100,17 @@ public class ChatActivity extends AppCompatActivity
             if (webSocketConnection.isConnected()) {
                 JSONObject json = new JSONObject();
                 json.put("method", "chat_sendChatMessage");
-                json.put("chatId", chatId);
+                json.put("chatId", Integer.toString(chatId));
                 json.put("message", text);
                 json.put("offerPrice", ""); //These are required parameters
                 json.put("offerMethod", "");
                 json.put("uuid", prefs.getUuid());
                 json.put("auth_token", prefs.getAuthToken());
-                webSocketConnection.sendTextMessage(text);
-                if (chatAdapter != null && messages != null) {
-                    messages.add(new Message(text, "", true)); //TODO: Add a real timestamp
+                webSocketConnection.sendTextMessage(json.toString());
+                if (chatAdapter != null || messages != null) {
+                    messages.add(0, new Message(text, "", true)); //TODO: Add a real timestamp
+                    chatAdapter.notifyItemInserted(0);
+                    composeEditText.setText("");
                 }
             } else {
                 webSocketConnection.connect(url, new GetChatListener());
@@ -123,11 +128,12 @@ public class ChatActivity extends AppCompatActivity
             if (!webSocketConnection.isConnected()) {
                 webSocketConnection.connect(url, webSocketHandler);
             } else {
-                makeRequest();
+                makeChatRequest();
             }
         } catch (WebSocketException e) {
             Toast.makeText(this, "There was an error retrieving messages", Toast.LENGTH_SHORT)
                     .show();
+            e.printStackTrace();
         }
     }
 
@@ -136,7 +142,7 @@ public class ChatActivity extends AppCompatActivity
         @Override
         public void onOpen()
         {
-            makeRequest();
+            makeChatRequest();
         }
 
         @Override
@@ -153,18 +159,32 @@ public class ChatActivity extends AppCompatActivity
                 if (jsonObject.getInt("success") != 1) {
                     Toast.makeText(ChatActivity.this, "There was an error", Toast.LENGTH_SHORT)
                             .show();
-                    Log.v("ChatActivity", jsonObject.toString());
                     return;
-                } else if (!jsonObject.has("messages")) {
-                    return;
+                } else if (jsonObject.has("chatId")) {
+                    chatId = jsonObject.getInt("chatId");
+                    chatInitiatedAlready = true;
+                    makeChatRequest();
+                } else if (jsonObject.has("messages")) {
+                    messages = processJson(jsonObject);
+                    chatAdapter = new ChatAdapter(messages);
+                    recyclerView.setAdapter(chatAdapter);
+                } else if (jsonObject.has("message")) {
+                    try {
+                        if (jsonObject.getString("message").equals("Welcome")) {
+                            return;
+                        }
+                    } catch (JSONException e) {
+                        String text = jsonObject.getJSONObject("message").getString("message");
+                        messages.add(0, new Message(text, "", false)); //TODO: Add a real timestamp
+                        chatAdapter.notifyItemInserted(0);
+                    }
+
                 }
-                messages = processJson(jsonObject);
-                chatAdapter = new ChatAdapter(messages);
-                recyclerView.setAdapter(chatAdapter);
 
             } catch (JSONException e) {
                 Toast.makeText(ChatActivity.this, "There was an error retrieving messages",
                                Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
             }
         }
 
@@ -188,17 +208,24 @@ public class ChatActivity extends AppCompatActivity
         return messages;
     }
 
-    private void makeRequest()
+    private void makeChatRequest()
     {
         JSONObject json = new JSONObject();
         try {
-            json.put("method", "chat_getMessagesForChat");
-            json.put("chatId", chatId);
             json.put("uuid", prefs.getUuid());
             json.put("auth_token", prefs.getAuthToken());
+
+            if (chatInitiatedAlready) {
+                json.put("method", "chat_getMessagesForChat");
+                json.put("chatId", chatId);
+            } else {
+                json.put("method", "chat_startChat");
+                json.put("itemId", itemId);
+            }
         } catch (JSONException e) {
             Toast.makeText(this, "There was an error retrieving messages", Toast.LENGTH_SHORT)
                     .show();
+            e.printStackTrace();
         }
 
         webSocketConnection.sendTextMessage(json.toString());

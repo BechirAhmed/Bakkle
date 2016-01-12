@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -9,86 +9,92 @@
     tools:context="com.bakkle.bakkle.ItemDetailActivity"
     tools:showIn="@layout/activity_item_detail">
 
-    <com.bakkle.bakkle.Views.SqaureViewPager
-        android:id="@+id/images"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    </com.bakkle.bakkle.Views.SqaureViewPager>
+        <com.bakkle.bakkle.Views.SqaureViewPager
+            android:id="@+id/images"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
-    <com.viewpagerindicator.CirclePageIndicator
-        android:id="@+id/indicator"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/images"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="16dp"/>
+        <com.viewpagerindicator.CirclePageIndicator
+            android:id="@+id/indicator"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/images"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="16dp"/>
 
 
-    <RelativeLayout
-        android:id="@+id/bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/images"
-        android:background="@color/colorPrimaryLight">
+        <RelativeLayout
+            android:id="@+id/bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/images"
+            android:background="@color/colorPrimaryLight">
 
-        <com.bakkle.bakkle.Views.CircleImageView
-            android:id="@+id/prof_pic"
-            android:layout_width="@dimen/avatar_width"
-            android:layout_height="@dimen/avatar_height"
-            android:padding="8dp"
-            app:civ_border_color="@color/colorTextAndIcons"
-            app:civ_border_width="1dp"/>
+            <com.bakkle.bakkle.Views.CircleImageView
+                android:id="@+id/prof_pic"
+                android:layout_width="@dimen/avatar_width"
+                android:layout_height="@dimen/avatar_height"
+                android:padding="8dp"
+                app:civ_border_color="@color/colorTextAndIcons"
+                app:civ_border_width="1dp"/>
+
+            <TextView
+                android:id="@+id/seller"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/prof_pic"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/distance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:textSize="16sp"/>
+        </RelativeLayout>
+
 
         <TextView
-            android:id="@+id/seller"
+            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/prof_pic"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/bar"
+            android:layout_toStartOf="@+id/price"
+            android:fontFamily="sans-serif-medium"
+            android:paddingStart="@dimen/activity_horizontal_margin"
+            android:textSize="20sp"/>
+
+        <TextView
+            android:id="@+id/price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/title"
+            android:layout_alignParentEnd="true"
+            android:paddingEnd="@dimen/activity_horizontal_margin"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/title"
+            android:layout_marginBottom="56dp"
+            android:maxLines="5"
+            android:paddingBottom="@dimen/activity_vertical_margin"
             android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:textSize="16sp"/>
-
-        <TextView
-            android:id="@+id/distance"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
             android:paddingRight="@dimen/activity_horizontal_margin"
-            android:textSize="16sp"/>
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:scrollbars="vertical"/>
+
     </RelativeLayout>
+</ScrollView>
 
-
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/bar"
-        android:fontFamily="sans-serif-medium"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:textSize="20sp"/>
-
-    <TextView
-        android:id="@+id/price"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/title"
-        android:layout_alignParentRight="true"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:textSize="16sp"/>
-
-    <TextView
-        android:id="@+id/description"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/title"
-        android:layout_marginBottom="56dp"
-        android:maxLines="5"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:scrollbars="vertical"/>
-
-</RelativeLayout>

@@ -50,9 +50,12 @@ public class FeedFragment extends Fragment
     Prefs                  prefs;
     RelativeLayout         error;
     RelativeLayout         done;
+    RelativeLayout         locationError;
     Button                 refresh;
+    Button                 grantLocation;
     FeedItem previousItem = null;
     FloatingActionButton undoFab;
+    boolean shouldShowLocationError = false;
 
     @Override
     public void onResume()
@@ -99,7 +102,9 @@ public class FeedFragment extends Fragment
         flingContainer = (SwipeFlingAdapterView) view.findViewById(R.id.feed);
         error = (RelativeLayout) view.findViewById(R.id.error);
         done = (RelativeLayout) view.findViewById(R.id.done);
+        locationError = (RelativeLayout) view.findViewById(R.id.location_error);
         refresh = (Button) view.findViewById(R.id.refresh);
+        grantLocation = (Button) view.findViewById(R.id.grant_location_button);
 
         refresh.setOnClickListener(new View.OnClickListener()
         {
@@ -176,7 +181,7 @@ public class FeedFragment extends Fragment
             API.getInstance()
                     .markItem(Constants.MARK_NOPE, previousItem.getPk(),
                               "42"); //TODO: Get actual view duration
-        }
+        } //Marks previously Nope'd item as Nope on the server
         if (Direction.hasRight(direction)) {
             /** Show splash screen.
              *
@@ -188,7 +193,7 @@ public class FeedFragment extends Fragment
              *
              *  If user is logged in, complete the action
              */
-            showTakeActionFragment(item.getImage_urls()[0], item.getPk());
+            showTakeActionFragment(item);
             previousItem = null;
 
         } else if (Direction.hasLeft(direction)) {
@@ -208,8 +213,12 @@ public class FeedFragment extends Fragment
                     .setNegativeButton("CANCEL", new DialogInterface.OnClickListener()
                     {
                         @Override
-                        public void onClick(DialogInterface dialog, int which)
+                        public void onClick(DialogInterface dialog,
+                                            int which) //Since the user clicked Cancel, add card back to feed
                         {
+                            items.add(0, item);
+                            adapter.notifyDataSetChanged();
+                            flingContainer.refresh();
                         }
                     })
                     .setPositiveButton("REPORT", new DialogInterface.OnClickListener()
@@ -265,10 +274,10 @@ public class FeedFragment extends Fragment
                 .setAlpha(scrollProgressPercentVertical > 0 ? scrollProgressPercentVertical : 0);
     }
 
-    private void showTakeActionFragment(String image_url, int pk)
+    private void showTakeActionFragment(FeedItem feedItem)
     {
         getFragmentManager().beginTransaction()
-                .add(R.id.drawer_layout, TakeActionFragment.newInstance(image_url, pk))
+                .add(R.id.drawer_layout, TakeActionFragment.newInstance(feedItem))
                 .addToBackStack(null)
                 .commit();
 
@@ -276,29 +285,46 @@ public class FeedFragment extends Fragment
         activity.getDrawer().setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
 
-    private void showError()
+    public void showError()
     {
         error.setVisibility(View.VISIBLE);
         refresh.setVisibility(View.VISIBLE);
     }
 
-    private void showDone()
+    public void showDone()
     {
         done.setVisibility(View.VISIBLE);
         refresh.setVisibility(View.VISIBLE);
     }
 
-    private void hideErrorAndDone()
+    public void showLocationError() //TODO: This method doesn't seem to actually show the error. Nor the button.
+    {
+        hideErrorAndDone();
+        items.clear(); //This is to make sure the cards are not displayed without location
+        adapter.notifyDataSetChanged();
+        flingContainer.refresh(); //Remove cards from layout view
+        locationError.setVisibility(View.VISIBLE);
+        grantLocation.setVisibility(View.VISIBLE);
+
+    }
+
+    public void hideErrorAndDone()
     {
         error.setVisibility(View.GONE);
+        locationError.setVisibility(View.GONE);
         done.setVisibility(View.GONE);
         refresh.setVisibility(View.GONE);
+        grantLocation.setVisibility(View.GONE);
     }
 
     public void refreshFeed() //TODO: For some reason, calling this method doesn't actually seem to refresh the feed
     {
-        hideErrorAndDone();
-        API.getInstance(getContext()).getFeed(new FeedListener(), new FeedErrorListener());
+        if (shouldShowLocationError) {
+            showLocationError();
+        } else {
+            hideErrorAndDone();
+            API.getInstance(getContext()).getFeed(new FeedListener(), new FeedErrorListener());
+        }
     }
 
     private void doneProcessing()
@@ -338,10 +364,13 @@ public class FeedFragment extends Fragment
                 image_urls[k] = image_urlsJson.getString(k);
             }
 
-            seller.setAvatar_image_url(sellerJson.getString("avatar_image_url"));
             seller.setDisplay_name(sellerJson.getString("display_name"));
             seller.setDescription(sellerJson.getString("description"));
             seller.setFacebook_id(sellerJson.getString("facebook_id"));
+            seller.setAvatar_image_url(seller.getFacebook_id()
+                                               .matches(
+                                                       "[0-9]+") ? "https://graph.facebook.com/" + seller
+                    .getFacebook_id() + "/picture?type=normal" : null);
             seller.setPk(sellerJson.getInt("pk"));
             seller.setFlavor(sellerJson.getInt("flavor"));
             seller.setUser_location(sellerJson.getString("user_location"));
@@ -399,7 +428,7 @@ public class FeedFragment extends Fragment
 
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(
                 menu.findItem(R.id.action_search));
-        searchView.onActionViewCollapsed();
+        //searchView.onActionViewCollapsed();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener()
         {
             @Override
@@ -564,6 +593,18 @@ public class FeedFragment extends Fragment
 
         return super.onOptionsItemSelected(item);
     }
+
+    //TODO: this doesn't mark the item as nope when user navigates away from feedfragment
+//    @Override
+//    public void setUserVisibleHint(boolean isVisibleToUser)
+//    {
+//        super.setUserVisibleHint(isVisibleToUser);
+//        if (!isVisibleToUser && previousItem != null) {
+//            API.getInstance()
+//                    .markItem(Constants.MARK_NOPE, previousItem.getPk(),
+//                              "42"); //TODO: Get actual view duration
+//        }
+//    }
 
     public class FeedListener implements Response.Listener<JSONObject>
     {

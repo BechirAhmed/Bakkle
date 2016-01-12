@@ -43,7 +43,6 @@ public class MessageListAdapter extends RecyclerView.Adapter<MessageListAdapter.
         holder.buyer = buyerAndChatIds.get(position).buyer;
         holder.chatId = buyerAndChatIds.get(position).chatId;
         holder.nameTextView.setText(holder.buyer.getDisplay_name());
-
         Picasso.with(context)
                 .load(holder.buyer.getAvatar_image_url())
                 .fit()

@@ -11,14 +11,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.bakkle.bakkle.Chat.ChatActivity;
+import com.bakkle.bakkle.Models.FeedItem;
 import com.bakkle.bakkle.Profile.RegisterActivity;
 import com.squareup.picasso.Picasso;
 
 public class TakeActionFragment extends Fragment
 {
     private MainActivity mainActivity;
-    private String       image_url;
-    private int          pk;
+    private FeedItem     feedItem;
 
     private Prefs prefs;
 
@@ -27,12 +28,11 @@ public class TakeActionFragment extends Fragment
         // Required empty public constructor
     }
 
-    public static TakeActionFragment newInstance(String image_url, int pk)
+    public static TakeActionFragment newInstance(FeedItem feedItem)
     {
         TakeActionFragment fragment = new TakeActionFragment();
-        Bundle args = new Bundle(1);
-        args.putString(Constants.IMAGE_URL, image_url);
-        args.putInt(Constants.PK, pk);
+        Bundle args = new Bundle(2);
+        args.putSerializable(Constants.FEED_ITEM, feedItem);
         fragment.setArguments(args);
         return fragment;
     }
@@ -42,7 +42,7 @@ public class TakeActionFragment extends Fragment
     {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            this.image_url = getArguments().getString(Constants.IMAGE_URL);
+            this.feedItem = (FeedItem) getArguments().getSerializable(Constants.FEED_ITEM);
         }
     }
     
@@ -55,29 +55,22 @@ public class TakeActionFragment extends Fragment
                 mainActivity.updateNavHeader();
                 sendMessage();
             }
-        } else if (requestCode == Constants.REQUEST_CODE_MAKE_OFFER) {
-            if (resultCode == Constants.REUSLT_CODE_OK) {
-                mainActivity.updateNavHeader();
-                makeOffer();
-            }
         }
-    }
-
-    private void makeOffer()
-    {
-        markWant();
-        //TODO: Start ChatActivity, with making offer as parameter
     }
     
     private void sendMessage()
     {
         markWant();
-        //TODO: Start ChatActivity, with sending message as parameter
+        Intent intent = new Intent(getContext(), ChatActivity.class);
+        intent.putExtra(Constants.FEED_ITEM, feedItem);
+        intent.putExtra(Constants.NAME, feedItem.getSeller().getDisplay_name());
+        startActivity(intent);
+        getFragmentManager().popBackStack();
     }
 
     private void markWant()
     {
-        API.getInstance().markItem(Constants.MARK_WANT, pk, "42");
+        API.getInstance().markItem(Constants.MARK_WANT, feedItem.getPk(), "42");
     }
     
     @Override
@@ -92,11 +85,9 @@ public class TakeActionFragment extends Fragment
         ImageView product;
         Button saveButton;
         Button sendMessageButton;
-        Button makeOfferButton;
 
         product = (ImageView) view.findViewById(R.id.product);
         sendMessageButton = (Button) view.findViewById(R.id.message);
-        makeOfferButton = (Button) view.findViewById(R.id.offer);
         saveButton = (Button) view.findViewById(R.id.save);
 
         sendMessageButton.setOnClickListener(new View.OnClickListener()
@@ -113,32 +104,23 @@ public class TakeActionFragment extends Fragment
             }
         });
 
-        makeOfferButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                if (!prefs.isLoggedIn()) {
-                    startActivityForResult(new Intent(getContext(), RegisterActivity.class),
-                                           Constants.REQUEST_CODE_MAKE_OFFER);
-                } else {
-                    makeOffer();
-                }
-            }
-        });
-
         saveButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
                 API.getInstance()
-                        .markItem(Constants.MARK_HOLD, pk, "42"); //TODO: Get actual view duration
+                        .markItem(Constants.MARK_HOLD, feedItem.getPk(),
+                                  "42"); //TODO: Get actual view duration
                 mainActivity.onBackPressed();
             }
         });
 
-        Picasso.with(getContext()).load(image_url).centerCrop().fit().into(product);
+        Picasso.with(getContext())
+                .load(feedItem.getImage_urls()[0])
+                .centerCrop()
+                .fit()
+                .into(product);
 
         return view;
     }

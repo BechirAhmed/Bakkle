@@ -16,7 +16,6 @@ import java.util.List;
 public class FeedAdapter extends ArrayAdapter<FeedItem>
 {
     List<FeedItem> items;
-    Context        context;
     int            resource;
 
     public FeedAdapter(Context context, int resource, List<FeedItem> items)
@@ -24,7 +23,6 @@ public class FeedAdapter extends ArrayAdapter<FeedItem>
         super(context, resource, items);
         this.items = items;
         this.resource = resource;
-        this.context = context;
     }
 
     @Override
@@ -33,7 +31,7 @@ public class FeedAdapter extends ArrayAdapter<FeedItem>
         ViewHolder holder;
 
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(resource, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(resource, parent, false);
             holder = new ViewHolder();
             holder.product = (ImageView) convertView.findViewById(R.id.image);
             holder.title = (TextView) convertView.findViewById(R.id.title);
@@ -43,7 +41,8 @@ public class FeedAdapter extends ArrayAdapter<FeedItem>
         }
 
         FeedItem item = items.get(position);
-        holder.price.setText("$".concat(item.getPrice()));
+        String priceText = item.getPrice().equals("0.00") ? "Offer" : "$".concat(item.getPrice());
+        holder.price.setText(priceText);
         holder.title.setText(item.getTitle());
 
         Picasso.with(getContext())

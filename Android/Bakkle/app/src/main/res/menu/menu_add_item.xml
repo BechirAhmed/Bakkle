@@ -3,8 +3,14 @@
       xmlns:tools="http://schemas.android.com/tools"
       tools:context=".AddItem.AddItemActivity">
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never"/>
+        android:id="@+id/add_photo"
+        android:icon="@drawable/ic_add_a_photo"
+        android:title="Add Photo"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/add_video"
+        android:icon="@drawable/ic_videocam"
+        android:title="Add Video"
+        app:showAsAction="always"/>
 </menu>

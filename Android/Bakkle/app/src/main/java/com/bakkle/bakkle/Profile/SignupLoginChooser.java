@@ -135,7 +135,7 @@ public class SignupLoginChooser extends Fragment
     }
 
 
-    public class LoginListener implements Response.Listener<JSONObject>
+    private class LoginListener implements Response.Listener<JSONObject>
     {
         @Override
         public void onResponse(JSONObject response)

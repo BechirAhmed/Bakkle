@@ -1,6 +1,6 @@
 package com.bakkle.bakkle;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,18 +15,16 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class BuyingAdapter
-        extends RecyclerView.Adapter<BuyingAdapter.ViewHolder>
+public class BuyingAdapter extends RecyclerView.Adapter<BuyingAdapter.ViewHolder>
 {
 
     private final List<FeedItem> items;
-    private Activity             activity;
+    private       Context        context;
 
-
-    public BuyingAdapter(List<FeedItem> items, Activity activity)
+    public BuyingAdapter(List<FeedItem> items, Context context)
     {
         this.items = items;
-        this.activity = activity;
+        this.context = context;
     }
 
     @Override
@@ -44,7 +42,11 @@ public class BuyingAdapter
         holder.titleTextView.setText(holder.item.getTitle());
         holder.priceTextView.setText("$".concat(holder.item.getPrice()));
 
-        Picasso.with(activity).load(holder.item.getImage_urls()[0]).fit().centerCrop().into(holder.productImageView);
+        Picasso.with(context)
+                .load(holder.item.getImage_urls()[0])
+                .fit()
+                .centerCrop()
+                .into(holder.productImageView);
 
         holder.mView.setOnClickListener(new View.OnClickListener()
         {
@@ -52,11 +54,11 @@ public class BuyingAdapter
             public void onClick(View v)
             {
 
-                Intent intent = new Intent(activity, ChatActivity.class);
+                Intent intent = new Intent(context, ChatActivity.class);
                 intent.putExtra(Constants.FEED_ITEM, holder.item);
                 intent.putExtra(Constants.NAME, holder.item.getSeller().getDisplay_name());
                 intent.putExtra(Constants.IS_SELF_SELLER, false);
-                activity.startActivity(intent);
+                context.startActivity(intent);
             }
         });
     }

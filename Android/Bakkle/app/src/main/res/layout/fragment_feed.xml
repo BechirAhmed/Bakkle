@@ -39,6 +39,33 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/location_error"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/location_error_image"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/ic_error"
+                android:tint="@color/colorSecondaryText"/>
+
+            <TextView
+                android:id="@+id/location_error_text"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/location_error_image"
+                android:layout_centerHorizontal="true"
+                android:text="@string/location_error_text"
+                android:textAlignment="center"
+                android:textColor="@color/colorSecondaryText"
+                android:textSize="12sp"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
             android:id="@+id/done"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -75,6 +102,17 @@
         android:layout_below="@+id/message"
         android:layout_centerInParent="true"
         android:text="@string/refresh"
+        android:textColor="@color/colorSecondaryText"
+        android:visibility="gone"/>
+
+    <Button
+        android:id="@+id/grant_location_button"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/message"
+        android:layout_centerInParent="true"
+        android:text="@string/grant_location_permission"
         android:textColor="@color/colorSecondaryText"
         android:visibility="gone"/>
 

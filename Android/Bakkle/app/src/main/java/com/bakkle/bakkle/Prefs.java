@@ -266,4 +266,15 @@ public class Prefs
 
 
     }
+
+    public void registeredPush(boolean registered)
+    {
+        editor.putBoolean(Constants.REGISTERED_PUSH, registered);
+        editor.commit();
+    }
+
+    public boolean isRegistered()
+    {
+        return preferences.getBoolean(Constants.REGISTERED_PUSH, false);
+    }
 }

@@ -1,11 +1,10 @@
-package com.bakkle.bakkle;
+package com.bakkle.bakkle.Selling;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.bakkle.bakkle.Chat.MessageListFragment;
-import com.bakkle.bakkle.Selling.AnalyticsFragment;
 
 public class SectionsPagerAdapter extends FragmentPagerAdapter
 {
