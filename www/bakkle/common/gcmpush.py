@@ -4,7 +4,7 @@ from gcm import *
 from common.decorators import run_async
 from tornado.log import logging
 
-config = { "reg_id": "AIzaSyB-jLcy_UiQPCdgkjTUI4Sqsb13G-MYxQ0",
+config = { "reg_id": "AIzaSyCcb7jWxCcdLusPGp4NSHIqM6ykD8CLvcE",#AIzaSyB-jLcy_UiQPCdgkjTUI4Sqsb13G-MYxQ0",
            "pacify": False }
 
 #@run_async
@@ -17,9 +17,9 @@ def sendGcmPushMessage(token, message, badge, sound, custom={}):
             'custom': custom }
 
 
-    logging.debug("Sending gcm notification " + str(payload) + " to " + str(token))
-    print("Sending gcm notification " + str(payload) + " to " + str(token))
+    logging.debug("Sending gcm notification " + str(data) + " to " + str(token))
+    print("Sending gcm notification data={} regid={}.".format(str(data), str(token)))
     if not config["pacify"]:
-        gcm.plaintext_request(registration_id=config[reg_id], data=data)
+        gcm.plaintext_request(registration_id=token, data=data)
 
 

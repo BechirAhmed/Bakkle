@@ -11,11 +11,11 @@ from django.db import models
 from account.models import Account, Device
 
 from tornado.log import logging
-from common.gcm import sendGcmPushMessage
+from common.gcmpush import sendGcmPushMessage
 from random import randint
 
 # Parms
-device_id = 2
+device_id = 236
 message = 'Test Message'
 sound = 'Bakkle_Notification_new.m4r'
 badge = randint(1,9)

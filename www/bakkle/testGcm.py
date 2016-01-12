@@ -11,7 +11,7 @@ from django.db import models
 
 
 from tornado.log import logging
-from common.gcm import sendGcmPushMessage
+from common.gcmpush import sendGcmPushMessage
 from random import randint
 
 # Parms

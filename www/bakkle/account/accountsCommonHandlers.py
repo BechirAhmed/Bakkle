@@ -399,7 +399,7 @@ def device_register_push(account_id, device_uuid, device_token, device_type, cli
     device.apns_token = device_token
     device.device_token = device_type
     device.save()
-    logging.info("registered {}".format(device_token))
+    logging.info("registered {} type={}".format(device_token, device_type))
 
     response_data = {"status": 1}
     return response_data
