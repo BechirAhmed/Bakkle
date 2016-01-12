@@ -95,10 +95,9 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
         self.tableView.tableFooterView = UIView()
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "messageCell")
         
-        dateFormatter.timeZone = NSTimeZone(abbreviation: "GMT")
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:SS"
-
-        
+//        dateFormatter.timeZone = NSTimeZone(abbreviation: "GMT")
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:SS ZZZ"
+      
     }
     
     override func viewWillAppear(animated: Bool) {

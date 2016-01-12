@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 from gcm import *
-from common.decorators import run_async
+#from common.decorators import run_async
 from tornado.log import logging
 
 config = { "API_KEY": "AIzaSyCcb7jWxCcdLusPGp4NSHIqM6ykD8CLvcE",#AIzaSyB-jLcy_UiQPCdgkjTUI4Sqsb13G-MYxQ0",
