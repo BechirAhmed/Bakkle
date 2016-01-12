@@ -1,5 +1,6 @@
 package com.bakkle.bakkle;
 
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -16,6 +17,8 @@ import android.widget.TextView;
 import com.bakkle.bakkle.Models.FeedItem;
 import com.squareup.picasso.Picasso;
 import com.viewpagerindicator.CirclePageIndicator;
+
+import java.util.Arrays;
 
 public class ItemDetailActivity extends AppCompatActivity
 {
@@ -42,7 +45,7 @@ public class ItemDetailActivity extends AppCompatActivity
         final FeedItem item = (FeedItem) getIntent().getSerializableExtra(Constants.FEED_ITEM);
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.images);
-        ImagePagerAdapter adapter = new ImagePagerAdapter(this, item.getImage_urls());
+        ImagePagerAdapter adapter = new ImagePagerAdapter(this, Arrays.asList(item.getImage_urls()));
         viewPager.setAdapter(adapter);
         ((CirclePageIndicator) findViewById(R.id.indicator)).setViewPager(viewPager);
         ((CirclePageIndicator) findViewById(R.id.indicator)).setSnap(true);
@@ -76,7 +79,8 @@ public class ItemDetailActivity extends AppCompatActivity
         distanceTextView.setText(String.valueOf(Math.round(distanceInMiles)).concat(" miles"));
 
         titleTextView.setText(item.getTitle());
-        priceTextView.setText("$".concat(item.getPrice()));
+        String priceText = item.getPrice().equals("0.00") ? "Offer" : "$".concat(item.getPrice());
+        priceTextView.setText(priceText);
         descriptionTextView.setText(item.getDescription());
         //"http://graph.facebook.com/" + item.getSeller().getFacebook_id() + "/picture?type=normal"
 
@@ -92,7 +96,12 @@ public class ItemDetailActivity extends AppCompatActivity
                 @Override
                 public void onClick(View view)
                 {
-                    setResult(Constants.RESULT_CODE_NOPE);
+                    Intent intent = new Intent();
+                    intent.putExtra(Constants.PK, item.getPk());
+                    intent.putExtra(Constants.POSITION,
+                            getIntent().getIntExtra(Constants.POSITION, -1));
+                    setResult(Constants.RESULT_CODE_NOPE, intent);
+
                     finish();
                 }
             });
@@ -107,8 +116,12 @@ public class ItemDetailActivity extends AppCompatActivity
                 public void onClick(View view)
                 {
                     Snackbar.make(view, "Item moved to Buying",
-                                  Snackbar.LENGTH_LONG); //TODO: Make the snackbar have an undo button
-                    setResult(Constants.RESULT_CODE_WANT);
+                            Snackbar.LENGTH_LONG); //TODO: Make the snackbar have an undo button
+                    Intent intent = new Intent();
+                    intent.putExtra(Constants.PK, item.getPk());
+                    intent.putExtra(Constants.POSITION,
+                            getIntent().getIntExtra(Constants.POSITION, -1));
+                    setResult(Constants.RESULT_CODE_WANT, intent);
                     finish();
                 }
             });

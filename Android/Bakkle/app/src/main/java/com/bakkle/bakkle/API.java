@@ -2,6 +2,7 @@ package com.bakkle.bakkle;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.util.LruCache;
 import android.widget.Toast;
 
@@ -16,6 +17,7 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
@@ -45,6 +47,7 @@ public class API
     final static String url_setdescription      = "account/set_description/";
     final static String url_guest_id            = "account/guestuserid/";
     final static String url_email_id            = "account/localuserid/";
+    final static String url_account_password    = "account/authenticatelocal/";
     //</editor-fold>
 
     private static API ourInstance = null;
@@ -64,7 +67,8 @@ public class API
     public static synchronized API getInstance()
     {
         if (ourInstance == null) {
-            throw new IllegalStateException(API.class.getSimpleName() + " is not initialized, call getInstance(Context c) first");
+            throw new IllegalStateException(
+                    API.class.getSimpleName() + " is not initialized, call getInstance(Context c) first");
         }
         return ourInstance;
     }
@@ -106,11 +110,17 @@ public class API
         int price = prefs.getPriceFilter() == 100 ? 101 : prefs.getPriceFilter();
 
         try {
-            url += "?auth_token=" + URLEncoder.encode(prefs.getAuthToken(), "UTF-8") + "&device_uuid=" + URLEncoder.encode(prefs.getUuid(), "UTF-8") + "&filter_distance=" + distance + "&filter_price=" + price + "&search_text=" + URLEncoder.encode(prefs.getSearchText(), "UTF-8") + "&user_location=" + URLEncoder.encode(location, "UTF-8");
+            url += "?auth_token=" + URLEncoder.encode(prefs.getAuthToken(),
+                    "UTF-8") + "&device_uuid=" + URLEncoder.encode(prefs.getUuid(),
+                    "UTF-8") + "&filter_distance=" + distance + "&filter_price=" + price + "&search_text=" + URLEncoder
+                    .encode(prefs.getSearchText(), "UTF-8") + "&user_location=" + URLEncoder.encode(
+                    location, "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            Toast.makeText(context, "There was error retrieving the feed", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "There was error retrieving the feed", Toast.LENGTH_SHORT)
+                    .show();
         }
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, responseListener, errorListener);
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url,
+                responseListener, errorListener);
 
         request.setShouldCache(true);
         queue.add(request);
@@ -122,11 +132,14 @@ public class API
         String url = url_base + url_get_holding_pattern;
 
         try {
-            url += "?auth_token=" + URLEncoder.encode(prefs.getAuthToken(), "UTF-8") + "&device_uuid=" + URLEncoder.encode(prefs.getUuid(), "UTF-8");
+            url += "?auth_token=" + URLEncoder.encode(prefs.getAuthToken(),
+                    "UTF-8") + "&device_uuid=" + URLEncoder.encode(prefs.getUuid(), "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            Toast.makeText(context, "There was error retrieving the Watch List", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "There was error retrieving the Watch List", Toast.LENGTH_SHORT)
+                    .show();
         }
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, responseListener, errorListener);
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url,
+                responseListener, errorListener);
 
         request.setShouldCache(true);
         queue.add(request);
@@ -138,11 +151,14 @@ public class API
         String url = url_base + url_buyers_trunk;
 
         try {
-            url += "?auth_token=" + URLEncoder.encode(prefs.getAuthToken(), "UTF-8") + "&device_uuid=" + URLEncoder.encode(prefs.getUuid(), "UTF-8");
+            url += "?auth_token=" + URLEncoder.encode(prefs.getAuthToken(),
+                    "UTF-8") + "&device_uuid=" + URLEncoder.encode(prefs.getUuid(), "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            Toast.makeText(context, "There was error retrieving the Buyer's Trunk", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "There was error retrieving the Buyer's Trunk",
+                    Toast.LENGTH_SHORT).show();
         }
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, responseListener, errorListener);
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url,
+                responseListener, errorListener);
 
         request.setShouldCache(true);
         queue.add(request);
@@ -154,11 +170,14 @@ public class API
         String url = url_base + url_sellers;
 
         try {
-            url += "?auth_token=" + URLEncoder.encode(prefs.getAuthToken(), "UTF-8") + "&device_uuid=" + URLEncoder.encode(prefs.getUuid(), "UTF-8");
+            url += "?auth_token=" + URLEncoder.encode(prefs.getAuthToken(),
+                    "UTF-8") + "&device_uuid=" + URLEncoder.encode(prefs.getUuid(), "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            Toast.makeText(context, "There was error retrieving the Seller Items", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "There was error retrieving the Seller Items",
+                    Toast.LENGTH_SHORT).show();
         }
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, responseListener, errorListener);
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url,
+                responseListener, errorListener);
 
         request.setShouldCache(true);
         queue.add(request);
@@ -184,20 +203,23 @@ public class API
             Toast.makeText(context, "There was error marking item", Toast.LENGTH_SHORT).show();
         }
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>()
-        {
-            @Override
-            public void onResponse(JSONObject response)
-            {
-                try {
-                    if (response.getInt("status") != 1) {
-                        Toast.makeText(context, "There was error marking item", Toast.LENGTH_SHORT).show();
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url,
+                new Response.Listener<JSONObject>()
+                {
+                    @Override
+                    public void onResponse(JSONObject response)
+                    {
+                        try {
+                            if (response.getInt("status") != 1) {
+                                Toast.makeText(context, "There was error marking item",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            Toast.makeText(context, "There was error marking item",
+                                    Toast.LENGTH_SHORT).show();
+                        }
                     }
-                } catch (JSONException e) {
-                    Toast.makeText(context, "There was error marking item", Toast.LENGTH_SHORT).show();
-                }
-            }
-        }, new Response.ErrorListener()
+                }, new Response.ErrorListener()
         {
             @Override
             public void onErrorResponse(VolleyError error)
@@ -220,15 +242,18 @@ public class API
                     "&device_uuid=" + URLEncoder.encode(prefs.getUuid(), "UTF-8") +
                     "&accountId=" + prefs.getAuthToken().substring(33);
         } catch (UnsupportedEncodingException e) {
-            Toast.makeText(context, "There was an error getting the account", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "There was an error getting the account", Toast.LENGTH_SHORT)
+                    .show();
         }
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, responseListener, new Response.ErrorListener()
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url,
+                responseListener, new Response.ErrorListener()
         {
             @Override
             public void onErrorResponse(VolleyError error)
             {
-                Toast.makeText(context, "There was an error getting the account", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "There was an error getting the account",
+                        Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -244,15 +269,18 @@ public class API
                     "&device_uuid=" + URLEncoder.encode(prefs.getUuid(), "UTF-8") +
                     "&description=" + URLEncoder.encode(description, "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            Toast.makeText(context, "There was an error setting the description", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "There was an error setting the description",
+                    Toast.LENGTH_SHORT).show();
         }
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, responseListener, new Response.ErrorListener()
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url,
+                responseListener, new Response.ErrorListener()
         {
             @Override
             public void onErrorResponse(VolleyError error)
             {
-                Toast.makeText(context, "There was an error setting the description", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "There was an error setting the description",
+                        Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -271,7 +299,8 @@ public class API
             Toast.makeText(context, "There was error signing in", Toast.LENGTH_SHORT).show();
         }
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, responseListener, new Response.ErrorListener()
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url,
+                responseListener, new Response.ErrorListener()
         {
             @Override
             public void onErrorResponse(VolleyError error)
@@ -289,12 +318,14 @@ public class API
         String url = url_base + url_email_id;
 
         try {
-            url += "?" + "device_uuid=" + URLEncoder.encode(prefs.getUuid(), "UTF-8") + "&email=" + email;
+            url += "?" + "device_uuid=" + URLEncoder.encode(prefs.getUuid(),
+                    "UTF-8") + "&email=" + email;
         } catch (UnsupportedEncodingException e) {
             Toast.makeText(context, "There was error signing in", Toast.LENGTH_SHORT).show();
         }
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, responseListener, new Response.ErrorListener()
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url,
+                responseListener, new Response.ErrorListener()
         {
             @Override
             public void onErrorResponse(VolleyError error)
@@ -307,6 +338,51 @@ public class API
         queue.add(request);
     }
 
+    public void authenticatePassword(String password,
+                                     Response.Listener<JSONObject> responseListener)
+    {
+        String url = url_base + url_account_password;
+        try {
+            url += "?user_id=" + URLEncoder.encode(prefs.getUserId(),
+                    "UTF-8") + "&device_uuid=" + URLEncoder.encode(prefs.getUuid(),
+                    "UTF-8") + "&password=" + URLEncoder.encode(password, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            Toast.makeText(context, "There was error signing in", Toast.LENGTH_SHORT).show();
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url,
+                new Response.Listener<JSONObject>()
+                {
+                    @Override
+                    public void onResponse(JSONObject response)
+                    {
+                        try {
+                            if (response.getInt("status") == 1) {
+
+                            } else {
+                                Toast.makeText(context, "There was error signing in",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            Toast.makeText(context, "There was error signing in",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }, new Response.ErrorListener()
+        {
+
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                Toast.makeText(context, "There was error signing in", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        request.setShouldCache(false);
+        queue.add(request);
+
+    }
+
     public void registerFacebook(final Response.Listener<JSONObject> LoginListener)
     {
         String url = url_base + url_facebook;
@@ -314,27 +390,36 @@ public class API
         try {
             url += "?email=" + URLEncoder.encode(prefs.getEmail(), "UTF-8") +
                     "&name=" + URLEncoder.encode(prefs.getName(), "UTF-8") +
-                    "&user_name=" + URLEncoder.encode(prefs.getUsername(), "UTF-8") + "&gender=" + URLEncoder.encode(prefs.getGender(), "UTF-8") + "&user_id=" + URLEncoder.encode(prefs.getUserId(), "UTF-8") + "&locale=" + URLEncoder.encode(prefs.getLocale(), "UTF-8") + "&first_name=" + URLEncoder.encode(prefs.getFirstName(), "UTF-8") + "&last_name=" + URLEncoder.encode(prefs.getLastName(), "UTF-8") + "&device_uuid=" + URLEncoder.encode(prefs.getUuid(), "UTF-8");
+                    "&user_name=" + URLEncoder.encode(prefs.getUsername(),
+                    "UTF-8") + "&gender=" + URLEncoder.encode(prefs.getGender(),
+                    "UTF-8") + "&user_id=" + URLEncoder.encode(prefs.getUserId(),
+                    "UTF-8") + "&locale=" + URLEncoder.encode(prefs.getLocale(),
+                    "UTF-8") + "&first_name=" + URLEncoder.encode(prefs.getFirstName(),
+                    "UTF-8") + "&last_name=" + URLEncoder.encode(prefs.getLastName(),
+                    "UTF-8") + "&device_uuid=" + URLEncoder.encode(prefs.getUuid(), "UTF-8");
         } catch (UnsupportedEncodingException e) {
             Toast.makeText(context, "There was error signing in", Toast.LENGTH_SHORT).show();
         }
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>()
-        {
-            @Override
-            public void onResponse(JSONObject response)
-            {
-                try {
-                    if (response.getInt("status") == 1) {
-                        loginFacebook(LoginListener);
-                    } else {
-                        Toast.makeText(context, "There was error signing in", Toast.LENGTH_SHORT).show();
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url,
+                new Response.Listener<JSONObject>()
+                {
+                    @Override
+                    public void onResponse(JSONObject response)
+                    {
+                        try {
+                            if (response.getInt("status") == 1) {
+                                loginFacebook(LoginListener);
+                            } else {
+                                Toast.makeText(context, "There was error signing in",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            Toast.makeText(context, "There was error signing in",
+                                    Toast.LENGTH_SHORT).show();
+                        }
                     }
-                } catch (JSONException e) {
-                    Toast.makeText(context, "There was error signing in", Toast.LENGTH_SHORT).show();
-                }
-            }
-        }, new Response.ErrorListener()
+                }, new Response.ErrorListener()
         {
 
             @Override
@@ -354,12 +439,16 @@ public class API
         String url = url_base + url_login;
 
         try {
-            url += "?app_version=" + URLEncoder.encode(BuildConfig.VERSION_NAME, "UTF-8") + "&is_ios=false" + "&user_location=" + URLEncoder.encode(location, "UTF-8") + "&user_id=" + URLEncoder.encode(prefs.getUserId(), "UTF-8") + "&device_uuid=" + URLEncoder.encode(prefs.getUuid(), "UTF-8");
+            url += "?app_version=" + URLEncoder.encode(BuildConfig.VERSION_NAME,
+                    "UTF-8") + "&is_ios=false" + "&user_location=" + URLEncoder.encode(location,
+                    "UTF-8") + "&user_id=" + URLEncoder.encode(prefs.getUserId(),
+                    "UTF-8") + "&device_uuid=" + URLEncoder.encode(prefs.getUuid(), "UTF-8");
         } catch (UnsupportedEncodingException e) {
             Toast.makeText(context, "There was error signing in", Toast.LENGTH_SHORT).show();
         }
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, responseListener, new Response.ErrorListener()
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url,
+                responseListener, new Response.ErrorListener()
         {
 
             @Override
@@ -382,28 +471,96 @@ public class API
         } catch (UnsupportedEncodingException e) {
             Toast.makeText(context, "There was an error logging out", Toast.LENGTH_SHORT).show();
         }
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>()
-        {
-            @Override
-            public void onResponse(JSONObject response)
-            {
-                try {
-                    if (response.getInt("status") != 1) {
-                        Toast.makeText(context, "There was an error logging out", Toast.LENGTH_SHORT).show();
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url,
+                new Response.Listener<JSONObject>()
+                {
+                    @Override
+                    public void onResponse(JSONObject response)
+                    {
+                        try {
+                            if (response.getInt("status") != 1) {
+                                Toast.makeText(context, "There was an error logging out",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            Toast.makeText(context, "There was an error logging out",
+                                    Toast.LENGTH_SHORT).show();
+                        }
                     }
-                } catch (JSONException e) {
-                    Toast.makeText(context, "There was an error logging out", Toast.LENGTH_SHORT).show();
-                }
-            }
-        }, new Response.ErrorListener()
+                }, new Response.ErrorListener()
         {
             @Override
             public void onErrorResponse(VolleyError error)
             {
-                Toast.makeText(context, "There was an error logging out", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "There was an error logging out", Toast.LENGTH_SHORT)
+                        .show();
             }
         });
 
         queue.add(request);
+    }
+
+    public void registerPush(String token)
+    {
+        if (!prefs.isLoggedIn()) {
+            return;
+        }
+        Log.v("Push token is", token);
+        String url = url_base + url_register_push;
+        try {
+            url += "?auth_token=" + URLEncoder.encode(prefs.getAuthToken(), "UTF-8") +
+                    "&device_uuid=" + URLEncoder.encode(prefs.getUuid(),
+                    "UTF-8") + "&device_token=" + URLEncoder.encode(token,
+                    "UTF-8") + "&device_type=gcm";
+        } catch (UnsupportedEncodingException e) {
+            Toast.makeText(context, "There was an error registering push", Toast.LENGTH_SHORT)
+                    .show();
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url,
+                new Response.Listener<JSONObject>()
+                {
+                    @Override
+                    public void onResponse(JSONObject response)
+                    {
+                        Prefs.getInstance(context).registeredPush(true);
+                        Toast.makeText(context, "Push Sent", Toast.LENGTH_SHORT).show();
+                    }
+                }, new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                error.printStackTrace();
+            }
+        });
+
+        queue.add(request);
+    }
+
+    public void postItem(String title, String price, String description,
+                         Response.Listener<JSONObject> responseListener,
+                         Response.ErrorListener errorListener, File[] files)
+    {
+        String url = url_base + url_add_item;
+        String location = prefs.getLatitude() + "," + prefs.getLongitude();
+        try {
+            url += "?auth_token=" + URLEncoder.encode(prefs.getAuthToken(), "UTF-8") +
+                    "&device_uuid=" + URLEncoder.encode(prefs.getUuid(),
+                    "UTF-8") + "&title=" + URLEncoder.encode(title,
+                    "UTF-8") + "&price=" + price + "&description=" + URLEncoder.encode(description,
+                    "UTF-8") + "&location=" + URLEncoder.encode(location, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            Toast.makeText(context, "There was an error posting item", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+
+        ImageUploadRequest request2 = new ImageUploadRequest(url, errorListener, responseListener,
+                files);
+
+        //JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, responseListener, errorListener);
+
+        queue.add(request2);
     }
 }

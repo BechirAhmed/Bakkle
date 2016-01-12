@@ -3,7 +3,6 @@ package com.bakkle.bakkle.Profile;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
@@ -46,8 +45,6 @@ public class SignupEmailFragment extends Fragment
     private View progressView;
     private View loginFormView;
     private boolean started = false;
-
-    private OnFragmentInteractionListener mListener;
 
     public SignupEmailFragment()
     {
@@ -116,24 +113,11 @@ public class SignupEmailFragment extends Fragment
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri)
-    {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onAttach(Context context)
     {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(
-                    context.toString() + " must implement OnFragmentInteractionListener");
-        }
+
         if (context instanceof RegisterActivity) {
             ((RegisterActivity) context).getSupportActionBar().show();
             ((RegisterActivity) context).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -144,7 +128,6 @@ public class SignupEmailFragment extends Fragment
     public void onDetach()
     {
         super.onDetach();
-        mListener = null;
     }
 
     /**
@@ -206,7 +189,7 @@ public class SignupEmailFragment extends Fragment
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            API.getInstance().getEmailUserId(email, new EmailIdListener(name));
+            API.getInstance().getEmailUserId(email, new EmailIdListener(name, password));
             //TODO: How do you submit the password to the server?
         }
     }
@@ -259,42 +242,61 @@ public class SignupEmailFragment extends Fragment
                 });
     }
 
-    public class EmailIdListener implements Response.Listener<JSONObject>
+    private class EmailIdListener implements Response.Listener<JSONObject>
     {
         private String name;
+        private String password;
 
-        public EmailIdListener(String name)
+        public EmailIdListener(String name, String password)
         {
             this.name = name;
+            this.password = password;
         }
 
         @Override
         public void onResponse(JSONObject response)
         {
             try {
-                if (response.has("status") && response.getInt("status") == 1) {
+                if (response.getInt("status") == 1) {
                     Prefs prefs = Prefs.getInstance(getContext());
                     prefs.setUserId(response.getString("userid"));
-                    prefs.setUsername(name);
-                    prefs.setName(name);
-                    String[] split = name.split(" ");
-                    if (split.length >= 2) {
-                        prefs.setFirstName(split[0]);
-                        prefs.setLastName(split[split.length - 1]);
-                    } else {
-                        prefs.setFirstName(name);
-                        prefs.setLastName("");
-                    }
-                    API.getInstance().registerFacebook(new LoginListener());
+
+                    //API.getInstance().authenticatePassword(password, new PasswordListener());
+                    API.getInstance().authenticatePassword("", new PasswordListener()); //TODO: This doesn't seem to autenticate, so I'm using a placeholder "" in the meantime. THIS MEANS ANY PASSWORD WILL WORK!!!
                 } else {
-                    Toast.makeText(getContext(), "There was error signing in", Toast.LENGTH_SHORT)
+                    Toast.makeText(getContext(), "There was error signing up", Toast.LENGTH_SHORT)
                             .show();
+                    showProgress(false);
                     started = false;
                 }
             } catch (JSONException e) {
-                Toast.makeText(getContext(), "There was error signing in", Toast.LENGTH_SHORT)
+                Toast.makeText(getContext(), "There was error signing up", Toast.LENGTH_SHORT)
                         .show();
+                showProgress(false);
                 started = false;
+            }
+        }
+
+        private class PasswordListener implements Response.Listener<JSONObject>
+        {
+            @Override
+            public void onResponse(JSONObject response)
+            {
+                try {
+                    if (response.getInt("status") == 1) {
+                        API.getInstance().registerFacebook(new LoginListener());
+                    } else {
+                        Toast.makeText(getContext(), "There was error signing up", Toast.LENGTH_SHORT)
+                                .show();
+                        showProgress(false);
+                        started = false;
+                    }
+                } catch (JSONException e) {
+                    Toast.makeText(getContext(), "There was an error signing up", Toast.LENGTH_LONG)
+                            .show();
+                    showProgress(false);
+                    started = false;
+                }
             }
         }
 
@@ -312,36 +314,32 @@ public class SignupEmailFragment extends Fragment
                         prefs.setLoggedIn(true);
                         prefs.setGuest(false);
                         showProgress(false);
+                        prefs.setUsername(name);
+                        prefs.setName(name);
+                        String[] split = name.split(" ");
+                        if (split.length >= 2) {
+                            prefs.setFirstName(split[0]);
+                            prefs.setLastName(split[split.length - 1]);
+                        } else {
+                            prefs.setFirstName(name);
+                            prefs.setLastName("");
+                        }
 
                         getActivity().setResult(Constants.REUSLT_CODE_OK);
                         getActivity().finish();
                     } else {
-                        Toast.makeText(getContext(), "There was error signing in",
-                                       Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "There was error signing up", Toast.LENGTH_SHORT)
+                                .show();
+                        showProgress(false);
                         started = false;
                     }
                 } catch (JSONException e) {
-                    Toast.makeText(getContext(), "There was error signing in", Toast.LENGTH_SHORT)
+                    Toast.makeText(getContext(), "There was error signing up", Toast.LENGTH_SHORT)
                             .show();
+                    showProgress(false);
                     started = false;
                 }
             }
         }
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener
-    {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
     }
 }

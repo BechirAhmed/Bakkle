@@ -55,7 +55,7 @@ public class FeedFragment extends Fragment
     Button                 grantLocation;
     FeedItem previousItem = null;
     FloatingActionButton undoFab;
-    boolean              shouldShowLocationError = false;
+    boolean shouldShowLocationError = false;
 
     @Override
     public void onResume()
@@ -213,7 +213,8 @@ public class FeedFragment extends Fragment
                     .setNegativeButton("CANCEL", new DialogInterface.OnClickListener()
                     {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) //Since the user clicked Cancel, add card back to feed
+                        public void onClick(DialogInterface dialog,
+                                            int which) //Since the user clicked Cancel, add card back to feed
                         {
                             items.add(0, item);
                             adapter.notifyDataSetChanged();
@@ -338,7 +339,7 @@ public class FeedFragment extends Fragment
 
         flingContainer.removeAllViewsInLayout();
 
-        adapter = new FeedAdapter(getActivity(), R.layout.feed_item, items);
+        adapter = new FeedAdapter(getContext(), R.layout.feed_item, items);
         flingContainer.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
@@ -427,7 +428,7 @@ public class FeedFragment extends Fragment
 
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(
                 menu.findItem(R.id.action_search));
-        searchView.onActionViewCollapsed();
+        //searchView.onActionViewCollapsed();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener()
         {
             @Override
@@ -592,6 +593,18 @@ public class FeedFragment extends Fragment
 
         return super.onOptionsItemSelected(item);
     }
+
+    //TODO: this doesn't mark the item as nope when user navigates away from feedfragment
+//    @Override
+//    public void setUserVisibleHint(boolean isVisibleToUser)
+//    {
+//        super.setUserVisibleHint(isVisibleToUser);
+//        if (!isVisibleToUser && previousItem != null) {
+//            API.getInstance()
+//                    .markItem(Constants.MARK_NOPE, previousItem.getPk(),
+//                              "42"); //TODO: Get actual view duration
+//        }
+//    }
 
     public class FeedListener implements Response.Listener<JSONObject>
     {

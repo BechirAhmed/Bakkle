@@ -25,6 +25,7 @@ public class Constants
     public static final String NEW_USER        = "newuser";
     public static final String AUTHENTICATED   = "authenticated";
     public static final String GUEST           = "guest";
+    public static final String REGISTERED_PUSH = "registeredPush";
 
     //Intent keys
     public static final String PICTURE_PATH     = "pic";
@@ -60,6 +61,7 @@ public class Constants
     public static final String FEED_ITEM        = "feedItem";
     public static final String SHOW_NOPE        = "showNope";
     public static final String SHOW_WANT        = "showWant";
+    public static final String POSITION         = "position";
 
     public static final String SHOW_TUORIAL = "showTutorial";
 
@@ -70,6 +72,8 @@ public class Constants
 
     public static final String APPLICATION_ID = "sxjMPMgXvXLMAGddMk4Zy9U8PKkvGP0N8MzBjiVg";
     public static final String CLIENT_ID      = "Gz8C7dTo72cMDpo4YgUbS6z7JSUl5f4AVgZjBaqO";
+
+    public static final String SENDER_ID = "495026598491";
 
     public static final int REUSLT_CODE_OK                      = -1;
     public static final int REQUEST_CODE_VIEW_ITEM              = 0;
@@ -84,5 +88,8 @@ public class Constants
     public static final int REQUEST_CODE_ACCESS_FINE_LOCATION   = 9;
     public static final int REQUEST_CODE_ACCESS_COARSE_LOCATION = 10;
     public static final int RESULT_CODE_NOW_SIGNED_IN           = 11;
+    public static final int REQUEST_CODE_POST_ITEM              = 12;
+    public static final int REQUEST_CODE_TAKE_PICTURE           = 13;
+    public static final int REQUEST_CODE_TAKE_VIDEO             = 14;
 
 }

@@ -1,6 +1,5 @@
 package com.bakkle.bakkle.Profile;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -8,7 +7,6 @@ import android.view.MenuItem;
 import com.bakkle.bakkle.R;
 
 public class RegisterActivity extends AppCompatActivity
-        implements SignupEmailFragment.OnFragmentInteractionListener
 {
 
     @Override
@@ -23,14 +21,9 @@ public class RegisterActivity extends AppCompatActivity
 
         //getSupportFragmentManager().addOnBackStackChangedListener(this);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new SignupLoginChooser()).commit();
-    }
-
-
-    @Override
-    public void onFragmentInteraction(Uri uri)
-    {
-
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.content_frame, new SignupLoginChooser())
+                .commit();
     }
 
     @Override

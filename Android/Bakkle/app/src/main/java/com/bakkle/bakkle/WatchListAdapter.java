@@ -19,11 +19,13 @@ public class WatchListAdapter extends RecyclerView.Adapter<WatchListAdapter.View
 
     private final List<FeedItem> items;
     private       Activity       activity;
+    private WatchListFragment fragment;
 
-    public WatchListAdapter(List<FeedItem> items, Activity activity)
+    public WatchListAdapter(List<FeedItem> items, Activity activity, WatchListFragment fragment)
     {
         this.items = items;
         this.activity = activity;
+        this.fragment = fragment;
     }
 
     @Override
@@ -56,10 +58,13 @@ public class WatchListAdapter extends RecyclerView.Adapter<WatchListAdapter.View
                 intent.putExtra(Constants.FEED_ITEM, holder.item);
                 intent.putExtra(Constants.SHOW_NOPE, true);
                 intent.putExtra(Constants.SHOW_WANT, true);
-                activity.startActivityForResult(intent, Constants.REQUEST_CODE_VIEW_ITEM);
+                intent.putExtra(Constants.POSITION, holder.getAdapterPosition());
+                fragment.startActivityForResult(intent, Constants.REQUEST_CODE_VIEW_ITEM);
             }
         });
     }
+
+
 
     @Override
     public int getItemCount()
