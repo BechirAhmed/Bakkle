@@ -373,7 +373,7 @@ def device_register(ip, uuid, user, location, app_version):
 
 
 @time_method
-def device_register_push(account_id, device_uuid, device_token, client_ip):
+def device_register_push(account_id, device_uuid, device_token, device_type, client_ip):
     logging.info("register_push")
     prevDevices = Device.objects.filter(Q(uuid=device_uuid) | Q(apns_token=device_token))
 
@@ -397,6 +397,7 @@ def device_register_push(account_id, device_uuid, device_token, client_ip):
     device.last_seen_date = datetime.datetime.now()
     device.ip_address = client_ip
     device.apns_token = device_token
+    device.device_token = device_type
     device.save()
     logging.info("registered {}".format(device_token))
 

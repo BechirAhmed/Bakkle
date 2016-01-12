@@ -67,6 +67,7 @@ class Device(models.Model):
     date_added = models.DateTimeField(auto_now_add=True)
     last_seen_date = models.DateTimeField(auto_now=True)
     apns_token = models.CharField(max_length=128)
+    device_type = models.CharField(max_length=64)
     ip_address = models.CharField(max_length=15)
     uuid = models.CharField(max_length=36)
     notifications_enabled = models.BooleanField(default=True)

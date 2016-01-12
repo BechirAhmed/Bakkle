@@ -383,8 +383,9 @@ class deviceRegisterPushHandler(bakkleRequestHandler):
             account_id = self.getUser()
             device_uuid = self.getArgument('device_uuid')
             device_token = self.getArgument('device_token')
+            device_type = self.getArgument('device_type', "apn")
             client_ip = self.getIP()
-            logging.info("device_register_push device_token={},device_uudi={}".format(device_token.replace(" ", ""),device_uuid))
+            logging.info("device_register_push device_token={},device_uuid={},device_type={}".format(device_token.replace(" ", ""),device_uuid, device_type))
         except QueryArgumentError as error:
             return self.writeJSON({"status": 0, "message": error.message})
 
@@ -392,6 +393,7 @@ class deviceRegisterPushHandler(bakkleRequestHandler):
             account_id,
             device_uuid,
             device_token,
+            device_type,
             client_ip)
 
         self.writeJSON(respObj)
