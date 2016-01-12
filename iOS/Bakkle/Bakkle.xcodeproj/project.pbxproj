@@ -83,7 +83,6 @@
 		726A38E31B39BE1E00CF5553 /* logo-white-design-clear.png in Resources */ = {isa = PBXBuildFile; fileRef = 726A38E21B39BE1E00CF5553 /* logo-white-design-clear.png */; };
 		727FA76D1B4C15750023C126 /* new-x.png in Resources */ = {isa = PBXBuildFile; fileRef = 727FA76C1B4C15750023C126 /* new-x.png */; };
 		728598C31B6A52C300C2FE55 /* InstructionScreen-new.png in Resources */ = {isa = PBXBuildFile; fileRef = 728598C21B6A52C300C2FE55 /* InstructionScreen-new.png */; };
-		728598C91B73B41000C2FE55 /* test-video.MOV in Resources */ = {isa = PBXBuildFile; fileRef = 728598C81B73B41000C2FE55 /* test-video.MOV */; };
 		728598CB1B75073500C2FE55 /* SplashScreen-bkg.png in Resources */ = {isa = PBXBuildFile; fileRef = F0D6F4041B5EA18700938A06 /* SplashScreen-bkg.png */; };
 		728647EB1B2F0E3F009A24C9 /* ChatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53BE1B0815CB000C406C /* ChatsViewController.swift */; };
 		728647EE1B309F6F009A24C9 /* NSDate+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 728647ED1B309F6F009A24C9 /* NSDate+String.swift */; };
@@ -142,6 +141,7 @@
 		A0A200051ACE30C200A42CD8 /* btn-logout40.png in Resources */ = {isa = PBXBuildFile; fileRef = A0A200041ACE30C200A42CD8 /* btn-logout40.png */; };
 		A0A2FFF31ACE213F00A42CD8 /* logo-white-design-png-100.png in Resources */ = {isa = PBXBuildFile; fileRef = A0A2FFF21ACE213F00A42CD8 /* logo-white-design-png-100.png */; };
 		A0A5F71D1AEDAE54001A7D7A /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A0A5F71C1AEDAE54001A7D7A /* Settings.bundle */; };
+		A0A6AABB1C4564E100467AE2 /* Sell.png in Resources */ = {isa = PBXBuildFile; fileRef = A0A6AABA1C4564E100467AE2 /* Sell.png */; };
 		A0A709CE1ACAC9D700E772B9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5EBDD6941AB211E600C7FBE7 /* Main.storyboard */; };
 		A0A709CF1ACAC9DB00E772B9 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5EBDD6991AB211E600C7FBE7 /* LaunchScreen.xib */; };
 		A0A8F8FE1B1F2BB70055BBC0 /* cartoon_fast_whoosh_good_for_karate_chop_other_fast_movement_or_swipe_001.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = A0A8F8FD1B1F2BB70055BBC0 /* cartoon_fast_whoosh_good_for_karate_chop_other_fast_movement_or_swipe_001.mp3 */; };
@@ -305,7 +305,6 @@
 		726A38E21B39BE1E00CF5553 /* logo-white-design-clear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo-white-design-clear.png"; sourceTree = "<group>"; };
 		727FA76C1B4C15750023C126 /* new-x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "new-x.png"; sourceTree = "<group>"; };
 		728598C21B6A52C300C2FE55 /* InstructionScreen-new.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "InstructionScreen-new.png"; sourceTree = "<group>"; };
-		728598C81B73B41000C2FE55 /* test-video.MOV */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = "test-video.MOV"; sourceTree = "<group>"; };
 		728647ED1B309F6F009A24C9 /* NSDate+String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSDate+String.swift"; sourceTree = "<group>"; };
 		72B5D8041B41E12D00E4B6EA /* BuyItemView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuyItemView.swift; sourceTree = "<group>"; };
 		72B5D8061B41E52300E4B6EA /* ChatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
@@ -367,6 +366,7 @@
 		A0A2FFFE1ACE2F7500A42CD8 /* btn-email40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-email40.png"; sourceTree = "<group>"; };
 		A0A2FFFF1ACE2F7500A42CD8 /* btn-facebook40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-facebook40.png"; sourceTree = "<group>"; };
 		A0A5F71C1AEDAE54001A7D7A /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		A0A6AABA1C4564E100467AE2 /* Sell.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Sell.png; sourceTree = "<group>"; };
 		A0A8F8FD1B1F2BB70055BBC0 /* cartoon_fast_whoosh_good_for_karate_chop_other_fast_movement_or_swipe_001.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = cartoon_fast_whoosh_good_for_karate_chop_other_fast_movement_or_swipe_001.mp3; sourceTree = "<group>"; };
 		A0A8F8FF1B1F2C870055BBC0 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		A0B765411B0E2B1A00107F7E /* NewItemNotification.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = NewItemNotification.apns; sourceTree = "<group>"; };
@@ -514,7 +514,6 @@
 				5EE2C9B11AB9F0FB0031D8CD /* MDCSwipeToChoose-Prefix.pch */,
 				5EBDD6991AB211E600C7FBE7 /* LaunchScreen.xib */,
 				5EBDD68F1AB211E600C7FBE7 /* Info.plist */,
-				728598C81B73B41000C2FE55 /* test-video.MOV */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -670,6 +669,7 @@
 				60BA452A1C404EB600D49C38 /* SwipeLeft.png */,
 				60BA452B1C404EB600D49C38 /* SwipeRight.png */,
 				60BA452C1C404EB600D49C38 /* SwipeUp.png */,
+				A0A6AABA1C4564E100467AE2 /* Sell.png */,
 				604D602D1BFFA0A10060579C /* default_profile.png */,
 				F0D6F40D1B5EC1A500938A06 /* gwIcon@2x.png */,
 				F0D6F4101B5EC54700938A06 /* GWLogo_Full@2x.png */,
@@ -1008,7 +1008,6 @@
 				602C38991B389A2E005CB493 /* WrongLocationForPhone.png in Resources */,
 				A05DB7521AF1BC090076D97D /* btn-menu.png in Resources */,
 				F0D6F4081B5EA28900938A06 /* SplashScreen-bkg-Blue.png in Resources */,
-				728598C91B73B41000C2FE55 /* test-video.MOV in Resources */,
 				F0D6F4021B5EA17100938A06 /* LoginScreen-bkg.png in Resources */,
 				728598CB1B75073500C2FE55 /* SplashScreen-bkg.png in Resources */,
 				A058A2A91AFD6024005E7432 /* btn-menu@3x.png in Resources */,
@@ -1038,6 +1037,7 @@
 				60BA45301C404EB600D49C38 /* SwipeRight.png in Resources */,
 				A08D53D81B0825E7000C406C /* icon-back.png in Resources */,
 				DB6726EA1B178F250014A896 /* star_half.png in Resources */,
+				A0A6AABB1C4564E100467AE2 /* Sell.png in Resources */,
 				A058A2B51AFDADA2005E7432 /* mask-buyer-grey@2x.png in Resources */,
 				60F3BC131B5E91710033EF83 /* Goodwill-Info.plist in Resources */,
 				728598C31B6A52C300C2FE55 /* InstructionScreen-new.png in Resources */,

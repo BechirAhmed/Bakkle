@@ -13,7 +13,8 @@ import Haneke
 
 class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDelegate, UINavigationControllerDelegate, MDCSwipeToChooseDelegate, UIAlertViewDelegate {
     
-    
+    let kNUM_TUTORIAL_SCREENS = 6
+
     let menuSegue = "presentNav"
     let itemDetailSegue = "ItemDetailSegue"
     let refineSegue = "RefineSegue"
@@ -93,6 +94,8 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             
             btnAddItem.hidden = true
         }
+        
+        pageControl.numberOfPages = kNUM_TUTORIAL_SCREENS
         
         // Always look for updates
         requestUpdates()
@@ -191,7 +194,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     
     /* collectionView display multiple pictures */
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection: Int) -> Int {
-        return 5
+        return kNUM_TUTORIAL_SCREENS
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
@@ -210,7 +213,8 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         case 1: cell.imgView.image = UIImage(named: "SwipeLeft.png")
         case 2: cell.imgView.image = UIImage(named: "SwipeUp.png")
         case 3: cell.imgView.image = UIImage(named: "SwipeDown.png")
-        case 4:
+        case 4: cell.imgView.image = UIImage(named: "Sell.png")
+        case 5:
             cell.imgView.image = UIImage(named: "Ready.png")
             cell.button.hidden = false
             break
