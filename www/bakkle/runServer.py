@@ -31,6 +31,7 @@ import items.itemsRESTHandlers as itemsRESTHandlers
 import account.accountsRESTHandlers as accountsRESTHandlers
 import chat.chatWSHandlers as ChatWSHandlers
 import purchase.purchaseRESTHandlers as PurchaseRESTHandlers
+import common.systemRESTHandlers as SystemRESTHandlers
 
 app = web.Application([
 
@@ -126,6 +127,9 @@ app = web.Application([
 
     web.url(r'^/purchase/purchase/$',
             PurchaseRESTHandlers.stripeChargeHandler, name='stripeCharge'),
+
+    web.url(r'^/system/status/$',
+            SystemRESTHandlers.statusHandler, name='status'),
 
 
     web.url(r"/ws.*", baseWSHandlers.BaseWSHandler),
