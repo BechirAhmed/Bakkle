@@ -512,6 +512,7 @@ public class API
                     "&device_uuid=" + URLEncoder.encode(prefs.getUuid(),
                     "UTF-8") + "&device_token=" + URLEncoder.encode(token,
                     "UTF-8") + "&device_type=gcm";
+            Log.v("Push url is", url);
         } catch (UnsupportedEncodingException e) {
             Toast.makeText(context, "There was an error registering push", Toast.LENGTH_SHORT)
                     .show();

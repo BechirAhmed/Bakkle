@@ -124,6 +124,25 @@ public class MainActivity extends AppCompatActivity
         InstanceID instanceID = InstanceID.getInstance(this);
         String token;
 
+        if (prefs.isLoggedIn()) {
+            new AsyncTask<Void, Void, Void>()
+            {
+                @Override
+                protected Void doInBackground(Void... params)
+                {
+                    try {
+                        API.getInstance(MainActivity.this)
+                                .registerPush(
+                                        GoogleCloudMessaging.getInstance(MainActivity.this)
+                                                .register(Constants.SENDER_ID));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }
+            }.execute();
+        }
+
     }
 
     private void requestLocationPermission()

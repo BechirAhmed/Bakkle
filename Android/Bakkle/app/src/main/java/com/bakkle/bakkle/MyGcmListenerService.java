@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.gms.gcm.GcmListenerService;
 
@@ -29,8 +28,6 @@ public class MyGcmListenerService extends GcmListenerService
     @Override
     public void onMessageReceived(String from, Bundle data) {
         String message = data.getString("message");
-        Toast.makeText(getApplicationContext(), "From: " + from, Toast.LENGTH_LONG).show();
-        Toast.makeText(getApplicationContext(), "Message: " + message, Toast.LENGTH_LONG).show();
 
         Log.d(TAG, "From: " + from);
         Log.d(TAG, "Message: " + message);
