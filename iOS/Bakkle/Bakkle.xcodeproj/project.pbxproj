@@ -142,6 +142,7 @@
 		A0A200051ACE30C200A42CD8 /* btn-logout40.png in Resources */ = {isa = PBXBuildFile; fileRef = A0A200041ACE30C200A42CD8 /* btn-logout40.png */; };
 		A0A2FFF31ACE213F00A42CD8 /* logo-white-design-png-100.png in Resources */ = {isa = PBXBuildFile; fileRef = A0A2FFF21ACE213F00A42CD8 /* logo-white-design-png-100.png */; };
 		A0A5F71D1AEDAE54001A7D7A /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A0A5F71C1AEDAE54001A7D7A /* Settings.bundle */; };
+		A0A6AABB1C4564E100467AE2 /* Sell.png in Resources */ = {isa = PBXBuildFile; fileRef = A0A6AABA1C4564E100467AE2 /* Sell.png */; };
 		A0A709CE1ACAC9D700E772B9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5EBDD6941AB211E600C7FBE7 /* Main.storyboard */; };
 		A0A709CF1ACAC9DB00E772B9 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5EBDD6991AB211E600C7FBE7 /* LaunchScreen.xib */; };
 		A0A8F8FE1B1F2BB70055BBC0 /* cartoon_fast_whoosh_good_for_karate_chop_other_fast_movement_or_swipe_001.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = A0A8F8FD1B1F2BB70055BBC0 /* cartoon_fast_whoosh_good_for_karate_chop_other_fast_movement_or_swipe_001.mp3 */; };
@@ -367,6 +368,7 @@
 		A0A2FFFE1ACE2F7500A42CD8 /* btn-email40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-email40.png"; sourceTree = "<group>"; };
 		A0A2FFFF1ACE2F7500A42CD8 /* btn-facebook40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-facebook40.png"; sourceTree = "<group>"; };
 		A0A5F71C1AEDAE54001A7D7A /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		A0A6AABA1C4564E100467AE2 /* Sell.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Sell.png; sourceTree = "<group>"; };
 		A0A8F8FD1B1F2BB70055BBC0 /* cartoon_fast_whoosh_good_for_karate_chop_other_fast_movement_or_swipe_001.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = cartoon_fast_whoosh_good_for_karate_chop_other_fast_movement_or_swipe_001.mp3; sourceTree = "<group>"; };
 		A0A8F8FF1B1F2C870055BBC0 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		A0B765411B0E2B1A00107F7E /* NewItemNotification.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = NewItemNotification.apns; sourceTree = "<group>"; };
@@ -670,6 +672,7 @@
 				60BA452A1C404EB600D49C38 /* SwipeLeft.png */,
 				60BA452B1C404EB600D49C38 /* SwipeRight.png */,
 				60BA452C1C404EB600D49C38 /* SwipeUp.png */,
+				A0A6AABA1C4564E100467AE2 /* Sell.png */,
 				604D602D1BFFA0A10060579C /* default_profile.png */,
 				F0D6F40D1B5EC1A500938A06 /* gwIcon@2x.png */,
 				F0D6F4101B5EC54700938A06 /* GWLogo_Full@2x.png */,
@@ -1038,6 +1041,7 @@
 				60BA45301C404EB600D49C38 /* SwipeRight.png in Resources */,
 				A08D53D81B0825E7000C406C /* icon-back.png in Resources */,
 				DB6726EA1B178F250014A896 /* star_half.png in Resources */,
+				A0A6AABB1C4564E100467AE2 /* Sell.png in Resources */,
 				A058A2B51AFDADA2005E7432 /* mask-buyer-grey@2x.png in Resources */,
 				60F3BC131B5E91710033EF83 /* Goodwill-Info.plist in Resources */,
 				728598C31B6A52C300C2FE55 /* InstructionScreen-new.png in Resources */,
