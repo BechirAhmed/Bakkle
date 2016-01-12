@@ -99,7 +99,9 @@ class Device(models.Model):
 
     def send_notification(self, message="", badge=1, sound="Bakkle_Notification_new.m4r", custom={}):
         dt = self.apns_token.replace(' ', '').replace('<', '').replace('>', '')
+        print("examine notif to {} {} {} {}".format(self.account_id.id, self.account_id.display_name, dt, message))
         if (dt is None or dt == ""):
             return
-        sendPushMessage(self.account_id.app_flavor, dt, message, 1, sound,custom)
+        print("notif to {} {}".format(dt, message))
+        sendPushMessage(self.account_id.app_flavor, dt, message, 1, sound, custom)
         # TODO: Log this to db so we know what we did.

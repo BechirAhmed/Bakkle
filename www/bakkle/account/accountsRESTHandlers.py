@@ -377,7 +377,6 @@ class deviceRegisterPushHandler(bakkleRequestHandler):
 
         if(not self.authenticate()):
             self.writeJSON({'success': 0, 'error': 'Device not authenticated'})
-            self.finish()
             return
 
         try:
@@ -396,3 +395,4 @@ class deviceRegisterPushHandler(bakkleRequestHandler):
             client_ip)
 
         self.writeJSON(respObj)
+

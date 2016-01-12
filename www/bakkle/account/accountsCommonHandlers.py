@@ -3,6 +3,7 @@ from django.shortcuts import render
 import datetime
 import json
 import md5
+import logging
 
 from django.http import HttpResponse, HttpResponseRedirect, Http404, HttpResponseForbidden
 from django.core.urlresolvers import reverse
@@ -373,7 +374,7 @@ def device_register(ip, uuid, user, location, app_version):
 
 @time_method
 def device_register_push(account_id, device_uuid, device_token, client_ip):
-
+    logging.info("register_push")
     prevDevices = Device.objects.filter(Q(uuid=device_uuid) | Q(apns_token=device_token))
 
     for device in prevDevices:
@@ -397,6 +398,7 @@ def device_register_push(account_id, device_uuid, device_token, client_ip):
     device.ip_address = client_ip
     device.apns_token = device_token
     device.save()
+    logging.info("registered {}".format(device_token))
 
     response_data = {"status": 1}
     return response_data
