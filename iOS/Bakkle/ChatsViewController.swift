@@ -139,7 +139,8 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
                 if let lastMessage = chat.valueForKey("last_message") as? NSDictionary {
                     message = lastMessage.valueForKey("message") as! String
                     dateString = lastMessage.valueForKey("date") as! String
-                    date = NSDate().dateFromString(dateString, format: "yyyy-MM-dd HH:mm:ss")
+                    dateString = dateString + " UTC"
+                    date = NSDate().dateFromString(dateString, format: "yyyy-MM-dd HH:mm:ss ZZZ")
                 }
                 id = chat.valueForKey("pk") as! Int
                 
