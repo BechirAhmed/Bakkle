@@ -3,6 +3,7 @@ from django.db import models
 import time
 from apns import APNs, Frame, Payload
 from common.apn import sendPushMessage
+from common.gcmpush import sendGcmPushMessage
 
 # Parms
 use_sandbox = True
@@ -67,6 +68,7 @@ class Device(models.Model):
     date_added = models.DateTimeField(auto_now_add=True)
     last_seen_date = models.DateTimeField(auto_now=True)
     apns_token = models.CharField(max_length=128)
+    device_type = models.CharField(max_length=64)
     ip_address = models.CharField(max_length=15)
     uuid = models.CharField(max_length=36)
     notifications_enabled = models.BooleanField(default=True)
@@ -103,5 +105,10 @@ class Device(models.Model):
         if (dt is None or dt == ""):
             return
         print("notif to {} {}".format(dt, message))
-        sendPushMessage(self.account_id.app_flavor, dt, message, 1, sound, custom)
+        if self.device_type == 'gcm':
+            regid = self.apns_token.replace('-', '')
+            sendGcmPushMessage(regid, message, 1, sound, custom)
+        else:
+            sendPushMessage(self.account_id.app_flavor, dt, message, 1, sound, custom)
+
         # TODO: Log this to db so we know what we did.
