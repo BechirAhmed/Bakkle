@@ -2,7 +2,6 @@ package com.bakkle.bakkle;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.util.Log;
 import android.util.LruCache;
 import android.widget.Toast;
 
@@ -48,6 +47,7 @@ public class API
     final static String url_guest_id            = "account/guestuserid/";
     final static String url_email_id            = "account/localuserid/";
     final static String url_account_password    = "account/authenticatelocal/";
+    final static String url_set_password        = "account/setpassword/";
     //</editor-fold>
 
     private static API ourInstance = null;
@@ -338,8 +338,28 @@ public class API
         queue.add(request);
     }
 
+    public void setPassword(String password, Response.Listener<JSONObject> responseListener,
+                            Response.ErrorListener errorListener)
+    {
+        String url = url_base + url_set_password;
+        try {
+            url += "?user_id=" + URLEncoder.encode(prefs.getUserId(),
+                    "UTF-8") + "&device_uuid=" + URLEncoder.encode(prefs.getUuid(),
+                    "UTF-8") + "&password=" + URLEncoder.encode(password, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            Toast.makeText(context, "There was error setting password", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url,
+                responseListener, errorListener);
+
+        queue.add(request);
+    }
+
     public void authenticatePassword(String password,
-                                     Response.Listener<JSONObject> responseListener)
+                                     Response.Listener<JSONObject> responseListener,
+                                     Response.ErrorListener errorListener)
     {
         String url = url_base + url_account_password;
         try {
@@ -351,32 +371,7 @@ public class API
         }
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url,
-                new Response.Listener<JSONObject>()
-                {
-                    @Override
-                    public void onResponse(JSONObject response)
-                    {
-                        try {
-                            if (response.getInt("status") == 1) {
-
-                            } else {
-                                Toast.makeText(context, "There was error signing in",
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        } catch (JSONException e) {
-                            Toast.makeText(context, "There was error signing in",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }, new Response.ErrorListener()
-        {
-
-            @Override
-            public void onErrorResponse(VolleyError error)
-            {
-                Toast.makeText(context, "There was error signing in", Toast.LENGTH_SHORT).show();
-            }
-        });
+                responseListener, errorListener);
 
         request.setShouldCache(false);
         queue.add(request);
@@ -505,14 +500,12 @@ public class API
         if (!prefs.isLoggedIn()) {
             return;
         }
-        Log.v("Push token is", token);
         String url = url_base + url_register_push;
         try {
             url += "?auth_token=" + URLEncoder.encode(prefs.getAuthToken(), "UTF-8") +
                     "&device_uuid=" + URLEncoder.encode(prefs.getUuid(),
                     "UTF-8") + "&device_token=" + URLEncoder.encode(token,
                     "UTF-8") + "&device_type=gcm";
-            Log.v("Push url is", url);
         } catch (UnsupportedEncodingException e) {
             Toast.makeText(context, "There was an error registering push", Toast.LENGTH_SHORT)
                     .show();
@@ -526,7 +519,6 @@ public class API
                     public void onResponse(JSONObject response)
                     {
                         Prefs.getInstance(context).registeredPush(true);
-                        Toast.makeText(context, "Push Sent", Toast.LENGTH_SHORT).show();
                     }
                 }, new Response.ErrorListener()
         {
@@ -557,11 +549,9 @@ public class API
             e.printStackTrace();
         }
 
-        ImageUploadRequest request2 = new ImageUploadRequest(url, errorListener, responseListener,
+        ImageUploadRequest request = new ImageUploadRequest(url, errorListener, responseListener,
                 files);
 
-        //JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, responseListener, errorListener);
-
-        queue.add(request2);
+        queue.add(request);
     }
 }

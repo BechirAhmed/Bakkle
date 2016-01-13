@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.bakkle.bakkle.API;
 import com.bakkle.bakkle.Constants;
 import com.bakkle.bakkle.Prefs;
@@ -186,57 +187,65 @@ public class LoginFragment extends Fragment
 
     private class EmailIdListener implements Response.Listener<JSONObject>
     {
-//        private String name;
-//
-//        public EmailIdListener(String name)
-//        {
-//            this.name = name;
-//        }
-
         @Override
         public void onResponse(JSONObject response)
         {
             try {
-                if (response.has("status") && response.getInt("status") == 1) {
-                    Prefs prefs = Prefs.getInstance(getContext());
-                    prefs.setUserId(response.getString("userid"));
-//                    prefs.setUsername(name);
-//                    prefs.setName(name);
-//                    String[] split = name.split(" ");
-//                    if (split.length >= 2) {
-//                        prefs.setFirstName(split[0]);
-//                        prefs.setLastName(split[split.length - 1]);
-//                    } else {
-//                        prefs.setFirstName(name);
-//                        prefs.setLastName("");
-//                    }
-                    API.getInstance().authenticatePassword(password, new AuthenticateListener());
+                if (response.getInt("status") == 1) {
+                    Prefs.getInstance().setUserId(response.getString("userid"));
+                    API.getInstance()
+                            .authenticatePassword(password, new AuthenticateListener(),
+                                    new AuthenticateErrorListener());
                 } else {
+                    showProgress(false);
+                    started = false;
                     Toast.makeText(getContext(), "There was error signing in", Toast.LENGTH_SHORT)
                             .show();
-                    started = false;
                 }
             } catch (JSONException e) {
+                showProgress(false);
+                started = false;
                 Toast.makeText(getContext(), "There was error signing in", Toast.LENGTH_SHORT)
                         .show();
-                started = false;
+                e.printStackTrace();
             }
         }
 
-        public class AuthenticateListener implements Response.Listener<JSONObject>
+        private class AuthenticateListener implements Response.Listener<JSONObject>
         {
             @Override
             public void onResponse(JSONObject response)
             {
                 Log.v("LoginFragment", response.toString());
                 try {
-                    if (response.getInt("success") == 1) {
+                    if (response.getInt("status") == 1) {
                         API.getInstance().registerFacebook(new LoginListener());
+                    } else {
+                        showProgress(false);
+                        started = false;
+                        Toast.makeText(getContext(), "There was error signing in",
+                                Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
+                    showProgress(false);
+                    started = false;
                     Toast.makeText(getContext(), "There was error signing in", Toast.LENGTH_SHORT)
                             .show();
+                    e.printStackTrace();
                 }
+            }
+        }
+
+        private class AuthenticateErrorListener implements Response.ErrorListener
+        {
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                showProgress(false);
+                started = false;
+                Toast.makeText(getContext(), "There was error signing in", Toast.LENGTH_SHORT)
+                        .show();
+                error.printStackTrace();
             }
         }
 
@@ -251,12 +260,27 @@ public class LoginFragment extends Fragment
                     prefs.setAuthenticated(true);
                     prefs.setLoggedIn(true);
                     prefs.setGuest(false);
+                    showProgress(false);
+                    String name = response.getString("display_name");
+                    prefs.setUsername(name);
+                    prefs.setName(name);
+                    String[] split = name.split(" ");
+                    if (split.length >= 2) {
+                        prefs.setFirstName(split[0]);
+                        prefs.setLastName(split[split.length - 1]);
+                    } else {
+                        prefs.setFirstName(name);
+                        prefs.setLastName("");
+                    }
 
                     getActivity().setResult(Constants.REUSLT_CODE_OK);
                     getActivity().finish();
                 } catch (JSONException e) {
+                    showProgress(false);
+                    started = false;
                     Toast.makeText(getContext(), "There was error signing in", Toast.LENGTH_SHORT)
                             .show();
+                    e.printStackTrace();
                 }
             }
         }

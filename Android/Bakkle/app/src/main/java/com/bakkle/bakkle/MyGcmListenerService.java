@@ -12,6 +12,9 @@ import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class MyGcmListenerService extends GcmListenerService
 {
 
@@ -26,8 +29,29 @@ public class MyGcmListenerService extends GcmListenerService
      */
     // [START receive_message]
     @Override
-    public void onMessageReceived(String from, Bundle data) {
+    public void onMessageReceived(String from, Bundle data)
+    {
         String message = data.getString("message");
+        String info = data.getString("custom");
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+
+        try {
+            JSONObject jsonObject = new JSONObject(info);
+            int pk = jsonObject.getInt("item_id");
+            int chatId = jsonObject.getInt("chat_id");
+            intent.putExtra(Constants.PK, pk);
+            intent.putExtra(Constants.CHAT_ID, chatId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        for (String key : data.keySet()) {
+            Object value = data.get(key);
+            Log.d(TAG,
+                    String.format("%s %s (%s)", key, value.toString(), value.getClass().getName()));
+        }
 
         Log.d(TAG, "From: " + from);
         Log.d(TAG, "Message: " + message);
@@ -44,7 +68,7 @@ public class MyGcmListenerService extends GcmListenerService
          * In some cases it may be useful to show a notification indicating to the user
          * that a message was received.
          */
-        sendNotification(message);
+        sendNotification(intent, message);
         // [END_EXCLUDE]
     }
     // [END receive_message]
@@ -54,23 +78,22 @@ public class MyGcmListenerService extends GcmListenerService
      *
      * @param message GCM message received.
      */
-    private void sendNotification(String message) {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+    private void sendNotification(Intent intent, String message)
+    {
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.mipmap.ic_launcher)
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(
+                this).setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle("Bakkle")
                 .setContentText(message)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent);
 
-        NotificationManager notificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager notificationManager = (NotificationManager) getSystemService(
+                Context.NOTIFICATION_SERVICE);
 
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
     }

@@ -593,7 +593,7 @@ public class Camera2Fragment extends BaseCameraFragment implements View.OnClickL
         }
         mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
         mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-        mMediaRecorder.setVideoEncodingBitRate(10000000);
+        mMediaRecorder.setVideoEncodingBitRate(5000000);
         mMediaRecorder.setVideoFrameRate(15);
         mMediaRecorder.setVideoSize(mVideoSize.getWidth(), mVideoSize.getHeight());
         mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
@@ -670,7 +670,7 @@ public class Camera2Fragment extends BaseCameraFragment implements View.OnClickL
         }
 
         releaseRecorder();
-        mButtonVideo.setImageResource(R.drawable.mcam_action_capture);
+        mButtonVideo.setImageResource(R.drawable.ic_videocam);
         mButtonFacing.setVisibility(View.VISIBLE);
         if (mInterface.getRecordingStart() > -1 && getActivity() != null) {
             mInterface.onShowPreview(mOutputUri, reachedZero);

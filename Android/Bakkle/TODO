@@ -2,6 +2,7 @@ Authenticate email password when logging in
 Setting email password when creating account
 Decrease size of ItemDetail ViewPager (or find a better way to display description)
 Chat send button ripple effect and z-elevation
-Add Item
-Push Notifications
 List Subheaders for Item lists
+Get json response when uploading item
+custom camera interface
+Editing an item

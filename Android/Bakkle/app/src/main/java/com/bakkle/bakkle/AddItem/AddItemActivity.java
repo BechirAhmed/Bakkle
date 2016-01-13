@@ -31,6 +31,7 @@ import com.bakkle.bakkle.AddItem.MaterialCamera.MaterialCamera;
 import com.bakkle.bakkle.Constants;
 import com.bakkle.bakkle.ImagePagerAdapter;
 import com.bakkle.bakkle.R;
+import com.facebook.FacebookSdk;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
 import com.viewpagerindicator.CirclePageIndicator;
@@ -57,6 +58,7 @@ public class AddItemActivity extends AppCompatActivity
     FrameLayout          content;
 
     File f;
+    boolean addedVideo = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -67,6 +69,8 @@ public class AddItemActivity extends AppCompatActivity
         toolbar.setTitle("List Item");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        FacebookSdk.sdkInitialize(getApplicationContext());
 
         uploadFab = (FloatingActionButton) findViewById(R.id.upload);
         titleEditText = (EditText) findViewById(R.id.title);
@@ -186,13 +190,16 @@ public class AddItemActivity extends AppCompatActivity
             }
 
         } else if (id == R.id.add_video) {
+            if (addedVideo) {
+                Toast.makeText(this, "Only 1 video is allowed", Toast.LENGTH_SHORT).show();
+                return true;
+            }
             File file;
             try {
                 file = createImageOrVideoFile("mp4");
 
-                new MaterialCamera(this)
-                        .allowRetry(false)
-                        .autoSubmit(false)
+                new MaterialCamera(this).allowRetry(false)
+                        .autoSubmit(true)
                         .saveDir(getExternalFilesDir(null))
                         .primaryColorRes(R.color.colorPrimary)
                         .defaultToFrontFacing(false)
@@ -243,7 +250,6 @@ public class AddItemActivity extends AppCompatActivity
 //                    }
                     bmp = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), m, true);
 
-
                     //Makes sure image is a square
                     if (bmp.getWidth() >= bmp.getHeight()) {
                         bmp = Bitmap.createBitmap(bmp, bmp.getWidth() / 2 - bmp.getHeight() / 2, 0,
@@ -272,8 +278,9 @@ public class AddItemActivity extends AppCompatActivity
             }
         } else if (requestCode == Constants.REQUEST_CODE_TAKE_VIDEO) {
             if (resultCode == RESULT_OK) {
-                Log.v("Result", data.getDataString());
-                adapter.addItem(data.getDataString());
+                addedVideo = true;
+                String uri = data.getDataString().substring(7); //to eliminate the file:// in front
+                adapter.addItem(uri);
                 Log.v("AddItemActivity", data.getDataString());
                 if (titleEditText.getText().length() > 0) {
                     uploadFab.show();
@@ -325,6 +332,11 @@ public class AddItemActivity extends AppCompatActivity
                 progressBar.setVisibility(View.GONE);
                 e.printStackTrace();
                 Log.v("AddItemActivity", response.toString());
+            } catch (NullPointerException e) {
+                if (share) {
+                    Toast.makeText(AddItemActivity.this, "There was an error sharing to FacebooK",
+                            Toast.LENGTH_SHORT).show();
+                }
             }
         }
     }

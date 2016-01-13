@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.bakkle.bakkle.API;
 import com.bakkle.bakkle.Constants;
 import com.bakkle.bakkle.Prefs;
@@ -258,11 +259,10 @@ public class SignupEmailFragment extends Fragment
         {
             try {
                 if (response.getInt("status") == 1) {
-                    Prefs prefs = Prefs.getInstance(getContext());
-                    prefs.setUserId(response.getString("userid"));
-
-                    //API.getInstance().authenticatePassword(password, new PasswordListener());
-                    API.getInstance().authenticatePassword("", new PasswordListener()); //TODO: This doesn't seem to autenticate, so I'm using a placeholder "" in the meantime. THIS MEANS ANY PASSWORD WILL WORK!!!
+                    Prefs.getInstance().setUserId(response.getString("userid"));
+                    API.getInstance()
+                            .setPassword(password, new PasswordListener(),
+                                    new PasswordErrorListener());
                 } else {
                     Toast.makeText(getContext(), "There was error signing up", Toast.LENGTH_SHORT)
                             .show();
@@ -286,8 +286,8 @@ public class SignupEmailFragment extends Fragment
                     if (response.getInt("status") == 1) {
                         API.getInstance().registerFacebook(new LoginListener());
                     } else {
-                        Toast.makeText(getContext(), "There was error signing up", Toast.LENGTH_SHORT)
-                                .show();
+                        Toast.makeText(getContext(), "There was error signing up",
+                                Toast.LENGTH_SHORT).show();
                         showProgress(false);
                         started = false;
                     }
@@ -297,6 +297,18 @@ public class SignupEmailFragment extends Fragment
                     showProgress(false);
                     started = false;
                 }
+            }
+        }
+
+        private class PasswordErrorListener implements Response.ErrorListener
+        {
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                showProgress(false);
+                Toast.makeText(getContext(), "There was error setting password", Toast.LENGTH_SHORT)
+                        .show();
+                error.printStackTrace();
             }
         }
 
@@ -328,8 +340,8 @@ public class SignupEmailFragment extends Fragment
                         getActivity().setResult(Constants.REUSLT_CODE_OK);
                         getActivity().finish();
                     } else {
-                        Toast.makeText(getContext(), "There was error signing up", Toast.LENGTH_SHORT)
-                                .show();
+                        Toast.makeText(getContext(), "There was error signing up",
+                                Toast.LENGTH_SHORT).show();
                         showProgress(false);
                         started = false;
                     }

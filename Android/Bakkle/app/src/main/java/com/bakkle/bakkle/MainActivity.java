@@ -40,7 +40,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 import com.google.android.gms.location.LocationServices;
-import com.parse.ParseInstallation;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
