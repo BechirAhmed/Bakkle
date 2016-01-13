@@ -3943,7 +3943,7 @@
                                             </mask>
                                         </variation>
                                     </view>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hold to Record Video" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yg2-gB-cS1">
+                                    <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hold to Record Video" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yg2-gB-cS1">
                                         <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
                                         <animations/>
                                         <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="17"/>
@@ -4695,7 +4695,7 @@
                     </connections>
                 </tapGestureRecognizer>
                 <tapGestureRecognizer id="9L1-Ar-kR0" userLabel="CamreaPreviewTap"/>
-                <pongPressGestureRecognizer cancelsTouchesInView="NO" allowableMovement="10" minimumPressDuration="0.5" id="kty-4d-tlO" userLabel="VideoLongPress">
+                <pongPressGestureRecognizer enabled="NO" cancelsTouchesInView="NO" allowableMovement="10" minimumPressDuration="0.5" id="kty-4d-tlO" userLabel="VideoLongPress">
                     <connections>
                         <action selector="takeVideo:" destination="Tk1-Fv-owu" id="CGK-Hm-lAs"/>
                     </connections>
