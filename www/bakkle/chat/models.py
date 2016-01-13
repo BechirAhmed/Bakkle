@@ -55,7 +55,7 @@ class Message(models.Model):
             'pk': self.pk,
             'chat': self.chat.pk,
             'sent_by_buyer': self.sent_by_buyer,
-            'date_sent': self.date_sent.strftime('%Y-%m-%d %H:%M:%S')
+            'date_sent': self.date_sent.strftime('%Y-%m-%d %H:%M:%S %Z')
         }
 
         if(self.message is not None):
@@ -66,8 +66,8 @@ class Message(models.Model):
         
 
         if(self.viewed_by_buyer_time is not None):
-            valuesDict['viewed_by_buyer_time'] = self.viewed_by_buyer_time.strftime('%Y-%m-%d %H:%M:%S')
+            valuesDict['viewed_by_buyer_time'] = self.viewed_by_buyer_time.strftime('%Y-%m-%d %H:%M:%S %Z')
         if(self.viewed_by_seller_time is not None):
-            valuesDict['viewed_by_seller_time'] = self.viewed_by_seller_time.strftime('%Y-%m-%d %H:%M:%S')
+            valuesDict['viewed_by_seller_time'] = self.viewed_by_seller_time.strftime('%Y-%m-%d %H:%M:%S %Z')
         return valuesDict
     
