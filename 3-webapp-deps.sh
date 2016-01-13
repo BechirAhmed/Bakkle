@@ -1,6 +1,6 @@
 #!/bin/sh
 
-sudo apt-get install python-django python-pip python2.7-dev -y
+sudo apt-get install python-django python-pip python2.7-dev python-pytest -y
 sudo apt-get install postgresql-client-9.3 #convineince only
 sudo apt-get install postgresql-common libpq-dev -y
 sudo pip install psycopg2
