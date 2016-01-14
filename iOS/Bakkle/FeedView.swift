@@ -215,7 +215,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         case 3: cell.imgView.image = UIImage(named: "SwipeDown.png")
         case 4: cell.imgView.image = UIImage(named: "Sell.png")
         case 5:
-            cell.imgView.image = UIImage(named: "Ready.png")
+            cell.imgView.image = UIImage(named: "ReadyNoBtn.png")
             cell.button.hidden = false
             break
         default:
