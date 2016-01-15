@@ -968,6 +968,8 @@
                                                         <exclude reference="yYA-fs-FfR"/>
                                                     </mask>
                                                     <mask key="constraints">
+                                                        <exclude reference="5pu-yY-ckG"/>
+                                                        <exclude reference="iQg-Iy-dIU"/>
                                                         <exclude reference="H4l-4O-ycK"/>
                                                         <exclude reference="buV-vz-7V4"/>
                                                         <exclude reference="hiu-BB-cbd"/>
@@ -977,8 +979,6 @@
                                                         <exclude reference="Jow-os-sse"/>
                                                         <exclude reference="P59-Rg-9dK"/>
                                                         <exclude reference="sfh-Iw-Giq"/>
-                                                        <exclude reference="5pu-yY-ckG"/>
-                                                        <exclude reference="iQg-Iy-dIU"/>
                                                     </mask>
                                                 </variation>
                                                 <variation key="heightClass=regular-widthClass=compact">
@@ -988,6 +988,8 @@
                                                         <include reference="yYA-fs-FfR"/>
                                                     </mask>
                                                     <mask key="constraints">
+                                                        <include reference="5pu-yY-ckG"/>
+                                                        <include reference="iQg-Iy-dIU"/>
                                                         <include reference="H4l-4O-ycK"/>
                                                         <include reference="buV-vz-7V4"/>
                                                         <include reference="hiu-BB-cbd"/>
@@ -997,8 +999,6 @@
                                                         <include reference="Jow-os-sse"/>
                                                         <include reference="P59-Rg-9dK"/>
                                                         <include reference="sfh-Iw-Giq"/>
-                                                        <include reference="5pu-yY-ckG"/>
-                                                        <include reference="iQg-Iy-dIU"/>
                                                     </mask>
                                                 </variation>
                                                 <connections>
@@ -7114,14 +7114,17 @@
                                                 <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="100 mi" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1iZ-4Q-IA8">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="∞" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1iZ-4Q-IA8">
                                                 <rect key="frame" x="38" y="128" width="192" height="21"/>
                                                 <animations/>
                                                 <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="17"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
+                                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                                    <rect key="frame" x="296.5" y="8" width="54.5" height="23.5"/>
+                                                </variation>
                                             </label>
-                                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="100" minValue="0.0" maxValue="101" translatesAutoresizingMaskIntoConstraints="NO" id="YEI-ei-kBo" userLabel="distance">
+                                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="101" minValue="0.0" maxValue="101" translatesAutoresizingMaskIntoConstraints="NO" id="YEI-ei-kBo" userLabel="distance">
                                                 <rect key="frame" x="36" y="343" width="300" height="31"/>
                                                 <animations/>
                                                 <color key="minimumTrackTintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
