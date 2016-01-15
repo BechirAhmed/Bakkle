@@ -190,7 +190,8 @@ public class SignupEmailFragment extends Fragment
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            API.getInstance().getEmailUserId(email, new EmailIdListener(name, password));
+            API.getInstance(getContext())
+                    .getEmailUserId(email, new EmailIdListener(name, password));
             //TODO: How do you submit the password to the server?
         }
     }
@@ -260,7 +261,7 @@ public class SignupEmailFragment extends Fragment
             try {
                 if (response.getInt("status") == 1) {
                     Prefs.getInstance().setUserId(response.getString("userid"));
-                    API.getInstance()
+                    API.getInstance(getContext())
                             .setPassword(password, new PasswordListener(),
                                     new PasswordErrorListener());
                 } else {
@@ -284,7 +285,7 @@ public class SignupEmailFragment extends Fragment
             {
                 try {
                     if (response.getInt("status") == 1) {
-                        API.getInstance().registerFacebook(new LoginListener());
+                        API.getInstance(getContext()).registerFacebook(new LoginListener());
                     } else {
                         Toast.makeText(getContext(), "There was error signing up",
                                 Toast.LENGTH_SHORT).show();

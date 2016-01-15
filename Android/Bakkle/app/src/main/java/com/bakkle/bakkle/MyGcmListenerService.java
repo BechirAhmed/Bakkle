@@ -45,6 +45,7 @@ public class MyGcmListenerService extends GcmListenerService
             intent.putExtra(Constants.CHAT_ID, chatId);
         } catch (JSONException e) {
             e.printStackTrace();
+            Log.v(TAG, info);
         }
 
         for (String key : data.keySet()) {

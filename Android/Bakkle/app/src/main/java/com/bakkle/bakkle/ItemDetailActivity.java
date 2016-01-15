@@ -67,8 +67,8 @@ public class ItemDetailActivity extends AppCompatActivity
         String[] latLong = itemLocation.split(",");
         String lat = latLong[0];
         String longitude = latLong[1];
-        float userLat = Prefs.getInstance().getLatitude();
-        float userLong = Prefs.getInstance().getLongitude();
+        float userLat = Prefs.getInstance(this).getLatitude();
+        float userLong = Prefs.getInstance(this).getLongitude();
         Location loc1 = new Location("");
         loc1.setLatitude(userLat);
         loc1.setLongitude(userLong);

@@ -1,163 +1,179 @@
 package com.bakkle.bakkle;
 
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-   
+import android.os.Build;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-  
+import android.widget.ImageView;
 import android.widget.TextView;
 
-public class TutorialActivity extends AppCompatActivity {
+import com.squareup.picasso.Picasso;
+import com.viewpagerindicator.CirclePageIndicator;
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
+public class TutorialActivity extends AppCompatActivity
+{
+
     private SectionsPagerAdapter mSectionsPagerAdapter;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-    private ViewPager mViewPager;
+    private ViewPager            mViewPager;
+    private CirclePageIndicator  indicator;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutorial);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-
-        // Set up the ViewPager with the sections adapter.
+        indicator = (CirclePageIndicator) findViewById(R.id.indicator);
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        indicator.setSnap(true);
+        indicator.setViewPager(mViewPager);
 
-
-      FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-      fab.setOnClickListener(new View.OnClickListener() {
-          @Override
-          public void onClick(View view) {
-              Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                      .setAction("Action", null).show();
-          }
-      });
-      
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_tutorial, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    
-  
-
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
-        }
-
-        @Override
-        public int getCount() {
-            // Show 3 total pages.
-            return 3;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return "SECTION 1";
-                case 1:
-                    return "SECTION 2";
-                case 2:
-                    return "SECTION 3";
-            }
-            return null;
-        }
-    }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
+    public static class TutorialScreenFragment extends Fragment
+    {
         private static final String ARG_SECTION_NUMBER = "section_number";
 
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
+        public TutorialScreenFragment()
+        {
+        }
+
+        public static TutorialScreenFragment newInstance(int sectionNumber)
+        {
+            TutorialScreenFragment fragment = new TutorialScreenFragment();
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
             fragment.setArguments(args);
             return fragment;
         }
 
-        public PlaceholderFragment() {
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState)
+        {
+            View rootView = inflater.inflate(R.layout.fragment_tutorial, container, false);
+            int sectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
+
+            ImageView imageView = (ImageView) rootView.findViewById(R.id.tutorial_image);
+            TextView textView = (TextView) rootView.findViewById(R.id.instructions);
+            textView.setText(getInstructions(sectionNumber));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                imageView.setImageResource(getResourceId(sectionNumber));
+                imageView.setRotation(sectionNumber == 2 || sectionNumber == 3 ? -90 : 0);
+            } else {
+                Picasso.with(getContext())
+                        .load(getResourceId(sectionNumber))
+                        .rotate(sectionNumber == 2 || sectionNumber == 3 ? -90 : 0) //only rotate for swipe up and down
+                        .into(imageView);
+            }
+            return rootView;
+        }
+
+        private int getResourceId(int sectionNumber)
+        {
+            switch (sectionNumber) {
+                case 0:
+                    return R.drawable.swipe_right;
+                case 2:
+                    return R.drawable.swipe_right;
+                case 1:
+                    return R.drawable.swipe_left;
+                case 3:
+                    return R.drawable.swipe_left;
+                case 4:
+                    return R.drawable.ic_add_a_photo;
+            }
+            return R.drawable.ic_add_a_photo; //section number should be between 0-4, so this doesn't matter
+        }
+    }
+
+    public static class TutorialScreenLastFragment extends Fragment
+    {
+        private static final String ARG_SECTION_NUMBER = "section_number";
+
+        public TutorialScreenLastFragment()
+        {
+        }
+
+        public static TutorialScreenLastFragment newInstance(int sectionNumber)
+        {
+            TutorialScreenLastFragment fragment = new TutorialScreenLastFragment();
+            Bundle args = new Bundle();
+            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            fragment.setArguments(args);
+            return fragment;
         }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_tutorial, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+                                 Bundle savedInstanceState)
+        {
+            View rootView = inflater.inflate(R.layout.fragment_tutorial_last, container, false);
+            int sectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
+            rootView.findViewById(R.id.button).setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    getActivity().setResult(Constants.REUSLT_CODE_OK);
+                    getActivity().finish();
+                }
+            });
+            TextView textView = (TextView) rootView.findViewById(R.id.instructions);
+            textView.setText(getInstructions(sectionNumber));
             return rootView;
+        }
+    }
+
+    private static String getInstructions(int sectionNumber)
+    {
+        switch (sectionNumber) {
+            case 0:
+                return "SWIPE RIGHT IF YOU\nWANT AN ITEM";
+            case 1:
+                return "SWIPE LEFT IF YOU\nDON'T WANT AN ITEM";
+            case 2:
+                return "SWIPE UP TO\nSAVE AN ITEM";
+            case 3:
+                return "SWIPE DOWN TO\nREPORT AN ITEM";
+            case 4:
+                return "CLICK THIS ICON TO\nSELL YOUR OWN ITEM";
+            case 5:
+                return "READY TO SWIPE?\nCLICK BELOW";
+        }
+        return "";
+    }
+
+    public class SectionsPagerAdapter extends FragmentPagerAdapter
+    {
+
+        public SectionsPagerAdapter(FragmentManager fm)
+        {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position)
+        {
+            if (position == 5) {
+                return TutorialScreenLastFragment.newInstance(position);
+            }
+            return TutorialScreenFragment.newInstance(position);
+        }
+
+        @Override
+        public int getCount()
+        {
+            // Show 6 total pages.
+            return 6;
         }
     }
 }

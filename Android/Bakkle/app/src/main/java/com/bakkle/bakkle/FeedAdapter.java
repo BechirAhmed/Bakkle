@@ -17,12 +17,14 @@ public class FeedAdapter extends ArrayAdapter<FeedItem>
 {
     List<FeedItem> items;
     int            resource;
+    Context        context;
 
     public FeedAdapter(Context context, int resource, List<FeedItem> items)
     {
         super(context, resource, items);
         this.items = items;
         this.resource = resource;
+        this.context = context;
     }
 
     @Override
@@ -31,7 +33,12 @@ public class FeedAdapter extends ArrayAdapter<FeedItem>
         ViewHolder holder;
 
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(resource, parent, false);
+            if (context instanceof MainActivity) {
+                convertView = ((MainActivity) context).getLayoutInflater()
+                        .inflate(resource, parent, false);
+            } else {
+                convertView = LayoutInflater.from(context).inflate(resource, parent, false);
+            }
             holder = new ViewHolder();
             holder.product = (ImageView) convertView.findViewById(R.id.image);
             holder.title = (TextView) convertView.findViewById(R.id.title);

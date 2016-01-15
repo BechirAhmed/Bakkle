@@ -83,7 +83,7 @@ public class WatchListFragment extends Fragment
 
     public void refreshWatchList()
     {
-        API.getInstance().getWatchList(new WatchListListener(), new WatchListErrorListener());
+        API.getInstance(getContext()).getWatchList(new WatchListListener(), new WatchListErrorListener());
     }
 
     @Override
@@ -222,17 +222,17 @@ public class WatchListFragment extends Fragment
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == Constants.REQUEST_CODE_VIEW_ITEM) {
             if (resultCode == Constants.RESULT_CODE_NOPE) {
-                API.getInstance()
+                API.getInstance(getContext())
                         .markItem(Constants.MARK_NOPE, data.getIntExtra(Constants.PK, -1), "42");
                 int position = data.getIntExtra(Constants.POSITION, -1);
                 items.remove(position);
                 adapter.notifyItemRemoved(position);
             } else if (resultCode == Constants.RESULT_CODE_WANT) {
-                if (Prefs.getInstance().isGuest()) {
+                if (Prefs.getInstance(getContext()).isGuest()) {
                     Intent intent = new Intent(getContext(), RegisterActivity.class);
                     startActivityForResult(intent, Constants.REQUEST_CODE_MARK_ITEM);
                 } else {
-                    API.getInstance()
+                    API.getInstance(getContext())
                             .markItem(Constants.MARK_WANT, data.getIntExtra(Constants.PK, -1),
                                     "42");
                     int position = data.getIntExtra(Constants.POSITION, -1);
@@ -242,7 +242,7 @@ public class WatchListFragment extends Fragment
             }
         } else if (requestCode == Constants.REQUEST_CODE_MARK_ITEM) {
             if (resultCode == Constants.REUSLT_CODE_OK) {
-                API.getInstance()
+                API.getInstance(getContext())
                         .markItem(Constants.MARK_WANT, data.getIntExtra(Constants.PK, -1), "42");
             }
         }

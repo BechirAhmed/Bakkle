@@ -98,7 +98,7 @@ public class BuyingFragment extends Fragment
                                                   Snackbar.LENGTH_SHORT).show();
                                     return; //If an action was used to dismiss, the user wants to undo the deletion, so we do not need to continue
                                 }
-                                API.getInstance()
+                                API.getInstance(getContext())
                                         .markItem(Constants.MARK_NOPE, deletedItem.getPk(), "42");
                             }
                         });
@@ -136,7 +136,7 @@ public class BuyingFragment extends Fragment
 
     public void refreshBuying()
     {
-        API.getInstance().getBuying(new BuyingListener(), new BuyingErrorListener());
+        API.getInstance(getContext()).getBuying(new BuyingListener(), new BuyingErrorListener());
     }
 
     @Override
@@ -262,7 +262,7 @@ public class BuyingFragment extends Fragment
         {
             try {
                 items = processJson(response);
-                buyingAdapter = new BuyingAdapter(items, getContext());
+                buyingAdapter = new BuyingAdapter(items, getActivity());
                 recyclerView.setAdapter(buyingAdapter);
                 listContainer.setRefreshing(false);
             } catch (JSONException e) {

@@ -2,6 +2,7 @@ package com.bakkle.bakkle;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.util.LruCache;
 import android.widget.Toast;
 
@@ -497,9 +498,6 @@ public class API
 
     public void registerPush(String token)
     {
-        if (!prefs.isLoggedIn()) {
-            return;
-        }
         String url = url_base + url_register_push;
         try {
             url += "?auth_token=" + URLEncoder.encode(prefs.getAuthToken(), "UTF-8") +
@@ -519,6 +517,7 @@ public class API
                     public void onResponse(JSONObject response)
                     {
                         Prefs.getInstance(context).registeredPush(true);
+                        Log.v("RegisterPush", "successfully reigstered");
                     }
                 }, new Response.ErrorListener()
         {

@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.bakkle.bakkle.Message;
 import com.bakkle.bakkle.R;
 
 import java.util.List;

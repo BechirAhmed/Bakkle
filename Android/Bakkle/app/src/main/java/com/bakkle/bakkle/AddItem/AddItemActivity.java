@@ -1,6 +1,8 @@
 package com.bakkle.bakkle.AddItem;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -8,7 +10,9 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -144,7 +148,7 @@ public class AddItemActivity extends AppCompatActivity
         for (int i = 0; i < files.length; i++) {
             files[i] = new File(adapter.getItem(i));
         }
-        API.getInstance()
+        API.getInstance(this)
                 .postItem(title, price, description, new PostItemListener(description, shareFb),
                         new PostItemErrorListener(), files);
     }
@@ -171,6 +175,24 @@ public class AddItemActivity extends AppCompatActivity
         return true;
     }
 
+    private void requestCameraPermission()
+    {
+        requestPermissions(new String[]{Manifest.permission.CAMERA}, 1);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults)
+    {
+        if (requestCode == 1) {
+            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                takePicture();
+            }
+        } else {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
@@ -178,14 +200,11 @@ public class AddItemActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.add_photo) {
-            File file;
-            try {
-                file = createImageOrVideoFile("jpg");
-                Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                i.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
-                startActivityForResult(i, Constants.REQUEST_CODE_TAKE_PICTURE);
-                return true;
-            } catch (IOException e) {
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                requestCameraPermission();
+            } else {
+                takePicture();
                 return true;
             }
 
@@ -219,6 +238,20 @@ public class AddItemActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private boolean takePicture()
+    {
+        File file;
+        try {
+            file = createImageOrVideoFile("jpg");
+            Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            i.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+            startActivityForResult(i, Constants.REQUEST_CODE_TAKE_PICTURE);
+            return true;
+        } catch (IOException e) {
+            return true;
+        }
     }
 
     @Override
@@ -334,7 +367,7 @@ public class AddItemActivity extends AppCompatActivity
                 Log.v("AddItemActivity", response.toString());
             } catch (NullPointerException e) {
                 if (share) {
-                    Toast.makeText(AddItemActivity.this, "There was an error sharing to FacebooK",
+                    Toast.makeText(AddItemActivity.this, "There was an error sharing to Facebook",
                             Toast.LENGTH_SHORT).show();
                 }
             }

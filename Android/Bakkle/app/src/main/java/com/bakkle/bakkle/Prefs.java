@@ -277,4 +277,15 @@ public class Prefs
     {
         return preferences.getBoolean(Constants.REGISTERED_PUSH, false);
     }
+
+    public boolean isFirstLaunch()
+    {
+        return preferences.getBoolean(Constants.FIRST_LAUNCH, true);
+    }
+
+    public void setFirstLaunch(boolean firstLaunch)
+    {
+        editor.putBoolean(Constants.FIRST_LAUNCH, firstLaunch);
+        editor.commit();
+    }
 }

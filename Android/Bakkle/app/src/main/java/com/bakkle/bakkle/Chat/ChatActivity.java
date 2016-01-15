@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import com.bakkle.bakkle.Constants;
 import com.bakkle.bakkle.ItemDetailActivity;
-import com.bakkle.bakkle.Message;
 import com.bakkle.bakkle.Models.FeedItem;
 import com.bakkle.bakkle.Prefs;
 import com.bakkle.bakkle.R;
@@ -24,7 +23,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import de.tavendo.autobahn.WebSocketConnection;
@@ -84,7 +86,7 @@ public class ChatActivity extends AppCompatActivity
         });
 
         webSocketConnection = new WebSocketConnection();
-        prefs = Prefs.getInstance();
+        prefs = Prefs.getInstance(this);
         url = ws_base + "?uuid=" + prefs.getUuid() + "&userId=" + prefs.getAuthToken()
                 .split("_")[1];
 
@@ -108,7 +110,9 @@ public class ChatActivity extends AppCompatActivity
                 json.put("auth_token", prefs.getAuthToken());
                 webSocketConnection.sendTextMessage(json.toString());
                 if (chatAdapter != null || messages != null) {
-                    messages.add(0, new Message(text, "", true)); //TODO: Add a real timestamp
+                    DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                    String date = df.format(Calendar.getInstance().getTime());
+                    messages.add(0, new Message(text, date, true, false));
                     chatAdapter.notifyItemInserted(0);
                     composeEditText.setText("");
                 }
@@ -175,7 +179,9 @@ public class ChatActivity extends AppCompatActivity
                         }
                     } catch (JSONException e) {
                         String text = jsonObject.getJSONObject("message").getString("message");
-                        messages.add(0, new Message(text, "", false)); //TODO: Add a real timestamp
+                        DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                        String date = df.format(Calendar.getInstance().getTime());
+                        messages.add(0, new Message(text, date, true, true)); //TODO: Add a real timestamp
                         chatAdapter.notifyItemInserted(0);
                     }
 
@@ -183,7 +189,7 @@ public class ChatActivity extends AppCompatActivity
 
             } catch (JSONException e) {
                 Toast.makeText(ChatActivity.this, "There was an error retrieving messages",
-                               Toast.LENGTH_SHORT).show();
+                        Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
             }
         }
@@ -201,6 +207,7 @@ public class ChatActivity extends AppCompatActivity
             }
             Message message = new Message();
             message.setTimestamp(messageJson.getString("date_sent"));
+            message.setUTC(true);
             message.setText(messageJson.getString("message"));
             message.setSelf(isSelfSeller != messageJson.getBoolean("sent_by_buyer"));
             messages.add(message);

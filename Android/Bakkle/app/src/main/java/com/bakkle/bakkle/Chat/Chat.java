@@ -39,7 +39,7 @@ public class Chat
 
     private Chat(Context c)
     {
-        prefs = Prefs.getInstance();
+        prefs = Prefs.getInstance(c);
         this.context = c;
         webSocketConnection = new WebSocketConnection();
         url = ws_base + "?uuid=" + prefs.getUuid() + "&userId=" + prefs.getUserId();

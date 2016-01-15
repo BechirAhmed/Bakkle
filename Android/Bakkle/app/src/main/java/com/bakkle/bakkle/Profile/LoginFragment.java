@@ -6,7 +6,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -149,7 +148,7 @@ public class LoginFragment extends Fragment
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            API.getInstance().getEmailUserId(email, new EmailIdListener());
+            API.getInstance(getContext()).getEmailUserId(email, new EmailIdListener());
             //TODO: How do you submit the password to the server?
         }
     }
@@ -192,8 +191,8 @@ public class LoginFragment extends Fragment
         {
             try {
                 if (response.getInt("status") == 1) {
-                    Prefs.getInstance().setUserId(response.getString("userid"));
-                    API.getInstance()
+                    Prefs.getInstance(getContext()).setUserId(response.getString("userid"));
+                    API.getInstance(getContext())
                             .authenticatePassword(password, new AuthenticateListener(),
                                     new AuthenticateErrorListener());
                 } else {
@@ -216,10 +215,9 @@ public class LoginFragment extends Fragment
             @Override
             public void onResponse(JSONObject response)
             {
-                Log.v("LoginFragment", response.toString());
                 try {
                     if (response.getInt("status") == 1) {
-                        API.getInstance().registerFacebook(new LoginListener());
+                        API.getInstance(getContext()).registerFacebook(new LoginListener());
                     } else {
                         showProgress(false);
                         started = false;

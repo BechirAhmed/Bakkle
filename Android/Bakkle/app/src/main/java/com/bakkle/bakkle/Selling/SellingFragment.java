@@ -84,7 +84,7 @@ public class SellingFragment extends Fragment
 
     public void refreshSelling()
     {
-        API.getInstance().getSellers(new SellersListener(), new SellersErrorListener());
+        API.getInstance(getContext()).getSellers(new SellersListener(), new SellersErrorListener());
     }
 
     @Override

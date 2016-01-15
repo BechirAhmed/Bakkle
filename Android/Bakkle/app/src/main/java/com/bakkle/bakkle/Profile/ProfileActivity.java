@@ -47,7 +47,7 @@ public class ProfileActivity extends AppCompatActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         FacebookSdk.sdkInitialize(this);
 
-        prefs = Prefs.getInstance();
+        prefs = Prefs.getInstance(this);
 
         loginLogoutButton = (Button) findViewById(R.id.login_logout_button);
         saveEditButton = (Button) findViewById(R.id.save_edit_button);
@@ -89,7 +89,7 @@ public class ProfileActivity extends AppCompatActivity
 
                 } else {
                     startActivityForResult(new Intent(ProfileActivity.this, RegisterActivity.class),
-                                           Constants.REQUEST_CODE_SIGN_IN);
+                            Constants.REQUEST_CODE_SIGN_IN);
                 }
             }
         });
@@ -101,7 +101,8 @@ public class ProfileActivity extends AppCompatActivity
             {
                 if (saveEditButton.getText().toString().equals(getString(R.string.save))) {
                     String description = descriptionEditText.getText().toString();
-                    API.getInstance().setDescription(new DescriptionListener(), description);
+                    API.getInstance(ProfileActivity.this)
+                            .setDescription(new DescriptionListener(), description);
                     descriptionTextView.setText(description);
                     viewSwitcher.showNext();
                     saveEditButton.setText(R.string.edit);
@@ -148,7 +149,7 @@ public class ProfileActivity extends AppCompatActivity
 
             } catch (JSONException e) {
                 Toast.makeText(getApplicationContext(), "There was an error getting the account",
-                               Toast.LENGTH_SHORT).show();
+                        Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -162,12 +163,12 @@ public class ProfileActivity extends AppCompatActivity
             try {
                 if (response.getInt("status") != 1) {
                     Toast.makeText(ProfileActivity.this,
-                                   "There was an error setting the description", Toast.LENGTH_SHORT)
+                            "There was an error setting the description", Toast.LENGTH_SHORT)
                             .show();
                 }
             } catch (JSONException e) {
                 Toast.makeText(ProfileActivity.this, "There was an error setting the description",
-                               Toast.LENGTH_SHORT).show();
+                        Toast.LENGTH_SHORT).show();
             }
         }
     }

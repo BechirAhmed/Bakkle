@@ -26,6 +26,7 @@ public class Constants
     public static final String AUTHENTICATED   = "authenticated";
     public static final String GUEST           = "guest";
     public static final String REGISTERED_PUSH = "registeredPush";
+    public static final String FIRST_LAUNCH    = "firstLaunch";
 
     //Intent keys
     public static final String PICTURE_PATH     = "pic";
@@ -63,8 +64,6 @@ public class Constants
     public static final String SHOW_WANT        = "showWant";
     public static final String POSITION         = "position";
 
-    public static final String SHOW_TUORIAL = "showTutorial";
-
     public static final String MARK_NOPE   = "meh";
     public static final String MARK_HOLD   = "hold";
     public static final String MARK_WANT   = "want";
@@ -91,5 +90,6 @@ public class Constants
     public static final int REQUEST_CODE_POST_ITEM              = 12;
     public static final int REQUEST_CODE_TAKE_PICTURE           = 13;
     public static final int REQUEST_CODE_TAKE_VIDEO             = 14;
+    public static final int SHOW_TUORIAL                        = 15;
 
 }

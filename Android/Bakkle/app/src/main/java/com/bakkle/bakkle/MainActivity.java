@@ -70,35 +70,13 @@ public class MainActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        prefs = Prefs.getInstance(this);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         //toolbar.setLogo(R.drawable.logo_white_clear);
         setSupportActionBar(toolbar);
 
-        prefs = Prefs.getInstance(this);
-
-        mRegistrationBroadcastReceiver = new BroadcastReceiver()
-        {
-            @Override
-            public void onReceive(Context context, Intent intent)
-            {
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(
-                        context);
-                boolean sentToken = sharedPreferences.getBoolean("sentTokenToServer", false);
-                if (sentToken) {
-                    Log.v("MainActivity", "Sent token");
-                } else {
-                    Log.v("MainActivity", "NOT Sent token");
-                }
-            }
-        };
-
-        Intent intent = new Intent(this, RegistrationIntentService.class);
-        startService(intent);
-
         setupNavDrawer(toolbar);
-
-        requestLocationPermission();
 
         FloatingActionButton addItemFab = (FloatingActionButton) findViewById(R.id.add_item_fab);
         addItemFab.setOnClickListener(new View.OnClickListener()
@@ -123,6 +101,36 @@ public class MainActivity extends AppCompatActivity
         InstanceID instanceID = InstanceID.getInstance(this);
         String token;
 
+        if (prefs.isFirstLaunch()) {
+            startActivityForResult(new Intent(this, TutorialActivity.class),
+                    Constants.SHOW_TUORIAL);
+        } else {
+            beginApp();
+        }
+
+    }
+
+    public void beginApp()
+    {
+        Intent intent = new Intent(this, RegistrationIntentService.class);
+        startService(intent);
+        requestLocationPermission();
+
+        mRegistrationBroadcastReceiver = new BroadcastReceiver()
+        {
+            @Override
+            public void onReceive(Context context, Intent intent)
+            {
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(
+                        context);
+                boolean sentToken = sharedPreferences.getBoolean("sentTokenToServer", false);
+                if (sentToken) {
+                    Log.v("MainActivity", "Sent token");
+                } else {
+                    Log.v("MainActivity", "NOT Sent token");
+                }
+            }
+        };
         if (prefs.isLoggedIn()) {
             new AsyncTask<Void, Void, Void>()
             {
@@ -131,9 +139,8 @@ public class MainActivity extends AppCompatActivity
                 {
                     try {
                         API.getInstance(MainActivity.this)
-                                .registerPush(
-                                        GoogleCloudMessaging.getInstance(MainActivity.this)
-                                                .register(Constants.SENDER_ID));
+                                .registerPush(GoogleCloudMessaging.getInstance(MainActivity.this)
+                                        .register(Constants.SENDER_ID));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -141,7 +148,6 @@ public class MainActivity extends AppCompatActivity
                 }
             }.execute();
         }
-
     }
 
     private void requestLocationPermission()
@@ -241,9 +247,15 @@ public class MainActivity extends AppCompatActivity
     protected void onResume()
     {
         super.onResume();
+        FeedFragment fragment = (FeedFragment) getSupportFragmentManager().findFragmentByTag(
+                Constants.FEED);
+        if (fragment != null) {
+            fragment.refreshFeed();
+        }
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(mRegistrationBroadcastReceiver,
                         new IntentFilter("registrationComplete"));
+
     }
 
     @Override
@@ -407,6 +419,10 @@ public class MainActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constants.SHOW_TUORIAL && resultCode == Constants.REUSLT_CODE_OK) {
+            beginApp();
+            prefs.setFirstLaunch(false);
+        }
         if (requestCode == Constants.REQUEST_CODE_PROFILE && resultCode == Constants.RESULT_CODE_NOW_SIGNED_OUT) {
             updateNavHeader();
             API.getInstance(getApplicationContext()).getGuestUserId(new GuestIdResponseListener());
@@ -437,13 +453,11 @@ public class MainActivity extends AppCompatActivity
 
         FeedFragment fragment = (FeedFragment) getSupportFragmentManager().findFragmentByTag(
                 Constants.FEED);
-        if (fragment != null) {
+        if (fragment != null && requestCode != Constants.REQUEST_CODE_VIEW_ITEM) {
             fragment.refreshFeed();
-        } else if (requestCode == Constants.REQUEST_CODE_POST_ITEM)
-
-        {
+        } else if (requestCode == Constants.REQUEST_CODE_POST_ITEM) {
             if (resultCode == Constants.RESULT_CODE_NOW_SIGNED_IN) {
-                //TODO: start AddItem Activity;
+                startActivity(new Intent(this, AddItemActivity.class));
             }
         }
     }

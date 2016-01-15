@@ -64,7 +64,7 @@ public class MessageListFragment extends Fragment
         pk = item.getPk();
         buyers = new ArrayList<>();
         webSocketConnection = new WebSocketConnection();
-        prefs = Prefs.getInstance();
+        prefs = Prefs.getInstance(getContext());
         url = ws_base + "?uuid=" + prefs.getUuid() + "&userId=" + prefs.getAuthToken()
                 .split("_")[1];
     }
@@ -107,9 +107,9 @@ public class MessageListFragment extends Fragment
             JSONObject chatJson = chatArray.getJSONObject(i);
             JSONObject buyerJson = chatJson.getJSONObject("buyer");
             Person buyer = new Person();
-            if (buyerJson.getString("display_name").contains("Guest")) {
-                continue;
-            }
+//            if (buyerJson.getString("display_name").contains("Guest")) {
+//                continue;
+//            }
             buyer.setDisplay_name(buyerJson.getString("display_name"));
             buyer.setFacebook_id(buyerJson.getString("facebook_id"));
 
