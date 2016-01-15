@@ -67,9 +67,9 @@
 		60708D561BF681FD0021D5A6 /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60708D551BF681FD0021D5A6 /* SignInView.swift */; };
 		609828291C46ED060049A1F6 /* camera-flash-auto.png in Resources */ = {isa = PBXBuildFile; fileRef = 609828241C46ED060049A1F6 /* camera-flash-auto.png */; };
 		6098282A1C46ED060049A1F6 /* camera-flash-off.png in Resources */ = {isa = PBXBuildFile; fileRef = 609828251C46ED060049A1F6 /* camera-flash-off.png */; };
-		6098282B1C46ED060049A1F6 /* camera-flash.png in Resources */ = {isa = PBXBuildFile; fileRef = 609828261C46ED060049A1F6 /* camera-flash.png */; };
 		6098282C1C46ED060049A1F6 /* ReadyBtn.png in Resources */ = {isa = PBXBuildFile; fileRef = 609828271C46ED060049A1F6 /* ReadyBtn.png */; };
 		6098282D1C46ED060049A1F6 /* ReadyNoBtn.png in Resources */ = {isa = PBXBuildFile; fileRef = 609828281C46ED060049A1F6 /* ReadyNoBtn.png */; };
+		60A228CB1C4701A30093DD80 /* camera-flash.png in Resources */ = {isa = PBXBuildFile; fileRef = 60A228CA1C4701A30093DD80 /* camera-flash.png */; };
 		60BA452D1C404EB600D49C38 /* Ready.png in Resources */ = {isa = PBXBuildFile; fileRef = 60BA45281C404EB600D49C38 /* Ready.png */; };
 		60BA452E1C404EB600D49C38 /* SwipeDown.png in Resources */ = {isa = PBXBuildFile; fileRef = 60BA45291C404EB600D49C38 /* SwipeDown.png */; };
 		60BA452F1C404EB600D49C38 /* SwipeLeft.png in Resources */ = {isa = PBXBuildFile; fileRef = 60BA452A1C404EB600D49C38 /* SwipeLeft.png */; };
@@ -295,9 +295,9 @@
 		60708D551BF681FD0021D5A6 /* SignInView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		609828241C46ED060049A1F6 /* camera-flash-auto.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera-flash-auto.png"; sourceTree = "<group>"; };
 		609828251C46ED060049A1F6 /* camera-flash-off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera-flash-off.png"; sourceTree = "<group>"; };
-		609828261C46ED060049A1F6 /* camera-flash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera-flash.png"; sourceTree = "<group>"; };
 		609828271C46ED060049A1F6 /* ReadyBtn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ReadyBtn.png; sourceTree = "<group>"; };
 		609828281C46ED060049A1F6 /* ReadyNoBtn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ReadyNoBtn.png; sourceTree = "<group>"; };
+		60A228CA1C4701A30093DD80 /* camera-flash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera-flash.png"; sourceTree = "<group>"; };
 		60BA45281C404EB600D49C38 /* Ready.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Ready.png; sourceTree = "<group>"; };
 		60BA45291C404EB600D49C38 /* SwipeDown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SwipeDown.png; sourceTree = "<group>"; };
 		60BA452A1C404EB600D49C38 /* SwipeLeft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SwipeLeft.png; sourceTree = "<group>"; };
@@ -676,9 +676,9 @@
 		A08D53B71B07DC8E000C406C /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				60A228CA1C4701A30093DD80 /* camera-flash.png */,
 				609828241C46ED060049A1F6 /* camera-flash-auto.png */,
 				609828251C46ED060049A1F6 /* camera-flash-off.png */,
-				609828261C46ED060049A1F6 /* camera-flash.png */,
 				609828271C46ED060049A1F6 /* ReadyBtn.png */,
 				609828281C46ED060049A1F6 /* ReadyNoBtn.png */,
 				60BA45321C404FF400D49C38 /* no-internet.png */,
@@ -1052,7 +1052,6 @@
 				DB6726E91B178F250014A896 /* star_full.png in Resources */,
 				A018DF8D1ADE09A500AF5550 /* mock-additem.png in Resources */,
 				60EEB9981B5546F100E87B8D /* switch-camera-outline.png in Resources */,
-				6098282B1C46ED060049A1F6 /* camera-flash.png in Resources */,
 				A08D53B11B06DBD8000C406C /* icon-x@3x.png in Resources */,
 				DB5DB3571B18E18100734692 /* icon-marker75.png in Resources */,
 				13AB6F9D1B0E3C520092EE61 /* btn-meh.png in Resources */,
@@ -1067,6 +1066,7 @@
 				728598C31B6A52C300C2FE55 /* InstructionScreen-new.png in Resources */,
 				A0A200051ACE30C200A42CD8 /* btn-logout40.png in Resources */,
 				F0D6F40E1B5EC1A500938A06 /* gwIcon@2x.png in Resources */,
+				60A228CB1C4701A30093DD80 /* camera-flash.png in Resources */,
 				DB6726EB1B178F250014A896 /* star_none.png in Resources */,
 				60F3BC111B5E90BC0033EF83 /* Goodwill-LaunchScreen.xib in Resources */,
 				A058A2BB1AFDB87F005E7432 /* loading.png in Resources */,

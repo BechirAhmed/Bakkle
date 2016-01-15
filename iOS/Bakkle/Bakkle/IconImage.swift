@@ -138,4 +138,16 @@ class IconImage {
     func remove() -> UIImage {
         return UIImage(named: "new-x-black.jpeg")!
     }
+    
+    func flash_on() -> UIImage {
+        return UIImage(named: "camera-flash.png")!
+    }
+    
+    func flash_off() -> UIImage {
+        return UIImage(named: "camera-flash-off.png")!
+    }
+    
+    func flash_auto() -> UIImage {
+        return UIImage(named: "camera-flash-auto.png")!
+    }
 }

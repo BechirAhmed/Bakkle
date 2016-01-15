@@ -126,10 +126,13 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         galleryButton.setImage(IconImage().gallery(), forState: .Normal)
         closeButton.setImage(IconImage().close(), forState: .Normal)
         switchCamera.setImage(IconImage().switchCamera(), forState: .Normal)
+        flashSettings.setImage(IconImage().flash_on(), forState: .Normal)
         
         galleryButton.setTitle("", forState: .Normal)
         closeButton.setTitle("", forState: .Normal)
         switchCamera.setTitle("", forState: .Normal)
+        flashSettings.setTitle("", forState: .Normal)
+
     }
     
     // Check if the view is new, came back from add item for editing, came back during upload, or came back after successful upload
@@ -237,8 +240,6 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         
         buttonEnabledHandler()
         
-        flashSettings.userInteractionEnabled = false
-        
         stopFocus = false
         focusIndicator = UIImageView(frame: CGRectMake(0, 0, CameraView.FOCUS_SQUARE_WIDTH_SCALE * cameraView.frame.size.width, CameraView.FOCUS_SQUARE_WIDTH_SCALE * cameraView.frame.size.width))
         focusIndicator.image = UIImage(named:"FocusIndicator.png")!
@@ -316,98 +317,6 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
 //        self.removeVideos()
         self.dismissViewControllerAnimated(true, completion: nil)
     }
-
-    /*
-    enum CameraFlashMode: Int {
-        case Off, On, Auto
-    }
-
-    
-    // Iterates through all the types of files saved for movies and removes them
-    func removeVideos() {
-        for i in 0...videoCount {
-            self.removeVideos(i)
-        }
-    }
-    
-    var hasFlash: Bool = {
-        let devices = AVCaptureDevice.devicesWithMediaType(AVMediaTypeVideo)
-        for  device in devices  {
-            let captureDevice = device as! AVCaptureDevice
-            if (captureDevice.position == .Back) {
-                return captureDevice.hasFlash
-            }
-        }
-        return false
-        }()
-
-        flashMode = CameraFlashMode.OFF{
-            didSet {
-                if flashMode != oldValue {
-                    _updateFlasMode(flashMode)
-                }
-            }
-        }
-    /**
-    Change current flash mode to next value from available ones.
-    
-    :returns: Current flash mode: Off / On / Auto
-    */
-    func changeFlashMode() -> CameraFlashMode {
-        flashMode = CameraFlashMode(rawValue: (flashMode.rawValue+1)%3)!
-        return flashMode
-    }
-    
-    
-    
-    func _updateTorch(flashMode: CameraFlashMode) {
-        captureSession?.beginConfiguration()
-        let devices = AVCaptureDevice.devicesWithMediaType(AVMediaTypeVideo)
-        for  device in devices  {
-            let captureDevice = device as! AVCaptureDevice
-            if (captureDevice.position == AVCaptureDevicePosition.Back) {
-                let avTorchMode = AVCaptureTorchMode(rawValue: flashMode.rawValue)
-                if (captureDevice.isTorchModeSupported(avTorchMode!)) {
-                    do {
-                    try captureDevice.lockForConfiguration()
-                    } catch {
-                        return;
-                    }
-                    captureDevice.torchMode = avTorchMode!
-                    captureDevice.unlockForConfiguration()
-                }
-            }
-        }
-        captureSession?.commitConfiguration()
-    }
-    func _updateFlasMode(flashMode: CameraFlashMode) {
-        captureSession?.beginConfiguration()
-        let devices = AVCaptureDevice.devicesWithMediaType(AVMediaTypeVideo)
-        for  device in devices  {
-            let captureDevice = device as! AVCaptureDevice
-            if (captureDevice.position == AVCaptureDevicePosition.Back) {
-                let avFlashMode = AVCaptureFlashMode(rawValue: flashMode.rawValue)
-                if (captureDevice.isFlashModeSupported(avFlashMode!)) {
-                    do {
-                    try captureDevice.lockForConfiguration()
-                    } catch {
-                        return
-                    }
-                    captureDevice.flashMode = avFlashMode!
-                    captureDevice.unlockForConfiguration()
-                }
-            }
-        }
-        captureSession?.commitConfiguration()
-    }
-    
-    
-    */
-    
-    
-    
-    
-    
     
     // Removes the specified video
     func removeVideos(index: Int) {
@@ -439,6 +348,18 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         self.willBeListedLabel.hidden = true
     }
     
+    
+    @IBAction func changeFlashMode(sender: UIButton) {
+        switch self.flashMode {
+        case .Auto: flashMode = .On
+            flashSettings.setImage(IconImage().flash_on(), forState: .Normal)
+        case .On: flashMode = .Off
+            flashSettings.setImage(IconImage().flash_off(), forState: .Normal)
+        case .Off: flashMode = .Auto
+            flashSettings.setImage(IconImage().flash_auto(), forState: .Normal)
+        }
+    }
+    
     // Change camera position, and animate with a "flip"
     @IBAction func swapCamera(sender: AnyObject) {
         // Remember to begin and commit configuration so all changes happen at once
@@ -454,7 +375,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         
         UIView.animateWithDuration(0.5, animations: { Void in
             // If the camera is defaulted as .Back (main camera) this will always "flip" the view when the camera swaps
-            self.cameraView.transform = CGAffineTransformScale(self.cameraView.transform, -1, 1)
+//            self.cameraView.transform = CGAffineTransformScale(self.cameraView.transform, -1, 1)
         }, completion: { Void in
                 
         })
@@ -1084,8 +1005,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         self.capButton.enabled = !imageCountGreaterThanMaxCount && notDragging || self.videoOutput.recording // visible while recording
         self.galleryButton.enabled = !imageCountGreaterThanMaxCount && notDragging && recordButtonNotHeld
         self.switchCamera.enabled = !imageCountGreaterThanMaxCount && self.cameraCount > 1 && notDragging && recordButtonNotHeld
-        //self.flashSettings.enabled = !imageCountGreaterThanMaxCount && selectedDevice != nil && selectedDevice!.device.hasFlash && notDragging && recordButtonHeld
-        self.flashSettings.enabled = false
+        self.flashSettings.enabled = !imageCountGreaterThanMaxCount && selectedDevice != nil && selectedDevice!.device.hasFlash && notDragging && recordButtonNotHeld
         
         self.capButton.hidden = !self.capButton.enabled
         self.galleryButton.hidden = !self.galleryButton.enabled
