@@ -377,9 +377,9 @@ def device_register_push(account_id, device_uuid, device_token, device_type, cli
     logging.info("register_push")
     prevDevices = Device.objects.filter(Q(uuid=device_uuid) | Q(apns_token=device_token))
 
-    for device in prevDevices:
-        device.apns_token = ""
-        device.save()
+    #for device in prevDevices:
+    #    device.apns_token = ""
+    #    device.save()
 
     try:
         account = Account.objects.get(pk=account_id)
@@ -397,7 +397,7 @@ def device_register_push(account_id, device_uuid, device_token, device_type, cli
     device.last_seen_date = datetime.datetime.now()
     device.ip_address = client_ip
     device.apns_token = device_token
-    device.device_token = device_type
+    device.device_type = device_type
     device.save()
     logging.info("registered {} type={}".format(device_token, device_type))
 
