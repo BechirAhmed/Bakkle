@@ -11,6 +11,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -32,6 +33,7 @@ public class BuyingFragment extends Fragment
     SwipeRefreshLayout listContainer;
     BuyingAdapter      buyingAdapter;
     List<FeedItem>     items;
+    TextView           emptyListTextView;
 
     public BuyingFragment()
     {
@@ -53,6 +55,8 @@ public class BuyingFragment extends Fragment
                              Bundle savedInstanceState)
     {
         final View view = inflater.inflate(R.layout.recycler_view, container, false);
+        emptyListTextView = (TextView) view.findViewById(R.id.empty_list_message);
+        emptyListTextView.setText(R.string.buying_empty_message);
 
         ((MainActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.buying));
 
@@ -258,6 +262,13 @@ public class BuyingFragment extends Fragment
         {
             try {
                 items = processJson(response);
+                if (items.size() == 0) {
+                    emptyListTextView.setVisibility(View.VISIBLE);
+                    listContainer.setVisibility(View.GONE);
+                } else {
+                    emptyListTextView.setVisibility(View.GONE);
+                    listContainer.setVisibility(View.VISIBLE);
+                }
                 buyingAdapter = new BuyingAdapter(items, getActivity());
                 recyclerView.setAdapter(buyingAdapter);
                 listContainer.setRefreshing(false);

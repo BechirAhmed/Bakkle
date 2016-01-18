@@ -412,6 +412,8 @@ public class MainActivity extends AppCompatActivity
             i.setData(Uri.parse(url));
             startActivity(i);
             //startActivity(new Intent(this, AboutActivity.class));
+        } else if (id == R.id.tutorial) {
+            startActivity(new Intent(this, TutorialActivity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -11,6 +11,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -35,6 +36,7 @@ public class SellingFragment extends Fragment
     SwipeRefreshLayout listContainer;
     SellingAdapter     sellingAdapter;
     List<FeedItem>     items;
+    TextView           emptyListTextView;
 
     public SellingFragment()
     {
@@ -56,6 +58,8 @@ public class SellingFragment extends Fragment
                              Bundle savedInstanceState)
     {
         final View view = inflater.inflate(R.layout.recycler_view, container, false);
+        emptyListTextView = (TextView) view.findViewById(R.id.empty_list_message);
+        emptyListTextView.setText(R.string.selling_empty_message);
 
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Selling");
 
@@ -251,9 +255,17 @@ public class SellingFragment extends Fragment
         {
             try {
                 items = processJson(response);
+                if (items.size() == 0) {
+                    emptyListTextView.setVisibility(View.VISIBLE);
+                    listContainer.setVisibility(View.GONE);
+                } else {
+                    emptyListTextView.setVisibility(View.GONE);
+                    listContainer.setVisibility(View.VISIBLE);
+                }
                 sellingAdapter = new SellingAdapter(items, getActivity());
                 recyclerView.setAdapter(sellingAdapter);
                 listContainer.setRefreshing(false);
+
             } catch (JSONException e) {
                 Toast.makeText(getContext(), "There was error retrieving the Seller's Garage",
                         Toast.LENGTH_SHORT).show();
