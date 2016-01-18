@@ -115,6 +115,14 @@ public class ChatActivity extends AppCompatActivity
                     messages.add(0, new Message(text, date, true, false));
                     chatAdapter.notifyItemInserted(0);
                     composeEditText.setText("");
+                    recyclerView.post(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            recyclerView.smoothScrollToPosition(0);
+                        }
+                    });
                 }
             } else {
                 webSocketConnection.connect(url, new GetChatListener());
@@ -183,6 +191,14 @@ public class ChatActivity extends AppCompatActivity
                         String date = df.format(Calendar.getInstance().getTime());
                         messages.add(0, new Message(text, date, true, true)); //TODO: Add a real timestamp
                         chatAdapter.notifyItemInserted(0);
+                        recyclerView.post(new Runnable()
+                        {
+                            @Override
+                            public void run()
+                            {
+                                recyclerView.smoothScrollToPosition(0);
+                            }
+                        });
                     }
 
                 }

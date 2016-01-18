@@ -82,7 +82,7 @@ public class AddItemActivity extends AppCompatActivity
         descriptionEditText = (EditText) findViewById(R.id.description);
         shareFacebookSwitch = (Switch) findViewById(R.id.share);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
-        content = (FrameLayout) findViewById(R.id.content);
+        content = (FrameLayout) findViewById(R.id.scrollview);
 
         viewPager = (ViewPager) findViewById(R.id.images);
         adapter = new ImagePagerAdapter(this);
@@ -130,6 +130,8 @@ public class AddItemActivity extends AppCompatActivity
 
     private void postItem()
     {
+        uploadFab.hide();
+
         String title = titleEditText.getText().toString();
         String price = priceEditText.getText().toString();
         String description = descriptionEditText.getText().toString();

@@ -37,6 +37,7 @@ public class API
     final static String url_feed                = "items/feed/";
     final static String url_sellers             = "items/get_seller_items/";
     final static String url_add_item            = "items/add_item/";
+    final static String url_delete_item         = "items/delete_item/";
     final static String url_send_chat           = "conversation/send_message/";
     final static String url_view_item           = "items/";
     final static String url_buyers_trunk        = "items/get_buyers_trunk/";
@@ -187,6 +188,39 @@ public class API
     public void markItem(String status, int itemId, String viewDuration)
     {
         markItem(status, itemId, viewDuration, null);
+    }
+
+    public void deleteItem(int itemId)
+    {
+        String url = url_base + url_delete_item;
+        try {
+            url += "?auth_token=" + URLEncoder.encode(prefs.getAuthToken(), "UTF-8") +
+                    "&device_uuid=" + URLEncoder.encode(prefs.getUuid(), "UTF-8") +
+                    "&item_id=" + itemId;
+        } catch (UnsupportedEncodingException e) {
+            Toast.makeText(context, "There was error marking item", Toast.LENGTH_SHORT).show();
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url,
+                new Response.Listener<JSONObject>()
+                {
+                    @Override
+                    public void onResponse(JSONObject response)
+                    {
+
+                    }
+                }, new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                Toast.makeText(context, "There was an error deleting item", Toast.LENGTH_SHORT)
+                        .show();
+                error.printStackTrace();
+            }
+        });
+
+        queue.add(request);
     }
 
     public void markItem(String status, int itemId, String viewDuration, String reportMessage)
@@ -531,7 +565,7 @@ public class API
         queue.add(request);
     }
 
-    public void postItem(String title, String price, String description,
+    public void postItem(int pk, String title, String price, String description,
                          Response.Listener<JSONObject> responseListener,
                          Response.ErrorListener errorListener, File[] files)
     {
@@ -543,6 +577,11 @@ public class API
                     "UTF-8") + "&title=" + URLEncoder.encode(title,
                     "UTF-8") + "&price=" + price + "&description=" + URLEncoder.encode(description,
                     "UTF-8") + "&location=" + URLEncoder.encode(location, "UTF-8");
+
+            if (pk != -1) { //We are editing an item, not posting a new one
+                url += "&item_id=" + pk;
+            }
+
         } catch (UnsupportedEncodingException e) {
             Toast.makeText(context, "There was an error posting item", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
@@ -552,5 +591,12 @@ public class API
                 files);
 
         queue.add(request);
+    }
+
+    public void postItem(String title, String price, String description,
+                         Response.Listener<JSONObject> responseListener,
+                         Response.ErrorListener errorListener, File[] files)
+    {
+        postItem(-1, title, price, description, responseListener, errorListener, files);
     }
 }

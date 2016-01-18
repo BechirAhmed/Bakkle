@@ -75,5 +75,6 @@
     <string name="mcam_no_audio_access">You haven\'t given access to your microphone; no audio will be recorded.</string>
     <string name="title_activity_tutorial">TutorialActivity</string>
     <string name="action_settings">Settings</string>
+    <string name="contact">Contact</string>
 
 </resources>

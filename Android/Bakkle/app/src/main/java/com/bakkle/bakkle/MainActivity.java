@@ -407,7 +407,11 @@ public class MainActivity extends AppCompatActivity
                         Constants.WATCH_LIST)).refreshWatchList();
             }
         } else if (id == R.id.nav_about) {
-            startActivity(new Intent(this, AboutActivity.class));
+            String url = "http://www.bakkle.com";
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse(url));
+            startActivity(i);
+            //startActivity(new Intent(this, AboutActivity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
