@@ -247,7 +247,7 @@ public class CameraFragment extends BaseCameraFragment implements View.OnClickLi
     }
 
     private boolean prepareMediaRecorder() {
-        return prepareMediaRecorder(CamcorderProfile.QUALITY_480P);
+        return prepareMediaRecorder(CamcorderProfile.QUALITY_LOW);
     }
 
     private boolean prepareMediaRecorder(int forceQuality) {
@@ -264,6 +264,8 @@ public class CameraFragment extends BaseCameraFragment implements View.OnClickLi
             mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.DEFAULT);
             mMediaRecorder.setProfile(CamcorderProfile.get(getCurrentCameraId(), forceQuality));
             mMediaRecorder.setVideoSize(mVideoSize.width, mVideoSize.height);
+            mMediaRecorder.setVideoFrameRate(15);
+
 
             Uri uri = Uri.fromFile(getOutputVideoFile());
             mOutputUri = uri.toString();
@@ -286,15 +288,17 @@ public class CameraFragment extends BaseCameraFragment implements View.OnClickLi
                 throwError(new Exception("Failed to re-lock camera: " + e.getMessage(), e));
                 return false;
             }
-            if (forceQuality == CamcorderProfile.QUALITY_480P)
-                return prepareMediaRecorder(CamcorderProfile.QUALITY_720P);
-            else if (forceQuality == CamcorderProfile.QUALITY_720P)
-                return prepareMediaRecorder(CamcorderProfile.QUALITY_LOW);
-            else if (forceQuality == CamcorderProfile.QUALITY_LOW) {
-                return prepareMediaRecorder(CamcorderProfile.QUALITY_1080P);
-            }
-            throwError(new Exception("Failed to begin recording: " + t.getMessage(), t));
-            return false;
+            return prepareMediaRecorder(CamcorderProfile.QUALITY_LOW);
+
+//            if (forceQuality == CamcorderProfile.QUALITY_480P)
+//                return prepareMediaRecorder(CamcorderProfile.QUALITY_720P);
+//            else if (forceQuality == CamcorderProfile.QUALITY_720P)
+//                return prepareMediaRecorder(CamcorderProfile.QUALITY_LOW);
+//            else if (forceQuality == CamcorderProfile.QUALITY_LOW) {
+//                return prepareMediaRecorder(CamcorderProfile.QUALITY_1080P);
+//            }
+//            throwError(new Exception("Failed to begin recording: " + t.getMessage(), t));
+//            return false;
         }
     }
 

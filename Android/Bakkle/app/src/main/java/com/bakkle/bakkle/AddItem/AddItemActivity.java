@@ -1,13 +1,16 @@
 package com.bakkle.bakkle.AddItem;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -177,6 +180,7 @@ public class AddItemActivity extends AppCompatActivity
         return true;
     }
 
+    @TargetApi (Build.VERSION_CODES.M)
     private void requestCameraPermission()
     {
         requestPermissions(new String[]{Manifest.permission.CAMERA}, 1);
@@ -270,20 +274,31 @@ public class AddItemActivity extends AppCompatActivity
                     int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
                             ExifInterface.ORIENTATION_UNDEFINED);
                     Matrix m = new Matrix();
-                    m.postRotate(90);
+//                    m.postRotate(90);
 
-//                    switch (orientation) {
-//                        case ExifInterface.ORIENTATION_ROTATE_90:
-//                            m.postRotate(90);
-//                            break;
-//                        case ExifInterface.ORIENTATION_ROTATE_180:
-//                            m.postRotate(180);
-//                            break;
-//                        case ExifInterface.ORIENTATION_ROTATE_270:
-//                            m.postRotate(270);
-//                            break;
-//                    }
+                    switch (orientation) {
+                        case ExifInterface.ORIENTATION_ROTATE_90:
+                            m.postRotate(90);
+                            break;
+                        case ExifInterface.ORIENTATION_ROTATE_180:
+                            m.postRotate(180);
+                            break;
+                        case ExifInterface.ORIENTATION_ROTATE_270:
+                            m.postRotate(270);
+                            break;
+                    }
                     bmp = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), m, true);
+                    int dimension;
+                    if (bmp.getWidth() >= bmp.getHeight()) {
+                        dimension = bmp.getHeight();
+                    }
+                    //If the bitmap is taller than it is wide
+                    //use the width as the square crop dimension
+                    else {
+                        dimension = bmp.getWidth();
+                    }
+                    bmp = ThumbnailUtils.extractThumbnail(bmp, dimension, dimension,
+                            ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
 
                     //Makes sure image is a square
                     if (bmp.getWidth() >= bmp.getHeight()) {
@@ -294,8 +309,7 @@ public class AddItemActivity extends AppCompatActivity
                         bmp = Bitmap.createBitmap(bmp, 0, bmp.getHeight() / 2 - bmp.getWidth() / 2,
                                 bmp.getWidth(), bmp.getWidth());
                     }
-                    Bitmap.createScaledBitmap(bmp, 640, 640, true)
-                            .compress(Bitmap.CompressFormat.JPEG, 40, fos);
+                    bmp.compress(Bitmap.CompressFormat.JPEG, 40, fos);
                     fos.flush();
                     fos.close();
                     adapter.addItem(f.getAbsolutePath());
@@ -316,7 +330,6 @@ public class AddItemActivity extends AppCompatActivity
                 addedVideo = true;
                 String uri = data.getDataString().substring(7); //to eliminate the file:// in front
                 adapter.addItem(uri);
-                Log.v("AddItemActivity", data.getDataString());
                 if (titleEditText.getText().length() > 0) {
                     uploadFab.show();
                 } else {
