@@ -1,46 +1,39 @@
 PODS:
-  - Bolts (1.5.1):
-    - Bolts/AppLinks (= 1.5.1)
-    - Bolts/Tasks (= 1.5.1)
-  - Bolts/AppLinks (1.5.1):
+  - Bolts (1.6.0):
+    - Bolts/AppLinks (= 1.6.0)
+    - Bolts/Tasks (= 1.6.0)
+  - Bolts/AppLinks (1.6.0):
     - Bolts/Tasks
-  - Bolts/Tasks (1.5.1)
-  - FBSDKCoreKit (4.8.0):
-    - Bolts (~> 1.1)
-    - FBSDKCoreKit/arc (= 4.8.0)
-    - FBSDKCoreKit/no-arc (= 4.8.0)
-  - FBSDKCoreKit/arc (4.8.0):
-    - Bolts (~> 1.1)
-  - FBSDKCoreKit/no-arc (4.8.0):
-    - Bolts (~> 1.1)
-    - FBSDKCoreKit/arc
+  - Bolts/Tasks (1.6.0)
+  - FBSDKCoreKit (4.9.1):
+    - Bolts (~> 1.5)
   - FBSDKLoginKit (4.5.1):
     - FBSDKCoreKit
-  - FBSDKShareKit (4.8.0):
+  - FBSDKShareKit (4.9.1):
     - FBSDKCoreKit
   - FontAwesomeIconFactory (2.1.1)
-  - HanekeSwift (0.9.1)
+  - HanekeSwift (0.10.1)
   - Reachability (3.2)
   - SocketRocket (0.4.2)
 
 DEPENDENCIES:
-  - Bolts (~> 1.5.0)
+  - Bolts
   - FBSDKCoreKit
   - FBSDKLoginKit (~> 4.5.1)
   - FBSDKShareKit
   - FontAwesomeIconFactory
-  - HanekeSwift (~> 0.9.1)
+  - HanekeSwift
   - Reachability
-  - SocketRocket (~> 0.4.1)
+  - SocketRocket
 
 SPEC CHECKSUMS:
-  Bolts: a12663244b1d3351c738882e71902fc74db54f64
-  FBSDKCoreKit: 66a935d17b6e00b6b64e604f2eb9b72c9ab7deb8
+  Bolts: f52a250053bb517ca874523c3913776359ab3def
+  FBSDKCoreKit: aee20b6d9855f15b618d4fddd1a5ad45f5a4a59d
   FBSDKLoginKit: 225cc9a388a92916ee3f3bb14422017b6e44b65b
-  FBSDKShareKit: e7577ee3adf80fc04fb656dd133fbb522250672b
+  FBSDKShareKit: b8c8ef0ed173f9fc1b3c8df384a0202ce53008d4
   FontAwesomeIconFactory: bb9ce26d3dd13044854a82d380023c8e7d3ebf1a
-  HanekeSwift: 50d37bfbc4432edc649167e538c259feccb4a2bb
+  HanekeSwift: 08e47d3d0f2899ec58e5d257beba0de619aca9e8
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   SocketRocket: ffe08119b00ef982f6c37052a4705a057c8494ad
 
-COCOAPODS: 0.39.0
+COCOAPODS: 0.38.2
