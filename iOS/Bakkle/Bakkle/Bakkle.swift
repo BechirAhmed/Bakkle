@@ -657,30 +657,32 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             /* JSON parse */
             do {
                 self.responseDict =  try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
+                
+                if self.responseDict.valueForKey("status")?.integerValue == 1 {
+                    self.auth_token = self.responseDict.valueForKey("auth_token") as! String
+                    var accountId = self.auth_token.characters.split {$0 == "_"}.map { String($0) }
+                    self.account_id = Int(accountId[1])
+                    let display_name = self.responseDict.valueForKey("display_name") as! String
+                    let nameArr = display_name.characters.split {$0 == " "}.map { String($0) }
+                    self.first_name = nameArr[0]
+                    self.last_name = ""
+                    if nameArr.count == 2 {
+                        self.last_name = nameArr[1]
+                    }
+                    self.profileImgURL = NSURL(string: self.profileImageURL())
+                    // Connect to web socket
+                    WSManager.setAuthenticationWithUUID(self.deviceUUID, withToken: self.auth_token)
+                    WSManager.connectWS()
+                    success()
+                } else {
+                    Bakkle.sharedInstance.logout({})
+                    fail()
+                }
+                
             } catch _ {
                 self.responseDict = nil
             }
             
-            if self.responseDict.valueForKey("status")?.integerValue == 1 {
-                self.auth_token = self.responseDict.valueForKey("auth_token") as! String
-                var accountId = self.auth_token.characters.split {$0 == "_"}.map { String($0) }
-                self.account_id = Int(accountId[1])
-                let display_name = self.responseDict.valueForKey("display_name") as! String
-                let nameArr = display_name.characters.split {$0 == " "}.map { String($0) }
-                self.first_name = nameArr[0]
-                self.last_name = ""
-                if nameArr.count == 2 {
-                    self.last_name = nameArr[1]
-                }
-                self.profileImgURL = NSURL(string: self.profileImageURL())
-                // Connect to web socket
-                WSManager.setAuthenticationWithUUID(self.deviceUUID, withToken: self.auth_token)
-                WSManager.connectWS()
-                success()
-            } else {
-                Bakkle.sharedInstance.logout({})
-                fail()
-            }
         }
         task.resume()
     }
@@ -866,18 +868,20 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             
             do {
                 self.responseDict =  try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
+                
+                self.debg("RESPONSE DICT IS: \(self.responseDict)")
+                
+                if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
+                    self.holdingItems = self.responseDict.valueForKey("holding_pattern") as! Array
+                    self.persistData()
+                    NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkHoldingUpdate, object: self)
+                    success()
+                }
             } catch _ {
                 self.responseDict = nil
             }
             
-            self.debg("RESPONSE DICT IS: \(self.responseDict)")
             
-            if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
-                self.holdingItems = self.responseDict.valueForKey("holding_pattern") as! Array
-                self.persistData()
-                NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkHoldingUpdate, object: self)
-                success()
-            }
         }
         task.resume()
     }
@@ -908,16 +912,18 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             
             do {
                 self.responseDict =  try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
+                
+                self.debg("RESPONSE DICT IS: \(self.responseDict)")
+                
+                if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
+                    self.trunkItems = self.responseDict.valueForKey("buyers_trunk") as! Array
+                    self.persistData()
+                    NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkTrunkUpdate, object: self)
+                    success()
+                }
+                
             } catch _ {
                 self.responseDict = nil
-            }
-            self.debg("RESPONSE DICT IS: \(self.responseDict)")
-            
-            if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
-                self.trunkItems = self.responseDict.valueForKey("buyers_trunk") as! Array
-                self.persistData()
-                NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkTrunkUpdate, object: self)
-                success()
             }
             
         }
@@ -947,29 +953,31 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                 return
             }
             
-//            _: String = NSString(data: data!, encoding: NSUTF8StringEncoding)! as String
+            //            _: String = NSString(data: data!, encoding: NSUTF8StringEncoding)! as String
             //self.debg("Response: \(responseString)")
             
-//            _: NSError?
+            //            _: NSError?
             do {
                 self.responseDict =  try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
+                
+                self.info("RESPONSE DICT IS: \(self.responseDict)")
+                
+                if self.responseDict != nil {
+                    if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
+                        if let feedarr: Array = self.responseDict.valueForKey("feed") as AnyObject! as? Array<NSObject>{
+                            //TODO: only update new items.
+                            self.feedItems = feedarr
+                            self.persistData()
+                            NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkFeedUpdate, object: self)
+                        }
+                        //note called on success, not 'new items'
+                        
+                        success()
+                    }
+                }
+                
             } catch _ {
                 self.responseDict = nil
-            }
-            self.info("RESPONSE DICT IS: \(self.responseDict)")
-            
-            if self.responseDict != nil {
-                if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
-                    if let feedarr: Array = self.responseDict.valueForKey("feed") as AnyObject! as? Array<NSObject>{
-                        //TODO: only update new items.
-                        self.feedItems = feedarr
-                        self.persistData()
-                        NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkFeedUpdate, object: self)
-                    }
-                    //note called on success, not 'new items'
-                    
-                    success()
-                }
             }
         }
         task.resume()
@@ -1002,18 +1010,20 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             
             do {
                 self.responseDict =  try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
+                
+                self.debg("RESPONSE DICT IS: \(self.responseDict)")
+                if (data != nil && data!.length != 0 ) {
+                    
+                    //            }&& Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 ){
+                    //                let item_id: Int = self.responseDict.valueForKey("item_id") as! Int
+                    //                let image_url: String = self.getImageURL(item_id)
+                    success()
+                } else {
+                    fail()
+                }
+                
             } catch _ {
                 self.responseDict = nil
-            }
-            self.debg("RESPONSE DICT IS: \(self.responseDict)")
-            if (data != nil && data!.length != 0 ) {
-                
-                //            }&& Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 ){
-                //                let item_id: Int = self.responseDict.valueForKey("item_id") as! Int
-                //                let image_url: String = self.getImageURL(item_id)
-                success()
-            } else {
-                fail()
             }
         }
         task.resume()
@@ -1102,18 +1112,20 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             
             do {
                 self.responseDict =  try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
+                
+                self.debg("RESPONSE DICT IS: \(self.responseDict)")
+                
+                if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
+                    let item_id: Int = self.responseDict.valueForKey("item_id") as! Int
+                    let image_url: String = self.responseDict.valueForKey("image_url") as! String
+                    success(item_id: item_id, image_url: image_url)
+                } else {
+                    fail()
+                }
             } catch _ {
                 self.responseDict = nil
             }
-            self.debg("RESPONSE DICT IS: \(self.responseDict)")
             
-            if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
-                let item_id: Int = self.responseDict.valueForKey("item_id") as! Int
-                let image_url: String = self.responseDict.valueForKey("image_url") as! String
-                success(item_id: item_id, image_url: image_url)
-            } else {
-                fail()
-            }
         }
         task.resume()
     }
@@ -1145,16 +1157,18 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             
             do {
                 self.responseDict =  try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
+                
+                self.debg("RESPONSE DICT IS: \(self.responseDict)")
+                
+                if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
+                    success()
+                } else {
+                    fail()
+                }
             } catch _ {
                 self.responseDict = nil
             }
-            self.debg("RESPONSE DICT IS: \(self.responseDict)")
             
-            if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
-                success()
-            } else {
-                fail()
-            }
         }
         task.resume()
     }
@@ -1220,16 +1234,18 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             
             do {
                 self.responseDict =  try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
+                
+                self.debg("RESPONSE DICT IS: \(self.responseDict)")
+                
+                if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
+                    success()
+                } else {
+                    fail()
+                }
             } catch _ {
                 self.responseDict = nil
             }
-            self.debg("RESPONSE DICT IS: \(self.responseDict)")
             
-            if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
-                success()
-            } else {
-                fail()
-            }
         }
         task.resume()
     }
@@ -1437,11 +1453,12 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                     let jsonData: NSData = f.dataUsingEncoding(NSUTF8StringEncoding)!
                     do {
                         self.feedItems = try NSJSONSerialization.JSONObjectWithData(jsonData, options: NSJSONReadingOptions.MutableContainers) as! Array
+                        self.info("Restored \( (self.feedItems as Array).count) feed items.")
+                        NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkFeedUpdate, object: self)
+                        
                     }catch _ {
                         self.feedItems = nil
                     }
-                    self.info("Restored \( (self.feedItems as Array).count) feed items.")
-                    NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkFeedUpdate, object: self)
                 }
                 
                 // restore TRUNK

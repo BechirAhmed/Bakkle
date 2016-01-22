@@ -8879,7 +8879,7 @@
         <image name="mock-rating-stars.png" width="1600" height="373"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="gDn-pc-qEe"/>
         <segue reference="Rco-rv-njI"/>
+        <segue reference="nLu-8f-h8F"/>
     </inferredMetricsTieBreakers>
 </document>
