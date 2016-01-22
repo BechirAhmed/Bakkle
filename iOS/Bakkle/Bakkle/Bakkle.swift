@@ -935,7 +935,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         let url: NSURL? = NSURL(string: url_base + url_feed)
         let request = NSMutableURLRequest(URL: url!)
         
-        let encLocation = user_location.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
+        let encLocation = user_location.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())
         
         request.HTTPMethod = "POST"
         let postString = "auth_token=\(self.auth_token)&device_uuid=\(self.deviceUUID)&search_text=\(self.search_text)&filter_distance=\(Int(self.filter_distance))&filter_price=\(Int(self.filter_price))&user_location=\(encLocation)"
@@ -986,7 +986,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     //http://localhost:8000/conversation/send_message/?auth_token=asdfasdfasdfasdf_1&message=I'd like 50 for it.&device_uuid=E6264D84-C395-4132-8C63-3EF051480191&conversation_id=7
     func sendChat(conversation_id: Int, message: String, success: ()->(), fail: ()->() ) {
         // URL encode some vars.
-        let escMessage = message.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
+        let escMessage = message.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())
         
         let postString = "device_uuid=\(self.deviceUUID)&auth_token=\(self.auth_token)&message=\(escMessage)&conversation_id=\(conversation_id)"
         let url: NSURL? = NSURL(string: url_base + url_send_chat + "?\(postString)")
@@ -1210,7 +1210,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     
     func setDescription(description: String!, success: ()->(), fail: ()->()) {
         var postString: String
-        let escDescription = description.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
+        let escDescription = description.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())
         postString = "device_uuid=\(self.deviceUUID)&auth_token=\(self.auth_token)&description=\(escDescription)"
         let url: NSURL? = NSURL(string: url_base +  url_setdescription + "?\(postString)")
         
