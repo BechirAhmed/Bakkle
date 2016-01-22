@@ -27,7 +27,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     /* ORIGIN IDENTIFIERS */
     var isEditting: Bool = false
     var item: NSDictionary!
-
+    
     /* SEGUE NAVIGATION */
     @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var nextButton: UIButton!
@@ -160,7 +160,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             successLabel.hidden = false
             
             if self.addItem!.successfulAdd {
-//                self.removeVideos()
+                //                self.removeVideos()
             }
             
             self.dismissViewControllerAnimated(true, completion: nil)
@@ -184,7 +184,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
                 }
             }
         }
-
+        
         let model = UIDevice.currentDevice().model
         if model == "iPad" {
             self.cameraView.addConstraint(NSLayoutConstraint(item: self.cameraView, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: self.cameraView, attribute: NSLayoutAttribute.Height, multiplier: 1.15, constant: 0.0))
@@ -330,92 +330,92 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     
     // Cancel button was pressed, remove any unwanted video files
     @IBAction func cancel(sender: AnyObject) {
-//        self.removeVideos()
+        //        self.removeVideos()
         self.dismissViewControllerAnimated(true, completion: nil)
     }
-
+    
     /*
     enum CameraFlashMode: Int {
-        case Off, On, Auto
+    case Off, On, Auto
     }
-
+    
     
     // Iterates through all the types of files saved for movies and removes them
     func removeVideos() {
-        for i in 0...videoCount {
-            self.removeVideos(i)
-        }
+    for i in 0...videoCount {
+    self.removeVideos(i)
+    }
     }
     
     var hasFlash: Bool = {
-        let devices = AVCaptureDevice.devicesWithMediaType(AVMediaTypeVideo)
-        for  device in devices  {
-            let captureDevice = device as! AVCaptureDevice
-            if (captureDevice.position == .Back) {
-                return captureDevice.hasFlash
-            }
-        }
-        return false
-        }()
-
-        flashMode = CameraFlashMode.OFF{
-            didSet {
-                if flashMode != oldValue {
-                    _updateFlasMode(flashMode)
-                }
-            }
-        }
+    let devices = AVCaptureDevice.devicesWithMediaType(AVMediaTypeVideo)
+    for  device in devices  {
+    let captureDevice = device as! AVCaptureDevice
+    if (captureDevice.position == .Back) {
+    return captureDevice.hasFlash
+    }
+    }
+    return false
+    }()
+    
+    flashMode = CameraFlashMode.OFF{
+    didSet {
+    if flashMode != oldValue {
+    _updateFlasMode(flashMode)
+    }
+    }
+    }
     /**
     Change current flash mode to next value from available ones.
     
     :returns: Current flash mode: Off / On / Auto
     */
     func changeFlashMode() -> CameraFlashMode {
-        flashMode = CameraFlashMode(rawValue: (flashMode.rawValue+1)%3)!
-        return flashMode
+    flashMode = CameraFlashMode(rawValue: (flashMode.rawValue+1)%3)!
+    return flashMode
     }
     
     
     
     func _updateTorch(flashMode: CameraFlashMode) {
-        captureSession?.beginConfiguration()
-        let devices = AVCaptureDevice.devicesWithMediaType(AVMediaTypeVideo)
-        for  device in devices  {
-            let captureDevice = device as! AVCaptureDevice
-            if (captureDevice.position == AVCaptureDevicePosition.Back) {
-                let avTorchMode = AVCaptureTorchMode(rawValue: flashMode.rawValue)
-                if (captureDevice.isTorchModeSupported(avTorchMode!)) {
-                    do {
-                    try captureDevice.lockForConfiguration()
-                    } catch {
-                        return;
-                    }
-                    captureDevice.torchMode = avTorchMode!
-                    captureDevice.unlockForConfiguration()
-                }
-            }
-        }
-        captureSession?.commitConfiguration()
+    captureSession?.beginConfiguration()
+    let devices = AVCaptureDevice.devicesWithMediaType(AVMediaTypeVideo)
+    for  device in devices  {
+    let captureDevice = device as! AVCaptureDevice
+    if (captureDevice.position == AVCaptureDevicePosition.Back) {
+    let avTorchMode = AVCaptureTorchMode(rawValue: flashMode.rawValue)
+    if (captureDevice.isTorchModeSupported(avTorchMode!)) {
+    do {
+    try captureDevice.lockForConfiguration()
+    } catch {
+    return;
+    }
+    captureDevice.torchMode = avTorchMode!
+    captureDevice.unlockForConfiguration()
+    }
+    }
+    }
+    captureSession?.commitConfiguration()
     }
     func _updateFlasMode(flashMode: CameraFlashMode) {
-        captureSession?.beginConfiguration()
-        let devices = AVCaptureDevice.devicesWithMediaType(AVMediaTypeVideo)
-        for  device in devices  {
-            let captureDevice = device as! AVCaptureDevice
-            if (captureDevice.position == AVCaptureDevicePosition.Back) {
-                let avFlashMode = AVCaptureFlashMode(rawValue: flashMode.rawValue)
-                if (captureDevice.isFlashModeSupported(avFlashMode!)) {
-                    do {
-                    try captureDevice.lockForConfiguration()
-                    } catch {
-                        return
-                    }
-                    captureDevice.flashMode = avFlashMode!
-                    captureDevice.unlockForConfiguration()
-                }
-            }
-        }
-        captureSession?.commitConfiguration()
+    captureSession?.beginConfiguration()
+    let devices = AVCaptureDevice.devicesWithMediaType(AVMediaTypeVideo)
+    for  device in devices  {
+    let captureDevice = device as! AVCaptureDevice
+    if (captureDevice.position == AVCaptureDevicePosition.Back) {
+    let avFlashMode = AVCaptureFlashMode(rawValue: flashMode.rawValue)
+    if (captureDevice.isFlashModeSupported(avFlashMode!)) {
+    do {
+    try captureDevice.lockForConfiguration()
+    } catch {
+    return
+    }
+    captureDevice.flashMode = avFlashMode!
+    captureDevice.unlockForConfiguration()
+    }
+    }
+    }
+    captureSession?.commitConfiguration()
     }
     
     
@@ -439,7 +439,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             do {
                 try NSFileManager.defaultManager().removeItemAtPath("\(NSTemporaryDirectory())video\(index).mp4")
             } catch {
-
+                
             }
         }
     }
@@ -468,7 +468,13 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         captureSession!.beginConfiguration()
         
         captureSession!.removeInput(selectedDevice)
-        selectedDevice = selectedDevice!.device.isEqual(findCameraWithPosition(.Front)) ? AVCaptureDeviceInput(device: findCameraWithPosition(.Back)!) : AVCaptureDeviceInput(device: findCameraWithPosition(.Front)!)
+        do {
+            selectedDevice = selectedDevice!.device.isEqual(findCameraWithPosition(.Front)) ? try AVCaptureDeviceInput(device: findCameraWithPosition(.Back)!) : try AVCaptureDeviceInput(device: findCameraWithPosition(.Front)!)
+        }catch _ {
+            selectedDevice = nil
+        }
+        
+        
         captureSession!.addInput(selectedDevice!)
         
         captureSession!.commitConfiguration()
@@ -478,7 +484,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         UIView.animateWithDuration(0.5, animations: { Void in
             // If the camera is defaulted as .Back (main camera) this will always "flip" the view when the camera swaps
             self.cameraView.transform = CGAffineTransformScale(self.cameraView.transform, -1, 1)
-        }, completion: { Void in
+            }, completion: { Void in
                 
         })
     }
@@ -627,14 +633,16 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             
             if CGRectContainsPoint(self.cameraView.frame, touchPoint.locationInView(nil)) {
                 if let device = self.selectedDevice!.device {
-                    if(device.lockForConfiguration()) {
-                        // focusIndicator removeAllAnimations incase we have the indicator darken with exposure
+                    do {
+                        try device.lockForConfiguration()
                         focusIndicator.hidden = true
                         device.focusPointOfInterest = focusPoint
                         device.focusMode = AVCaptureFocusMode.ContinuousAutoFocus
                         device.exposurePointOfInterest = focusPoint
                         device.exposureMode = AVCaptureExposureMode.ContinuousAutoExposure
                         device.unlockForConfiguration()
+                    }catch _ {
+                        return
                     }
                 }
             }
@@ -654,7 +662,6 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     ** If the touch is ended by the user, insert the view where it is wanted
     */
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        var touchPoint = touches.first as! UITouch
         
         if dragActivated > -1 && dragActivated < imageViews.count {
             self.released()
@@ -665,7 +672,6 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     ** If the touch is cancelled because of a system event: act as if the user didn't move the view properly
     */
     override func touchesCancelled(touches: Set<UITouch>?, withEvent event: UIEvent?) {
-        var touchPoint = touches.first as! UITouch
         
         if dragActivated > -1 && dragActivated < imageViews.count {
             self.released()
@@ -722,24 +728,30 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             stillRecording = 2
             
             /* Start Video Recording */
-            var videoOutputPath = "\(NSTemporaryDirectory())video\(videoCount++).mov"
+            let videoOutputPath = "\(NSTemporaryDirectory())video\(videoCount++).mov"
             NSLog("Temp video path: \(videoOutputPath)")
-            var fileManager = NSFileManager.defaultManager()
-            var error: NSError?
+            let fileManager = NSFileManager.defaultManager()
+            //            _: NSError?
             
             if fileManager.fileExistsAtPath(videoOutputPath) {
                 var err: NSError?
                 do {
                     try fileManager.removeItemAtPath(videoOutputPath)
-                } catch var error as NSError {
+                } catch let error as NSError {
                     err = error
-                    
+                    print(err)
                 }
             }
-            if self.selectedDevice!.device.flashActive && self.selectedDevice!.device.lockForConfiguration() {
-                self.selectedDevice!.device.flashMode = AVCaptureFlashMode.Off
-                self.selectedDevice!.device.unlockForConfiguration()
+            do {
+                try self.selectedDevice!.device.lockForConfiguration()
+                if self.selectedDevice!.device.flashActive{
+                    self.selectedDevice!.device.flashMode = AVCaptureFlashMode.Off
+                    self.selectedDevice!.device.unlockForConfiguration()
+                }
+            }catch _ {
+                
             }
+            
             videoOutput.startRecordingToOutputFileURL(NSURL(fileURLWithPath: videoOutputPath), recordingDelegate: self)
             
             
@@ -752,7 +764,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             recordViewOutline!.userInteractionEnabled = false
             self.view.addSubview(recordViewOutline!)
             
-            var recordBeginWidth: CGFloat = 5.0
+            let recordBeginWidth: CGFloat = 5.0
             recordView = UIView(frame: CGRectMake(recordViewOutline!.frame.maxX - (recordViewOutline!.frame.width / 2 + recordBeginWidth / 2.0), recordViewOutline!.frame.maxY - (recordViewOutline!.frame.width / 2  + recordBeginWidth / 2.0), recordBeginWidth, recordBeginWidth))
             recordView!.backgroundColor = UIColor.redColor()
             recordView!.layer.cornerRadius = recordView!.frame.width / 2.0
@@ -763,14 +775,14 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             
             UIView.animateWithDuration(Bakkle.sharedInstance.video_length_sec, animations: {
                 self.recordView!.transform = CGAffineTransformMakeScale(self.recordViewOutline!.frame.width / self.recordView!.frame.width, self.recordViewOutline!.frame.height / self.recordView!.frame.height)
-            }, completion: { Void in
-                if self.stillRecording > 0 {
-                    self.finishRecording()
-                }
+                }, completion: { Void in
+                    if self.stillRecording > 0 {
+                        self.finishRecording()
+                    }
             })
         }
     }
-
+    
     // Called if the length of the video is 15 second
     func finishRecording() {
         stillRecording--
@@ -780,9 +792,9 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         UIView.animateWithDuration(0.05, animations: {
             self.recordView!.alpha = 0.0
             self.recordViewOutline!.alpha = 0.0
-        }, completion: { Void in
-            self.recordView!.removeFromSuperview()
-            self.recordViewOutline!.removeFromSuperview()
+            }, completion: { Void in
+                self.recordView!.removeFromSuperview()
+                self.recordViewOutline!.removeFromSuperview()
         })
     }
     
@@ -791,12 +803,12 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         
         if error != nil {
             if error!.code != 0 {
-                if error.userInfo != nil {
-                    var value: AnyObject? = error.userInfo[AVErrorRecordingSuccessfullyFinishedKey]
-                    if value != nil {
-                        successfulRecord = value!.boolValue
-                    }
+                
+                let value: AnyObject? = error.userInfo[AVErrorRecordingSuccessfullyFinishedKey]
+                if value != nil {
+                    successfulRecord = value!.boolValue
                 }
+                
             }
         }
         
@@ -812,46 +824,49 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             var attr: NSDictionary?
             do {
                 attr = try NSFileManager.defaultManager().attributesOfItemAtPath(outputFileURL.path!)
-            } catch var error as NSError {
+            } catch let error as NSError {
                 err = error
                 attr = nil
+                print(err)
             }
             if let _attr = attr {
                 fileSize = _attr.fileSize()
+                print(fileSize)
             }
             
             NSLog("Recording Finished, video\(videoCount - 1).mov size: %d bits", videoOutput.recordedFileSize)
             // Convert video to .mp4
             NSLog("Converting to MP4")
-            var avAsset = AVURLAsset(URL: outputFileURL, options: nil)
-            var compatiblePresets: NSArray = AVAssetExportSession.exportPresetsCompatibleWithAsset(avAsset)
+            let avAsset = AVURLAsset(URL: outputFileURL, options: nil)
+            //            _: NSArray = AVAssetExportSession.exportPresetsCompatibleWithAsset(avAsset)
             // Change this preset for quality
-            var exportSession = AVAssetExportSession(asset: avAsset, presetName: AVAssetExportPresetLowQuality)
+            let exportSession = AVAssetExportSession(asset: avAsset, presetName: AVAssetExportPresetLowQuality)
             
-            exportSession.outputURL = NSURL(fileURLWithPath: "\(NSString(string: outputFileURL.path!).substringWithRange(NSRange(location: 0, length: (outputFileURL.path!).characters.count - 4))).mp4")!
+            exportSession!.outputURL = NSURL(fileURLWithPath: "\(NSString(string: outputFileURL.path!).substringWithRange(NSRange(location: 0, length: (outputFileURL.path!).characters.count - 4))).mp4")
             
-            var fileManager = NSFileManager.defaultManager()
-            var error: NSError?
+            let fileManager = NSFileManager.defaultManager()
+            //            _: NSError?
             
-            if fileManager.fileExistsAtPath(exportSession.outputURL.path!) {
+            if fileManager.fileExistsAtPath(exportSession!.outputURL!.path!) {
                 var err: NSError?
                 do {
-                    try fileManager.removeItemAtPath(exportSession.outputURL.path!)
-                } catch var error as NSError {
+                    try fileManager.removeItemAtPath(exportSession!.outputURL!.path!)
+                } catch let error as NSError {
                     err = error
+                    print(err);
                     
                 }
             }
             
             // Compress the video and save it as an HTML5 compatible format (.mp4)
-            exportSession.shouldOptimizeForNetworkUse = true
+            exportSession!.shouldOptimizeForNetworkUse = true
             exportSession!.outputFileType = AVFileTypeMPEG4
-            NSLog("MP4 url location: \(exportSession!.outputURL.path)")
+            NSLog("MP4 url location: \(exportSession!.outputURL!.path)")
             
-            exportSession.exportAsynchronouslyWithCompletionHandler({ Void in
-                switch (exportSession.status) {
+            exportSession!.exportAsynchronouslyWithCompletionHandler({ Void in
+                switch (exportSession!.status) {
                 case AVAssetExportSessionStatus.Failed:
-                    NSLog("Conversion Failed: \(exportSession.error)")
+                    NSLog("Conversion Failed: \(exportSession!.error)")
                     break
                     
                 case AVAssetExportSessionStatus.Cancelled:
@@ -861,28 +876,29 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
                 case AVAssetExportSessionStatus.Completed:
                     if NSFileManager.defaultManager().fileExistsAtPath(outputFileURL.path!) {
                         NSLog("Conversion Completed Successfully")
-                        var movieData = NSMutableData(contentsOfFile: exportSession.outputURL.path!)
+                        let movieData = NSMutableData(contentsOfFile: exportSession!.outputURL!.path!)
                         NSLog("MP4 Size: \(movieData?.length) bits")
                         if movieData == nil {
-                            NSLog("\(exportSession.error)")
+                            NSLog("\(exportSession!.error)")
                         }
-                        self.videos[self.videoCount - 1] = exportSession.outputURL
+                        self.videos[self.videoCount - 1] = exportSession!.outputURL!
                         
                         if self.addItem != nil {
                             if self.addItem!.videos.count >= self.videoCount {
-                                self.addItem!.videos[self.videoCount - 1] = exportSession.outputURL
+                                self.addItem!.videos[self.videoCount - 1] = exportSession!.outputURL!
                             }
-    //                        else {
-    //                            self.addItem!.videos.append(exportSession.outputURL)
-    //                        }
+                            //                        else {
+                            //                            self.addItem!.videos.append(exportSession.outputURL)
+                            //                        }
                         }
                     } else {
                         NSLog("Video deleted while processing.")
                         var err: NSError?
                         do {
-                            try NSFileManager.defaultManager().removeItemAtPath(exportSession.outputURL.path!)
-                        } catch var error as NSError {
+                            try NSFileManager.defaultManager().removeItemAtPath(exportSession!.outputURL!.path!)
+                        } catch let error as NSError {
                             err = error
+                            print(err);
                         } catch {
                             fatalError()
                         }
@@ -930,30 +946,36 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         }
         
         self.releasedCaptureButton(self)
-        var videoConnection = self.stillImageOutput.connectionWithMediaType(AVMediaTypeVideo)
+        let videoConnection = self.stillImageOutput.connectionWithMediaType(AVMediaTypeVideo)
         
         // Ensure that there is still a media connection to take a picture
         if videoConnection != nil {
             self.capButton.enabled = false
             self.nextButton.enabled = false
-            var itemIndex = self.imageCount++
+            let itemIndex = self.imageCount++
             
-            var err: NSError?
             
-            if self.selectedDevice!.device.hasFlash && self.selectedDevice!.device.lockForConfiguration() {
-                self.selectedDevice!.device.flashMode = self.flashMode
-                self.selectedDevice!.device.unlockForConfiguration()
+            
+            do {
+                try self.selectedDevice!.device.lockForConfiguration()
+                if self.selectedDevice!.device.hasFlash {
+                    self.selectedDevice!.device.flashMode = self.flashMode
+                    self.selectedDevice!.device.unlockForConfiguration()
+                }
+            }catch _ {
+                
             }
             
-            if err != nil {
-                print(err)
-            }
+//            let err: NSError?
+//            if err != nil {
+//                print(err)
+//            }
             
             // Take the picture
             stillImageOutput.captureStillImageAsynchronouslyFromConnection(videoConnection, completionHandler: { (imageDataSampleBuffer, error) -> Void in
                 // If the capture was successful crop the picture to the desired square and compress the image to a .jpg
                 if imageDataSampleBuffer != nil {
-                    var recentImage = UIImage(data: (AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageDataSampleBuffer)))
+                    let recentImage = UIImage(data: (AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageDataSampleBuffer)))
                     
                     self.flashView.alpha = 0.0
                     self.flashView.hidden = false
@@ -962,25 +984,25 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
                     })
                     
                     recentImage!.cropAndResize(self.size!, completionHandler: { (resizedImage:UIImage, data:NSData) -> () in
-                        var compressedImage = UIImageJPEGRepresentation(resizedImage, CGFloat(Bakkle.sharedInstance.image_quality))
+                        let compressedImage = UIImageJPEGRepresentation(resizedImage, CGFloat(Bakkle.sharedInstance.image_quality))
                         self.images[itemIndex] = UIImage(data: compressedImage!)!
                         self.displayStillImage(self.images[itemIndex])
                         self.populatePhotos()
                         UIView.animateWithDuration(CameraView.FLASH_TIME * 2, delay: CameraView.FLASH_TIME, options: [], animations: {
                             self.flashView.alpha = 0
                             }, completion: { Void in
-                                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(CameraView.IMAGE_FREEZE_TIME * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
-                                        self.buttonEnabledHandler()
-                                        if self.imageCount >= CameraView.MAX_IMAGE_COUNT {
-                                            if let image = self.imageViews[CameraView.MAX_IMAGE_COUNT - 1].image {
-                                                // Incase rapid fire ends up
-                                                self.displayStillImage(image)
-                                            }
-                                        } else {
-                                            self.removeStillImage()
+                                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(CameraView.IMAGE_FREEZE_TIME * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
+                                    self.buttonEnabledHandler()
+                                    if self.imageCount >= CameraView.MAX_IMAGE_COUNT {
+                                        if let image = self.imageViews[CameraView.MAX_IMAGE_COUNT - 1].image {
+                                            // Incase rapid fire ends up
+                                            self.displayStillImage(image)
                                         }
+                                    } else {
+                                        self.removeStillImage()
                                     }
-                                })
+                                }
+                        })
                     }) // cropAndResize
                     
                     
@@ -1068,7 +1090,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             
             self.imageViews[self.imageViews.count - 1 - i].image = videoImagesNoSpace[i]
         }
-
+        
         
         // This is needed to stop any concurrent modification for the first for loop
         for i in 0...(self.images.count - 1) {
@@ -1099,7 +1121,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             
             UIView.animateWithDuration(CameraView.IMAGE_SLIDE_ANIMATION_TIME, animations: {
                 slideView.frame = CGRectMake(self.imageViewX[toIndex], self.imageViewY, slideView.frame.width, slideView.frame.height)
-            }, completion: { Void in
+                }, completion: { Void in
                     self.imageViews[toIndex].image = slideView.image
                     slideView.image = nil
                     slideView.removeFromSuperview()
@@ -1230,37 +1252,37 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             UIView.animateWithDuration(CameraView.IMAGE_SLIDE_ANIMATION_TIME, animations: { Void in
                 self.draggedImage!.frame = CGRectMake(self.imageViewX[oldDragAct], self.imageViewY, self.imageViews[oldDragAct].frame.width, self.imageViews[oldDragAct].frame.height)
                 self.draggedImage!.alpha = 1.0
-            }, completion: { Void in
-                self.imageViews[oldDragAct].image = self.draggedImage!.image
-                self.draggedImage!.removeFromSuperview()
-                self.draggedImage = nil
-                
-                // Ensure that all animations are done before we finish releasing
-                // this shouldn't need to run, though it is a failsafe
-                var wait = false
-                repeat {
-                    for var i = 0; i < self.lockRelease.count && !wait; i++ {
-                        wait = wait || self.lockRelease[i]
-                    }
-                } while(wait)
-                
-                // this is the same logic in populatePhotos, except it uses a different image source
-                var imagesNoSpace = [UIImage]()
-                for i in 0...(self.imageViews.count - 1) {
-                    if self.isVideo[i] {
-                        break
+                }, completion: { Void in
+                    self.imageViews[oldDragAct].image = self.draggedImage!.image
+                    self.draggedImage!.removeFromSuperview()
+                    self.draggedImage = nil
+                    
+                    // Ensure that all animations are done before we finish releasing
+                    // this shouldn't need to run, though it is a failsafe
+                    var wait = false
+                    repeat {
+                        for var i = 0; i < self.lockRelease.count && !wait; i++ {
+                            wait = wait || self.lockRelease[i]
+                        }
+                    } while(wait)
+                    
+                    // this is the same logic in populatePhotos, except it uses a different image source
+                    var imagesNoSpace = [UIImage]()
+                    for i in 0...(self.imageViews.count - 1) {
+                        if self.isVideo[i] {
+                            break
+                        }
+                        
+                        if self.imageViews[i].image != nil {
+                            imagesNoSpace.append(self.imageViews[i].image!)
+                            self.images[i] = self.imageViews[i].image!
+                        } else {
+                            self.images[i] = UIImage()
+                        }
                     }
                     
-                    if self.imageViews[i].image != nil {
-                        imagesNoSpace.append(self.imageViews[i].image!)
-                        self.images[i] = self.imageViews[i].image!
-                    } else {
-                        self.images[i] = UIImage()
-                    }
-                }
-                
-                self.imageCount = imagesNoSpace.count
-                self.buttonEnabledHandler()
+                    self.imageCount = imagesNoSpace.count
+                    self.buttonEnabledHandler()
             })
         }
         self.dragActivated = -1

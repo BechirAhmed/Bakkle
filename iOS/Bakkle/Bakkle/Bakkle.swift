@@ -40,8 +40,8 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     let url_sellertransactions: String  = "items/get_seller_transactions/"
     let url_getaccount:String     = "account/get_account/"
     let url_setdescription:String = "account/set_description/"
-   
-
+    
+    
     static let bkFeedUpdate     = "com.bakkle.feedUpdate"
     static let bkGarageUpdate   = "com.bakkle.garageUpdate"
     static let bkTrunkUpdate    = "com.bakkle.trunkUpdate"
@@ -60,20 +60,20 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     static let developerTools   = false
     static let defaultServerNum = 0 // 0 = prod, 1 = prod cluster (sets default server in list below)
     static let servers   =   ["https://app.bakkle.com/",            // 0 (Production Single)
-                              "https://app-cluster.bakkle.com/",    // 1 (Production Cluster)
-                              "http://bakkle.rhventures.org:8000/"] // 2 (Test)
+        "https://app-cluster.bakkle.com/",    // 1 (Production Cluster)
+        "http://bakkle.rhventures.org:8000/"] // 2 (Test)
     
     static let serverNames = ["Production Server Single",
-                              "Production Server Cluster",
-                              "Test Server (Developers Only)"]
+        "Production Server Cluster",
+        "Test Server (Developers Only)"]
     
     static let BAKKLE = 1
     static let GOODWILL = 2
     
     /* 1 - ERROR
-     * 2 - INFO
-     * 3 - DEBUG
-     */
+    * 2 - INFO
+    * 3 - DEBUG
+    */
     var debug: Int = 2 // 0=off
     var serverNum: Int = 0
     var deviceUUID : String = UIDevice.currentDevice().identifierForVendor!.UUIDString
@@ -82,7 +82,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     var account_id: Int! = 0
     var auth_token: String!
     var facebook_id_str: String!  // Store ID for 'logged in' for BOTH facebook and local, despite the name
-                                  // when logged in with facebook, store the facebook id here. When logged in local, store the local ID here.
+    // when logged in with facebook, store the facebook id here. When logged in local, store the local ID here.
     var guest_id_str: String!     // Store ID for 'guest mode'. This is kept even after you login with a real account.
     var account_type: Int = Bakkle.bkAccountTypeGuest
     
@@ -98,7 +98,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     var holdingItems: [NSObject]!
     
     var userInfo: [NSObject: AnyObject]!
-
+    
     var responseDict: NSDictionary!
     
     var filter_distance: Float = 100
@@ -126,15 +126,15 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         }
         return Static.instance
     }
-
+    
     override init() {
         super.init()
         info("API initialized \(apiVersion)");
-
+        
         // Switch servers
         setServer()
         info("Using server: \(self.serverNum) \(self.url_base)")
-
+        
         self.getFilter()
         self.restoreData()
         self.initLocation()
@@ -146,7 +146,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         if(self.flavor == 2){
             self.theme_base = UIColor(red: 0, green: 83.0/255.0, blue: 160.0/255.0, alpha: 1)
             self.theme_baseDark = UIColor(red: 0, green: 70.0/255.0, blue: 136.0/255.0, alpha: 1)
-
+            
         }
         
         settings()
@@ -176,7 +176,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             self.user_location = "39.417672,-87.330438"
             self.info("Set phony default location: \(self.user_location)")
         }
-
+        
         if CLLocationManager.locationServicesEnabled() {
             locationManager.delegate = self
             locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
@@ -185,9 +185,9 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             }
             
             // Quirk to support simulating location in simulator
-//            if UIDevice.currentDevice().model == "iPhone Simulator" {
-                locationManager.startUpdatingLocation()
-  //          }
+            //            if UIDevice.currentDevice().model == "iPhone Simulator" {
+            locationManager.startUpdatingLocation()
+            //          }
         } else {
             // TODO : Warn no location services available
         }
@@ -237,20 +237,20 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         serverNum = Bakkle.developerTools ? NSUserDefaults.standardUserDefaults().integerForKey("server") : Bakkle.defaultServerNum
         switch( serverNum )
         {
-            case 0: self.url_base = Bakkle.servers[0]
+        case 0: self.url_base = Bakkle.servers[0]
             //case 0: self.url_base = "https://PRODCLUSTER-16628191.us-west-2.elb.amazonaws.com/"
-            case 1: self.url_base = Bakkle.servers[1]
-            case 2: self.url_base = Bakkle.servers[2]
-            case 3: self.url_base = Bakkle.servers[3]
-            case 4: self.url_base = Bakkle.servers[4]
+        case 1: self.url_base = Bakkle.servers[1]
+        case 2: self.url_base = Bakkle.servers[2]
+        case 3: self.url_base = Bakkle.servers[3]
+        case 4: self.url_base = Bakkle.servers[4]
             //case 4: self.url_base = "http://137.112.57.140:8000/"
-            case 5: self.url_base = Bakkle.servers[5] //Patrick
-            case 6: self.url_base = Bakkle.servers[6] //Xinyu
-            case 7: self.url_base = Bakkle.servers[7] // Joe
-            default: self.url_base = Bakkle.servers[Bakkle.defaultServerNum]
+        case 5: self.url_base = Bakkle.servers[5] //Patrick
+        case 6: self.url_base = Bakkle.servers[6] //Xinyu
+        case 7: self.url_base = Bakkle.servers[7] // Joe
+        default: self.url_base = Bakkle.servers[Bakkle.defaultServerNum]
         }
     }
-
+    
     func refresh() {
         /* TODO: this will request a data update from the server */
         self.populateFeed({})
@@ -276,60 +276,60 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     
     /* register and login using facebook */
     func settings() {
-            let url:NSURL? = NSURL(string: url_base + url_settings)
-            let request = NSMutableURLRequest(URL: url!)
+        let url:NSURL? = NSURL(string: url_base + url_settings)
+        let request = NSMutableURLRequest(URL: url!)
         
-            request.HTTPMethod = "GET"
-            let postString = ""
-            request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+        request.HTTPMethod = "GET"
+        let postString = ""
+        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+        
+        info("facebook")
+        info("URL: \(url)")
+        info("METHOD: \(request.HTTPMethod)")
+        info("BODY: \(postString)")
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
+            data, response, error in
             
-            info("facebook")
-            info("URL: \(url)")
-            info("METHOD: \(request.HTTPMethod)")
-            info("BODY: \(postString)")
-            let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
-                data, response, error in
-                
-                if error != nil {
-                    print("error=\(error)")
-                    return
-                }
-                
-                let responseString = NSString(data: data!, encoding:NSUTF8StringEncoding)
-                print("Response: \(responseString)")
-                
-                /* JSON parse */
-                if (data != nil && data!.length != 0) {
-                    let responseDict : NSDictionary = (try! NSJSONSerialization.JSONObjectWithData(data!, options: .MutableContainers)) as! NSDictionary
-                    
-                    if responseDict.valueForKey("status")?.integerValue == 1 {
-                        let settings_dict :NSDictionary = responseDict.valueForKey("settings_dict") as! NSDictionary
-                        
-                        if(settings_dict.valueForKey("feed_items_to_load") != nil){
-                            self.feed_items_to_load = settings_dict.valueForKey("feed_items_to_load")!.integerValue!
-                        }
-                        if(settings_dict.valueForKey("image_height") != nil){
-                            self.image_height = settings_dict.valueForKey("image_height")!.integerValue!
-                        }
-                        if(settings_dict.valueForKey("image_width") != nil){
-                            self.image_width = settings_dict.valueForKey("image_width")!.integerValue!
-                        }
-                        if(settings_dict.valueForKey("image_quality") != nil){
-                            self.image_quality = settings_dict.valueForKey("image_quality")!.floatValue!
-                        }
-                        if(settings_dict.valueForKey("image_precache") != nil){
-                            self.image_precache = settings_dict.valueForKey("image_precache")!.integerValue!
-                        }
-                        if(settings_dict.valueForKey("video_length_sec") != nil){
-                            self.video_length_sec = settings_dict.valueForKey("video_length_sec")!.doubleValue!
-                        }
-                        
-                    }
-                } else {
-                    //TODO: Trigger reattempt to connect timer.
-                }
+            if error != nil {
+                print("error=\(error)")
+                return
             }
-            task.resume()
+            
+            let responseString = NSString(data: data!, encoding:NSUTF8StringEncoding)
+            print("Response: \(responseString)")
+            
+            /* JSON parse */
+            if (data != nil && data!.length != 0) {
+                let responseDict : NSDictionary = (try! NSJSONSerialization.JSONObjectWithData(data!, options: .MutableContainers)) as! NSDictionary
+                
+                if responseDict.valueForKey("status")?.integerValue == 1 {
+                    let settings_dict :NSDictionary = responseDict.valueForKey("settings_dict") as! NSDictionary
+                    
+                    if(settings_dict.valueForKey("feed_items_to_load") != nil){
+                        self.feed_items_to_load = settings_dict.valueForKey("feed_items_to_load")!.integerValue!
+                    }
+                    if(settings_dict.valueForKey("image_height") != nil){
+                        self.image_height = settings_dict.valueForKey("image_height")!.integerValue!
+                    }
+                    if(settings_dict.valueForKey("image_width") != nil){
+                        self.image_width = settings_dict.valueForKey("image_width")!.integerValue!
+                    }
+                    if(settings_dict.valueForKey("image_quality") != nil){
+                        self.image_quality = settings_dict.valueForKey("image_quality")!.floatValue!
+                    }
+                    if(settings_dict.valueForKey("image_precache") != nil){
+                        self.image_precache = settings_dict.valueForKey("image_precache")!.integerValue!
+                    }
+                    if(settings_dict.valueForKey("video_length_sec") != nil){
+                        self.video_length_sec = settings_dict.valueForKey("video_length_sec")!.doubleValue!
+                    }
+                    
+                }
+            } else {
+                //TODO: Trigger reattempt to connect timer.
+            }
+        }
+        task.resume()
     }
     
     // Check to see if user has permission to perform requested action
@@ -351,7 +351,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             // TODO: lookup image URL
             return "https://app.bakkle.com/img/default_profile.png"
         }
-
+        
         // Else assume guest
         return "https://app.bakkle.com/img/default_profile.png"
     }
@@ -374,7 +374,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             if error != nil {
                 print("error=\(error)")
                 return
-//                fail()
+                //                fail()
             }
             
             let responseString = NSString(data: data!, encoding: NSUTF8StringEncoding)
@@ -387,7 +387,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                     self.guest_id_str = responseDict.valueForKey("userid") as! String
                     success()
                 }else{
-//                    fail()
+                    //                    fail()
                 }
             }
         }
@@ -553,7 +553,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     }
     
     
-
+    
     
     /* register and login using facebook */
     /* create account */
@@ -571,7 +571,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         } else {
             avatarImageURL = "https://app.bakkle.com/img/default_profile.png"
         }
-            
+        
         request.HTTPMethod = "POST"
         let postString = "name=\(name)&gender=\(gender)&user_id=\(userid)&first_name=\(first_name)&last_name=\(last_name)&device_uuid=\(self.deviceUUID)&flavor=\(self.flavor)&avatar_image_url=\(avatarImageURL)&account_type=\(self.account_type)"
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
@@ -602,7 +602,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                     self.last_name = last_name
                     
                     self.profileImgURL = NSURL(string: self.profileImageURL())
-
+                    
                     success()
                 }
                 else {
@@ -620,65 +620,69 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     
     /* login and get account details */
     func login(success: ()->(), fail: ()->()) {
-            let url:NSURL? = NSURL(string: url_base + url_login)
-            let request = NSMutableURLRequest(URL: url!)
+        let url:NSURL? = NSURL(string: url_base + url_login)
+        let request = NSMutableURLRequest(URL: url!)
         
-            // Get device capabilities
-            let bounds: CGRect = UIScreen.mainScreen().bounds
-            let screen_width:CGFloat = bounds.size.width
-            let screen_height:CGFloat = bounds.size.height
+        // Get device capabilities
+        let bounds: CGRect = UIScreen.mainScreen().bounds
+        let screen_width:CGFloat = bounds.size.width
+        let screen_height:CGFloat = bounds.size.height
         
-            let (a,b) = self.appVersion()
-            let encLocation = user_location.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())
+        let (a,b) = self.appVersion()
+        let encLocation = user_location.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())
         
-            request.HTTPMethod = "POST"
+        request.HTTPMethod = "POST"
         var user_id: String
         if Bakkle.sharedInstance.account_type == Bakkle.bkAccountTypeGuest {
             user_id = self.guest_id_str
         }else{
             user_id = self.facebook_id_str
         }
-            let postString = "device_uuid=\(self.deviceUUID)&user_id=\(user_id)&screen_width=\(screen_width)&screen_height=\(screen_height)&app_version=\(a)&app_build=\(b)&user_location=\(encLocation)&is_ios=true&flavor=\(self.flavor)"
-            request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+        let postString = "device_uuid=\(self.deviceUUID)&user_id=\(user_id)&screen_width=\(screen_width)&screen_height=\(screen_height)&app_version=\(a)&app_build=\(b)&user_location=\(encLocation)&is_ios=true&flavor=\(self.flavor)"
+        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+        
+        print("[Bakkle] login (facebook)")
+        print("URL: \(url) METHOD: \(request.HTTPMethod) BODY: \(postString)")
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
+            data, response, error in
             
-            print("[Bakkle] login (facebook)")
-            print("URL: \(url) METHOD: \(request.HTTPMethod) BODY: \(postString)")
-            let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
-                data, response, error in
-                
-                if error != nil {
-                    print("error=\(error)")
-                    return
-                }
-
-                let responseString = NSString(data: data!, encoding:NSUTF8StringEncoding)
-                print("ResponseLogin: \(responseString)")
-                
-                /* JSON parse */
-                let responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data!, options: .MutableContainers) as! NSDictionary
-                
-                if responseDict.valueForKey("status")?.integerValue == 1 {
-                    self.auth_token = responseDict.valueForKey("auth_token") as! String
-                    var accountId = self.auth_token.characters.split {$0 == "_"}.map { String($0) }
-                    self.account_id = Int(accountId[1])
-                    let display_name = responseDict.valueForKey("display_name") as! String
-                    let nameArr = display_name.characters.split {$0 == " "}.map { String($0) }
-                    self.first_name = nameArr[0]
-                    self.last_name = ""
-                    if nameArr.count == 2 {
-                        self.last_name = nameArr[1]
-                    }
-                    self.profileImgURL = NSURL(string: self.profileImageURL())
-                    // Connect to web socket
-                    WSManager.setAuthenticationWithUUID(self.deviceUUID, withToken: self.auth_token)
-                    WSManager.connectWS()
-                    success()
-                } else {
-                    Bakkle.sharedInstance.logout({})
-                    fail()
-                }
+            if error != nil {
+                print("error=\(error)")
+                return
             }
-            task.resume()
+            
+            let responseString = NSString(data: data!, encoding:NSUTF8StringEncoding)
+            print("ResponseLogin: \(responseString)")
+            
+            /* JSON parse */
+            do {
+                self.responseDict =  try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
+            } catch _ {
+                self.responseDict = nil
+            }
+            
+            if self.responseDict.valueForKey("status")?.integerValue == 1 {
+                self.auth_token = self.responseDict.valueForKey("auth_token") as! String
+                var accountId = self.auth_token.characters.split {$0 == "_"}.map { String($0) }
+                self.account_id = Int(accountId[1])
+                let display_name = self.responseDict.valueForKey("display_name") as! String
+                let nameArr = display_name.characters.split {$0 == " "}.map { String($0) }
+                self.first_name = nameArr[0]
+                self.last_name = ""
+                if nameArr.count == 2 {
+                    self.last_name = nameArr[1]
+                }
+                self.profileImgURL = NSURL(string: self.profileImageURL())
+                // Connect to web socket
+                WSManager.setAuthenticationWithUUID(self.deviceUUID, withToken: self.auth_token)
+                WSManager.connectWS()
+                success()
+            } else {
+                Bakkle.sharedInstance.logout({})
+                fail()
+            }
+        }
+        task.resume()
     }
     
     /* logout */
@@ -708,16 +712,16 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         }
         task.resume()
     }
-
+    
     /* register device for push notifications */
     func register_push(deviceToken: NSData) {
         let url:NSURL? = NSURL(string: url_base + url_register_push)
         let request = NSMutableURLRequest(URL: url!)
-
+        
         request.HTTPMethod = "POST"
         let postString = "auth_token=\(self.auth_token)&device_uuid=\(self.deviceUUID)&device_token=\(deviceToken)"
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
-
+        
         print("[Bakkle] register_push")
         print("URL: \(url) METHOD: \(request.HTTPMethod) BODY: \(postString)")
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
@@ -731,7 +735,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             let responseString = NSString(data: data!, encoding: NSUTF8StringEncoding)
             self.debg("Response: \(responseString)")
         }
-        task.resume() 
+        task.resume()
     }
     
     /* mark feed item 'status' as MEH/WANT/HOLD/REPORT */
@@ -746,12 +750,12 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         if(message != nil){
             
             postString = "auth_token=\(self.auth_token)&device_uuid=\(self.deviceUUID)&item_id=\(item_id)&view_duration=\(view_duration)&report_message=\(message!)"
-
+            
         }
         else{
             
             postString = "auth_token=\(self.auth_token)&device_uuid=\(self.deviceUUID)&item_id=\(item_id)&view_duration=\(view_duration)"
-
+            
         }
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
         
@@ -860,7 +864,12 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             let responseString: String = NSString(data: data!, encoding: NSUTF8StringEncoding)! as String
             self.info("Response: \(responseString)")
             
-            self.responseDict = NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary!
+            do {
+                self.responseDict =  try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
+            } catch _ {
+                self.responseDict = nil
+            }
+            
             self.debg("RESPONSE DICT IS: \(self.responseDict)")
             
             if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
@@ -872,7 +881,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         }
         task.resume()
     }
-
+    
     /* Populates the trunk with items from the server */
     func populateTrunk(success: ()->()) {
         let url: NSURL? = NSURL(string: url_base + url_buyers_trunk)
@@ -897,7 +906,11 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             let responseString: String = NSString(data: data!, encoding: NSUTF8StringEncoding)! as String
             self.info("Response: \(responseString)")
             
-            self.responseDict = NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary!
+            do {
+                self.responseDict =  try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
+            } catch _ {
+                self.responseDict = nil
+            }
             self.debg("RESPONSE DICT IS: \(self.responseDict)")
             
             if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
@@ -933,17 +946,21 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                 self.err("error= \(error)")
                 return
             }
-
-            let responseString: String = NSString(data: data!, encoding: NSUTF8StringEncoding)! as String
+            
+//            _: String = NSString(data: data!, encoding: NSUTF8StringEncoding)! as String
             //self.debg("Response: \(responseString)")
             
-            var parseError: NSError?
-            self.responseDict = NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary!
+//            _: NSError?
+            do {
+                self.responseDict =  try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
+            } catch _ {
+                self.responseDict = nil
+            }
             self.info("RESPONSE DICT IS: \(self.responseDict)")
             
             if self.responseDict != nil {
                 if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
-                    if let feedarr: Array = self.responseDict["feed"] {
+                    if let feedarr: Array = self.responseDict.valueForKey("feed") as AnyObject! as? Array<NSObject>{
                         //TODO: only update new items.
                         self.feedItems = feedarr
                         self.persistData()
@@ -983,14 +1000,18 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             let responseString: String = NSString(data: data!, encoding: NSUTF8StringEncoding)! as String
             self.debg("Response: \(responseString)")
             
-            self.responseDict = NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary!
+            do {
+                self.responseDict =  try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
+            } catch _ {
+                self.responseDict = nil
+            }
             self.debg("RESPONSE DICT IS: \(self.responseDict)")
             if (data != nil && data!.length != 0 ) {
                 
-//            }&& Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 ){
-    //                let item_id: Int = self.responseDict.valueForKey("item_id") as! Int
-    //                let image_url: String = self.getImageURL(item_id)
-                    success()
+                //            }&& Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 ){
+                //                let item_id: Int = self.responseDict.valueForKey("item_id") as! Int
+                //                let image_url: String = self.getImageURL(item_id)
+                success()
             } else {
                 fail()
             }
@@ -1015,7 +1036,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         let escTitle = title.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())
         let escDescription = description.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())
         let escLocation = location.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())
-
+        
         var escPrice: String!
         if price == "take it!" {
             escPrice = "0.00"
@@ -1045,7 +1066,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         request.addValue(contentType, forHTTPHeaderField: "Content-Type")
         
         let body:NSMutableData = NSMutableData()
-                
+        
         //add all images as neccessary.
         for i in images{
             body.appendData("\r\n--\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!)
@@ -1079,7 +1100,11 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             self.debg("Response: \(responseString)")
             print("Response: \(responseString)")
             
-            self.responseDict = NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary!
+            do {
+                self.responseDict =  try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
+            } catch _ {
+                self.responseDict = nil
+            }
             self.debg("RESPONSE DICT IS: \(self.responseDict)")
             
             if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
@@ -1095,9 +1120,9 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     
     func removeItem(item_id: NSInteger, success: ()->(), fail: ()->() ) {
         // URL encode some vars.
-            var postString: String
-            postString = "device_uuid=\(self.deviceUUID)&auth_token=\(self.auth_token)&item_id=\(item_id)"
-
+        var postString: String
+        postString = "device_uuid=\(self.deviceUUID)&auth_token=\(self.auth_token)&item_id=\(item_id)"
+        
         let url: NSURL? = NSURL(string: url_base +  url_delete_item + "?\(postString)")
         
         let request = NSMutableURLRequest(URL: url!)
@@ -1118,7 +1143,11 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             self.debg("Response: \(responseString)")
             print("Response: \(responseString)")
             
-            self.responseDict = NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary!
+            do {
+                self.responseDict =  try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
+            } catch _ {
+                self.responseDict = nil
+            }
             self.debg("RESPONSE DICT IS: \(self.responseDict)")
             
             if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
@@ -1132,7 +1161,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     
     func getAccount(account_id: NSInteger, success: (account: NSDictionary)->(), fail: ()->()) {
         var postString: String
-         postString = "device_uuid=\(self.deviceUUID)&auth_token=\(self.auth_token)&accountId=\(account_id)"
+        postString = "device_uuid=\(self.deviceUUID)&auth_token=\(self.auth_token)&accountId=\(account_id)"
         let url: NSURL? = NSURL(string: url_base +  url_getaccount + "?\(postString)")
         
         let request = NSMutableURLRequest(URL: url!)
@@ -1189,7 +1218,11 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             self.debg("Response: \(responseString)")
             print("Response: \(responseString)")
             
-            self.responseDict = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary!
+            do {
+                self.responseDict =  try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
+            } catch _ {
+                self.responseDict = nil
+            }
             self.debg("RESPONSE DICT IS: \(self.responseDict)")
             
             if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
@@ -1214,7 +1247,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         let imageRef: CGImage!
         do {
             imageRef = try imageGenerator.copyCGImageAtTime(time, actualTime: nil)
-        } catch var error1 as NSError {
+        } catch let error1 as NSError {
             error = error1
             imageRef = nil
         }
@@ -1225,20 +1258,20 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         }
         
         // Side lengths are the ratio * smallest length (width or height)
-        var lengthRatio: CGFloat = 1.0 / 3.0
-        var length: CGFloat = min(CGFloat(self.image_width), CGFloat(self.image_height)) * lengthRatio
-        var distToSide: CGFloat = length / (2.0 * sqrt(3.0))
-        var distToVertex: CGFloat = length / sqrt(3.0)
+        let lengthRatio: CGFloat = 1.0 / 3.0
+        let length: CGFloat = min(CGFloat(self.image_width), CGFloat(self.image_height)) * lengthRatio
+        let distToSide: CGFloat = length / (2.0 * sqrt(3.0))
+        let distToVertex: CGFloat = length / sqrt(3.0)
         
         //  |\   Is the orientation of the play triangle, where:
         //  | \           point1 = top most vertex
         //  | /           point2 = rightmost vertex
         //  |/           point3 = bottom most vertex
-        var point1: CGPoint = CGPointMake(CGFloat(self.image_width) / 2.0 - distToSide, CGFloat(self.image_height) / 2.0 - length / 2.0)
-        var point2: CGPoint = CGPointMake(CGFloat(self.image_width) / 2.0 + distToVertex, CGFloat(self.image_height) / 2.0)
-        var point3: CGPoint = CGPointMake(CGFloat(self.image_width) / 2.0 - distToSide, CGFloat(self.image_height) / 2.0 + length / 2.0)
+        let point1: CGPoint = CGPointMake(CGFloat(self.image_width) / 2.0 - distToSide, CGFloat(self.image_height) / 2.0 - length / 2.0)
+        let point2: CGPoint = CGPointMake(CGFloat(self.image_width) / 2.0 + distToVertex, CGFloat(self.image_height) / 2.0)
+        let point3: CGPoint = CGPointMake(CGFloat(self.image_width) / 2.0 - distToSide, CGFloat(self.image_height) / 2.0 + length / 2.0)
         
-        var imageWithTriangle = UIImage(CGImage: imageRef)!
+        var imageWithTriangle = UIImage(CGImage: imageRef)
         
         // Crop to Square (from UIImage+Resize, without the dispatch_async blocks)
         let contextSize: CGSize = imageWithTriangle.size
@@ -1257,10 +1290,10 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             width = contextSize.width
             height = contextSize.width
         }
-        imageWithTriangle = UIImage(CGImage: CGImageCreateWithImageInRect(imageWithTriangle.CGImage, CGRectMake(posX, posY, width, height)), scale: imageWithTriangle.scale, orientation: imageWithTriangle.imageOrientation)!
+        imageWithTriangle = UIImage(CGImage: CGImageCreateWithImageInRect(imageWithTriangle.CGImage, CGRectMake(posX, posY, width, height))!, scale: imageWithTriangle.scale, orientation: imageWithTriangle.imageOrientation)
         
         // Resize (from UIImage+Resize, without the dispatch_async blocks)
-        var newSize:CGSize = CGSizeMake(CGFloat(self.image_width), CGFloat(self.image_height))
+        let newSize:CGSize = CGSizeMake(CGFloat(self.image_width), CGFloat(self.image_height))
         let rect = CGRectMake(0, 0, newSize.width, newSize.height)
         UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)
         imageWithTriangle.drawInRect(rect)
@@ -1270,7 +1303,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         // Take the cropped and resized image, then average the rgb values with dark gray color to darken it
         UIGraphicsBeginImageContextWithOptions(newImage.size, false, newImage.scale)
         var context = UIGraphicsGetCurrentContext()
-        var area = CGRectMake(0, 0, newImage.size.width, newImage.size.height)
+        let area = CGRectMake(0, 0, newImage.size.width, newImage.size.height)
         CGContextSaveGState(context)
         CGContextClipToMask(context, area, newImage.CGImage)
         UIColor.darkGrayColor().set()
@@ -1289,7 +1322,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.65).set()
         CGContextSetLineJoin(context, CGLineJoin.Round)
         CGContextSetLineWidth(context, 8.0)
-        var triangle = CGPathCreateMutable()
+        let triangle = CGPathCreateMutable()
         CGPathMoveToPoint(triangle, nil, point1.x, point1.y)
         CGPathAddLineToPoint(triangle, nil, point2.x, point2.y)
         CGPathAddLineToPoint(triangle, nil, point3.x, point3.y)
@@ -1301,7 +1334,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         
         return returnImage
     }
-
+    
     
     /* reset feed items on server for DEMO */
     func resetDemo(success: ()->()) {
@@ -1323,7 +1356,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                 return
             }
             
-            if let responseString = NSString(data: data, encoding: NSUTF8StringEncoding) {
+            if let responseString = NSString(data: data!, encoding: NSUTF8StringEncoding) {
                 self.debg("Response: \(responseString)")
                 
                 // TODO: Refresh UI
@@ -1332,10 +1365,10 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         }
         task.resume()
     }
-
+    
     func getFilter() {
         let userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
-
+        
         if let x = userDefaults.objectForKey("filter_distance") as? Float {
             self.filter_distance = x
             self.debg("Restored filter_distance = \(x)")
@@ -1398,11 +1431,15 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                 userDefaults.setBool(true, forKey: "instruction")
             }
             if version == self.appVersion().build {
-            
+                
                 // restore FEED
                 if let f = userDefaults.objectForKey("feedItems") as? NSString {
                     let jsonData: NSData = f.dataUsingEncoding(NSUTF8StringEncoding)!
-                    self.feedItems = NSJSONSerialization.JSONObjectWithData(jsonData, options: NSJSONReadingOptions.MutableContainers) as! Array
+                    do {
+                        self.feedItems = try NSJSONSerialization.JSONObjectWithData(jsonData, options: NSJSONReadingOptions.MutableContainers) as! Array
+                    }catch _ {
+                        self.feedItems = nil
+                    }
                     self.info("Restored \( (self.feedItems as Array).count) feed items.")
                     NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkFeedUpdate, object: self)
                 }
@@ -1410,7 +1447,11 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                 // restore TRUNK
                 if let f = userDefaults.objectForKey("trunkItems") as? NSString {
                     let jsonData: NSData = f.dataUsingEncoding(NSUTF8StringEncoding)!
-                    self.trunkItems = NSJSONSerialization.JSONObjectWithData(jsonData, options: NSJSONReadingOptions.MutableContainers) as! Array
+                    do {
+                        self.trunkItems = try NSJSONSerialization.JSONObjectWithData(jsonData, options: NSJSONReadingOptions.MutableContainers) as! Array
+                    } catch _ {
+                        self.trunkItems = nil
+                    }
                     self.info("Restored \( (self.trunkItems as Array).count) trunk items.")
                     NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkTrunkUpdate, object: self)
                 }
@@ -1418,19 +1459,28 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                 // restore GARAGE
                 if let f = userDefaults.objectForKey("garageItems") as? NSString {
                     let jsonData: NSData = f.dataUsingEncoding(NSUTF8StringEncoding)!
-                    self.garageItems = NSJSONSerialization.JSONObjectWithData(jsonData, options: NSJSONReadingOptions.MutableContainers) as! Array
+                    do {
+                        self.garageItems = try NSJSONSerialization.JSONObjectWithData(jsonData, options: NSJSONReadingOptions.MutableContainers) as! Array
+                    }catch _ {
+                        self.garageItems = nil
+                    }
                     self.info("Restored \( (self.garageItems as Array).count) garage items.")
                     NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkGarageUpdate, object: self)
                 }
-
+                
                 // restore HOLDING
                 if let f = userDefaults.objectForKey("holdingItems") as? NSString {
                     let jsonData: NSData = f.dataUsingEncoding(NSUTF8StringEncoding)!
-                    self.holdingItems = NSJSONSerialization.JSONObjectWithData(jsonData, options: NSJSONReadingOptions.MutableContainers) as! Array
+                    do {
+                        self.holdingItems = try NSJSONSerialization.JSONObjectWithData(jsonData, options: NSJSONReadingOptions.MutableContainers) as! Array
+                    }catch _ {
+                        self.holdingItems = nil
+                    }
+                    
                     self.info("Restored \( (self.holdingItems as Array).count) holding items.")
                     NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkHoldingUpdate, object: self)
                 }
-
+                
                 return
                 
             }
@@ -1471,7 +1521,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         } else {
             userDefaults.removeObjectForKey("garageItems")
         }
-
+        
         // Store HOLDING
         if self.holdingItems != nil {
             let data3 = try? NSJSONSerialization.dataWithJSONObject(self.holdingItems, options: [])
@@ -1482,16 +1532,16 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             userDefaults.removeObjectForKey("holdingItems")
         }
         
-//        if let temp = userDefaults.objectForKey("first_name") as? Int {
-//            self.first_name = temp
-//            self.info("Restored \( self.first_name ) first_name.")
-//        }
-//        if let temp = userDefaults.objectForKey("last_name") as? Int {
-//            self.last_name = temp
-//            self.info("Restored \( self.last_name ) last_name.")
-//        }
+        //        if let temp = userDefaults.objectForKey("first_name") as? Int {
+        //            self.first_name = temp
+        //            self.info("Restored \( self.first_name ) first_name.")
+        //        }
+        //        if let temp = userDefaults.objectForKey("last_name") as? Int {
+        //            self.last_name = temp
+        //            self.info("Restored \( self.last_name ) last_name.")
+        //        }
         
-
+        
         // Store VERSION
         userDefaults.setObject(self.appVersion().build, forKey: "version")
         self.info("Stored version = \(self.appVersion().build)")
@@ -1499,15 +1549,15 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         // Store GUESTID
         userDefaults.setObject(self.guest_id_str, forKey: "guest_id_str")
         self.info("Stored guest_id_str = \(self.guest_id_str)")
-
+        
         // Store FACEBOOK/LOCALID
         userDefaults.setObject(self.facebook_id_str, forKey: "facebook_id_str")
         self.info("Stored facebook_id_str = \(self.facebook_id_str)")
-
+        
         // Store ACCOUNT TYPE
         userDefaults.setObject(self.account_type, forKey: "account_type")
         self.info("Stored account_type = \(self.account_type)")
-
+        
         // Store FIRST_NAME
         userDefaults.setObject(self.first_name, forKey: "first_name")
         self.info("Stored first_name = \(self.first_name)")
