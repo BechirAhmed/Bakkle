@@ -271,22 +271,6 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         self.dismissViewControllerAnimated(true, completion: nil)
     }
 
-    /**
-    * @return Bool: true if confirm button is enabled
-    *
-    * This handles disabling and enabling the confirm button (changing color, etc).
-    * Updating the backgroundColor end up placing the confirmButtonText behind the
-    * button itself, so it needs to be brought back infront.
-    *
-    * Note: for some reason, if the background is changed before the first frame of
-    * this page is shown, the text will not be brought to the front until this function
-    * is called again.
-    *
-    * Note 2: To fix the initialization of the above note, the button is initialized as
-    * disabled and gray, the RGB color on the three variables above CONFIRM_BUTTON_RED,
-    * CONFIRM_BUTTON_GREEN, CONFIRM_BUTTON_BLUE will need to be changed if the color is
-    * ever to be changed
-    */
     func disableConfirmButtonHandler() -> Bool {
         if confirmHit || self.titleField.text!.isEmpty || itemImages?.count < 1 || itemImages?.count > CameraView.MAX_IMAGE_COUNT {
             confirmButton.enabled = false
@@ -327,12 +311,6 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         }
         
         for i in 0..<self.videos.count {
-            
-            // NOTE: The reason we are downloading then immediately reuploading a video is
-            // because there would be large amount of backend work to be able to support 
-            // the change of simply keeping the reference to the video. By the time we ran
-            // into this issue, we would not be able to finish the changes by the time we
-            // stop working.
             
             // TODO: Fix backend and don't download and reupload every video
             if !self.videos[i].fileURL {
