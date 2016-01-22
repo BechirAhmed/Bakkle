@@ -45,8 +45,8 @@ class SellersGarageView: UIViewController, UITableViewDelegate, UITableViewDataS
         // Register for garage updates
         let notificationCenter = NSNotificationCenter.defaultCenter()
         let mainQueue = NSOperationQueue.mainQueue()
-        var observer = notificationCenter.addObserverForName(Bakkle.bkGarageUpdate, object: nil, queue: mainQueue) { _ in
-            println("Received garage update")
+        _ = notificationCenter.addObserverForName(Bakkle.bkGarageUpdate, object: nil, queue: mainQueue) { _ in
+            print("Received garage update")
             self.refreshData()
         }
 
@@ -135,8 +135,8 @@ class SellersGarageView: UIViewController, UITableViewDelegate, UITableViewDataS
     
     /* Request update from server */
     func requestUpdates() {
-        println("[Sellers Garage] Requesting updates from server")
-        dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
+        print("[Sellers Garage] Requesting updates from server")
+        dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INTERACTIVE.rawValue), 0)) {
             Bakkle.sharedInstance.populateGarage({ })
         }
     }
@@ -167,11 +167,11 @@ class SellersGarageView: UIViewController, UITableViewDelegate, UITableViewDataS
             return 0
         }
         if activeItem.count != 0 || soldItem.count != 0 {
-            println("Actually got items from the garage!")
-            println(String(Bakkle.sharedInstance.garageItems.count) + " items in garage")
+            print("Actually got items from the garage!")
+            print(String(Bakkle.sharedInstance.garageItems.count) + " items in garage")
             return activeItem.count + soldItem.count  + 2
         }
-        println("Didn't get anything in garage")
+        print("Didn't get anything in garage")
         return 2;
     }
 
@@ -184,7 +184,7 @@ class SellersGarageView: UIViewController, UITableViewDelegate, UITableViewDataS
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if tableView.numberOfRowsInSection(0) == 2 {
-            let cell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier("messageCell") as! UITableViewCell
+            let cell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier("messageCell")! as UITableViewCell
             if indexPath.row == 1 {
                 cell.textLabel!.text = "There are no items!"
             }
@@ -222,7 +222,7 @@ class SellersGarageView: UIViewController, UITableViewDelegate, UITableViewDataS
             
         let topPrice: String = item.valueForKey("price") as! String
         var myString : String = ""
-        if suffix(topPrice, 2) == "00" {
+        if String(topPrice.characters.suffix(2)) == "00" {
             let withoutZeroes = "$\((topPrice as NSString).integerValue)"
             myString = withoutZeroes
         } else {
@@ -238,7 +238,7 @@ class SellersGarageView: UIViewController, UITableViewDelegate, UITableViewDataS
         cell.numViews.text = (item.valueForKey("number_of_views") as! NSNumber).stringValue
         
         cell.selectorView.userInteractionEnabled = true
-        var tapGestureRecognizer = UITapGestureRecognizer(target:self, action:Selector("imageTapped:"))
+        let tapGestureRecognizer = UITapGestureRecognizer(target:self, action:Selector("imageTapped:"))
         cell.selectorView.addGestureRecognizer(tapGestureRecognizer)
 //        cell.selectorView.tag = indexPath.row
         cell.selectorView.tag = getIndex(indexPath)
@@ -328,7 +328,7 @@ class SellersGarageView: UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     func noInternetConnectionAlert(){
-        var alert = UIAlertController(title: "No Internet", message: "There was an error! Please check your Network Connection and try again", preferredStyle: UIAlertControllerStyle.Alert)
+        let alert = UIAlertController(title: "No Internet", message: "There was an error! Please check your Network Connection and try again", preferredStyle: UIAlertControllerStyle.Alert)
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
         self.presentViewController(alert, animated: true, completion: nil)
 

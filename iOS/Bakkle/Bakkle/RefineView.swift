@@ -31,7 +31,7 @@ class RefineView: UIViewController, UISearchBarDelegate {
         
         setupButtons()
         
-        var tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
         self.view.addGestureRecognizer(tapGestureRecognizer)
         
         if search_text != nil {
@@ -88,7 +88,7 @@ class RefineView: UIViewController, UISearchBarDelegate {
     }
     
     func setupBackground() {
-        var visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .Dark)) as UIVisualEffectView
+        let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .Dark)) as UIVisualEffectView
         visualEffectView.frame = self.view.bounds
         self.view.addSubview(visualEffectView)
     }
@@ -115,7 +115,7 @@ class RefineView: UIViewController, UISearchBarDelegate {
     }
     
     @IBAction func filterChanged(sender: AnyObject) {
-        println("SET d:\(Int(distance.value)) p:\(price.value)")
+        print("SET d:\(Int(distance.value)) p:\(price.value)")
         self.dismissKeyboard()
         if distance.value > 100 {
             distanceLbl.text = "∞"

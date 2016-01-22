@@ -50,7 +50,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 textView.textContainerInset = UIEdgeInsetsMake(4, 3, 3, 3)
                 toolBar.addSubview(textView)
                 
-                sendButton = UIButton.buttonWithType(.System) as! UIButton
+                sendButton = UIButton(type: .System)
                 sendButton.enabled = false
                 sendButton.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 17)
                 sendButton.setTitle("Send", forState: .Normal)
@@ -61,8 +61,8 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 toolBar.addSubview(sendButton)
                 
                 // Auto Layout allows `sendButton` to change width, e.g., for localization.
-                textView.setTranslatesAutoresizingMaskIntoConstraints(false)
-                sendButton.setTranslatesAutoresizingMaskIntoConstraints(false)
+                textView.translatesAutoresizingMaskIntoConstraints = false
+                sendButton.translatesAutoresizingMaskIntoConstraints = false
                 toolBar.addConstraint(NSLayoutConstraint(item: textView, attribute: .Left, relatedBy: .Equal, toItem: toolBar, attribute: .Left, multiplier: 1, constant: 4))
                 toolBar.addConstraint(NSLayoutConstraint(item: textView, attribute: .Top, relatedBy: .Equal, toItem: toolBar, attribute: .Top, multiplier: 1, constant: 7.5))
                 toolBar.addConstraint(NSLayoutConstraint(item: textView, attribute: .Right, relatedBy: .Equal, toItem: sendButton, attribute: .Left, multiplier: 1, constant: -2))
@@ -80,7 +80,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         title = chat.user.name
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -98,10 +98,8 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         header = UIView(frame: CGRectMake(view.bounds.origin.x, view.bounds.origin.y, view.bounds.size.width, headerHeight+topHeight))
         header.backgroundColor = Bakkle.sharedInstance.theme_base
         
-        let testView = self.inputAccessoryView
-        
         let buttonWidth: CGFloat = 80.0
-        var backButton = UIButton(frame: CGRectMake(header.bounds.origin.x + 4, header.bounds.origin.y+24, buttonWidth, headerHeight - 8))
+        let backButton = UIButton(frame: CGRectMake(header.bounds.origin.x + 4, header.bounds.origin.y+24, buttonWidth, headerHeight - 8))
         backButton.setImage(UIImage(named: "icon-back.png"), forState: UIControlState.Normal)
         backButton.addTarget(self, action: "btnBack:", forControlEvents: UIControlEvents.TouchUpInside)
         header.addSubview(backButton)
@@ -118,17 +116,8 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         setupNameLabelTitle()
         header.addSubview(nameLabel)
         
-        //        profileButton = UIButton(frame: CGRectMake(profileXpos, header.bounds.origin.y+topHeight+4, profileButtonWidth, profileButtonWidth))
-        //        profileButton.backgroundColor = Bakkle.sharedInstance.theme_base
-        //        profileButton.setImage(UIImage(named: "loading.png"), forState: UIControlState.Normal)
-        //        profileButton.imageView?.layer.cornerRadius = profileButton.imageView!.frame.size.width/2
-        //        profileButton.imageView?.layer.borderWidth = 1.5
-        //        profileButton.imageView?.layer.borderColor = UIColor.whiteColor().CGColor
-        //        profileButton.addTarget(self, action: "btnProfile:", forControlEvents: UIControlEvents.TouchUpInside)
-        //        header.addSubview(profileButton)
-        
         let infoButtonWidth:CGFloat = 40
-        var infoButton = UIButton(frame: CGRectMake(header.bounds.origin.x+header.bounds.size.width-infoButtonWidth, header.bounds.origin.y+topHeight, infoButtonWidth, headerHeight-4))
+        let infoButton = UIButton(frame: CGRectMake(header.bounds.origin.x+header.bounds.size.width-infoButtonWidth, header.bounds.origin.y+topHeight, infoButtonWidth, headerHeight-4))
         infoButton.setImage(UIImage(named: Bakkle.sharedInstance.flavor == Bakkle.GOODWILL ? "icon-i-blue.png" : "icon-i.png"), forState: UIControlState.Normal)
         infoButton.addTarget(self, action: "btnI:", forControlEvents: UIControlEvents.TouchUpInside)
         header.addSubview(infoButton)
@@ -143,7 +132,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         view.addSubview(header)
         
         tableView = UITableView(frame: CGRectMake(view.bounds.origin.x, view.bounds.origin.y+headerHeight+topHeight, view.bounds.size.width, view.bounds.size.height-headerHeight-self.inputAccessoryView.bounds.size.height), style: .Plain)
-        tableView.autoresizingMask = .FlexibleWidth | .FlexibleHeight
+        tableView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
         tableView.backgroundColor = UIColor.whiteColor()
         let edgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: toolBarMinHeight, right: 0)
         tableView.contentInset = edgeInsets
@@ -168,7 +157,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "dismissKeyboard"))
         
         let mainQueue = NSOperationQueue.mainQueue()
-        var observer = notificationCenter.addObserverForName(Bakkle.bkAppBecameActive, object: nil, queue: mainQueue) { _ in
+        _ = notificationCenter.addObserverForName(Bakkle.bkAppBecameActive, object: nil, queue: mainQueue) { _ in
             self.appBecameActive()
         }
         
@@ -239,18 +228,15 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 //                profileButton.hnk_setImage(UIImage(named: "gwIcon@2x.png")!, state: UIControlState.Normal, animated: false, success: nil)
             }
             else{
-                var name = seller.valueForKey("display_name") as! String
-                var nameArr = split(name) {$0 == " "}
+                let name = seller.valueForKey("display_name") as! String
+                var nameArr = name.characters.split {$0 == " "}.map { String($0) }
                 nameLabel.text = nameArr[0]
                 //                profileButton.hnk_setImageFromURL(imgURL!, state: UIControlState.Normal, placeholder: UIImage(named:"loading.png"), format: nil, failure: nil, success: nil)
             }
         }
         else {
             let user = chat.user
-            var facebookProfileImageUrlString = "http://graph.facebook.com/\(user.facebookID)/picture?width=142&height=142"
-            let imgURL = NSURL(string: facebookProfileImageUrlString)
             nameLabel.text = user.firstName
-            //            profileButton.hnk_setImageFromURL(imgURL!, state: UIControlState.Normal, placeholder: UIImage(named:"loading.png"), format: nil, failure: nil, success: nil)
         }
 
     }
@@ -264,10 +250,10 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         var loadedMessages: [Message] = []
         
         // Load messages from server
-        var chatPayload: WSRequest = WSGetMessagesForChatRequest(chatId: String(chat.chatId))
+        let chatPayload: WSRequest = WSGetMessagesForChatRequest(chatId: String(chat.chatId))
         chatPayload.successHandler = {
-            (var success: NSDictionary) in
-            var messages: [NSDictionary] = success.valueForKey("messages") as! [NSDictionary]
+            (success: NSDictionary) in
+            let messages: [NSDictionary] = success.valueForKey("messages") as! [NSDictionary]
             var loadedMessage: Message!
             for message in messages {
                 // if message is null, we have an offer
@@ -276,7 +262,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 var dateString = message.valueForKey("date_sent") as! String
                 
                 // Can remove, temporary hack so old data without TZs doesnt' crash the formatter
-                if count(dateString)<22 { dateString = dateString + " UTC" }
+                if dateString.characters.count<22 { dateString = dateString + " UTC" }
                 
                 let date = NSDate().dateFromString(dateString, format:  "yyyy-MM-dd HH:mm:ss ZZZ")
                 let incoming = message.valueForKey("sent_by_buyer") as! Bool
@@ -291,7 +277,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 }
                 loadedMessages.append(loadedMessage)
             }
-            self.chat.loadedMessages = loadedMessages.reverse()
+            self.chat.loadedMessages = Array(loadedMessages.reverse())
             self.tableView.reloadData()
             self.tableViewScrollToBottomAnimated(true)
         }
@@ -299,10 +285,10 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         // Register for messages sent via websocket
         WSManager.registerMessageHandler({ (data : [NSObject : AnyObject]!) -> Void in
-            var dict: NSDictionary = data as NSDictionary
+            let dict: NSDictionary = data as NSDictionary
             
             var message: NSDictionary = NSDictionary()
-            var messageOrigin: String = ""
+            let messageOrigin: String = ""
             
             if(dict.objectForKey("message") != nil){
                 message = dict.objectForKey("message") as! NSDictionary
@@ -311,7 +297,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 var dateString = message.valueForKey("date_sent") as! String
 
                 // Can remove, temporary hack so old data without TZs doesnt' crash the formatter
-                if count(dateString)<22 { dateString = dateString + " UTC" }
+                if dateString.characters.count<22 { dateString = dateString + " UTC" }
                 
                 let date = NSDate().dateFromString(dateString, format:  "yyyy-MM-dd HH:mm:ss ZZZ")
                 let incoming = (message.valueForKey("sent_by_buyer") as! Bool) == !self.isBuyer
@@ -321,7 +307,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
                     self.chat.loadedMessages.append(loadedMessage)
                 }
                 
-                print("[NewMessageHandler] NewMessageHandler received new message $'\(messageText)' from userId \(messageOrigin)");
+                print("[NewMessageHandler] NewMessageHandler received new message $'\(messageText)' from userId \(messageOrigin)", terminator: "");
             }
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 self.tableView.reloadData()
@@ -331,10 +317,10 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         // Register for offers sent via websocket
         WSManager.registerMessageHandler({ (data : [NSObject : AnyObject]!) -> Void in
-            var dict: NSDictionary = data as NSDictionary
-            println("received an offer")
+            let dict: NSDictionary = data as NSDictionary
+            print("received an offer")
             var message: NSDictionary = NSDictionary()
-            var messageOrigin: String = ""
+            let messageOrigin: String = ""
             
             if(dict.objectForKey("message") != nil){
                 message = dict.objectForKey("message") as! NSDictionary
@@ -352,7 +338,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
                     self.chat.loadedMessages.append(loadedOffer)
                 }
                 
-                print("[NewOfferHandler] NewOfferHandler received new offer '\(offerPrice)' from userId \(messageOrigin)");
+                print("[NewOfferHandler] NewOfferHandler received new offer '\(offerPrice)' from userId \(messageOrigin)", terminator: "");
             }
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 self.tableView.reloadData()
@@ -363,9 +349,9 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     
     func btnAcceptOffer(sender: UIButton!) {
-        var sendPayload: WSRequest = WSAcceptOfferRequest(offerId: String(sender.tag))
+      let sendPayload: WSRequest = WSAcceptOfferRequest(offerId: String(sender.tag))
         sendPayload.failHandler = {
-            (var failure: NSDictionary) in
+            ( failure: NSDictionary) in
             self.toolBar.hidden = true
             let errorMessage = failure.valueForKey("error") as! String
             let alert: UIAlertController = UIAlertController(title: "Accept Offer Failed", message: errorMessage, preferredStyle: .Alert)
@@ -376,13 +362,13 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         WSManager.enqueueWorkPayload(sendPayload)
         loadMessages()
-        println("Accepted offer")
+        print("Accepted offer")
     }
     
     func btnRetractOffer(sender: UIButton!) {
-        var sendPayload: WSRequest = WSRetractOfferRequest(offerId: String(sender.tag))
+      let sendPayload: WSRequest = WSRetractOfferRequest(offerId: String(sender.tag))
         sendPayload.failHandler = {
-            (var failure: NSDictionary) in
+            ( failure: NSDictionary) in
             self.toolBar.hidden = true
             let errorMessage = failure.valueForKey("error") as! String
             let alert: UIAlertController = UIAlertController(title: "Retract Offer Failed", message: errorMessage, preferredStyle: .Alert)
@@ -393,13 +379,13 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         WSManager.enqueueWorkPayload(sendPayload)
         loadMessages()
-        println("Retracted offer")
+        print("Retracted offer")
     }
     
     func btnCounterOffer(sender: UIButton!) {
         proposeOffer()
         loadMessages()
-        println("Countered offer")
+        print("Countered offer")
     }
     
     func btnBack(sender:UIButton!)
@@ -443,7 +429,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         self.view.endEditing(true)
         self.toolBar.hidden = true
         let alert: UIAlertController = UIAlertController(title: "Offer Proposal", message: "Enter a dollar amount to propose an offer.", preferredStyle: .Alert)
-        alert.addTextFieldWithConfigurationHandler({(txtField: UITextField!) in
+        alert.addTextFieldWithConfigurationHandler({(txtField: UITextField) in
             txtField.placeholder = "Offer amount"
             txtField.keyboardType = UIKeyboardType.DecimalPad
             self.offerTF = txtField
@@ -455,11 +441,11 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             self.toolBar.hidden = false
             // need to format offer text
             let offerPriceString = self.offerTF.text
-            let offerPriceFormatted = self.formatPrice(offerPriceString)
-            var sendPayload: WSRequest = WSSendOfferRequest(chatId: String(self.chat.chatId), offerPrice: offerPriceFormatted, offerMethod: deliveryMethod.ship)
+            let offerPriceFormatted = self.formatPrice(offerPriceString!)
+            let sendPayload: WSRequest = WSSendOfferRequest(chatId: String(self.chat.chatId), offerPrice: offerPriceFormatted, offerMethod: deliveryMethod.ship)
             WSManager.enqueueWorkPayload(sendPayload)
             AudioServicesPlaySystemSound(messageSoundOutgoing)
-            println("Proposed Offer: $" + self.offerTF.text)
+            print("Proposed Offer: $" + self.offerTF.text!)
         }))
         self.presentViewController(alert, animated: false, completion: nil)
     }
@@ -531,7 +517,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var indexFloor: Int = Int(floor(Double(indexPath.row) * 0.5))
+        let indexFloor: Int = Int(floor(Double(indexPath.row) * 0.5))
         let message = chat.loadedMessages[indexFloor]
         
         // Date cells
@@ -558,8 +544,8 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
                         cell.makeOfferLabel.text = "YOU REJECTED THE OFFER OF $\(offer)."
                     } else {
                         cell.makeOfferLabel.text = "AN OFFER OF $\(offer) HAS BEEN MADE."
-                        var acceptBtn: UIButton = UIButton()
-                        var counterBtn: UIButton = UIButton()
+                        let acceptBtn: UIButton = UIButton()
+                        let counterBtn: UIButton = UIButton()
                         acceptBtn.addTarget(self, action: "btnAcceptOffer:", forControlEvents: UIControlEvents.TouchUpInside)
                         acceptBtn.tag = message.offer.valueForKey("pk") as! Int
                         cell.contentView.addSubview(acceptBtn)
@@ -577,7 +563,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
                         cell.makeOfferLabel.text = "YOUR OFFER OF $\(offer) WAS REJECTED."
                     } else {
                         cell.makeOfferLabel.text = "YOU PROPOSED AN OFFER OF $\(offer)."
-                        var retractBtn: UIButton = UIButton()
+                        let retractBtn: UIButton = UIButton()
                         retractBtn.addTarget(self, action: "btnRetractOffer:", forControlEvents: UIControlEvents.TouchUpInside)
                         retractBtn.tag = message.offer.valueForKey("pk") as! Int
                         cell.contentView.addSubview(retractBtn)
@@ -638,7 +624,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
             }
         }
         if duration > 0 {
-            let options = UIViewAnimationOptions(UInt((userInfo[UIKeyboardAnimationCurveUserInfoKey] as! NSNumber).integerValue << 16)) // http://stackoverflow.com/a/18873820/242933
+            let options = UIViewAnimationOptions(rawValue: UInt((userInfo[UIKeyboardAnimationCurveUserInfoKey] as! NSNumber).integerValue << 16)) // http://stackoverflow.com/a/18873820/242933
             UIView.animateWithDuration(duration, delay: 0, options: options, animations: animations, completion: nil)
         } else {
             animations()
@@ -683,7 +669,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         textView.resignFirstResponder()
         textView.becomeFirstResponder()
         
-        var sendPayload: WSRequest = WSSendChatMessageRequest(chatId: String(chat.chatId), message: textView.text)
+        let sendPayload: WSRequest = WSSendChatMessageRequest(chatId: String(chat.chatId), message: textView.text)
         WSManager.enqueueWorkPayload(sendPayload)
         
         textView.text = nil
@@ -723,13 +709,13 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     // 2. Copy text to pasteboard
     func messageCopyTextAction(menuController: UIMenuController) {
-        let selectedIndexPath = tableView.indexPathForSelectedRow()
+        let selectedIndexPath = tableView.indexPathForSelectedRow
         let selectedMessage = chat.loadedMessages[selectedIndexPath!.row-1]
         UIPasteboard.generalPasteboard().string = selectedMessage.text
     }
     // 3. Deselect row
     func menuControllerWillHide(notification: NSNotification) {
-        if let selectedIndexPath = tableView.indexPathForSelectedRow() {
+        if let selectedIndexPath = tableView.indexPathForSelectedRow {
             tableView.deselectRowAtIndexPath(selectedIndexPath, animated: false)
         }
         (notification.object as! UIMenuController).menuItems = nil
@@ -746,7 +732,7 @@ func createMessageSoundOutgoing() -> SystemSoundID {
 // Only show "Copy" when editing `textView` #CopyMessage
 class InputTextView: UITextView {
     override func canPerformAction(action: Selector, withSender sender: AnyObject!) -> Bool {
-        if (delegate as! ChatViewController).tableView.indexPathForSelectedRow() != nil {
+        if (delegate as! ChatViewController).tableView.indexPathForSelectedRow != nil {
             return action == "messageCopyTextAction:"
         } else {
             return super.canPerformAction(action, withSender: sender)

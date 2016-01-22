@@ -91,7 +91,7 @@ class ProfileView: UIViewController, UITextViewDelegate {
     
     func setGuestInfo(){
         dispatch_async(dispatch_get_global_queue(
-            Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
+            Int(QOS_CLASS_USER_INTERACTIVE.rawValue), 0)) {
                 dispatch_async(dispatch_get_main_queue()) {
                     self.backgroundAvatar.hnk_setImageFromURL(NSURL(string: Bakkle.sharedInstance.profileImageURL())!)
                     self.avatar.hnk_setImageFromURL(NSURL(string: Bakkle.sharedInstance.profileImageURL())!)
@@ -110,13 +110,13 @@ class ProfileView: UIViewController, UITextViewDelegate {
     
     func setUserInfo() {
         let facebook_id = user.valueForKey("facebook_id") as! String
-        println("facebook_id: \(facebook_id)")
+        print("facebook_id: \(facebook_id)")
         let imgURL = NSURL(string: user.valueForKey("avatar_image_url") as! String + "?width=300&height=300")!
         
         dispatch_async(dispatch_get_global_queue(
-            Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
+            Int(QOS_CLASS_USER_INTERACTIVE.rawValue), 0)) {
                 dispatch_async(dispatch_get_main_queue()) {
-                    println("[SettingsView] displaying image \(imgURL)")
+                    print("[SettingsView] displaying image \(imgURL)")
                         self.backgroundAvatar.hnk_setImageFromURL(imgURL)
                         self.avatar.hnk_setImageFromURL(imgURL)
                     
@@ -137,7 +137,7 @@ class ProfileView: UIViewController, UITextViewDelegate {
     }
     
     func setImageAttributes(){
-        var visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .Light)) as UIVisualEffectView
+        let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .Light)) as UIVisualEffectView
         visualEffectView.frame = self.backgroundAvatar.frame
         self.backgroundAvatar.addSubview(visualEffectView)
         
@@ -197,7 +197,7 @@ class ProfileView: UIViewController, UITextViewDelegate {
     
     /* helper function to help the screen move up and down when the keyboard shows or dismisses */
     func animateViewMoving(up: Bool) {
-        var movement = (up ? -keyboardHeight : keyboardHeight)
+        let movement = (up ? -keyboardHeight : keyboardHeight)
         
         UIView.animateWithDuration(0.5, animations: {
             self.view.frame = CGRectOffset(self.view.frame, 0, movement)

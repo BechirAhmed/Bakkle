@@ -82,9 +82,9 @@ class MenuTableController: UITableViewController {
     }
     
     func setupBackground() {
-        var visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .Dark)) as UIVisualEffectView
+        let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .Dark)) as UIVisualEffectView
         visualEffectView.frame = tableView.frame
-        var backgroundImageView = UIImageView(frame: tableView.frame)
+        let backgroundImageView = UIImageView(frame: tableView.frame)
         backgroundImageView.contentMode = UIViewContentMode.ScaleAspectFill
         let finalString = Bakkle.sharedInstance.profileImageURL() + "?width=142&height=142"
         backgroundImageView.hnk_setImageFromURL(NSURL(string: finalString)!)
@@ -168,7 +168,7 @@ class MenuTableController: UITableViewController {
     }
     
     func noInternetConnectionAlert(){
-        var alert = UIAlertController(title: "No Internet", message: "There was an error! Please check your Network Connection and try again", preferredStyle: UIAlertControllerStyle.Alert)
+        let alert = UIAlertController(title: "No Internet", message: "There was an error! Please check your Network Connection and try again", preferredStyle: UIAlertControllerStyle.Alert)
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
         self.presentViewController(alert, animated: true, completion: nil)
         

@@ -26,7 +26,7 @@ class ComposeViewController: UIViewController, UITableViewDataSource, UITextView
         view.addSubview(toTextView)
 
         searchResultsTableView.frame = view.bounds
-        searchResultsTableView.autoresizingMask = .FlexibleWidth | .FlexibleHeight
+        searchResultsTableView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
         searchResultsTableView.dataSource = self
         searchResultsTableView.hidden = true
         searchResultsTableView.keyboardDismissMode = .OnDrag
@@ -34,7 +34,7 @@ class ComposeViewController: UIViewController, UITableViewDataSource, UITextView
         searchResultsTableView.registerClass(UserCell.self, forCellReuseIdentifier: NSStringFromClass(UserCell))
         view.addSubview(searchResultsTableView)
 
-        toTextView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        toTextView.translatesAutoresizingMaskIntoConstraints = false
         view.addConstraint(NSLayoutConstraint(item: toTextView, attribute: .Left, relatedBy: .Equal, toItem: view, attribute: .Left, multiplier: 1, constant: 0))
         view.addConstraint(NSLayoutConstraint(item: toTextView, attribute: .Right, relatedBy: .Equal, toItem: view, attribute: .Right, multiplier: 1, constant: 0))
         view.addConstraint(NSLayoutConstraint(item: toTextView, attribute: .Top, relatedBy: .Equal, toItem: topLayoutGuide, attribute: .Bottom, multiplier: 1, constant: 0))
@@ -57,7 +57,7 @@ class ComposeViewController: UIViewController, UITableViewDataSource, UITextView
     // MARK: - UITextViewDelegate
 
     func textViewDidChange(textView: UITextView) {
-        println(textView.text)
+        print(textView.text)
     }
 
     // MARK: - Actions

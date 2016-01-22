@@ -50,7 +50,7 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
 
         activityInd?.startAnimating()
         
-        var swipeDown = UISwipeGestureRecognizer(target: self, action: "goback:")
+        let swipeDown = UISwipeGestureRecognizer(target: self, action: "goback:")
         swipeDown.direction = UISwipeGestureRecognizerDirection.Down
         self.view.addGestureRecognizer(swipeDown)
         
@@ -70,7 +70,7 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
         }
         
         
-        if let index = Bakkle.sharedInstance.trunkItems {
+        if let _ = Bakkle.sharedInstance.trunkItems {
             if (Bakkle.sharedInstance.trunkItems.count != 0) {
                 for index in 0...Bakkle.sharedInstance.trunkItems.count-1 {
                     if item == Bakkle.sharedInstance.trunkItems[index].valueForKey("item") as! NSDictionary {
@@ -101,9 +101,7 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
         
         let sellerProfile: NSDictionary = item!.valueForKey("seller") as! NSDictionary
         // get the first name of the seller (split seller name by " " and get first element)
-        let sellersName: String = (split(sellerProfile.valueForKey("display_name") as! String) {$0 == " "})[0]
-        let sellerFBID: String = sellerProfile.valueForKey("facebook_id") as! String
-        let sellerFacebookProfileImgString = "http://graph.facebook.com/\(sellerFBID)/picture?width=142&height=142"
+        let sellersName: String = ((sellerProfile.valueForKey("display_name") as! String).characters.split {$0 == " "}.map { String($0) })[0]
         let topTitle: String = item!.valueForKey("title") as! String
         let topPrice: String = item!.valueForKey("price") as! String
         let tags = item!.valueForKey("tags") as! String
@@ -137,7 +135,7 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
         
         let sellerProfile: NSDictionary = item!.valueForKey("seller") as! NSDictionary
 
-        var profileImageURL = NSURL(string: sellerProfile.valueForKey("avatar_image_url") as! String)!
+        let profileImageURL = NSURL(string: sellerProfile.valueForKey("avatar_image_url") as! String)!
         var image = UIImage(data: NSData(contentsOfURL: profileImageURL)!)
         if (image == nil){
             image = UIImage(named: "default_profile.png")
@@ -228,14 +226,14 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
         cell.imgView.contentMode = UIViewContentMode.ScaleAspectFill
         cell.imgView.clipsToBounds  = true
         let imageURL = self.itemImages![indexPath.row]
-        let fileExtension = imageURL.path?.pathExtension
+        let fileExtension = (imageURL.path! as NSString).pathExtension
         if fileExtension == "mp4" {
             if self.videoImages[imageURL] == nil {
                 self.videoImages[imageURL] = Bakkle.sharedInstance.previewImageForLocalVideo(imageURL)
             }
             
             cell.imgView!.image = self.videoImages[imageURL]
-            var tapGestureRecognizer = UITapGestureRecognizer(target:self, action:Selector("videoTapped:"))
+            let tapGestureRecognizer = UITapGestureRecognizer(target:self, action:Selector("videoTapped:"))
             self.videoURL = imageURL
             cell.imgView!.addGestureRecognizer(tapGestureRecognizer)
         } else {
@@ -257,8 +255,8 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
-        var pageWidth: CGFloat  = collectionView.bounds.size.width
-        var page: Int = Int(floor((collectionView.contentOffset.x - pageWidth / 2) / pageWidth)) + 1
+        let pageWidth: CGFloat  = collectionView.bounds.size.width
+        let page: Int = Int(floor((collectionView.contentOffset.x - pageWidth / 2) / pageWidth)) + 1
         pageControl.currentPage = page
     }
 

@@ -37,19 +37,19 @@ class AnalyticsView: UIViewController, PNChartDelegate{
         header.backgroundColor = Theme.ColorGreen
         
         let buttonWidth: CGFloat = 80.0
-        var backButton = UIButton(frame: CGRectMake(header.bounds.origin.x + 4, header.bounds.origin.y+24, buttonWidth, headerHeight - 8))
+        let backButton = UIButton(frame: CGRectMake(header.bounds.origin.x + 4, header.bounds.origin.y+24, buttonWidth, headerHeight - 8))
         backButton.setImage(UIImage(named: "icon-back.png"), forState: UIControlState.Normal)
         backButton.addTarget(self, action: "btnBack:", forControlEvents: UIControlEvents.TouchUpInside)
         header.addSubview(backButton)
         
         let editButtonWidth:CGFloat = 50
-        var editButton = UIButton(frame: CGRectMake(header.bounds.origin.x+header.bounds.size.width-55
+        let editButton = UIButton(frame: CGRectMake(header.bounds.origin.x+header.bounds.size.width-55
             ,header.bounds.origin.y + 25,editButtonWidth,headerHeight-10))
         editButton.setImage(IconImage().edit(headerHeight-15), forState: UIControlState.Normal)
         editButton.addTarget(self, action: "editItem:", forControlEvents: UIControlEvents.TouchUpInside)
         header.addSubview(editButton)
         
-        var title = UILabel(frame: CGRectMake(view.bounds.origin.x, view.bounds.origin.y + topHeight, view.bounds.size.width, headerHeight))
+        let title = UILabel(frame: CGRectMake(view.bounds.origin.x, view.bounds.origin.y + topHeight, view.bounds.size.width, headerHeight))
         title.center = CGPointMake((editButton.frame.origin.x - backButton.frame.size.width - backButton.frame.origin.x)/2+backButton.frame.size.width+backButton.frame.origin.x, topHeight + (headerHeight/2))
         title.textAlignment = NSTextAlignment.Center
         title.font = UIFont(name: "Avenir-Black", size: 20)
@@ -69,7 +69,7 @@ class AnalyticsView: UIViewController, PNChartDelegate{
         tabView.backgroundColor = UIColor.whiteColor()
         
         let edge: CGFloat = 10
-        var msgButton: UIButton = UIButton(frame: CGRectMake(edge, 5, (view.bounds.size.width-20)/2, headerHeight-15))
+        let msgButton: UIButton = UIButton(frame: CGRectMake(edge, 5, (view.bounds.size.width-20)/2, headerHeight-15))
         msgButton.setTitle("MESSAGES", forState: UIControlState.Normal)
         msgButton.titleLabel!.font = UIFont(name: "Avenir-Black", size: 15)
         msgButton.setTitleColor(Theme.ColorGreen, forState: UIControlState.Normal)
@@ -79,7 +79,7 @@ class AnalyticsView: UIViewController, PNChartDelegate{
         msgButton.addTarget(self, action: "msgPressed", forControlEvents: UIControlEvents.TouchUpInside)
         tabView.addSubview(msgButton)
         
-        var alyButton: UIButton = UIButton(frame: CGRectMake(edge+msgButton.frame.size.width, 5, (view.bounds.size.width-20)/2, headerHeight-15))
+        let alyButton: UIButton = UIButton(frame: CGRectMake(edge+msgButton.frame.size.width, 5, (view.bounds.size.width-20)/2, headerHeight-15))
         alyButton.setTitle("ANALYTICS", forState: UIControlState.Normal)
         alyButton.titleLabel!.font = UIFont(name: "Avenir-Black", size: 15)
         
@@ -99,7 +99,7 @@ class AnalyticsView: UIViewController, PNChartDelegate{
         pieChartHeight = contentView.frame.height / 7 * 4
         lineChartHeight = contentView.frame.height / 7 * 3
         
-        var userLabel: UILabel = UILabel(frame: CGRectMake(view.bounds.origin.x, 5, view.bounds.size.width, 20))
+        let userLabel: UILabel = UILabel(frame: CGRectMake(view.bounds.origin.x, 5, view.bounds.size.width, 20))
         userLabel.textAlignment = NSTextAlignment.Center
         userLabel.text = "user interaction".uppercaseString
         userLabel.textColor = Theme.ColorGreen
@@ -126,7 +126,7 @@ class AnalyticsView: UIViewController, PNChartDelegate{
         let nopeNum = item.valueForKey("number_of_meh") as? CGFloat
         let reportNum = item.valueForKey("number_of_report") as? CGFloat
         
-        var items: NSMutableArray = NSMutableArray()
+        let items: NSMutableArray = NSMutableArray()
         if holdNum != 0 {
             items.addObject(PNPieChartDataItem(value: holdNum!, color: Theme.ColorBlue, description: "HOLD"))
         }
@@ -142,15 +142,15 @@ class AnalyticsView: UIViewController, PNChartDelegate{
         if items.count == 0 {
             items.addObject(PNPieChartDataItem(value: 0, color: Theme.ColorGreen, description: "NO VIEWS"))
         }
-        var itemArray = items as AnyObject as! [PNPieChartDataItem]
-        var pieChart: PNPieChart = PNPieChart(frame: CGRectMake((view.bounds.size.width - (pieChartHeight - 35))/2, 35, pieChartHeight - 35, pieChartHeight - 35), items: itemArray)
+        let itemArray = items as AnyObject as! [PNPieChartDataItem]
+        let pieChart: PNPieChart = PNPieChart(frame: CGRectMake((view.bounds.size.width - (pieChartHeight - 35))/2, 35, pieChartHeight - 35, pieChartHeight - 35), items: itemArray)
         pieChart.descriptionTextColor = UIColor.whiteColor()
         pieChart.descriptionTextFont = UIFont(name: "Avenir-Heavy", size: 17)
         pieChart.strokeChart()
         pieChart.userInteractionEnabled = false 
         contentView.addSubview(pieChart)
         
-        var viewsLabel: UILabel = UILabel(frame: CGRectMake(view.bounds.origin.x, 27+(pieChartHeight - 35)/2, view.bounds.size.width, 20))
+        let viewsLabel: UILabel = UILabel(frame: CGRectMake(view.bounds.origin.x, 27+(pieChartHeight - 35)/2, view.bounds.size.width, 20))
         viewsLabel.textAlignment = NSTextAlignment.Center
         viewsLabel.text = "VIEWS"
         viewsLabel.textColor = Theme.ColorGreen
@@ -158,7 +158,7 @@ class AnalyticsView: UIViewController, PNChartDelegate{
         contentView.addSubview(viewsLabel)
         
         let viewNum = item.valueForKey("number_of_views") as? NSNumber
-        var numLabel: UILabel = UILabel(frame: CGRectMake(view.bounds.origin.x, 44+(pieChartHeight - 35)/2, view.bounds.size.width, 20))
+        let numLabel: UILabel = UILabel(frame: CGRectMake(view.bounds.origin.x, 44+(pieChartHeight - 35)/2, view.bounds.size.width, 20))
         numLabel.textAlignment = NSTextAlignment.Center
         numLabel.text = viewNum?.stringValue
         numLabel.textColor = Theme.ColorGreen
@@ -168,7 +168,7 @@ class AnalyticsView: UIViewController, PNChartDelegate{
     
     func lineChartSetup() {
         
-        var lineChart:PNLineChart = PNLineChart(frame: CGRectMake(view.bounds.origin.x, 50+pieChartHeight, view.bounds.size.width, lineChartHeight-50))
+        let lineChart:PNLineChart = PNLineChart(frame: CGRectMake(view.bounds.origin.x, 50+pieChartHeight, view.bounds.size.width, lineChartHeight-50))
         lineChart.yLabelFormat = "%1.1f"
         lineChart.showLabel = true
         lineChart.backgroundColor = UIColor.clearColor()
@@ -177,13 +177,13 @@ class AnalyticsView: UIViewController, PNChartDelegate{
         lineChart.delegate = self
         
         var data01Array: [CGFloat] = [60.1, 160.1, 126.4, 262.3, 186.2, 127.2, 176.2]
-        var data01:PNLineChartData = PNLineChartData()
+        let data01:PNLineChartData = PNLineChartData()
         data01.color = Theme.ColorGreen
         data01.itemCount = data01Array.count
         //data01.inflexionPointStyle = PNLineChartData
         data01.getData = ({(index: Int) -> PNLineChartDataItem in
-            var yValue:CGFloat = data01Array[index]
-            var item = PNLineChartDataItem()
+            let yValue:CGFloat = data01Array[index]
+            let item = PNLineChartDataItem()
             item.y = yValue
             return item
         })

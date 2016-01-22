@@ -62,7 +62,7 @@ class LoginView: UIViewController {
         let login = FBSDKLoginManager()
         login.logInWithReadPermissions(["public_profile"], handler: { (result, error) -> Void in
             if error != nil {
-                var alert = UIAlertController(title: error.localizedDescription, message: error.localizedRecoverySuggestion, preferredStyle: UIAlertControllerStyle.Alert)
+                let alert = UIAlertController(title: error.localizedDescription, message: error.localizedRecoverySuggestion, preferredStyle: UIAlertControllerStyle.Alert)
                 alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
                 self.presentViewController(alert, animated: true, completion: nil)
             }else if result.isCancelled {
@@ -83,16 +83,16 @@ class LoginView: UIViewController {
     func bakkleLogin() {
         FBSDKGraphRequest(graphPath: "me", parameters: ["fields":"id, name, first_name, last_name, gender, verified"]).startWithCompletionHandler({ (connection, result2, error) -> Void in
             if error != nil {
-                println("error=\(error)")
+                print("error=\(error)")
                 return
             } else {
-                var verifiedKey = "verified"
+                let verifiedKey = "verified"
                 NSLog("User verified = \(result2.objectForKey(verifiedKey))")
-                var userid = result2.objectForKey("id") as! String
-                var gender = result2.objectForKey("gender") as! String
-                var name = result2.objectForKey("name") as! String
-                var first_name = result2.objectForKey("first_name") as! String
-                var last_name = result2.objectForKey("last_name") as! String
+                let userid = result2.objectForKey("id") as! String
+                let gender = result2.objectForKey("gender") as! String
+                let name = result2.objectForKey("name") as! String
+                let first_name = result2.objectForKey("first_name") as! String
+                let last_name = result2.objectForKey("last_name") as! String
                 Bakkle.sharedInstance.account_type = Bakkle.bkAccountTypeFacebook
                 Bakkle.sharedInstance.facebook(gender, name: name, userid: userid, first_name: first_name, last_name: last_name, success: {
                     // Sucessfully logged in via FB

@@ -35,14 +35,18 @@ public extension UIDevice {
         uname(&systemInfo)
         
         let machine = systemInfo.machine
-        let mirror = reflect(machine)
+        let mirror = Mirror(reflecting:machine)
         var identifier = ""
-        
-        for i in 0..<mirror.count {
-            if let value = mirror[i].1.value as? Int8 where value != 0 {
+
+        for child in mirror.children {
+            guard let _ = child.label else {
+                continue
+            }
+            if let value = child.value as? Int8 where value != 0 {
                 identifier.append(UnicodeScalar(UInt8(value)))
             }
         }
+
         return DeviceList[identifier] ?? identifier
     }
     

@@ -19,7 +19,7 @@ class User {
         var initials: String?
         for name in [firstName, lastName] {
             if let definiteName = name {
-                var initial = definiteName.substringToIndex(advance(definiteName.startIndex, 1))
+                let initial = definiteName.substringToIndex(definiteName.startIndex.advancedBy(1))
                 if initial.lengthOfBytesUsingEncoding(NSNEXTSTEPStringEncoding) > 0 {
                     initials = (initials == nil ? initial : initials! + initial)
                 }

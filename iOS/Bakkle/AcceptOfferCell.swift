@@ -23,7 +23,7 @@ class AcceptOfferCell: UITableViewCell {
     
         contentView.addSubview(makeOfferLabel)
         
-        makeOfferLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
+        makeOfferLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addConstraint(NSLayoutConstraint(item: makeOfferLabel, attribute: .CenterX, relatedBy: .Equal, toItem: contentView, attribute: .CenterX, multiplier: 1, constant: 0))
         contentView.addConstraint(NSLayoutConstraint(item: makeOfferLabel, attribute: .Top, relatedBy: .Equal, toItem: contentView, attribute: .Top, multiplier: 1, constant: 15))
     }
@@ -35,7 +35,7 @@ class AcceptOfferCell: UITableViewCell {
         acceptBtn.backgroundColor = Theme.ColorGreen
         acceptBtn.userInteractionEnabled = true
         
-        acceptBtn.setTranslatesAutoresizingMaskIntoConstraints(false)
+        acceptBtn.translatesAutoresizingMaskIntoConstraints = false
         contentView.addConstraint(NSLayoutConstraint(item: acceptBtn, attribute: .Right, relatedBy: .Equal, toItem: contentView, attribute: .Right, multiplier: 1, constant: -20))
         contentView.addConstraint(NSLayoutConstraint(item: acceptBtn, attribute: .Left, relatedBy: .Equal, toItem: contentView, attribute: .CenterX, multiplier: 1, constant: 10))
         contentView.addConstraint(NSLayoutConstraint(item: makeOfferLabel, attribute: .Bottom, relatedBy: .Equal, toItem: acceptBtn, attribute: .Top, multiplier: 1, constant: -5))
@@ -48,7 +48,7 @@ class AcceptOfferCell: UITableViewCell {
         counterBtn.tintColor = UIColor.whiteColor()
         counterBtn.backgroundColor = UIColor.redColor()
         
-        counterBtn.setTranslatesAutoresizingMaskIntoConstraints(false)
+        counterBtn.translatesAutoresizingMaskIntoConstraints = false
         contentView.addConstraint(NSLayoutConstraint(item: counterBtn, attribute: .Left, relatedBy: .Equal, toItem: contentView, attribute: .Left, multiplier: 1, constant: 20))
         contentView.addConstraint(NSLayoutConstraint(item: counterBtn, attribute: .Right, relatedBy: .Equal, toItem: contentView, attribute: .CenterX, multiplier: 1, constant: -10))
         contentView.addConstraint(NSLayoutConstraint(item: makeOfferLabel, attribute: .Bottom, relatedBy: .Equal, toItem: counterBtn, attribute: .Top, multiplier: 1, constant: -5))
@@ -61,20 +61,20 @@ class AcceptOfferCell: UITableViewCell {
         retractBtn.tintColor = UIColor.whiteColor()
         retractBtn.backgroundColor = UIColor.redColor()
         
-        retractBtn.setTranslatesAutoresizingMaskIntoConstraints(false)
+        retractBtn.translatesAutoresizingMaskIntoConstraints = false
         contentView.addConstraint(NSLayoutConstraint(item: retractBtn, attribute: .Left, relatedBy: .Equal, toItem: contentView, attribute: .CenterX, multiplier: 1, constant: -100))
         contentView.addConstraint(NSLayoutConstraint(item: retractBtn, attribute: .Right, relatedBy: .Equal, toItem: contentView, attribute: .CenterX, multiplier: 1, constant: 100))
         contentView.addConstraint(NSLayoutConstraint(item: makeOfferLabel, attribute: .Bottom, relatedBy: .Equal, toItem: retractBtn, attribute: .Top, multiplier: 1, constant: -5))
         contentView.addConstraint(NSLayoutConstraint(item: contentView, attribute: .Bottom, relatedBy: .Equal, toItem: retractBtn, attribute: .Bottom, multiplier: 1, constant: 0))
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     func acceptBtn(sender:UIButton!)
     {
-        println("Button tapped")
+        print("Button tapped")
     }
     
 }

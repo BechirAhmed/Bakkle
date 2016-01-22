@@ -43,7 +43,7 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
         
         let notificationCenter = NSNotificationCenter.defaultCenter()
         let mainQueue = NSOperationQueue.mainQueue()
-        var observer = notificationCenter.addObserverForName(Bakkle.bkTrunkUpdate, object: nil, queue: mainQueue) { _ in
+        _ = notificationCenter.addObserverForName(Bakkle.bkTrunkUpdate, object: nil, queue: mainQueue) { _ in
             self.classifyData()
             self.tableView.reloadData()
         }
@@ -146,17 +146,17 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
             return 0
         }
         if activeItem.count != 0 || boughtItem.count != 0 || soldItem.count != 0 {
-            println("Actually got items from the trunk!")
-            println(String(Bakkle.sharedInstance.trunkItems.count) + " items in trunk")
+            print("Actually got items from the trunk!")
+            print(String(Bakkle.sharedInstance.trunkItems.count) + " items in trunk")
             return activeItem.count + soldItem.count + boughtItem.count + 3
         }
-        println("Didn't get anything in trunk")
+        print("Didn't get anything in trunk")
         return 3
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if tableView.numberOfRowsInSection(0) == 3 {
-            let cell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier("messageCell") as! UITableViewCell
+            let cell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier("messageCell")! as UITableViewCell
             if indexPath.row == 1 {
                 cell.textLabel!.text = "There are no items!"
             }
@@ -189,7 +189,7 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
         }
 
 
-        println("[BuyersTrunk] Updating table view")
+        print("[BuyersTrunk] Updating table view")
         let cell = self.tableView.dequeueReusableCellWithIdentifier("BuyersTrunkCell") as! BuyersTrunkCell
         cell.itemImage?.image = UIImage(named: "blank.png")
         cell.itemImage?.contentMode = UIViewContentMode.ScaleAspectFill
@@ -198,9 +198,8 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
         
         let trunkEntry : NSDictionary = getItem(indexPath)
         let item = trunkEntry.valueForKey("item") as! NSDictionary
-        println(item.description)
+        print(item.description)
         let imgURLs : [String] = item.valueForKey("image_urls") as! [String]
-        let description : String = item.valueForKey("description") as! String
         let title : String = item.valueForKey("title") as! String
         let price : String = item.valueForKey("price") as! String
         let firstURL = imgURLs[0] as String
@@ -208,7 +207,7 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
             
         cell.itemImage!.hnk_setImageFromURL(imgURL!)
         cell.itemImage!.userInteractionEnabled = true
-        var tapGestureRecognizer = UITapGestureRecognizer(target:self, action:Selector("imageTapped:"))
+        let tapGestureRecognizer = UITapGestureRecognizer(target:self, action:Selector("imageTapped:"))
         cell.itemImage!.addGestureRecognizer(tapGestureRecognizer)
         cell.itemImage!.tag = getIndex(indexPath)
         cell.titleLabel!.text = title.uppercaseString
@@ -251,11 +250,11 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
                 firstName: Bakkle.sharedInstance.first_name, lastName: Bakkle.sharedInstance.last_name)
             let chatItem = getItem(indexPath).valueForKey("item") as! NSDictionary
             let chatItemId = (chatItem.valueForKey("pk") as! NSNumber).stringValue
-            var chatPayload: WSRequest = WSStartChatRequest(itemId: chatItemId)
+            let chatPayload: WSRequest = WSStartChatRequest(itemId: chatItemId)
             chatPayload.successHandler = {
-                (var success: NSDictionary) in
+                (success: NSDictionary) in
                 let chatId = success.valueForKey("chatId") as! Int
-                var buyerChat = Chat(user: buyer, lastMessageText: "", lastMessageSentDate: NSDate(), chatId: chatId)
+                let buyerChat = Chat(user: buyer, lastMessageText: "", lastMessageSentDate: NSDate(), chatId: chatId)
                 let chatViewController = ChatViewController(chat: buyerChat)
                 chatViewController.item = chatItem
                 chatViewController.seller = chatItem.valueForKey("seller") as! NSDictionary
@@ -295,7 +294,7 @@ class BuyersTrunkView: UIViewController, UITableViewDataSource, UITableViewDeleg
     }
     
     func noInternetConnectionAlert(){
-        var alert = UIAlertController(title: "No Internet", message: "There was an error! Please check your Network Connection and try again", preferredStyle: UIAlertControllerStyle.Alert)
+        let alert = UIAlertController(title: "No Internet", message: "There was an error! Please check your Network Connection and try again", preferredStyle: UIAlertControllerStyle.Alert)
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
         self.presentViewController(alert, animated: true, completion: nil)
         

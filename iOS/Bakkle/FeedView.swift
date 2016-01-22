@@ -87,7 +87,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             self.view.backgroundColor = Bakkle.sharedInstance.theme_base
             self.titleBar.backgroundColor = Bakkle.sharedInstance.theme_baseDark
             
-            var logo : UIImage = UIImage(named: "Goodwill Logo-White.png")!
+            let logo : UIImage = UIImage(named: "Goodwill Logo-White.png")!
             logoImageView.image = logo;
             logoImageViewHeight.constant = 20;
             logoImageViewWidth.constant = 140;
@@ -121,11 +121,11 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         // Register for feed updates
         let notificationCenter = NSNotificationCenter.defaultCenter()
         let mainQueue = NSOperationQueue.mainQueue()
-        var observer = notificationCenter.addObserverForName(Bakkle.bkFeedUpdate, object: nil, queue: mainQueue) { _ in
-            println("Received feed update")
+        _ = notificationCenter.addObserverForName(Bakkle.bkFeedUpdate, object: nil, queue: mainQueue) { _ in
+            print("Received feed update")
             self.refreshData()
         }
-        var observer2 = notificationCenter.addObserverForName(Bakkle.bkFilterChanged, object: nil, queue: mainQueue) { _ in
+        _ = notificationCenter.addObserverForName(Bakkle.bkFilterChanged, object: nil, queue: mainQueue) { _ in
             self.filterChanged()
         }
         
@@ -149,7 +149,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         setupNoInternetView()
         
         if Bakkle.sharedInstance.flavor == Bakkle.GOODWILL {
-            var goodwillLogo: UIImageView = UIImageView(frame: CGRectMake(btnAddItem.frame.origin.x, logoImageView.frame.midY + 2.5, 35.0, 35.0))
+            let goodwillLogo: UIImageView = UIImageView(frame: CGRectMake(btnAddItem.frame.origin.x, logoImageView.frame.midY + 2.5, 35.0, 35.0))
             goodwillLogo.image = UIImage(named: "gwIcon@2x.png")!
             goodwillLogo.layer.cornerRadius = 7.0
             goodwillLogo.layer.masksToBounds = true
@@ -173,7 +173,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         
         resetSwipeView()
         
-        println("Loading existing feed items")
+        print("Loading existing feed items")
         if fromCamera == false {
             if let items = Bakkle.sharedInstance.feedItems {
                 if items.count>0 {
@@ -226,22 +226,22 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
-        var pageWidth: CGFloat  = tutorialCollectionView.bounds.size.width
-        var page: Int = Int(floor((tutorialCollectionView.contentOffset.x - pageWidth / 2) / pageWidth)) + 1
+        let pageWidth: CGFloat  = tutorialCollectionView.bounds.size.width
+        let page: Int = Int(floor((tutorialCollectionView.contentOffset.x - pageWidth / 2) / pageWidth)) + 1
         pageControl.currentPage = page
     }
 
     @IBAction func closeTutorial(button: UIButton) {
         tutorialView.hidden = true
-        var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        let userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
         userDefaults.setBool(false, forKey: "instruction")
     }
     
     func setupNoInternetView(){
-        var visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.Dark)) as UIVisualEffectView
+        let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.Dark)) as UIVisualEffectView
         visualEffectView.frame = CGRectMake(0, 0, noInternectView.frame.width, noInternectView.frame.height)
         self.noInternectView.addSubview(visualEffectView)
-        var backgroundImageView = UIImageView(frame: CGRectMake(0, 0, noInternectView.frame.width, noInternectView.frame.height))
+        let backgroundImageView = UIImageView(frame: CGRectMake(0, 0, noInternectView.frame.width, noInternectView.frame.height))
         backgroundImageView.contentMode = UIViewContentMode.ScaleAspectFit
         backgroundImageView.image = UIImage(named: "no-internet.png")
         backgroundImageView.clipsToBounds = true
@@ -260,7 +260,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     }
     
     func checkTutorial(){
-        var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        let userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
         if userDefaults.boolForKey("instruction") {
             self.tutorialView.hidden = false;
             self.view.bringSubviewToFront(self.tutorialView)
@@ -322,16 +322,16 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     }
     
     func  setupChatSwiping(){
-        var startChatViewOptions: MDCSwipeOptions = MDCSwipeOptions.new()
+        let startChatViewOptions: MDCSwipeOptions = MDCSwipeOptions()
         startChatViewOptions.delegate = self
         startChatViewOptions.threshold = self.view.frame.width / 4
         
         startChatViewOptions.onPan = { state -> Void in
             self.darkenStartAChat.alpha = state.thresholdRatio / 3 * 2
             
-            var rotation = CGFloat(-M_PI_4)
+            let rotation = CGFloat(-M_PI_4)
             // Rotation multiplier is the distance moved (x) / total distance (according to what the position it ends on after close)
-            var rotationMultiplier = (self.view.frame.midX - self.startChatView.frame.midX) / (self.startChatView.frame.width * 2)
+            let rotationMultiplier = (self.view.frame.midX - self.startChatView.frame.midX) / (self.startChatView.frame.width * 2)
             self.startChatView.transform = CGAffineTransformRotate(CGAffineTransformIdentity,  rotation * rotationMultiplier)
             
             if state.thresholdRatio == 0.0 {
@@ -397,7 +397,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     
     /* Call when filter parameters change. Updates text when all cards are exhausted */
     func filterChanged() {
-        println("Filter parameters changed")
+        print("Filter parameters changed")
         if Bakkle.sharedInstance.filter_distance < 100 {
             self.noNewItemsLabel.text = "There are no new items within \(Int(Bakkle.sharedInstance.filter_distance)) miles."
         } else {
@@ -415,8 +415,6 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             self.searchBar.resignFirstResponder()
             searching = false
         }else{
-            let itemDet = ItemDetails()
-            println("GOES IN DETAILS VIEW CONTROLLER")
             self.performSegueWithIdentifier(itemDetailSegue, sender: self)
         }
     }
@@ -424,7 +422,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     
     /* Used at end of swipe, this is used to load the next item in the view */
     func loadNext() {
-        println("[FeedScreen] removing item from feed")
+        print("[FeedScreen] removing item from feed")
         recordstart = NSDate();
         // Put the swipe view back in the correct location
         //        resetSwipeView()
@@ -439,7 +437,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         }
         
         if Bakkle.sharedInstance.feedItems.count == 1 {
-            println("1 item left")
+            print("1 item left")
             if self.bottomView != nil {
                 self.bottomView.removeFromSuperview()
                 self.requestUpdates()
@@ -447,7 +445,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         }
         
         if Bakkle.sharedInstance.feedItems.count == 0 {
-            println("0 items left")
+            print("0 items left")
             if self.bottomView != nil {
                 self.bottomView.removeFromSuperview()
             }
@@ -462,7 +460,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     }
     
     func resetSwipeView() {
-        println("[FeedScreen] Resetting swipe view")
+        print("[FeedScreen] Resetting swipe view")
         
         /* First time page is loaded, swipe view will not exist and we need to create it. */
         if Bakkle.sharedInstance.feedItems != nil &&
@@ -507,8 +505,8 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     
     /* Check server for new items */
     func requestUpdates() {
-        println("[FeedScreen] Requesting updates from server")
-        dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
+        print("[FeedScreen] Requesting updates from server")
+        dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INTERACTIVE.rawValue), 0)) {
             Bakkle.sharedInstance.populateFeed({})
         }
     }
@@ -518,7 +516,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         if self.startChatView.hidden {
             dispatch_async(dispatch_get_main_queue()) {
                 //TODO: Check items 0 and 1, if they are the same, do nothing
-                var revealViewController: SWRevealViewController! = self.revealViewController()
+                let revealViewController: SWRevealViewController! = self.revealViewController()
                 if revealViewController == nil {
                     self.resetSwipeView()
                     self.updateView()
@@ -539,14 +537,14 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         let topPrice: String = item.valueForKey("price") as! String
         
         let sellersProfile = item.valueForKey("seller") as! NSDictionary
-        let sellerFacebookID = sellersProfile.valueForKey("facebook_id") as! String
+        _ = sellersProfile.valueForKey("facebook_id") as! String
         let sellersName = sellersProfile.valueForKey("display_name") as! String
-        let sellersImageProfile = sellersProfile.valueForKey("avatar_image_url") as! String
+        _ = sellersProfile.valueForKey("avatar_image_url") as! String
         
         //        let profileImageURL = NSURL(string)
         
-        let dividedName = split(sellersName) {$0 == " "}
-        let firstName = dividedName[0] as String
+        let dividedName = sellersName.characters.split {$0 == " "}.map { String($0) }
+        _ = dividedName[0] as String
         
         let firstURL = imgURLs[0] as! String
         let imgURL = NSURL(string: firstURL)
@@ -556,7 +554,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         var myString : String = ""
         
         //  Trim the zeroes after the decimal.
-        if suffix(topPrice, 2) == "00" {
+        if String(topPrice.characters.suffix(2)) == "00" {
             let withoutZeroes = (topPrice as NSString).integerValue
             if withoutZeroes == 0 {
                 myString = " Offer"
@@ -591,11 +589,11 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     }
     
     func updateView() {
-        println("[FeedScreen] Updating view ")
+        print("[FeedScreen] Updating view ")
         if Bakkle.sharedInstance.feedItems == nil {
             return
         }
-        println("updateView items: \(Bakkle.sharedInstance.feedItems.count)")
+        print("updateView items: \(Bakkle.sharedInstance.feedItems.count)")
         if Bakkle.sharedInstance.feedItems.count > 0 {
             if self.swipeView != nil {
                 self.swipeView.alpha = 1
@@ -613,12 +611,12 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                     if self.bottomView != nil {
                         self.bottomView.alpha = 1
                         
-                        var bottomItem = Bakkle.sharedInstance.feedItems[1] as! NSDictionary
+                        let bottomItem = Bakkle.sharedInstance.feedItems[1] as! NSDictionary
                         setupView(self.bottomView, item: bottomItem)
                     }
                 }
                 else {
-                    println("Only one item, hiding bottom card")
+                    print("Only one item, hiding bottom card")
                     // only 1 item (top card)
                     if self.bottomView != nil {
                         self.bottomView.removeFromSuperview()
@@ -627,7 +625,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                 }
             }
         } else {
-            println("No items, hiding both cards")
+            print("No items, hiding both cards")
             /* No items left in feed */
             if self.swipeView != nil {
                 self.swipeView.removeFromSuperview()
@@ -663,7 +661,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         }
         UIView.animateWithDuration(0.16, animations: { () -> Void in
             view.transform = CGAffineTransformIdentity
-            var superView : UIView = self.view.superview!
+            let superView : UIView = self.view.superview!
             self.view.center = superView.convertPoint(superView.center, fromView: superView.superview)
         })
         return false
@@ -711,7 +709,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             var report: UITextField!
             let confirmAction = UIAlertAction(title: "Confirm", style: .Default, handler: { action in
                 if report != nil {
-                    println(report.text)
+                    print(report.text)
                     Bakkle.sharedInstance.markItem("report", item_id: self.item_id, message: report.text, duration: self.recordtime, success: {}, fail: {})
                 } else {
                     Bakkle.sharedInstance.markItem("report", item_id: self.item_id, duration: self.recordtime,success: {}, fail: {})
@@ -723,7 +721,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             })
             alertController.addAction(cancelAction)
             alertController.addAction(confirmAction)
-            alertController.addTextFieldWithConfigurationHandler({ (textField: UITextField!) -> Void in
+            alertController.addTextFieldWithConfigurationHandler({ (textField: UITextField) -> Void in
                 report = textField
             })
             presentViewController(alertController, animated: true, completion: nil)
@@ -768,11 +766,11 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             let imgURL = NSURL(string: (itemData!.valueForKey("image_urls") as! NSArray)[0] as! String)
             if imgURL != nil {
                 let request: NSURLRequest = NSURLRequest(URL: imgURL!)
-                NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue(), completionHandler: {(response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
+                NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue(), completionHandler: {(response: NSURLResponse?, data: NSData?, error: NSError?) -> Void in
                     if error == nil {
-                        self.startChatItemImage.image = UIImage(data: data)
+                        self.startChatItemImage.image = UIImage(data: data!)
                     } else {
-                        NSLog("%@", error)
+                        NSLog("%@", error!)
                     }
                 })
             }
@@ -858,15 +856,14 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             
             let buyer = User(facebookID: Bakkle.sharedInstance.facebook_id_str,accountID: Bakkle.sharedInstance.account_id,
                 firstName: Bakkle.sharedInstance.first_name, lastName: Bakkle.sharedInstance.last_name)
-            let account = Account(user: buyer)
             let chatItem = self.itemData!
             let chatItemId = String(sender.tag)
             var chatId: Int = 0
-            var chatPayload: WSRequest = WSStartChatRequest(itemId: chatItemId)
+            let chatPayload: WSRequest = WSStartChatRequest(itemId: chatItemId)
             chatPayload.successHandler = {
-                (var success: NSDictionary) in
+                ( success: NSDictionary) in
                 chatId = success.valueForKey("chatId") as! Int
-                var buyerChat = Chat(user: buyer, lastMessageText: "", lastMessageSentDate: NSDate(), chatId: chatId)
+                let buyerChat = Chat(user: buyer, lastMessageText: "", lastMessageSentDate: NSDate(), chatId: chatId)
                 let chatViewController = ChatViewController(chat: buyerChat)
                 chatViewController.itemData = chatItem
                 chatViewController.seller = chatItem.valueForKey("seller") as! NSDictionary
@@ -897,15 +894,14 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             
             let buyer = User(facebookID: Bakkle.sharedInstance.facebook_id_str,accountID: Bakkle.sharedInstance.account_id,
                 firstName: Bakkle.sharedInstance.first_name, lastName: Bakkle.sharedInstance.last_name)
-            let account = Account(user: buyer)
             let chatItem = self.itemData!
             let chatItemId = String(sender.tag)
             var chatId: Int = 0
-            var chatPayload: WSRequest = WSStartChatRequest(itemId: chatItemId)
+            let chatPayload: WSRequest = WSStartChatRequest(itemId: chatItemId)
             chatPayload.successHandler = {
-                (var success: NSDictionary) in
+                ( success: NSDictionary) in
                 chatId = success.valueForKey("chatId") as! Int
-                var buyerChat = Chat(user: buyer, lastMessageText: "", lastMessageSentDate: NSDate(), chatId: chatId)
+                let buyerChat = Chat(user: buyer, lastMessageText: "", lastMessageSentDate: NSDate(), chatId: chatId)
                 let chatViewController = ChatViewController(chat: buyerChat)
                 chatViewController.itemData = chatItem
                 chatViewController.seller = chatItem.valueForKey("seller") as! NSDictionary

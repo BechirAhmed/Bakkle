@@ -77,14 +77,14 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         // with the fields above it, because UITextView has different edges for scrolling
         descriptionField.contentInset = UIEdgeInsetsMake(-8.0, -5.0, 0, 0.0)
         
-        var nextBtn = UIToolbar(frame: CGRectMake(0, 0, 320, 50))
+        let nextBtn = UIToolbar(frame: CGRectMake(0, 0, 320, 50))
         nextBtn.barStyle = UIBarStyle.Default
         nextBtn.items = [UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil),UIBarButtonItem(title: "Next", style: UIBarButtonItemStyle.Done, target: nil, action: "priceNextToggle")]
         nextBtn.sizeToFit()
         priceField.inputAccessoryView = nextBtn
         
         // tap gesture recognizer for dismiss keyboard
-        var tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
         self.view.addGestureRecognizer(tap)
         
         titleField.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
@@ -164,7 +164,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
      * this limitation.
      */
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-        return textField == titleField ? (count(textField.text.utf16) + count(string.utf16) - range.length) <= 30 : true
+        return textField == titleField ? (textField.text!.utf16.count + string.utf16.count - range.length) <= 30 : true
     }
     
     /**
@@ -234,8 +234,8 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         // set content if it's in edit mode
         if isEditting {
             titleLabel.text = "EDIT ITEM"
-            titleField.text = item.valueForKey("title") as! String
-            priceField.text = item.valueForKey("price") as! String
+            titleField.text = item.valueForKey("title") as? String
+            priceField.text = item.valueForKey("price") as? String
             formatPrice()
             let description = item.valueForKey("description") as! String
             if description != "" {
@@ -260,7 +260,9 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     }
     
     func dismissKeyboard() {
-        self.titleField.resignFirstResponder() || self.priceField.resignFirstResponder() || self.descriptionField.resignFirstResponder()
+        self.titleField.resignFirstResponder()
+        self.priceField.resignFirstResponder()
+        self.descriptionField.resignFirstResponder()
         disableConfirmButtonHandler()
         self.allowPlayback = true
     }
@@ -286,7 +288,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     * ever to be changed
     */
     func disableConfirmButtonHandler() -> Bool {
-        if confirmHit || self.titleField.text.isEmpty || itemImages?.count < 1 || itemImages?.count > CameraView.MAX_IMAGE_COUNT {
+        if confirmHit || self.titleField.text!.isEmpty || itemImages?.count < 1 || itemImages?.count > CameraView.MAX_IMAGE_COUNT {
             confirmButton.enabled = false
             confirmButton.backgroundColor = AddItem.CONFIRM_BUTTON_DISABLED_COLOR
         } else {
@@ -297,8 +299,8 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     }
     
     func formatPrice() {
-        if (priceField.text as String).lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 && (priceField.text as NSString).floatValue > 0 {
-            var str = (priceField.text! as NSString).stringByReplacingOccurrencesOfString("$", withString: "").stringByReplacingOccurrencesOfString(" ", withString: "")
+        if (priceField.text! as String).lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 && (priceField.text! as NSString).floatValue > 0 {
+            let str = (priceField.text! as NSString).stringByReplacingOccurrencesOfString("$", withString: "").stringByReplacingOccurrencesOfString(" ", withString: "")
             var value:Float = (str as NSString).floatValue
             // Currently capping value at 100k
             if value > 100000 {
@@ -321,7 +323,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         var videoData = [NSData]()
         
         for i in self.itemImages! {
-            imageData.append(UIImageJPEGRepresentation(i, 1.0))
+            imageData.append(UIImageJPEGRepresentation(i, 1.0)!)
         }
         
         for i in 0..<self.videos.count {
@@ -334,7 +336,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
             
             // TODO: Fix backend and don't download and reupload every video
             if !self.videos[i].fileURL {
-                var data = NSData(contentsOfURL: self.videos[i])
+                let data = NSData(contentsOfURL: self.videos[i])
                 
                 if let fileData = data {
                     videoData.append(fileData)
@@ -346,14 +348,14 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
                 // Wait
             }
             
-            var data = NSData(contentsOfFile: self.videos[i].path!)
+            let data = NSData(contentsOfFile: self.videos[i].path!)
             
             if let fileData = data {
                 videoData.append(fileData)
             }
         }
         
-        if priceField.text.isEmpty {
+        if priceField.text!.isEmpty {
             priceField.text = "offer"
         }
         
@@ -379,12 +381,12 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         
         let priceToSend = priceField.text == "offer" ? "0" : priceField.text
         
-        Bakkle.sharedInstance.addItem(self.titleField.text, description: self.descriptionField.text, location: Bakkle.sharedInstance.user_location,
-            price: priceToSend,
+        Bakkle.sharedInstance.addItem(self.titleField.text!, description: self.descriptionField.text, location: Bakkle.sharedInstance.user_location,
+            price: priceToSend!,
             images:imageData, videos:videoData, item_id: item_id, success: {
                 (item_id:Int?, image_url: String?) -> () in
                     time = NSDate.timeIntervalSinceReferenceDate() - time
-                    println("Time taken to upload in sec: \(time)")
+                    print("Time taken to upload in sec: \(time)")
                     if self.shareToFacebookBtn.on {
 //                        Adds the bakkle tag to the item, can't find anything about trying to use a local image for the url
 //                        let topImg = UIImage(named: "pendant-tag660.png")
@@ -398,7 +400,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
 //                        UIGraphicsEndImageContext()
                         
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            var content = FBSDKShareLinkContent()
+                            let content = FBSDKShareLinkContent()
                             content.contentDescription = self.descriptionField.text
                             content.contentTitle = self.titleField.text
                             
@@ -417,7 +419,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
                     // and hope we are fairly current.
                     Bakkle.sharedInstance.populateFeed({
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            println("item_id=\(item_id) item_url=\(image_url)")
+                            print("item_id=\(item_id) item_url=\(image_url)")
                             self.successfulAdd = true
                             self.dismissViewControllerAnimated(true, completion: nil)
                         })
@@ -470,14 +472,14 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         cell.imgView.contentMode = UIViewContentMode.ScaleAspectFill
         cell.imgView.clipsToBounds  = true
         if indexPath.row >= self.itemImages?.count && self.videos.count > 0 {
-            var imageURL = self.videos[indexPath.row - self.itemImages!.count]
-            if imageURL.absoluteString != nil && count(imageURL.absoluteString!) != 0 {
+            let imageURL = self.videos[indexPath.row - self.itemImages!.count]
+            if (imageURL.absoluteString).characters.count != 0 {
                 if self.videoImages[imageURL] == nil {
                     self.videoImages[imageURL] = Bakkle.sharedInstance.previewImageForLocalVideo(imageURL)
                 }
                 
                 cell.imgView!.image = self.videoImages[imageURL]
-                var tapGestureRecognizer = UITapGestureRecognizer(target:self, action:Selector("videoTapped:"))
+                let tapGestureRecognizer = UITapGestureRecognizer(target:self, action:Selector("videoTapped:"))
                 cell.imgView!.addGestureRecognizer(tapGestureRecognizer)
             }
         } else {

@@ -48,7 +48,7 @@ class ItemData: AnyObject {
         
         self.sellerProfile = item.valueForKey("seller") as! NSDictionary
         self.sellerName = "" //sellerProfile.valueForKey("display_name") as! String
-        var localRating = item.valueForKey("seller_rating") as! String
+        let localRating = item.valueForKey("seller_rating") as! String
         self.rating = localRating.isEmpty ? ItemData.DEFAULT_RATING : (localRating as NSString).floatValue
         self.facebookID = sellerProfile.valueForKey("facebook_id") as! String
         self.facebookProfileImgString = "http://graph.facebook.com/\(facebookID)/picture?width=142&height=142"
@@ -75,9 +75,9 @@ class ItemData: AnyObject {
      */
     static func distanceStringCalc(location: String) -> NSMutableAttributedString {
         let start: CLLocation = CLLocation(locationString: location)
-        var attachment: NSTextAttachment = NSTextAttachment()
+        let attachment: NSTextAttachment = NSTextAttachment()
         attachment.image = UIImage(named: "icon-marker75.png")
-        var attachmentString : NSAttributedString = NSAttributedString(attachment: attachment)
+        let attachmentString : NSAttributedString = NSAttributedString(attachment: attachment)
         var distStr: NSMutableAttributedString
         
         if let distance = Bakkle.sharedInstance.distanceTo(start) {

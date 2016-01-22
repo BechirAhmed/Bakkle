@@ -15,7 +15,7 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
         title = "Chats"
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -32,20 +32,20 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
         header.backgroundColor = Theme.ColorGreen
         
         let buttonWidth: CGFloat = 80.0
-        var backButton = UIButton(frame: CGRectMake(header.bounds.origin.x + 4, header.bounds.origin.y+24, buttonWidth, headerHeight - 8))
+        let backButton = UIButton(frame: CGRectMake(header.bounds.origin.x + 4, header.bounds.origin.y+24, buttonWidth, headerHeight - 8))
         backButton.setImage(UIImage(named: "icon-back.png"), forState: UIControlState.Normal)
         backButton.addTarget(self, action: "btnBack:", forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(backButton)
         header.addSubview(backButton)
         
         let editButtonWidth:CGFloat = 50
-        var editButton = UIButton(frame: CGRectMake(header.bounds.origin.x+header.bounds.size.width-55
+        let editButton = UIButton(frame: CGRectMake(header.bounds.origin.x+header.bounds.size.width-55
             ,header.bounds.origin.y + 25,editButtonWidth,headerHeight-10))
         editButton.setImage(IconImage().edit(headerHeight-15), forState: UIControlState.Normal)
         editButton.addTarget(self, action: "editItem:", forControlEvents: UIControlEvents.TouchUpInside)
         header.addSubview(editButton)
         
-        var title = UILabel(frame: CGRectMake(view.bounds.origin.x, view.bounds.origin.y + topHeight, view.bounds.size.width, headerHeight))
+        let title = UILabel(frame: CGRectMake(view.bounds.origin.x, view.bounds.origin.y + topHeight, view.bounds.size.width, headerHeight))
         title.center = CGPointMake((editButton.frame.origin.x - backButton.frame.size.width - backButton.frame.origin.x)/2+backButton.frame.size.width+backButton.frame.origin.x, topHeight + (headerHeight/2))
         title.textAlignment = NSTextAlignment.Center
         title.font = UIFont(name: "Avenir-Black", size: 20)
@@ -60,7 +60,7 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
         tabView.backgroundColor = UIColor.whiteColor()
         
         let edge: CGFloat = 10
-        var msgButton: UIButton = UIButton(frame: CGRectMake(edge, 5, (view.bounds.size.width-20)/2, headerHeight-15))
+        let msgButton: UIButton = UIButton(frame: CGRectMake(edge, 5, (view.bounds.size.width-20)/2, headerHeight-15))
         msgButton.setTitle("MESSAGES", forState: UIControlState.Normal)
         msgButton.titleLabel!.font = UIFont(name: "Avenir-Black", size: 15)
         msgButton.layer.borderWidth = 2.0
@@ -69,7 +69,7 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
         msgButton.addTarget(self, action: "msgPressed", forControlEvents: UIControlEvents.TouchUpInside)
         tabView.addSubview(msgButton)
         
-        var alyButton: UIButton = UIButton(frame: CGRectMake(edge+msgButton.frame.size.width, 5, (view.bounds.size.width-20)/2, headerHeight-15))
+        let alyButton: UIButton = UIButton(frame: CGRectMake(edge+msgButton.frame.size.width, 5, (view.bounds.size.width-20)/2, headerHeight-15))
         alyButton.setTitle("ANALYTICS", forState: UIControlState.Normal)
         alyButton.titleLabel!.font = UIFont(name: "Avenir-Black", size: 15)
         alyButton.setTitleColor(Theme.ColorGreen, forState: UIControlState.Normal)
@@ -82,7 +82,7 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
         view.addSubview(tabView)
 
         tableView = UITableView(frame:CGRectMake(view.bounds.origin.x,view.bounds.origin.y+headerHeight*2+topHeight,view.bounds.size.width,view.bounds.size.height-headerHeight*2-topHeight))
-        tableView.autoresizingMask = .FlexibleWidth | .FlexibleHeight
+        tableView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
         tableView.backgroundColor = UIColor.whiteColor()
         tableView.dataSource = self
         tableView.delegate = self
@@ -98,7 +98,7 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         let notificationCenter = NSNotificationCenter.defaultCenter()
         let mainQueue = NSOperationQueue.mainQueue()
-        var observer = notificationCenter.addObserverForName(Bakkle.bkAppBecameActive, object: nil, queue: mainQueue) { _ in
+        _ = notificationCenter.addObserverForName(Bakkle.bkAppBecameActive, object: nil, queue: mainQueue) { _ in
             self.appBecameActive()
         }
         UIApplication.sharedApplication().applicationIconBadgeNumber = 0
@@ -121,13 +121,12 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
             firstName: Bakkle.sharedInstance.first_name, lastName: Bakkle.sharedInstance.last_name)
         self.account = Account(user: seller)
         
-        var chatPayload: WSRequest = WSGetChatsRequest(itemId: chatItemID)
+        let chatPayload: WSRequest = WSGetChatsRequest(itemId: chatItemID)
         chatPayload.successHandler = {
-            (var success: NSDictionary) in
-            var chats: [NSDictionary] = success.valueForKey("chats") as! [NSDictionary]
+            ( success: NSDictionary) in
+            let chats: [NSDictionary] = success.valueForKey("chats") as! [NSDictionary]
             for chat in chats {
                 // Set up user
-                var item: NSDictionary = chat.valueForKey("item") as! NSDictionary
                 
                 var message: String = ""
                 var dateString: String = ""
@@ -144,17 +143,17 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
                 }
                 id = chat.valueForKey("pk") as! Int
                 
-                var buyer: NSDictionary = chat.valueForKey("buyer") as! NSDictionary
+                let buyer: NSDictionary = chat.valueForKey("buyer") as! NSDictionary
                 let account_id = buyer.valueForKey("pk") as! Int
                 let facebookID = buyer.valueForKey("facebook_id") as! String
                 
                 let buyersName = buyer.valueForKey("display_name") as! String
-                let dividedName = split(buyersName) {$0 == " "}
+                let dividedName = buyersName.characters.split {$0 == " "}.map { String($0) }
                 let firstName = dividedName[0] as String
                 let lastName = dividedName[1] as String
                 
                 let buyerUser = User(facebookID: facebookID, accountID: account_id, firstName: firstName, lastName: lastName)
-                var buyerChat = Chat(user: buyerUser, lastMessageText: message, lastMessageSentDate: date, chatId: id)
+                let buyerChat = Chat(user: buyerUser, lastMessageText: message, lastMessageSentDate: date, chatId: id)
                 self.account.chats.append(buyerChat)
             }
             self.tableView.reloadData()

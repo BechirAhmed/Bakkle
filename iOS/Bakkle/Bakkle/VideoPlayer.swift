@@ -27,8 +27,8 @@ class VideoPlayer {
     /**
      *  Initialize the VideoPlayer object.
      * 
-     *  :param: videoURL `String` used to set an `NSURL` that directs to the desired video for playback.
-     *  :param: presentingController `UIViewController` that instantiated the object.
+     *  - parameter videoURL: `String` used to set an `NSURL` that directs to the desired video for playback.
+     *  - parameter presentingController: `UIViewController` that instantiated the object.
      */
     init (videoURL: NSURL, presentingController: UIViewController) {
         self.player = AVPlayer(URL: videoURL)
@@ -42,8 +42,8 @@ class VideoPlayer {
     /**
      *  Initialize the VideoPlayer object.
      *
-     *  :param: videoURL `NSURL` that directs to the desired video for playback.
-     *  :param: presentingController `UIViewController` that instantiated the object (should be `self`).
+     *  - parameter videoURL: `NSURL` that directs to the desired video for playback.
+     *  - parameter presentingController: `UIViewController` that instantiated the object (should be `self`).
      */
     init (videoURL: String, presentingController: UIViewController) {
         self.videoURL = NSURL(string: videoURL)!
@@ -57,8 +57,8 @@ class VideoPlayer {
     /**
      *  Presents an `AVPlayerViewController` with an `AVPlayer` and begins video playback (WEB).
      *  
-     *  :param: videoURL `String` used to set an `NSURL` that directs to the desired video for playback.
-     *  :param: presentingController `UIViewController` that instantiated the object.
+     *  - parameter videoURL: `String` used to set an `NSURL` that directs to the desired video for playback.
+     *  - parameter presentingController: `UIViewController` that instantiated the object.
      */
     static func playWeb(videoURL: String, presentingController: UIViewController) -> VideoPlayerViewController {
         return VideoPlayer.play(NSURL(string: videoURL)!, presentingController: presentingController)
@@ -67,22 +67,22 @@ class VideoPlayer {
     /**
      *  Presents an `AVPlayerViewController` with an `AVPlayer` and begins video playback (FILE).
      *
-     *  :param: videoURL `String` used to set an `NSURL` that directs to the desired video for playback.
-     *  :param: presentingController `UIViewController` that instantiated the object.
+     *  - parameter videoURL: `String` used to set an `NSURL` that directs to the desired video for playback.
+     *  - parameter presentingController: `UIViewController` that instantiated the object.
      */
     static func playFile(videoURL: String, presentingController: UIViewController) -> VideoPlayerViewController {
-        return VideoPlayer.play(NSURL(fileURLWithPath: videoURL)!, presentingController: presentingController)
+        return VideoPlayer.play(NSURL(fileURLWithPath: videoURL), presentingController: presentingController)
     }
     
     /**
      *  Presents an `AVPlayerViewController` with an `AVPlayer` and begins video playback.
      *
-     *  :param: videoURL `NSURL` that directs to the desired video for playback.
-     *  :param: presentingController `UIViewController` that instantiated the object.
+     *  - parameter videoURL: `NSURL` that directs to the desired video for playback.
+     *  - parameter presentingController: `UIViewController` that instantiated the object.
      */
     static func play(videoURL: NSURL, presentingController: UIViewController) -> VideoPlayerViewController {
-        var player = AVPlayer(URL: videoURL)
-        var playerController = VideoPlayerViewController()
+        let player = AVPlayer(URL: videoURL)
+        let playerController = VideoPlayerViewController()
         
         playerController.player = player
         
@@ -105,7 +105,7 @@ class VideoPlayer {
     /**
      *  Returns the `AVPlayerViewController` used to display video playback.
      *
-     *  :returns: `AVPlayerViewController` used to present the `AVPlayer`.
+     *  - returns: `AVPlayerViewController` used to present the `AVPlayer`.
      */
     func getAVPlayerViewController() -> AVPlayerViewController {
         return self.playerController
@@ -114,7 +114,7 @@ class VideoPlayer {
     /**
      *  Returns the `AVPlayer` within the `AVPlayerViewController`.
      * 
-     *  :returns: `AVPlayer` used for video playback.
+     *  - returns: `AVPlayer` used for video playback.
      */
     func getAVPlayer() -> AVPlayer {
         return self.player
@@ -123,7 +123,7 @@ class VideoPlayer {
     /**
      *  Returns the `NSURL` of the current video.
      *
-     *  :returns: `NSURL` currently used for video playback.
+     *  - returns: `NSURL` currently used for video playback.
      */
     func getCurrentVideoURL() -> NSURL {
         return self.videoURL
@@ -132,7 +132,7 @@ class VideoPlayer {
     /**
      *  Sets the `NSURL` for video playback.
      *
-     *  :param: videoURL `String` used to set an `NSURL` that directs to the desired video for playback.
+     *  - parameter videoURL: `String` used to set an `NSURL` that directs to the desired video for playback.
      */
     func setVideoURL(videoURL: String) {
         self.setVideoURL(NSURL(string: videoURL)!)
@@ -141,7 +141,7 @@ class VideoPlayer {
     /**
      *  Sets the `NSURL` for video playback.
      *
-     *  :param: videoURL `NSURL` that directs to the desired video for playback.
+     *  - parameter videoURL: `NSURL` that directs to the desired video for playback.
      */
     func setVideoURL(videoURL: NSURL) {
         self.videoURL = videoURL
@@ -178,7 +178,7 @@ class VideoPlayerViewController: AVPlayerViewController {
     /**
      *  Override method to tell the application to rotate.
      *
-     *  :returns: `Bool` true if the application should autorotate.
+     *  - returns: `Bool` true if the application should autorotate.
      */
     override func shouldAutorotate() -> Bool {
         return self.shouldRotate
@@ -187,7 +187,7 @@ class VideoPlayerViewController: AVPlayerViewController {
     /**
      *  Set whether the device should Autorotate.
      * 
-     *  :param: allowRotation `Bool` true to allow autorotation.
+     *  - parameter allowRotation: `Bool` true to allow autorotation.
      */
     func setShouldRotate(allowRotation: Bool) {
         self.shouldRotate = allowRotation

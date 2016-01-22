@@ -36,7 +36,7 @@ class DemoView: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate{
         return Bakkle.servers.count
     }
     
-    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String! {
+    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return Bakkle.serverNames[row]
     }
     

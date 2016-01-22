@@ -76,7 +76,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
      */
     var debug: Int = 2 // 0=off
     var serverNum: Int = 0
-    var deviceUUID : String = UIDevice.currentDevice().identifierForVendor.UUIDString
+    var deviceUUID : String = UIDevice.currentDevice().identifierForVendor!.UUIDString
     var flavor: Int = 0
     
     var account_id: Int! = 0
@@ -165,7 +165,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         locationManager.requestWhenInUseAuthorization()
         
         // load last location (or set default)
-        var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        let userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
         if let f = userDefaults.objectForKey("user_location") as? NSString {
             self.user_location = f as String
             self.user_loc = CLLocation(locationString: self.user_location)
@@ -196,7 +196,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     func updateduration(time:Double)
     {
         duration = time
-        println("Worked")
+        print("Worked")
     }
     
     
@@ -206,34 +206,28 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             return .None
         }
         if let start = user_loc {
-            println( destination.toString() )
-            println( user_loc!.toString())
-            println( destination.distanceFromLocation(start))
+            print( destination.toString() )
+            print( user_loc!.toString())
+            print( destination.distanceFromLocation(start))
             return destination.distanceFromLocation(start) / 1609.34
         } else {
             return .None
         }
     }
     
-    func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
-        if locations[0].coordinate == nil {
-            return
-        }
-        self.user_loc = locations[0] as? CLLocation
+    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        self.user_loc = locations[0]
         self.user_location = "\( locations[0].coordinate.latitude ), \( locations[0].coordinate.longitude )"
         self.debg("Received new location: \(self.user_location)")
     }
     
-    func locationManager(manager: CLLocationManager!, didUpdateToLocation newLocation: CLLocation!, fromLocation oldLocation: CLLocation!) {
-        if newLocation == nil {
-            return
-        }
+    func locationManager(manager: CLLocationManager, didUpdateToLocation newLocation: CLLocation, fromLocation oldLocation: CLLocation) {
         self.user_loc = newLocation
         self.user_location = "\( newLocation.coordinate.latitude ), \( newLocation.coordinate.longitude )"
         self.debg("Received new location: \(self.user_location)")
         
         // Store location
-        var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        let userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
         userDefaults.setObject(self.user_location, forKey: "user_location")
         userDefaults.synchronize()
     }
@@ -266,7 +260,6 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     func appVersion() -> (build: String, bundle: String) {
         let build: String = NSBundle.mainBundle().infoDictionary?["CFBundleVersion"] as! String
         let bundleName: String = NSBundle.mainBundle().infoDictionary?["CFBundleName"] as! String
-        let shortVersion: String = NSBundle.mainBundle().infoDictionary?["CFBundleShortVersionString"] as! String
         
         return (build,bundleName)
     }
@@ -298,20 +291,19 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                 data, response, error in
                 
                 if error != nil {
-                    println("error=\(error)")
+                    print("error=\(error)")
                     return
                 }
                 
-                let responseString = NSString(data: data, encoding:NSUTF8StringEncoding)
-                println("Response: \(responseString)")
+                let responseString = NSString(data: data!, encoding:NSUTF8StringEncoding)
+                print("Response: \(responseString)")
                 
                 /* JSON parse */
-                var error: NSError? = error
-                if (data != nil && data.length != 0) {
-                    var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &error) as! NSDictionary
+                if (data != nil && data!.length != 0) {
+                    let responseDict : NSDictionary = (try! NSJSONSerialization.JSONObjectWithData(data!, options: .MutableContainers)) as! NSDictionary
                     
                     if responseDict.valueForKey("status")?.integerValue == 1 {
-                        var settings_dict :NSDictionary = responseDict.valueForKey("settings_dict") as! NSDictionary
+                        let settings_dict :NSDictionary = responseDict.valueForKey("settings_dict") as! NSDictionary
                         
                         if(settings_dict.valueForKey("feed_items_to_load") != nil){
                             self.feed_items_to_load = settings_dict.valueForKey("feed_items_to_load")!.integerValue!
@@ -380,17 +372,16 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             data, response, error in
             
             if error != nil {
-                println("error=\(error)")
+                print("error=\(error)")
                 return
 //                fail()
             }
             
-            let responseString = NSString(data: data, encoding: NSUTF8StringEncoding)
-            println("Response: \(responseString)")
+            let responseString = NSString(data: data!, encoding: NSUTF8StringEncoding)
+            print("Response: \(responseString)")
             
-            var error: NSError? = error
-            if data != nil && data.length != 0 {
-                var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &error) as! NSDictionary
+            if data != nil && data!.length != 0 {
+                let responseDict : NSDictionary = (try! NSJSONSerialization.JSONObjectWithData(data!, options: .MutableContainers)) as! NSDictionary
                 
                 if responseDict.valueForKey("status")?.integerValue == 1 {
                     self.guest_id_str = responseDict.valueForKey("userid") as! String
@@ -421,16 +412,15 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             data, response, error in
             
             if error != nil {
-                println("error=\(error)")
+                print("error=\(error)")
                 return
             }
             
-            let responseString = NSString(data: data, encoding: NSUTF8StringEncoding)
-            println("Response: \(responseString)")
+            let responseString = NSString(data: data!, encoding: NSUTF8StringEncoding)
+            print("Response: \(responseString)")
             
-            var error: NSError? = error
-            if data != nil && data.length != 0 {
-                var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &error) as! NSDictionary
+            if data != nil && data!.length != 0 {
+                let responseDict : NSDictionary = (try! NSJSONSerialization.JSONObjectWithData(data!, options: .MutableContainers)) as! NSDictionary
                 
                 if responseDict.valueForKey("status")?.integerValue == 1 {
                     
@@ -458,18 +448,17 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             data, response, error in
             
             if error != nil {
-                println("error=\(error)")
+                print("error=\(error)")
                 return
             }
             
-            let responseString = NSString(data: data, encoding: NSUTF8StringEncoding)
-            println("Response: \(responseString)")
+            let responseString = NSString(data: data!, encoding: NSUTF8StringEncoding)
+            print("Response: \(responseString)")
             
             self.errorStr = ""
             
-            var error: NSError? = error
-            if data != nil && data.length != 0 {
-                var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &error) as! NSDictionary
+            if data != nil && data!.length != 0 {
+                let responseDict : NSDictionary = (try! NSJSONSerialization.JSONObjectWithData(data!, options: .MutableContainers)) as! NSDictionary
                 
                 if responseDict.valueForKey("status")?.integerValue == 1 {
                     self.info("successfully updated profile")
@@ -497,18 +486,17 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             data, response, error in
             
             if error != nil {
-                println("error=\(error)")
+                print("error=\(error)")
                 return
             }
             
-            let responseString = NSString(data: data, encoding: NSUTF8StringEncoding)
-            println("Response: \(responseString)")
+            let responseString = NSString(data: data!, encoding: NSUTF8StringEncoding)
+            print("Response: \(responseString)")
             
             self.errorStr = ""
             
-            var error: NSError? = error
-            if data != nil && data.length != 0 {
-                var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &error) as! NSDictionary
+            if data != nil && data!.length != 0 {
+                let responseDict : NSDictionary = (try! NSJSONSerialization.JSONObjectWithData(data!, options: .MutableContainers)) as! NSDictionary
                 
                 if responseDict.valueForKey("status")?.integerValue == 1 {
                     self.info("password set successfully")
@@ -539,18 +527,17 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             data, response, error in
             
             if error != nil {
-                println("error=\(error)")
+                print("error=\(error)")
                 return
             }
             
-            let responseString = NSString(data: data, encoding: NSUTF8StringEncoding)
-            println("Response: \(responseString)")
+            let responseString = NSString(data: data!, encoding: NSUTF8StringEncoding)
+            print("Response: \(responseString)")
             
             self.errorStr = ""
             
-            var error: NSError? = error
-            if data != nil && data.length != 0 {
-                var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &error) as! NSDictionary
+            if data != nil && data!.length != 0 {
+                let responseDict : NSDictionary = (try! NSJSONSerialization.JSONObjectWithData(data!, options: .MutableContainers)) as! NSDictionary
                 
                 if responseDict.valueForKey("status")?.integerValue == 1 {
                     self.info("successfult authenticated local account")
@@ -597,19 +584,18 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             data, response, error in
             
             if error != nil {
-                println("error=\(error)")
+                print("error=\(error)")
                 return
             }
             
-            let responseString = NSString(data: data, encoding:NSUTF8StringEncoding)
-            println("Response: \(responseString)")
+            let responseString = NSString(data: data!, encoding:NSUTF8StringEncoding)
+            print("Response: \(responseString)")
             
             self.errorStr = ""
             
             /* JSON parse */
-            var error: NSError? = error
-            if (data != nil && data.length != 0) {
-                var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &error) as! NSDictionary
+            if (data != nil && data!.length != 0) {
+                let responseDict : NSDictionary = (try! NSJSONSerialization.JSONObjectWithData(data!, options: .MutableContainers)) as! NSDictionary
                 
                 if responseDict.valueForKey("status")?.integerValue == 1 {
                     self.first_name = first_name
@@ -638,12 +624,12 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             let request = NSMutableURLRequest(URL: url!)
         
             // Get device capabilities
-            var bounds: CGRect = UIScreen.mainScreen().bounds
-            var screen_width:CGFloat = bounds.size.width
-            var screen_height:CGFloat = bounds.size.height
+            let bounds: CGRect = UIScreen.mainScreen().bounds
+            let screen_width:CGFloat = bounds.size.width
+            let screen_height:CGFloat = bounds.size.height
         
             let (a,b) = self.appVersion()
-            let encLocation = user_location.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
+            let encLocation = user_location.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())
         
             request.HTTPMethod = "POST"
         var user_id: String
@@ -655,29 +641,28 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             let postString = "device_uuid=\(self.deviceUUID)&user_id=\(user_id)&screen_width=\(screen_width)&screen_height=\(screen_height)&app_version=\(a)&app_build=\(b)&user_location=\(encLocation)&is_ios=true&flavor=\(self.flavor)"
             request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
             
-            println("[Bakkle] login (facebook)")
-            println("URL: \(url) METHOD: \(request.HTTPMethod) BODY: \(postString)")
+            print("[Bakkle] login (facebook)")
+            print("URL: \(url) METHOD: \(request.HTTPMethod) BODY: \(postString)")
             let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
                 data, response, error in
                 
                 if error != nil {
-                    println("error=\(error)")
+                    print("error=\(error)")
                     return
                 }
 
-                let responseString = NSString(data: data, encoding:NSUTF8StringEncoding)
-                println("ResponseLogin: \(responseString)")
+                let responseString = NSString(data: data!, encoding:NSUTF8StringEncoding)
+                print("ResponseLogin: \(responseString)")
                 
                 /* JSON parse */
-                var error: NSError? = error
-                var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &error) as! NSDictionary!
+                let responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data!, options: .MutableContainers) as! NSDictionary
                 
                 if responseDict.valueForKey("status")?.integerValue == 1 {
                     self.auth_token = responseDict.valueForKey("auth_token") as! String
-                    var accountId = split(self.auth_token) {$0 == "_"}
-                    self.account_id = accountId[1].toInt()
+                    var accountId = self.auth_token.characters.split {$0 == "_"}.map { String($0) }
+                    self.account_id = Int(accountId[1])
                     let display_name = responseDict.valueForKey("display_name") as! String
-                    let nameArr = split(display_name) {$0 == " "}
+                    let nameArr = display_name.characters.split {$0 == " "}.map { String($0) }
                     self.first_name = nameArr[0]
                     self.last_name = ""
                     if nameArr.count == 2 {
@@ -705,18 +690,18 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         let postString = "auth_token=\(self.auth_token)&device_uuid=\(self.deviceUUID)"
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
         
-        println("Logout auth_token:\(auth_token) device:\(self.deviceUUID)")
-        println("URL: \(url) METHOD: \(request.HTTPMethod) BODY: \(postString)")
+        print("Logout auth_token:\(auth_token) device:\(self.deviceUUID)")
+        print("URL: \(url) METHOD: \(request.HTTPMethod) BODY: \(postString)")
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
             data, response, error in
             
             if error != nil {
-                println("error=\(error)")
+                print("error=\(error)")
                 return
             }
             
-            let responseString = NSString(data: data, encoding: NSUTF8StringEncoding)
-            println("Response: \(responseString)")
+            let responseString = NSString(data: data!, encoding: NSUTF8StringEncoding)
+            print("Response: \(responseString)")
             
             self.account_type = Bakkle.bkAccountTypeGuest
             success()
@@ -733,17 +718,17 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         let postString = "auth_token=\(self.auth_token)&device_uuid=\(self.deviceUUID)&device_token=\(deviceToken)"
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
 
-        println("[Bakkle] register_push")
-        println("URL: \(url) METHOD: \(request.HTTPMethod) BODY: \(postString)")
+        print("[Bakkle] register_push")
+        print("URL: \(url) METHOD: \(request.HTTPMethod) BODY: \(postString)")
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
             data, response, error in
             
             if error != nil {
-                println("error=\(error)")
+                print("error=\(error)")
                 return
             }
             
-            let responseString = NSString(data: data, encoding: NSUTF8StringEncoding)
+            let responseString = NSString(data: data!, encoding: NSUTF8StringEncoding)
             self.debg("Response: \(responseString)")
         }
         task.resume() 
@@ -770,22 +755,16 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         }
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
         
-        println("[Bakkle] markItem")
-        println("URL: \(url) METHOD: \(request.HTTPMethod) BODY: \(postString)")
+        print("[Bakkle] markItem")
+        print("URL: \(url) METHOD: \(request.HTTPMethod) BODY: \(postString)")
         dispatch_async(dispatch_get_global_queue(
-            Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
+            Int(QOS_CLASS_USER_INTERACTIVE.rawValue), 0)) {
                 let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
                     data, response, error in
                     
-                    if let responseString = NSString(data: data, encoding: NSUTF8StringEncoding) {
+                    if let responseString = NSString(data: data!, encoding: NSUTF8StringEncoding) {
                         self.debg("Response: \(responseString)")
                         
-                        //TODO: Check error handling here.
-                        //                var err: NSError?
-                        //                var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &err) as NSDictionary!
-                        //
-                        //TODO: THIS IS WRONG
-                        //if responseDict.valueForKey("status")?.integerValue == 1 {
                         self.persistData()
                         
                         switch(status){
@@ -836,18 +815,22 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                 return
             }
             
-            let responseString: String = NSString(data: data, encoding: NSUTF8StringEncoding)! as String
+            //let responseString: String = NSString(data: data!, encoding: NSUTF8StringEncoding)! as String
             //self.debg("Response: \(responseString)")
             
-            var parseError: NSError?
-            self.responseDict = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! NSDictionary!
-            self.info("RESPONSE DICT IS: \(self.responseDict)")
-            
-            if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
-                self.garageItems = self.responseDict.valueForKey("seller_garage") as! Array
-                self.persistData()
-                NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkGarageUpdate, object: self)
-                success()
+            do {
+                try self.responseDict = NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
+                self.info("RESPONSE DICT IS: \(self.responseDict)")
+                
+                if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
+                    self.garageItems = self.responseDict.valueForKey("seller_garage") as! Array
+                    self.persistData()
+                    NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkGarageUpdate, object: self)
+                    success()
+                }
+            }
+            catch {
+                
             }
         }
         task.resume()
@@ -874,11 +857,10 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                 return
             }
             
-            let responseString: String = NSString(data: data, encoding: NSUTF8StringEncoding)! as String
+            let responseString: String = NSString(data: data!, encoding: NSUTF8StringEncoding)! as String
             self.info("Response: \(responseString)")
             
-            var parseError: NSError?
-            self.responseDict = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! NSDictionary!
+            self.responseDict = NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary!
             self.debg("RESPONSE DICT IS: \(self.responseDict)")
             
             if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
@@ -912,11 +894,10 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                 return
             }
             
-            let responseString: String = NSString(data: data, encoding: NSUTF8StringEncoding)! as String
+            let responseString: String = NSString(data: data!, encoding: NSUTF8StringEncoding)! as String
             self.info("Response: \(responseString)")
             
-            var parseError: NSError?
-            self.responseDict = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! NSDictionary!
+            self.responseDict = NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary!
             self.debg("RESPONSE DICT IS: \(self.responseDict)")
             
             if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
@@ -953,18 +934,18 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                 return
             }
 
-            let responseString: String = NSString(data: data, encoding: NSUTF8StringEncoding)! as String
+            let responseString: String = NSString(data: data!, encoding: NSUTF8StringEncoding)! as String
             //self.debg("Response: \(responseString)")
             
             var parseError: NSError?
-            self.responseDict = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! NSDictionary!
+            self.responseDict = NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary!
             self.info("RESPONSE DICT IS: \(self.responseDict)")
             
             if self.responseDict != nil {
                 if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
-                    if let feedEl: AnyObject = self.responseDict["feed"] {
+                    if let feedarr: Array = self.responseDict["feed"] {
                         //TODO: only update new items.
-                        self.feedItems = self.responseDict.valueForKey("feed") as! Array
+                        self.feedItems = feedarr
                         self.persistData()
                         NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkFeedUpdate, object: self)
                     }
@@ -999,13 +980,12 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                 return
             }
             
-            let responseString: String = NSString(data: data, encoding: NSUTF8StringEncoding)! as String
+            let responseString: String = NSString(data: data!, encoding: NSUTF8StringEncoding)! as String
             self.debg("Response: \(responseString)")
             
-            var parseError: NSError?
-            self.responseDict = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! NSDictionary!
+            self.responseDict = NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary!
             self.debg("RESPONSE DICT IS: \(self.responseDict)")
-            if (data != nil && data.length != 0 ) {
+            if (data != nil && data!.length != 0 ) {
                 
 //            }&& Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 ){
     //                let item_id: Int = self.responseDict.valueForKey("item_id") as! Int
@@ -1032,10 +1012,10 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     // take out tags right now, but if needed, will add later
     func addItem(title: String, description: String, location: String, price: String, images: [NSData], videos: [NSData], item_id: NSInteger?, success: (item_id: Int?, image_url: String?)->(), fail: ()->() ) {
         // URL encode some vars.
-        let escTitle = title.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-        let escDescription = description.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-        let escLocation = location.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-//        let escTags = tags.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
+        let escTitle = title.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())
+        let escDescription = description.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())
+        let escLocation = location.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())
+
         var escPrice: String!
         if price == "take it!" {
             escPrice = "0.00"
@@ -1060,14 +1040,11 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             imageDataLength += i.length;
         }
         
-        let postLength: String = "\(imageDataLength)"
-        
-        
-        var boundary:String = "---------------------------14737809831466499882746641449"
-        var contentType:String = "multipart/form-data; boundary=\(boundary)"
+        let boundary:String = "---------------------------14737809831466499882746641449"
+        let contentType:String = "multipart/form-data; boundary=\(boundary)"
         request.addValue(contentType, forHTTPHeaderField: "Content-Type")
         
-        var body:NSMutableData = NSMutableData()
+        let body:NSMutableData = NSMutableData()
                 
         //add all images as neccessary.
         for i in images{
@@ -1098,12 +1075,11 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                 return
             }
             
-            let responseString: String = NSString(data: data, encoding: NSUTF8StringEncoding)! as String
+            let responseString: String = NSString(data: data!, encoding: NSUTF8StringEncoding)! as String
             self.debg("Response: \(responseString)")
-            println("Response: \(responseString)")
+            print("Response: \(responseString)")
             
-            var parseError: NSError?
-            self.responseDict = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! NSDictionary!
+            self.responseDict = NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary!
             self.debg("RESPONSE DICT IS: \(self.responseDict)")
             
             if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
@@ -1138,12 +1114,11 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                 return
             }
             
-            let responseString: String = NSString(data: data, encoding: NSUTF8StringEncoding)! as String
+            let responseString: String = NSString(data: data!, encoding: NSUTF8StringEncoding)! as String
             self.debg("Response: \(responseString)")
-            println("Response: \(responseString)")
+            print("Response: \(responseString)")
             
-            var parseError: NSError?
-            self.responseDict = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! NSDictionary!
+            self.responseDict = NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary!
             self.debg("RESPONSE DICT IS: \(self.responseDict)")
             
             if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
@@ -1174,12 +1149,11 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                 return
             }
             
-            let responseString: String = NSString(data: data, encoding: NSUTF8StringEncoding)! as String
+            let responseString: String = NSString(data: data!, encoding: NSUTF8StringEncoding)! as String
             self.debg("Response: \(responseString)")
-            println("Response: \(responseString)")
+            print("Response: \(responseString)")
             
-            var parseError: NSError?
-            self.responseDict = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! NSDictionary
+            self.responseDict = (try! NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers)) as! NSDictionary
             self.debg("RESPONSE DICT IS: \(self.responseDict)")
             
             if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
@@ -1211,12 +1185,11 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                 return
             }
             
-            let responseString: String = NSString(data: data, encoding: NSUTF8StringEncoding)! as String
+            let responseString: String = NSString(data: data!, encoding: NSUTF8StringEncoding)! as String
             self.debg("Response: \(responseString)")
-            println("Response: \(responseString)")
+            print("Response: \(responseString)")
             
-            var parseError: NSError?
-            self.responseDict = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! NSDictionary!
+            self.responseDict = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary!
             self.debg("RESPONSE DICT IS: \(self.responseDict)")
             
             if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
@@ -1238,7 +1211,13 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         time.value = min(time.value, 2)
         
         var error: NSError?
-        let imageRef = imageGenerator.copyCGImageAtTime(time, actualTime: nil, error: &error)
+        let imageRef: CGImage!
+        do {
+            imageRef = try imageGenerator.copyCGImageAtTime(time, actualTime: nil)
+        } catch var error1 as NSError {
+            error = error1
+            imageRef = nil
+        }
         
         if error != nil {
             NSLog("Image generation failed with error \(error)")
@@ -1297,7 +1276,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         UIColor.darkGrayColor().set()
         CGContextFillRect(context, area)
         CGContextRestoreGState(context)
-        CGContextSetBlendMode(context, kCGBlendModeMultiply)
+        CGContextSetBlendMode(context, CGBlendMode.Multiply)
         CGContextDrawImage(context, area, newImage.CGImage)
         var returnImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
@@ -1308,7 +1287,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         CGContextDrawImage(context, CGRectMake(0, 0, returnImage.size.width, returnImage.size.height), returnImage.CGImage)
         UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.65).setStroke()
         UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.65).set()
-        CGContextSetLineJoin(context, kCGLineJoinRound)
+        CGContextSetLineJoin(context, CGLineJoin.Round)
         CGContextSetLineWidth(context, 8.0)
         var triangle = CGPathCreateMutable()
         CGPathMoveToPoint(triangle, nil, point1.x, point1.y)
@@ -1355,7 +1334,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     }
 
     func getFilter() {
-        var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        let userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
 
         if let x = userDefaults.objectForKey("filter_distance") as? Float {
             self.filter_distance = x
@@ -1365,7 +1344,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         }
         if let y = userDefaults.objectForKey("filter_price")    as? Float {
             self.filter_price = y
-            println("Restored filter_price = \(y)")
+            print("Restored filter_price = \(y)")
         } else {
             self.filter_price = 100
         }
@@ -1375,7 +1354,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         self.filter_distance = ffilter_distance
         self.filter_price = ffilter_price
         
-        var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        let userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
         userDefaults.setFloat(self.filter_distance, forKey: "filter_distance")
         userDefaults.setFloat(self.filter_price,    forKey: "filter_price")
         userDefaults.synchronize()
@@ -1384,7 +1363,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     }
     
     func restoreData() {
-        var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        let userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
         
         // reset instructional overlay
         if userDefaults.objectForKey("instruction") == nil{
@@ -1422,36 +1401,32 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             
                 // restore FEED
                 if let f = userDefaults.objectForKey("feedItems") as? NSString {
-                    var parseError: NSError?
-                    var jsonData: NSData = f.dataUsingEncoding(NSUTF8StringEncoding)!
-                    self.feedItems = NSJSONSerialization.JSONObjectWithData(jsonData, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! Array
+                    let jsonData: NSData = f.dataUsingEncoding(NSUTF8StringEncoding)!
+                    self.feedItems = NSJSONSerialization.JSONObjectWithData(jsonData, options: NSJSONReadingOptions.MutableContainers) as! Array
                     self.info("Restored \( (self.feedItems as Array).count) feed items.")
                     NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkFeedUpdate, object: self)
                 }
                 
                 // restore TRUNK
                 if let f = userDefaults.objectForKey("trunkItems") as? NSString {
-                    var parseError: NSError?
-                    var jsonData: NSData = f.dataUsingEncoding(NSUTF8StringEncoding)!
-                    self.trunkItems = NSJSONSerialization.JSONObjectWithData(jsonData, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! Array
+                    let jsonData: NSData = f.dataUsingEncoding(NSUTF8StringEncoding)!
+                    self.trunkItems = NSJSONSerialization.JSONObjectWithData(jsonData, options: NSJSONReadingOptions.MutableContainers) as! Array
                     self.info("Restored \( (self.trunkItems as Array).count) trunk items.")
                     NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkTrunkUpdate, object: self)
                 }
                 
                 // restore GARAGE
                 if let f = userDefaults.objectForKey("garageItems") as? NSString {
-                    var parseError: NSError?
-                    var jsonData: NSData = f.dataUsingEncoding(NSUTF8StringEncoding)!
-                    self.garageItems = NSJSONSerialization.JSONObjectWithData(jsonData, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! Array
+                    let jsonData: NSData = f.dataUsingEncoding(NSUTF8StringEncoding)!
+                    self.garageItems = NSJSONSerialization.JSONObjectWithData(jsonData, options: NSJSONReadingOptions.MutableContainers) as! Array
                     self.info("Restored \( (self.garageItems as Array).count) garage items.")
                     NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkGarageUpdate, object: self)
                 }
 
                 // restore HOLDING
                 if let f = userDefaults.objectForKey("holdingItems") as? NSString {
-                    var parseError: NSError?
-                    var jsonData: NSData = f.dataUsingEncoding(NSUTF8StringEncoding)!
-                    self.holdingItems = NSJSONSerialization.JSONObjectWithData(jsonData, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! Array
+                    let jsonData: NSData = f.dataUsingEncoding(NSUTF8StringEncoding)!
+                    self.holdingItems = NSJSONSerialization.JSONObjectWithData(jsonData, options: NSJSONReadingOptions.MutableContainers) as! Array
                     self.info("Restored \( (self.holdingItems as Array).count) holding items.")
                     NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkHoldingUpdate, object: self)
                 }
@@ -1465,11 +1440,11 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         
     }
     func persistData() {
-        var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        let userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
         
         // Store FEED
         if self.feedItems != nil {
-            let data = NSJSONSerialization.dataWithJSONObject(self.feedItems, options: nil, error: nil)
+            let data = try? NSJSONSerialization.dataWithJSONObject(self.feedItems, options: [])
             let string = NSString(data: data!, encoding: NSUTF8StringEncoding)
             userDefaults.setObject(string,   forKey: "feedItems")
             self.info("Stored \( (self.feedItems as Array).count) feed items")
@@ -1479,7 +1454,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         
         // Store TRUNK
         if self.trunkItems != nil {
-            let data1 = NSJSONSerialization.dataWithJSONObject(self.trunkItems, options: nil, error: nil)
+            let data1 = try? NSJSONSerialization.dataWithJSONObject(self.trunkItems, options: [])
             let string = NSString(data: data1!, encoding: NSUTF8StringEncoding)
             userDefaults.setObject(string, forKey: "trunkItems")
             self.info("Stored \( (self.trunkItems as Array).count) trunk items")
@@ -1489,7 +1464,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         
         // Store GARAGE
         if self.garageItems != nil {
-            let data2 = NSJSONSerialization.dataWithJSONObject(self.garageItems, options: nil, error: nil)
+            let data2 = try? NSJSONSerialization.dataWithJSONObject(self.garageItems, options: [])
             let string2 = NSString(data: data2!, encoding: NSUTF8StringEncoding)
             userDefaults.setObject(string2,   forKey: "garageItems")
             self.info("Stored \( (self.garageItems as Array).count) garage items")
@@ -1499,7 +1474,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
 
         // Store HOLDING
         if self.holdingItems != nil {
-            let data3 = NSJSONSerialization.dataWithJSONObject(self.holdingItems, options: nil, error: nil)
+            let data3 = try? NSJSONSerialization.dataWithJSONObject(self.holdingItems, options: [])
             let string3 = NSString(data: data3!, encoding: NSUTF8StringEncoding)
             userDefaults.setObject(string3,   forKey: "holdingItems")
             self.info("Stored \( (self.holdingItems as Array).count) holding items")
@@ -1546,20 +1521,20 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     
     func err(logMessage: String, functionName: String = __FUNCTION__, line: Int = __LINE__, file: String = __FILE__) {
         if self.debug>=1 {
-            println("[ERRR] \(file.lastPathComponent.stringByDeletingPathExtension):(\(line)): \(logMessage)")
+            print("[ERRR] \(((file as NSString).lastPathComponent as NSString).stringByDeletingPathExtension):(\(line)): \(logMessage)")
         }
     }
     
     func info(logMessage: String, functionName: String = __FUNCTION__, line: Int = __LINE__, file: String = __FILE__) {
-        var prettyFunc = functionName
+        let prettyFunc = functionName
         if self.debug>=2 {
-            println("[INFO] \(file.lastPathComponent.stringByDeletingPathExtension):\(prettyFunc)(\(line)): \(logMessage)")
+            print("[INFO] \(((file as NSString).lastPathComponent as NSString).stringByDeletingPathExtension):\(prettyFunc)(\(line)): \(logMessage)")
         }
     }
     
     func debg(logMessage: String, functionName: String = __FUNCTION__, line: Int = __LINE__, file: String = __FILE__) {
         if self.debug>=3 {
-            println("[DEBG] \(file.lastPathComponent.stringByDeletingPathExtension):(\(line)): \(logMessage)")
+            print("[DEBG] \(((file as NSString).lastPathComponent as NSString).stringByDeletingPathExtension):(\(line)): \(logMessage)")
         }
     }
     

@@ -43,7 +43,7 @@ class SignUpView: UIViewController, UITextFieldDelegate {
         passwordField.delegate = self
         confirmPasswordField.delegate = self
         
-        var tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
         self.view.addGestureRecognizer(tap)
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardDidShow:", name: UIKeyboardDidShowNotification, object: nil)
@@ -67,7 +67,10 @@ class SignUpView: UIViewController, UITextFieldDelegate {
     }
     
     func dismissKeyboard() {
-        self.nameField.resignFirstResponder() || self.emailField.resignFirstResponder() || self.passwordField.resignFirstResponder() || self.confirmPasswordField.resignFirstResponder()
+        self.nameField.resignFirstResponder()
+        self.emailField.resignFirstResponder()
+        self.passwordField.resignFirstResponder()
+        self.confirmPasswordField.resignFirstResponder()
     }
     
     func keyboardDidShow(notification: NSNotification) {
@@ -80,7 +83,7 @@ class SignUpView: UIViewController, UITextFieldDelegate {
     }
     
     func disableButtonHandler() {
-        if self.nameField.text.isEmpty || self.emailField.text.isEmpty || self.passwordField.text.isEmpty || self.confirmPasswordField.text.isEmpty {
+        if self.nameField.text!.isEmpty || self.emailField.text!.isEmpty || self.passwordField.text!.isEmpty || self.confirmPasswordField.text!.isEmpty {
             signUpBtn.enabled = false
             signUpBtn.setTitleColor(AddItem.CONFIRM_BUTTON_DISABLED_COLOR, forState: .Normal)
         }else{
@@ -159,15 +162,15 @@ class SignUpView: UIViewController, UITextFieldDelegate {
         let confirmPassword = self.confirmPasswordField.text
         if password == confirmPassword {
             Bakkle.sharedInstance.account_type = Bakkle.bkAccountTypeEmail
-            Bakkle.sharedInstance.localUserID(email, device_uuid: Bakkle.sharedInstance.deviceUUID, success: { () -> () in
-                let fullName = split(name) {$0 == " "}
+            Bakkle.sharedInstance.localUserID(email!, device_uuid: Bakkle.sharedInstance.deviceUUID, success: { () -> () in
+                let fullName = name!.characters.split {$0 == " "}.map { String($0) }
                 let first_name = fullName[0]
                 var last_name: String = ""
                 if fullName.count == 2 {
                     last_name = fullName[1]
                 }
-                Bakkle.sharedInstance.facebook("", name: name, userid: Bakkle.sharedInstance.facebook_id_str, first_name: first_name, last_name: last_name, success: { () -> () in
-                    Bakkle.sharedInstance.setPassword(Bakkle.sharedInstance.facebook_id_str, device_uuid: Bakkle.sharedInstance.deviceUUID, password: password, success: { () -> () in
+                Bakkle.sharedInstance.facebook("", name: name!, userid: Bakkle.sharedInstance.facebook_id_str, first_name: first_name, last_name: last_name, success: { () -> () in
+                    Bakkle.sharedInstance.setPassword(Bakkle.sharedInstance.facebook_id_str, device_uuid: Bakkle.sharedInstance.deviceUUID, password: password!, success: { () -> () in
                         Bakkle.sharedInstance.login({ () -> () in
                             if self.profileVC != nil {
                                 Bakkle.sharedInstance.getAccount(Bakkle.sharedInstance.account_id, success: { (account: NSDictionary) -> () in
@@ -188,7 +191,7 @@ class SignUpView: UIViewController, UITextFieldDelegate {
                     })
                     }, fail: {() -> () in
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            var alert = UIAlertController(title: "Account exists", message: "Account already exists. Try logging in.", preferredStyle: UIAlertControllerStyle.Alert)
+                            let alert = UIAlertController(title: "Account exists", message: "Account already exists. Try logging in.", preferredStyle: UIAlertControllerStyle.Alert)
                             alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
                             self.presentViewController(alert, animated: true, completion: nil)
                         })
@@ -196,7 +199,7 @@ class SignUpView: UIViewController, UITextFieldDelegate {
             })
             
         }else{
-            var alert = UIAlertController(title: "Password does not match", message: "The two password don't match", preferredStyle: UIAlertControllerStyle.Alert)
+            let alert = UIAlertController(title: "Password does not match", message: "The two password don't match", preferredStyle: UIAlertControllerStyle.Alert)
             alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
             self.presentViewController(alert, animated: true, completion: nil)
         }

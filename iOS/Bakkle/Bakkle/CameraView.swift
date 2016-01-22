@@ -115,10 +115,10 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         imageViews.reserveCapacity(imageViews.count)
         removeImageButtons.reserveCapacity(removeImageButtons.count)
         
-        images = [UIImage](count:CameraView.MAX_IMAGE_COUNT, repeatedValue:UIImage.alloc())
+        images = [UIImage](count:CameraView.MAX_IMAGE_COUNT, repeatedValue:UIImage())
         isVideo = [Bool](count:CameraView.MAX_IMAGE_COUNT, repeatedValue:false)
         videos = [NSURL](count:CameraView.MAX_VIDEO_COUNT, repeatedValue:NSURL())
-        videoImages = [UIImage](count:CameraView.MAX_VIDEO_COUNT, repeatedValue:UIImage.alloc())
+        videoImages = [UIImage](count:CameraView.MAX_VIDEO_COUNT, repeatedValue:UIImage())
         
         UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: .Fade)
         UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent
@@ -144,12 +144,12 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         if self.addItem != nil && (self.addItem!.successfulAdd || self.addItem!.confirmHit) {
             // If the view became active after the confirm button was hit, then display the Bakkle Item added slash
             self.fadeViewLoadLogo.image = UIImage(named: "logo-white-design-clear.png")!
-            var backgroundImage = UIImageView(frame: self.fadeView.frame)
+            let backgroundImage = UIImageView(frame: self.fadeView.frame)
             backgroundImage.image = UIImage(named:"LoginScreen-bkg.png")!
             self.fadeView.insertSubview(backgroundImage, belowSubview: self.fadeViewLoadLogo)
             
             // Text is set in storyboard to get a feel of orientation
-            var successLabel = self.addItem!.successfulAdd ? listedLabel : willBeListedLabel
+            let successLabel = self.addItem!.successfulAdd ? listedLabel : willBeListedLabel
             if isEditting {
                 // set the text of the label accordingly with uploading an item and while it is being uploaded
                 successLabel.text = self.addItem!.successfulAdd ? "Your changes were submitted successfully!" : "Don't worry, we're still updating your changes!"
@@ -172,10 +172,10 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             self.notPopulated = true
             
             for index in 0...imageUrls.count-1 {
-                var imageURL: NSURL = NSURL(string: imageUrls[index])!
+                let imageURL: NSURL = NSURL(string: imageUrls[index])!
                 
                 if imageURL.pathExtension != "mp4" {
-                    var imageData: NSData = NSData(contentsOfURL: imageURL)!
+                    let imageData: NSData = NSData(contentsOfURL: imageURL)!
                     images[index] = UIImage(data: imageData)!
                 } else {
                     videos[self.videoCount] = imageURL
@@ -185,8 +185,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             }
         }
 
-        var cameraFlashMode: UIImagePickerControllerCameraFlashMode
-        var model = UIDevice.currentDevice().model
+        let model = UIDevice.currentDevice().model
         if model == "iPad" {
             self.cameraView.addConstraint(NSLayoutConstraint(item: self.cameraView, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: self.cameraView, attribute: NSLayoutAttribute.Height, multiplier: 1.15, constant: 0.0))
         } else{
@@ -263,7 +262,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     }
     
     // Specific observer to update the UI when recording either begins or finishes
-    override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
+    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
         if context == &recordingDidChange {
             buttonEnabledHandler()
         } else {
@@ -280,19 +279,27 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         captureSession = AVCaptureSession()
         
         // Audio Input
-        var audioDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeAudio)
-        var err: NSError?
-        self.audioInput = AVCaptureDeviceInput(device: audioDevice, error: &err)
+        let audioDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeAudio)
+        do {
+            self.audioInput = try AVCaptureDeviceInput(device: audioDevice)
+        } catch {
+            self.audioInput = nil
+        }
         if audioInput != nil {
             captureSession!.addInput(self.audioInput)
         }
         
         // Video Input
-        var frontCam = findCameraWithPosition(.Front)
-        var backCam = findCameraWithPosition(.Back)
+        let frontCam = findCameraWithPosition(.Front)
+        let backCam = findCameraWithPosition(.Back)
         
         if backCam != nil && frontCam != nil {
-            selectedDevice = AVCaptureDeviceInput(device: backCam!, error: &error)
+            do {
+                selectedDevice = try AVCaptureDeviceInput(device: backCam!)
+            } catch let error1 as NSError {
+                error = error1
+                selectedDevice = nil
+            }
             cameraCount = 2
             return;
         }
@@ -301,10 +308,20 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         switchCamera.hidden = true
         
         if backCam != nil {
-            selectedDevice = AVCaptureDeviceInput(device: backCam!, error: &error)
+            do {
+                selectedDevice = try AVCaptureDeviceInput(device: backCam!)
+            } catch let error1 as NSError {
+                error = error1
+                selectedDevice = nil
+            }
             cameraCount = 1
         } else if frontCam != nil {
-            selectedDevice = AVCaptureDeviceInput(device: frontCam!, error: &error)
+            do {
+                selectedDevice = try AVCaptureDeviceInput(device: frontCam!)
+            } catch let error1 as NSError {
+                error = error1
+                selectedDevice = nil
+            }
             cameraCount = 1
         } else {
             // alert is called when previewing, this code is only run before an alert can be shown
@@ -411,13 +428,19 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     
     // Removes the specified video
     func removeVideos(index: Int) {
-        var err: NSError?
         if NSFileManager.defaultManager().fileExistsAtPath("\(NSTemporaryDirectory())video\(index).mov") {
-            NSFileManager.defaultManager().removeItemAtPath("\(NSTemporaryDirectory())video\(index).mov", error: &err)
+            do {
+                try NSFileManager.defaultManager().removeItemAtPath("\(NSTemporaryDirectory())video\(index).mov")
+            } catch {
+            }
         }
         
         if NSFileManager.defaultManager().fileExistsAtPath("\(NSTemporaryDirectory())video\(index).mp4") {
-            NSFileManager.defaultManager().removeItemAtPath("\(NSTemporaryDirectory())video\(index).mp4", error: &err)
+            do {
+                try NSFileManager.defaultManager().removeItemAtPath("\(NSTemporaryDirectory())video\(index).mp4")
+            } catch {
+
+            }
         }
     }
     
@@ -445,7 +468,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         captureSession!.beginConfiguration()
         
         captureSession!.removeInput(selectedDevice)
-        selectedDevice = selectedDevice!.device.isEqual(findCameraWithPosition(.Front)) ? AVCaptureDeviceInput(device: findCameraWithPosition(.Back)!, error: &error) : AVCaptureDeviceInput(device: findCameraWithPosition(.Front)!, error: &error)
+        selectedDevice = selectedDevice!.device.isEqual(findCameraWithPosition(.Front)) ? AVCaptureDeviceInput(device: findCameraWithPosition(.Back)!) : AVCaptureDeviceInput(device: findCameraWithPosition(.Front)!)
         captureSession!.addInput(selectedDevice!)
         
         captureSession!.commitConfiguration()
@@ -544,7 +567,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         }
         
         if error != nil {
-            println("Error while displaying AVFoundation preview:\n\(error)")
+            print("Error while displaying AVFoundation preview:\n\(error)")
             return
         }
         
@@ -552,11 +575,11 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         
         // Create the preview layer, and add it to the screen
         capturePreview = AVCaptureVideoPreviewLayer(session: captureSession!)
-        var startPoint = (cameraView.layer.frame.width - cameraView.layer.frame.height ) / 2
+        let startPoint = (cameraView.layer.frame.width - cameraView.layer.frame.height ) / 2
         capturePreview?.frame = CGRectMake(startPoint, 0, cameraView.layer.frame.height, cameraView.layer.frame.height)
         
         capturePreview?.videoGravity = AVLayerVideoGravityResizeAspectFill
-        self.cameraView.layer.insertSublayer(capturePreview, below: self.flashView.layer)
+        self.cameraView.layer.insertSublayer(capturePreview!, below: self.flashView.layer)
         
         // If the capture session can add the stillImageOutput and it doesn't have one already, add a new output
         if captureSession!.canAddOutput(stillImageOutput) && !contains(captureSession!.outputs, item: stillImageOutput) {
@@ -596,15 +619,15 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     }
     
     // Tap to focus, need to draw square
-    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         if selectedDevice != nil && selectedDevice!.device.focusPointOfInterestSupported {
-            var touchPoint = touches.first as! UITouch
-            var screenSize = cameraView.bounds.size
-            var focusPoint = CGPoint(x: touchPoint.locationInView(cameraView).x / screenSize.width, y: touchPoint.locationInView(cameraView).y / screenSize.height)
+            let touchPoint = touches.first! as UITouch
+            let screenSize = cameraView.bounds.size
+            let focusPoint = CGPoint(x: touchPoint.locationInView(cameraView).x / screenSize.width, y: touchPoint.locationInView(cameraView).y / screenSize.height)
             
             if CGRectContainsPoint(self.cameraView.frame, touchPoint.locationInView(nil)) {
                 if let device = self.selectedDevice!.device {
-                    if(device.lockForConfiguration(nil)) {
+                    if(device.lockForConfiguration()) {
                         // focusIndicator removeAllAnimations incase we have the indicator darken with exposure
                         focusIndicator.hidden = true
                         device.focusPointOfInterest = focusPoint
@@ -619,8 +642,8 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     }
     
     // Called when the UI detects a touch that has moved, used with image dragging
-    override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
-        var touchPoint = touches.first as! UITouch
+    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        let touchPoint = touches.first! as UITouch
         
         if dragActivated > -1 && dragActivated < imageViews.count {
             self.dragImage(touchPoint.locationInView(self.view))
@@ -630,7 +653,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     /*
     ** If the touch is ended by the user, insert the view where it is wanted
     */
-    override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
+    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
         var touchPoint = touches.first as! UITouch
         
         if dragActivated > -1 && dragActivated < imageViews.count {
@@ -641,7 +664,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     /*
     ** If the touch is cancelled because of a system event: act as if the user didn't move the view properly
     */
-    override func touchesCancelled(touches: Set<NSObject>!, withEvent event: UIEvent!) {
+    override func touchesCancelled(touches: Set<UITouch>?, withEvent event: UIEvent?) {
         var touchPoint = touches.first as! UITouch
         
         if dragActivated > -1 && dragActivated < imageViews.count {
@@ -706,11 +729,14 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             
             if fileManager.fileExistsAtPath(videoOutputPath) {
                 var err: NSError?
-                if !fileManager.removeItemAtPath(videoOutputPath, error: &err) {
+                do {
+                    try fileManager.removeItemAtPath(videoOutputPath)
+                } catch var error as NSError {
+                    err = error
                     
                 }
             }
-            if self.selectedDevice!.device.flashActive && self.selectedDevice!.device.lockForConfiguration(&error) {
+            if self.selectedDevice!.device.flashActive && self.selectedDevice!.device.lockForConfiguration() {
                 self.selectedDevice!.device.flashMode = AVCaptureFlashMode.Off
                 self.selectedDevice!.device.unlockForConfiguration()
             }
@@ -766,7 +792,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         if error != nil {
             if error!.code != 0 {
                 if error.userInfo != nil {
-                    var value: AnyObject? = error.userInfo![AVErrorRecordingSuccessfullyFinishedKey]
+                    var value: AnyObject? = error.userInfo[AVErrorRecordingSuccessfullyFinishedKey]
                     if value != nil {
                         successfulRecord = value!.boolValue
                     }
@@ -783,7 +809,13 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             
             var fileSize: UInt64 = 0 // this is incase the user manages to record another video before this is processed
             
-            var attr: NSDictionary? = NSFileManager.defaultManager().attributesOfItemAtPath(outputFileURL.path!, error: &err)
+            var attr: NSDictionary?
+            do {
+                attr = try NSFileManager.defaultManager().attributesOfItemAtPath(outputFileURL.path!)
+            } catch var error as NSError {
+                err = error
+                attr = nil
+            }
             if let _attr = attr {
                 fileSize = _attr.fileSize()
             }
@@ -796,22 +828,25 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             // Change this preset for quality
             var exportSession = AVAssetExportSession(asset: avAsset, presetName: AVAssetExportPresetLowQuality)
             
-            exportSession.outputURL = NSURL(fileURLWithPath: "\(NSString(string: outputFileURL.path!).substringWithRange(NSRange(location: 0, length: count(outputFileURL.path!) - 4))).mp4")!
+            exportSession.outputURL = NSURL(fileURLWithPath: "\(NSString(string: outputFileURL.path!).substringWithRange(NSRange(location: 0, length: (outputFileURL.path!).characters.count - 4))).mp4")!
             
             var fileManager = NSFileManager.defaultManager()
             var error: NSError?
             
             if fileManager.fileExistsAtPath(exportSession.outputURL.path!) {
                 var err: NSError?
-                if !fileManager.removeItemAtPath(exportSession.outputURL.path!, error: &err) {
+                do {
+                    try fileManager.removeItemAtPath(exportSession.outputURL.path!)
+                } catch var error as NSError {
+                    err = error
                     
                 }
             }
             
             // Compress the video and save it as an HTML5 compatible format (.mp4)
             exportSession.shouldOptimizeForNetworkUse = true
-            exportSession.outputFileType = AVFileTypeMPEG4
-            NSLog("MP4 url location: \(exportSession.outputURL.path)")
+            exportSession!.outputFileType = AVFileTypeMPEG4
+            NSLog("MP4 url location: \(exportSession!.outputURL.path)")
             
             exportSession.exportAsynchronouslyWithCompletionHandler({ Void in
                 switch (exportSession.status) {
@@ -844,7 +879,13 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
                     } else {
                         NSLog("Video deleted while processing.")
                         var err: NSError?
-                        NSFileManager.defaultManager().removeItemAtPath(exportSession.outputURL.path!, error: &err)
+                        do {
+                            try NSFileManager.defaultManager().removeItemAtPath(exportSession.outputURL.path!)
+                        } catch var error as NSError {
+                            err = error
+                        } catch {
+                            fatalError()
+                        }
                     }
                     break
                     
@@ -899,13 +940,13 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             
             var err: NSError?
             
-            if self.selectedDevice!.device.hasFlash && self.selectedDevice!.device.lockForConfiguration(&err) {
+            if self.selectedDevice!.device.hasFlash && self.selectedDevice!.device.lockForConfiguration() {
                 self.selectedDevice!.device.flashMode = self.flashMode
                 self.selectedDevice!.device.unlockForConfiguration()
             }
             
             if err != nil {
-                println(err)
+                print(err)
             }
             
             // Take the picture
@@ -922,10 +963,10 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
                     
                     recentImage!.cropAndResize(self.size!, completionHandler: { (resizedImage:UIImage, data:NSData) -> () in
                         var compressedImage = UIImageJPEGRepresentation(resizedImage, CGFloat(Bakkle.sharedInstance.image_quality))
-                        self.images[itemIndex] = UIImage(data: compressedImage)!
+                        self.images[itemIndex] = UIImage(data: compressedImage!)!
                         self.displayStillImage(self.images[itemIndex])
                         self.populatePhotos()
-                        UIView.animateWithDuration(CameraView.FLASH_TIME * 2, delay: CameraView.FLASH_TIME, options: nil, animations: {
+                        UIView.animateWithDuration(CameraView.FLASH_TIME * 2, delay: CameraView.FLASH_TIME, options: [], animations: {
                             self.flashView.alpha = 0
                             }, completion: { Void in
                                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(CameraView.IMAGE_FREEZE_TIME * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
@@ -965,13 +1006,13 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     }
     
     // UIImagePickerController finished
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
-        var itemIndex = self.imageCount++ // set the index to imageCount then increment the total count by 1
-        var image = info[UIImagePickerControllerOriginalImage] as! UIImage
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+        let itemIndex = self.imageCount++ // set the index to imageCount then increment the total count by 1
+        let image = info[UIImagePickerControllerOriginalImage] as! UIImage
         // Crop to the desired size and compress to a .jpg
         image.cropAndResize(self.size!, completionHandler: { (resizedImage:UIImage, data:NSData) -> () in
-            var compressedImage = UIImageJPEGRepresentation(resizedImage, CGFloat(Bakkle.sharedInstance.image_quality))
-            self.images[itemIndex] = UIImage(data: compressedImage)!
+            let compressedImage = UIImageJPEGRepresentation(resizedImage, CGFloat(Bakkle.sharedInstance.image_quality))
+            self.images[itemIndex] = UIImage(data: compressedImage!)!
             self.displayStillImage(self.images[itemIndex])
             
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(CameraView.IMAGE_FREEZE_TIME * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
@@ -1031,7 +1072,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         
         // This is needed to stop any concurrent modification for the first for loop
         for i in 0...(self.images.count - 1) {
-            self.images[i] = i >= imagesNoSpace.count ? (self.isVideo[i] ? self.images[i] : UIImage.alloc()) : imagesNoSpace[i];
+            self.images[i] = i >= imagesNoSpace.count ? (self.isVideo[i] ? self.images[i] : UIImage()) : imagesNoSpace[i];
         }
         
         imageCount = imagesNoSpace.count
@@ -1043,8 +1084,8 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     func animateSlide(fromIndex: Int, toIndex: Int) {
         // If the index is valid and the image isn't nil
         if fromIndex < self.imageViews.count && toIndex < self.imageViews.count && fromIndex != toIndex && self.imageViews[fromIndex].image != nil {
-            var startPoint = self.imageViews[fromIndex].convertPoint(self.imageViews[fromIndex].frame.origin, toView: self.view)
-            var slideView = UIImageView(frame: CGRectMake(startPoint.x, startPoint.y, self.imageViews[fromIndex].frame.width, self.imageViews[fromIndex].frame.height))
+            let startPoint = self.imageViews[fromIndex].convertPoint(self.imageViews[fromIndex].frame.origin, toView: self.view)
+            let slideView = UIImageView(frame: CGRectMake(startPoint.x, startPoint.y, self.imageViews[fromIndex].frame.width, self.imageViews[fromIndex].frame.height))
             slideView.image = self.imageViews[fromIndex].image
             slideView.layer.cornerRadius = 15.0
             slideView.layer.borderColor = UIColor.whiteColor().CGColor
@@ -1071,9 +1112,9 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     
     // Hides and disables buttons when needed throughout the app
     func buttonEnabledHandler() {
-        var notDragging = self.dragActivated < 0
-        var imageCountGreaterThanMaxCount = (imageCount + self.videoCount) >= CameraView.MAX_IMAGE_COUNT
-        var recordButtonNotHeld =  !self.videoOutput.recording
+        let notDragging = self.dragActivated < 0
+        let imageCountGreaterThanMaxCount = (imageCount + self.videoCount) >= CameraView.MAX_IMAGE_COUNT
+        let recordButtonNotHeld =  !self.videoOutput.recording
         
         self.closeButton.enabled = notDragging && recordButtonNotHeld
         self.closeButton.hidden = !self.closeButton.enabled
@@ -1104,14 +1145,14 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     // If the user holds a photo, set it up for rearrangement and dragging
     @IBAction func photoHeld(sender: UILongPressGestureRecognizer) {
         if ((sender.view!) as! UIImageView).image != nil && self.dragActivated < 0 && !self.isVideo[sender.view!.tag - 31] {
-            var newW:CGFloat = sender.view!.frame.width * 1.1
-            var newH:CGFloat = sender.view!.frame.height * 1.1
-            var actualBeginPt = sender.view!.convertPoint(sender.view!.frame.origin, toView: self.view)
+            let newW:CGFloat = sender.view!.frame.width * 1.1
+            let newH:CGFloat = sender.view!.frame.height * 1.1
+            let actualBeginPt = sender.view!.convertPoint(sender.view!.frame.origin, toView: self.view)
             
             draggedImage = UIImageView(frame: CGRectMake(actualBeginPt.x, actualBeginPt.y, sender.view!.frame.width, sender.view!.frame.height))
             
-            var x: CGFloat = actualBeginPt.x - (newW - sender.view!.frame.width)
-            var y: CGFloat = actualBeginPt.y - (newH - sender.view!.frame.height)
+            let x: CGFloat = actualBeginPt.x - (newW - sender.view!.frame.width)
+            let y: CGFloat = actualBeginPt.y - (newH - sender.view!.frame.height)
             draggedImage!.layer.cornerRadius = 15.0
             draggedImage!.layer.borderColor = UIColor.whiteColor().CGColor
             draggedImage!.layer.borderWidth = 1.0
@@ -1151,7 +1192,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         
         var i = 0
         for imageView in self.imageViews {
-            var relativePoint = imageView.convertPoint(point, fromCoordinateSpace: self.view)
+            let relativePoint = imageView.convertPoint(point, fromCoordinateSpace: self.view)
             
             if self.isVideo[i] {
                 break
@@ -1173,8 +1214,8 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     
     // Moves images to accomadate the given "blank" space
     func rearrangePhotos(blankSpace: Int, previousSpace: Int) {
-        var increment = previousSpace > blankSpace ? -1: 1
-        for i in stride(from: previousSpace, to: blankSpace, by: increment) {
+        let increment = previousSpace > blankSpace ? -1: 1
+        for i in previousSpace.stride(to: blankSpace, by: increment) {
             animateSlide(i + increment, toIndex: i)
         }
         
@@ -1184,7 +1225,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     // Animate the dragged image to "drop" on the selected position
     func released() {
         if self.draggedImage != nil {
-            var oldDragAct = self.dragActivated
+            let oldDragAct = self.dragActivated
             self.dragActivated = -1
             UIView.animateWithDuration(CameraView.IMAGE_SLIDE_ANIMATION_TIME, animations: { Void in
                 self.draggedImage!.frame = CGRectMake(self.imageViewX[oldDragAct], self.imageViewY, self.imageViews[oldDragAct].frame.width, self.imageViews[oldDragAct].frame.height)
@@ -1197,7 +1238,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
                 // Ensure that all animations are done before we finish releasing
                 // this shouldn't need to run, though it is a failsafe
                 var wait = false
-                do {
+                repeat {
                     for var i = 0; i < self.lockRelease.count && !wait; i++ {
                         wait = wait || self.lockRelease[i]
                     }
@@ -1214,7 +1255,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
                         imagesNoSpace.append(self.imageViews[i].image!)
                         self.images[i] = self.imageViews[i].image!
                     } else {
-                        self.images[i] = UIImage.alloc()
+                        self.images[i] = UIImage()
                     }
                 }
                 
@@ -1229,7 +1270,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     @IBAction func photoPreview(sender: UITapGestureRecognizer) {
         // Image view tags should all be 31 higher than their position in the image view array
         // 30 represents their superview's level on the ui they are (3rd row down) 1 represents the array offset
-        var imageViewIndex = sender.view!.tag - 31
+        let imageViewIndex = sender.view!.tag - 31
         
         let validTags = [1, 10, 20, 21, 30, 31, 32, 33, 34, 40, 41, 42, 43]
         
@@ -1260,19 +1301,19 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         // conversion to get the image number is integer division / 10 (get rid of ones)
         // subtract by 31 (row + offset) and the result is the imageView number from left
         // to right in the range of 0-3
-        var removeImageIndex = sender.tag / 10 - 31
+        let removeImageIndex = sender.tag / 10 - 31
         
         if removeImageIndex < 0 {
             NSLog("[CameraView] Error in removePhoto: Unknown Sender\n\(sender)")
         } else if imageViews[removeImageIndex].image != nil {
             var alertController: UIAlertController?
-            var defaultAction = UIAlertAction(title: "NO", style: .Default, handler: nil)
+            let defaultAction = UIAlertAction(title: "NO", style: .Default, handler: nil)
             var acceptAction: UIAlertAction?
             
             // Ensure the user wants to remove the video or photo, then if they tap "YES" remove it
             if self.isVideo[removeImageIndex] {
                 alertController = UIAlertController(title: "Remove Video", message: "Are you sure that you want to remove video #\(CameraView.MAX_IMAGE_COUNT - removeImageIndex)?", preferredStyle: .Alert)
-                acceptAction = UIAlertAction(title: "YES", style: .Destructive, handler: { (action: UIAlertAction!) in
+                acceptAction = UIAlertAction(title: "YES", style: .Destructive, handler: { (action: UIAlertAction) in
                     self.isVideo[removeImageIndex] = false
                     self.videoCount--
                     self.videos[CameraView.MAX_IMAGE_COUNT - removeImageIndex - 1] = NSURL()
@@ -1284,14 +1325,14 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
                 })
             } else {
                 alertController = UIAlertController(title: "Remove Photo", message:"Are you sure that you want to remove image #\(removeImageIndex + 1)?", preferredStyle: .Alert)
-                acceptAction = UIAlertAction(title: "YES", style: .Destructive, handler: { (action: UIAlertAction!) in
-                    var wasDisplayingRemovedImage = self.displayingStill && self.stillImagePreview.image?.isEqual(self.imageViews[removeImageIndex].image!) != nil
+                acceptAction = UIAlertAction(title: "YES", style: .Destructive, handler: { (action: UIAlertAction) in
+                    let wasDisplayingRemovedImage = self.displayingStill && self.stillImagePreview.image?.isEqual(self.imageViews[removeImageIndex].image!) != nil
                     if wasDisplayingRemovedImage {
                         self.stillImagePreview.image = nil
                     }
                     
                     self.imageViews[removeImageIndex].image = nil
-                    self.images[removeImageIndex] = UIImage.alloc()
+                    self.images[removeImageIndex] = UIImage()
                     
                     self.imageCount--
                     self.populatePhotos()
@@ -1329,7 +1370,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
                 }
                 
                 if i < videos.count {
-                    if self.videos[i].absoluteString != nil && count(self.videos[i].absoluteString!) > 0 {
+                    if (self.videos[i].absoluteString).characters.count > 0 {
                         destinationVC.videos.append(self.videos[i])
                     }
                     

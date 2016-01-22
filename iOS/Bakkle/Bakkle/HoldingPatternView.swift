@@ -105,7 +105,7 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
         
         let notificationCenter = NSNotificationCenter.defaultCenter()
         let mainQueue = NSOperationQueue.mainQueue()
-        var observer = notificationCenter.addObserverForName(Bakkle.bkHoldingUpdate, object: nil, queue: mainQueue) { _ in
+        _ = notificationCenter.addObserverForName(Bakkle.bkHoldingUpdate, object: nil, queue: mainQueue) { _ in
             self.classifyData()
             self.tableView.reloadData()
         }
@@ -184,8 +184,8 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
             case "Active":
                 var viewTime = Bakkle.sharedInstance.holdingItems[index].valueForKey("view_time") as! String
                 viewTime = viewTime.substringToIndex(viewTime.endIndex.predecessor())
-                var viewDate :NSDate = dateFormatter.dateFromString(viewTime)!
-                var currentTime = NSDate()
+                let viewDate :NSDate = dateFormatter.dateFromString(viewTime)!
+                let currentTime = NSDate()
                 if viewDate.timeIntervalSinceDate(currentTime) + 259200 <= 0 {
                     self.expiredItem.append(index)
                 }else{
@@ -217,17 +217,17 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
             return 0
         }
         if activeItem.count != 0 || expiredItem.count != 0 || soldItem.count != 0 {
-            println("Actually got items from the watch list!")
-            println(String(Bakkle.sharedInstance.holdingItems.count) + " items in watch list")
+            print("Actually got items from the watch list!")
+            print(String(Bakkle.sharedInstance.holdingItems.count) + " items in watch list")
             return activeItem.count + soldItem.count + expiredItem.count + 3
         }
-        println("Didn't get anything in watch list")
+        print("Didn't get anything in watch list")
         return 3
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if tableView.numberOfRowsInSection(0) == 3 {
-            let cell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier("messageCell") as! UITableViewCell
+            let cell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier("messageCell")! as UITableViewCell
             if indexPath.row == 1 {
                 cell.textLabel!.text = "There are no items!"
             }
@@ -257,7 +257,7 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
             return cell
         }
         
-        println("[HoldingPattern] Updating table view")
+        print("[HoldingPattern] Updating table view")
         let cell = self.tableView.dequeueReusableCellWithIdentifier("HoldingPatternCell") as! HoldingPatternCell
         cell.itemImage?.image = UIImage(named: "blank.png")
         cell.itemImage?.contentMode = UIViewContentMode.ScaleAspectFill
@@ -269,8 +269,8 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
         let firstURL = imgURLs[0] as String
         let imgURL = NSURL(string: firstURL)
         let viewTime = entry.valueForKey("view_time") as! String
-        var viewDate :NSDate = dateFormatter.dateFromString(viewTime)!
-        var currentTime = NSDate()
+        let viewDate :NSDate = dateFormatter.dateFromString(viewTime)!
+        let currentTime = NSDate()
         cell.timeRemaining = viewDate.timeIntervalSinceDate(currentTime) + 259200
         
         
@@ -328,7 +328,7 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     func noInternetConnectionAlert(){
-        var alert = UIAlertController(title: "No Internet", message: "There was an error! Please check your Network Connection and try again", preferredStyle: UIAlertControllerStyle.Alert)
+        let alert = UIAlertController(title: "No Internet", message: "There was an error! Please check your Network Connection and try again", preferredStyle: UIAlertControllerStyle.Alert)
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
         self.presentViewController(alert, animated: true, completion: nil)
     }

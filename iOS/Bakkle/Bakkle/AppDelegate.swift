@@ -48,7 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
         else  {
-            print(Bakkle.sharedInstance.first_name)
+            print(Bakkle.sharedInstance.first_name, terminator: "")
             Bakkle.sharedInstance.login({ () -> () in
                 
                 if let options = launchOptions as? [String: AnyObject],
@@ -68,7 +68,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
     }
     
-    func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject?) -> Bool {
+    func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
         return FBSDKApplicationDelegate.sharedInstance().application(application, openURL: url, sourceApplication: sourceApplication, annotation: annotation)
     }
     
@@ -91,7 +91,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Register for push notifications
         if application.respondsToSelector("registerUserNotificationSettings:") {
             
-            let types:UIUserNotificationType = (.Alert | .Badge | .Sound)
+            let types:UIUserNotificationType = ([.Alert, .Badge, .Sound])
             let settings:UIUserNotificationSettings = UIUserNotificationSettings(forTypes: types, categories: nil)
             
             application.registerUserNotificationSettings(settings)
@@ -127,13 +127,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // Push Notifications
     func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
         
-        println("Registered for notifications")
+        print("Registered for notifications")
         Bakkle.sharedInstance.register_push(deviceToken)
     }
     
     func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
         
-        println("Failed to register for notifications")
+        print("Failed to register for notifications")
         /* DO nothing on failure */
     }
     
@@ -198,15 +198,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UIApplication.sharedApplication().applicationIconBadgeNumber = 0
         
         if application.applicationState == UIApplicationState.Active {
-            var localNotification: UILocalNotification = UILocalNotification()
+            let localNotification: UILocalNotification = UILocalNotification()
             localNotification.userInfo = userInfo
             localNotification.fireDate = NSDate()
             
-            let blob: Dictionary = userInfo as Dictionary
             if let aps = userInfo["aps"] as? NSDictionary {
-                println("There is an aps")
+                print("There is an aps")
                 if let message = aps["alert"] as? String {
-                    println("Message received: \(message)")
+                    print("Message received: \(message)")
                     localNotification.alertBody = message
                     localNotification.userInfo = userInfo
                 }
@@ -216,22 +215,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
             var error:NSError?
             
-            AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryAmbient, error: nil)
-            AVAudioSession.sharedInstance().setActive(true, error: nil)
+            do {
+                try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryAmbient)
+            } catch _ {
+            }
+            do {
+                try AVAudioSession.sharedInstance().setActive(true)
+            } catch _ {
+            }
             
             let soundURL = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource("Bakkle_Notification_new", ofType: "m4r")!)
             
-            audioPlayer = AVAudioPlayer(contentsOfURL: soundURL, error: &error)
+            do {
+                audioPlayer = try AVAudioPlayer(contentsOfURL: soundURL)
+            } catch let error1 as NSError {
+                error = error1
+            }
             
             if (error != nil) {
-                println("There was an error: \(error)")
+                print("There was an error: \(error)")
             } else {
                 audioPlayer.prepareToPlay()
                 audioPlayer.play()
             }
             
         } else if let item_id = userInfo["item_id"] as? Int {
-            println("There is a item_id \(item_id)")
+            print("There is a item_id \(item_id)")
             NSNotificationCenter.defaultCenter().postNotificationName("pushNotification", object: nil, userInfo: userInfo)
             
             dispatch_async(dispatch_get_main_queue(),{
@@ -240,9 +249,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
-    func application(application: UIApplication, handleWatchKitExtensionRequest userInfo: [NSObject : AnyObject]?, reply: (([NSObject : AnyObject]!) -> Void)!)
+    func application(application: UIApplication, handleWatchKitExtensionRequest userInfo: [NSObject : AnyObject]?, reply: (([NSObject : AnyObject]?) -> Void))
     {
-        var dictionary = userInfo! as NSDictionary
+        let dictionary = userInfo! as NSDictionary
         
         if let type = dictionary.objectForKey("type") as? String
         {
@@ -253,7 +262,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if type == "fetch"
             {
                 if Bakkle.sharedInstance.feedItems.count > 0{
-                    var topItem = Bakkle.sharedInstance.feedItems[0]
+                    let topItem = Bakkle.sharedInstance.feedItems[0]
                     let imgURLs = topItem.valueForKey("image_urls") as! NSArray
                     let imgURL = imgURLs[0] as! String
                     let fancyImgURL = NSURL(string: imgURL)
@@ -269,7 +278,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     reply(["success":"no","item_title":"no item","item_price":"no item","item_id":"no item","item_image":"no item"])
                 }
             }else if type == "meh" {
-                println("inside meh")
+                print("inside meh")
                 if let id = dictionary.objectForKey("item_id") as? NSString {
                     Bakkle.sharedInstance.markItem("meh", item_id: id.integerValue, success: { () -> () in
                         }, fail: { () -> () in
@@ -279,7 +288,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         Bakkle.sharedInstance.feedItems.removeAtIndex(0)
                     }
                     if Bakkle.sharedInstance.feedItems.count > 0{
-                        var topItem = Bakkle.sharedInstance.feedItems[0]
+                        let topItem = Bakkle.sharedInstance.feedItems[0]
                         let imgURLs = topItem.valueForKey("image_urls") as! NSArray
                         let imgURL = imgURLs[0] as! String
                         let fancyImgURL = NSURL(string: imgURL)
@@ -298,7 +307,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     reply(["success":"no","item_title":"no item","item_price":"no item","item_id":"no item","item_image":"no item"])
                 }
             }else if type == "want" {
-                println("inside want")
+                print("inside want")
                 if let id = dictionary.objectForKey("item_id") as? NSString {
                     Bakkle.sharedInstance.markItem("want", item_id: id.integerValue, success: { () -> () in
                         }, fail: { () -> () in
@@ -308,7 +317,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         Bakkle.sharedInstance.feedItems.removeAtIndex(0)
                     }
                     if Bakkle.sharedInstance.feedItems.count > 0{
-                        var topItem = Bakkle.sharedInstance.feedItems[0]
+                        let topItem = Bakkle.sharedInstance.feedItems[0]
                         let imgURLs = topItem.valueForKey("image_urls") as! NSArray
                         let imgURL = imgURLs[0] as! String
                         let fancyImgURL = NSURL(string: imgURL)
@@ -327,7 +336,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     reply(["success":"no","item_title":"no item","item_price":"no item","item_id":"no item","item_image":"no item"])
                 }
             }else {
-                println("Got Some other key")
+                print("Got Some other key")
             }}
     }
 }
