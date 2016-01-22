@@ -1361,7 +1361,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             self.filter_distance = x
             self.debg("Restored filter_distance = \(x)")
         } else {
-            self.filter_distance = 100
+            self.filter_distance = 101
         }
         if let y = userDefaults.objectForKey("filter_price")    as? Float {
             self.filter_price = y
