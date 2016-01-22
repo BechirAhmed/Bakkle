@@ -34,7 +34,7 @@ class BuyItemView: UIViewController {
         let sellersProfile = item.valueForKey("seller") as! NSDictionary
         let facebookID = sellersProfile.valueForKey("facebook_id") as! String
         let sellersName = sellersProfile.valueForKey("display_name") as! String
-        let facebookProfileImgString = "http://graph.facebook.com/\(facebookID)/picture?width=142&height=142"
+        let facebookProfileImgString = "https://graph.facebook.com/\(facebookID)/picture?width=142&height=142"
         
         //TODO: handle case where sellers name is null
         let dividedName = sellersName.characters.split {$0 == " "}.map { String($0) }

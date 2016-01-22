@@ -345,7 +345,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     
     func profileImageURL() -> String {
         if account_type == Bakkle.bkAccountTypeFacebook {
-            return "http://graph.facebook.com/\(facebook_id_str)/picture"
+            return "https://graph.facebook.com/\(facebook_id_str)/picture"
         }
         if account_type == Bakkle.bkAccountTypeEmail {
             // TODO: lookup image URL
@@ -567,7 +567,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         
         var avatarImageURL = ""
         if self.account_type == Bakkle.bkAccountTypeFacebook {
-            avatarImageURL = "http://graph.facebook.com/\(userid)/picture"
+            avatarImageURL = "https://graph.facebook.com/\(userid)/picture"
         } else {
             avatarImageURL = "https://app.bakkle.com/img/default_profile.png"
         }

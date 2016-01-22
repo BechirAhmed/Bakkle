@@ -77,7 +77,7 @@ class ChatCell: UITableViewCell {
 
     func configureWithChat(chat: Chat) {
         let user = chat.user
-        let facebookProfileImageUrlString = "http://graph.facebook.com/\(user.facebookID)/picture?width=142&height=142"
+        let facebookProfileImageUrlString = "https://graph.facebook.com/\(user.facebookID)/picture?width=142&height=142"
         let imgURL = NSURL(string: facebookProfileImageUrlString)
         userPictureImageView.hnk_setImageFromURL(imgURL!, placeholder: UIImage(named:"loading.png"), format: nil, failure: nil, success: nil)
         userPictureImageView.contentMode = UIViewContentMode.ScaleAspectFill

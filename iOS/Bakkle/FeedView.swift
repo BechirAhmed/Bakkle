@@ -30,7 +30,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     var bottomView : MDCSwipeToChooseView!
     
     // for instructional overlay appeared above the feedView
-    var instructionImgView: UIImageView!
+//    var instructionImgView: UIImageView!
     var effectView: UIVisualEffectView!
     
     var itemDetailTap: UITapGestureRecognizer!

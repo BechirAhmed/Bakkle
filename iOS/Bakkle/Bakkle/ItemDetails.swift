@@ -135,12 +135,17 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
         
         let sellerProfile: NSDictionary = item!.valueForKey("seller") as! NSDictionary
 
-        let profileImageURL = NSURL(string: sellerProfile.valueForKey("avatar_image_url") as! String)!
-        var image = UIImage(data: NSData(contentsOfURL: profileImageURL)!)
-        if (image == nil){
-            image = UIImage(named: "default_profile.png")
+        let profileImageURL = NSURL(string: sellerProfile.valueForKey("avatar_image_url") as! String)
+//        var image = UIImage(data: NSData(contentsOfURL: profileImageURL)!)
+//        if (image == nil){
+//            image = UIImage(named: "default_profile.png")
+//        }
+        if profileImageURL == nil {
+            sellerAvatar.image = UIImage(named:"default_profile.png")
+        }else{
+            sellerAvatar.hnk_setImageFromURL(profileImageURL!)
         }
-        sellerAvatar.image = image
+        
         sellerAvatar.layer.borderWidth = 2.0
         sellerAvatar.layer.borderColor = UIColor.whiteColor().CGColor
         sellerAvatar.layer.cornerRadius = sellerAvatar.layer.frame.size.width / 2

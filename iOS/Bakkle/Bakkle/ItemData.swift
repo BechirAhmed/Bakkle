@@ -51,7 +51,7 @@ class ItemData: AnyObject {
         let localRating = item.valueForKey("seller_rating") as! String
         self.rating = localRating.isEmpty ? ItemData.DEFAULT_RATING : (localRating as NSString).floatValue
         self.facebookID = sellerProfile.valueForKey("facebook_id") as! String
-        self.facebookProfileImgString = "http://graph.facebook.com/\(facebookID)/picture?width=142&height=142"
+        self.facebookProfileImgString = "https://graph.facebook.com/\(facebookID)/picture?width=142&height=142"
     }
     
     private init(item: NSObject, imgURLs: NSArray, title: String, price: String, distanceString: NSMutableAttributedString, method: String, sellerProfile: NSDictionary, sellerName: String, rating: Float32, facebookID: String, facebookProfileImgString: String) {
