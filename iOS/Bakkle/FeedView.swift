@@ -931,6 +931,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     
     @IBAction func saveToWatchList(sender: AnyObject) {
         Bakkle.sharedInstance.markItem("hold", item_id: self.item_id, duration: self.recordtime, success: {}, fail: {})
+        self.mostRecentMarked = self.item_id
         self.closeStartAChat(nil)
     }
     
