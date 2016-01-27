@@ -149,9 +149,13 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
                 let facebookID = buyer.valueForKey("facebook_id") as! String
                 
                 let buyersName = buyer.valueForKey("display_name") as! String
-                let dividedName = split(buyersName) {$0 == " "}
+                let dividedName = split(buyersName) {$0 == " "} as Array
                 let firstName = dividedName[0] as String
-                let lastName = dividedName[1] as String
+                var lastName = ""
+                if (dividedName.count == 2){
+                    lastName = dividedName[1] as String
+                }
+                
                 
                 let buyerUser = User(facebookID: facebookID, accountID: account_id, firstName: firstName, lastName: lastName)
                 var buyerChat = Chat(user: buyerUser, lastMessageText: message, lastMessageSentDate: date, chatId: id)
