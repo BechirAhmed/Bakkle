@@ -108,8 +108,9 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
         let topPrice: String = item!.valueForKey("price") as! String
         let tags = item!.valueForKey("tags") as! String
         let descriptions: String = item!.valueForKey("description") as! String
-        let location: String = item!.valueForKey("location") as! String
-        let distance = Bakkle.sharedInstance.distanceTo(CLLocation(locationString: location)) as CLLocationDistance!
+        var location: String = item!.valueForKey("location") as! String
+//        location = "0.0000,0.0000"
+        let distance = Bakkle.sharedInstance.distanceTo(CLLocation(locationString: location)) as CLLocationDistance?
         
         itemTitleLabel.text = topTitle
         itemPriceLabel.text = (topPrice as NSString).floatValue != 0 ? topPrice : "Offer"
@@ -119,7 +120,11 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
             itemTagsTextView.text = descriptions
         }
         sellerName.text = sellersName
-        itemDistanceLabel.text = String(format: "%d miles", roundDist(distance))
+        if (distance == nil){
+            itemDistanceLabel.text = "- miles"
+        }else{
+            itemDistanceLabel.text = String(format: "%d miles", roundDist(distance!))
+        }
         
         for index in 0...imgURLs.count-1{
             let firstURL = imgURLs[index] as! String
