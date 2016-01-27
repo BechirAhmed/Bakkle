@@ -3168,16 +3168,29 @@
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="DESCRIPTION" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cs7-Lb-SdC">
                                                         <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
                                                         <animations/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="94.5" id="AIA-Sg-jkT"/>
+                                                        </constraints>
                                                         <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="14"/>
                                                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                         <nil key="highlightedColor"/>
+                                                        <variation key="default">
+                                                            <mask key="constraints">
+                                                                <exclude reference="AIA-Sg-jkT"/>
+                                                            </mask>
+                                                        </variation>
+                                                        <variation key="heightClass=regular-widthClass=compact">
+                                                            <mask key="constraints">
+                                                                <include reference="AIA-Sg-jkT"/>
+                                                            </mask>
+                                                        </variation>
                                                     </label>
                                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="V86-Gy-omu">
                                                         <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                                         <animations/>
                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="14"/>
-                                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
                                                         <connections>
                                                             <outlet property="delegate" destination="6AS-g2-sDb" id="7U5-ww-PXj"/>
                                                         </connections>
@@ -3185,15 +3198,15 @@
                                                 </subviews>
                                                 <animations/>
                                                 <constraints>
-                                                    <constraint firstAttribute="trailing" secondItem="V86-Gy-omu" secondAttribute="trailing" constant="16" id="FiY-Gp-WsN">
-                                                        <variation key="heightClass=regular-widthClass=compact" constant="8"/>
-                                                    </constraint>
                                                     <constraint firstItem="Cs7-Lb-SdC" firstAttribute="top" secondItem="I8s-9b-w66" secondAttribute="top" constant="8" id="Hpg-xL-6C0"/>
-                                                    <constraint firstItem="V86-Gy-omu" firstAttribute="top" secondItem="I8s-9b-w66" secondAttribute="top" constant="8" id="MYs-BM-3WG"/>
+                                                    <constraint firstItem="V86-Gy-omu" firstAttribute="width" secondItem="I8s-9b-w66" secondAttribute="width" id="L2x-In-RhG"/>
+                                                    <constraint firstItem="V86-Gy-omu" firstAttribute="leading" secondItem="I8s-9b-w66" secondAttribute="leading" constant="4" id="V1O-fU-L4M"/>
+                                                    <constraint firstItem="V86-Gy-omu" firstAttribute="top" secondItem="Cs7-Lb-SdC" secondAttribute="bottom" constant="1.5" id="aTL-Zq-ddh">
+                                                        <variation key="heightClass=regular-widthClass=compact" constant="2"/>
+                                                    </constraint>
                                                     <constraint firstAttribute="bottom" secondItem="V86-Gy-omu" secondAttribute="bottom" constant="16" id="koQ-Yn-8Xb">
                                                         <variation key="heightClass=regular-widthClass=compact" constant="8"/>
                                                     </constraint>
-                                                    <constraint firstItem="V86-Gy-omu" firstAttribute="leading" secondItem="Cs7-Lb-SdC" secondAttribute="trailing" constant="8" id="tL9-Rk-qVt"/>
                                                     <constraint firstItem="Cs7-Lb-SdC" firstAttribute="leading" secondItem="I8s-9b-w66" secondAttribute="leading" constant="8" id="umb-Nh-5GR"/>
                                                 </constraints>
                                                 <variation key="default">
@@ -3204,10 +3217,10 @@
                                                     <mask key="constraints">
                                                         <exclude reference="Hpg-xL-6C0"/>
                                                         <exclude reference="umb-Nh-5GR"/>
-                                                        <exclude reference="FiY-Gp-WsN"/>
-                                                        <exclude reference="MYs-BM-3WG"/>
+                                                        <exclude reference="L2x-In-RhG"/>
+                                                        <exclude reference="V1O-fU-L4M"/>
+                                                        <exclude reference="aTL-Zq-ddh"/>
                                                         <exclude reference="koQ-Yn-8Xb"/>
-                                                        <exclude reference="tL9-Rk-qVt"/>
                                                     </mask>
                                                 </variation>
                                                 <variation key="heightClass=regular-widthClass=compact">
@@ -3218,10 +3231,10 @@
                                                     <mask key="constraints">
                                                         <include reference="Hpg-xL-6C0"/>
                                                         <include reference="umb-Nh-5GR"/>
-                                                        <include reference="FiY-Gp-WsN"/>
-                                                        <include reference="MYs-BM-3WG"/>
+                                                        <include reference="L2x-In-RhG"/>
+                                                        <include reference="V1O-fU-L4M"/>
+                                                        <include reference="aTL-Zq-ddh"/>
                                                         <include reference="koQ-Yn-8Xb"/>
-                                                        <include reference="tL9-Rk-qVt"/>
                                                     </mask>
                                                 </variation>
                                             </view>
@@ -6216,9 +6229,6 @@
                                                     <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="15"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
-                                                    <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
-                                                        <rect key="frame" x="99" y="8" width="212.5" height="20.5"/>
-                                                    </variation>
                                                 </label>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ABU-0d-c2I">
                                                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
@@ -7139,9 +7149,6 @@
                                                 <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="17"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
-                                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
-                                                    <rect key="frame" x="296.5" y="8" width="54.5" height="23.5"/>
-                                                </variation>
                                             </label>
                                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="101" minValue="0.0" maxValue="101" translatesAutoresizingMaskIntoConstraints="NO" id="YEI-ei-kBo" userLabel="distance">
                                                 <rect key="frame" x="36" y="343" width="300" height="31"/>
