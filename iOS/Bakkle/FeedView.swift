@@ -14,7 +14,7 @@ import Haneke
 class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDelegate, UINavigationControllerDelegate, MDCSwipeToChooseDelegate, UIAlertViewDelegate {
     
     let kNUM_TUTORIAL_SCREENS = 6
-
+    
     let menuSegue = "presentNav"
     let itemDetailSegue = "ItemDetailSegue"
     let refineSegue = "RefineSegue"
@@ -70,6 +70,8 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     var keepBrowsingContext = 0
     var recordstart = NSDate()
     var recordtime: Double = 0.0
+    
+    var mostRecentMarked : NSObject?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -187,7 +189,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         // check internet connection
         checkInternetConnection()
         
-        // check tutorial 
+        // check tutorial
         checkTutorial()
         
     }
@@ -205,7 +207,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell :TutorialCell = collectionView.dequeueReusableCellWithReuseIdentifier(tutorialCellIdentifier, forIndexPath: indexPath) as! TutorialCell
-    
+        
         cell.imgView.contentMode = UIViewContentMode.ScaleAspectFill
         cell.imgView.clipsToBounds  = true
         switch (indexPath.row) {
@@ -230,7 +232,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         var page: Int = Int(floor((tutorialCollectionView.contentOffset.x - pageWidth / 2) / pageWidth)) + 1
         pageControl.currentPage = page
     }
-
+    
     @IBAction func closeTutorial(button: UIButton) {
         tutorialView.hidden = true
         var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
@@ -433,8 +435,8 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             requestUpdates();
         }
         
-        // Remove the item that was just marked from the view
-        if Bakkle.sharedInstance.feedItems.count>0 {
+        let it = (Bakkle.sharedInstance.feedItems[0] as! NSDictionary).objectForKey("pk") as! Int
+        if it == self.mostRecentMarked {
             Bakkle.sharedInstance.feedItems.removeAtIndex(0)
         }
         
@@ -604,7 +606,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                 if let x: AnyObject = topItem.valueForKey("pk") {
                     self.item_id = Int(x.intValue)
                 }
-            
+                
                 setupView(self.swipeView, item: topItem)
                 
                 self.view.addSubview(swipeView)
@@ -641,7 +643,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             self.progressIndicator.alpha = 0
             noNewItemsLabel.alpha = 1
         }
-    
+        
         checkInternetConnection()
         checkTutorial()
     }
@@ -676,6 +678,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             let recordend = NSDate();
             self.recordtime = recordend.timeIntervalSinceDate(recordstart);
             Bakkle.sharedInstance.markItem("meh", item_id: self.item_id, duration: self.recordtime, success: {}, fail: {})
+            self.mostRecentMarked = self.item_id
             loadNext()
             break
         case MDCSwipeDirection.Right:
@@ -700,6 +703,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             self.recordtime = recordend.timeIntervalSinceDate(recordstart);
             
             Bakkle.sharedInstance.markItem("hold", item_id: self.item_id, duration: self.recordtime, success: {}, fail: {})
+            self.mostRecentMarked = self.item_id
             loadNext()
             break
         case MDCSwipeDirection.Down:
@@ -713,8 +717,11 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                 if report != nil {
                     println(report.text)
                     Bakkle.sharedInstance.markItem("report", item_id: self.item_id, message: report.text, duration: self.recordtime, success: {}, fail: {})
+                    self.mostRecentMarked = self.item_id
+                    
                 } else {
                     Bakkle.sharedInstance.markItem("report", item_id: self.item_id, duration: self.recordtime,success: {}, fail: {})
+                    self.mostRecentMarked = self.item_id
                 }
                 self.loadNext()
             })
