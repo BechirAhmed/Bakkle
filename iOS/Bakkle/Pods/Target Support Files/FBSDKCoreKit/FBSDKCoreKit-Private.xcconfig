@@ -1,0 +1,6 @@
+#include "FBSDKCoreKit.xcconfig"
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
+HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers/Private" "${PODS_ROOT}/Headers/Private/FBSDKCoreKit" "${PODS_ROOT}/Headers/Private/FBSDKCoreKit/FBSDKCoreKit" "${PODS_ROOT}/Headers/Private/FBSDKCoreKit/FBSDKCoreKit/Internal" "${PODS_ROOT}/Headers/Private/FBSDKCoreKit/FBSDKCoreKit/Internal/AppEvents" "${PODS_ROOT}/Headers/Private/FBSDKCoreKit/FBSDKCoreKit/Internal/AppLink" "${PODS_ROOT}/Headers/Private/FBSDKCoreKit/FBSDKCoreKit/Internal/Base64" "${PODS_ROOT}/Headers/Private/FBSDKCoreKit/FBSDKCoreKit/Internal/BridgeAPI" "${PODS_ROOT}/Headers/Private/FBSDKCoreKit/FBSDKCoreKit/Internal/BridgeAPI/ProtocolVersions" "${PODS_ROOT}/Headers/Private/FBSDKCoreKit/FBSDKCoreKit/Internal/Cryptography" "${PODS_ROOT}/Headers/Private/FBSDKCoreKit/FBSDKCoreKit/Internal/ErrorRecovery" "${PODS_ROOT}/Headers/Private/FBSDKCoreKit/FBSDKCoreKit/Internal/Network" "${PODS_ROOT}/Headers/Private/FBSDKCoreKit/FBSDKCoreKit/Internal/ServerConfiguration" "${PODS_ROOT}/Headers/Private/FBSDKCoreKit/FBSDKCoreKit/Internal/TokenCaching" "${PODS_ROOT}/Headers/Private/FBSDKCoreKit/FBSDKCoreKit/Internal/UI" "${PODS_ROOT}/Headers/Private/FBSDKCoreKit/FBSDKCoreKit/Internal/WebDialog" "${PODS_ROOT}/Headers/Public"
+OTHER_LDFLAGS = ${FBSDKCOREKIT_OTHER_LDFLAGS}
+PODS_ROOT = ${SRCROOT}
+SKIP_INSTALL = YES

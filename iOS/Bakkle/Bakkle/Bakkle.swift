@@ -8,6 +8,7 @@
 
 import Foundation
 import Reachability
+import TCMobileProvision
 
 class Bakkle : NSObject, CLLocationManagerDelegate {
     
@@ -730,7 +731,8 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         let request = NSMutableURLRequest(URL: url!)
 
         request.HTTPMethod = "POST"
-        let postString = "auth_token=\(self.auth_token)&device_uuid=\(self.deviceUUID)&device_token=\(deviceToken)"
+        let apsnMode = self.apnsMode()
+        let postString = "auth_token=\(self.auth_token)&device_uuid=\(self.deviceUUID)&device_token=\(deviceToken)&apns_mode=\(apnsMode)"
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
 
         println("[Bakkle] register_push")
@@ -1565,5 +1567,15 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     
     
     // HELPERS
+ 
+    // production
+    func apnsMode() -> String {
+        let mobileprovisionPath = NSBundle.mainBundle().bundlePath
+        let mobileprovision = TCMobileProvision(data: NSData(contentsOfFile: mobileprovisionPath))
+        let entitlements = mobileprovision.dict["Entitlements"]! as! NSDictionary
+        let apsEnvironment = entitlements["aps-environment"] as! String
+        
+        return apsEnvironment
+    }
     
 }

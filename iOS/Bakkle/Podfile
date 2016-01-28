@@ -9,4 +9,5 @@ target 'Bakkle' do
   pod 'FBSDKShareKit'
   pod 'Reachability'
   pod 'Bolts', '~> 1.5.0'
+  pod 'TCMobileProvision'
 end
