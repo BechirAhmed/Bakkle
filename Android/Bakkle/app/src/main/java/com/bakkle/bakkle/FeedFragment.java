@@ -339,9 +339,13 @@ public class FeedFragment extends Fragment
 
         flingContainer.removeAllViewsInLayout();
 
-        adapter = new FeedAdapter(getActivity(), R.layout.feed_item, items);
-        flingContainer.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+        if (getContext() != null && items != null) {
+            adapter = new FeedAdapter(getContext(), R.layout.feed_item, items);
+            flingContainer.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+        } else {
+            showError();
+        }
     }
 
     public List<FeedItem> processJson(JSONObject json) throws JSONException

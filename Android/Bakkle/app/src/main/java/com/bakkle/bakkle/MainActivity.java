@@ -247,11 +247,6 @@ public class MainActivity extends AppCompatActivity
     protected void onResume()
     {
         super.onResume();
-        FeedFragment fragment = (FeedFragment) getSupportFragmentManager().findFragmentByTag(
-                Constants.FEED);
-        if (fragment != null) {
-            fragment.refreshFeed();
-        }
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(mRegistrationBroadcastReceiver,
                         new IntentFilter("registrationComplete"));
