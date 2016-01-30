@@ -353,6 +353,8 @@ public class AddItemActivity extends AppCompatActivity
         @Override
         public void onResponse(JSONObject response)
         {
+            setResult(Constants.REUSLT_CODE_OK);
+            finish();
             try {
                 if (response.getInt("success") == 1) {
                     if (share) {

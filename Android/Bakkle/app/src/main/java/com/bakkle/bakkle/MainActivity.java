@@ -85,7 +85,8 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view)
             {
                 if (prefs.isLoggedIn()) {
-                    startActivity(new Intent(MainActivity.this, AddItemActivity.class));
+                    startActivityForResult(new Intent(MainActivity.this, AddItemActivity.class),
+                            Constants.REQUEST_CODE_POSTED_ITEM_SUCCESSFULLY);
                 } else {
                     startActivityForResult(new Intent(MainActivity.this, RegisterActivity.class),
                             Constants.REQUEST_CODE_POST_ITEM);
@@ -454,11 +455,14 @@ public class MainActivity extends AppCompatActivity
 
         FeedFragment fragment = (FeedFragment) getSupportFragmentManager().findFragmentByTag(
                 Constants.FEED);
-        if (fragment != null && requestCode != Constants.REQUEST_CODE_VIEW_ITEM) {
+        if (fragment != null && requestCode == Constants.REQUEST_CODE_POSTED_ITEM_SUCCESSFULLY && resultCode == Constants.REUSLT_CODE_OK) {
+            fragment.refreshFeed();
+        } else if (fragment != null && requestCode != Constants.REQUEST_CODE_VIEW_ITEM && requestCode != Constants.REQUEST_CODE_POSTED_ITEM_SUCCESSFULLY) {
             fragment.refreshFeed();
         } else if (requestCode == Constants.REQUEST_CODE_POST_ITEM) {
             if (resultCode == Constants.RESULT_CODE_NOW_SIGNED_IN) {
-                startActivity(new Intent(this, AddItemActivity.class));
+                startActivityForResult(new Intent(this, AddItemActivity.class),
+                        Constants.REQUEST_CODE_POSTED_ITEM_SUCCESSFULLY);
             }
         }
     }

@@ -74,22 +74,23 @@ public class Constants
 
     public static final String SENDER_ID = "495026598491";
 
-    public static final int REUSLT_CODE_OK                      = -1;
-    public static final int REQUEST_CODE_VIEW_ITEM              = 0;
-    public static final int REQUEST_CODE_SEND_MESSAGE           = 1;
-    public static final int REQUEST_CODE_MAKE_OFFER             = 2;
-    public static final int RESULT_CODE_WANT                    = 3;
-    public static final int RESULT_CODE_NOPE                    = 4;
-    public static final int REQUEST_CODE_SIGN_IN                = 5;
-    public static final int RESULT_CODE_NOW_SIGNED_OUT          = 6;
-    public static final int REQUEST_CODE_PROFILE                = 7;
-    public static final int REQUEST_CODE_MARK_ITEM              = 8;
-    public static final int REQUEST_CODE_ACCESS_FINE_LOCATION   = 9;
-    public static final int REQUEST_CODE_ACCESS_COARSE_LOCATION = 10;
-    public static final int RESULT_CODE_NOW_SIGNED_IN           = 11;
-    public static final int REQUEST_CODE_POST_ITEM              = 12;
-    public static final int REQUEST_CODE_TAKE_PICTURE           = 13;
-    public static final int REQUEST_CODE_TAKE_VIDEO             = 14;
-    public static final int SHOW_TUORIAL                        = 15;
+    public static final int REUSLT_CODE_OK                        = -1;
+    public static final int REQUEST_CODE_VIEW_ITEM                = 0;
+    public static final int REQUEST_CODE_SEND_MESSAGE             = 1;
+    public static final int REQUEST_CODE_MAKE_OFFER               = 2;
+    public static final int RESULT_CODE_WANT                      = 3;
+    public static final int RESULT_CODE_NOPE                      = 4;
+    public static final int REQUEST_CODE_SIGN_IN                  = 5;
+    public static final int RESULT_CODE_NOW_SIGNED_OUT            = 6;
+    public static final int REQUEST_CODE_PROFILE                  = 7;
+    public static final int REQUEST_CODE_MARK_ITEM                = 8;
+    public static final int REQUEST_CODE_ACCESS_FINE_LOCATION     = 9;
+    public static final int REQUEST_CODE_ACCESS_COARSE_LOCATION   = 10;
+    public static final int RESULT_CODE_NOW_SIGNED_IN             = 11;
+    public static final int REQUEST_CODE_POST_ITEM                = 12;
+    public static final int REQUEST_CODE_TAKE_PICTURE             = 13;
+    public static final int REQUEST_CODE_TAKE_VIDEO               = 14;
+    public static final int SHOW_TUORIAL                          = 15;
+    public static final int REQUEST_CODE_POSTED_ITEM_SUCCESSFULLY = 16;
 
 }
