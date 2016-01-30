@@ -6,9 +6,9 @@ android {
 
     defaultConfig {
         applicationId "com.bakkle.bakkle"
-        minSdkVersion 13
+        minSdkVersion 17
         targetSdkVersion 23
-        versionCode 12
+        versionCode 13
         versionName "1.0"
     }
     buildTypes {
