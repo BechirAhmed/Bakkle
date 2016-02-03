@@ -371,7 +371,12 @@ def feed(buyer_id, device_uuid, user_location, search_text,
     app_flavor = account.app_flavor
 
     try:
-        item_list = Items.objects.exclude(pk__in=items_viewed)
+        item_list = []
+        # hide items previously viewed, unless searching
+        if search_text:
+            item_list = Items.objects.all()
+        else:
+            item_list = Items.objects.exclude(pk__in=items_viewed)
 
         logging.info("Filter app_flavor={}".format(app_flavor))
         item_list = item_list.filter(seller__app_flavor=app_flavor)

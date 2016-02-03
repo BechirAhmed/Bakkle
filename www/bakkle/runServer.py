@@ -93,6 +93,8 @@ app = web.Application([
             accountsRESTHandlers.setDescriptionHandler, name='set_description'),
     web.url(r'^/account/get_account/$',
             accountsRESTHandlers.getAccountHandler, name='get_account'),
+    web.url(r'^/account/restart/$',
+            accountsRESTHandlers.restartHandler, name='restart'),
 
     web.url(r'^/purchase/purchase/$',
             PurchaseRESTHandlers.stripeChargeHandler, name='stripeCharge'),

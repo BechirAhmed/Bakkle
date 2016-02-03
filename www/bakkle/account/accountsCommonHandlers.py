@@ -176,6 +176,27 @@ def get_account(accountId):
     return {"status": 1, "account": account.toDictionary()}
 
 
+# Mark all items a user has 'noped' to 'restarted' so the app will redisplay them.
+# aka "soft reset" of users feed without loosing items they have acted on.
+@time_method
+def restart(accountId):
+    try:
+        # find items user has viewed
+        buyer_items = BuyerItem.objects.get(buyer=accountId)
+
+        # which have been marked 'nope'
+        buyer_items.filter(Q(status=BuyerItem.MEH))
+
+        # and mark items 'restarted' so they can be redisplayed in the app
+        for buyer_item in buyer_items.all():
+            buyer_item.status = BuyerItem.RESTARTED
+            buyer_item.save()
+
+    except Account.DoesNotExist:
+        return {"status": 0, "message": "Invalid account id"}
+    return {"status": 1, "message": "restart successful"}
+
+
 @time_method
 def login_facebook(facebook_id, device_uuid, user_location, app_version, is_ios, client_ip, app_flavor):
 
