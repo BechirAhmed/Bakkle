@@ -26,6 +26,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     let url_register_local        = "account/register_local"
     let url_login_local           = "account/login_local"
     let url_register_push: String = "account/device/register_push/"
+    let url_start_over: String    = "account/start_over"
     let url_reset: String         = "items/reset/"
     let url_mark: String          = "items/" //+status/
     let url_feed: String          = "items/feed/"
@@ -996,6 +997,53 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             }
         }
         task.resume()
+    }
+    
+    /* Put all the meh items back after feed view is already out of items */
+    func resetFeed(success: ()->()){
+        let url: NSURL? = NSURL(string: url_base + url_start_over)
+        let request = NSMutableURLRequest(URL: url!)
+        
+        let encLocation = user_location.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
+        
+        request.HTTPMethod = "POST"
+        let postString = ""
+        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+        
+        info("[Bakkle] resetFeed")
+        info("[Bakkle]  URL: \(url)")
+        info("[Bakkle]  METHOD: \(request.HTTPMethod)")
+        info("[Bakkle]  BODY: \(postString)")
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
+            data, response, error in
+            
+            if error != nil {
+                self.err("error= \(error)")
+                return
+            }
+            
+            let responseString: String = NSString(data: data, encoding: NSUTF8StringEncoding)! as String
+            //self.debg("Response: \(responseString)")
+            
+            var parseError: NSError?
+            self.responseDict = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! NSDictionary!
+            self.info("RESPONSE DICT IS: \(self.responseDict)")
+            
+            if self.responseDict != nil {
+                if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
+                    // TODO later
+                    if let feedEl: AnyObject = self.responseDict["feed"] {
+                        //TODO: only update new items.
+                        self.feedItems = self.responseDict.valueForKey("feed") as! Array
+                        self.persistData()
+                        NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkFeedUpdate, object: self)
+                    }
+                    success()
+                }
+            }
+        }
+        task.resume()
+
     }
     
     //http://localhost:8000/conversation/send_message/?auth_token=asdfasdfasdfasdf_1&message=I'd like 50 for it.&device_uuid=E6264D84-C395-4132-8C63-3EF051480191&conversation_id=7

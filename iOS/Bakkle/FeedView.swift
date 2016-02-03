@@ -61,6 +61,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     @IBOutlet weak var startChatViewOriginY: NSLayoutConstraint!
     @IBOutlet weak var darkenStartAChat: UIView!
     @IBOutlet weak var noInternectView: UIView!
+    @IBOutlet weak var resetFeedBtn: UIButton!
     
     var itemData: NSDictionary?
     var sendMessageContext = 0
@@ -353,6 +354,8 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         
         refineButton.layer.borderWidth = 1
         refineButton.layer.borderColor = UIColor.whiteColor().CGColor
+        
+//        resetFeedBtn.hidden = true
     }
     
     @IBAction func menuButtonPressed(sender: AnyObject) {
@@ -360,6 +363,13 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         self.revealViewController().revealToggleAnimated(true)
         self.searchBar.resignFirstResponder()
         searching = false
+    }
+    
+    @IBAction func resetFeed(sender: UIButton) {
+        println("[FeedScreen] Reset feed items from server")
+        dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
+            Bakkle.sharedInstance.resetFeed({})
+        }
     }
     
     /* UISearch Bar delegate */
@@ -613,8 +623,8 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                     }
                 }
             }
-        }
-        else {
+            self.noNewItemsLabel.alpha = 0
+        } else {
             println("No items, hiding both cards")
             /* No items left in feed */
             if self.swipeView != nil {
@@ -627,7 +637,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             }
             
             self.progressIndicator.alpha = 0
-            noNewItemsLabel.alpha = 1
+            self.noNewItemsLabel.alpha = 1
         }
         
         checkInternetConnection()
