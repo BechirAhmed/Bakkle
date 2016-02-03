@@ -97,7 +97,9 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     var garageItems: [NSObject]!
     var trunkItems: [NSObject]!
     var holdingItems: [NSObject]!
-    
+    // store marked items to avoid duplicate items
+    var markedItem: [NSObject]! = Array()
+
     var userInfo: [NSObject: AnyObject]!
 
     var responseDict: NSDictionary!
@@ -782,12 +784,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                     if let responseString = NSString(data: data, encoding: NSUTF8StringEncoding) {
                         self.debg("Response: \(responseString)")
                         
-                        //TODO: Check error handling here.
-                        //                var err: NSError?
-                        //                var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &err) as NSDictionary!
-                        //
-                        //TODO: THIS IS WRONG
-                        //if responseDict.valueForKey("status")?.integerValue == 1 {
+                        self.markedItem.append(item_id)
                         self.persistData()
                         
                         switch(status){
@@ -808,7 +805,6 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                             
                         }
                         success()
-                        //  }
                         
                     }
                     fail()
@@ -932,6 +928,15 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         task.resume()
     }
     
+    /* populate more items from server if less than 10 items in feed*/
+    func requestMoreItems() {
+        if(feedItems.count < 10){
+            populateFeed({
+                
+            });
+        }
+    }
+    
     /* Populates the feed with items from the server */
     func populateFeed(success: ()->()) {
         let url: NSURL? = NSURL(string: url_base + url_feed)
@@ -964,11 +969,25 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             
             if self.responseDict != nil {
                 if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
-                    if let feedEl: AnyObject = self.responseDict["feed"] {
-                        //TODO: only update new items.
-                        self.feedItems = self.responseDict.valueForKey("feed") as! Array
+                    if let feedEl: [NSObject] = self.responseDict.valueForKey("feed") as? Array {
+                        var newItems = false
+                        for item in feedEl {
+                            if !contains(self.feedItems,item) {
+                                if !contains(self.markedItem, item.valueForKey("pk") as! NSObject) {
+                                    let lockQueue = dispatch_queue_create("com.test.LockQueue", nil)
+                                    dispatch_async(lockQueue, { () -> Void in
+                                        self.feedItems.append(item)
+                                        newItems = true;
+                                    })
+                                }
+                            }
+                        }
+                        self.markedItem = []
+//                        self.feedItems = self.responseDict.valueForKey("feed") as! Array
                         self.persistData()
-                        NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkFeedUpdate, object: self)
+                        if newItems {
+                            NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkFeedUpdate, object: self)
+                        }
                     }
                     //note called on success, not 'new items'
                     
@@ -1570,8 +1589,9 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
  
     // production
     func apnsMode() -> String {
-        let mobileprovisionPath = NSBundle.mainBundle().bundlePath
-        let mobileprovision = TCMobileProvision(data: NSData(contentsOfFile: mobileprovisionPath))
+        let mobileprovisionPath = NSBundle.mainBundle().bundlePath.stringByAppendingPathComponent("embedded.mobileprovision")
+        let data = NSData(contentsOfFile: mobileprovisionPath)
+        let mobileprovision = TCMobileProvision(data: data)
         let entitlements = mobileprovision.dict["Entitlements"]! as! NSDictionary
         let apsEnvironment = entitlements["aps-environment"] as! String
         
