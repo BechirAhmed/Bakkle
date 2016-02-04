@@ -17,7 +17,7 @@ class AddItem: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     static let DESCRIPTION_PLACEHOLDER_COLOR = UIColor(red: CGFloat(AddItem.red)/255.0, green: CGFloat(AddItem.green)/255.0, blue: CGFloat(AddItem.blue)/255.0, alpha: CGFloat(1.0))
     static let BAKKLE_GREEN_COLOR = Theme.ColorGreen
     static let CONFIRM_BUTTON_DISABLED_COLOR = UIColor.lightGrayColor()
-    private static let TAG_PLACEHOLDER_STR = "WORDS TO DESCRIBE ITEM"
+    private static let TAG_PLACEHOLDER_STR = ""
     private static let red = 201
     private static let green = 201
     private static let blue = 201
