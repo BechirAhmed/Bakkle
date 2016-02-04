@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "47B8523BEC7AB4A5D8898118"
+               BlueprintIdentifier = "25F2ED85AF80448154EEA573"
                BuildableName = "TCMobileProvision.framework"
                BlueprintName = "TCMobileProvision"
                ReferencedContainer = "container:Pods.xcodeproj">

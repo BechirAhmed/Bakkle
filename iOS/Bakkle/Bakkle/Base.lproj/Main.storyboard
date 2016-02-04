@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="CRb-vL-jlS">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="CRb-vL-jlS">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
@@ -410,8 +410,7 @@
                                                 <exclude reference="okM-7c-9Du"/>
                                             </mask>
                                         </variation>
-                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
-                                            <rect key="frame" x="8" y="43" width="268" height="37"/>
+                                        <variation key="heightClass=regular-widthClass=compact">
                                             <mask key="subviews">
                                                 <include reference="kPY-AF-IXd"/>
                                             </mask>
@@ -464,8 +463,7 @@
                                                 <exclude reference="zm5-ZR-WwQ"/>
                                             </mask>
                                         </variation>
-                                        <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
-                                            <rect key="frame" x="8" y="81" width="268" height="38"/>
+                                        <variation key="heightClass=regular-widthClass=compact">
                                             <mask key="subviews">
                                                 <include reference="WEF-pR-e2z"/>
                                             </mask>
@@ -1189,7 +1187,19 @@
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TvW-JJ-Vqb" userLabel="Drawer">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lNA-Jo-Jmc">
+                                        <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                        <animations/>
+                                        <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="23"/>
+                                        <state key="normal" title="Start Over">
+                                            <color key="titleColor" red="0.20000000000000001" green="0.80392156859999997" blue="0.37254901959999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="resetFeed:" destination="dzt-bR-uoN" eventType="touchUpInside" id="4WD-0m-MfE"/>
+                                        </connections>
+                                    </button>
+                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TvW-JJ-Vqb" userLabel="Drawer">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                         <animations/>
                                     </view>
@@ -1209,22 +1219,29 @@
                                     </constraint>
                                     <constraint firstAttribute="centerX" secondItem="t37-H0-tA2" secondAttribute="centerX" id="Y37-My-uTT"/>
                                     <constraint firstAttribute="centerY" secondItem="t37-H0-tA2" secondAttribute="centerY" id="aLY-W5-gOJ"/>
+                                    <constraint firstAttribute="centerX" secondItem="lNA-Jo-Jmc" secondAttribute="centerX" id="dha-Po-oFW"/>
                                     <constraint firstAttribute="bottom" secondItem="TvW-JJ-Vqb" secondAttribute="bottom" constant="44" id="p05-eO-z44">
                                         <variation key="heightClass=regular-widthClass=compact" constant="20"/>
                                     </constraint>
                                     <constraint firstAttribute="centerY" secondItem="gXy-mo-Jm8" secondAttribute="centerY" id="pSg-JS-mhC"/>
+                                    <constraint firstItem="gXy-mo-Jm8" firstAttribute="bottom" secondItem="lNA-Jo-Jmc" secondAttribute="top" constant="-25" id="srF-E0-WoN">
+                                        <variation key="heightClass=regular-widthClass=compact" constant="-25"/>
+                                    </constraint>
                                 </constraints>
                                 <variation key="default">
                                     <mask key="subviews">
                                         <exclude reference="t37-H0-tA2"/>
                                         <exclude reference="gXy-mo-Jm8"/>
+                                        <exclude reference="lNA-Jo-Jmc"/>
                                         <exclude reference="TvW-JJ-Vqb"/>
                                     </mask>
                                     <mask key="constraints">
                                         <exclude reference="CY5-4l-SGX"/>
                                         <exclude reference="pSg-JS-mhC"/>
+                                        <exclude reference="srF-E0-WoN"/>
                                         <exclude reference="Y37-My-uTT"/>
                                         <exclude reference="aLY-W5-gOJ"/>
+                                        <exclude reference="dha-Po-oFW"/>
                                         <exclude reference="E6s-0F-7a8"/>
                                         <exclude reference="Pfa-Av-az9"/>
                                         <exclude reference="Xnm-HZ-6iD"/>
@@ -1235,13 +1252,16 @@
                                     <mask key="subviews">
                                         <include reference="t37-H0-tA2"/>
                                         <include reference="gXy-mo-Jm8"/>
+                                        <include reference="lNA-Jo-Jmc"/>
                                         <include reference="TvW-JJ-Vqb"/>
                                     </mask>
                                     <mask key="constraints">
                                         <include reference="CY5-4l-SGX"/>
                                         <include reference="pSg-JS-mhC"/>
+                                        <include reference="srF-E0-WoN"/>
                                         <include reference="Y37-My-uTT"/>
                                         <include reference="aLY-W5-gOJ"/>
+                                        <include reference="dha-Po-oFW"/>
                                         <include reference="E6s-0F-7a8"/>
                                         <include reference="Pfa-Av-az9"/>
                                         <include reference="Xnm-HZ-6iD"/>
@@ -1802,6 +1822,7 @@
                         <outlet property="pageControl" destination="bBP-gY-0ut" id="LOA-ER-juV"/>
                         <outlet property="progressIndicator" destination="t37-H0-tA2" id="Fyg-ZW-tJR"/>
                         <outlet property="refineButton" destination="XrE-Ch-t0r" id="CpE-61-Lhd"/>
+                        <outlet property="resetFeedBtn" destination="lNA-Jo-Jmc" id="75n-oE-c1z"/>
                         <outlet property="searchBar" destination="XAD-Uh-z5L" id="aXC-SF-va3"/>
                         <outlet property="searchDisplayController" destination="hSv-s7-nTK" id="bfk-b0-bf7"/>
                         <outlet property="sendMessageButton" destination="nSX-e0-sZy" id="ucb-NU-pX1"/>
@@ -6232,7 +6253,7 @@
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                     <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
-                                                        <rect key="frame" x="99" y="8" width="213" height="21"/>
+                                                        <rect key="frame" x="99.5" y="8" width="212.5" height="20.5"/>
                                                     </variation>
                                                 </label>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ABU-0d-c2I">

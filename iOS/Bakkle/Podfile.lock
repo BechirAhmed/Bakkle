@@ -10,7 +10,7 @@ PODS:
     - DTFoundation/Core
   - FBSDKCoreKit (4.9.1):
     - Bolts (~> 1.5)
-  - FBSDKLoginKit (4.5.1):
+  - FBSDKLoginKit (4.9.1):
     - FBSDKCoreKit
   - FBSDKShareKit (4.9.1):
     - FBSDKCoreKit
@@ -24,7 +24,7 @@ PODS:
 DEPENDENCIES:
   - Bolts (~> 1.5.0)
   - FBSDKCoreKit
-  - FBSDKLoginKit (~> 4.5.1)
+  - FBSDKLoginKit
   - FBSDKShareKit
   - FontAwesomeIconFactory
   - HanekeSwift (~> 0.9.1)
@@ -36,7 +36,7 @@ SPEC CHECKSUMS:
   Bolts: a12663244b1d3351c738882e71902fc74db54f64
   DTFoundation: 70a0765e3596f82dd421832e95c65e2166eb3102
   FBSDKCoreKit: aee20b6d9855f15b618d4fddd1a5ad45f5a4a59d
-  FBSDKLoginKit: 225cc9a388a92916ee3f3bb14422017b6e44b65b
+  FBSDKLoginKit: ec22dc49bd372b064e93d6773df4ffefb3a552a2
   FBSDKShareKit: b8c8ef0ed173f9fc1b3c8df384a0202ce53008d4
   FontAwesomeIconFactory: bb9ce26d3dd13044854a82d380023c8e7d3ebf1a
   HanekeSwift: 50d37bfbc4432edc649167e538c259feccb4a2bb
@@ -44,4 +44,4 @@ SPEC CHECKSUMS:
   SocketRocket: ffe08119b00ef982f6c37052a4705a057c8494ad
   TCMobileProvision: 2a8962b38821a20fad53b9d7851bbc9ae8c52995
 
-COCOAPODS: 0.39.0
+COCOAPODS: 0.38.2

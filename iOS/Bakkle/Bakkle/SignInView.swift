@@ -103,7 +103,7 @@ class SignInView: UIViewController, UITextFieldDelegate {
     
     @IBAction func facebookPressed(sender: AnyObject) {
         let login = FBSDKLoginManager()
-        login.logInWithReadPermissions(["public_profile"], handler: { (result, error) -> Void in
+        login.logInWithReadPermissions(["public_profile"], fromViewController: self, handler: { (result, error) -> Void in
             if error != nil {
                 var alert = UIAlertController(title: error.localizedDescription, message: error.localizedRecoverySuggestion, preferredStyle: UIAlertControllerStyle.Alert)
                 alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))

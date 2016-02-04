@@ -24,14 +24,11 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     var fromCamera: Bool! = false
     var searching = false
     var state : MDCPanState!
+    
     // the first card in the feedView
     var swipeView : MDCSwipeToChooseView!
     // the card behind the first card
     var bottomView : MDCSwipeToChooseView!
-    
-    // for instructional overlay appeared above the feedView
-    var instructionImgView: UIImageView!
-    var effectView: UIVisualEffectView!
     
     var itemDetailTap: UITapGestureRecognizer!
     var item_id = 42 //TODO: unhardcode this
@@ -64,14 +61,13 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     @IBOutlet weak var startChatViewOriginY: NSLayoutConstraint!
     @IBOutlet weak var darkenStartAChat: UIView!
     @IBOutlet weak var noInternectView: UIView!
+    @IBOutlet weak var resetFeedBtn: UIButton!
     
     var itemData: NSDictionary?
     var sendMessageContext = 0
     var keepBrowsingContext = 0
     var recordstart = NSDate()
     var recordtime: Double = 0.0
-    
-    var mostRecentMarked : NSObject?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -81,7 +77,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         
         // check if comes from a notification
         if ((Bakkle.sharedInstance.userInfo) != nil){
-            showChatViewController()
+            awakeFromNotification()
         }
         
         // check if it is a goodwill app
@@ -98,9 +94,6 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         }
         
         pageControl.numberOfPages = kNUM_TUTORIAL_SCREENS
-        
-        // Always look for updates
-        requestUpdates()
         
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         progressIndicator.startAnimating()
@@ -157,6 +150,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             goodwillLogo.layer.masksToBounds = true
             self.view.addSubview(goodwillLogo)
         }
+        
         
         self.makeAnOfferButton.layer.borderColor = UIColor.whiteColor().CGColor
         self.sendMessageButton.layer.borderColor = UIColor.whiteColor().CGColor
@@ -271,7 +265,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         }
     }
     
-    func showChatViewController(){
+    func awakeFromNotification(){
         UIApplication.sharedApplication().applicationIconBadgeNumber = 0
         var userInfo = Bakkle.sharedInstance.userInfo
         Bakkle.sharedInstance.userInfo = nil
@@ -360,6 +354,8 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         
         refineButton.layer.borderWidth = 1
         refineButton.layer.borderColor = UIColor.whiteColor().CGColor
+        
+//        resetFeedBtn.hidden = true
     }
     
     @IBAction func menuButtonPressed(sender: AnyObject) {
@@ -367,6 +363,13 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         self.revealViewController().revealToggleAnimated(true)
         self.searchBar.resignFirstResponder()
         searching = false
+    }
+    
+    @IBAction func resetFeed(sender: UIButton) {
+        println("[FeedScreen] Reset feed items from server")
+        dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
+            Bakkle.sharedInstance.resetFeed({})
+        }
     }
     
     /* UISearch Bar delegate */
@@ -428,23 +431,15 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     func loadNext() {
         println("[FeedScreen] removing item from feed")
         recordstart = NSDate();
-        // Put the swipe view back in the correct location
-        //        resetSwipeView()
         
-        if(Bakkle.sharedInstance.feedItems.count < 10){
-            requestUpdates();
-        }
+        Bakkle.sharedInstance.feedItems.removeAtIndex(0)
         
-        let it = (Bakkle.sharedInstance.feedItems[0] as! NSDictionary).objectForKey("pk") as! Int
-        if it == self.mostRecentMarked {
-            Bakkle.sharedInstance.feedItems.removeAtIndex(0)
-        }
+        Bakkle.sharedInstance.requestMoreItems()
         
         if Bakkle.sharedInstance.feedItems.count == 1 {
             println("1 item left")
             if self.bottomView != nil {
                 self.bottomView.removeFromSuperview()
-                self.requestUpdates()
             }
         }
         
@@ -628,6 +623,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                     }
                 }
             }
+            self.noNewItemsLabel.alpha = 0
         } else {
             println("No items, hiding both cards")
             /* No items left in feed */
@@ -641,7 +637,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             }
             
             self.progressIndicator.alpha = 0
-            noNewItemsLabel.alpha = 1
+            self.noNewItemsLabel.alpha = 1
         }
         
         checkInternetConnection()
@@ -678,7 +674,6 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             let recordend = NSDate();
             self.recordtime = recordend.timeIntervalSinceDate(recordstart);
             Bakkle.sharedInstance.markItem("meh", item_id: self.item_id, duration: self.recordtime, success: {}, fail: {})
-            self.mostRecentMarked = self.item_id
             loadNext()
             break
         case MDCSwipeDirection.Right:
@@ -703,7 +698,6 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             self.recordtime = recordend.timeIntervalSinceDate(recordstart);
             
             Bakkle.sharedInstance.markItem("hold", item_id: self.item_id, duration: self.recordtime, success: {}, fail: {})
-            self.mostRecentMarked = self.item_id
             loadNext()
             break
         case MDCSwipeDirection.Down:
@@ -717,11 +711,9 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                 if report != nil {
                     println(report.text)
                     Bakkle.sharedInstance.markItem("report", item_id: self.item_id, message: report.text, duration: self.recordtime, success: {}, fail: {})
-                    self.mostRecentMarked = self.item_id
                     
                 } else {
                     Bakkle.sharedInstance.markItem("report", item_id: self.item_id, duration: self.recordtime,success: {}, fail: {})
-                    self.mostRecentMarked = self.item_id
                 }
                 self.loadNext()
             })
@@ -931,7 +923,6 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     
     @IBAction func saveToWatchList(sender: AnyObject) {
         Bakkle.sharedInstance.markItem("hold", item_id: self.item_id, duration: self.recordtime, success: {}, fail: {})
-        self.mostRecentMarked = self.item_id
         self.closeStartAChat(nil)
     }
     

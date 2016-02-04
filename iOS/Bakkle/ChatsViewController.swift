@@ -37,11 +37,11 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
         backButton.addTarget(self, action: "btnBack:", forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(backButton)
         header.addSubview(backButton)
-        
-        let editButtonWidth:CGFloat = 50
-        var editButton = UIButton(frame: CGRectMake(header.bounds.origin.x+header.bounds.size.width-55
+
+        let editButtonWidth:CGFloat = 59
+        var editButton = UIButton(frame: CGRectMake(header.bounds.origin.x+header.bounds.size.width-editButtonWidth-10
             ,header.bounds.origin.y + 25,editButtonWidth,headerHeight-10))
-        editButton.setImage(IconImage().edit(headerHeight-15), forState: UIControlState.Normal)
+        editButton.setImage(UIImage(named: "icon-edit.png"), forState: UIControlState.Normal)
         editButton.addTarget(self, action: "editItem:", forControlEvents: UIControlEvents.TouchUpInside)
         header.addSubview(editButton)
         

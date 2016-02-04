@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "9826AD7AB2C682A2FBA50541"
+               BlueprintIdentifier = "4CF24FA771D33C5E99205EBF"
                BuildableName = "Pods_Bakkle.framework"
                BlueprintName = "Pods-Bakkle"
                ReferencedContainer = "container:Pods.xcodeproj">
