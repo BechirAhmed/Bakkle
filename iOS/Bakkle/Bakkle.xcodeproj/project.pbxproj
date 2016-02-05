@@ -153,6 +153,8 @@
 		A0A8F8FE1B1F2BB70055BBC0 /* cartoon_fast_whoosh_good_for_karate_chop_other_fast_movement_or_swipe_001.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = A0A8F8FD1B1F2BB70055BBC0 /* cartoon_fast_whoosh_good_for_karate_chop_other_fast_movement_or_swipe_001.mp3 */; };
 		A0A8F9001B1F2C870055BBC0 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0A8F8FF1B1F2C870055BBC0 /* AVFoundation.framework */; };
 		A0B7F4BA1AFB053B00065407 /* blank.png in Resources */ = {isa = PBXBuildFile; fileRef = A0B7F4B91AFB053B00065407 /* blank.png */; };
+		A0D6E4901C6527980011B0BE /* Pods_Bakkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E0CABDBE20E9D5B2EED4810 /* Pods_Bakkle.framework */; };
+		A0D6E4911C6527980011B0BE /* Pods_Bakkle.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3E0CABDBE20E9D5B2EED4810 /* Pods_Bakkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A0D96F791AD765990046DA13 /* icon-gear.png in Resources */ = {isa = PBXBuildFile; fileRef = A0D96F731AD765990046DA13 /* icon-gear.png */; };
 		A0D96F7A1AD765990046DA13 /* icon-filter.png in Resources */ = {isa = PBXBuildFile; fileRef = A0D96F741AD765990046DA13 /* icon-filter.png */; };
 		A0D96F7B1AD765990046DA13 /* icon-down.png in Resources */ = {isa = PBXBuildFile; fileRef = A0D96F751AD765990046DA13 /* icon-down.png */; };
@@ -199,6 +201,20 @@
 			remoteInfo = Bakkle;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A0D6E4921C6527990011B0BE /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				A0D6E4911C6527980011B0BE /* Pods_Bakkle.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		136AB1E21B0835E200C76C71 /* ChatNotification.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = ChatNotification.apns; sourceTree = "<group>"; };
@@ -440,6 +456,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A0D6E4901C6527980011B0BE /* Pods_Bakkle.framework in Frameworks */,
 				605ECFEC1C0F890400B111C3 /* SystemConfiguration.framework in Frameworks */,
 				1BE43B5C1B6A9AEF00A6E6F8 /* CoreLocation.framework in Frameworks */,
 				A0A8F9001B1F2C870055BBC0 /* AVFoundation.framework in Frameworks */,
@@ -906,6 +923,7 @@
 				5EBDD6891AB211E600C7FBE7 /* Resources */,
 				DAC119B602F64538F899B059 /* Embed Pods Frameworks */,
 				1BBD5791D628CB2AC4F68D73 /* Copy Pods Resources */,
+				A0D6E4921C6527990011B0BE /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
