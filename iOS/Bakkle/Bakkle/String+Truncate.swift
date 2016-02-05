@@ -10,8 +10,8 @@ import Foundation
 
 extension String {
     func truncate(length: Int, trailing: String? = "...") -> String {
-        if self.count > length {
-            return self.substringToIndex(self.startIndex.advancedBy(length)) + (trailing ?? "")
+        if count(self.utf8) > length {
+            return self.substringToIndex(advance(self.startIndex,length)) + trailing!
         } else {
             return self
         }
