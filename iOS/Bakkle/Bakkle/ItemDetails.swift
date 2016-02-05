@@ -255,7 +255,7 @@ class ItemDetails: UIViewController, UIScrollViewDelegate {
     func videoTapped(sender: UITapGestureRecognizer) {
         for url in self.videoImages {
             if (sender.view as! UIImageView).image == url.1 {
-                VideoPlayer.play(url.0, presentingController: self)
+                //RVP VideoPlayer.play(url.0, presentingController: self)
                 break
             }
         }

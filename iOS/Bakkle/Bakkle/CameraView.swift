@@ -406,7 +406,7 @@ class CameraView: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             alertController.addAction(defaultAction)
             presentViewController(alertController, animated: true, completion: nil)
         } else {
-            VideoPlayer.play(path, presentingController: self)
+            //RVP VideoPlayer.play(path, presentingController: self)
         }
     }
     

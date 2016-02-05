@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "CE0E9CEBA2BF13E3522E5135"
+               BlueprintIdentifier = "DD9EA4DD22A358D8E3221161"
                BuildableName = "DTFoundation.framework"
                BlueprintName = "DTFoundation"
                ReferencedContainer = "container:Pods.xcodeproj">
