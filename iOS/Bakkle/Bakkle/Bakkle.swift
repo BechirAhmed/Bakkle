@@ -26,7 +26,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     let url_register_local        = "account/register_local"
     let url_login_local           = "account/login_local"
     let url_register_push: String = "account/device/register_push/"
-    let url_start_over: String    = "account/start_over"
+    let url_start_over: String    = "account/restart/"
     let url_reset: String         = "items/reset/"
     let url_mark: String          = "items/" //+status/
     let url_feed: String          = "items/feed/"
@@ -1010,7 +1010,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         let encLocation = user_location.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
         request.HTTPMethod = "POST"
-        let postString = ""
+        let postString = "auth_token=\(self.auth_token)&device_uuid=\(self.deviceUUID)&accountId=\(self.account_id)"
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
         
         info("[Bakkle] resetFeed")

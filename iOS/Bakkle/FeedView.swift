@@ -369,6 +369,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         println("[FeedScreen] Reset feed items from server")
         dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
             Bakkle.sharedInstance.resetFeed({})
+            Bakkle.sharedInstance.populateFeed({})
         }
     }
     
