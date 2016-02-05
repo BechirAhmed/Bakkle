@@ -529,6 +529,8 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         }
     }
     
+    let MAX_TITLE_LEN = 20
+    
     /* helper function */
     func setupView(view: MDCSwipeToChooseView!, item: NSDictionary!) {
         let imgURLs = item.valueForKey("image_urls") as! NSArray
@@ -548,7 +550,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         let firstURL = imgURLs[0] as! String
         let imgURL = NSURL(string: firstURL)
         
-        view.nameLabel.text = topTitle
+        view.nameLabel.text = topTitle.truncate(MAX_TITLE_LEN)
         
         var myString : String = ""
         
