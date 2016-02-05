@@ -973,6 +973,9 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                     if let feedEl: [NSObject] = self.responseDict.valueForKey("feed") as? Array {
                         var newItems = false
                         for item in feedEl {
+                            if self.feedItems == nil {
+                                self.feedItems = Array()
+                            }
                             if !contains(self.feedItems,item) {
                                 if !contains(self.markedItem, item.valueForKey("pk") as! NSObject) {
                                     let lockQueue = dispatch_queue_create("com.test.LockQueue", nil)
