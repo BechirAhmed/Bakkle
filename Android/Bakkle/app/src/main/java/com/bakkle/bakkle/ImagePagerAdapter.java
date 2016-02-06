@@ -3,7 +3,6 @@ package com.bakkle.bakkle;
 import android.content.Context;
 import android.net.Uri;
 import android.support.v4.view.PagerAdapter;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -84,7 +83,6 @@ public class ImagePagerAdapter extends PagerAdapter
 
     public void addItem(String url)
     {
-        Log.v("URL", url);
         urls.add(url);
         notifyDataSetChanged();
     }

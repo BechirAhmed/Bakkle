@@ -37,6 +37,7 @@ public class API
     final static String url_feed                = "items/feed/";
     final static String url_sellers             = "items/get_seller_items/";
     final static String url_add_item            = "items/add_item/";
+    final static String url_delete_item         = "items/delete_item/";
     final static String url_send_chat           = "conversation/send_message/";
     final static String url_view_item           = "items/";
     final static String url_buyers_trunk        = "items/get_buyers_trunk/";
@@ -48,6 +49,7 @@ public class API
     final static String url_guest_id            = "account/guestuserid/";
     final static String url_email_id            = "account/localuserid/";
     final static String url_account_password    = "account/authenticatelocal/";
+    final static String url_set_password        = "account/setpassword/";
     //</editor-fold>
 
     private static API ourInstance = null;
@@ -186,6 +188,39 @@ public class API
     public void markItem(String status, int itemId, String viewDuration)
     {
         markItem(status, itemId, viewDuration, null);
+    }
+
+    public void deleteItem(int itemId)
+    {
+        String url = url_base + url_delete_item;
+        try {
+            url += "?auth_token=" + URLEncoder.encode(prefs.getAuthToken(), "UTF-8") +
+                    "&device_uuid=" + URLEncoder.encode(prefs.getUuid(), "UTF-8") +
+                    "&item_id=" + itemId;
+        } catch (UnsupportedEncodingException e) {
+            Toast.makeText(context, "There was error marking item", Toast.LENGTH_SHORT).show();
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url,
+                new Response.Listener<JSONObject>()
+                {
+                    @Override
+                    public void onResponse(JSONObject response)
+                    {
+
+                    }
+                }, new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                Toast.makeText(context, "There was an error deleting item", Toast.LENGTH_SHORT)
+                        .show();
+                error.printStackTrace();
+            }
+        });
+
+        queue.add(request);
     }
 
     public void markItem(String status, int itemId, String viewDuration, String reportMessage)
@@ -338,8 +373,28 @@ public class API
         queue.add(request);
     }
 
+    public void setPassword(String password, Response.Listener<JSONObject> responseListener,
+                            Response.ErrorListener errorListener)
+    {
+        String url = url_base + url_set_password;
+        try {
+            url += "?user_id=" + URLEncoder.encode(prefs.getUserId(),
+                    "UTF-8") + "&device_uuid=" + URLEncoder.encode(prefs.getUuid(),
+                    "UTF-8") + "&password=" + URLEncoder.encode(password, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            Toast.makeText(context, "There was error setting password", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url,
+                responseListener, errorListener);
+
+        queue.add(request);
+    }
+
     public void authenticatePassword(String password,
-                                     Response.Listener<JSONObject> responseListener)
+                                     Response.Listener<JSONObject> responseListener,
+                                     Response.ErrorListener errorListener)
     {
         String url = url_base + url_account_password;
         try {
@@ -351,32 +406,7 @@ public class API
         }
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url,
-                new Response.Listener<JSONObject>()
-                {
-                    @Override
-                    public void onResponse(JSONObject response)
-                    {
-                        try {
-                            if (response.getInt("status") == 1) {
-
-                            } else {
-                                Toast.makeText(context, "There was error signing in",
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        } catch (JSONException e) {
-                            Toast.makeText(context, "There was error signing in",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }, new Response.ErrorListener()
-        {
-
-            @Override
-            public void onErrorResponse(VolleyError error)
-            {
-                Toast.makeText(context, "There was error signing in", Toast.LENGTH_SHORT).show();
-            }
-        });
+                responseListener, errorListener);
 
         request.setShouldCache(false);
         queue.add(request);
@@ -502,17 +532,12 @@ public class API
 
     public void registerPush(String token)
     {
-        if (!prefs.isLoggedIn()) {
-            return;
-        }
-        Log.v("Push token is", token);
         String url = url_base + url_register_push;
         try {
             url += "?auth_token=" + URLEncoder.encode(prefs.getAuthToken(), "UTF-8") +
                     "&device_uuid=" + URLEncoder.encode(prefs.getUuid(),
                     "UTF-8") + "&device_token=" + URLEncoder.encode(token,
                     "UTF-8") + "&device_type=gcm";
-            Log.v("Push url is", url);
         } catch (UnsupportedEncodingException e) {
             Toast.makeText(context, "There was an error registering push", Toast.LENGTH_SHORT)
                     .show();
@@ -526,7 +551,7 @@ public class API
                     public void onResponse(JSONObject response)
                     {
                         Prefs.getInstance(context).registeredPush(true);
-                        Toast.makeText(context, "Push Sent", Toast.LENGTH_SHORT).show();
+                        Log.v("RegisterPush", "successfully reigstered");
                     }
                 }, new Response.ErrorListener()
         {
@@ -540,7 +565,7 @@ public class API
         queue.add(request);
     }
 
-    public void postItem(String title, String price, String description,
+    public void postItem(int pk, String title, String price, String description,
                          Response.Listener<JSONObject> responseListener,
                          Response.ErrorListener errorListener, File[] files)
     {
@@ -552,16 +577,26 @@ public class API
                     "UTF-8") + "&title=" + URLEncoder.encode(title,
                     "UTF-8") + "&price=" + price + "&description=" + URLEncoder.encode(description,
                     "UTF-8") + "&location=" + URLEncoder.encode(location, "UTF-8");
+
+            if (pk != -1) { //We are editing an item, not posting a new one
+                url += "&item_id=" + pk;
+            }
+
         } catch (UnsupportedEncodingException e) {
             Toast.makeText(context, "There was an error posting item", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
 
-        ImageUploadRequest request2 = new ImageUploadRequest(url, errorListener, responseListener,
+        ImageUploadRequest request = new ImageUploadRequest(url, errorListener, responseListener,
                 files);
 
-        //JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, responseListener, errorListener);
+        queue.add(request);
+    }
 
-        queue.add(request2);
+    public void postItem(String title, String price, String description,
+                         Response.Listener<JSONObject> responseListener,
+                         Response.ErrorListener errorListener, File[] files)
+    {
+        postItem(-1, title, price, description, responseListener, errorListener, files);
     }
 }

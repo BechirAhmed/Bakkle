@@ -91,7 +91,7 @@ public class SignupLoginChooser extends Fragment
                     public void onCompleted(GraphResponse response)
                     {
                         JSONObject jsonObject = response.getJSONObject();
-                        Prefs prefs = Prefs.getInstance();
+                        Prefs prefs = Prefs.getInstance(getContext());
                         try {
                             prefs.setFirstName(jsonObject.getString("first_name"));
                             prefs.setLastName(jsonObject.getString("last_name"));
@@ -102,7 +102,7 @@ public class SignupLoginChooser extends Fragment
                             prefs.setUserId(jsonObject.getString("id"));
                             prefs.setUserImageUrl(jsonObject.getJSONObject("picture").getJSONObject("data").getString("url"));
 
-                            API.getInstance().registerFacebook(new LoginListener());
+                            API.getInstance(getContext()).registerFacebook(new LoginListener());
                         } catch (JSONException | NullPointerException e) {
                             Toast.makeText(getContext(), "There was an error signing in", Toast.LENGTH_SHORT).show();
                         }

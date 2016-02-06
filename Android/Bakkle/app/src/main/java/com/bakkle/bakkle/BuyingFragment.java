@@ -11,6 +11,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -32,6 +33,7 @@ public class BuyingFragment extends Fragment
     SwipeRefreshLayout listContainer;
     BuyingAdapter      buyingAdapter;
     List<FeedItem>     items;
+    TextView           emptyListTextView;
 
     public BuyingFragment()
     {
@@ -48,12 +50,13 @@ public class BuyingFragment extends Fragment
         super.onCreate(savedInstanceState);
     }
 
-    //TODO: Add ability to swipe to delete an item from Buying (don't want to use the thumbs up/down button)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
         final View view = inflater.inflate(R.layout.recycler_view, container, false);
+        emptyListTextView = (TextView) view.findViewById(R.id.empty_list_message);
+        emptyListTextView.setText(R.string.buying_empty_message);
 
         ((MainActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.buying));
 
@@ -71,37 +74,35 @@ public class BuyingFragment extends Fragment
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction)
             {
-                //TODO: Swipe to delete
                 final int position = viewHolder.getAdapterPosition();
                 final FeedItem deletedItem = items.remove(position);
                 buyingAdapter.notifyItemRemoved(position);
 
-                final Snackbar snackbar = Snackbar.make(view, deletedItem.getTitle()
-                        .concat(" has been deleted from Buying"), Snackbar.LENGTH_LONG)
-                        .setAction("Undo", new View.OnClickListener()
-                        {
-                            @Override
-                            public void onClick(View v)
-                            {
-                                items.add(position, deletedItem);
-                                buyingAdapter.notifyItemInserted(position);
-                            }
-                        })
-                        .setCallback(new Snackbar.Callback()
-                        {
-                            @Override
-                            public void onDismissed(Snackbar snackbar, int event)
-                            {
-                                if (event == DISMISS_EVENT_ACTION) {
-                                    Snackbar.make(view, deletedItem.getTitle()
-                                                          .concat(" has been restored to Buying"),
-                                                  Snackbar.LENGTH_SHORT).show();
-                                    return; //If an action was used to dismiss, the user wants to undo the deletion, so we do not need to continue
-                                }
-                                API.getInstance()
-                                        .markItem(Constants.MARK_NOPE, deletedItem.getPk(), "42");
-                            }
-                        });
+                final Snackbar snackbar = Snackbar.make(view,
+                        deletedItem.getTitle().concat(" has been deleted from Buying"),
+                        Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        items.add(position, deletedItem);
+                        buyingAdapter.notifyItemInserted(position);
+                    }
+                }).setCallback(new Snackbar.Callback()
+                {
+                    @Override
+                    public void onDismissed(Snackbar snackbar, int event)
+                    {
+                        if (event == DISMISS_EVENT_ACTION) {
+                            Snackbar.make(view,
+                                    deletedItem.getTitle().concat(" has been restored to Buying"),
+                                    Snackbar.LENGTH_SHORT).show();
+                            return; //If an action was used to dismiss, the user wants to undo the deletion, so we do not need to continue
+                        }
+                        API.getInstance(getContext())
+                                .markItem(Constants.MARK_NOPE, deletedItem.getPk(), "42");
+                    }
+                });
                 snackbar.show();
             }
         };
@@ -112,7 +113,7 @@ public class BuyingFragment extends Fragment
         listContainer = (SwipeRefreshLayout) view.findViewById(R.id.listContainer);
 
         listContainer.setColorSchemeResources(R.color.colorPrimary, R.color.colorNope,
-                                              R.color.colorHoldBlue);
+                R.color.colorHoldBlue);
 
         listContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
         {
@@ -136,7 +137,7 @@ public class BuyingFragment extends Fragment
 
     public void refreshBuying()
     {
-        API.getInstance().getBuying(new BuyingListener(), new BuyingErrorListener());
+        API.getInstance(getContext()).getBuying(new BuyingListener(), new BuyingErrorListener());
     }
 
     @Override
@@ -208,7 +209,7 @@ public class BuyingFragment extends Fragment
     {
         if (json.getInt("status") != 1) {
             Toast.makeText(getContext(), "There was error retrieving the Buyer's Trunk",
-                           Toast.LENGTH_SHORT).show();
+                    Toast.LENGTH_SHORT).show();
             return null;
         }
         JSONArray jsonArray = json.getJSONArray("buyers_trunk");
@@ -232,9 +233,8 @@ public class BuyingFragment extends Fragment
             seller.setDescription(sellerJson.getString("description"));
             seller.setFacebook_id(sellerJson.getString("facebook_id"));
             seller.setAvatar_image_url(seller.getFacebook_id()
-                                               .matches(
-                                                       "[0-9]+") ? "https://graph.facebook.com/" + seller
-                    .getFacebook_id() + "/picture?type=normal" : null);
+                    .matches(
+                            "[0-9]+") ? "https://graph.facebook.com/" + seller.getFacebook_id() + "/picture?type=normal" : null);
             seller.setPk(sellerJson.getInt("pk"));
             seller.setFlavor(sellerJson.getInt("flavor"));
             seller.setUser_location(sellerJson.getString("user_location"));
@@ -262,12 +262,19 @@ public class BuyingFragment extends Fragment
         {
             try {
                 items = processJson(response);
-                buyingAdapter = new BuyingAdapter(items, getContext());
+                if (items.size() == 0) {
+                    emptyListTextView.setVisibility(View.VISIBLE);
+                    listContainer.setVisibility(View.GONE);
+                } else {
+                    emptyListTextView.setVisibility(View.GONE);
+                    listContainer.setVisibility(View.VISIBLE);
+                }
+                buyingAdapter = new BuyingAdapter(items, getActivity());
                 recyclerView.setAdapter(buyingAdapter);
                 listContainer.setRefreshing(false);
             } catch (JSONException e) {
                 Toast.makeText(getContext(), "There was error retrieving the Buyer's Trunk",
-                               Toast.LENGTH_SHORT).show();
+                        Toast.LENGTH_SHORT).show();
                 showError();
             }
         }
@@ -285,7 +292,7 @@ public class BuyingFragment extends Fragment
         public void onErrorResponse(VolleyError error)
         {
             Toast.makeText(getContext(), "There was error retrieving the Buyer's Trunk",
-                           Toast.LENGTH_SHORT).show();
+                    Toast.LENGTH_SHORT).show();
             showError();
         }
     }

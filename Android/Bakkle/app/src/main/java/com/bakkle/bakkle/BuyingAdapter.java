@@ -30,8 +30,15 @@ public class BuyingAdapter extends RecyclerView.Adapter<BuyingAdapter.ViewHolder
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.watchlist_trunk_list_item, parent, false);
+        View view;
+        if (context instanceof MainActivity) {
+            view = ((MainActivity) context).getLayoutInflater()
+                    .inflate(R.layout.watchlist_trunk_list_item, parent, false);
+        } else {
+            view = LayoutInflater.from(context)
+                    .inflate(R.layout.watchlist_trunk_list_item, parent, false);
+        }
+
         return new ViewHolder(view);
     }
 

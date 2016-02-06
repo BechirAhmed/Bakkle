@@ -27,8 +27,12 @@
         android:id="@+id/secondary_options">
         <item
             android:id="@+id/nav_about"
+            android:icon="@drawable/ic_email"
+            android:title="@string/contact"/>
+        <item
+            android:id="@+id/tutorial"
             android:icon="@drawable/ic_about"
-            android:title="@string/about"/>
+            android:title="@string/tutorial" />
     </group>
 
 </menu>

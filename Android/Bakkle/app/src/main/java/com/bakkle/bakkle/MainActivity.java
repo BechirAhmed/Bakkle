@@ -40,7 +40,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 import com.google.android.gms.location.LocationServices;
-import com.parse.ParseInstallation;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -71,12 +70,52 @@ public class MainActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        prefs = Prefs.getInstance(this);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         //toolbar.setLogo(R.drawable.logo_white_clear);
         setSupportActionBar(toolbar);
 
-        prefs = Prefs.getInstance(this);
+        setupNavDrawer(toolbar);
+
+        FloatingActionButton addItemFab = (FloatingActionButton) findViewById(R.id.add_item_fab);
+        addItemFab.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                if (prefs.isLoggedIn()) {
+                    startActivityForResult(new Intent(MainActivity.this, AddItemActivity.class),
+                            Constants.REQUEST_CODE_POSTED_ITEM_SUCCESSFULLY);
+                } else {
+                    startActivityForResult(new Intent(MainActivity.this, RegisterActivity.class),
+                            Constants.REQUEST_CODE_POST_ITEM);
+                }
+            }
+        });
+        undoFab = (FloatingActionButton) findViewById(R.id.undo);
+        googleApiClient = new GoogleApiClient.Builder(this).addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+
+        InstanceID instanceID = InstanceID.getInstance(this);
+        String token;
+
+        if (prefs.isFirstLaunch()) {
+            startActivityForResult(new Intent(this, TutorialActivity.class),
+                    Constants.SHOW_TUORIAL);
+        } else {
+            beginApp();
+        }
+
+    }
+
+    public void beginApp()
+    {
+        Intent intent = new Intent(this, RegistrationIntentService.class);
+        startService(intent);
+        requestLocationPermission();
 
         mRegistrationBroadcastReceiver = new BroadcastReceiver()
         {
@@ -93,37 +132,6 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         };
-
-        Intent intent = new Intent(this, RegistrationIntentService.class);
-        startService(intent);
-
-        setupNavDrawer(toolbar);
-
-        requestLocationPermission();
-
-        FloatingActionButton addItemFab = (FloatingActionButton) findViewById(R.id.add_item_fab);
-        addItemFab.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                if (prefs.isLoggedIn()) {
-                    startActivity(new Intent(MainActivity.this, AddItemActivity.class));
-                } else {
-                    startActivityForResult(new Intent(MainActivity.this, RegisterActivity.class),
-                            Constants.REQUEST_CODE_POST_ITEM);
-                }
-            }
-        });
-        undoFab = (FloatingActionButton) findViewById(R.id.undo);
-        googleApiClient = new GoogleApiClient.Builder(this).addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-
-        InstanceID instanceID = InstanceID.getInstance(this);
-        String token;
-
         if (prefs.isLoggedIn()) {
             new AsyncTask<Void, Void, Void>()
             {
@@ -132,9 +140,8 @@ public class MainActivity extends AppCompatActivity
                 {
                     try {
                         API.getInstance(MainActivity.this)
-                                .registerPush(
-                                        GoogleCloudMessaging.getInstance(MainActivity.this)
-                                                .register(Constants.SENDER_ID));
+                                .registerPush(GoogleCloudMessaging.getInstance(MainActivity.this)
+                                        .register(Constants.SENDER_ID));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -142,7 +149,6 @@ public class MainActivity extends AppCompatActivity
                 }
             }.execute();
         }
-
     }
 
     private void requestLocationPermission()
@@ -245,6 +251,7 @@ public class MainActivity extends AppCompatActivity
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(mRegistrationBroadcastReceiver,
                         new IntentFilter("registrationComplete"));
+
     }
 
     @Override
@@ -396,7 +403,13 @@ public class MainActivity extends AppCompatActivity
                         Constants.WATCH_LIST)).refreshWatchList();
             }
         } else if (id == R.id.nav_about) {
-            startActivity(new Intent(this, AboutActivity.class));
+            String url = "http://www.bakkle.com";
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse(url));
+            startActivity(i);
+            //startActivity(new Intent(this, AboutActivity.class));
+        } else if (id == R.id.tutorial) {
+            startActivity(new Intent(this, TutorialActivity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -408,6 +421,10 @@ public class MainActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constants.SHOW_TUORIAL && resultCode == Constants.REUSLT_CODE_OK) {
+            beginApp();
+            prefs.setFirstLaunch(false);
+        }
         if (requestCode == Constants.REQUEST_CODE_PROFILE && resultCode == Constants.RESULT_CODE_NOW_SIGNED_OUT) {
             updateNavHeader();
             API.getInstance(getApplicationContext()).getGuestUserId(new GuestIdResponseListener());
@@ -438,13 +455,14 @@ public class MainActivity extends AppCompatActivity
 
         FeedFragment fragment = (FeedFragment) getSupportFragmentManager().findFragmentByTag(
                 Constants.FEED);
-        if (fragment != null) {
+        if (fragment != null && requestCode == Constants.REQUEST_CODE_POSTED_ITEM_SUCCESSFULLY && resultCode == Constants.REUSLT_CODE_OK) {
             fragment.refreshFeed();
-        } else if (requestCode == Constants.REQUEST_CODE_POST_ITEM)
-
-        {
+        } else if (fragment != null && requestCode != Constants.REQUEST_CODE_VIEW_ITEM && requestCode != Constants.REQUEST_CODE_POSTED_ITEM_SUCCESSFULLY) {
+            fragment.refreshFeed();
+        } else if (requestCode == Constants.REQUEST_CODE_POST_ITEM) {
             if (resultCode == Constants.RESULT_CODE_NOW_SIGNED_IN) {
-                //TODO: start AddItem Activity;
+                startActivityForResult(new Intent(this, AddItemActivity.class),
+                        Constants.REQUEST_CODE_POSTED_ITEM_SUCCESSFULLY);
             }
         }
     }

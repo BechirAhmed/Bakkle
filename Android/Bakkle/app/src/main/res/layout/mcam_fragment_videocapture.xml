@@ -49,6 +49,7 @@
                 android:layout_height="@dimen/mcam_action_icon_size"
                 android:background="@drawable/mcam_circle_selector"
                 android:padding="@dimen/mcam_content_inset_less"
+                android:visibility="gone"
                 android:scaleType="fitXY"
                 android:src="@drawable/mcam_action_capture"
                 tools:ignore="ContentDescription"/>

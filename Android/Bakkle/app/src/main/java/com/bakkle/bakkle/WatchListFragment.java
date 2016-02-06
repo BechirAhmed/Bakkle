@@ -3,13 +3,16 @@ package com.bakkle.bakkle;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -30,8 +33,9 @@ public class WatchListFragment extends Fragment
 {
     RecyclerView       recyclerView;
     SwipeRefreshLayout listContainer;
-    List<FeedItem> items;
-    WatchListAdapter adapter;
+    List<FeedItem>     items;
+    WatchListAdapter   adapter;
+    TextView           emptyListTextView;
 
     public WatchListFragment()
     {
@@ -52,9 +56,60 @@ public class WatchListFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.recycler_view, container, false);
+        final View view = inflater.inflate(R.layout.recycler_view, container, false);
+        emptyListTextView = (TextView) view.findViewById(R.id.empty_list_message);
+        emptyListTextView.setText(R.string.watchlist_empty_message);
 
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Watch List");
+
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(
+                0, ItemTouchHelper.LEFT)
+        {
+
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
+                                  RecyclerView.ViewHolder target)
+            {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction)
+            {
+                final int position = viewHolder.getAdapterPosition();
+                final FeedItem deletedItem = items.remove(position);
+                adapter.notifyItemRemoved(position);
+
+                final Snackbar snackbar = Snackbar.make(view,
+                        deletedItem.getTitle().concat(" has been deleted from Watchlist"),
+                        Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        items.add(position, deletedItem);
+                        adapter.notifyItemInserted(position);
+                    }
+                }).setCallback(new Snackbar.Callback()
+                {
+                    @Override
+                    public void onDismissed(Snackbar snackbar, int event)
+                    {
+                        if (event == DISMISS_EVENT_ACTION) {
+                            Snackbar.make(view,
+                                    deletedItem.getTitle().concat(" has been restored to Watchlist"),
+                                    Snackbar.LENGTH_SHORT).show();
+                            return; //If an action was used to dismiss, the user wants to undo the deletion, so we do not need to continue
+                        }
+                        API.getInstance(getContext())
+                                .markItem(Constants.MARK_NOPE, deletedItem.getPk(), "42");
+                    }
+                });
+                snackbar.show();
+            }
+        };
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.list);
         listContainer = (SwipeRefreshLayout) view.findViewById(R.id.listContainer);
@@ -75,6 +130,7 @@ public class WatchListFragment extends Fragment
                 new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL_LIST));
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        itemTouchHelper.attachToRecyclerView(recyclerView);
 
         refreshWatchList();
 
@@ -83,7 +139,8 @@ public class WatchListFragment extends Fragment
 
     public void refreshWatchList()
     {
-        API.getInstance().getWatchList(new WatchListListener(), new WatchListErrorListener());
+        API.getInstance(getContext())
+                .getWatchList(new WatchListListener(), new WatchListErrorListener());
     }
 
     @Override
@@ -205,6 +262,13 @@ public class WatchListFragment extends Fragment
         {
             try {
                 items = processJson(response);
+                if (items.size() == 0) {
+                    emptyListTextView.setVisibility(View.VISIBLE);
+                    listContainer.setVisibility(View.GONE);
+                } else {
+                    emptyListTextView.setVisibility(View.GONE);
+                    listContainer.setVisibility(View.VISIBLE);
+                }
                 adapter = new WatchListAdapter(items, getActivity(), WatchListFragment.this);
                 recyclerView.setAdapter(adapter);
                 listContainer.setRefreshing(false);
@@ -222,17 +286,17 @@ public class WatchListFragment extends Fragment
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == Constants.REQUEST_CODE_VIEW_ITEM) {
             if (resultCode == Constants.RESULT_CODE_NOPE) {
-                API.getInstance()
+                API.getInstance(getContext())
                         .markItem(Constants.MARK_NOPE, data.getIntExtra(Constants.PK, -1), "42");
                 int position = data.getIntExtra(Constants.POSITION, -1);
                 items.remove(position);
                 adapter.notifyItemRemoved(position);
             } else if (resultCode == Constants.RESULT_CODE_WANT) {
-                if (Prefs.getInstance().isGuest()) {
+                if (Prefs.getInstance(getContext()).isGuest()) {
                     Intent intent = new Intent(getContext(), RegisterActivity.class);
                     startActivityForResult(intent, Constants.REQUEST_CODE_MARK_ITEM);
                 } else {
-                    API.getInstance()
+                    API.getInstance(getContext())
                             .markItem(Constants.MARK_WANT, data.getIntExtra(Constants.PK, -1),
                                     "42");
                     int position = data.getIntExtra(Constants.POSITION, -1);
@@ -242,7 +306,7 @@ public class WatchListFragment extends Fragment
             }
         } else if (requestCode == Constants.REQUEST_CODE_MARK_ITEM) {
             if (resultCode == Constants.REUSLT_CODE_OK) {
-                API.getInstance()
+                API.getInstance(getContext())
                         .markItem(Constants.MARK_WANT, data.getIntExtra(Constants.PK, -1), "42");
             }
         }

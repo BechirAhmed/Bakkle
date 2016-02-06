@@ -1,14 +1,21 @@
 package com.bakkle.bakkle.AddItem;
 
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -31,6 +38,7 @@ import com.bakkle.bakkle.AddItem.MaterialCamera.MaterialCamera;
 import com.bakkle.bakkle.Constants;
 import com.bakkle.bakkle.ImagePagerAdapter;
 import com.bakkle.bakkle.R;
+import com.facebook.FacebookSdk;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
 import com.viewpagerindicator.CirclePageIndicator;
@@ -57,6 +65,7 @@ public class AddItemActivity extends AppCompatActivity
     FrameLayout          content;
 
     File f;
+    boolean addedVideo = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -68,13 +77,15 @@ public class AddItemActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        FacebookSdk.sdkInitialize(getApplicationContext());
+
         uploadFab = (FloatingActionButton) findViewById(R.id.upload);
         titleEditText = (EditText) findViewById(R.id.title);
         priceEditText = (EditText) findViewById(R.id.price);
         descriptionEditText = (EditText) findViewById(R.id.description);
         shareFacebookSwitch = (Switch) findViewById(R.id.share);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
-        content = (FrameLayout) findViewById(R.id.content);
+        content = (FrameLayout) findViewById(R.id.scrollview);
 
         viewPager = (ViewPager) findViewById(R.id.images);
         adapter = new ImagePagerAdapter(this);
@@ -122,6 +133,8 @@ public class AddItemActivity extends AppCompatActivity
 
     private void postItem()
     {
+        uploadFab.hide();
+
         String title = titleEditText.getText().toString();
         String price = priceEditText.getText().toString();
         String description = descriptionEditText.getText().toString();
@@ -140,7 +153,7 @@ public class AddItemActivity extends AppCompatActivity
         for (int i = 0; i < files.length; i++) {
             files[i] = new File(adapter.getItem(i));
         }
-        API.getInstance()
+        API.getInstance(this)
                 .postItem(title, price, description, new PostItemListener(description, shareFb),
                         new PostItemErrorListener(), files);
     }
@@ -167,6 +180,25 @@ public class AddItemActivity extends AppCompatActivity
         return true;
     }
 
+    @TargetApi (Build.VERSION_CODES.M)
+    private void requestCameraPermission()
+    {
+        requestPermissions(new String[]{Manifest.permission.CAMERA}, 1);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults)
+    {
+        if (requestCode == 1) {
+            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                takePicture();
+            }
+        } else {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
@@ -174,25 +206,25 @@ public class AddItemActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.add_photo) {
-            File file;
-            try {
-                file = createImageOrVideoFile("jpg");
-                Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                i.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
-                startActivityForResult(i, Constants.REQUEST_CODE_TAKE_PICTURE);
-                return true;
-            } catch (IOException e) {
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                requestCameraPermission();
+            } else {
+                takePicture();
                 return true;
             }
 
         } else if (id == R.id.add_video) {
+            if (addedVideo) {
+                Toast.makeText(this, "Only 1 video is allowed", Toast.LENGTH_SHORT).show();
+                return true;
+            }
             File file;
             try {
                 file = createImageOrVideoFile("mp4");
 
-                new MaterialCamera(this)
-                        .allowRetry(false)
-                        .autoSubmit(false)
+                new MaterialCamera(this).allowRetry(false)
+                        .autoSubmit(true)
                         .saveDir(getExternalFilesDir(null))
                         .primaryColorRes(R.color.colorPrimary)
                         .defaultToFrontFacing(false)
@@ -214,6 +246,20 @@ public class AddItemActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    private boolean takePicture()
+    {
+        File file;
+        try {
+            file = createImageOrVideoFile("jpg");
+            Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            i.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+            startActivityForResult(i, Constants.REQUEST_CODE_TAKE_PICTURE);
+            return true;
+        } catch (IOException e) {
+            return true;
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
@@ -228,21 +274,31 @@ public class AddItemActivity extends AppCompatActivity
                     int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
                             ExifInterface.ORIENTATION_UNDEFINED);
                     Matrix m = new Matrix();
-                    m.postRotate(90);
+//                    m.postRotate(90);
 
-//                    switch (orientation) {
-//                        case ExifInterface.ORIENTATION_ROTATE_90:
-//                            m.postRotate(90);
-//                            break;
-//                        case ExifInterface.ORIENTATION_ROTATE_180:
-//                            m.postRotate(180);
-//                            break;
-//                        case ExifInterface.ORIENTATION_ROTATE_270:
-//                            m.postRotate(270);
-//                            break;
-//                    }
+                    switch (orientation) {
+                        case ExifInterface.ORIENTATION_ROTATE_90:
+                            m.postRotate(90);
+                            break;
+                        case ExifInterface.ORIENTATION_ROTATE_180:
+                            m.postRotate(180);
+                            break;
+                        case ExifInterface.ORIENTATION_ROTATE_270:
+                            m.postRotate(270);
+                            break;
+                    }
                     bmp = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), m, true);
-
+                    int dimension;
+                    if (bmp.getWidth() >= bmp.getHeight()) {
+                        dimension = bmp.getHeight();
+                    }
+                    //If the bitmap is taller than it is wide
+                    //use the width as the square crop dimension
+                    else {
+                        dimension = bmp.getWidth();
+                    }
+                    bmp = ThumbnailUtils.extractThumbnail(bmp, dimension, dimension,
+                            ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
 
                     //Makes sure image is a square
                     if (bmp.getWidth() >= bmp.getHeight()) {
@@ -253,8 +309,7 @@ public class AddItemActivity extends AppCompatActivity
                         bmp = Bitmap.createBitmap(bmp, 0, bmp.getHeight() / 2 - bmp.getWidth() / 2,
                                 bmp.getWidth(), bmp.getWidth());
                     }
-                    Bitmap.createScaledBitmap(bmp, 640, 640, true)
-                            .compress(Bitmap.CompressFormat.JPEG, 40, fos);
+                    bmp.compress(Bitmap.CompressFormat.JPEG, 40, fos);
                     fos.flush();
                     fos.close();
                     adapter.addItem(f.getAbsolutePath());
@@ -272,9 +327,9 @@ public class AddItemActivity extends AppCompatActivity
             }
         } else if (requestCode == Constants.REQUEST_CODE_TAKE_VIDEO) {
             if (resultCode == RESULT_OK) {
-                Log.v("Result", data.getDataString());
-                adapter.addItem(data.getDataString());
-                Log.v("AddItemActivity", data.getDataString());
+                addedVideo = true;
+                String uri = data.getDataString().substring(7); //to eliminate the file:// in front
+                adapter.addItem(uri);
                 if (titleEditText.getText().length() > 0) {
                     uploadFab.show();
                 } else {
@@ -298,6 +353,8 @@ public class AddItemActivity extends AppCompatActivity
         @Override
         public void onResponse(JSONObject response)
         {
+            setResult(Constants.REUSLT_CODE_OK);
+            finish();
             try {
                 if (response.getInt("success") == 1) {
                     if (share) {
@@ -325,6 +382,11 @@ public class AddItemActivity extends AppCompatActivity
                 progressBar.setVisibility(View.GONE);
                 e.printStackTrace();
                 Log.v("AddItemActivity", response.toString());
+            } catch (NullPointerException e) {
+                if (share) {
+                    Toast.makeText(AddItemActivity.this, "There was an error sharing to Facebook",
+                            Toast.LENGTH_SHORT).show();
+                }
             }
         }
     }

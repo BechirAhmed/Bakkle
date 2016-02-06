@@ -70,7 +70,7 @@ public class TakeActionFragment extends Fragment
 
     private void markWant()
     {
-        API.getInstance().markItem(Constants.MARK_WANT, feedItem.getPk(), "42");
+        API.getInstance(getContext()).markItem(Constants.MARK_WANT, feedItem.getPk(), "42");
     }
     
     @Override
@@ -80,7 +80,7 @@ public class TakeActionFragment extends Fragment
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_take_action, container, false);
 
-        prefs = Prefs.getInstance();
+        prefs = Prefs.getInstance(getContext());
 
         ImageView product;
         Button saveButton;
@@ -109,7 +109,7 @@ public class TakeActionFragment extends Fragment
             @Override
             public void onClick(View v)
             {
-                API.getInstance()
+                API.getInstance(getContext())
                         .markItem(Constants.MARK_HOLD, feedItem.getPk(),
                                   "42"); //TODO: Get actual view duration
                 mainActivity.onBackPressed();

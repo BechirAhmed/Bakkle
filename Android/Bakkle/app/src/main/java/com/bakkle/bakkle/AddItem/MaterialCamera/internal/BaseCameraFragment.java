@@ -106,7 +106,7 @@ abstract class BaseCameraFragment extends Fragment
         if (mMediaRecorder != null && mIsRecording) {
             mButtonVideo.setImageResource(R.drawable.mcam_action_stop);
         } else {
-            mButtonVideo.setImageResource(R.drawable.mcam_action_capture);
+            mButtonVideo.setImageResource(R.drawable.ic_videocam);
             mInterface.setDidRecord(false);
         }
 
@@ -270,7 +270,6 @@ abstract class BaseCameraFragment extends Fragment
     {
         final int orientation = Degrees.getActivityOrientation(getActivity());
         getActivity().setRequestedOrientation(orientation);
-        mInterface.setDidRecord(true);
 
     }
 

@@ -1,28 +1,27 @@
 package com.bakkle.bakkle.Selling;
 
-/**
- * Created by vanshgandhi on 12/10/15.
- */
-
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.bakkle.bakkle.API;
-import com.bakkle.bakkle.Views.DividerItemDecoration;
 import com.bakkle.bakkle.MainActivity;
 import com.bakkle.bakkle.Models.FeedItem;
 import com.bakkle.bakkle.Models.Person;
 import com.bakkle.bakkle.R;
+import com.bakkle.bakkle.Views.DividerItemDecoration;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,8 +32,11 @@ import java.util.List;
 
 public class SellingFragment extends Fragment
 {
-    RecyclerView recyclerView;
+    RecyclerView       recyclerView;
     SwipeRefreshLayout listContainer;
+    SellingAdapter     sellingAdapter;
+    List<FeedItem>     items;
+    TextView           emptyListTextView;
 
     public SellingFragment()
     {
@@ -55,27 +57,80 @@ public class SellingFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.recycler_view, container, false);
+        final View view = inflater.inflate(R.layout.recycler_view, container, false);
+        emptyListTextView = (TextView) view.findViewById(R.id.empty_list_message);
+        emptyListTextView.setText(R.string.selling_empty_message);
 
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Selling");
+
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(
+                0, ItemTouchHelper.LEFT)
+        {
+
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
+                                  RecyclerView.ViewHolder target)
+            {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction)
+            {
+                final int position = viewHolder.getAdapterPosition();
+                final FeedItem deletedItem = items.remove(position);
+                sellingAdapter.notifyItemRemoved(position);
+
+                final Snackbar snackbar = Snackbar.make(view,
+                        deletedItem.getTitle().concat(" has been deleted from Selling"),
+                        Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        items.add(position, deletedItem);
+                        sellingAdapter.notifyItemInserted(position);
+                    }
+                }).setCallback(new Snackbar.Callback()
+                {
+                    @Override
+                    public void onDismissed(Snackbar snackbar, int event)
+                    {
+                        if (event == DISMISS_EVENT_ACTION) {
+                            Snackbar.make(view,
+                                    deletedItem.getTitle().concat(" has been restored to Selling"),
+                                    Snackbar.LENGTH_SHORT).show();
+                            return; //If an action was used to dismiss, the user wants to undo the deletion, so we do not need to continue
+                        }
+                        API.getInstance(getContext()).deleteItem(deletedItem.getPk());
+                    }
+                });
+                snackbar.show();
+            }
+        };
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.list);
         listContainer = (SwipeRefreshLayout) view.findViewById(R.id.listContainer);
 
-        listContainer.setColorSchemeResources(R.color.colorPrimary, R.color.colorNope, R.color.colorHoldBlue);
+        listContainer.setColorSchemeResources(R.color.colorPrimary, R.color.colorNope,
+                R.color.colorHoldBlue);
 
-        listContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        listContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
+        {
             @Override
-            public void onRefresh() {
+            public void onRefresh()
+            {
                 refreshSelling();
             }
         });
-
 
         recyclerView.addItemDecoration(
                 new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL_LIST));
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        itemTouchHelper.attachToRecyclerView(recyclerView);
 
         refreshSelling();
 
@@ -84,7 +139,7 @@ public class SellingFragment extends Fragment
 
     public void refreshSelling()
     {
-        API.getInstance().getSellers(new SellersListener(), new SellersErrorListener());
+        API.getInstance(getContext()).getSellers(new SellersListener(), new SellersErrorListener());
     }
 
     @Override
@@ -141,7 +196,7 @@ public class SellingFragment extends Fragment
     {
         if (json.getInt("status") != 1) {
             Toast.makeText(getContext(), "There was error retrieving the Seller Items",
-                           Toast.LENGTH_SHORT).show();
+                    Toast.LENGTH_SHORT).show();
             return null;
         }
         JSONArray jsonArray = json.getJSONArray("seller_garage");
@@ -165,9 +220,8 @@ public class SellingFragment extends Fragment
             seller.setDescription(sellerJson.getString("description"));
             seller.setFacebook_id(sellerJson.getString("facebook_id"));
             seller.setAvatar_image_url(seller.getFacebook_id()
-                                               .matches(
-                                                       "[0-9]+") ? "https://graph.facebook.com/" + seller
-                    .getFacebook_id() + "/picture?type=normal" : null);
+                    .matches(
+                            "[0-9]+") ? "https://graph.facebook.com/" + seller.getFacebook_id() + "/picture?type=normal" : null);
             seller.setPk(sellerJson.getInt("pk"));
             seller.setFlavor(sellerJson.getInt("flavor"));
             seller.setUser_location(sellerJson.getString("user_location"));
@@ -200,11 +254,21 @@ public class SellingFragment extends Fragment
         public void onResponse(JSONObject response)
         {
             try {
-                recyclerView.setAdapter(new SellingAdapter(processJson(response), getActivity()));
+                items = processJson(response);
+                if (items.size() == 0) {
+                    emptyListTextView.setVisibility(View.VISIBLE);
+                    listContainer.setVisibility(View.GONE);
+                } else {
+                    emptyListTextView.setVisibility(View.GONE);
+                    listContainer.setVisibility(View.VISIBLE);
+                }
+                sellingAdapter = new SellingAdapter(items, getActivity());
+                recyclerView.setAdapter(sellingAdapter);
                 listContainer.setRefreshing(false);
+
             } catch (JSONException e) {
                 Toast.makeText(getContext(), "There was error retrieving the Seller's Garage",
-                               Toast.LENGTH_SHORT).show();
+                        Toast.LENGTH_SHORT).show();
                 showError();
             }
         }
@@ -222,7 +286,7 @@ public class SellingFragment extends Fragment
         public void onErrorResponse(VolleyError error)
         {
             Toast.makeText(getContext(), "There was error retrieving the Seller's Garage",
-                           Toast.LENGTH_SHORT).show();
+                    Toast.LENGTH_SHORT).show();
             showError();
         }
     }

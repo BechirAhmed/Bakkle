@@ -178,9 +178,9 @@ public class FeedFragment extends Fragment
     {
         final FeedItem item = (FeedItem) dataObject;
         if (previousItem != null) {
-            API.getInstance()
+            API.getInstance(getContext())
                     .markItem(Constants.MARK_NOPE, previousItem.getPk(),
-                              "42"); //TODO: Get actual view duration
+                            "42"); //TODO: Get actual view duration
         } //Marks previously Nope'd item as Nope on the server
         if (Direction.hasRight(direction)) {
             /** Show splash screen.
@@ -199,9 +199,9 @@ public class FeedFragment extends Fragment
         } else if (Direction.hasLeft(direction)) {
             previousItem = item;
         } else if (Direction.hasTop(direction)) {
-            API.getInstance()
+            API.getInstance(getContext())
                     .markItem(Constants.MARK_HOLD, item.getPk(),
-                              "42"); //TODO: Get actual view duration
+                            "42"); //TODO: Get actual view duration
             previousItem = null;
         } else if (Direction.hasBottom(direction)) {
             final EditText input = new EditText(getContext());
@@ -228,9 +228,9 @@ public class FeedFragment extends Fragment
                         {
                             String reportText = input.getText().toString();
                             previousItem = null;
-                            API.getInstance()
+                            API.getInstance(getContext())
                                     .markItem(Constants.MARK_REPORT, item.getPk(), "42",
-                                              reportText); //TODO: Get actual view duration
+                                            reportText); //TODO: Get actual view duration
                         }
                     })
                     .show();
@@ -339,9 +339,13 @@ public class FeedFragment extends Fragment
 
         flingContainer.removeAllViewsInLayout();
 
-        adapter = new FeedAdapter(getContext(), R.layout.feed_item, items);
-        flingContainer.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+        if (getContext() != null && items != null) {
+            adapter = new FeedAdapter(getContext(), R.layout.feed_item, items);
+            flingContainer.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+        } else {
+            showError();
+        }
     }
 
     public List<FeedItem> processJson(JSONObject json) throws JSONException
@@ -368,9 +372,8 @@ public class FeedFragment extends Fragment
             seller.setDescription(sellerJson.getString("description"));
             seller.setFacebook_id(sellerJson.getString("facebook_id"));
             seller.setAvatar_image_url(seller.getFacebook_id()
-                                               .matches(
-                                                       "[0-9]+") ? "https://graph.facebook.com/" + seller
-                    .getFacebook_id() + "/picture?type=normal" : null);
+                    .matches(
+                            "[0-9]+") ? "https://graph.facebook.com/" + seller.getFacebook_id() + "/picture?type=normal" : null);
             seller.setPk(sellerJson.getInt("pk"));
             seller.setFlavor(sellerJson.getInt("flavor"));
             seller.setUser_location(sellerJson.getString("user_location"));
@@ -600,7 +603,7 @@ public class FeedFragment extends Fragment
 //    {
 //        super.setUserVisibleHint(isVisibleToUser);
 //        if (!isVisibleToUser && previousItem != null) {
-//            API.getInstance()
+//            API.getInstance(getContext())
 //                    .markItem(Constants.MARK_NOPE, previousItem.getPk(),
 //                              "42"); //TODO: Get actual view duration
 //        }
@@ -616,7 +619,7 @@ public class FeedFragment extends Fragment
                 doneProcessing();
             } catch (JSONException e) {
                 Toast.makeText(getContext(), "There was error retrieving the feed",
-                               Toast.LENGTH_SHORT).show();
+                        Toast.LENGTH_SHORT).show();
                 showError();
             }
         }
