@@ -1,14 +1,3 @@
-blur on the cards
-Make flicking cards easier
-Make action bar change dynamically
-Bring the app to Material design guidelines (or at least make it a little better)
 Check status codes when making server calls
-Make ServerCalls class non-instantiable
-Use ViewPager to look at images instead of HorizontalScrollView
-Custom camera view
-View video
-upload video
-Remove pictures
+Camera
 Edit item
-Fix Add item title
-Show Next button when adding image from Gallery

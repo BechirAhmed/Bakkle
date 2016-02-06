@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="SwipeFlingAdapterView"><attr format="reference" name="SwipeFlingStyle"/><attr name="direction"><flag name="LEFT" value="1"/><flag name="TOP" value="2"/><flag name="RIGHT" value="4"/><flag name="BOTTOM" value="8"/><flag name="HORIZONTAL" value="5"/><flag name="VERTICAL" value="10"/><flag name="ALL" value="15"/></attr><attr format="float" name="rotation_degrees"/><attr format="integer" name="min_adapter_stack"/><attr format="integer" name="max_visible"/></declare-styleable>
+    <string name="app_name">Fling Swipe Cards</string>
+    <string name="selling">Selling</string>
+    <style name="SwipeFling">
+        <item name="rotation_degrees">15</item>
+        <item name="min_adapter_stack">6</item>
+        <item name="max_visible">4</item>
+    </style>
+</resources>
