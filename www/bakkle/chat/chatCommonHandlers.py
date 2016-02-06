@@ -69,6 +69,10 @@ def sendChatMessage(clients, chatId, senderId, message, offerPrice, offerMethod)
         sender = Account.objects.get(pk=senderId)
         sentByBuyer = (sender == chat.buyer)
 
+        trunc_title   = (chat.item.title[:10] + '..') if len(chat.item.title) > 8 else chat.item.title
+        trunc_message = (message[:100] + '...') if len(message) > 97 else message
+        notification_message = "{}: {}".format(trunc_title, trunc_message)
+
         offer = None
         if (offerPrice is not None and offerPrice != "") and (offerMethod is not None and offerMethod != ""):
             try:
@@ -99,7 +103,7 @@ def sendChatMessage(clients, chatId, senderId, message, offerPrice, offerMethod)
 
     newMessage = Message.objects.create(
         chat=chat, sent_by_buyer=sentByBuyer, message=message)
-    newMessage.date_sent = datetime.datetime.now()
+    newMessage.date_sent = datetime.datetime.utcnow()
     if (offer is not None):
         newMessage.offer = offer
     newMessage.save()
@@ -108,7 +112,7 @@ def sendChatMessage(clients, chatId, senderId, message, offerPrice, offerMethod)
     chat.hasUnreadSeller = sentByBuyer
     chat.save()
 
-    logging.info("Chat item={} seller={} buyer={} senderid={}".format(chat.item.id, chat.item.seller.id, chat.buyer.id, senderId))
+    logging.info("Chat item={} seller={} buyer={} senderid={} notification_message={}".format(chat.item.id, chat.item.seller.id, chat.buyer.id, senderId, notification_message))
 
     # Find devices owned by seller
     if(sender != chat.item.seller):
@@ -116,18 +120,18 @@ def sendChatMessage(clients, chatId, senderId, message, offerPrice, offerMethod)
       sellerNumUnreadChats = getNumUnreadChatsForAccount(chat.item.seller.pk)
       for device in devices:
         device.send_notification(
-            message,
+            notification_message,
             sellerNumUnreadChats,
             "Bakkle_Notification_new.m4r",
             {'chat_id': chat.id, 'item_id':chat.item.id, 'seller_id':chat.item.seller.id, 'buyer_id':chat.buyer.id})
-        
+
     # Find devices owned by BUYER
     if(sender != chat.buyer):
       devices = Device.objects.filter(account_id=chat.buyer)
       buyerNumUnreadChats = getNumUnreadChatsForAccount(chat.buyer.pk)
       for device in devices:
         device.send_notification(
-            message,
+            notification_message,
             buyerNumUnreadChats,
             "Bakkle_Notification_new.m4r",
             {'chat_id': chat.id, 'item_id':chat.item.id, 'seller_id':chat.item.seller.id, 'buyer_id':chat.buyer.id})

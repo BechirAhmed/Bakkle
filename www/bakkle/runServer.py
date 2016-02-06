@@ -35,32 +35,18 @@ import common.systemRESTHandlers as SystemRESTHandlers
 
 app = web.Application([
 
-    web.url(r'^/items/$', itemsRESTHandlers.indexHandler, name='itemIndex'),
-    web.url(r'^/items/spam/$', itemsRESTHandlers.spamIndexHandler,
-            name='spamItemsIndex'),
-    web.url(r'^/items/(?P<item_id>[0-9]+)/detail/$',
-            itemsRESTHandlers.itemDetailHandler, name='itemDetail'),
+# Public WEB
     web.url(r'^/items/(?P<item_id>[0-9]+)/$',
             itemsRESTHandlers.itemPublicDetailHandler, name='itemPublicDetail'),
-    web.url(r'^/items/(?P<item_id>[0-9]+)/delete/$',
-            itemsRESTHandlers.markDeletedHandler, name='itemMarkDelete'),
-    web.url(r'^/items/(?P<item_id>[0-9]+)/spam/$',
-            itemsRESTHandlers.markSpamHandler, name='itemMarkSpam'),
-    web.url(r'^/items/spam/(?P<item_id>[0-9]+)/delete/$',
-            itemsRESTHandlers.markDeletedHandlerFromSpam,
-            name='itemMarkDeleteFromSpam'),
-    web.url(r'^/items/spam/(?P<item_id>[0-9]+)/spam/$',
-            itemsRESTHandlers.markSpamHandlerFromSpam,
-            name='itemMarkSpamFromSpam'),
 
+# Webservices for APP
     web.url(r'^/items/reset/$', itemsRESTHandlers.resetHandler, name='reset'),
     web.url(r'^/items/feed/$', itemsRESTHandlers.feedHandler, name='feed'),
     web.url(r'^/items/meh/$', itemsRESTHandlers.mehHandler, name='meh'),
     web.url(r'^/items/want/$', itemsRESTHandlers.wantHandler, name='want'),
     web.url(r'^/items/hold/$', itemsRESTHandlers.holdHandler, name='hold'),
     web.url(r'^/items/sold/$', itemsRESTHandlers.soldHandler, name='sold'),
-    web.url(
-        r'^/items/report/$', itemsRESTHandlers.reportHandler, name='report'),
+    web.url(r'^/items/report/$', itemsRESTHandlers.reportHandler, name='report'),
     web.url(r'^/items/add_item/$',
             itemsRESTHandlers.addItemHandler, name='add_item'),
     web.url(r'^/items/delete_item/$',
@@ -82,23 +68,6 @@ app = web.Application([
             itemsRESTHandlers.getBuyerTransactionsHandler, name='get_buyer_transactions'),
     web.url(r'^/items/get_delivery_methods/$',
             itemsRESTHandlers.getDeliveryMethodsHandler, name='get_delivery_methods'),
-
-
-    web.url(
-        r'^/account/$', accountsRESTHandlers.indexHandler, name='accountIndex'),
-    web.url(r'^/account/dashboard/$',
-            accountsRESTHandlers.accountDashboardHandler, name='dashboard'),
-    web.url(r'^/account/(?P<account_id>[0-9]+)/detail/$',
-            accountsRESTHandlers.accountDetailHandler, name='accountDetail'),
-    web.url(r'^/account/(?P<account_id>[0-9]+)/reset/$',
-            accountsRESTHandlers.accountResetHandler, name='accountReset'),
-    web.url(r'^/account/(?P<account_id>[0-9]+)/notify/$',
-            accountsRESTHandlers.deviceNotifyAllHandler, name='deviceNotifyAll'),
-    web.url(r'^/account/device/(?P<device_id>[0-9]+)/detail/$',
-            accountsRESTHandlers.deviceDetailHandler, name='deviceDetail'),
-    web.url(r'^/account/device/(?P<device_id>[0-9]+)/notify/$',
-            accountsRESTHandlers.deviceNotifyHandler, name='deviceNotify'),
-    # web.url(r'^/items/(?P<account_id>[0-9]+)/spam/$', accountsRESTHandlers.markSpamHandler, name='itemMarkSpam'),
 
     web.url(r'^/account/login_facebook/$',
             accountsRESTHandlers.loginFacebookHandler, name='login_facebook'),
@@ -124,6 +93,8 @@ app = web.Application([
             accountsRESTHandlers.setDescriptionHandler, name='set_description'),
     web.url(r'^/account/get_account/$',
             accountsRESTHandlers.getAccountHandler, name='get_account'),
+    web.url(r'^/account/restart/$',
+            accountsRESTHandlers.restartHandler, name='restart'),
 
     web.url(r'^/purchase/purchase/$',
             PurchaseRESTHandlers.stripeChargeHandler, name='stripeCharge'),
@@ -131,8 +102,43 @@ app = web.Application([
     web.url(r'^/system/status/$',
             SystemRESTHandlers.statusHandler, name='status'),
 
-
+# Websocket for APP (chat)
     web.url(r"/ws.*", baseWSHandlers.BaseWSHandler),
+
+
+# ADMIN INTERFACE
+    web.url(r'^/secure/account/$', accountsRESTHandlers.indexHandler, name='accountIndex'),
+    web.url(r'^/secure/account/dashboard/$',
+            accountsRESTHandlers.accountDashboardHandler, name='dashboard'),
+    web.url(r'^/secure/account/(?P<account_id>[0-9]+)/detail/$',
+            accountsRESTHandlers.accountDetailHandler, name='accountDetail'),
+    web.url(r'^/secure/account/(?P<account_id>[0-9]+)/reset/$',
+            accountsRESTHandlers.accountResetHandler, name='accountReset'),
+    web.url(r'^/secure/account/(?P<account_id>[0-9]+)/notify/$',
+            accountsRESTHandlers.deviceNotifyAllHandler, name='deviceNotifyAll'),
+    web.url(r'^/secure/account/device/(?P<device_id>[0-9]+)/detail/$',
+            accountsRESTHandlers.deviceDetailHandler, name='deviceDetail'),
+    web.url(r'^/secure/account/device/(?P<device_id>[0-9]+)/notify/$',
+            accountsRESTHandlers.deviceNotifyHandler, name='deviceNotify'),
+    # web.url(r'^/items/(?P<account_id>[0-9]+)/spam/$', accountsRESTHandlers.markSpamHandler, name='itemMarkSpam'),
+
+    web.url(r'^/secure/items/$', itemsRESTHandlers.indexHandler, name='itemIndex'),
+    web.url(r'^/secure/items/spam/$', itemsRESTHandlers.spamIndexHandler, name='spamItemsIndex'),
+    web.url(r'^/secure/items/(?P<item_id>[0-9]+)/detail/$',
+            itemsRESTHandlers.itemDetailHandler, name='itemDetail'),
+
+    web.url(r'^/secure/items/(?P<item_id>[0-9]+)/delete/$',
+            itemsRESTHandlers.markDeletedHandler, name='itemMarkDelete'),
+    web.url(r'^/secure/items/(?P<item_id>[0-9]+)/spam/$',
+            itemsRESTHandlers.markSpamHandler, name='itemMarkSpam'),
+    web.url(r'^/secure/items/spam/(?P<item_id>[0-9]+)/delete/$',
+            itemsRESTHandlers.markDeletedHandlerFromSpam,
+            name='itemMarkDeleteFromSpam'),
+    web.url(r'^/secure/items/spam/(?P<item_id>[0-9]+)/spam/$',
+            itemsRESTHandlers.markSpamHandlerFromSpam,
+            name='itemMarkSpamFromSpam'),
+
+
 ], debug=False
 )
 

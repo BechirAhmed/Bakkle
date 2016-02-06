@@ -13,7 +13,6 @@
 		1B754B251B4D4D960002C41D /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B754B241B4D4D960002C41D /* CameraView.swift */; };
 		1B876B161B57F65C00D79D82 /* camera-remove.png in Resources */ = {isa = PBXBuildFile; fileRef = 1B876B151B57F65C00D79D82 /* camera-remove.png */; };
 		1BE43B5C1B6A9AEF00A6E6F8 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BE43B5B1B6A9AEF00A6E6F8 /* CoreLocation.framework */; };
-		1BF70DC31B74F74900B9231A /* VideoPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF70DC21B74F74900B9231A /* VideoPlayer.swift */; };
 		1BF7D3631B592D7800EC7789 /* FocusIndicator.png in Resources */ = {isa = PBXBuildFile; fileRef = 1BF7D3611B592D7800EC7789 /* FocusIndicator.png */; };
 		1BF7D3641B592D7800EC7789 /* ios-flash-on-white.png in Resources */ = {isa = PBXBuildFile; fileRef = 1BF7D3621B592D7800EC7789 /* ios-flash-on-white.png */; };
 		1BFAEC661B6659FF00E264A9 /* Goodwill Logo-White.png in Resources */ = {isa = PBXBuildFile; fileRef = 1BFAEC651B6659FF00E264A9 /* Goodwill Logo-White.png */; };
@@ -65,6 +64,11 @@
 		604D60301BFFBC690060579C /* SigUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604D602F1BFFBC690060579C /* SigUpView.swift */; };
 		605ECFEC1C0F890400B111C3 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 605ECFEB1C0F890400B111C3 /* SystemConfiguration.framework */; };
 		60708D561BF681FD0021D5A6 /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60708D551BF681FD0021D5A6 /* SignInView.swift */; };
+		609828291C46ED060049A1F6 /* camera-flash-auto.png in Resources */ = {isa = PBXBuildFile; fileRef = 609828241C46ED060049A1F6 /* camera-flash-auto.png */; };
+		6098282A1C46ED060049A1F6 /* camera-flash-off.png in Resources */ = {isa = PBXBuildFile; fileRef = 609828251C46ED060049A1F6 /* camera-flash-off.png */; };
+		6098282C1C46ED060049A1F6 /* ReadyBtn.png in Resources */ = {isa = PBXBuildFile; fileRef = 609828271C46ED060049A1F6 /* ReadyBtn.png */; };
+		6098282D1C46ED060049A1F6 /* ReadyNoBtn.png in Resources */ = {isa = PBXBuildFile; fileRef = 609828281C46ED060049A1F6 /* ReadyNoBtn.png */; };
+		60A228CB1C4701A30093DD80 /* camera-flash.png in Resources */ = {isa = PBXBuildFile; fileRef = 60A228CA1C4701A30093DD80 /* camera-flash.png */; };
 		60BA452D1C404EB600D49C38 /* Ready.png in Resources */ = {isa = PBXBuildFile; fileRef = 60BA45281C404EB600D49C38 /* Ready.png */; };
 		60BA452E1C404EB600D49C38 /* SwipeDown.png in Resources */ = {isa = PBXBuildFile; fileRef = 60BA45291C404EB600D49C38 /* SwipeDown.png */; };
 		60BA452F1C404EB600D49C38 /* SwipeLeft.png in Resources */ = {isa = PBXBuildFile; fileRef = 60BA452A1C404EB600D49C38 /* SwipeLeft.png */; };
@@ -118,6 +122,7 @@
 		A05DB7521AF1BC090076D97D /* btn-menu.png in Resources */ = {isa = PBXBuildFile; fileRef = A05DB7511AF1BC090076D97D /* btn-menu.png */; };
 		A05DB7541AF3F22B0076D97D /* dot@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A05DB7531AF3F22B0076D97D /* dot@2x.png */; };
 		A05DB7581AF4F8C60076D97D /* mock-tile.png in Resources */ = {isa = PBXBuildFile; fileRef = A05DB7571AF4F8C60076D97D /* mock-tile.png */; };
+		A0655E2D1C63A2F000C8B164 /* icon-edit.png in Resources */ = {isa = PBXBuildFile; fileRef = A0655E2C1C63A2F000C8B164 /* icon-edit.png */; };
 		A06AA9EE1AD609530075D7F7 /* Bakkle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A06AA9ED1AD609530075D7F7 /* Bakkle.swift */; };
 		A08D53AF1B06D850000C406C /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08D53AE1B06D850000C406C /* Common.swift */; };
 		A08D53B11B06DBD8000C406C /* icon-x@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = A08D53B01B06DBD8000C406C /* icon-x@3x.png */; };
@@ -148,6 +153,9 @@
 		A0A8F8FE1B1F2BB70055BBC0 /* cartoon_fast_whoosh_good_for_karate_chop_other_fast_movement_or_swipe_001.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = A0A8F8FD1B1F2BB70055BBC0 /* cartoon_fast_whoosh_good_for_karate_chop_other_fast_movement_or_swipe_001.mp3 */; };
 		A0A8F9001B1F2C870055BBC0 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0A8F8FF1B1F2C870055BBC0 /* AVFoundation.framework */; };
 		A0B7F4BA1AFB053B00065407 /* blank.png in Resources */ = {isa = PBXBuildFile; fileRef = A0B7F4B91AFB053B00065407 /* blank.png */; };
+		A0D6E4901C6527980011B0BE /* Pods_Bakkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E0CABDBE20E9D5B2EED4810 /* Pods_Bakkle.framework */; };
+		A0D6E4911C6527980011B0BE /* Pods_Bakkle.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3E0CABDBE20E9D5B2EED4810 /* Pods_Bakkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A0D6E4941C652A170011B0BE /* String+Truncate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D6E4931C652A170011B0BE /* String+Truncate.swift */; };
 		A0D96F791AD765990046DA13 /* icon-gear.png in Resources */ = {isa = PBXBuildFile; fileRef = A0D96F731AD765990046DA13 /* icon-gear.png */; };
 		A0D96F7A1AD765990046DA13 /* icon-filter.png in Resources */ = {isa = PBXBuildFile; fileRef = A0D96F741AD765990046DA13 /* icon-filter.png */; };
 		A0D96F7B1AD765990046DA13 /* icon-down.png in Resources */ = {isa = PBXBuildFile; fileRef = A0D96F751AD765990046DA13 /* icon-down.png */; };
@@ -194,6 +202,20 @@
 			remoteInfo = Bakkle;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A0D6E4921C6527990011B0BE /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				A0D6E4911C6527980011B0BE /* Pods_Bakkle.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		136AB1E21B0835E200C76C71 /* ChatNotification.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = ChatNotification.apns; sourceTree = "<group>"; };
@@ -288,6 +310,11 @@
 		604D602F1BFFBC690060579C /* SigUpView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SigUpView.swift; sourceTree = "<group>"; };
 		605ECFEB1C0F890400B111C3 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		60708D551BF681FD0021D5A6 /* SignInView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
+		609828241C46ED060049A1F6 /* camera-flash-auto.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera-flash-auto.png"; sourceTree = "<group>"; };
+		609828251C46ED060049A1F6 /* camera-flash-off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera-flash-off.png"; sourceTree = "<group>"; };
+		609828271C46ED060049A1F6 /* ReadyBtn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ReadyBtn.png; sourceTree = "<group>"; };
+		609828281C46ED060049A1F6 /* ReadyNoBtn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ReadyNoBtn.png; sourceTree = "<group>"; };
+		60A228CA1C4701A30093DD80 /* camera-flash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera-flash.png"; sourceTree = "<group>"; };
 		60BA45281C404EB600D49C38 /* Ready.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Ready.png; sourceTree = "<group>"; };
 		60BA45291C404EB600D49C38 /* SwipeDown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SwipeDown.png; sourceTree = "<group>"; };
 		60BA452A1C404EB600D49C38 /* SwipeLeft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SwipeLeft.png; sourceTree = "<group>"; };
@@ -343,6 +370,7 @@
 		A05DB7511AF1BC090076D97D /* btn-menu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-menu.png"; sourceTree = "<group>"; };
 		A05DB7531AF3F22B0076D97D /* dot@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dot@2x.png"; sourceTree = "<group>"; };
 		A05DB7571AF4F8C60076D97D /* mock-tile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mock-tile.png"; sourceTree = "<group>"; };
+		A0655E2C1C63A2F000C8B164 /* icon-edit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-edit.png"; sourceTree = "<group>"; };
 		A06AA9ED1AD609530075D7F7 /* Bakkle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bakkle.swift; sourceTree = "<group>"; };
 		A08D53AE1B06D850000C406C /* Common.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
 		A08D53B01B06DBD8000C406C /* icon-x@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-x@3x.png"; sourceTree = "<group>"; };
@@ -376,6 +404,7 @@
 		A0B765431B0E3A2700107F7E /* Bakkle.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Bakkle.entitlements; sourceTree = "<group>"; };
 		A0B765441B0E3BD600107F7E /* Bakkle WatchKit Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Bakkle WatchKit Extension.entitlements"; sourceTree = "<group>"; };
 		A0B7F4B91AFB053B00065407 /* blank.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blank.png; sourceTree = "<group>"; };
+		A0D6E4931C652A170011B0BE /* String+Truncate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Truncate.swift"; sourceTree = "<group>"; };
 		A0D96F731AD765990046DA13 /* icon-gear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-gear.png"; sourceTree = "<group>"; };
 		A0D96F741AD765990046DA13 /* icon-filter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-filter.png"; sourceTree = "<group>"; };
 		A0D96F751AD765990046DA13 /* icon-down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-down.png"; sourceTree = "<group>"; };
@@ -429,6 +458,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A0D6E4901C6527980011B0BE /* Pods_Bakkle.framework in Frameworks */,
 				605ECFEC1C0F890400B111C3 /* SystemConfiguration.framework in Frameworks */,
 				1BE43B5C1B6A9AEF00A6E6F8 /* CoreLocation.framework in Frameworks */,
 				A0A8F9001B1F2C870055BBC0 /* AVFoundation.framework in Frameworks */,
@@ -500,6 +530,7 @@
 				5EBDD6941AB211E600C7FBE7 /* Main.storyboard */,
 				A08D53B71B07DC8E000C406C /* Images */,
 				5EBDD68E1AB211E600C7FBE7 /* Supporting Files */,
+				A0D6E4931C652A170011B0BE /* String+Truncate.swift */,
 			);
 			path = Bakkle;
 			sourceTree = "<group>";
@@ -666,6 +697,11 @@
 		A08D53B71B07DC8E000C406C /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				60A228CA1C4701A30093DD80 /* camera-flash.png */,
+				609828241C46ED060049A1F6 /* camera-flash-auto.png */,
+				609828251C46ED060049A1F6 /* camera-flash-off.png */,
+				609828271C46ED060049A1F6 /* ReadyBtn.png */,
+				609828281C46ED060049A1F6 /* ReadyNoBtn.png */,
 				60BA45321C404FF400D49C38 /* no-internet.png */,
 				60BA45281C404EB600D49C38 /* Ready.png */,
 				60BA45291C404EB600D49C38 /* SwipeDown.png */,
@@ -694,6 +730,7 @@
 				5EBDD6971AB211E600C7FBE7 /* Images.xcassets */,
 				A08D53D91B08269A000C406C /* icon-i.png */,
 				A08D53D71B0825E7000C406C /* icon-back.png */,
+				A0655E2C1C63A2F000C8B164 /* icon-edit.png */,
 				F0D6F4011B5EA17100938A06 /* LoginScreen-bkg.png */,
 				F0D6F4041B5EA18700938A06 /* SplashScreen-bkg.png */,
 				A08D53B01B06DBD8000C406C /* icon-x@3x.png */,
@@ -889,6 +926,7 @@
 				5EBDD6891AB211E600C7FBE7 /* Resources */,
 				DAC119B602F64538F899B059 /* Embed Pods Frameworks */,
 				1BBD5791D628CB2AC4F68D73 /* Copy Pods Resources */,
+				A0D6E4921C6527990011B0BE /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -967,8 +1005,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				DBEE0E9B1AF3C85C005E60BD /* btn-want-disabled.png in Resources */,
+				6098282A1C46ED060049A1F6 /* camera-flash-off.png in Resources */,
 				A05DB7581AF4F8C60076D97D /* mock-tile.png in Resources */,
 				1BFAEC661B6659FF00E264A9 /* Goodwill Logo-White.png in Resources */,
+				6098282D1C46ED060049A1F6 /* ReadyNoBtn.png in Resources */,
 				A08D53DA1B08269A000C406C /* icon-i.png in Resources */,
 				A0A5F71D1AEDAE54001A7D7A /* Settings.bundle in Resources */,
 				726A38E31B39BE1E00CF5553 /* logo-white-design-clear.png in Resources */,
@@ -981,9 +1021,11 @@
 				DB5DB3581B18E18100734692 /* icon-tags75.png in Resources */,
 				5E1DCC9F1AD44C72002D41FD /* tiger.jpg in Resources */,
 				604D602E1BFFA0A10060579C /* default_profile.png in Resources */,
+				6098282C1C46ED060049A1F6 /* ReadyBtn.png in Resources */,
 				A058A2A61AFD6024005E7432 /* btn-addItem@2x.png in Resources */,
 				DBEE0E991AF3C855005E60BD /* btb-want.png in Resources */,
 				A058A2B41AFDADA2005E7432 /* mask-buyer-grey.png in Resources */,
+				609828291C46ED060049A1F6 /* camera-flash-auto.png in Resources */,
 				60F3BC221B694C5A0033EF83 /* Bakkle_Notification_new.m4r in Resources */,
 				A0A200011ACE2F7500A42CD8 /* btn-email40.png in Resources */,
 				A058A2B91AFDADA2005E7432 /* mask-buyer-white@3x.png in Resources */,
@@ -1020,6 +1062,7 @@
 				A0D96F7C1AD765990046DA13 /* icon-cart.png in Resources */,
 				A0D96F791AD765990046DA13 /* icon-gear.png in Resources */,
 				A08D53D21B0815CB000C406C /* MessageOutgoing.aiff in Resources */,
+				A0655E2D1C63A2F000C8B164 /* icon-edit.png in Resources */,
 				A0A200021ACE2F7500A42CD8 /* btn-facebook40.png in Resources */,
 				5E1DCCA31AD47C53002D41FD /* btn-x.png in Resources */,
 				60BA452D1C404EB600D49C38 /* Ready.png in Resources */,
@@ -1047,6 +1090,7 @@
 				728598C31B6A52C300C2FE55 /* InstructionScreen-new.png in Resources */,
 				A0A200051ACE30C200A42CD8 /* btn-logout40.png in Resources */,
 				F0D6F40E1B5EC1A500938A06 /* gwIcon@2x.png in Resources */,
+				60A228CB1C4701A30093DD80 /* camera-flash.png in Resources */,
 				DB6726EB1B178F250014A896 /* star_none.png in Resources */,
 				60F3BC111B5E90BC0033EF83 /* Goodwill-LaunchScreen.xib in Resources */,
 				A058A2BB1AFDB87F005E7432 /* loading.png in Resources */,
@@ -1127,6 +1171,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A0D6E4941C652A170011B0BE /* String+Truncate.swift in Sources */,
 				5EE2C9B71AB9F0FB0031D8CD /* MDCPanState.m in Sources */,
 				A058A2AB1AFD8EAD005E7432 /* UIImage+Resize.swift in Sources */,
 				A08D53CB1B0815CB000C406C /* ChatCell.swift in Sources */,
@@ -1148,7 +1193,6 @@
 				1B56D5D41B30709F009D81C6 /* UIDevice+ModelName.swift in Sources */,
 				602C390D1B3C9933005CB493 /* PNLineChartData.swift in Sources */,
 				723D532E1B2718590067A80A /* OffsetTextAttachment.swift in Sources */,
-				1BF70DC31B74F74900B9231A /* VideoPlayer.swift in Sources */,
 				A003EB141AD4CCA600EE51A1 /* SWRevealViewController.m in Sources */,
 				5E8055421AE541460035521C /* ItemDetails.swift in Sources */,
 				5EE2C9BA1AB9F0FB0031D8CD /* UIView+MDCBorderedLabel.m in Sources */,
@@ -1332,6 +1376,8 @@
 				APP_NAME = Bakkle;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				CLANG_ENABLE_MODULES = NO;
 				CODE_SIGN_ENTITLEMENTS = Bakkle/Bakkle.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1359,6 +1405,8 @@
 				APP_NAME = Bakkle;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				CLANG_ENABLE_MODULES = NO;
 				CODE_SIGN_ENTITLEMENTS = Bakkle/Bakkle.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";

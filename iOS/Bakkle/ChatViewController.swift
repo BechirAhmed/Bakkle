@@ -139,7 +139,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
         offerButton.setImage(IconImage().offer(), forState: UIControlState.Normal)
         
         offerButton.addTarget(self, action: "btnOffer:", forControlEvents: UIControlEvents.TouchUpInside)
-        header.addSubview(offerButton)
+        //Disabled offer button header.addSubview(offerButton)
         view.addSubview(header)
         
         tableView = UITableView(frame: CGRectMake(view.bounds.origin.x, view.bounds.origin.y+headerHeight+topHeight, view.bounds.size.width, view.bounds.size.height-headerHeight-self.inputAccessoryView.bounds.size.height), style: .Plain)
@@ -273,8 +273,12 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 // if message is null, we have an offer
                 let messageText = message.valueForKey("message") as! String
                 //let offerPrice = message.valueForKey("offer") as! String
-                let dateString = message.valueForKey("date_sent") as! String
-                let date = NSDate().dateFromString(dateString, format:  "yyyy-MM-dd HH:mm:ss")
+                var dateString = message.valueForKey("date_sent") as! String
+                
+                // Can remove, temporary hack so old data without TZs doesnt' crash the formatter
+                if count(dateString)<22 { dateString = dateString + " UTC" }
+                
+                let date = NSDate().dateFromString(dateString, format:  "yyyy-MM-dd HH:mm:ss ZZZ")
                 let incoming = message.valueForKey("sent_by_buyer") as! Bool
                 var offer = NSDictionary()
                 if let offerDict = message.valueForKey("offer") as? NSDictionary {
@@ -304,8 +308,12 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 message = dict.objectForKey("message") as! NSDictionary
                 
                 let messageText = message.valueForKey("message") as! String
-                let dateString = message.valueForKey("date_sent") as! String
-                let date = NSDate().dateFromString(dateString, format:  "yyyy-MM-dd HH:mm:ss")
+                var dateString = message.valueForKey("date_sent") as! String
+
+                // Can remove, temporary hack so old data without TZs doesnt' crash the formatter
+                if count(dateString)<22 { dateString = dateString + " UTC" }
+                
+                let date = NSDate().dateFromString(dateString, format:  "yyyy-MM-dd HH:mm:ss ZZZ")
                 let incoming = (message.valueForKey("sent_by_buyer") as! Bool) == !self.isBuyer
                 let loadedMessage = Message(incoming: incoming, text: messageText, offer: NSDictionary(), sentDate: date)
                 let incomingChatId = (message.valueForKey("chat") as! NSNumber).integerValue
@@ -332,7 +340,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 message = dict.objectForKey("message") as! NSDictionary
                 
                 let dateString = message.valueForKey("date_sent") as! String
-                let date = NSDate().dateFromString(dateString, format:  "yyyy-MM-dd HH:mm:ss")
+                let date = NSDate().dateFromString(dateString, format:  "yyyy-MM-dd HH:mm:ss ZZZ")
                 let incoming = (message.valueForKey("sent_by_buyer") as! Bool) == !self.isBuyer
                 let incomingChatId = (message.valueForKey("chat") as! NSNumber).integerValue
                 

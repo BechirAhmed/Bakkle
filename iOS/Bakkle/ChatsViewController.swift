@@ -37,11 +37,11 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
         backButton.addTarget(self, action: "btnBack:", forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(backButton)
         header.addSubview(backButton)
-        
-        let editButtonWidth:CGFloat = 50
-        var editButton = UIButton(frame: CGRectMake(header.bounds.origin.x+header.bounds.size.width-55
+
+        let editButtonWidth:CGFloat = 59
+        var editButton = UIButton(frame: CGRectMake(header.bounds.origin.x+header.bounds.size.width-editButtonWidth-10
             ,header.bounds.origin.y + 25,editButtonWidth,headerHeight-10))
-        editButton.setImage(IconImage().edit(headerHeight-15), forState: UIControlState.Normal)
+        editButton.setImage(UIImage(named: "icon-edit.png"), forState: UIControlState.Normal)
         editButton.addTarget(self, action: "editItem:", forControlEvents: UIControlEvents.TouchUpInside)
         header.addSubview(editButton)
         
@@ -139,7 +139,8 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
                 if let lastMessage = chat.valueForKey("last_message") as? NSDictionary {
                     message = lastMessage.valueForKey("message") as! String
                     dateString = lastMessage.valueForKey("date") as! String
-                    date = NSDate().dateFromString(dateString, format: "yyyy-MM-dd HH:mm:ss")
+                    dateString = dateString + " UTC"
+                    date = NSDate().dateFromString(dateString, format: "yyyy-MM-dd HH:mm:ss ZZZ")
                 }
                 id = chat.valueForKey("pk") as! Int
                 
@@ -148,9 +149,13 @@ class ChatsViewController: UIViewController, UITableViewDataSource, UITableViewD
                 let facebookID = buyer.valueForKey("facebook_id") as! String
                 
                 let buyersName = buyer.valueForKey("display_name") as! String
-                let dividedName = split(buyersName) {$0 == " "}
+                let dividedName = split(buyersName) {$0 == " "} as Array
                 let firstName = dividedName[0] as String
-                let lastName = dividedName[1] as String
+                var lastName = ""
+                if (dividedName.count == 2){
+                    lastName = dividedName[1] as String
+                }
+                
                 
                 let buyerUser = User(facebookID: facebookID, accountID: account_id, firstName: firstName, lastName: lastName)
                 var buyerChat = Chat(user: buyerUser, lastMessageText: message, lastMessageSentDate: date, chatId: id)

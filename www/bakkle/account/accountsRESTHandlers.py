@@ -235,6 +235,26 @@ class getAccountHandler(bakkleRequestHandler):
         self.writeJSON(respObj)
 
 
+class restartHandler(bakkleRequestHandler):
+
+    def post(self):
+
+        if(not self.authenticate()):
+            self.writeJSON({'success': 0, 'error': 'Device not authenticated'})
+            self.finish()
+            return
+
+        try:
+            accountId = self.getArgument('accountId')
+            logging.info("restart accountid={}".format(accountId))
+        except QueryArgumentError as error:
+            return self.writeJSON({"status": 0, "message": error.message})
+
+        respObj = accountsCommonHandlers.restart(accountId)
+
+        self.writeJSON(respObj)
+
+
 class logoutHandler(bakkleRequestHandler):
 
     def post(self):
@@ -384,8 +404,9 @@ class deviceRegisterPushHandler(bakkleRequestHandler):
             device_uuid = self.getArgument('device_uuid')
             device_token = self.getArgument('device_token')
             device_type = self.getArgument('device_type', "apn")
+            apns_mode = self.getArgument('apns_mode', "unknown")
             client_ip = self.getIP()
-            logging.info("device_register_push device_token={},device_uuid={},device_type={}".format(device_token.replace(" ", ""),device_uuid, device_type))
+            logging.info("device_register_push device_token={},device_uuid={},device_type={},apns_mode={}".format(device_token.replace(" ", ""),device_uuid, device_type, apns_mode))
         except QueryArgumentError as error:
             return self.writeJSON({"status": 0, "message": error.message})
 

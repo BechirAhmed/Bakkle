@@ -14,7 +14,7 @@ import Haneke
 class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDelegate, UINavigationControllerDelegate, MDCSwipeToChooseDelegate, UIAlertViewDelegate {
     
     let kNUM_TUTORIAL_SCREENS = 6
-
+    
     let menuSegue = "presentNav"
     let itemDetailSegue = "ItemDetailSegue"
     let refineSegue = "RefineSegue"
@@ -24,14 +24,11 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     var fromCamera: Bool! = false
     var searching = false
     var state : MDCPanState!
+    
     // the first card in the feedView
     var swipeView : MDCSwipeToChooseView!
     // the card behind the first card
     var bottomView : MDCSwipeToChooseView!
-    
-    // for instructional overlay appeared above the feedView
-    var instructionImgView: UIImageView!
-    var effectView: UIVisualEffectView!
     
     var itemDetailTap: UITapGestureRecognizer!
     var item_id = 42 //TODO: unhardcode this
@@ -64,6 +61,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     @IBOutlet weak var startChatViewOriginY: NSLayoutConstraint!
     @IBOutlet weak var darkenStartAChat: UIView!
     @IBOutlet weak var noInternectView: UIView!
+    @IBOutlet weak var resetFeedBtn: UIButton!
     
     var itemData: NSDictionary?
     var sendMessageContext = 0
@@ -79,7 +77,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         
         // check if comes from a notification
         if ((Bakkle.sharedInstance.userInfo) != nil){
-            showChatViewController()
+            awakeFromNotification()
         }
         
         // check if it is a goodwill app
@@ -96,9 +94,6 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         }
         
         pageControl.numberOfPages = kNUM_TUTORIAL_SCREENS
-        
-        // Always look for updates
-        requestUpdates()
         
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         progressIndicator.startAnimating()
@@ -156,6 +151,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             self.view.addSubview(goodwillLogo)
         }
         
+        
         self.makeAnOfferButton.layer.borderColor = UIColor.whiteColor().CGColor
         self.sendMessageButton.layer.borderColor = UIColor.whiteColor().CGColor
         self.startChatItemImage.layer.borderColor = UIColor.whiteColor().CGColor
@@ -187,7 +183,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         // check internet connection
         checkInternetConnection()
         
-        // check tutorial 
+        // check tutorial
         checkTutorial()
         
     }
@@ -205,7 +201,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell :TutorialCell = collectionView.dequeueReusableCellWithReuseIdentifier(tutorialCellIdentifier, forIndexPath: indexPath) as! TutorialCell
-    
+        
         cell.imgView.contentMode = UIViewContentMode.ScaleAspectFill
         cell.imgView.clipsToBounds  = true
         switch (indexPath.row) {
@@ -215,7 +211,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         case 3: cell.imgView.image = UIImage(named: "SwipeDown.png")
         case 4: cell.imgView.image = UIImage(named: "Sell.png")
         case 5:
-            cell.imgView.image = UIImage(named: "Ready.png")
+            cell.imgView.image = UIImage(named: "ReadyNoBtn.png")
             cell.button.hidden = false
             break
         default:
@@ -230,7 +226,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         var page: Int = Int(floor((tutorialCollectionView.contentOffset.x - pageWidth / 2) / pageWidth)) + 1
         pageControl.currentPage = page
     }
-
+    
     @IBAction func closeTutorial(button: UIButton) {
         tutorialView.hidden = true
         var userDefaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
@@ -269,7 +265,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         }
     }
     
-    func showChatViewController(){
+    func awakeFromNotification(){
         UIApplication.sharedApplication().applicationIconBadgeNumber = 0
         var userInfo = Bakkle.sharedInstance.userInfo
         Bakkle.sharedInstance.userInfo = nil
@@ -358,6 +354,8 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         
         refineButton.layer.borderWidth = 1
         refineButton.layer.borderColor = UIColor.whiteColor().CGColor
+        
+//        resetFeedBtn.hidden = true
     }
     
     @IBAction func menuButtonPressed(sender: AnyObject) {
@@ -365,6 +363,14 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         self.revealViewController().revealToggleAnimated(true)
         self.searchBar.resignFirstResponder()
         searching = false
+    }
+    
+    @IBAction func resetFeed(sender: UIButton) {
+        println("[FeedScreen] Reset feed items from server")
+        dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INTERACTIVE.value), 0)) {
+            Bakkle.sharedInstance.resetFeed({})
+            Bakkle.sharedInstance.populateFeed({})
+        }
     }
     
     /* UISearch Bar delegate */
@@ -426,23 +432,15 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
     func loadNext() {
         println("[FeedScreen] removing item from feed")
         recordstart = NSDate();
-        // Put the swipe view back in the correct location
-        //        resetSwipeView()
         
-        if(Bakkle.sharedInstance.feedItems.count < 10){
-            requestUpdates();
-        }
+        Bakkle.sharedInstance.feedItems.removeAtIndex(0)
         
-        // Remove the item that was just marked from the view
-        if Bakkle.sharedInstance.feedItems.count>0 {
-            Bakkle.sharedInstance.feedItems.removeAtIndex(0)
-        }
+        Bakkle.sharedInstance.requestMoreItems()
         
         if Bakkle.sharedInstance.feedItems.count == 1 {
             println("1 item left")
             if self.bottomView != nil {
                 self.bottomView.removeFromSuperview()
-                self.requestUpdates()
             }
         }
         
@@ -532,6 +530,8 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         }
     }
     
+    let MAX_TITLE_LEN = 20
+    
     /* helper function */
     func setupView(view: MDCSwipeToChooseView!, item: NSDictionary!) {
         let imgURLs = item.valueForKey("image_urls") as! NSArray
@@ -551,7 +551,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
         let firstURL = imgURLs[0] as! String
         let imgURL = NSURL(string: firstURL)
         
-        view.nameLabel.text = topTitle
+        view.nameLabel.text = topTitle.truncate(MAX_TITLE_LEN)
         
         var myString : String = ""
         
@@ -604,7 +604,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                 if let x: AnyObject = topItem.valueForKey("pk") {
                     self.item_id = Int(x.intValue)
                 }
-            
+                
                 setupView(self.swipeView, item: topItem)
                 
                 self.view.addSubview(swipeView)
@@ -626,6 +626,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                     }
                 }
             }
+            self.noNewItemsLabel.alpha = 0
         } else {
             println("No items, hiding both cards")
             /* No items left in feed */
@@ -639,9 +640,9 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
             }
             
             self.progressIndicator.alpha = 0
-            noNewItemsLabel.alpha = 1
+            self.noNewItemsLabel.alpha = 1
         }
-    
+        
         checkInternetConnection()
         checkTutorial()
     }
@@ -713,6 +714,7 @@ class FeedView: UIViewController, UIImagePickerControllerDelegate, UISearchBarDe
                 if report != nil {
                     println(report.text)
                     Bakkle.sharedInstance.markItem("report", item_id: self.item_id, message: report.text, duration: self.recordtime, success: {}, fail: {})
+                    
                 } else {
                     Bakkle.sharedInstance.markItem("report", item_id: self.item_id, duration: self.recordtime,success: {}, fail: {})
                 }

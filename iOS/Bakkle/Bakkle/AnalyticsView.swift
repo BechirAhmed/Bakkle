@@ -45,7 +45,7 @@ class AnalyticsView: UIViewController, PNChartDelegate{
         let editButtonWidth:CGFloat = 50
         var editButton = UIButton(frame: CGRectMake(header.bounds.origin.x+header.bounds.size.width-55
             ,header.bounds.origin.y + 25,editButtonWidth,headerHeight-10))
-        editButton.setImage(IconImage().edit(headerHeight-15), forState: UIControlState.Normal)
+        backButton.setImage(UIImage(named: "icon-edit.png"), forState: UIControlState.Normal)
         editButton.addTarget(self, action: "editItem:", forControlEvents: UIControlEvents.TouchUpInside)
         header.addSubview(editButton)
         

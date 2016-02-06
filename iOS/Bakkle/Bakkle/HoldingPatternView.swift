@@ -96,9 +96,8 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "messageCell")
         
         dateFormatter.timeZone = NSTimeZone(abbreviation: "GMT")
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:SS"
-
-        
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+      
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -183,7 +182,8 @@ class HoldingPatternView: UIViewController, UITableViewDataSource, UITableViewDe
             let status = item?.valueForKey("status") as! String
             switch status {
             case "Active":
-                let viewTime = Bakkle.sharedInstance.holdingItems[index].valueForKey("view_time") as! String
+                var viewTime = Bakkle.sharedInstance.holdingItems[index].valueForKey("view_time") as! String
+                viewTime = viewTime.substringToIndex(viewTime.endIndex.predecessor())
                 var viewDate :NSDate = dateFormatter.dateFromString(viewTime)!
                 var currentTime = NSDate()
                 if viewDate.timeIntervalSinceDate(currentTime) + 259200 <= 0 {

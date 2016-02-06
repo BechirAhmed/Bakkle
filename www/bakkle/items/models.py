@@ -54,8 +54,8 @@ class Items(models.Model):
             if url != "" and url != " ":
                 images.append(url)
 
-        valuesDict = {'pk':self.pk, 
-            'description': self.description, 
+        valuesDict = {'pk':self.pk,
+            'description': self.description,
             'seller': self.seller.toDictionary(),
             'image_urls': images,
             'tags': self.tags,
@@ -80,6 +80,7 @@ class BuyerItem(models.Model):
     SOLD = 'Sold'
     SOLD_TO = 'Sold To'
     MY_ITEM = 'My Item'
+    RESTARTED = 'Restarted'
     STATUS_OPTIONS = (
         (ACTIVE, 'Active'),
         (MEH, 'Meh'),
@@ -90,7 +91,8 @@ class BuyerItem(models.Model):
         (PENDING, 'Pending'),
         (SOLD, 'Sold'),
         (SOLD_TO, 'Sold To'),
-        (MY_ITEM, 'My Item')
+        (MY_ITEM, 'My Item'),
+        (RESTARTED, 'Restarted'),
     )
     buyer = models.ForeignKey(Account, null = True)
     #alter table items_buyeritem add column uuid varchar(36) null

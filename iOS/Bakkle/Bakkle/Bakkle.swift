@@ -8,6 +8,7 @@
 
 import Foundation
 import Reachability
+import TCMobileProvision
 
 class Bakkle : NSObject, CLLocationManagerDelegate {
     
@@ -25,6 +26,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     let url_register_local        = "account/register_local"
     let url_login_local           = "account/login_local"
     let url_register_push: String = "account/device/register_push/"
+    let url_start_over: String    = "account/restart/"
     let url_reset: String         = "items/reset/"
     let url_mark: String          = "items/" //+status/
     let url_feed: String          = "items/feed/"
@@ -96,7 +98,9 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     var garageItems: [NSObject]!
     var trunkItems: [NSObject]!
     var holdingItems: [NSObject]!
-    
+    // store marked items to avoid duplicate items
+    var markedItem: [NSObject]! = Array()
+
     var userInfo: [NSObject: AnyObject]!
 
     var responseDict: NSDictionary!
@@ -730,7 +734,8 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         let request = NSMutableURLRequest(URL: url!)
 
         request.HTTPMethod = "POST"
-        let postString = "auth_token=\(self.auth_token)&device_uuid=\(self.deviceUUID)&device_token=\(deviceToken)"
+        let apsnMode = self.apnsMode()
+        let postString = "auth_token=\(self.auth_token)&device_uuid=\(self.deviceUUID)&device_token=\(deviceToken)&apns_mode=\(apnsMode)"
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
 
         println("[Bakkle] register_push")
@@ -780,12 +785,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                     if let responseString = NSString(data: data, encoding: NSUTF8StringEncoding) {
                         self.debg("Response: \(responseString)")
                         
-                        //TODO: Check error handling here.
-                        //                var err: NSError?
-                        //                var responseDict : NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &err) as NSDictionary!
-                        //
-                        //TODO: THIS IS WRONG
-                        //if responseDict.valueForKey("status")?.integerValue == 1 {
+                        self.markedItem.append(item_id)
                         self.persistData()
                         
                         switch(status){
@@ -806,7 +806,6 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
                             
                         }
                         success()
-                        //  }
                         
                     }
                     fail()
@@ -930,6 +929,15 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
         task.resume()
     }
     
+    /* populate more items from server if less than 10 items in feed*/
+    func requestMoreItems() {
+        if(feedItems.count < 10){
+            populateFeed({
+                
+            });
+        }
+    }
+    
     /* Populates the feed with items from the server */
     func populateFeed(success: ()->()) {
         let url: NSURL? = NSURL(string: url_base + url_feed)
@@ -962,11 +970,28 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             
             if self.responseDict != nil {
                 if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
-                    if let feedEl: AnyObject = self.responseDict["feed"] {
-                        //TODO: only update new items.
-                        self.feedItems = self.responseDict.valueForKey("feed") as! Array
+                    if let feedEl: [NSObject] = self.responseDict.valueForKey("feed") as? Array {
+                        var newItems = false
+                        for item in feedEl {
+                            if self.feedItems == nil {
+                                self.feedItems = Array()
+                            }
+                            if !contains(self.feedItems,item) {
+                                if !contains(self.markedItem, item.valueForKey("pk") as! NSObject) {
+                                    let lockQueue = dispatch_queue_create("com.test.LockQueue", nil)
+                                    dispatch_async(lockQueue, { () -> Void in
+                                        self.feedItems.append(item)
+                                        newItems = true;
+                                    })
+                                }
+                            }
+                        }
+                        self.markedItem = []
+//                        self.feedItems = self.responseDict.valueForKey("feed") as! Array
                         self.persistData()
-                        NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkFeedUpdate, object: self)
+                        if newItems {
+                            NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkFeedUpdate, object: self)
+                        }
                     }
                     //note called on success, not 'new items'
                     
@@ -975,6 +1000,53 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             }
         }
         task.resume()
+    }
+    
+    /* Put all the meh items back after feed view is already out of items */
+    func resetFeed(success: ()->()){
+        let url: NSURL? = NSURL(string: url_base + url_start_over)
+        let request = NSMutableURLRequest(URL: url!)
+        
+        let encLocation = user_location.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
+        
+        request.HTTPMethod = "POST"
+        let postString = "auth_token=\(self.auth_token)&device_uuid=\(self.deviceUUID)&accountId=\(self.account_id)"
+        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+        
+        info("[Bakkle] resetFeed")
+        info("[Bakkle]  URL: \(url)")
+        info("[Bakkle]  METHOD: \(request.HTTPMethod)")
+        info("[Bakkle]  BODY: \(postString)")
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
+            data, response, error in
+            
+            if error != nil {
+                self.err("error= \(error)")
+                return
+            }
+            
+            let responseString: String = NSString(data: data, encoding: NSUTF8StringEncoding)! as String
+            //self.debg("Response: \(responseString)")
+            
+            var parseError: NSError?
+            self.responseDict = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &parseError) as! NSDictionary!
+            self.info("RESPONSE DICT IS: \(self.responseDict)")
+            
+            if self.responseDict != nil {
+                if Bakkle.sharedInstance.responseDict.valueForKey("status")?.integerValue == 1 {
+                    // TODO later
+                    if let feedEl: AnyObject = self.responseDict["feed"] {
+                        //TODO: only update new items.
+                        self.feedItems = self.responseDict.valueForKey("feed") as! Array
+                        self.persistData()
+                        NSNotificationCenter.defaultCenter().postNotificationName(Bakkle.bkFeedUpdate, object: self)
+                    }
+                    success()
+                }
+            }
+        }
+        task.resume()
+
     }
     
     //http://localhost:8000/conversation/send_message/?auth_token=asdfasdfasdfasdf_1&message=I'd like 50 for it.&device_uuid=E6264D84-C395-4132-8C63-3EF051480191&conversation_id=7
@@ -1361,7 +1433,7 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
             self.filter_distance = x
             self.debg("Restored filter_distance = \(x)")
         } else {
-            self.filter_distance = 100
+            self.filter_distance = 101
         }
         if let y = userDefaults.objectForKey("filter_price")    as? Float {
             self.filter_price = y
@@ -1565,5 +1637,16 @@ class Bakkle : NSObject, CLLocationManagerDelegate {
     
     
     // HELPERS
+ 
+    // production
+    func apnsMode() -> String {
+        let mobileprovisionPath = NSBundle.mainBundle().bundlePath.stringByAppendingPathComponent("embedded.mobileprovision")
+        let data = NSData(contentsOfFile: mobileprovisionPath)
+        let mobileprovision = TCMobileProvision(data: data)
+        let entitlements = mobileprovision.dict["Entitlements"]! as! NSDictionary
+        let apsEnvironment = entitlements["aps-environment"] as! String
+        
+        return apsEnvironment
+    }
     
 }

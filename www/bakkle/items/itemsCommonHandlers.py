@@ -271,54 +271,31 @@ def spam_item(item_id):
     return update_status(item_id, Items.SPAM)
 
 
-@time_method
-def feed(buyer_id, device_uuid, user_location, search_text, filter_distance, filter_price):
-    logging.info("[feed()] buyer_id={}, device_uuid={}, user_location={}, search_text={}, filter_distance={}, filter_price={}".format(buyer_id, device_uuid, user_location, search_text, filter_distance, filter_price))
-    search_text = ""
-    startTime = time.time()
+MAX_ITEM_PRICE = 100
+MAX_ITEM_DISTANCE = 101
+RETURN_ITEM_ARRAY_SIZE = 20
 
-    MAX_ITEM_PRICE = 100
-    MAX_ITEM_DISTANCE = 101
-    RETURN_ITEM_ARRAY_SIZE = 20
-
-    # Check that location was in the correct format
+# Take a string and return (location_string, lat, lon) or throw error
+def h_validate_location(user_location):
     location = ""
     lat = 0
     lon = 0
     try:
         positions = user_location.split(",")
         if len(positions) < 2:
-            response_data = {
-                "status": 0, "error": "User location was not in the correct format."}
-            return response_data
-        else:
-            TWOPLACES = Decimal(10) ** -2
-            lat = float(Decimal(positions[0]).quantize(TWOPLACES))
-            lon = float(Decimal(positions[1]).quantize(TWOPLACES))
-            location = str(lat) + "," + str(lon)
+            raise Exception('User location was not in the correct format.')
+
+        TWOPLACES = Decimal(10) ** -2
+        lat = float(Decimal(positions[0]).quantize(TWOPLACES))
+        lon = float(Decimal(positions[1]).quantize(TWOPLACES))
+        location = str(lat) + "," + str(lon)
     except ValueError:
-        response_data = {
-            "status": 0, "error": "Latitude or Longitude was not a valid decimal."}
-        return response_data
+        raise Exception('Latitude or Longitude was not a valid decimal.')
 
-    logging.debug('Time after %s: %0.2f ms' %
-                  ("parsing locations", (time.time() - startTime) * 1000.0))
-    startTime = time.time()
+    return (location, lat, lon)
 
-    # horizontal range
-    lonRange = filter_distance / (math.cos(lat / 180 * math.pi) * 69.172)
-    lonMin = lon - lonRange
-    lonMax = lon + lonRange
-
-    # vertical range
-    latRange = filter_distance / 69.172
-    latMin = lat - latRange
-    latMax = lat + latRange
-
-    logging.debug('Time after %s: %0.2f ms' %
-                  ("getting item range", (time.time() - startTime) * 1000.0))
-    startTime = time.time()
-
+# leaving this for possible future reinclusion
+def h_update_device_location():
     # get the account object and the device and update location
     try:
         #if buyer_id != 0:
@@ -341,105 +318,161 @@ def feed(buyer_id, device_uuid, user_location, search_text, filter_distance, fil
             "status": 0, "error": "Device {} does not exist.".format(device_uuid)}
         return response_data
 
-    logging.debug('Time after %s: %0.2f ms' %
-                  ("updating locations", (time.time() - startTime) * 1000.0))
-    startTime = time.time()
+DEBUG_FEED=True
+IGNORE_PRICE_MAX=100
+IGNORE_DISTANCE=101
+@time_method
+def feed(buyer_id, device_uuid, user_location, search_text,
+         filter_distance, filter_price, max_results=RETURN_ITEM_ARRAY_SIZE):
+
+    # clean up search test
+    search_text = search_text.strip()
+
+    logging.info("[feed()] buyer_id={}, device_uuid={}, user_location={}, search_text={}, filter_distance={}, filter_price={} max_results={}".format(buyer_id, device_uuid, user_location, search_text, filter_distance, filter_price, max_results))
+    print("[feed()] buyer_id={}, device_uuid={}, user_location={}, search_text={}, filter_distance={}, filter_price={} max_results={}".format(buyer_id, device_uuid, user_location, search_text, filter_distance, filter_price, max_results))
+
+    # Check that location was in the correct format
+    try:
+        (location_string, lat, lon) = h_validate_location(user_location)
+    except Exception as e:
+        return { "status": 0, "error": e.message }
+
+    # Check price is in correct format
+    try:
+        filter_price = int(filter_price)
+    except:
+        return { "status": 1, "error": "price is in incorrect format." }
+
+    # horizontal range
+    lonRange = filter_distance / (math.cos(lat / 180 * math.pi) * 69.172)
+    lonMin = lon - lonRange
+    lonMax = lon + lonRange
+
+    # vertical range
+    latRange = filter_distance / 69.172
+    latMin = lat - latRange
+    latMax = lat + latRange
+
+    # get user's account object
+    try:
+        account = Account.objects.get(id=buyer_id)
+    except Account.DoesNotExist:
+        return { "status": 0, "error": "Account {} does not exist.".format(buyer_id) }
 
     # get items (when in guest mode filter on uuid not buyer account id)
     items_viewed = BuyerItem.objects.filter(buyer=buyer_id).values('item')
-    #items_viewed = None
-    #if buyer_id==0:
-    #   logging.info("Getting items for UUID={}".format(device_uuid))
-    #   #import pdb; pdb.set_trace()
-    #   items_viewed = BuyerItem.objects.filter(uuid=device_uuid).values('item')
-    #else:
-    #   logging.info("Getting items for buyer_id={}".format(buyer_id))
-    #   items_viewed = BuyerItem.objects.filter(buyer=buyer_id).values('item')
-    appFlavor = account.app_flavor
+    if DEBUG_FEED:
+        try:
+            print("Items viewed: {}".format(len(items_viewed)))
+        except:
+            print("No viewed items")
 
-    item_list = None
+    # This is a relic but leaving it here for now.
+    app_flavor = account.app_flavor
+
+    try:
+        item_list = []
+        # hide items previously viewed, unless searching
+        if search_text:
+            item_list = Items.objects.all()
+        else:
+            item_list = Items.objects.exclude(pk__in=items_viewed)
+
+        logging.info("Filter app_flavor={}".format(app_flavor))
+        item_list = item_list.filter(seller__app_flavor=app_flavor)
+
+        logging.info("Filter status=ACTIVE|PENDING")
+        item_list = item_list.filter(Q(status=Items.ACTIVE) | Q(status=Items.PENDING))
+
+        # Filter by price. 101 is a magic number indicating to ignore price
+        if filter_price < IGNORE_PRICE_MAX:
+            logging.info("Filter price<={} because {}<{}".format(filter_price, filter_price, IGNORE_PRICE_MAX))
+            item_list = item_list.filter(Q(price__lte=filter_price))
+        else:
+            logging.info("Filter price=<ANY>")
+
+        # Filter by distance. 101 is a magic number indicating to ignore distance
+        print("FD={} ID={}".format(filter_distance, IGNORE_DISTANCE))
+        if filter_distance < IGNORE_DISTANCE:
+            logging.info("Filter distance<={} because {}<{}".format(filter_distance, filter_distance, IGNORE_DISTANCE))
+            item_list = item_list.filter(longitude__lte=lonMax, longitude__gte=lonMin, latitude__lte=latMax, latitude__gte=latMin)
+        else:
+            logging.info("Filter distance=<ANY>")
+
+        # Filter by search terms
+        if search_text:
+            logging.info("Filter search_text={}".format(search_text))
+            print("Filter search_text={}".format(search_text))
+            item_list = item_list.filter(Q(tags__contains=search_text) | Q(title__contains=search_text))
+
+        # Sort newest items first
+        item_list = item_list.order_by('-post_date')
+
+        print("Results {}".format(len(item_list)))
+
+        # Limit number of results
+        item_list = item_list[:RETURN_ITEM_ARRAY_SIZE]
+
+        # Get an items for this user (so we can show their most recent item first
+        users_list = Items.objects.filter(Q(seller__pk=buyer_id))
+        users_list = users_list.filter(pk__in=items_viewed)
+        users_list = users_list.filter(Q(status=Items.ACTIVE) | Q(status=Items.PENDING))
+        users_list = users_list.order_by('-post_date')[:1]
+
+    except Exception as e:
+        logging.error("Error retreiving items: {}".format(e))
+        return { "status": 0, "error": "Unknown error retrieving results." }
+
     users_list = None
 
-    logging.info("Applying search filter={}".format(search_text))
-    if(search_text is not None and search_text != ""):
-        logging.info(" searching")
-        search_text.strip()
+    print("Results {}".format(len(item_list)))
 
-        # if filter price is 100+, ignore filter.
-        if(filter_price == MAX_ITEM_PRICE):
-            logging.info(" no max price")
-
-            item_list = Items.objects.exclude(pk__in=items_viewed).filter(seller__app_flavor=appFlavor).filter(Q(status=Items.ACTIVE) | Q(
-                status=Items.PENDING)).filter(Q(tags__contains=search_text) | Q(title__contains=search_text)).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
-        else:
-            logging.info(" filtering on price")
-            item_list = Items.objects.exclude(pk__in=items_viewed).filter(seller__app_flavor=appFlavor).filter(Q(price__lte=filter_price)).filter(Q(status=Items.ACTIVE) | Q(
-                status=Items.PENDING)).filter(Q(tags__contains=search_text) | Q(title__contains=search_text)).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
-    else:
-
-        logging.info(" no search filter")
-        # if filter price is 100+, ignore filter.
-        if(filter_distance == MAX_ITEM_DISTANCE):
-            logging.info(" no distance filter")
-            if(filter_price == MAX_ITEM_PRICE):
-                logging.info(" no price filter")
-                item_list = Items.objects.exclude(pk__in=items_viewed).exclude(seller__pk=buyer_id).filter(seller__app_flavor=appFlavor).filter(
-                    Q(status=Items.ACTIVE) | Q(status=Items.PENDING)).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
-                users_list = Items.objects.filter(Q(seller__pk=buyer_id)).filter(
-                    Q(status=Items.ACTIVE) | Q(status=Items.PENDING)).order_by('-post_date')[:1]
-            else:
-                logging.info(" max price filter")
-                item_list = Items.objects.exclude(pk__in=items_viewed).exclude(seller__pk=buyer_id).filter(seller__app_flavor=appFlavor).filter(
-                    Q(price__lte=filter_price)).filter(Q(status=Items.ACTIVE) | Q(status=Items.PENDING)).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
-                users_list = Items.objects.filter(Q(seller__pk=buyer_id)).filter(
-                    Q(status=Items.ACTIVE) | Q(status=Items.PENDING)).order_by('-post_date')[:1]
-        else:
-            logging.info(" distance filter")
-            if(filter_price == MAX_ITEM_PRICE):
-                logging.info(" no max price filter")
-                item_list = Items.objects.exclude(pk__in=items_viewed).exclude(seller__pk=buyer_id).filter(seller__app_flavor=appFlavor).filter(Q(status=Items.ACTIVE) | Q(
-                    status=Items.PENDING)).filter(longitude__lte=lonMax, longitude__gte=lonMin, latitude__lte=latMax, latitude__gte=latMin).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
-                users_list = Items.objects.filter(Q(seller__pk=buyer_id)).filter(
-                    Q(status=Items.ACTIVE) | Q(status=Items.PENDING)).order_by('-post_date')[:1]
-            else:
-                logging.info(" max price filter")
-                item_list = Items.objects.exclude(pk__in=items_viewed).exclude(seller__pk=buyer_id).filter(seller__app_flavor=appFlavor).filter(Q(price__lte=filter_price)).filter(
-                    Q(status=Items.ACTIVE) | Q(status=Items.PENDING)).filter(longitude__lte=lonMax, longitude__gte=lonMin, latitude__lte=latMax, latitude__gte=latMin).order_by('-post_date')[:RETURN_ITEM_ARRAY_SIZE]
-                users_list = Items.objects.filter(Q(seller__pk=buyer_id)).filter(
-                    Q(status=Items.ACTIVE) | Q(status=Items.PENDING)).order_by('-post_date')[:1]
-
+    # Limit results
     logging.info("paginating")
     item_array = []
-    paginatedItems = Paginator(item_list, 100)
-    numUserItems = 0
 
-    logging.info("Num items {}".format(len(item_list)))
-    logging.info("Num items from user {}".format(len(users_list)))
+    try:
+        logging.info("Num items {}".format(len(item_list)))
+        logging.info("Num items from user {}".format(len(users_list)))
+    except:
+        pass
 
     # show user's items before other items - place at top of array.
-    if(users_list is not None and len(users_list) != 0):
-        for item in users_list:
-            if(len(BuyerItem.objects.filter(buyer__pk=buyer_id).filter(item__pk=item.pk)) == 0):
-                item_dict = item.toDictionary()
-                item_array.append(item_dict)
+    try:
 
-    # add all other items - show after top user item
-    page = 1
-    while len(item_array) < RETURN_ITEM_ARRAY_SIZE and page <= paginatedItems.num_pages:
-        itemPage = paginatedItems.page(page)
-        for item in itemPage.object_list:
-            if (len(item_array) < RETURN_ITEM_ARRAY_SIZE):
-                item_dict = item.toDictionary()
-                item_array.append(item_dict)
+        if(users_list is not None and len(users_list) != 0):
+            for item in users_list:
+                if(len(BuyerItem.objects.filter(buyer__pk=buyer_id).filter(item__pk=item.pk)) == 0):
+                    item_dict = item.toDictionary()
+                    item_array.append(item_dict)
+    except Exception as e:
+        logging.error("Error adding user's item: {}".format(e))
 
-        page += 1
+    try:
+        for item in item_list:
+            item_dict = item.toDictionary()
+            item_array.append(item_dict)
+    except Exception as e:
+        logging.error("Error adding regular feed items: {}".format(e))
 
-    logging.debug('Time after %s: %0.2f ms' % (
-        "adding feed items to return array", (time.time() - startTime) * 1000.0))
-    startTime = time.time()
+    #paginatedItems = Paginator(item_list, 100)
+    ## add all other items - show after top user item
+    #page = 1
+    #while len(item_array) < RETURN_ITEM_ARRAY_SIZE and page <= paginatedItems.num_pages:
+    #    itemPage = paginatedItems.page(page)
+    #    for item in itemPage.object_list:
+    #        if (len(item_array) < RETURN_ITEM_ARRAY_SIZE):
+    #            item_dict = item.toDictionary()
+    #            item_array.append(item_dict)
+    #
+    #    page += 1
 
-    response_data = {'status': 1, 'feed': item_array}
-    return response_data
+    try:
+        print("item_array={}".format(len(item_array)))
+    except:
+        print("item array empty")
+
+    return {'status': 1, 'feed': item_array}
 
 
 @time_method

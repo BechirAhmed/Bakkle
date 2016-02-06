@@ -176,6 +176,27 @@ def get_account(accountId):
     return {"status": 1, "account": account.toDictionary()}
 
 
+# Mark all items a user has 'noped' to 'restarted' so the app will redisplay them.
+# aka "soft reset" of users feed without loosing items they have acted on.
+@time_method
+def restart(accountId):
+    try:
+        # find items user has viewed
+        buyer_items = BuyerItem.objects.get(buyer=accountId)
+
+        # which have been marked 'nope'
+        buyer_items.filter(Q(status=BuyerItem.MEH))
+
+        # and mark items 'restarted' so they can be redisplayed in the app
+        for buyer_item in buyer_items.all():
+            buyer_item.status = BuyerItem.RESTARTED
+            buyer_item.save()
+
+    except Account.DoesNotExist:
+        return {"status": 0, "message": "Invalid account id"}
+    return {"status": 1, "message": "restart successful"}
+
+
 @time_method
 def login_facebook(facebook_id, device_uuid, user_location, app_version, is_ios, client_ip, app_flavor):
 
@@ -377,9 +398,9 @@ def device_register_push(account_id, device_uuid, device_token, device_type, cli
     logging.info("register_push")
     prevDevices = Device.objects.filter(Q(uuid=device_uuid) | Q(apns_token=device_token))
 
-    for device in prevDevices:
-        device.apns_token = ""
-        device.save()
+    #for device in prevDevices:
+    #    device.apns_token = ""
+    #    device.save()
 
     try:
         account = Account.objects.get(pk=account_id)
@@ -397,7 +418,7 @@ def device_register_push(account_id, device_uuid, device_token, device_type, cli
     device.last_seen_date = datetime.datetime.now()
     device.ip_address = client_ip
     device.apns_token = device_token
-    device.device_token = device_type
+    device.device_type = device_type
     device.save()
     logging.info("registered {} type={}".format(device_token, device_type))
 
